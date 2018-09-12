@@ -1,0 +1,23 @@
+{
+  "name": "cogs",
+  "version": "0.0.1",
+  "description": "Champions of Guilds and Strongholds",
+  "main": "server/app.js",
+  "dependencies": {
+    "express": "^4.16.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/pixel_bros/cogs.git"
+  },
+  "author": "Pixel Bros",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://gitlab.com/pixel_bros/cogs/issues"
+  },
+  "homepage": "https://gitlab.com/pixel_bros/cogs#README"
+}
