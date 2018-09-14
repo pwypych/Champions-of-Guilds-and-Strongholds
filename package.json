@@ -4,7 +4,8 @@
   "description": "Champions of Guilds and Strongholds",
   "main": "server/app.js",
   "dependencies": {
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "ws": "^6.0.0"
   },
   "devDependencies": {},
   "scripts": {
