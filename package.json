@@ -9,7 +9,8 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server/app.js"
+    "start": "nodemon server/app.js",
+    "key": "ssh ~/.ssh/*"
   },
   "repository": {
     "type": "git",
