@@ -13,18 +13,27 @@
          "id":0,
          "properties":[
                 {
-                 "name":"plugin",
+                 "name":"name",
                  "type":"string",
-                 "value":"block"
+                 "value":"empty"
                 }]
         }, 
         {
          "id":1,
          "properties":[
                 {
-                 "name":"plugin",
+                 "name":"name",
                  "type":"string",
                  "value":"dirt"
+                }]
+        }, 
+        {
+         "id":2,
+         "properties":[
+                {
+                 "name":"name",
+                 "type":"string",
+                 "value":"rock"
                 }]
         }],
  "tilewidth":16,
