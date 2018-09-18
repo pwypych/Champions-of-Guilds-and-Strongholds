@@ -2,14 +2,19 @@
 
 'use strict';
 
-module.exports = () => {
+module.exports = (environment, templateToHtml) => {
   return (request, responce) => {
+    const viewModel = {};
+
     (function init() {
       sendResponce();
     })();
 
     function sendResponce() {
-      responce.send('Pierwszy hello');
+      templateToHtml('server/home/home.ejs', viewModel, (error, html) => {
+        console.log('sendResponce()', html);
+        responce.send(html);
+      });
     }
   };
 };

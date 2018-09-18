@@ -7,6 +7,7 @@ const express = require('express');
 
 // Instances of libraries
 const app = express();
+const path = require('path');
 
 // Variables (for this file)
 const environment = {};
@@ -20,8 +21,9 @@ console.log('***STARTING***');
 
 function setupEnvironment() {
   environment.baseurl = 'http://localhost:3000';
+  environment.basepath = path.join(__dirname, '..');
 
-  console.log('setupEnvironment()');
+  console.log('setupEnvironment()', environment);
   setupLocals();
 }
 
@@ -43,9 +45,10 @@ function setupStaticFolder() {
 
 function setupLibrariesAndRoutes() {
   // libraries
+  const templateToHtml = require('./libraries/templateToHtml.js')(environment);
 
   // routes
-  app.get('/', require('./home/home.js')(environment));
+  app.get('/', require('./home/home.js')(environment, templateToHtml));
 
   console.log('setupLibrariesAndRoutes()');
   setupExpress();
