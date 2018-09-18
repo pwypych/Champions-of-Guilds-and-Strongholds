@@ -1,24 +1,52 @@
 // @format
 
+'use strict';
+
+// External libraries
 const express = require('express');
-const ws = require('ws');
+
+// Instances of libraries
 const app = express();
 
-app.use(express.static('public'));
+// Variables (for this file)
+const environment = {};
 
-app.get('/', function(req, res) {
-  res.send('Hello World');
-});
+// eslint-disable-next-line no-console
+console.log('***STARTING***');
 
-app.listen(3000);
+(function init() {
+  setupEnvironment();
+})();
 
-var WebSocketServer = require('ws').Server;
-var wss = new WebSocketServer({port: 8080});
+function setupEnvironment() {
+  environment.baseurl = 'http://localhost:3000';
 
-wss.on('connection', function(ws) {
-  ws.on('message', function(message) {
-    console.log('received: %s', message);
+  setupLocals();
+}
+
+function setupLocals() {
+  app.use((req, res, next) => {
+    next();
   });
 
-  ws.send('something');
-});
+  setupStaticFolder();
+}
+
+function setupStaticFolder() {
+  app.use(express.static('public'));
+
+  setupLibrariesAndRoutes();
+}
+
+function setupLibrariesAndRoutes() {
+  // libraries
+
+  // routes
+  app.get('/', require('./home/home.js')(environment));
+
+  setupExpress();
+}
+
+function setupExpress() {
+  app.listen(3000);
+}
