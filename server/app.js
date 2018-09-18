@@ -21,6 +21,7 @@ console.log('***STARTING***');
 function setupEnvironment() {
   environment.baseurl = 'http://localhost:3000';
 
+  console.log('setupEnvironment()');
   setupLocals();
 }
 
@@ -29,12 +30,14 @@ function setupLocals() {
     next();
   });
 
+  console.log('setupLocals()');
   setupStaticFolder();
 }
 
 function setupStaticFolder() {
   app.use(express.static('public'));
 
+  console.log('setupStaticFolder()');
   setupLibrariesAndRoutes();
 }
 
@@ -44,9 +47,11 @@ function setupLibrariesAndRoutes() {
   // routes
   app.get('/', require('./home/home.js')(environment));
 
+  console.log('setupLibrariesAndRoutes()');
   setupExpress();
 }
 
 function setupExpress() {
+  console.log('setupExpress()');
   app.listen(3000);
 }
