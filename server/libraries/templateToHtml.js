@@ -4,6 +4,7 @@
 
 const dot = require('dot');
 const fs = require('fs');
+var debug = require('debug')('cogs:templateToHtml');
 
 /* eslint-disable no-useless-escape */
 dot.templateSettings = {
@@ -27,18 +28,18 @@ module.exports = (environment) => {
     let html;
 
     (function init() {
-      console.log('init()', templatePath, viewModel);
+      debug('init()', templatePath, viewModel);
       loadFile();
     })();
 
     function loadFile() {
       const path = environment.basepath + '/' + templatePath;
 
-      console.log('loadFile', path);
+      debug('loadFile', path);
 
       fs.readFile(path, (error, templateBuffer) => {
         if (error) {
-          console.log('!!! TEMPLATE ERROR !!! - Cannot load file: ', path);
+          debug('!!! TEMPLATE ERROR !!! - Cannot load file: ', path);
           callback(error);
         }
 
@@ -58,8 +59,8 @@ module.exports = (environment) => {
       }
 
       if (error) {
-        console.log('!!! TEMPLATE ERROR !!! ', error.message);
-        console.log('!!! TEMPLATE ERROR !!! ', error.stack);
+        debug('!!! TEMPLATE ERROR !!! ', error.message);
+        debug('!!! TEMPLATE ERROR !!! ', error.stack);
 
         callback(error);
         return;

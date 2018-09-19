@@ -13,9 +13,10 @@ const path = require('path');
 const environment = {};
 
 // eslint-disable-next-line no-console
-console.log('***STARTING***');
+var debug = require('debug')('cogs:app');
 
 (function init() {
+  debug('init()');
   setupEnvironment();
 })();
 
@@ -23,7 +24,7 @@ function setupEnvironment() {
   environment.baseurl = 'http://localhost:3000';
   environment.basepath = path.join(__dirname, '..');
 
-  console.log('setupEnvironment()', environment);
+  debug('setupEnvironment()', environment);
   setupLocals();
 }
 
@@ -32,14 +33,14 @@ function setupLocals() {
     next();
   });
 
-  console.log('setupLocals()');
+  debug('setupLocals()');
   setupStaticFolder();
 }
 
 function setupStaticFolder() {
   app.use(express.static('public'));
 
-  console.log('setupStaticFolder()');
+  debug('setupStaticFolder()');
   setupLibrariesAndRoutes();
 }
 
@@ -50,11 +51,11 @@ function setupLibrariesAndRoutes() {
   // routes
   app.get('/', require('./home/home.js')(environment, templateToHtml));
 
-  console.log('setupLibrariesAndRoutes()');
+  debug('setupLibrariesAndRoutes()');
   setupExpress();
 }
 
 function setupExpress() {
-  console.log('setupExpress()');
+  debug('setupExpress()');
   app.listen(3000);
 }
