@@ -6,6 +6,7 @@ var debug = require('debug')('cogs:home');
 module.exports = (environment, templateToHtml) => {
   return (request, responce) => {
     const viewModel = {};
+    viewModel.timestamp = Date.now();
 
     (function init() {
       sendResponce();
@@ -13,7 +14,8 @@ module.exports = (environment, templateToHtml) => {
 
     function sendResponce() {
       templateToHtml('server/home/home.ejs', viewModel, (error, html) => {
-        debug('sendResponce():html', html.length);
+        debug('sendResponce():html', viewModel, html);
+        debug('*** send ***');
         responce.send(html);
       });
     }
