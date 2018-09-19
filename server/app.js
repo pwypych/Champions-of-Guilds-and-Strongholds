@@ -3,6 +3,7 @@
 'use strict';
 
 // External libraries
+const debug = require('debug')('cogs:app');
 const express = require('express');
 
 // Instances of libraries
@@ -13,7 +14,6 @@ const path = require('path');
 const environment = {};
 
 // eslint-disable-next-line no-console
-var debug = require('debug')('cogs:app');
 
 (function init() {
   debug('init()');
@@ -57,5 +57,6 @@ function setupLibrariesAndRoutes() {
 
 function setupExpress() {
   debug('setupExpress()');
+  debug('*** start ***');
   app.listen(3000);
 }
