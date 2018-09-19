@@ -1,0 +1,10 @@
+{
+  "ext": "js ejs json css bash lodash script html",
+  "events": {
+    "start": ""
+  },
+  "ignore": ["public/generated"],
+  "execMap": {
+    "js": "node"
+  }
+}
