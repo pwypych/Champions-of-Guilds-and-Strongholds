@@ -44,16 +44,14 @@ function setupStaticFolder() {
   setupLibrariesAndRoutes();
 }
 
+// prettier-ignore
 function setupLibrariesAndRoutes() {
   // libraries
   const templateToHtml = require('./libraries/templateToHtml.js')(environment);
 
   // routes
   app.get('/', require('./home/home.js')(environment, templateToHtml));
-  app.get(
-    '/create-game',
-    require('./createGame/createGame.js')(environment, templateToHtml)
-  );
+  app.get('/create-game', require('./createGame/createGame.js')(environment, templateToHtml));
 
   debug('setupLibrariesAndRoutes()');
   setupExpress();

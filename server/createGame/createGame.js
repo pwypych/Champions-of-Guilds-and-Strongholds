@@ -4,7 +4,7 @@
 var debug = require('debug')('cogs:home');
 
 module.exports = (environment, templateToHtml) => {
-  return (request, responce) => {
+  return (req, res) => {
     const viewModel = {};
     viewModel.timestamp = Date.now();
 
@@ -13,11 +13,15 @@ module.exports = (environment, templateToHtml) => {
     })();
 
     function sendResponce() {
-      templateToHtml('server/home/home.ejs', viewModel, (error, html) => {
-        debug('sendResponce():html', viewModel, html);
-        debug('*** send ***');
-        responce.send(html);
-      });
+      templateToHtml(
+        'server/createGame/createGame.ejs',
+        viewModel,
+        (error, html) => {
+          debug('sendResponce():html', viewModel, html);
+          debug('*** send ***');
+          res.send(html);
+        }
+      );
     }
   };
 };

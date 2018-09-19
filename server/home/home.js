@@ -7,6 +7,7 @@ module.exports = (environment, templateToHtml) => {
   return (request, responce) => {
     const viewModel = {};
     viewModel.timestamp = Date.now();
+    viewModel.baseurl = environment.baseurl;
 
     (function init() {
       sendResponce();

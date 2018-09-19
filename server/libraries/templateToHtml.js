@@ -9,8 +9,8 @@ var debug = require('debug')('cogs:templateToHtml');
 /* eslint-disable no-useless-escape */
 dot.templateSettings = {
   evaluate: /\<\%([\s\S]+?)\%\>/g,
-  interpolate: /\<\%=([\s\S]+?)\%\>/g,
-  encode: /\<\%-([\s\S]+?)\%\>/g,
+  encode: /\<\%=([\s\S]+?)\%\>/g,
+  interpolate: /\<\%-([\s\S]+?)\%\>/g,
   use: /\<\%#([\s\S]+?)\%\>/g,
   define: /\<\%##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\%\>/g,
   conditional: /\<\%\?(\?)?\s*([\s\S]*?)\s*\%\>/g,

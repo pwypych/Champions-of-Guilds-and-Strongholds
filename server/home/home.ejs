@@ -5,12 +5,12 @@
     <meta charset="utf-8">
 
     <title>Champions of Guilds &amp; Strongholds</title>
-    <link rel="stylesheet" href="style.css?v=<%- viewModel.timestamp %>">
+    <link rel="stylesheet" href="style.css?v=<%= viewModel.timestamp %>">
   </head>
 
   <body>
     <h1>Champions of Guilds &amp; Strongholds</h1>
-    <button class="js-create">Create Game</button>
+    <a href="<%= viewModel.baseurl + '/create-game'%>" class="js-create">Create Game</a>
 
     <div class="seperator-20"></div>
 
