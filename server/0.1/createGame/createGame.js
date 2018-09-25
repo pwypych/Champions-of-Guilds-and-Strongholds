@@ -1,7 +1,8 @@
 // @format
 
 'use strict';
-var debug = require('debug')('cogs:home');
+
+const debug = require('debug')('cogs:home');
 
 module.exports = (environment, templateToHtml) => {
   return (req, res) => {
@@ -13,15 +14,11 @@ module.exports = (environment, templateToHtml) => {
     })();
 
     function sendResponce() {
-      templateToHtml(
-        'server/0.1/createGame/createGame.ejs',
-        viewModel,
-        (error, html) => {
-          debug('sendResponce():html', viewModel, html);
-          debug('*** send ***');
-          res.send(html);
-        }
-      );
+      templateToHtml(__filename, viewModel, (error, html) => {
+        debug('sendResponce():html', viewModel, html);
+        debug('*** send ***');
+        res.send(html);
+      });
     }
   };
 };
