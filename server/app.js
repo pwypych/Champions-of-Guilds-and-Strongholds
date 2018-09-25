@@ -5,6 +5,7 @@
 // External libraries
 const debug = require('debug')('cogs:app');
 const express = require('express');
+const mongodb = require('mongodb').MongoClient;
 
 // Instances of libraries
 const app = express();
@@ -12,6 +13,7 @@ const path = require('path');
 
 // Variables (for this file)
 const environment = {};
+let db;
 
 (function init() {
   debug('init()');
@@ -39,7 +41,26 @@ function setupStaticFolder() {
   app.use(express.static('public'));
 
   debug('setupStaticFolder()');
-  setupLibrariesAndRoutes();
+  setupMongo();
+}
+
+function setupMongo() {
+  const connectionUrl = 'mongodb://localhost:27017';
+  const dbName = 'cogs';
+  const options = {
+    useNewUrlParser: true
+  };
+
+  mongodb.connect(
+    connectionUrl,
+    options,
+    (error, client) => {
+      db = client.db(dbName);
+
+      debug('setupMongo()');
+      setupLibrariesAndRoutes();
+    }
+  );
 }
 
 /* eslint-disable global-require */
