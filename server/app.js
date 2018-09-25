@@ -13,7 +13,6 @@ const path = require('path');
 // Variables (for this file)
 const environment = {};
 
-// eslint-disable-next-line no-console
 (function init() {
   debug('init()');
   setupEnvironment();
