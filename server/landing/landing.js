@@ -1,7 +1,8 @@
 // @format
 
 'use strict';
-var debug = require('debug')('cogs:home');
+
+const debug = require('debug')('cogs:home');
 
 module.exports = (environment, templateToHtml) => {
   return (request, responce) => {
