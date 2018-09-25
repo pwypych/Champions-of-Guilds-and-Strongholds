@@ -14,7 +14,6 @@ const path = require('path');
 const environment = {};
 
 // eslint-disable-next-line no-console
-
 (function init() {
   debug('init()');
   setupEnvironment();
@@ -44,6 +43,7 @@ function setupStaticFolder() {
   setupLibrariesAndRoutes();
 }
 
+/* eslint-disable global-require */
 // prettier-ignore
 function setupLibrariesAndRoutes() {
   // libraries
@@ -56,6 +56,7 @@ function setupLibrariesAndRoutes() {
   debug('setupLibrariesAndRoutes()');
   setupExpress();
 }
+/* eslint-enable global-require */
 
 function setupExpress() {
   debug('setupExpress()');
