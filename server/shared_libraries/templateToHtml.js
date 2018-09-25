@@ -4,7 +4,7 @@
 
 const dot = require('dot');
 const fs = require('fs');
-var debug = require('debug')('cogs:templateToHtml');
+const debug = require('debug')('cogs:templateToHtml');
 
 /* eslint-disable no-useless-escape */
 dot.templateSettings = {
@@ -22,23 +22,30 @@ dot.templateSettings = {
 };
 /* eslint-enable no-useless-escape */
 
-module.exports = (environment) => {
-  return (templatePath, viewModel, callback) => {
+module.exports = () => {
+  return (filename, viewModel, callback) => {
     let error = false;
     let html;
 
     (function init() {
-      debug('init()', templatePath, viewModel);
+      debug('init()', filename, viewModel);
       loadFile();
     })();
 
     function loadFile() {
-      const path = environment.basepath + '/' + templatePath;
+      // const path = environment.basepath + '/' + templatePath;
+      let path;
+
+      if (filename.substr(-3, 3) === '.js') {
+        path = filename.substr(0, filename.length - 3) + '.ejs';
+      } else {
+        path = filename;
+      }
 
       debug('loadFile', path);
 
-      fs.readFile(path, (error, templateBuffer) => {
-        if (error) {
+      fs.readFile(path, (errorReadFile, templateBuffer) => {
+        if (errorReadFile) {
           debug('!!! TEMPLATE ERROR !!! - Cannot load file: ', path);
           callback(error);
         }

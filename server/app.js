@@ -67,11 +67,12 @@ function setupMongo() {
 // prettier-ignore
 function setupLibrariesAndRoutes() {
   // libraries
-  const templateToHtml = require('./libraries/templateToHtml.js')(environment);
+  const templateToHtml = require('./shared_libraries/templateToHtml.js')();
 
   // routes
-  app.get('/', require('./home/home.js')(environment, templateToHtml));
-  app.get('/create-game', require('./createGame/createGame.js')(environment, templateToHtml));
+  app.get('/', require('./landing/landing.js')(environment, templateToHtml));
+
+  app.get('/0.1/create-game', require('./0.1/createGame/createGame.js')(environment, templateToHtml));
 
   debug('setupLibrariesAndRoutes()');
   setupExpress();

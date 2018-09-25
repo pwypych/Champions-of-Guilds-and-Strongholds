@@ -4,24 +4,21 @@
 var debug = require('debug')('cogs:home');
 
 module.exports = (environment, templateToHtml) => {
-  return (req, res) => {
+  return (request, responce) => {
     const viewModel = {};
     viewModel.timestamp = Date.now();
+    viewModel.baseurl = environment.baseurl;
 
     (function init() {
       sendResponce();
     })();
 
     function sendResponce() {
-      templateToHtml(
-        'server/createGame/createGame.ejs',
-        viewModel,
-        (error, html) => {
-          debug('sendResponce():html', viewModel, html);
-          debug('*** send ***');
-          res.send(html);
-        }
-      );
+      templateToHtml(__filename, viewModel, (error, html) => {
+        debug('sendResponce():html', viewModel, html);
+        debug('*** send ***');
+        responce.send(html);
+      });
     }
   };
 };
