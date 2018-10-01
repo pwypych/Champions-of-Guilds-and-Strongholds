@@ -4,6 +4,7 @@
 
 // Libraries
 const fs = require('fs');
+const path = require('path');
 const mongodb = require('mongodb').MongoClient;
 
 // Variables
@@ -40,7 +41,7 @@ function checkFileExists() {
       process.exit(1);
     }
 
-    console.log('checkFileExists');
+    console.log('checkFileExists', stats);
     readFile();
   });
 }
@@ -93,7 +94,35 @@ function setupMongo() {
       db = client.db(dbName);
 
       console.log('setupMongo()');
-      process.exit(0);
+      upsertMapObject();
     }
   );
+}
+
+function upsertMapObject() {
+  const mapName = path.basename(mapFilePath, '.json');
+
+  mapObject._id = mapName;
+
+  db.collection('maps').removeOne({_id: mapName}, (errorRemove) => {
+    if (errorRemove) {
+      console.error('ERROR: remove mongo error:', errorRemove);
+      process.exit(1);
+    }
+
+    db.collection('maps').insertOne(mapObject, (errorInsert) => {
+      if (errorInsert) {
+        console.error('ERROR: insert mongo error:', errorInsert);
+        process.exit(1);
+      }
+
+      console.log('upsertMapObject', mapName);
+      exit();
+    });
+  });
+}
+
+function exit() {
+  console.log('exit: SUCCESS');
+  process.exit(0);
 }
