@@ -1,3 +1,5 @@
+// @format
+
 'use strict';
 
 // Libraries
@@ -6,10 +8,31 @@ const mongodb = require('mongodb').MongoClient;
 
 // Variables
 let db;
+let mapPath;
 
 (function init() {
-  setupMongo();
+  parseArguments();
+  console.log('init');
 })();
+
+function parseArguments() {
+  mapPath = process.argv[2];
+
+  if (!mapPath) {
+    console.error(
+      'parseArguments: First argument must be valid path to map JSON'
+    );
+    process.exit(1);
+  }
+
+  console.log('parseArguments', mapPath);
+  checkFileExists();
+}
+
+function checkFileExists() {
+  console.log('checkFileExists');
+  setupMongo();
+}
 
 function setupMongo() {
   const connectionUrl = 'mongodb://localhost:27017';
