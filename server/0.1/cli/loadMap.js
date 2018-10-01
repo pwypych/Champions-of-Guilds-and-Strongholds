@@ -13,7 +13,7 @@ let db;
 
 function setupMongo() {
   const connectionUrl = 'mongodb://localhost:27017';
-  const dbName = 'cogs';
+  const dbName = 'cogs_0_1';
   const options = {
     useNewUrlParser: true
   };
