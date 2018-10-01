@@ -9,6 +9,7 @@ const mongodb = require('mongodb').MongoClient;
 // Variables
 let db;
 let mapFilePath;
+let mapObject;
 
 /* eslint-disable no-console */
 (function init() {
@@ -21,7 +22,7 @@ function parseArguments() {
 
   if (!mapFilePath) {
     console.error(
-      'parseArguments: First argument must be valid path to map JSON'
+      'ERROR: parseArguments: First argument must be valid path to map JSON'
     );
     process.exit(1);
   }
@@ -34,32 +35,47 @@ function checkFileExists() {
   fs.stat(mapFilePath, (error, stats) => {
     if (error) {
       console.error(
-        'checkFileExists: File does not exist, or other read error'
+        'ERROR: checkFileExists: File does not exist, or other read error'
       );
       process.exit(1);
     }
 
-    console.log('checkFileExists', stats);
+    console.log('checkFileExists');
     readFile();
   });
 }
 
 function readFile() {
   fs.readFile(mapFilePath, 'utf8', (error, mapString) => {
-    console.log('readFile', mapString);
+    console.log('readFile', mapString.length);
     parseJson(mapString);
   });
 }
 
 function parseJson(mapString) {
   try {
-    JSON.parse(mapString);
+    mapObject = JSON.parse(mapString);
   } catch (error) {
-    console.error('parseJson: JSON parse error, not valid map file');
+    console.error('ERROR: parseJson: JSON parse error, not valid map file');
     process.exit(1);
   }
 
   console.log('parseJson');
+  validateMap();
+}
+
+function validateMap() {
+  if (!mapObject.layers) {
+    console.error('ERROR: validateMap: mapObject missing layers array');
+    process.exit(1);
+  }
+
+  if (!Array.isArray(mapObject.layers)) {
+    console.error('ERROR: validateMap: mapObject.layers is not array');
+    process.exit(1);
+  }
+
+  console.log('validateMap', mapObject.layers[0].data.length);
   setupMongo();
 }
 
