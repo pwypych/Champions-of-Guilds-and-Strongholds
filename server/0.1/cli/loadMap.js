@@ -8,30 +8,38 @@ const mongodb = require('mongodb').MongoClient;
 
 // Variables
 let db;
-let mapPath;
+let mapFilePath;
 
+/* eslint-disable no-console */
 (function init() {
   parseArguments();
   console.log('init');
 })();
 
 function parseArguments() {
-  mapPath = process.argv[2];
+  mapFilePath = process.argv[2];
 
-  if (!mapPath) {
+  if (!mapFilePath) {
     console.error(
       'parseArguments: First argument must be valid path to map JSON'
     );
     process.exit(1);
   }
 
-  console.log('parseArguments', mapPath);
+  console.log('parseArguments', mapFilePath);
   checkFileExists();
 }
 
 function checkFileExists() {
-  console.log('checkFileExists');
-  setupMongo();
+  fs.stat(mapFilePath, (error, stats) => {
+    if (error) {
+      console.error('checkFileExists:', error);
+      process.exit(1);
+    }
+
+    console.log('checkFileExists', stats);
+    setupMongo();
+  });
 }
 
 function setupMongo() {
