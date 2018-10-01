@@ -94,31 +94,38 @@ function setupMongo() {
       db = client.db(dbName);
 
       console.log('setupMongo()');
-      upsertMapObject();
+      removeMapObject();
     }
   );
 }
 
-function upsertMapObject() {
+function removeMapObject() {
+  const mapName = path.basename(mapFilePath, '.json');
+
+  db.collection('maps').removeOne({ _id: mapName }, (error) => {
+    if (error) {
+      console.error('ERROR: remove mongo error:', error);
+      process.exit(1);
+    }
+
+    console.log('removeMapObject');
+    insertMapObject();
+  });
+}
+
+function insertMapObject() {
   const mapName = path.basename(mapFilePath, '.json');
 
   mapObject._id = mapName;
 
-  db.collection('maps').removeOne({_id: mapName}, (errorRemove) => {
-    if (errorRemove) {
-      console.error('ERROR: remove mongo error:', errorRemove);
+  db.collection('maps').insertOne(mapObject, (error) => {
+    if (error) {
+      console.error('ERROR: insert mongo error:', error);
       process.exit(1);
     }
 
-    db.collection('maps').insertOne(mapObject, (errorInsert) => {
-      if (errorInsert) {
-        console.error('ERROR: insert mongo error:', errorInsert);
-        process.exit(1);
-      }
-
-      console.log('upsertMapObject', mapName);
-      exit();
-    });
+    console.log('insertMapObject');
+    exit();
   });
 }
 
