@@ -33,13 +33,34 @@ function parseArguments() {
 function checkFileExists() {
   fs.stat(mapFilePath, (error, stats) => {
     if (error) {
-      console.error('checkFileExists:', error);
+      console.error(
+        'checkFileExists: File does not exist, or other read error'
+      );
       process.exit(1);
     }
 
     console.log('checkFileExists', stats);
-    setupMongo();
+    readFile();
   });
+}
+
+function readFile() {
+  fs.readFile(mapFilePath, 'utf8', (error, mapString) => {
+    console.log('readFile', mapString);
+    parseJson(mapString);
+  });
+}
+
+function parseJson(mapString) {
+  try {
+    JSON.parse(mapString);
+  } catch (error) {
+    console.error('parseJson: JSON parse error, not valid map file');
+    process.exit(1);
+  }
+
+  console.log('parseJson');
+  setupMongo();
 }
 
 function setupMongo() {
