@@ -18,7 +18,7 @@ module.exports = (environment, db, templateToHtml) => {
     function findMapNameArray() {
       const query = {};
       const options = {};
-      options.projection = {_id: 1};
+      options.projection = { _id: 1 };
 
       db.collection('maps')
         .find(query, options)
@@ -27,7 +27,9 @@ module.exports = (environment, db, templateToHtml) => {
             debug('findMapNameArray: error:', error);
           }
 
-          const mapNameArray = mapArray;
+          const mapNameArray = mapArray.map((mapObject) => {
+            return mapObject._id;
+          });
 
           viewModel.mapNameArray = mapNameArray;
 

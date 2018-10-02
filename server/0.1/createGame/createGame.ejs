@@ -14,6 +14,9 @@
 
     <div class="seperator-20"></div>
 
-    <span>Map:</span>
+    <span>Map:</span><br />
+    <% viewModel.mapNameArray.forEach((mapName) => { %>
+      <span><%= mapName %></span><br />
+    <% }); %>
   </body>
 </html>
