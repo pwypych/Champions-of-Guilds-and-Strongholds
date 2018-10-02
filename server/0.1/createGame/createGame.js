@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:home');
+const debug = require('debug')('cogs:createGame');
 
 module.exports = (environment, db, templateToHtml) => {
   return (req, res) => {
@@ -11,17 +11,35 @@ module.exports = (environment, db, templateToHtml) => {
     viewModel.timestamp = Date.now();
 
     (function init() {
-      findMaps(db);
+      debug('init');
+      findMapNameArray();
     })();
 
-    function findMaps(db) {
-      sendResponce();
+    function findMapNameArray() {
+      const query = {};
+      const options = {};
+      options.projection = {_id: 1};
+
+      db.collection('maps')
+        .find(query, options)
+        .toArray((error, mapArray) => {
+          if (error) {
+            debug('findMapNameArray: error:', error);
+          }
+
+          const mapNameArray = mapArray;
+
+          viewModel.mapNameArray = mapNameArray;
+
+          debug('findMapNameArray', mapNameArray);
+          sendResponce();
+        });
     }
 
     function sendResponce() {
       templateToHtml(__filename, viewModel, (error, html) => {
         debug('sendResponce():html', viewModel, html);
-        debug('*** send ***');
+        debug('******************** send ********************');
         res.send(html);
       });
     }
