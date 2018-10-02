@@ -16,6 +16,9 @@ const environment = {};
 let db;
 
 (function init() {
+  debug('');
+  debug('');
+  debug('');
   debug('init()');
   setupEnvironment();
 })();
@@ -81,6 +84,6 @@ function setupLibrariesAndRoutes() {
 
 function setupExpress() {
   debug('setupExpress()');
-  debug('*** start ***');
+  debug('******************** start ********************');
   app.listen(3000);
 }

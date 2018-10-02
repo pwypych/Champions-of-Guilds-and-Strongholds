@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:home');
+const debug = require('debug')('cogs:landing');
 
 module.exports = (environment, templateToHtml) => {
   return (request, responce) => {
@@ -17,7 +17,7 @@ module.exports = (environment, templateToHtml) => {
     function sendResponce() {
       templateToHtml(__filename, viewModel, (error, html) => {
         debug('sendResponce():html', viewModel, html);
-        debug('*** send ***');
+        debug('******************** send ********************');
         responce.send(html);
       });
     }
