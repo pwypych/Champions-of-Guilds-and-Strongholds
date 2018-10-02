@@ -6,6 +6,7 @@
 const debug = require('debug')('cogs:app');
 const express = require('express');
 const mongodb = require('mongodb').MongoClient;
+const bodyParser = require('body-parser');
 
 // Instances of libraries
 const app = express();
@@ -44,6 +45,14 @@ function setupStaticFolder() {
   app.use(express.static('public'));
 
   debug('setupStaticFolder()');
+  setupBodyParser();
+}
+
+function setupBodyParser() {
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(bodyParser.json());
+
+  debug('setupBodyParser()');
   setupMongo();
 }
 
@@ -75,7 +84,9 @@ function setupLibrariesAndRoutes() {
   // routes
   app.get('/', require('./landing/landing.js')(environment, templateToHtml));
 
-  app.get('/0.1/create-game', require('./0.1/createGame/createGame.js')(environment, db, templateToHtml));
+  app.get('/0.1/createGame', require('./0.1/createGame/createGame.js')(environment, db, templateToHtml));
+  app.post('/0.1/createGamePost', require('./0.1/createGame/createGamePost.js')(environment, db));
+
 
   debug('setupLibrariesAndRoutes()');
   setupExpress();
