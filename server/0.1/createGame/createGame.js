@@ -25,6 +25,9 @@ module.exports = (environment, db, templateToHtml) => {
         .toArray((error, mapArray) => {
           if (error) {
             debug('findMapNameArray: error:', error);
+            res
+              .status(503)
+              .send('503 - Error - Cannot find anything in maps collection');
           }
 
           const mapNameArray = mapArray.map((mapObject) => {
