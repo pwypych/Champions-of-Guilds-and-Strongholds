@@ -80,12 +80,13 @@ function setupMongo() {
 function setupLibrariesAndRoutes() {
   // libraries
   const templateToHtml = require('./shared_libraries/templateToHtml.js')();
+  const sanitizer = require('./shared_libraries/sanitizer.js')();
 
   // routes
   app.get('/', require('./landing/landing.js')(environment, templateToHtml));
 
   app.get('/0.1/createGame', require('./0.1/createGame/createGame.js')(environment, db, templateToHtml));
-  app.post('/0.1/createGamePost', require('./0.1/createGame/createGamePost.js')(environment, db));
+  app.post('/0.1/createGamePost', require('./0.1/createGame/createGamePost.js')(environment, sanitizer, db));
 
 
   debug('setupLibrariesAndRoutes()');
