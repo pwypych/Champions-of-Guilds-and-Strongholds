@@ -4,11 +4,13 @@
   "description": "Champions of Guilds and Strongholds",
   "main": "server/app.js",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "debug": "^4.0.1",
     "dot": "^1.1.2",
     "express": "^4.16.3",
     "mongodb": "^3.1.6",
     "path": "^0.12.7",
+    "validator": "^10.8.0",
     "ws": "^6.0.0"
   },
   "devDependencies": {},
