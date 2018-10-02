@@ -4,15 +4,19 @@
 
 const debug = require('debug')('cogs:home');
 
-module.exports = (environment, templateToHtml) => {
+module.exports = (environment, db, templateToHtml) => {
   return (req, res) => {
     const viewModel = {};
     viewModel.baseurl = environment.baseurl;
     viewModel.timestamp = Date.now();
 
     (function init() {
-      sendResponce();
+      findMaps(db);
     })();
+
+    function findMaps(db) {
+      sendResponce();
+    }
 
     function sendResponce() {
       templateToHtml(__filename, viewModel, (error, html) => {

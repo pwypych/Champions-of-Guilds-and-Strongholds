@@ -72,7 +72,7 @@ function setupLibrariesAndRoutes() {
   // routes
   app.get('/', require('./landing/landing.js')(environment, templateToHtml));
 
-  app.get('/0.1/create-game', require('./0.1/createGame/createGame.js')(environment, templateToHtml));
+  app.get('/0.1/create-game', require('./0.1/createGame/createGame.js')(environment, db, templateToHtml));
 
   debug('setupLibrariesAndRoutes()');
   setupExpress();
