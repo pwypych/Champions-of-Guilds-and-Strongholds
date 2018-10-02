@@ -10,13 +10,18 @@
 
   <body>
     <h1>Champions of Guilds &amp; Strongholds - create game</h1>
-    <button class="js-create">Create Game</button>
 
-    <div class="seperator-20"></div>
+    <form action="<%= viewModel.baseurl %>/0.1/createGamePost" method="POST">
+      <button class="js-create" type="submit">Create Game</button>
 
-    <span>Map:</span><br />
-    <% viewModel.mapNameArray.forEach((mapName) => { %>
-      <span><%= mapName %></span><br />
-    <% }); %>
+      <div class="seperator-20"></div>
+
+      <span>Map:</span><br />
+      <select name="map">
+        <% viewModel.mapNameArray.forEach((mapName) => { %>
+          <option value="<%= mapName %>"><%= mapName %></option>
+        <% }); %>
+      </select>
+    </form>
   </body>
 </html>
