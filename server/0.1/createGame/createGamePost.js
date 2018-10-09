@@ -11,6 +11,7 @@ module.exports = (environment, sanitizer, db) => {
     viewModel.baseurl = environment.baseurl;
 
     let mapName;
+    let gameInstance = {};
 
     (function init() {
       debug('init');
@@ -41,8 +42,41 @@ module.exports = (environment, sanitizer, db) => {
         }
 
         debug('findMap', mapObject);
-        sendResponce(mapObject._id);
+        convertMapObjectToGameInstanceMap(mapObject);
       });
+    }
+
+    function convertMapObjectToGameInstanceMap(mapObject) {
+      gameInstance.mapName = mapObject._id;
+
+      // mapObject.layers[0].data;
+      // mapObject.width;
+      const data = mapObject.layers[0].data;
+      const height = mapObject.layers[0].height;
+      const width = mapObject.layers[0].width;
+
+      const mapLayer = [];
+
+      for (let i = 0; i < height; i += 1) {
+        mapLayer.push([]);
+      }
+
+      let x = 0;
+      let y = 0;
+
+      data.forEach((tileId) => {
+        mapLayer[y].push(tileId);
+
+        if (x >= width - 1) {
+          y += 1;
+          x = 0;
+        } else {
+          x += 1;
+        }
+      });
+
+      debug('convertMapObjectToGameInstanceMap', mapLayer);
+      sendResponce(mapObject._id);
     }
 
     function sendResponce(_id) {
