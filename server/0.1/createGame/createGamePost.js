@@ -29,7 +29,7 @@ module.exports = (environment, sanitizer, db) => {
     }
 
     function findMap() {
-      const query = {_id: mapName};
+      const query = { _id: mapName };
       const options = {};
 
       db.collection('maps').findOne(query, options, (error, mapObject) => {
@@ -45,6 +45,8 @@ module.exports = (environment, sanitizer, db) => {
     }
 
     function sendResponce(_id) {
+      debug('sendResponce()');
+      debug('******************** should redirect ********************');
       res.send('loaded map: ' + _id);
     }
   };
