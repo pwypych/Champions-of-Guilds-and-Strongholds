@@ -46,9 +46,11 @@ module.exports = (environment, sanitizer, db) => {
     function prepareGameInstance(mapObject) {
       const gameInstance = {};
 
+      gameInstance._id = shortid.generate();
+
       gameInstance.mapName = mapObject._id;
       gameInstance.mapLayer = toolConvertTiledLayer(mapObject.layers[0]);
-      gameInstance._id = shortid.generate();
+
       gameInstance.players = [];
 
       const playerOne = {};
