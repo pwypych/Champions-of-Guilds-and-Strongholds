@@ -48,12 +48,22 @@ module.exports = (environment, sanitizer, db) => {
 
     function convertMapObjectToGameInstanceMap(mapObject) {
       gameInstance.mapName = mapObject._id;
+      gameInstance.mapLayer = toolConvertTiledLayer(mapObject.layers[0]);
 
-      // mapObject.layers[0].data;
-      // mapObject.width;
-      const data = mapObject.layers[0].data;
-      const height = mapObject.layers[0].height;
-      const width = mapObject.layers[0].width;
+      debug('convertMapObjectToGameInstanceMap %o', gameInstance.mapLayer);
+      sendResponce(mapObject._id);
+    }
+
+    function sendResponce(_id) {
+      debug('sendResponce()');
+      debug('******************** should redirect ********************');
+      res.send('loaded map: ' + _id);
+    }
+
+    function toolConvertTiledLayer(tiledLayer) {
+      const data = tiledLayer.data;
+      const height = tiledLayer.height;
+      const width = tiledLayer.width;
 
       const mapLayer = [];
 
@@ -75,14 +85,7 @@ module.exports = (environment, sanitizer, db) => {
         }
       });
 
-      debug('convertMapObjectToGameInstanceMap', mapLayer);
-      sendResponce(mapObject._id);
-    }
-
-    function sendResponce(_id) {
-      debug('sendResponce()');
-      debug('******************** should redirect ********************');
-      res.send('loaded map: ' + _id);
+      return mapLayer;
     }
   };
 };
