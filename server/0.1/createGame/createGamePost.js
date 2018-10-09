@@ -10,9 +10,6 @@ module.exports = (environment, sanitizer, db) => {
     const viewModel = {};
     viewModel.baseurl = environment.baseurl;
 
-    let mapName;
-    let gameInstance = {};
-
     (function init() {
       debug('init');
       sanitizeMapName();
@@ -25,12 +22,12 @@ module.exports = (environment, sanitizer, db) => {
         return;
       }
 
-      mapName = sanitizer.sanitizeMapName(req.body.mapName);
+      const mapName = sanitizer.sanitizeMapName(req.body.mapName);
       debug('sanitizeMapName', mapName);
-      findMap();
+      findMap(mapName);
     }
 
-    function findMap() {
+    function findMap(mapName) {
       const query = { _id: mapName };
       const options = {};
 
@@ -41,23 +38,50 @@ module.exports = (environment, sanitizer, db) => {
           return;
         }
 
-        debug('findMap', mapObject);
-        convertMapObjectToGameInstanceMap(mapObject);
+        debug('findMap', mapObject._id);
+        prepareGameInstance(mapObject);
       });
     }
 
-    function convertMapObjectToGameInstanceMap(mapObject) {
+    function prepareGameInstance(mapObject) {
+      const gameInstance = {};
+
       gameInstance.mapName = mapObject._id;
       gameInstance.mapLayer = toolConvertTiledLayer(mapObject.layers[0]);
+      gameInstance._id = shortid.generate();
+      gameInstance.players = [];
 
-      debug('convertMapObjectToGameInstanceMap %o', gameInstance.mapLayer);
-      sendResponce(mapObject._id);
+      const playerOne = {};
+      playerOne.token = shortid.generate();
+      playerOne.name = 'Player 1';
+      gameInstance.players.push(playerOne);
+
+      const playerTwo = {};
+      playerTwo.token = shortid.generate();
+      playerTwo.name = 'Player 2';
+      gameInstance.players.push(playerTwo);
+
+      // debug('gameInstance.mapLayer: %o', gameInstance.mapLayer);
+      debug('prepareGameInstance', gameInstance._id);
+      insertGameInstance(gameInstance);
     }
 
-    function sendResponce(_id) {
+    function insertGameInstance(gameInstance) {
+      db.collection('games').insertOne(gameInstance, (error) => {
+        if (error) {
+          debug('insertGameInstance: error:', error);
+          res.status(503).send('503 Error - Cannot insert game instance');
+        }
+
+        debug('insertGameInstance');
+        sendResponce(gameInstance.mapName);
+      });
+    }
+
+    function sendResponce(mapName) {
       debug('sendResponce()');
       debug('******************** should redirect ********************');
-      res.send('loaded map: ' + _id);
+      res.send('loaded map: ' + mapName);
     }
 
     function toolConvertTiledLayer(tiledLayer) {
