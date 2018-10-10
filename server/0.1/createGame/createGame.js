@@ -27,7 +27,9 @@ module.exports = (environment, db, templateToHtml) => {
             debug('findMapNameArray: error:', error);
             res
               .status(503)
-              .send('503 - Error - Cannot find anything in maps collection');
+              .send(
+                '503 Service Unavailable: Mongo error, cannot run find on maps collection'
+              );
           }
 
           const mapNameArray = mapArray.map((mapObject) => {
@@ -37,11 +39,11 @@ module.exports = (environment, db, templateToHtml) => {
           viewModel.mapNameArray = mapNameArray;
 
           debug('findMapNameArray', mapNameArray);
-          findActiveGames();
+          findGameInstanceArray();
         });
     }
 
-    function findActiveGames() {
+    function findGameInstanceArray() {
       const query = {};
       const options = {};
       options.projection = { mapLayer: 0 };
@@ -50,11 +52,11 @@ module.exports = (environment, db, templateToHtml) => {
         .find(query, options)
         .toArray((error, gameInstanceArray) => {
           if (error) {
-            debug('findActiveGames: error:', error);
+            debug('findGameInstanceArray: error:', error);
             res
               .status(503)
               .send(
-                '503 - Error - Cannot find activ games in games collection'
+                '503 Service Unavailable: Mongo error, cannot run find on games collection'
               );
           }
 
