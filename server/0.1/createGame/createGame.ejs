@@ -22,8 +22,11 @@
           <option value="<%= mapName %>"><%= mapName %></option>
         <% }); %>
       </select>
-    </form><br />
-    <% viewModel.gameInstances.forEach((gameInstance) => { %>
+    </form>
+    
+    <br />
+
+    <% viewModel.gameInstanceArray.forEach((gameInstance) => { %>
       map name: <%= gameInstance.mapName %><br />
       game token: <%= gameInstance._id %><br />
       <% gameInstance.players.forEach((player) => { %>
@@ -32,5 +35,6 @@
       <% }); %>
       <br />
     <% }); %>
+
   </body>
 </html>

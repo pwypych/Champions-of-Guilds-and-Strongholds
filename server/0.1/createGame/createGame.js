@@ -60,11 +60,9 @@ module.exports = (environment, db, templateToHtml) => {
               );
           }
 
-          const gameInstances = gameInstanceArray;
+          viewModel.gameInstanceArray = gameInstanceArray;
 
-          viewModel.gameInstances = gameInstances;
-
-          debug('findMapNameArray', gameInstances);
+          debug('findMapNameArray', gameInstanceArray);
           sendResponce();
         });
     }
