@@ -31,16 +31,20 @@ module.exports = (environment, sanitizer, db) => {
       const query = { _id: mapName };
       const options = {};
 
-      db.collection('maps').findOne(query, options, (error, mapObject) => {
-        if (error) {
-          debug('findMap: error:', error);
-          res.status(503).send('503 Error - Cannot find map');
-          return;
-        }
+      db.collection('mapCollection').findOne(
+        query,
+        options,
+        (error, mapObject) => {
+          if (error) {
+            debug('findMap: error:', error);
+            res.status(503).send('503 Error - Cannot find map');
+            return;
+          }
 
-        debug('findMap', mapObject._id);
-        prepareGameInstance(mapObject);
-      });
+          debug('findMap', mapObject._id);
+          prepareGameInstance(mapObject);
+        }
+      );
     }
 
     function prepareGameInstance(mapObject) {
@@ -51,17 +55,17 @@ module.exports = (environment, sanitizer, db) => {
       gameInstance.mapName = mapObject._id;
       gameInstance.mapLayer = toolConvertTiledLayer(mapObject.layers[0]);
 
-      gameInstance.players = [];
+      gameInstance.playerArray = [];
 
       const playerOne = {};
       playerOne.token = shortid.generate();
       playerOne.name = 'Player 1';
-      gameInstance.players.push(playerOne);
+      gameInstance.playerArray.push(playerOne);
 
       const playerTwo = {};
       playerTwo.token = shortid.generate();
       playerTwo.name = 'Player 2';
-      gameInstance.players.push(playerTwo);
+      gameInstance.playerArray.push(playerTwo);
 
       // debug('gameInstance.mapLayer: %o', gameInstance.mapLayer);
       debug('prepareGameInstance', gameInstance._id);
@@ -69,7 +73,7 @@ module.exports = (environment, sanitizer, db) => {
     }
 
     function insertGameInstance(gameInstance) {
-      db.collection('games').insertOne(gameInstance, (error) => {
+      db.collection('gameCollection').insertOne(gameInstance, (error) => {
         if (error) {
           debug('insertGameInstance: error:', error);
           res.status(503).send('503 Error - Cannot insert game instance');

@@ -23,13 +23,13 @@
         <% }); %>
       </select>
     </form>
-    
+
     <br />
 
     <% viewModel.gameInstanceArray.forEach((gameInstance) => { %>
       map name: <%= gameInstance.mapName %><br />
       game token: <%= gameInstance._id %><br />
-      <% gameInstance.players.forEach((player) => { %>
+      <% gameInstance.playerArray.forEach((player) => { %>
         Player name: <%= player.name %><br />
         Player token:<%= player.token %><br />
       <% }); %>

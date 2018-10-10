@@ -102,7 +102,7 @@ function setupMongo() {
 function removeMapObject() {
   const mapName = path.basename(mapFilePath, '.json');
 
-  db.collection('maps').removeOne({ _id: mapName }, (error) => {
+  db.collection('mapCollection').removeOne({ _id: mapName }, (error) => {
     if (error) {
       console.error('ERROR: remove mongo error:', error);
       process.exit(1);
@@ -118,7 +118,7 @@ function insertMapObject() {
 
   mapObject._id = mapName;
 
-  db.collection('maps').insertOne(mapObject, (error) => {
+  db.collection('mapCollection').insertOne(mapObject, (error) => {
     if (error) {
       console.error('ERROR: insert mongo error:', error);
       process.exit(1);
