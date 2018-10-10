@@ -25,16 +25,40 @@
     </form>
 
     <br />
+    <hr />
+    <br />
 
-    <% viewModel.gameInstanceArray.forEach((gameInstance) => { %>
-      map name: <%= gameInstance.mapName %><br />
-      game token: <%= gameInstance._id %><br />
-      <% gameInstance.playerArray.forEach((player) => { %>
-        Player name: <%= player.name %><br />
-        Player token:<%= player.token %><br />
+    <h2>Current active game instances</h2>
+
+    <table>
+      <tr class="bold">
+        <td>Map Name</td>
+        <td>Player Names</td>
+        <td>Player Links</td>
+        <td>Options</td>
+      </tr>
+
+      <% viewModel.gameInstanceArray.forEach((gameInstance) => { %>
+        <tr>
+          <td><%= gameInstance.mapName %></td>
+          <td>
+            <% gameInstance.playerArray.forEach((player) => { %>
+              <%= player.name %><br/> 
+            <% }); %>
+          </td>
+          <td>
+            <% gameInstance.playerArray.forEach((player) => { %>
+              <% const uri = '/0.1/game/' + gameInstance._id + '/' + player.token; %>
+              <a href="<%= viewModel.baseurl + uri %>"><%= uri %></a>
+              <br/> 
+            <% }); %>
+          </td>
+          <td>
+            Delete game
+          </td>
+        </tr>
       <% }); %>
-      <br />
-    <% }); %>
+    </table>
 
   </body>
 </html>
