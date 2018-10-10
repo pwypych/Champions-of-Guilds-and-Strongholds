@@ -79,15 +79,15 @@ module.exports = (environment, sanitizer, db) => {
           res.status(503).send('503 Error - Cannot insert game instance');
         }
 
-        debug('insertGameInstance');
-        sendResponce(gameInstance.mapName);
+        debug('insertGameInstance', gameInstance.mapName);
+        sendResponce();
       });
     }
 
-    function sendResponce(mapName) {
+    function sendResponce() {
       debug('sendResponce()');
       debug('******************** should redirect ********************');
-      res.send('loaded map: ' + mapName);
+      res.redirect(environment.baseurl + '/0.1/createGame');
     }
 
     function toolConvertTiledLayer(tiledLayer) {
