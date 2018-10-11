@@ -12,7 +12,7 @@ module.exports = (environment, sanitizer, db) => {
     })();
 
     function checkRequestBody() {
-      if (!req.body.gameId) {
+      if (!req.body.gameInstanceId) {
         debug('validateShortId: error: ', req.body);
         res.status(503).send('503 Error - Wrong POST parameter');
         return;
@@ -22,7 +22,7 @@ module.exports = (environment, sanitizer, db) => {
     }
 
     function validateRequestBody() {
-      const gameInstanceId = req.body.gameId;
+      const gameInstanceId = req.body.gameInstanceId;
 
       if (!sanitizer.isValidShortId(gameInstanceId)) {
         debug('validateShortId: error: ', gameInstanceId);
