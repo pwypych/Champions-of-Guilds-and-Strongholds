@@ -88,6 +88,7 @@ function setupLibrariesAndRoutes() {
   app.get('/0.1/createGame', require('./0.1/createGame/createGame.js')(environment, db, templateToHtml));
   app.post('/0.1/createGamePost', require('./0.1/createGame/createGamePost.js')(environment, sanitizer, db));
 
+  app.post('/0.1/deleteGamePost', require('./0.1/createGame/deleteGamePost.js')(environment, sanitizer, db));
 
   debug('setupLibrariesAndRoutes()');
   setupExpress();
