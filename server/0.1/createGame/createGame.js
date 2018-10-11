@@ -69,7 +69,7 @@ module.exports = (environment, db, templateToHtml) => {
 
     function sendResponce() {
       templateToHtml(__filename, viewModel, (error, html) => {
-        debug('sendResponce():html', viewModel, html);
+        debug('sendResponce():html', viewModel, html.length);
         debug('******************** send ********************');
         res.send(html);
       });
