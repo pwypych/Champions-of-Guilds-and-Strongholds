@@ -43,18 +43,21 @@
           <td><%= gameInstance.mapName %></td>
           <td>
             <% gameInstance.playerArray.forEach((player) => { %>
-              <%= player.name %><br/> 
+              <%= player.name %><br/>
             <% }); %>
           </td>
           <td>
             <% gameInstance.playerArray.forEach((player) => { %>
               <% const uri = '/0.1/game/' + gameInstance._id + '/' + player.token; %>
               <a href="<%= viewModel.baseurl + uri %>"><%= uri %></a>
-              <br/> 
+              <br/>
             <% }); %>
           </td>
           <td>
-            Delete game
+            <form class="" action="/deleteGame" method="post">
+              <input name="prodId" type="hidden" value="<%= gameInstance._id %>">
+              <input type="button" name="" value="Delete game">
+            </form>
           </td>
         </tr>
       <% }); %>
