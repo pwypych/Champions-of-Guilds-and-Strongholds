@@ -6,40 +6,43 @@ const debug = require('debug')('cogs:deleteGamePost');
 
 module.exports = (environment, sanitizer, db) => {
   return (req, res) => {
-    const viewModel = {};
-    viewModel.baseurl = environment.baseurl;
-
     (function init() {
       debug('init');
-      validateShortId();
+      checkRequestBody();
     })();
 
-    function validateShortId() {
+    function checkRequestBody() {
       if (!req.body.gameId) {
         debug('validateShortId: error: ', req.body);
         res.status(503).send('503 Error - Wrong POST parameter');
         return;
       }
-
-      const gameId = req.body.gameId;
-
-      if (!sanitizer.isValidShortId(gameId)) {
-        debug('validateShortId: error: ', gameId);
-        res.status(503).send('503 Error - gameId is not valid');
-        return;
-      }
-      debug('validateShortId', gameId);
-      deleteGame(gameId);
+      debug('checkRequestBody');
+      validateRequestBody();
     }
 
-    function deleteGame(gameId) {
-      debug('deleteGame:gameId', gameId);
-      db.collection('gameCollection').deleteOne({ _id: gameId }, (error) => {
-        if (error) {
-          debug('deleteGamePost: error:', error);
-          res.status(503).send('503 Error - Cannot insert game instance');
+    function validateRequestBody() {
+      const gameInstanceId = req.body.gameId;
+
+      if (!sanitizer.isValidShortId(gameInstanceId)) {
+        debug('validateShortId: error: ', gameInstanceId);
+        res.status(503).send('503 Error - gameInstanceId is not valid');
+        return;
+      }
+      debug('validateRequestBody', gameInstanceId);
+      deleteGame(gameInstanceId);
+    }
+
+    function deleteGame(gameInstanceId) {
+      db.collection('gameCollection').deleteOne(
+        { _id: gameInstanceId },
+        (error) => {
+          if (error) {
+            debug('deleteGamePost: error:', error);
+            res.status(503).send('503 Error - Cannot delete game instance');
+          }
         }
-      });
+      );
 
       debug('deleteGamePost');
       sendResponce();
