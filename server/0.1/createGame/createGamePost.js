@@ -7,23 +7,24 @@ const shortid = require('shortid');
 
 module.exports = (environment, sanitizer, db) => {
   return (req, res) => {
-    const viewModel = {};
-    viewModel.baseurl = environment.baseurl;
-
     (function init() {
       debug('init');
-      sanitizeMapName();
+      checkRequestBody();
     })();
 
-    function sanitizeMapName() {
+    function checkRequestBody() {
       if (!req.body.mapName) {
-        debug('sanitizeMapName: error: ', req.body);
+        debug('checkRequestBody: error: ', req.body);
         res.status(503).send('503 Error - Wrong POST parameter');
         return;
       }
+      debug('checkRequestBody');
+      sanitizeRequestBody();
+    }
 
+    function sanitizeRequestBody() {
       const mapName = sanitizer.sanitizeMapName(req.body.mapName);
-      debug('sanitizeMapName', mapName);
+      debug('checkRequestBody', mapName);
       findMap(mapName);
     }
 
