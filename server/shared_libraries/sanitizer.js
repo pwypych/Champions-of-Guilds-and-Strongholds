@@ -3,6 +3,7 @@
 'use strict';
 
 const validator = require('validator');
+const shortid = require('shortid');
 
 module.exports = () => {
   function sanitizeMapName(dirty) {
@@ -13,7 +14,12 @@ module.exports = () => {
     return clean;
   }
 
+  function isValidShortId(input) {
+    return shortid.isValid(input);
+  }
+
   return {
-    sanitizeMapName: sanitizeMapName
+    sanitizeMapName: sanitizeMapName,
+    isValidShortId: isValidShortId
   };
 };
