@@ -85,10 +85,10 @@ function setupLibrariesAndRoutes() {
   // routes
   app.get('/', require('./landing/landing.js')(environment, templateToHtml));
 
-  app.get('/0.1/createGame', require('./0.1/createGame/createGame.js')(environment, db, templateToHtml));
-  app.post('/0.1/createGamePost', require('./0.1/createGame/createGamePost.js')(environment, sanitizer, db));
+  app.get('/0.1/gamePanel', require('./0.1/gamePanel/gamePanel.js')(environment, db, templateToHtml));
+  app.post('/0.1/createGamePost', require('./0.1/gamePanel/createGamePost.js')(environment, sanitizer, db));
 
-  app.post('/0.1/deleteGamePost', require('./0.1/createGame/deleteGamePost.js')(environment, sanitizer, db));
+  app.post('/0.1/deleteGamePost', require('./0.1/gamePanel/deleteGamePost.js')(environment, sanitizer, db));
 
   debug('setupLibrariesAndRoutes()');
   setupExpress();
