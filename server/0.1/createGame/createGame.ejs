@@ -54,9 +54,9 @@
             <% }); %>
           </td>
           <td>
-            <form class="" action="/deleteGame" method="post">
-              <input name="prodId" type="hidden" value="<%= gameInstance._id %>">
-              <input type="button" name="" value="Delete game">
+            <form class="" action="/0.1/deleteGamePost" method="post">
+              <input name="gameId" type="hidden" value="<%= gameInstance._id %>">
+              <button type="submit">Delete game</button>
             </form>
           </td>
         </tr>
