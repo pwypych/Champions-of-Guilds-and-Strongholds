@@ -2,6 +2,16 @@
 
 'use strict';
 
+/*
+
+  # Usage
+
+  >node loadMapFromTiles.js ~/node/cogs/_/map/forest/forest.json
+
+  !NB There should be tileset file in directory named forest_tileset.json
+
+*/
+
 // Libraries
 const fs = require('fs');
 const path = require('path');
