@@ -88,7 +88,7 @@ function setupLibrariesAndRoutes() {
   app.get('/0.1/gamePanel', require('./0.1/gamePanel/gamePanel.js')(environment, db, templateToHtml));
   app.post('/0.1/createGameInstancePost', require('./0.1/gamePanel/createGameInstancePost.js')(environment, sanitizer, db));
 
-  app.post('/0.1/deleteGamePost', require('./0.1/gamePanel/deleteGamePost.js')(environment, sanitizer, db));
+  app.post('/0.1/deleteGameInstancePost', require('./0.1/gamePanel/deleteGameInstancePost.js')(environment, sanitizer, db));
 
   debug('setupLibrariesAndRoutes()');
   setupExpress();

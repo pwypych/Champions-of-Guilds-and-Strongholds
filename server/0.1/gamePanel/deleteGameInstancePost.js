@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:deleteGamePost');
+const debug = require('debug')('cogs:deleteGameInstancePost');
 
 module.exports = (environment, sanitizer, db) => {
   return (req, res) => {
@@ -38,13 +38,13 @@ module.exports = (environment, sanitizer, db) => {
         { _id: gameInstanceId },
         (error) => {
           if (error) {
-            debug('deleteGamePost: error:', error);
+            debug('deleteGameInstancePost: error:', error);
             res.status(503).send('503 Error - Cannot delete game instance');
           }
         }
       );
 
-      debug('deleteGamePost');
+      debug('deleteGameInstancePost');
       sendResponce();
     }
 
