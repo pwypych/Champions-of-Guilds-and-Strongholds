@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:createGamePost');
+const debug = require('debug')('cogs:createGameInstancePost');
 const shortid = require('shortid');
 
 module.exports = (environment, sanitizer, db) => {
