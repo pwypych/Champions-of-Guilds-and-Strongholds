@@ -19,9 +19,11 @@ const mongodb = require('mongodb').MongoClient;
 
 // Variables
 let db;
+
 let mapFilePath;
-let tilesetPath;
 let mapObject;
+
+let tilesetPath;
 let tilesetObject;
 
 /* eslint-disable no-console */
@@ -44,7 +46,7 @@ function parseArguments() {
   checkFileMapExists();
 }
 
-// ---------- forest.json ----------
+// ---------- ex. forest.json ----------
 
 function checkFileMapExists() {
   fs.stat(mapFilePath, (error, stats) => {
@@ -94,7 +96,8 @@ function validateMap() {
   generateTilesetPath();
 }
 
-// ---------- forest_tileset.json ----------
+// ---------- ex. forest_tileset.json ----------
+
 function generateTilesetPath() {
   const mapName = path.basename(mapFilePath, '.json');
   const directoryName = path.dirname(mapFilePath);
@@ -151,7 +154,7 @@ function validateTileset() {
   }
 
   console.log('validateTileset', tilesetObject.tiles.length);
-  exit();
+  setupMongo();
 }
 
 // ---------- Database ----------
@@ -192,6 +195,7 @@ function insertMapObject() {
   const mapName = path.basename(mapFilePath, '.json');
 
   mapObject._id = mapName;
+  mapObject.tilesetObject = tilesetObject;
 
   db.collection('mapCollection').insertOne(mapObject, (error) => {
     if (error) {
@@ -200,11 +204,7 @@ function insertMapObject() {
     }
 
     console.log('insertMapObject');
-    exit();
+    console.log('processExit: SUCCESS');
+    process.exit(0);
   });
-}
-
-function exit() {
-  console.log('exit: SUCCESS');
-  process.exit(0);
 }
