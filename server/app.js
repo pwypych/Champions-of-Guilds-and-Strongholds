@@ -83,10 +83,13 @@ function setupLibrariesAndRoutes() {
   const sanitizer = require('./libraries/sanitizer.js')();
 
   // routes
-  app.get('/', require('./gamePanel/gamePanel.js')(environment, db, templateToHtml));
-  app.post('/createGameInstancePost', require('./gamePanel/createGameInstancePost.js')(environment, sanitizer, db));
+  app.get('/gamePanel', require('./gamePanel/gamePanel.js')(environment, db, templateToHtml));
+  app.post('/gamePanel/createGameInstancePost', require('./gamePanel/createGameInstancePost.js')(environment, sanitizer, db));
 
-  app.post('/deleteGameInstancePost', require('./gamePanel/deleteGameInstancePost.js')(environment, sanitizer, db));
+  app.post('/gamePanel/deleteGameInstancePost', require('./gamePanel/deleteGameInstancePost.js')(environment, sanitizer, db));
+
+  // redirects
+  app.get('/', (req, res) => { res.redirect('/gamePanel'); });
 
   debug('setupLibrariesAndRoutes()');
   setupExpress();

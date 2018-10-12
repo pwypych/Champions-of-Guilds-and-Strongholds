@@ -88,7 +88,7 @@ module.exports = (environment, sanitizer, db) => {
     function sendResponce() {
       debug('sendResponce()');
       debug('******************** should redirect ********************');
-      res.redirect(environment.baseurl + '/');
+      res.redirect(environment.baseurl + '/gamePanel');
     }
 
     function toolConvertTiledLayer(tiledLayer) {

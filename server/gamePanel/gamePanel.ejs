@@ -11,7 +11,7 @@
   <body>
     <h1>Champions of Guilds &amp; Strongholds - create game</h1>
 
-    <form action="<%= viewModel.baseurl %>/createGameInstancePost" method="POST">
+    <form action="<%= viewModel.baseurl %>/gamePanel/createGameInstancePost" method="POST">
       <button class="js-create" type="submit">Create Game</button>
 
       <div class="seperator-20"></div>
@@ -54,7 +54,7 @@
             <% }); %>
           </td>
           <td>
-            <form class="" action="/deleteGameInstancePost" method="post">
+            <form class="" action="/gamePanel/deleteGameInstancePost" method="post">
               <input name="gameInstanceId" type="hidden" value="<%= gameInstance._id %>">
               <button type="submit">Delete game</button>
             </form>
