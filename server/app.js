@@ -79,8 +79,8 @@ function setupMongo() {
 // prettier-ignore
 function setupLibrariesAndRoutes() {
   // libraries
-  const templateToHtml = require('./shared_libraries/templateToHtml.js')();
-  const sanitizer = require('./shared_libraries/sanitizer.js')();
+  const templateToHtml = require('./libraries/templateToHtml.js')();
+  const sanitizer = require('./libraries/sanitizer.js')();
 
   // routes
   app.get('/', require('./gamePanel/gamePanel.js')(environment, db, templateToHtml));
