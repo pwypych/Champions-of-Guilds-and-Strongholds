@@ -6,7 +6,7 @@
 
   # Usage
 
-  >node loadMapFromTiles.js ~/node/cogs/_/map/forest/forest.json
+  >node loadMapFromTiled.js ~/node/cogs/_/map/forest/forest.json
 
   !NB There should be tileset file in directory named forest_tileset.json
 
@@ -20,7 +20,9 @@ const mongodb = require('mongodb').MongoClient;
 // Variables
 let db;
 let mapFilePath;
+let tilesetPath;
 let mapObject;
+let tilesetObject;
 
 /* eslint-disable no-console */
 (function init() {
@@ -39,19 +41,21 @@ function parseArguments() {
   }
 
   console.log('parseArguments', mapFilePath);
-  checkFileExists();
+  checkFileMapExists();
 }
 
-function checkFileExists() {
+// ---------- forest.json ----------
+
+function checkFileMapExists() {
   fs.stat(mapFilePath, (error, stats) => {
     if (error) {
       console.error(
-        'ERROR: checkFileExists: File does not exist, or other read error'
+        'ERROR: checkFileMapExists: File does not exist, or other read error'
       );
       process.exit(1);
     }
 
-    console.log('checkFileExists', stats);
+    console.log('checkFileMapExists: stats.size', stats.size);
     readFileMap();
   });
 }
@@ -87,18 +91,70 @@ function validateMap() {
   }
 
   console.log('validateMap', mapObject.layers[0].data.length);
-  readFileTileset();
+  generateTilesetPath();
 }
 
-function readFileTileset() {
+// ---------- forest_tileset.json ----------
+function generateTilesetPath() {
   const mapName = path.basename(mapFilePath, '.json');
   const directoryName = path.dirname(mapFilePath);
 
-  const tilesetPath = path.join(directoryName, mapName + '_tileset.json');
+  tilesetPath = path.join(directoryName, mapName + '_tileset.json');
+  checkFileTilesetExist();
+}
 
-  console.log('readFileTileset', tilesetPath);
+function checkFileTilesetExist() {
+  fs.stat(tilesetPath, (error, stats) => {
+    if (error) {
+      console.error(
+        'ERROR: checkFileTilesetExist: File does not exist, or other read error'
+      );
+      process.exit(1);
+    }
+    console.log('checkFileTilesetExist: stats.size', stats.size);
+    readFileTileset();
+  });
+}
+
+function readFileTileset() {
+  fs.readFile(tilesetPath, 'utf8', (error, tilesetString) => {
+    console.log('readFileTileset', tilesetString.length);
+    parseJsonTileset(tilesetString);
+  });
+}
+
+function parseJsonTileset(tilesetString) {
+  try {
+    tilesetObject = JSON.parse(tilesetString);
+  } catch (error) {
+    console.error(
+      'ERROR: parseJsonTileset: JSON parse error, not valid tileset file'
+    );
+    process.exit(1);
+  }
+
+  console.log('parseJsonTileset');
+  validateTileset();
+}
+
+function validateTileset() {
+  if (!tilesetObject.tiles) {
+    console.error('ERROR: validateMap: TileObject missing tiles array');
+    process.exit(1);
+  }
+
+  if (!tilesetObject.tiles[0].properties[0].value) {
+    console.error(
+      'ERROR: validateTileset: tilesetObject.tiles[0].properties[0].value is not exist'
+    );
+    process.exit(1);
+  }
+
+  console.log('validateTileset', tilesetObject.tiles.length);
   exit();
 }
+
+// ---------- Database ----------
 
 function setupMongo() {
   const connectionUrl = 'mongodb://localhost:27017';
@@ -118,7 +174,6 @@ function setupMongo() {
     }
   );
 }
-
 function removeMapObject() {
   const mapName = path.basename(mapFilePath, '.json');
 
