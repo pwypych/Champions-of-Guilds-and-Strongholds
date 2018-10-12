@@ -42,26 +42,26 @@ function checkFileExists() {
     }
 
     console.log('checkFileExists', stats);
-    readFile();
+    readFileMap();
   });
 }
 
-function readFile() {
+function readFileMap() {
   fs.readFile(mapFilePath, 'utf8', (error, mapString) => {
-    console.log('readFile', mapString.length);
-    parseJson(mapString);
+    console.log('readFileMap', mapString.length);
+    parseJsonMap(mapString);
   });
 }
 
-function parseJson(mapString) {
+function parseJsonMap(mapString) {
   try {
     mapObject = JSON.parse(mapString);
   } catch (error) {
-    console.error('ERROR: parseJson: JSON parse error, not valid map file');
+    console.error('ERROR: parseJsonMap: JSON parse error, not valid map file');
     process.exit(1);
   }
 
-  console.log('parseJson');
+  console.log('parseJsonMap');
   validateMap();
 }
 
@@ -77,7 +77,17 @@ function validateMap() {
   }
 
   console.log('validateMap', mapObject.layers[0].data.length);
-  setupMongo();
+  readFileTileset();
+}
+
+function readFileTileset() {
+  const mapName = path.basename(mapFilePath, '.json');
+  const directoryName = path.dirname(mapFilePath);
+
+  const tilesetPath = path.join(directoryName, mapName + '_tileset.json');
+
+  console.log('readFileTileset', tilesetPath);
+  exit();
 }
 
 function setupMongo() {
