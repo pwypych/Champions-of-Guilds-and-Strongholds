@@ -91,6 +91,8 @@ function setupLibrariesAndRoutes() {
   // redirects
   app.get('/', (req, res) => { res.redirect('/gamePanel'); });
 
+  app.get('/gameInstance/:gameInstanceId/:playerToken', require('./gameInstance/gameInstance.js')(environment, db, templateToHtml));
+
   debug('setupLibrariesAndRoutes()');
   setupExpress();
 }
