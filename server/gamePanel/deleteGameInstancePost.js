@@ -34,7 +34,7 @@ module.exports = (environment, sanitizer, db) => {
     }
 
     function deleteGame(gameInstanceId) {
-      db.collection('gameCollection').deleteOne(
+      db.collection('gameInstanceCollection').deleteOne(
         { _id: gameInstanceId },
         (error) => {
           if (error) {

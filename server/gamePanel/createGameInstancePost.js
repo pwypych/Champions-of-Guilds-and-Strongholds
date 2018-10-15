@@ -77,15 +77,18 @@ module.exports = (environment, sanitizer, db) => {
     }
 
     function insertGameInstance(gameInstance) {
-      db.collection('gameCollection').insertOne(gameInstance, (error) => {
-        if (error) {
-          debug('insertGameInstance: error:', error);
-          res.status(503).send('503 Error - Cannot insert game instance');
-        }
+      db.collection('gameInstanceCollection').insertOne(
+        gameInstance,
+        (error) => {
+          if (error) {
+            debug('insertGameInstance: error:', error);
+            res.status(503).send('503 Error - Cannot insert game instance');
+          }
 
-        debug('insertGameInstance', gameInstance.mapName);
-        sendResponce();
-      });
+          debug('insertGameInstance', gameInstance.mapName);
+          sendResponce();
+        }
+      );
     }
 
     function sendResponce() {

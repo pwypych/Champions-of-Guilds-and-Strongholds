@@ -48,7 +48,7 @@ module.exports = (environment, db, templateToHtml) => {
       const options = {};
       options.projection = { mapLayer: 0 };
 
-      db.collection('gameCollection')
+      db.collection('gameInstanceCollection')
         .find(query, options)
         .toArray((error, gameInstanceArray) => {
           if (error) {
@@ -56,7 +56,7 @@ module.exports = (environment, db, templateToHtml) => {
             res
               .status(503)
               .send(
-                '503 Service Unavailable: Mongo error, cannot run find on gameCollection'
+                '503 Service Unavailable: Mongo error, cannot run find on gameInstanceCollection'
               );
           }
 
