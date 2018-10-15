@@ -58,7 +58,7 @@ function setupBodyParser() {
 
 function setupMongo() {
   const connectionUrl = 'mongodb://localhost:27017';
-  const dbName = 'cogs_0_1';
+  const dbName = 'cogs_axe';
   const options = {
     useNewUrlParser: true
   };
