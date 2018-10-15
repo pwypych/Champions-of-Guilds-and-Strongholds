@@ -15,9 +15,12 @@ module.exports = (environment, sanitizer, db) => {
     function checkRequestBody() {
       if (!req.body.mapName) {
         debug('checkRequestBody: error: ', req.body);
-        res.status(503).send('503 Error - Wrong POST parameter');
+        res
+          .status(503)
+          .send('503 Error - Wrong POST parameter or empty mapName parameter');
         return;
       }
+
       debug('checkRequestBody');
       sanitizeRequestBody();
     }
