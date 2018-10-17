@@ -16,7 +16,16 @@
   <body>
     hello World
     <a href="/">back</a>
+    <script type="text/javascript">
+      let type = "WebGL";
+      if (!PIXI.utils.isWebGLSupported()) {
+        type = "canvas";
+      }
+
+      PIXI.utils.sayHello(type);
+    </script>
 <script type="text/javascript">
+console.log(_);
   $(function() {
     console.log("hello jQuery");
   });
