@@ -6,11 +6,20 @@
 
     <title>Champions of Guilds &amp; Strongholds</title>
     <link rel="stylesheet" href="<%= viewModel.baseurl %>/style.css?v=<%= viewModel.timestamp %>">
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/libraries/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/libraries/lodash-4.17.10.js"></script>
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/libraries/pixi-4.8.2.js"></script>
+
+    </script>
   </head>
 
   <body>
     hello World
     <a href="/">back</a>
-
+<script type="text/javascript">
+  $(function() {
+    console.log("hello jQuery");
+  });
+</script>
   </body>
 </html>
