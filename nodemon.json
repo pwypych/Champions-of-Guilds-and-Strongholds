@@ -1,7 +1,7 @@
 {
   "ext": "js ejs json css bash lodash script html",
   "events": {
-    "start": ""
+    "start": "./build_client.bash"
   },
   "ignore": ["public/generated"],
   "execMap": {
