@@ -4,21 +4,44 @@
 
 /* pixiTutorial.js */
 moduleContainer.pixiTutorial = () => {
-  console.log('pixiTutorial');
+  let app;
 
-  const options = {};
-  options.width = 256;
-  options.height = 256;
-  options.backgroundColor = '0xff0000';
-  const app = new PIXI.Application(options);
-  document.body.appendChild(app.view);
+  (function init() {
+    console.log('init');
+    instantiatePixiApp();
+  })();
 
-  PIXI.loader.add('image/cat.png').load(setup);
+  function instantiatePixiApp() {
+    const options = {};
+    options.width = 256;
+    options.height = 256;
+    options.backgroundColor = 0xff0000;
+    // options.forceCanvas = true;
+    app = new PIXI.Application(options);
+    appendToBody();
+  }
 
-  function setup() {
+  function appendToBody() {
+    document.body.appendChild(app.view);
+    loadImages();
+  }
+
+  function loadImages() {
+    PIXI.loader.add('image/cat.png');
+    PIXI.loader.load(() => {
+      instantiateSprites();
+    });
+  }
+
+  function instantiateSprites() {
     const texture = PIXI.loader.resources['image/cat.png'].texture;
     const sprite = new PIXI.Sprite(texture);
     console.log('sprite', sprite);
+    displaySprites(sprite);
+  }
+
+  function displaySprites(sprite) {
+    app.stage.addChild(sprite);
   }
 };
 /* /pixiTutorial.js */
