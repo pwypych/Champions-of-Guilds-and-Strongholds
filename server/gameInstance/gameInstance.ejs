@@ -12,14 +12,20 @@
     <script>
       'use strict';
 
-      const moduleArray = [];
+      const moduleContainer = {};
     </script>
 
     <script type="text/javascript" src="<%= viewModel.baseurl %>/libraries/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="<%= viewModel.baseurl %>/libraries/lodash-4.17.10.js"></script>
     <script type="text/javascript" src="<%= viewModel.baseurl %>/libraries/pixi-4.8.2.js"></script>
 
-    <% /* we always put our modules into one global variable moduleArray, modules are buildt to bundle.js */ %>
+    <% /* we always put our modules into one global variable moduleContainer, modules are buildt to bundle.js */ %>
     <script type="text/javascript" src="<%= viewModel.baseurl %>/build/bundle.js"></script>
+
+    <script>
+      (function init() {
+        moduleContainer.start();
+      })();
+    </script>
   </body>
 </html>
