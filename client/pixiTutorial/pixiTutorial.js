@@ -12,5 +12,13 @@ moduleContainer.pixiTutorial = () => {
   options.backgroundColor = '0xff0000';
   const app = new PIXI.Application(options);
   document.body.appendChild(app.view);
+
+  PIXI.loader.add('image/cat.png').load(setup);
+
+  function setup() {
+    const texture = PIXI.loader.resources['image/cat.png'].texture;
+    const sprite = new PIXI.Sprite(texture);
+    console.log('sprite', sprite);
+  }
 };
 /* /pixiTutorial.js */
