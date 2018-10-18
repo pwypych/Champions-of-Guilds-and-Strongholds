@@ -15,8 +15,6 @@ moduleContainer.pixiTutorial = () => {
     const options = {};
     options.width = 256;
     options.height = 256;
-    options.backgroundColor = 0xff0000;
-    // options.forceCanvas = true;
     app = new PIXI.Application(options);
     appendToBody();
   }
@@ -27,14 +25,14 @@ moduleContainer.pixiTutorial = () => {
   }
 
   function loadImages() {
-    PIXI.loader.add('image/cat.png');
+    PIXI.loader.add('/image/cat.png');
     PIXI.loader.load(() => {
       instantiateSprites();
     });
   }
 
   function instantiateSprites() {
-    const texture = PIXI.loader.resources['image/cat.png'].texture;
+    const texture = PIXI.loader.resources['/image/cat.png'].texture;
     const sprite = new PIXI.Sprite(texture);
     console.log('sprite', sprite);
     displaySprites(sprite);
