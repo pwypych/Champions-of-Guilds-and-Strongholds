@@ -33,13 +33,40 @@ moduleContainer.pixiTutorial = () => {
 
   function instantiateSprites() {
     const texture = PIXI.loader.resources['/image/cat.png'].texture;
-    const sprite = new PIXI.Sprite(texture);
-    console.log('sprite', sprite);
-    displaySprites(sprite);
+
+    const rectangle = new PIXI.Rectangle(32, 32, 32, 32);
+
+    texture.frame = rectangle;
+
+    const catSprite = new PIXI.Sprite(texture);
+    console.log('catSprite', catSprite);
+    displaySprites(catSprite);
   }
 
-  function displaySprites(sprite) {
-    app.stage.addChild(sprite);
+  function displaySprites(catSprite) {
+    catSprite.x = 128;
+    catSprite.y = 128;
+
+    catSprite.width = 80;
+    catSprite.height = 120;
+
+    catSprite.scale.x = 2;
+    catSprite.scale.y = 2;
+
+    catSprite.anchor.x = 0.5;
+    catSprite.anchor.y = 0.5;
+
+    catSprite.rotation = 0.5;
+
+    app.stage.addChild(catSprite);
+
+    app.ticker.add((dt) => {
+      gameLoop(dt, catSprite);
+    });
+  }
+
+  function gameLoop(dt, catSprite) {
+    catSprite.rotation += 0.05 * dt;
   }
 };
 /* /pixiTutorial.js */
