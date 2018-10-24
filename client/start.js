@@ -5,7 +5,7 @@
 /* start.js */
 moduleContainer.start = function start() {
   (function init() {
-    moduleContainer.pixiTutorial();
+    moduleContainer.pixiTest();
   })();
 };
 /* /start.js */
