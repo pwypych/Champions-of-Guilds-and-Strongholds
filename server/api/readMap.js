@@ -4,12 +4,9 @@
 
 const debug = require('debug')('cogs:readMap');
 
-module.exports = (environment, db) => {
+module.exports = (db) => {
   return (req, res) => {
     let gameToken;
-    const viewModel = {};
-    viewModel.baseurl = environment.baseurl;
-    viewModel.timestamp = Date.now();
 
     (function init() {
       debug('init');
