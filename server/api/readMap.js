@@ -6,6 +6,7 @@ const debug = require('debug')('cogs:readMap');
 
 module.exports = (environment, db) => {
   return (req, res) => {
+    let gameToken;
     const viewModel = {};
     viewModel.baseurl = environment.baseurl;
     viewModel.timestamp = Date.now();
@@ -16,11 +17,24 @@ module.exports = (environment, db) => {
     })();
 
     function checkRequestQuery() {
+      debug('checkRequestQuery');
       debug('req.query - ', req.query);
-      res.send('api/readMap');
+      if (req.query.gameToken) {
+        gameToken = req.query.gameToken;
+        sanitizeGameToken();
+      } else {
+        res.send('Error, missing gameToken querry variable');
+      }
+    }
+
+    function sanitizeGameToken() {
+      debug('sanitizeGameToken');
+      debug('gameToken', gameToken);
+      res.send(gameToken);
     }
 
     function findMap(mapName) {
+      debug('findMap');
       const query = { _id: mapName };
       const options = {};
 
