@@ -4,7 +4,7 @@
 
 const debug = require('debug')('cogs:readMap');
 
-module.exports = (db) => {
+module.exports = (sanitizer, db) => {
   return (req, res) => {
     let gameToken;
 
@@ -20,35 +20,40 @@ module.exports = (db) => {
         gameToken = req.query.gameToken;
         sanitizeGameToken();
       } else {
-        res.send('Error, missing gameToken querry variable');
+        res.send('Error 403, missing gameToken querry variable');
       }
     }
 
     function sanitizeGameToken() {
       debug('sanitizeGameToken');
       debug('gameToken', gameToken);
-      res.send(gameToken);
+      if (sanitizer.isValidShortId(gameToken)) {
+        findGame(gameToken);
+      } else {
+        res.send('invalid game token');
+      }
     }
 
-    function findMap(mapName) {
-      debug('findMap');
-      const query = { _id: mapName };
+    function findGame(gameId) {
+      debug('findGame');
+      const query = { _id: gameId };
       const options = {};
 
-      db.collection('mapCollection').findOne(
+      db.collection('gameInstanceCollection').findOne(
         query,
         options,
-        (error, mapObject) => {
+        (error, gameObject) => {
           if (error) {
-            debug('findMap: error:', error);
+            debug('findGame: error:', error);
             res.status(503).send('503 Error - Cannot find map');
             return;
           }
 
-          debug('findMap', mapObject._id);
-          prepareGameInstance(mapObject);
+          debug('findGame', gameObject._id);
+          res.send('game found');
+          // prepareGameInstance(gameObject);
         }
       );
-    }
+    } // Function
   };
 };
