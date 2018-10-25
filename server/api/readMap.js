@@ -15,54 +15,63 @@ module.exports = (sanitizer, db) => {
     })();
 
     function checkRequestQuery() {
-      debug('checkRequestQuery');
-      debug('req.query - ', req.query);
-      if (!req.query.gameInstanceId || !req.query.plyerToken) {
-        res.send('Error 403, missing gameInstanceId querry variable');
+      debug('req.query', req.query);
+      if (!req.query.gameInstanceId && !req.query.plyerToken) {
+        res
+          .status(503)
+          .send('403 Forbbidden - missing gameInstanceId querry variable');
         return;
       }
       gameInstanceId = req.query.gameInstanceId;
       playerToken = req.query.playerToken;
-      sanitizeQueryStrings();
+
+      debug('checkRequestQuery:', playerToken, gameInstanceId);
+      sanitizeRequestQuery();
     }
 
-    function sanitizeQueryStrings() {
-      debug('sanitizeQueryStrings');
+    function sanitizeRequestQuery() {
+      debug('playerToken', playerToken);
       debug('gameInstanceId', gameInstanceId);
       if (!sanitizer.isValidShortId(gameInstanceId)) {
-        res.send('invalid gameInstanceId');
+        debug('sanitizeRequestQuery: invalid gameInstanceId:', gameInstanceId);
+        res
+          .status(503)
+          .send('503 Service Unavailable - invalid gameInstanceId');
         return;
       }
+
       if (!sanitizer.isValidShortId(playerToken)) {
-        res.send('invalid playerToken');
+        debug('sanitizeRequestQuery: invalid playerToken:', playerToken);
+        res.status(503).send('503 Service Unavailable - invalid playerToken');
         return;
       }
-      findGame(gameInstanceId);
+
+      debug('sanitizeRequestQuery');
+      findGameInstance();
     }
 
-    function findGame(gameId) {
-      debug('findGame');
-      const query = { _id: gameId };
+    function findGameInstance() {
+      const query = { _id: gameInstanceId };
       const options = {};
 
       db.collection('gameInstanceCollection').findOne(
         query,
         options,
-        (error, gameObject) => {
+        (error, gameInstanceObject) => {
           if (error) {
-            debug('findGame: error:', error);
-            res.status(503).send('503 Error - Cannot find map');
+            debug('findGameInstance: error:', error);
+            res.status(503).send('503 Service Unavailable - Cannot find map');
             return;
           }
 
-          debug('findGame', gameObject._id);
-          sendMapLayer(gameObject.mapLayer);
-          // prepareGameInstance(gameObject);
+          debug('findGameInstance', gameInstanceObject._id);
+          sendMapLayer(gameInstanceObject.mapLayer);
         }
       );
-    } // Function
+    }
 
     function sendMapLayer(mapLayer) {
+      debug('sendMapLayer');
       res.send(mapLayer);
     }
   };
