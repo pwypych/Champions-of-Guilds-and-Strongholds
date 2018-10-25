@@ -50,10 +50,14 @@ module.exports = (sanitizer, db) => {
           }
 
           debug('findGame', gameObject._id);
-          res.send('game found');
+          sendMapLayer(gameObject.mapLayer);
           // prepareGameInstance(gameObject);
         }
       );
     } // Function
+
+    function sendMapLayer(mapLayer) {
+      res.send(mapLayer);
+    }
   };
 };
