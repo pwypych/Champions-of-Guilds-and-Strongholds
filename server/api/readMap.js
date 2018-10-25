@@ -26,12 +26,12 @@ module.exports = (sanitizer, db) => {
       playerToken = req.query.playerToken;
 
       debug('checkRequestQuery:', playerToken, gameInstanceId);
-      sanitizeRequestQuery();
+      validateRequestQuery();
     }
 
-    function sanitizeRequestQuery() {
+    function validateRequestQuery() {
       if (!sanitizer.isValidShortId(gameInstanceId)) {
-        debug('sanitizeRequestQuery: Invalid gameInstanceId:', gameInstanceId);
+        debug('validateRequestQuery: Invalid gameInstanceId:', gameInstanceId);
         res
           .status(503)
           .send('503 Service Unavailable - Invalid gameInstanceId');
@@ -39,12 +39,12 @@ module.exports = (sanitizer, db) => {
       }
 
       if (!sanitizer.isValidShortId(playerToken)) {
-        debug('sanitizeRequestQuery: invalid playerToken:', playerToken);
+        debug('validateRequestQuery: invalid playerToken:', playerToken);
         res.status(503).send('503 Service Unavailable - Invalid playerToken');
         return;
       }
 
-      debug('sanitizeRequestQuery');
+      debug('validateRequestQuery');
       findGameInstance();
     }
 
