@@ -6,7 +6,8 @@ const debug = require('debug')('cogs:readMap');
 
 module.exports = (sanitizer, db) => {
   return (req, res) => {
-    let gameToken;
+    let gameInstanceId;
+    let playerToken;
 
     (function init() {
       debug('init');
@@ -16,22 +17,27 @@ module.exports = (sanitizer, db) => {
     function checkRequestQuery() {
       debug('checkRequestQuery');
       debug('req.query - ', req.query);
-      if (req.query.gameToken) {
-        gameToken = req.query.gameToken;
-        sanitizeGameToken();
-      } else {
-        res.send('Error 403, missing gameToken querry variable');
+      if (!req.query.gameInstanceId || !req.query.plyerToken) {
+        res.send('Error 403, missing gameInstanceId querry variable');
+        return;
       }
+      gameInstanceId = req.query.gameInstanceId;
+      playerToken = req.query.playerToken;
+      sanitizeQueryStrings();
     }
 
-    function sanitizeGameToken() {
-      debug('sanitizeGameToken');
-      debug('gameToken', gameToken);
-      if (sanitizer.isValidShortId(gameToken)) {
-        findGame(gameToken);
-      } else {
-        res.send('invalid game token');
+    function sanitizeQueryStrings() {
+      debug('sanitizeQueryStrings');
+      debug('gameInstanceId', gameInstanceId);
+      if (!sanitizer.isValidShortId(gameInstanceId)) {
+        res.send('invalid gameInstanceId');
+        return;
       }
+      if (!sanitizer.isValidShortId(playerToken)) {
+        res.send('invalid playerToken');
+        return;
+      }
+      findGame(gameInstanceId);
     }
 
     function findGame(gameId) {
@@ -50,10 +56,14 @@ module.exports = (sanitizer, db) => {
           }
 
           debug('findGame', gameObject._id);
-          res.send('game found');
+          sendMapLayer(gameObject.mapLayer);
           // prepareGameInstance(gameObject);
         }
       );
     } // Function
+
+    function sendMapLayer(mapLayer) {
+      res.send(mapLayer);
+    }
   };
 };
