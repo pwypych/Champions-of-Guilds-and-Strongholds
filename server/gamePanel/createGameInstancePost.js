@@ -57,7 +57,15 @@ module.exports = (environment, sanitizer, db) => {
       gameInstance._id = shortid.generate();
 
       gameInstance.mapName = mapObject._id;
-      gameInstance.mapLayer = toolConvertTiledLayer(mapObject.layers[0]);
+
+      // We convert tiled layer which is long array of numbers [0, 0, 0, 1, 0 ...] to two dimentional array of numbers
+      const mapLayerNumbers = toolConvertTiledLayer(mapObject.layers[0]);
+
+      // We convert tiled id of tile to its tile "value", that will become figureName
+      gameInstance.mapLayer = toolConvertNumbersToNames(
+        mapLayerNumbers,
+        mapObject.tilesetObject.tiles
+      );
 
       gameInstance.playerArray = [];
 
@@ -120,6 +128,37 @@ module.exports = (environment, sanitizer, db) => {
         } else {
           x += 1;
         }
+      });
+
+      return mapLayer;
+    }
+
+    function toolConvertNumbersToNames(mapLayerNumbers, tiledTileArray) {
+      const mapLayer = mapLayerNumbers.slice(); // slice with no arguments copies array
+
+      // each y, x multidimentional array
+      mapLayerNumbers.forEach((row, y) => {
+        row.forEach((number, x) => {
+          const tileIdFromLayer = number + 1; // tiled saves as id + 1 on layer array
+
+          debug(y, x, tileIdFromLayer);
+
+          tiledTileArray.forEach((tiledTile) => {
+            // for every tile defined in tiled
+            if (tiledTile.id !== tileIdFromLayer) {
+              return;
+            }
+
+            // if number + 1 is equal id of a tile from tiled
+            if (!tiledTile.properties[0].value) {
+              // if value does not exists it is empty
+              mapLayer[y][x] = 'empty';
+              return;
+            }
+
+            mapLayer[y][x] = tiledTile.properties[0].value; // use that value as name
+          });
+        });
       });
 
       return mapLayer;
