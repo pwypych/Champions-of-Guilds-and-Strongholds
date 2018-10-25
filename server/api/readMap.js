@@ -15,11 +15,11 @@ module.exports = (sanitizer, db) => {
     })();
 
     function checkRequestQuery() {
-      debug('req.query', req.query);
-      if (!req.query.gameInstanceId && !req.query.plyerToken) {
-        res
-          .status(503)
-          .send('403 Forbbidden - missing gameInstanceId querry variable');
+      if (
+        typeof req.query.gameInstanceId === 'undefined' ||
+        typeof req.query.playerToken === 'undefined'
+      ) {
+        res.status(503).send('403 Forbbidden - Missing querry variable');
         return;
       }
       gameInstanceId = req.query.gameInstanceId;
@@ -30,19 +30,17 @@ module.exports = (sanitizer, db) => {
     }
 
     function sanitizeRequestQuery() {
-      debug('playerToken', playerToken);
-      debug('gameInstanceId', gameInstanceId);
       if (!sanitizer.isValidShortId(gameInstanceId)) {
-        debug('sanitizeRequestQuery: invalid gameInstanceId:', gameInstanceId);
+        debug('sanitizeRequestQuery: Invalid gameInstanceId:', gameInstanceId);
         res
           .status(503)
-          .send('503 Service Unavailable - invalid gameInstanceId');
+          .send('503 Service Unavailable - Invalid gameInstanceId');
         return;
       }
 
       if (!sanitizer.isValidShortId(playerToken)) {
         debug('sanitizeRequestQuery: invalid playerToken:', playerToken);
-        res.status(503).send('503 Service Unavailable - invalid playerToken');
+        res.status(503).send('503 Service Unavailable - Invalid playerToken');
         return;
       }
 
