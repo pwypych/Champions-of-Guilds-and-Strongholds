@@ -62,11 +62,19 @@ module.exports = (environment, sanitizer, db) => {
 
       // We convert tiled layer which is long array of numbers [0, 0, 0, 1, 0 ...] to two dimentional array of numbers
       const mapLayerNumbers = toolConvertTiledLayer(mapObject.layers[0]);
+      debug(
+        'prepareGameInstance:mapLayerNumbers:',
+        JSON.stringify(mapLayerNumbers).slice(0, 50)
+      );
 
       // We convert tiled id of tile to its tile "value", that will become figureName
       gameInstance.mapLayer = toolConvertNumbersToNames(
         mapLayerNumbers,
         mapObject.tilesetObject.tiles
+      );
+      debug(
+        'prepareGameInstance:mapLayer:',
+        JSON.stringify(gameInstance.mapLayer).slice(0, 50)
       );
 
       gameInstance.playerArray = [];
@@ -138,30 +146,48 @@ module.exports = (environment, sanitizer, db) => {
     }
 
     function toolConvertNumbersToNames(mapLayerNumbers, tiledTileArray) {
-      const mapLayer = mapLayerNumbers.slice(); // slice with no arguments copies array
+      // we will fill that array with Names
+      // slice with no arguments copies array
+      const mapLayer = mapLayerNumbers.slice();
 
       // each y, x multidimentional array
       mapLayerNumbers.forEach((row, y) => {
         row.forEach((number, x) => {
-          const tileIdFromLayer = number + 1; // tiled saves as id + 1 on layer array
+          // tiled saves id's within layers with +1 index because it uses 0 as empty
+          const tileNumberFromLayer = number - 1;
 
-          debug(y, x, tileIdFromLayer);
-
+          // searching for that tile number withing tiledTileArray
+          let foundTiledTile;
           tiledTileArray.forEach((tiledTile) => {
-            // for every tile defined in tiled
-            if (tiledTile.id !== tileIdFromLayer) {
-              return;
+            if (tiledTile.id === tileNumberFromLayer) {
+              foundTiledTile = tiledTile;
             }
-
-            // if number + 1 is equal id of a tile from tiled
-            if (!tiledTile.properties[0].value) {
-              // if value does not exists it is empty
-              mapLayer[y][x] = 'empty';
-              return;
-            }
-
-            mapLayer[y][x] = tiledTile.properties[0].value; // use that value as name
           });
+
+          // if none of the tiles has number we are looking for, use empty
+          // @todo maybe add warning that wrong tile ids are used in this map
+          if (!foundTiledTile) {
+            mapLayer[y][x] = 'empty';
+            return;
+          }
+
+          // tile properties are an array in tiled tileset. We must go through them to find 'name' property
+          let foundValue;
+          foundTiledTile.properties.forEach((property) => {
+            if (property.name === 'name') {
+              foundValue = property.value;
+            }
+          });
+
+          // if tile has no name property it is considered empty
+          if (!foundValue) {
+            mapLayer[y][x] = 'empty';
+            return;
+          }
+
+          mapLayer[y][x] = foundValue;
+
+          // debug('toolConvertNumbersToNames', y, x, mapLayer[y][x]);
         });
       });
 
