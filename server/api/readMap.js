@@ -19,9 +19,10 @@ module.exports = (sanitizer, db) => {
         typeof req.query.gameInstanceId === 'undefined' ||
         typeof req.query.playerToken === 'undefined'
       ) {
-        res.status(503).send('403 Forbbidden - Missing querry variable');
+        res.status(403).send('403 Forbbidden - Missing querry variable');
         return;
       }
+
       gameInstanceId = req.query.gameInstanceId;
       playerToken = req.query.playerToken;
 
