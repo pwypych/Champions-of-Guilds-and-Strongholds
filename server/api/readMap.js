@@ -7,6 +7,7 @@ const debug = require('debug')('cogs:readMap');
 module.exports = (sanitizer, db) => {
   return (req, res) => {
     let gameInstanceId;
+    let playerToken;
 
     (function init() {
       debug('init');
@@ -16,19 +17,24 @@ module.exports = (sanitizer, db) => {
     function checkRequestQuery() {
       debug('checkRequestQuery');
       debug('req.query - ', req.query);
-      if (!req.query.gameInstanceId) {
+      if (!req.query.gameInstanceId || !req.query.plyerToken) {
         res.send('Error 403, missing gameInstanceId querry variable');
         return;
       }
       gameInstanceId = req.query.gameInstanceId;
-      sanitizeGameToken();
+      playerToken = req.query.playerToken;
+      sanitizeQueryStrings();
     }
 
-    function sanitizeGameToken() {
-      debug('sanitizeGameToken');
+    function sanitizeQueryStrings() {
+      debug('sanitizeQueryStrings');
       debug('gameInstanceId', gameInstanceId);
       if (!sanitizer.isValidShortId(gameInstanceId)) {
-        res.send('invalid game token');
+        res.send('invalid gameInstanceId');
+        return;
+      }
+      if (!sanitizer.isValidShortId(playerToken)) {
+        res.send('invalid playerToken');
         return;
       }
       findGame(gameInstanceId);
