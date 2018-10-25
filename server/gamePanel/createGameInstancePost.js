@@ -13,11 +13,13 @@ module.exports = (environment, sanitizer, db) => {
     })();
 
     function checkRequestBody() {
-      if (!req.body.mapName) {
-        debug('checkRequestBody: error: ', req.body);
+      if (typeof req.body.mapName !== 'string') {
+        debug('checkRequestBody: mapName not a string: ', req.body);
         res
           .status(503)
-          .send('503 Error - Wrong POST parameter or empty mapName parameter');
+          .send(
+            '503 Service Unavailable - Wrong POST parameter or empty mapName parameter'
+          );
         return;
       }
 
@@ -41,7 +43,7 @@ module.exports = (environment, sanitizer, db) => {
         (error, mapObject) => {
           if (error) {
             debug('findMap: error:', error);
-            res.status(503).send('503 Error - Cannot find map');
+            res.status(503).send('503 Service Unavailable - Cannot find map');
             return;
           }
 
@@ -90,7 +92,9 @@ module.exports = (environment, sanitizer, db) => {
         (error) => {
           if (error) {
             debug('insertGameInstance: error:', error);
-            res.status(503).send('503 Error - Cannot insert game instance');
+            res
+              .status(503)
+              .send('503 Service Unavailable - Cannot insert game instance');
           }
 
           debug('insertGameInstance', gameInstance.mapName);
