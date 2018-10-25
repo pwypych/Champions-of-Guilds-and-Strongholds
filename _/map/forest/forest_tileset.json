@@ -10,15 +10,6 @@
  "tileheight":16,
  "tiles":[
         {
-         "id":0,
-         "properties":[
-                {
-                 "name":"name",
-                 "type":"string",
-                 "value":"empty"
-                }]
-        }, 
-        {
          "id":1,
          "properties":[
                 {
@@ -34,6 +25,15 @@
                  "name":"name",
                  "type":"string",
                  "value":"rock"
+                }]
+        }, 
+        {
+         "id":6,
+         "properties":[
+                {
+                 "name":"name",
+                 "type":"string",
+                 "value":"tree"
                 }]
         }],
  "tilewidth":16,

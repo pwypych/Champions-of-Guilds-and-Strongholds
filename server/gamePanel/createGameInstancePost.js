@@ -13,11 +13,13 @@ module.exports = (environment, sanitizer, db) => {
     })();
 
     function checkRequestBody() {
-      if (!req.body.mapName) {
-        debug('checkRequestBody: error: ', req.body);
+      if (typeof req.body.mapName !== 'string') {
+        debug('checkRequestBody: mapName not a string: ', req.body);
         res
           .status(503)
-          .send('503 Error - Wrong POST parameter or empty mapName parameter');
+          .send(
+            '503 Service Unavailable - Wrong POST parameter or empty mapName parameter'
+          );
         return;
       }
 
@@ -41,7 +43,7 @@ module.exports = (environment, sanitizer, db) => {
         (error, mapObject) => {
           if (error) {
             debug('findMap: error:', error);
-            res.status(503).send('503 Error - Cannot find map');
+            res.status(503).send('503 Service Unavailable - Cannot find map');
             return;
           }
 
@@ -57,7 +59,23 @@ module.exports = (environment, sanitizer, db) => {
       gameInstance._id = shortid.generate();
 
       gameInstance.mapName = mapObject._id;
-      gameInstance.mapLayer = toolConvertTiledLayer(mapObject.layers[0]);
+
+      // We convert tiled layer which is long array of numbers [0, 0, 0, 1, 0 ...] to two dimentional array of numbers
+      const mapLayerNumbers = toolConvertTiledLayer(mapObject.layers[0]);
+      debug(
+        'prepareGameInstance:mapLayerNumbers:',
+        JSON.stringify(mapLayerNumbers).slice(0, 50)
+      );
+
+      // We convert tiled id of tile to its tile "value", that will become figureName
+      gameInstance.mapLayer = toolConvertNumbersToNames(
+        mapLayerNumbers,
+        mapObject.tilesetObject.tiles
+      );
+      debug(
+        'prepareGameInstance:mapLayer:',
+        JSON.stringify(gameInstance.mapLayer).slice(0, 50)
+      );
 
       gameInstance.playerArray = [];
 
@@ -82,7 +100,9 @@ module.exports = (environment, sanitizer, db) => {
         (error) => {
           if (error) {
             debug('insertGameInstance: error:', error);
-            res.status(503).send('503 Error - Cannot insert game instance');
+            res
+              .status(503)
+              .send('503 Service Unavailable - Cannot insert game instance');
           }
 
           debug('insertGameInstance', gameInstance.mapName);
@@ -120,6 +140,55 @@ module.exports = (environment, sanitizer, db) => {
         } else {
           x += 1;
         }
+      });
+
+      return mapLayer;
+    }
+
+    function toolConvertNumbersToNames(mapLayerNumbers, tiledTileArray) {
+      // we will fill that array with Names
+      // slice with no arguments copies array
+      const mapLayer = mapLayerNumbers.slice();
+
+      // each y, x multidimentional array
+      mapLayerNumbers.forEach((row, y) => {
+        row.forEach((number, x) => {
+          // tiled saves id's within layers with +1 index because it uses 0 as empty
+          const tileNumberFromLayer = number - 1;
+
+          // searching for that tile number withing tiledTileArray
+          let foundTiledTile;
+          tiledTileArray.forEach((tiledTile) => {
+            if (tiledTile.id === tileNumberFromLayer) {
+              foundTiledTile = tiledTile;
+            }
+          });
+
+          // if none of the tiles has number we are looking for, use empty
+          // @todo maybe add warning that wrong tile ids are used in this map
+          if (!foundTiledTile) {
+            mapLayer[y][x] = 'empty';
+            return;
+          }
+
+          // tile properties are an array in tiled tileset. We must go through them to find 'name' property
+          let foundValue;
+          foundTiledTile.properties.forEach((property) => {
+            if (property.name === 'name') {
+              foundValue = property.value;
+            }
+          });
+
+          // if tile has no name property it is considered empty
+          if (!foundValue) {
+            mapLayer[y][x] = 'empty';
+            return;
+          }
+
+          mapLayer[y][x] = foundValue;
+
+          // debug('toolConvertNumbersToNames', y, x, mapLayer[y][x]);
+        });
       });
 
       return mapLayer;
