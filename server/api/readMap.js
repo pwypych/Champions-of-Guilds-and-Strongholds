@@ -58,11 +58,18 @@ module.exports = (sanitizer, db) => {
         query,
         options,
         (error, gameInstanceObject) => {
-          if (error || !gameInstanceObject) {
+          if (error) {
             debug('findGameInstance: error:', error);
             res
               .status(503)
-              .send('503 Service Unavailable - Cannot find gameInstance');
+              .send('503 Service Unavailable - Error', error.message);
+            return;
+          }
+
+          if (!gameInstanceObject) {
+            res
+              .status(503)
+              .send('503 Service Unavailable - Cannot find gameInstanceId');
             return;
           }
 
@@ -73,23 +80,24 @@ module.exports = (sanitizer, db) => {
     }
 
     function isPlayerTokenInGameInstanceObject(playerArray) {
-      for (let i = 0; i < playerArray.length; i += 1) {
-        debug('playerToken:', playerArray[i].token, ' = ', playerToken);
-        if (playerArray[i].token === playerToken) {
-          debug(
-            'isPlayerTokenInGameInstanceObject:',
-            playerArray[i].token,
-            playerToken
-          );
-          findMapLayer();
-          return;
+      let isFound = false;
+      playerArray.forEach((player) => {
+        if (player.token === playerToken) {
+          isFound = true;
         }
+      });
+
+      if (!isFound) {
+        res
+          .status(503)
+          .send(
+            '503 Service Unavailable - Cannot find playerToken in gameInstance'
+          );
+        return;
       }
-      res
-        .status(503)
-        .send(
-          '503 Service Unavailable - Cannot match playerToken with gameInstanceObject tokens'
-        );
+
+      debug('isPlayerTokenInGameInstanceObject:', isFound);
+      findMapLayer();
     }
 
     function findMapLayer() {
