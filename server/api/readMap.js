@@ -47,10 +47,10 @@ module.exports = (sanitizer, db) => {
       }
 
       debug('validateRequestQuery');
-      findGameInstance();
+      findGameInstanceById();
     }
 
-    function findGameInstance() {
+    function findGameInstanceById() {
       const query = { _id: gameInstanceId };
       const options = {};
 
@@ -59,7 +59,7 @@ module.exports = (sanitizer, db) => {
         options,
         (error, gameInstanceObject) => {
           if (error) {
-            debug('findGameInstance: error:', error);
+            debug('findGameInstanceById: error:', error);
             res
               .status(503)
               .send('503 Service Unavailable - Error', error.message);
@@ -73,7 +73,7 @@ module.exports = (sanitizer, db) => {
             return;
           }
 
-          debug('findGameInstance', gameInstanceObject._id);
+          debug('findGameInstanceById', gameInstanceObject._id);
           isPlayerTokenInGameInstanceObject(gameInstanceObject.playerArray);
         }
       );
@@ -109,7 +109,7 @@ module.exports = (sanitizer, db) => {
         options,
         (error, gameInstanceObject) => {
           if (error || !gameInstanceObject) {
-            debug('findGameInstance: error:', error);
+            debug('findMapLayer: error:', error);
             res
               .status(503)
               .send('503 Service Unavailable - Cannot find gameInstance');
