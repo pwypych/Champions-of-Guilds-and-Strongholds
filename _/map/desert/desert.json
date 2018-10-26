@@ -22,11 +22,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"tileset.json"
-        }, 
-        {
-         "firstgid":65,
-         "source":"..\/tiled\/editorTileset.json"
+         "source":"desert_tileset.json"
         }],
  "tilewidth":16,
  "type":"map",
