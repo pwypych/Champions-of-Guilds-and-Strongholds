@@ -5,6 +5,7 @@
 /* pixiTest.js */
 moduleContainer.pixiTest = () => {
   let app;
+  let viewport;
 
   const blockWidthPx = 32;
   const blockHeightPx = 32;
@@ -19,8 +20,8 @@ moduleContainer.pixiTest = () => {
 
   function instantiatePixiApp() {
     const options = {};
-    options.width = 500;
-    options.height = 500;
+    options.width = window.innerWidth;
+    options.height = window.innerHeight;
     options.resolution = window.devicePixelRatio; // So retina (double pixel displays works correctly)
 
     app = new PIXI.Application(options);
@@ -32,13 +33,13 @@ moduleContainer.pixiTest = () => {
 
   function instantiateViewport() {
     const options = {};
-    options.screenWidth = 500;
-    options.screenHeight = 500;
-    options.worldWidth = 2000;
-    options.worldHeight = 2000;
-    options.interaction = app.renderer.interaction;
+    options.screenWidth = window.innerWidth;
+    options.screenHeight = window.innerHeight;
+    options.worldWidth = mapLayer[0].length * blockWidthPx;
+    options.worldHeight = mapLayer.length * blockHeightPx;
+    // options.interaction = app.renderer.interaction;
 
-    const viewport = new PIXI.extras.Viewport(options);
+    viewport = new PIXI.extras.Viewport(options);
 
     console.log(viewport);
 
@@ -50,9 +51,9 @@ moduleContainer.pixiTest = () => {
     viewport.wheel();
     viewport.decelerate();
 
-    viewport.on('clicked', (e) =>
-      console.log('clicked (' + e.world.x + ',' + e.world.y + ')')
-    );
+    // viewport.on('clicked', (e) =>
+    //   console.log('clicked (' + e.world.x + ',' + e.world.y + ')')
+    // );
 
     loadImages();
   }
@@ -102,7 +103,7 @@ moduleContainer.pixiTest = () => {
     sprite.x = x * blockWidthPx;
     sprite.y = y * blockHeightPx;
 
-    app.stage.addChild(sprite);
+    viewport.addChild(sprite);
   }
 };
 /* /pixiTest.js */
