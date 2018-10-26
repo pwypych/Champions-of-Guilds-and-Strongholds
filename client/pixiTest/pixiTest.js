@@ -19,14 +19,41 @@ moduleContainer.pixiTest = () => {
 
   function instantiatePixiApp() {
     const options = {};
-    options.width = 640;
-    options.height = 480;
+    options.width = 500;
+    options.height = 500;
+    options.resolution = window.devicePixelRatio; // So retina (double pixel displays works correctly)
+
     app = new PIXI.Application(options);
-    appendToBody();
+
+    document.body.appendChild(app.view);
+
+    instantiateViewport();
   }
 
-  function appendToBody() {
-    document.body.appendChild(app.view);
+  function instantiateViewport() {
+    const options = {};
+    options.screenWidth = 500;
+    options.screenHeight = 500;
+    options.worldWidth = 2000;
+    options.worldHeight = 2000;
+    options.interaction = app.renderer.interaction;
+
+    const viewport = new PIXI.extras.Viewport(options);
+
+    console.log(viewport);
+
+    app.stage.addChild(viewport);
+
+    // activate plugins
+    viewport.drag({ clampWheel: true });
+    viewport.pinch();
+    viewport.wheel();
+    viewport.decelerate();
+
+    viewport.on('clicked', (e) =>
+      console.log('clicked (' + e.world.x + ',' + e.world.y + ')')
+    );
+
     loadImages();
   }
 

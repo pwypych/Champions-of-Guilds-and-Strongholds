@@ -1,3 +1,15 @@
+/* needed by pixi */
+body {
+  margin:0;
+  padding:0;
+  overflow:hidden;
+}
+
+canvas {
+  display:block;
+}
+
+/* our basic styles */
 td {
   padding: 5px 10px;
 }
