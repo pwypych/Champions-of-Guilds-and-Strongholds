@@ -15,6 +15,7 @@ module.exports = (sanitizer, db) => {
     })();
 
     function checkRequestQuery() {
+      debug('req.query', req.query);
       if (
         typeof req.query.gameInstanceId === 'undefined' ||
         typeof req.query.playerToken === 'undefined'
@@ -57,13 +58,57 @@ module.exports = (sanitizer, db) => {
         query,
         options,
         (error, gameInstanceObject) => {
-          if (error) {
+          if (error || !gameInstanceObject) {
             debug('findGameInstance: error:', error);
-            res.status(503).send('503 Service Unavailable - Cannot find map');
+            res
+              .status(503)
+              .send('503 Service Unavailable - Cannot find gameInstance');
             return;
           }
 
           debug('findGameInstance', gameInstanceObject._id);
+          isPlayerTokenInGameInstanceObject(gameInstanceObject.playerArray);
+        }
+      );
+    }
+
+    function isPlayerTokenInGameInstanceObject(playerArray) {
+      for (let i = 0; i < playerArray.length; i += 1) {
+        debug('playerToken:', playerArray[i].token, ' = ', playerToken);
+        if (playerArray[i].token === playerToken) {
+          debug(
+            'isPlayerTokenInGameInstanceObject:',
+            playerArray[i].token,
+            playerToken
+          );
+          findMapLayer();
+          return;
+        }
+      }
+      res
+        .status(503)
+        .send(
+          '503 Service Unavailable - Cannot match playerToken with gameInstanceObject tokens'
+        );
+    }
+
+    function findMapLayer() {
+      const query = { _id: gameInstanceId };
+      const options = {};
+
+      db.collection('gameInstanceCollection').findOne(
+        query,
+        options,
+        (error, gameInstanceObject) => {
+          if (error || !gameInstanceObject) {
+            debug('findGameInstance: error:', error);
+            res
+              .status(503)
+              .send('503 Service Unavailable - Cannot find gameInstance');
+            return;
+          }
+
+          debug('findMapLayer', gameInstanceObject._id);
           sendMapLayer(gameInstanceObject.mapLayer);
         }
       );
