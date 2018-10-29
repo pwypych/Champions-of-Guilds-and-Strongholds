@@ -87,7 +87,12 @@ function setupLibrariesAndRoutes() {
     db
   );
 
-  // routes
+  // redirect form homepage to gamePanel
+  app.get('/', (req, res) => {
+    res.redirect('/gamePanel');
+  });
+
+  // gamePanel
   app.get(
     '/gamePanel',
     require('./gamePanel/gamePanel.js')(environment, db, templateToHtml)
@@ -102,21 +107,18 @@ function setupLibrariesAndRoutes() {
     require('./gamePanel/deleteGameInstancePost.js')(environment, sanitizer, db)
   );
 
-  app.get(
-    '/api/readMap',
-    middlewareTokenAuthentication,
-    require('./api/readMap.js')(db)
-  );
-
-  // redirects
-  app.get('/', (req, res) => {
-    res.redirect('/gamePanel');
-  });
-
+  // main game
   app.get(
     '/gameInstance',
     middlewareTokenAuthentication,
     require('./gameInstance/gameInstance.js')(environment, db, templateToHtml)
+  );
+
+  // ajax
+  app.get(
+    '/api/readMap',
+    middlewareTokenAuthentication,
+    require('./api/readMap.js')(db)
   );
 
   debug('setupLibrariesAndRoutes()');
