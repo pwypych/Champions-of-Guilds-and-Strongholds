@@ -76,24 +76,48 @@ function setupMongo() {
 }
 
 /* eslint-disable global-require */
-// prettier-ignore
 function setupLibrariesAndRoutes() {
   // libraries
   const templateToHtml = require('./libraries/templateToHtml.js')();
   const sanitizer = require('./libraries/sanitizer.js')();
 
+  // middlewares
+  const middlewareTokenAuthentication = require('./api/middlewareTokenAuthentication.js')(
+    sanitizer,
+    db
+  );
+
   // routes
-  app.get('/gamePanel', require('./gamePanel/gamePanel.js')(environment, db, templateToHtml));
-  app.post('/gamePanel/createGameInstancePost', require('./gamePanel/createGameInstancePost.js')(environment, sanitizer, db));
+  app.get(
+    '/gamePanel',
+    require('./gamePanel/gamePanel.js')(environment, db, templateToHtml)
+  );
+  app.post(
+    '/gamePanel/createGameInstancePost',
+    require('./gamePanel/createGameInstancePost.js')(environment, sanitizer, db)
+  );
 
-  app.post('/gamePanel/deleteGameInstancePost', require('./gamePanel/deleteGameInstancePost.js')(environment, sanitizer, db));
+  app.post(
+    '/gamePanel/deleteGameInstancePost',
+    require('./gamePanel/deleteGameInstancePost.js')(environment, sanitizer, db)
+  );
 
-  app.get('/api/readMap', require('./api/middlewareTokenAuthentication.js')(sanitizer, db), require('./api/readMap.js')(db));
+  app.get(
+    '/api/readMap',
+    middlewareTokenAuthentication,
+    require('./api/readMap.js')(db)
+  );
 
   // redirects
-  app.get('/', (req, res) => { res.redirect('/gamePanel'); });
+  app.get('/', (req, res) => {
+    res.redirect('/gamePanel');
+  });
 
-  app.get('/gameInstance', require('./api/middlewareTokenAuthentication.js')(sanitizer, db), require('./gameInstance/gameInstance.js')(environment, db, templateToHtml));
+  app.get(
+    '/gameInstance',
+    middlewareTokenAuthentication,
+    require('./gameInstance/gameInstance.js')(environment, db, templateToHtml)
+  );
 
   debug('setupLibrariesAndRoutes()');
   setupExpress();
