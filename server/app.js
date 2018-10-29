@@ -88,7 +88,7 @@ function setupLibrariesAndRoutes() {
 
   app.post('/gamePanel/deleteGameInstancePost', require('./gamePanel/deleteGameInstancePost.js')(environment, sanitizer, db));
 
-  app.get('/api/readMap', require('./api/readMap.js')(sanitizer, db));
+  app.get('/api/readMap', require('./api/middlewareTokenAuthentication.js')(sanitizer, db), require('./api/readMap.js')(db));
 
   // redirects
   app.get('/', (req, res) => { res.redirect('/gamePanel'); });
