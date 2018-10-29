@@ -48,7 +48,7 @@
           </td>
           <td>
             <% gameInstance.playerArray.forEach((player) => { %>
-              <% const uri = '/gameInstance?gameInstanceId=' + gameInstance._id + '?playerToken=' + player.token; %>
+              <% const uri = '/gameInstance?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
               <a href="<%= viewModel.baseurl + uri %>"><%= uri %></a>
               <br/>
             <% }); %>
