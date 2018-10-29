@@ -50,14 +50,14 @@
           <td>
             <% gameInstance.playerArray.forEach((player) => { %>
               <% const uri = '/gameInstance?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
-              <a href="<%= viewModel.baseurl + uri %>">open Map</a>
+              <a href="<%= viewModel.baseurl + uri %>">Open Map</a>
               <br/>
             <% }); %>
           </td>
           <td>
             <% gameInstance.playerArray.forEach((player) => { %>
               <% const uri = '/api/readMap?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
-              <a href="<%= viewModel.baseurl + uri %>"><%= uri %></a>
+              <a href="<%= viewModel.baseurl + uri %>">/api/readMap</a>
               <br/>
             <% }); %>
           </td>
