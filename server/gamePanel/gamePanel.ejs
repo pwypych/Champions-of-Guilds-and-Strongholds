@@ -35,6 +35,7 @@
         <td>Map Name</td>
         <td>Player Names</td>
         <td>Player Links</td>
+        <td>API readMap</td>
         <td>Options</td>
       </tr>
 
@@ -49,6 +50,13 @@
           <td>
             <% gameInstance.playerArray.forEach((player) => { %>
               <% const uri = '/gameInstance?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
+              <a href="<%= viewModel.baseurl + uri %>">open Map</a>
+              <br/>
+            <% }); %>
+          </td>
+          <td>
+            <% gameInstance.playerArray.forEach((player) => { %>
+              <% const uri = '/api/readMap?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
               <a href="<%= viewModel.baseurl + uri %>"><%= uri %></a>
               <br/>
             <% }); %>
