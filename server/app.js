@@ -93,7 +93,7 @@ function setupLibrariesAndRoutes() {
   // redirects
   app.get('/', (req, res) => { res.redirect('/gamePanel'); });
 
-  app.get('/gameInstance', require('./gameInstance/gameInstance.js')(environment, db, templateToHtml));
+  app.get('/gameInstance', require('./api/middlewareTokenAuthentication.js')(sanitizer, db), require('./gameInstance/gameInstance.js')(environment, db, templateToHtml));
 
   debug('setupLibrariesAndRoutes()');
   setupExpress();
