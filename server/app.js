@@ -82,7 +82,7 @@ function setupLibrariesAndRoutes() {
   const sanitizer = require('./libraries/sanitizer.js')();
 
   // middlewares
-  const middlewareTokenAuthentication = require('./api/middlewareTokenAuthentication.js')(
+  const middlewareTokenAuthentication = require('./ajax/middlewareTokenAuthentication.js')(
     sanitizer,
     db
   );
@@ -116,9 +116,9 @@ function setupLibrariesAndRoutes() {
 
   // ajax
   app.get(
-    '/api/readMap',
+    '/ajax/readMap',
     middlewareTokenAuthentication,
-    require('./api/readMap.js')(db)
+    require('./ajax/readMap.js')(db)
   );
 
   debug('setupLibrariesAndRoutes()');

@@ -56,8 +56,8 @@
           </td>
           <td>
             <% gameInstance.playerArray.forEach((player) => { %>
-              <% const uri = '/api/readMap?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
-              <a href="<%= viewModel.baseurl + uri %>">/api/readMap</a>
+              <% const uri = '/ajax/readMap?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
+              <a href="<%= viewModel.baseurl + uri %>">/ajax/readMap</a>
               <br/>
             <% }); %>
           </td>

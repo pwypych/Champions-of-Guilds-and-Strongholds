@@ -24,7 +24,7 @@ moduleContainer.pixiTest = () => {
   function ajaxReadMapLayer() {
     console.log();
     $.get(
-      `/api/readMap?gameInstanceId=${gameInstanceId}&playerToken=${playerToken}`,
+      `/ajax/readMap?gameInstanceId=${gameInstanceId}&playerToken=${playerToken}`,
       (data) => {
         console.log('GET api/readMap', data);
         mapLayer = data;
