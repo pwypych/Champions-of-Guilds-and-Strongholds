@@ -70,9 +70,25 @@ function setupMongo() {
       db = client.db(dbName);
 
       debug('setupMongo()');
-      setupLibrariesAndRoutes();
+      setupMapCollection();
     }
   );
+}
+/* eslint-disable global-require */
+function setupMapCollection() {
+  const generateMapCollection = require('./libraries/generateMapCollection.js')(
+    environment,
+    db
+  );
+  generateMapCollection((error) => {
+    if (error) {
+      debug('setupMapCollection: Error:', error);
+      process.exit(1);
+      return;
+    }
+    debug('setupMapCollection');
+    setupLibrariesAndRoutes();
+  });
 }
 
 /* eslint-disable global-require */
