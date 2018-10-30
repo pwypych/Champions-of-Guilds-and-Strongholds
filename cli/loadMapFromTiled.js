@@ -6,7 +6,7 @@
 
   # Usage
 
-  >node loadMapFromTiled.js ~/node/cogs/_/map/forest/forest.json
+  >node loadMapFromTiled.js ~/node/cogs/tiledMap/forest/forest.json
 
   !NB There should be tileset file in directory named forest_tileset.json
 
