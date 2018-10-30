@@ -96,6 +96,7 @@ function setupLibrariesAndRoutes() {
   // libraries
   const templateToHtml = require('./libraries/templateToHtml.js')();
   const sanitizer = require('./libraries/sanitizer.js')();
+  // const generateFigureManagerTree = require('./figure/generateFigureManagerTree.js')();
 
   // middlewares
   const middlewareTokenAuthentication = require('./ajax/middlewareTokenAuthentication.js')(
