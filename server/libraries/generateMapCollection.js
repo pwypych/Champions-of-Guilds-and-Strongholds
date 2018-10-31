@@ -6,6 +6,9 @@ const debug = require('debug')('cogs:generateMapCollection');
 const fs = require('fs');
 const path = require('path');
 
+// Map base folder is in /tiledMap/ and has a folder for each map
+// Map folder should have a name, f.ex "desert" and have two json files
+// desert.json and desert_tileset.json inside, both saved from tiled
 module.exports = (environment, db) => {
   return (callback) => {
     (function init() {
@@ -87,7 +90,7 @@ module.exports = (environment, db) => {
         return;
       }
 
-      debug('parseJsonMapString', mapObject.height);
+      debug('parseJsonMapString: mapObject.height:', mapObject.height);
       validateMapObject(mapFilePath, mapObject);
     }
 
@@ -102,7 +105,10 @@ module.exports = (environment, db) => {
         return;
       }
 
-      debug('validateMapObject', mapObject.layers[0].data.length);
+      debug(
+        'validateMapObject: mapObject.layers[0].data.length:',
+        mapObject.layers[0].data.length
+      );
       updateMapObjectWithMapId(mapFilePath, mapObject);
     }
 
