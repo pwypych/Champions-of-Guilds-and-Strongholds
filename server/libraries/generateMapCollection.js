@@ -7,9 +7,8 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = (environment, db) => {
-  let mapFilePaths = [];
-  let mapObject;
-  let mapDir;
+  const mapFilePathArray = [];
+  let mapFolderPath;
 
   let tilesetPath;
   let tilesetObject;
@@ -21,42 +20,34 @@ module.exports = (environment, db) => {
     })();
 
     function scanMapFolder() {
-      debug('environment', environment);
-      mapDir = environment.basepath + '/tiledMap';
-      debug('mapDir', mapDir);
+      mapFolderPath = environment.basepath + '/tiledMap';
 
-      fs.readdir(mapDir, (err, files) => {
-        debug('scanMapFolder', files);
-        generateMapFilePaths(files);
+      fs.readdir(mapFolderPath, (err, folderArray) => {
+        debug('scanMapFolder: folderArray:', folderArray);
+        generateMapFilePathArray(folderArray);
       });
     }
 
-    function generateMapFilePaths(foldersArray) {
-      foldersArray.forEach((folderName) => {
-        const name = mapDir + '/' + folderName + '/' + folderName + '.json';
-        mapFilePaths.push(name);
+    function generateMapFilePathArray(folderArray) {
+      folderArray.forEach((folderName) => {
+        const mapFilePath =
+          mapFolderPath + '/' + folderName + '/' + folderName + '.json';
+        mapFilePathArray.push(mapFilePath);
       });
 
-      debug('generateMapFilePaths', mapFilePaths);
-      parseArguments();
+      debug('generateMapFilePathArray: mapFilePathArray:', mapFilePathArray);
+      forEachMapFilePath();
     }
 
-    function parseArguments() {
-      const mapFilePath = mapFilePaths[0];
+    function forEachMapFilePath() {
+      const mapFilePath = mapFilePathArray[0];
 
-      if (!mapFilePath) {
-        callback(
-          'parseArguments: First argument must be valid path to map JSON'
-        );
-        return;
-      }
-
-      debug('parseArguments', mapFilePath);
-      checkFileMapExists();
+      debug('forEachMapFilePath', mapFilePath);
+      checkFileMapExists(mapFilePath);
     }
 
-    function checkFileMapExists() {
-      fs.stat(mapFilePaths[0], (error, stats) => {
+    function checkFileMapExists(mapFilePath) {
+      fs.stat(mapFilePath, (error, stats) => {
         if (error) {
           callback(
             'checkFileMapExists: File does not exist, or other read error'
@@ -65,18 +56,19 @@ module.exports = (environment, db) => {
         }
 
         debug('checkFileMapExists: stats.size', stats.size);
-        readFileMap();
+        readFileMap(mapFilePath);
       });
     }
 
-    function readFileMap() {
-      fs.readFile(mapFilePaths[0], 'utf8', (error, mapString) => {
+    function readFileMap(mapFilePath) {
+      fs.readFile(mapFilePath, 'utf8', (error, mapString) => {
         debug('readFileMap', mapString.length);
-        parseJsonMap(mapString);
+        parseJsonMap(mapFilePath, mapString);
       });
     }
 
-    function parseJsonMap(mapString) {
+    function parseJsonMap(mapFilePath, mapString) {
+      let mapObject;
       try {
         mapObject = JSON.parse(mapString);
       } catch (error) {
@@ -85,10 +77,10 @@ module.exports = (environment, db) => {
       }
 
       debug('parseJsonMap', mapObject.height);
-      validateMap();
+      validateMap(mapFilePath, mapObject);
     }
 
-    function validateMap() {
+    function validateMap(mapFilePath, mapObject) {
       if (!mapObject.layers) {
         callback('validateMap: mapObject missing layers array');
         return;
@@ -100,13 +92,13 @@ module.exports = (environment, db) => {
       }
 
       debug('validateMap', mapObject.layers[0].data.length);
-      generateTilesetPath();
+      generateTilesetPath(mapFilePath, mapObject);
     }
 
-    function generateTilesetPath() {
-      const mapName = path.basename(mapFilePaths[0], '.json');
+    function generateTilesetPath(mapFilePath, mapObject) {
+      const mapName = path.basename(mapFilePath, '.json');
       debug('mapName', mapName);
-      const directoryName = path.dirname(mapFilePaths[0]);
+      const directoryName = path.dirname(mapFilePath);
       debug('directoryName', directoryName);
 
       tilesetPath = path.join(directoryName, mapName + '_tileset.json');
@@ -161,7 +153,10 @@ module.exports = (environment, db) => {
         return;
       }
 
-      debug('validateTileset', tilesetObject.tiles.length);
+      debug(
+        'validateTileset: tilesetObject.tiles.length:',
+        tilesetObject.tiles.length
+      );
       dropMapCollection();
     }
 
@@ -181,7 +176,7 @@ module.exports = (environment, db) => {
     }
 
     function insertMapObject() {
-      const mapName = path.basename(mapFilePaths[0], '.json');
+      const mapName = path.basename(mapFilePathArray[0], '.json');
 
       mapObject._id = mapName;
       mapObject.tilesetObject = tilesetObject;
@@ -193,7 +188,7 @@ module.exports = (environment, db) => {
         }
 
         debug('insertMapObject');
-        callback(null);
+        callback(null, 1);
       });
     }
   };

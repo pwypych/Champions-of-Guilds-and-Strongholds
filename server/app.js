@@ -80,13 +80,13 @@ function setupMapCollection() {
     environment,
     db
   );
-  generateMapCollection((error) => {
+  generateMapCollection((error, mapCount) => {
     if (error) {
       debug('setupMapCollection: Error:', error);
       process.exit(1);
       return;
     }
-    debug('setupMapCollection');
+    debug('setupMapCollection: mapCount:', mapCount);
     setupLibrariesAndRoutes();
   });
 }
