@@ -32,20 +32,23 @@ module.exports = (environment, db) => {
     }
 
     function scanMapBaseFolder() {
-      const mapBaseFolderPath = environment.basepath + '/tiledMap';
-
-      fs.readdir(mapBaseFolderPath, (err, folderArray) => {
+      fs.readdir(environment.mapBaseFolderPath, (err, folderArray) => {
         debug('scanMapBaseFolder: folderArray:', folderArray);
-        generateMapFilePathArray(folderArray, mapBaseFolderPath);
+        generateMapFilePathArray(folderArray);
       });
     }
 
-    function generateMapFilePathArray(folderArray, mapBaseFolderPath) {
+    function generateMapFilePathArray(folderArray) {
       const mapFilePathArray = [];
 
       folderArray.forEach((folderName) => {
         const mapFilePath =
-          mapBaseFolderPath + '/' + folderName + '/' + folderName + '.json';
+          environment.mapBaseFolderPath +
+          '/' +
+          folderName +
+          '/' +
+          folderName +
+          '.json';
         mapFilePathArray.push(mapFilePath);
       });
 
