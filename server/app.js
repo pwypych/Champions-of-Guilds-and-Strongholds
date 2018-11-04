@@ -28,6 +28,7 @@ function setupEnvironment() {
   environment.baseurl = 'http://localhost:3000';
   environment.basepath = path.join(__dirname, '..');
   environment.basepathTiledMap = environment.basepath + '/tiledMap';
+  environment.basepathFigure = environment.basepath + '/server/figure';
 
   debug('setupEnvironment()', environment);
   setupLocals();
@@ -75,6 +76,7 @@ function setupMongo() {
     }
   );
 }
+
 /* eslint-disable global-require */
 function setupMapCollection() {
   const generateMapCollection = require('./libraries/generateMapCollection.js')(
@@ -87,13 +89,34 @@ function setupMapCollection() {
       process.exit(1);
       return;
     }
+
     debug('setupMapCollection: mapCount:', mapCount);
-    setupLibrariesAndRoutes();
+    setupFigureManagerTree();
   });
 }
+/* eslint-enable global-require */
 
 /* eslint-disable global-require */
-function setupLibrariesAndRoutes() {
+function setupFigureManagerTree() {
+  const generateFigureManagerTree = require('./figure/generateFigureManagerTree.js')(
+    environment
+  );
+
+  generateFigureManagerTree((error, figureManagerTree) => {
+    if (error) {
+      debug('setupFigureManagerTree: Errors:', error);
+      process.exit(1);
+      return;
+    }
+
+    debug('setupFigureManagerTree: figureManagerTree:', figureManagerTree);
+    setupLibrariesAndRoutes(figureManagerTree);
+  });
+}
+/* eslint-enable global-require */
+
+/* eslint-disable global-require */
+function setupLibrariesAndRoutes(figureManagerTree) {
   // libraries
   const templateToHtml = require('./libraries/templateToHtml.js')();
   const sanitizer = require('./libraries/sanitizer.js')();
