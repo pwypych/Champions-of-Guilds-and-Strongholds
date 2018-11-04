@@ -27,7 +27,7 @@ let db;
 function setupEnvironment() {
   environment.baseurl = 'http://localhost:3000';
   environment.basepath = path.join(__dirname, '..');
-  environment.mapBaseFolderPath = environment.basepath + '/tiledMap';
+  environment.basepathTiledMap = environment.basepath + '/tiledMap';
 
   debug('setupEnvironment()', environment);
   setupLocals();
