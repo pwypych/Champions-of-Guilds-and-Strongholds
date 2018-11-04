@@ -34,7 +34,7 @@ module.exports = (environment, db) => {
     }
 
     function scanMapBaseFolder() {
-      fs.readdir(environment.basepathTiledMap, (err, folderNameArray) => {
+      fs.readdir(environment.basepathTiledMap, (error, folderNameArray) => {
         debug('scanMapBaseFolder: folderNameArray:', folderNameArray);
         forEachFolderName(folderNameArray);
       });
@@ -237,12 +237,12 @@ module.exports = (environment, db) => {
 
     function afterForEach(loadedMapCount) {
       debug('afterForEach');
-      if (_.isEmpty(errorArray)) {
-        callback(null, loadedMapCount);
+      if (!_.isEmpty(errorArray)) {
+        callback('\n ' + errorArray.join(' \n '));
         return;
       }
 
-      callback('\n ' + errorArray.join(' \n '));
+      callback(null, loadedMapCount);
     }
   };
 };
