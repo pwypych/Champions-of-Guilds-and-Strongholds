@@ -11,6 +11,8 @@ const _ = require('lodash');
 // desert.json and desert_tileset.json inside, both saved from tiled
 module.exports = (environment, db) => {
   return (callback) => {
+    const errorArray = [];
+
     (function init() {
       debug('init');
       dropMapCollection();
@@ -78,9 +80,11 @@ module.exports = (environment, db) => {
     function checkTiledMapFileExists(mapObject, done) {
       fs.stat(mapObject.pathTiledMap, (error, stats) => {
         if (error) {
-          callback(
-            'checkTiledMapFileExists: File does not exist, or other read error'
+          errorArray.push(
+            mapObject.folderName +
+              ': checkTiledMapFileExists: File does not exist, or other read error'
           );
+          done();
           return;
         }
 
@@ -101,7 +105,11 @@ module.exports = (environment, db) => {
       try {
         tiledMapObject = JSON.parse(tiledMapString);
       } catch (error) {
-        callback('parseJsonMapString: JSON parse error, not valid map file');
+        errorArray.push(
+          mapObject.folderName +
+            ': parseJsonMapString: JSON parse error, not valid map file'
+        );
+        done();
         return;
       }
 
@@ -114,12 +122,20 @@ module.exports = (environment, db) => {
 
     function validateTiledMapObject(mapObject, tiledMapObject, done) {
       if (!tiledMapObject.layers) {
-        callback('validateTiledMapObject: tiledMapObject missing layers array');
+        errorArray.push(
+          mapObject.folderName +
+            ': validateTiledMapObject: tiledMapObject missing layers array'
+        );
+        done();
         return;
       }
 
       if (!Array.isArray(tiledMapObject.layers)) {
-        callback('validateTiledMapObject: tiledMapObject.layers is not array');
+        errorArray.push(
+          mapObject.folderName +
+            ': validateTiledMapObject: tiledMapObject.layers is not array'
+        );
+        done();
         return;
       }
 
@@ -135,9 +151,11 @@ module.exports = (environment, db) => {
     function checkTiledTilesetFileExist(mapObject, done) {
       fs.stat(mapObject.pathTiledTileset, (error, stats) => {
         if (error) {
-          callback(
-            'checkTiledTilesetFileExist: File does not exist, or other read error'
+          errorArray.push(
+            mapObject.folderName +
+              ': checkTiledTilesetFileExist: File does not exist, or other read error'
           );
+          done();
           return;
         }
 
@@ -162,9 +180,11 @@ module.exports = (environment, db) => {
       try {
         tiledTilesetObject = JSON.parse(tiledTilesetString);
       } catch (error) {
-        callback(
-          'parseJsonTilesetString: JSON parse error, not valid tileset file'
+        errorArray.push(
+          mapObject.folderName +
+            ': parseJsonTilesetString: JSON parse error, not valid tileset file'
         );
+        done();
         return;
       }
 
@@ -174,14 +194,19 @@ module.exports = (environment, db) => {
 
     function validateTilesetObject(mapObject, tiledTilesetObject, done) {
       if (!tiledTilesetObject.tiles) {
-        callback('validateMap: TileObject missing tiles array');
+        errorArray.push(
+          mapObject.folderName + ': validateMap: TileObject missing tiles array'
+        );
+        done();
         return;
       }
 
       if (!tiledTilesetObject.tiles[0].properties[0].value) {
-        callback(
-          'validateTilesetObject: tiledTilesetObject.tiles[0].properties[0].value is not exist'
+        errorArray.push(
+          mapObject.folderName +
+            ': validateTilesetObject: tiledTilesetObject.tiles[0].properties[0].value is not exist'
         );
+        done();
         return;
       }
 
@@ -197,7 +222,11 @@ module.exports = (environment, db) => {
     function insertMapObject(mapObject, done) {
       db.collection('mapCollection').insertOne(mapObject, (error) => {
         if (error) {
-          callback('ERROR: insert mongo error:', error);
+          errorArray.push(
+            mapObject.folderName + ': ERROR: insert mongo error:',
+            error
+          );
+          done();
           return;
         }
 
@@ -208,7 +237,12 @@ module.exports = (environment, db) => {
 
     function afterForEach(loadedMapCount) {
       debug('afterForEach');
-      callback(null, loadedMapCount);
+      if (_.isEmpty(errorArray)) {
+        callback(null, loadedMapCount);
+        return;
+      }
+
+      callback('\n ' + errorArray.join(' \n '));
     }
   };
 };

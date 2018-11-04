@@ -83,7 +83,7 @@ function setupMapCollection() {
   );
   generateMapCollection((error, mapCount) => {
     if (error) {
-      debug('setupMapCollection: Error:', error);
+      debug('setupMapCollection: Errors:', error);
       process.exit(1);
       return;
     }
