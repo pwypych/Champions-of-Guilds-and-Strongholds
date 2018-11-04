@@ -7,7 +7,7 @@ const shortid = require('shortid');
 
 module.exports = (environment, sanitizer, db) => {
   return (req, res) => {
-    let tiledMapObject;
+    let mapObject;
     const gameInstance = {};
 
     (function init() {
@@ -47,9 +47,9 @@ module.exports = (environment, sanitizer, db) => {
           return;
         }
 
-        tiledMapObject = data;
+        mapObject = data;
 
-        debug('findMap', tiledMapObject._id);
+        debug('findMap: mapObject._id:', mapObject._id);
         generateGameInstance();
       });
     }
@@ -57,7 +57,7 @@ module.exports = (environment, sanitizer, db) => {
     function generateGameInstance() {
       gameInstance._id = shortid.generate();
 
-      gameInstance.mapName = tiledMapObject._id;
+      gameInstance.mapName = mapObject._id;
 
       gameInstance.playerArray = [];
 
@@ -79,7 +79,7 @@ module.exports = (environment, sanitizer, db) => {
     function convertFromTiled() {
       // We convert tiled layer which is long array of numbers [0, 0, 0, 1, 0 ...] to two dimentional array of numbers
       const mapLayerWithNumbers = toolConvertTiledLayer(
-        tiledMapObject.layers[0]
+        mapObject.tiledMapObject.layers[0]
       );
       debug(
         'convertFromTiled:mapLayerWithNumbers:',
@@ -89,7 +89,7 @@ module.exports = (environment, sanitizer, db) => {
       // We convert tiled id of tile to its tile "value", that will become figureName
       const mapLayerWithStrings = toolConvertNumbersToNames(
         mapLayerWithNumbers,
-        tiledMapObject.tilesetObject.tiles
+        mapObject.tiledTilesetObject.tiles
       );
       debug(
         'convertFromTiled:mapLayer:',
