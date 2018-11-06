@@ -30,6 +30,7 @@ module.exports = (environment, db, templateToHtml) => {
               .send(
                 '503 Service Unavailable: Mongo error, cannot run find on mapCollection'
               );
+            return;
           }
 
           const mapNameArray = mapArray.map((mapObject) => {
@@ -58,6 +59,7 @@ module.exports = (environment, db, templateToHtml) => {
               .send(
                 '503 Service Unavailable: Mongo error, cannot run find on gameInstanceCollection'
               );
+            return;
           }
 
           viewModel.gameInstanceArray = gameInstanceArray;
