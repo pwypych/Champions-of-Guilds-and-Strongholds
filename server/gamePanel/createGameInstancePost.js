@@ -5,8 +5,9 @@
 const debug = require('debug')('cogs:createGameInstancePost');
 const shortid = require('shortid');
 const validator = require('validator');
+const _ = require('lodash');
 
-module.exports = (environment, db) => {
+module.exports = (environment, db, figureManagerTree) => {
   return (req, res) => {
     let mapObject;
     const gameInstance = {};
@@ -101,12 +102,43 @@ module.exports = (environment, db) => {
       );
 
       debug('convertFromTiled');
-      generateMapLayerFigures(mapLayerWithStrings);
+      instantiateFigures(mapLayerWithStrings);
     }
 
-    function generateMapLayerFigures(mapLayerWithStrings) {
-      gameInstance.mapLayer = mapLayerWithStrings;
-      debug('generateMapLayerFigures');
+    function instantiateFigures(mapLayerWithStrings) {
+      const errorArray = [];
+      gameInstance.mapLayer = [];
+
+      mapLayerWithStrings.forEach((row, y) => {
+        gameInstance.mapLayer[y] = [];
+        row.forEach((figureName, x) => {
+          if (!figureManagerTree[figureName]) {
+            const error = 'Cannot load figure ' + figureName;
+            errorArray.push(error);
+            return;
+          }
+
+          if (!figureManagerTree[figureName].produce) {
+            const error = 'Cannot load blueprint for figure ' + figureName;
+            errorArray.push(error);
+            return;
+          }
+
+          const figure = figureManagerTree[figureName].produce();
+
+          gameInstance.mapLayer[y][x] = figure;
+        });
+      });
+
+      if (!_.isEmpty(errorArray)) {
+        debug('instantiateFigures: errorArray:', errorArray);
+        res
+          .status(503)
+          .send('503 Service Unavailable - ' + JSON.stringify(errorArray));
+        return;
+      }
+
+      debug('instantiateFigures');
       insertGameInstance();
     }
 

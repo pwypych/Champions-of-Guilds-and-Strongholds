@@ -32,6 +32,7 @@
 
     <table>
       <tr class="bold">
+        <td>Game Instance ID</td>
         <td>Map Name</td>
         <td>Player Names</td>
         <td>Player Links</td>
@@ -41,6 +42,7 @@
 
       <% viewModel.gameInstanceArray.forEach((gameInstance) => { %>
         <tr>
+          <td><%= gameInstance._id %></td>
           <td><%= gameInstance.mapName %></td>
           <td>
             <% gameInstance.playerArray.forEach((player) => { %>

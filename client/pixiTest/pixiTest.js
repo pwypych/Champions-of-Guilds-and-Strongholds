@@ -84,8 +84,8 @@ moduleContainer.pixiTest = () => {
 
   function forEachFigure() {
     mapLayer.forEach((row, y) => {
-      row.forEach((figureName, x) => {
-        instantiateSprites(figureName, x, y);
+      row.forEach((figure, x) => {
+        instantiateSprites(figure.name, x, y);
       });
     });
   }
