@@ -138,7 +138,11 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
   app.post(
     '/gamePanel/createGameInstancePost',
-    require('./gamePanel/createGameInstancePost.js')(environment, db)
+    require('./gamePanel/createGameInstancePost.js')(
+      environment,
+      db,
+      figureManagerTree
+    )
   );
 
   app.post(
