@@ -153,6 +153,12 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./gameInstance/gameInstance.js')(environment, db, templateToHtml)
   );
 
+  // show Image
+  app.get(
+    '/image/figure/:imageName.png',
+    require('./libraries/showImage.js')(environment)
+  );
+
   // ajax
   app.get(
     '/ajax/readMap',
