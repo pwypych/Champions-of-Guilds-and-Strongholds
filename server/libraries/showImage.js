@@ -31,7 +31,12 @@ module.exports = (environment) => {
 
       fs.stat(imageFilePath, (error, stats) => {
         if (error) {
-          debug('Error: ', error.message);
+          debug('scanImageFile: error:', error);
+          res
+            .status(503)
+            .send(
+              '503 Service Unavailable: File not exist: ' + imageName + '.png'
+            );
           return;
         }
 
@@ -43,7 +48,8 @@ module.exports = (environment) => {
     function readImage(imageFilePath) {
       fs.readFile(imageFilePath, (error, data) => {
         if (error) {
-          debug('Error: ', error.message);
+          debug('readImage: error:', error);
+          res.status(503).send('503 Service Unavailable: Cannot read file');
           return;
         }
         sendResponse(data);
