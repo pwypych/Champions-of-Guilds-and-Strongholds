@@ -3,8 +3,9 @@
 'use strict';
 
 const debug = require('debug')('cogs:middlewareTokenAuthentication');
+const shortid = require('shortid');
 
-module.exports = (sanitizer, db) => {
+module.exports = (db) => {
   return (req, res, next) => {
     let gameInstanceId;
     let playerToken;
@@ -32,7 +33,7 @@ module.exports = (sanitizer, db) => {
     }
 
     function validateRequestQuery() {
-      if (!sanitizer.isValidShortId(gameInstanceId)) {
+      if (!shortid.isValid(gameInstanceId)) {
         debug('validateRequestQuery: Invalid gameInstanceId:', gameInstanceId);
         res
           .status(503)
@@ -40,7 +41,7 @@ module.exports = (sanitizer, db) => {
         return;
       }
 
-      if (!sanitizer.isValidShortId(playerToken)) {
+      if (!shortid.isValid(playerToken)) {
         debug('validateRequestQuery: invalid playerToken:', playerToken);
         res.status(503).send('503 Service Unavailable - Invalid playerToken');
         return;

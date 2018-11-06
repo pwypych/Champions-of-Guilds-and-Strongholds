@@ -119,12 +119,10 @@ function setupFigureManagerTree() {
 function setupLibrariesAndRoutes(figureManagerTree) {
   // libraries
   const templateToHtml = require('./libraries/templateToHtml.js')();
-  const sanitizer = require('./libraries/sanitizer.js')();
   // const generateFigureManagerTree = require('./figure/generateFigureManagerTree.js')();
 
   // middlewares
   const middlewareTokenAuthentication = require('./ajax/middlewareTokenAuthentication.js')(
-    sanitizer,
     db
   );
 
@@ -140,12 +138,12 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
   app.post(
     '/gamePanel/createGameInstancePost',
-    require('./gamePanel/createGameInstancePost.js')(environment, sanitizer, db)
+    require('./gamePanel/createGameInstancePost.js')(environment, db)
   );
 
   app.post(
     '/gamePanel/deleteGameInstancePost',
-    require('./gamePanel/deleteGameInstancePost.js')(environment, sanitizer, db)
+    require('./gamePanel/deleteGameInstancePost.js')(environment, db)
   );
 
   // main game

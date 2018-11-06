@@ -3,8 +3,9 @@
 'use strict';
 
 const debug = require('debug')('cogs:deleteGameInstancePost');
+const shortid = require('shortid');
 
-module.exports = (environment, sanitizer, db) => {
+module.exports = (environment, db) => {
   return (req, res) => {
     (function init() {
       debug('init');
@@ -24,7 +25,7 @@ module.exports = (environment, sanitizer, db) => {
     function validateRequestBody() {
       const gameInstanceId = req.body.gameInstanceId;
 
-      if (!sanitizer.isValidShortId(gameInstanceId)) {
+      if (!shortid.isValid(gameInstanceId)) {
         debug('validateShortId: error: ', gameInstanceId);
         res.status(503).send('503 Error - gameInstanceId is not valid');
         return;

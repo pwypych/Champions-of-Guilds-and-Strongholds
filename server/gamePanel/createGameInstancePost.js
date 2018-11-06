@@ -4,8 +4,9 @@
 
 const debug = require('debug')('cogs:createGameInstancePost');
 const shortid = require('shortid');
+const validator = require('validator');
 
-module.exports = (environment, sanitizer, db) => {
+module.exports = (environment, db) => {
   return (req, res) => {
     let mapObject;
     const gameInstance = {};
@@ -31,7 +32,10 @@ module.exports = (environment, sanitizer, db) => {
     }
 
     function sanitizeRequestBody() {
-      const mapName = sanitizer.sanitizeMapName(req.body.mapName);
+      const mapName = validator.whitelist(
+        req.body.mapName,
+        'abcdefghijklmnopqrstuvwxyz01234567890|_'
+      );
       debug('checkRequestBody', mapName);
       findMap(mapName);
     }
