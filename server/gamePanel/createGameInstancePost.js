@@ -126,6 +126,9 @@ module.exports = (environment, db, figureManagerTree) => {
 
           const figure = figureManagerTree[figureName].produce();
 
+          figure._id = shortid.generate();
+          debug('figure: ', figure);
+
           gameInstance.mapLayer[y][x] = figure;
         });
       });
