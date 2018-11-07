@@ -13,7 +13,6 @@ moduleContainer.pixiTest = () => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
-  // prettier-ignore
   let mapLayer;
 
   (function init() {
@@ -56,7 +55,7 @@ moduleContainer.pixiTest = () => {
 
     viewport = new PIXI.extras.Viewport(options);
 
-    console.log(viewport);
+    // console.log(viewport);
 
     app.stage.addChild(viewport);
 
@@ -74,9 +73,24 @@ moduleContainer.pixiTest = () => {
   }
 
   function loadImages() {
-    PIXI.loader.add('rock', '/image/figure/3.png');
-    PIXI.loader.add('dirt', '/image/figure/2.png');
-    PIXI.loader.add('tree', '/image/figure/7.png');
+    // find all figure names
+    const figureNameArray = [];
+    mapLayer.forEach((row) => {
+      row.forEach((figure) => {
+        figureNameArray.push(figure.name);
+      });
+    });
+
+    // only unique names
+    const figureNameUniqueArray = _.uniq(figureNameArray);
+
+    console.log('figureNameUniqueArray', figureNameUniqueArray);
+
+    figureNameUniqueArray.forEach((figureName) => {
+      PIXI.loader.add(figureName, `/image/figure/${figureName}.png`);
+    });
+
+    // start loading images
     PIXI.loader.load(() => {
       forEachFigure();
     });
