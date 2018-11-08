@@ -1,12 +1,18 @@
 /* needed by pixi */
 body {
-  margin:0;
-  padding:0;
-  overflow:hidden;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 canvas {
-  display:block;
+  display: block;
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: -o-crisp-edges;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
 }
 
 /* our basic styles */
