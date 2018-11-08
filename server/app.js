@@ -176,6 +176,12 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/readGameStateData.js')(db)
   );
 
+  app.get(
+    '/ajax/readWorldStateData',
+    middlewareTokenAuthentication,
+    require('./ajax/readWorldStateData.js')(db)
+  );
+
   debug('setupLibrariesAndRoutes()');
   setupExpress();
 }
