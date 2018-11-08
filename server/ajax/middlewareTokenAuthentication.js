@@ -97,6 +97,9 @@ module.exports = (db) => {
         return;
       }
 
+      res.locals.playerToken = playerToken;
+      res.locals.gameInstanceId = gameInstanceId;
+
       debug('isPlayerTokenInGameInstanceObject:', isFound);
       next();
     }
