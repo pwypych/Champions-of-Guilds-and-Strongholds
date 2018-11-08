@@ -3,31 +3,34 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-
     <title>Champions of Guilds &amp; Strongholds</title>
     <link rel="stylesheet" href="<%= viewModel.baseurl %>/style.css?v=<%= viewModel.timestamp %>">
-  </head>
-
-  <body>
-    <script>
-      'use strict';
-
-      const moduleContainer = {};
-    </script>
 
     <script type="text/javascript" src="<%= viewModel.baseurl %>/library/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="<%= viewModel.baseurl %>/library/url-2.5.3.js"></script>
     <script type="text/javascript" src="<%= viewModel.baseurl %>/library/lodash-4.17.10.js"></script>
     <script type="text/javascript" src="<%= viewModel.baseurl %>/library/pixi-4.8.2.js"></script>
     <script type="text/javascript" src="<%= viewModel.baseurl %>/library/pixi-viewport-3.4.1.js"></script>
+  </head>
 
-    <% /* we always put our modules into one global variable moduleContainer, modules are buildt to bundle.js */ %>
+  <body>
+    <div id="pixi" style="display: none;"><canvas id="pixi-canvas"></canvas></div>
+
+    <script>
+      'use strict';
+
+      const g = {};
+      g.module = {};
+    </script>
+
     <script type="text/javascript" src="<%= viewModel.baseurl %>/build/bundle.js"></script>
 
     <script>
-      (function init() {
-        moduleContainer.start();
-      })();
+      'use strict';
+
+      window.onload = function() {
+        g.module.start();
+      }
     </script>
   </body>
 </html>

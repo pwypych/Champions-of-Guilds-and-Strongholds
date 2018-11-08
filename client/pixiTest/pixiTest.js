@@ -3,7 +3,7 @@
 'use strict';
 
 /* pixiTest.js */
-moduleContainer.pixiTest = () => {
+g.module.pixiTest = () => {
   const gameInstanceId = $.url('?gameInstanceId');
   const playerToken = $.url('?playerToken');
 
@@ -33,14 +33,16 @@ moduleContainer.pixiTest = () => {
   }
 
   function instantiatePixiApp() {
+    $('#pixi').show();
+    const eCanvas = document.getElementById('pixi-canvas');
+
     const options = {};
     options.width = window.innerWidth;
     options.height = window.innerHeight;
     options.resolution = window.devicePixelRatio; // So retina (double pixel displays works correctly)
+    options.view = eCanvas;
 
     app = new PIXI.Application(options);
-
-    document.body.appendChild(app.view);
 
     instantiateViewport();
   }
@@ -51,7 +53,6 @@ moduleContainer.pixiTest = () => {
     options.screenHeight = window.innerHeight;
     options.worldWidth = mapLayer[0].length * blockWidthPx;
     options.worldHeight = mapLayer.length * blockHeightPx;
-    // options.interaction = app.renderer.interaction;
 
     viewport = new PIXI.extras.Viewport(options);
 
