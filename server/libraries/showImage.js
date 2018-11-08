@@ -9,7 +9,7 @@ const fs = require('fs');
 module.exports = (environment) => {
   return (req, res) => {
     (function init() {
-      debug('init');
+      // debug('init');
       sanitizeImageName();
     })();
 
@@ -17,17 +17,17 @@ module.exports = (environment) => {
       const imageNameDirty = req.params.imageName;
       const imageNameClean = validator.whitelist(
         imageNameDirty,
-        'abcdefghijklmnopqrstuvwxyz01234567890'
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890'
       );
 
-      debug('sanitizeImageName: imageNameClean:', imageNameClean);
+      // debug('sanitizeImageName: imageNameClean:', imageNameClean);
       scanImageFile(imageNameClean);
     }
 
     function scanImageFile(imageName) {
       const imageFilePath =
         environment.basepathFigure + '/' + imageName + '/' + imageName + '.png';
-      debug('imageFilePath', imageFilePath);
+      // debug('imageFilePath', imageFilePath);
 
       fs.stat(imageFilePath, (error, stats) => {
         if (error) {
@@ -40,7 +40,7 @@ module.exports = (environment) => {
           return;
         }
 
-        debug('scanImageFile: stats.size', stats.size);
+        // debug('scanImageFile: stats.size', stats.size);
         readImage(imageFilePath);
       });
     }
@@ -59,7 +59,7 @@ module.exports = (environment) => {
     function sendResponse(data) {
       res.setHeader('Content-Type', 'image/png');
       res.end(data); // Send the file data to the browser.
-      debug('******************** send ********************');
+      // debug('******************** send ********************');
     }
   };
 };

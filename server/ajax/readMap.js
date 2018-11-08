@@ -37,6 +37,7 @@ module.exports = (db) => {
     function sendMapLayer(mapLayer) {
       debug('sendMapLayer');
       res.send(mapLayer);
+      debug('******************** ajax ********************');
     }
   };
 };
