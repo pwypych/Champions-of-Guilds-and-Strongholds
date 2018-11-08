@@ -28,6 +28,15 @@
                 }]
         }, 
         {
+         "id":4,
+         "properties":[
+                {
+                 "name":"name",
+                 "type":"string",
+                 "value":"startPosition"
+                }]
+        }, 
+        {
          "id":6,
          "properties":[
                 {
