@@ -10,15 +10,15 @@ module.exports = (db) => {
 
     (function init() {
       debug('init');
-      getRequestQuery();
+      getResponseLocals();
     })();
 
-    function getRequestQuery() {
-      debug('req.query', req.query);
+    function getResponseLocals() {
+      debug('res.locals', res.locals);
 
-      gameInstanceId = req.query.gameInstanceId;
+      gameInstanceId = res.locals.gameInstanceId;
 
-      debug('getRequestQuery:', gameInstanceId);
+      debug('getResponseLocals:', gameInstanceId);
       findGameInstance();
     }
 
@@ -39,30 +39,30 @@ module.exports = (db) => {
           }
 
           debug('findGameInstance', gameInstanceObject._id);
-          createGameSetupObject(gameInstanceObject);
+          generateGameStateData(gameInstanceObject);
         }
       );
     }
 
-    function createGameSetupObject(gameInstanceObject) {
-      const gameSetupObject = {};
-      gameSetupObject.gameState = gameInstanceObject.gameState;
+    function generateGameStateData(gameInstanceObject) {
+      const gameStateData = {};
+      gameStateData.gameState = gameInstanceObject.gameState;
 
-      gameSetupObject.players = [];
+      gameStateData.players = [];
       gameInstanceObject.playerArray.forEach((player) => {
-        gameSetupObject.players.push(player);
+        gameStateData.players.push({ name: player.name });
       });
 
       debug(
-        'createGameSetupObject: gameSetupObject.players.length',
-        gameSetupObject.players.length
+        'generateGameStateData: gameStateData.players.length',
+        gameStateData.players.length
       );
-      sendSetupGameObject(gameSetupObject);
+      sendGameStateData(gameStateData);
     }
 
-    function sendSetupGameObject(gameSetupObject) {
-      debug('sendMapLayer');
-      res.send(gameSetupObject);
+    function sendGameStateData(gameStateData) {
+      debug('sendGameStateData');
+      res.send(gameStateData);
       debug('******************** ajax ********************');
     }
   };
