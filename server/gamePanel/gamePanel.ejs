@@ -37,6 +37,7 @@
         <td>Player Names</td>
         <td>Player Links</td>
         <td>API readMap</td>
+        <td>API readGameStateData</td>
         <td>Options</td>
       </tr>
 
@@ -60,6 +61,13 @@
             <% gameInstance.playerArray.forEach((player) => { %>
               <% const uri = '/ajax/readMap?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
               <a href="<%= viewModel.baseurl + uri %>">/ajax/readMap</a>
+              <br/>
+            <% }); %>
+          </td>
+          <td>
+            <% gameInstance.playerArray.forEach((player) => { %>
+              <% const uri = '/ajax/readGameStateData?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
+              <a href="<%= viewModel.baseurl + uri %>">/ajax/readGameStateData</a>
               <br/>
             <% }); %>
           </td>
