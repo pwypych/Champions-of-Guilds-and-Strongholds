@@ -3,7 +3,7 @@
   "events": {
     "start": "./build_client.bash"
   },
-  "ignore": ["public/build"],
+  "ignore": ["public/build", "_assets"],
   "execMap": {
     "js": "node"
   }
