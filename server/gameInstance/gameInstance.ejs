@@ -4,6 +4,9 @@
   <head>
     <meta charset="utf-8">
     <title>Champions of Guilds &amp; Strongholds</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet"> 
+
     <link rel="stylesheet" href="<%= viewModel.baseurl %>/style.css?v=<%= viewModel.timestamp %>">
 
     <script type="text/javascript" src="<%= viewModel.baseurl %>/library/jquery-3.3.1.js"></script>
@@ -14,6 +17,61 @@
   </head>
 
   <body>
+
+    <style>
+      .overlay {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+
+      .modal {
+        margin: 15% auto; /* 15% from the top and centered */
+        width: 70%;
+        padding: 20px;
+        border: 15px solid;
+        border-image-source: url('<%= viewModel.baseurl %>/image/ui/border-image.png');
+        border-image-slice: 15 fill;
+        border-image-repeat: repeat;
+      }
+
+      input {
+        border: 6px solid;
+        border-image-source: url('<%= viewModel.baseurl %>/image/ui/border-image-input.png');
+        border-image-slice: 6 fill;
+        border-image-repeat: repeat;
+      }
+
+      button {
+        border: 9px solid;
+        border-image-source: url('<%= viewModel.baseurl %>/image/ui/border-image-button-up.png');
+        border-image-slice: 9 fill;
+        border-image-repeat: repeat;
+        background: none;
+      }
+
+      button:active {
+        border-image-source: url('<%= viewModel.baseurl %>/image/ui/border-image-button-down.png');
+      }
+    </style>
+    <div class="overlay">
+      <div class="modal" id="setup">
+        <p>Player Setup</p>
+        <p>Name: <input type="text" length="20" /></p>
+        <p>Castle: Random</p>
+        <p>Hero: One</p>
+        <p><button>Ready!</button></p>
+        <div class="seperator-40"></div>
+        <p>Player 1: Not ready</p>
+        <p>Player 2: Not ready</p>
+        <p>Player 3: Not ready</p>
+      </div>
+    </div>
+    <script>
+    </script>
+
     <div id="pixi" style="display: none;"><canvas id="pixi-canvas"></canvas></div>
 
     <script>

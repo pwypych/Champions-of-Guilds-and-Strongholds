@@ -1,8 +1,43 @@
 /* needed by pixi */
+::selection {
+  background: #4f1507; /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: #4f1507; /* Gecko Browsers */
+}
+
 body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  outline: 0;
+
+  font-family: 'Press Start 2P', cursive;
+  font-size: 15px;
+  line-height: 26px;
+  color: #fff;
+  text-shadow: -3px -3px 0 #823c3d,  3px -3px 0 #823c3d, -3px 3px 0 #823c3d, 3px 3px 0 #823c3d;
+}
+
+button {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 15px;
+  color: #fff;
+  text-shadow: -3px -3px 0 #376d03,  3px -3px 0 #376d03, -3px 3px 0 #376d03, 3px 3px 0 #376d03;
+  padding: 0px 0px 5px 5px
+}
+
+button:active {
+  padding: 3px 0px 2px 5px
+}
+
+input {
+  height: 26px;
+  padding: 0px 6px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 15px;
+  color: #fff;
+  text-shadow: -3px -3px 0 #823c3d,  3px -3px 0 #823c3d, -3px 3px 0 #823c3d, 3px 3px 0 #823c3d;
 }
 
 canvas {
