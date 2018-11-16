@@ -6,21 +6,12 @@ const debug = require('debug')('cogs:readWorldStateData');
 
 module.exports = (db) => {
   return (req, res) => {
-    let gameInstanceId;
+    const gameInstanceId = res.locals.gameInstanceId;
 
     (function init() {
       debug('init');
-      getResponseLocals();
-    })();
-
-    function getResponseLocals() {
-      debug('res.locals', res.locals);
-
-      gameInstanceId = res.locals.gameInstanceId;
-
-      debug('getResponseLocals:', gameInstanceId);
       findGameInstance();
-    }
+    })();
 
     function findGameInstance() {
       const query = { _id: gameInstanceId };
