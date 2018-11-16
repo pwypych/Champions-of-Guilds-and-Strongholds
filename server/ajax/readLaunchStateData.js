@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:readGameStateData');
+const debug = require('debug')('cogs:readLaunchStateData');
 
 module.exports = (db) => {
   return (req, res) => {

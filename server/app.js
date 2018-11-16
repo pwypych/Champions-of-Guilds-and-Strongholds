@@ -171,9 +171,9 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   app.get(
-    '/ajax/readGameStateData',
+    '/ajax/readLaunchStateData',
     middlewareTokenAuthentication,
-    require('./ajax/readGameStateData.js')(db)
+    require('./ajax/readLaunchStateData.js')(db)
   );
 
   app.get(
