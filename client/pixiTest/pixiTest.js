@@ -23,9 +23,9 @@ g.module.pixiTest = () => {
   function ajaxReadMapLayer() {
     console.log();
     $.get(
-      `/ajax/readMap?gameInstanceId=${gameInstanceId}&playerToken=${playerToken}`,
+      `/ajax/readStateData?gameInstanceId=${gameInstanceId}&playerToken=${playerToken}`,
       (data) => {
-        console.log('GET api/readMap', data);
+        console.log('GET api/readStateData', data);
         mapLayer = data;
         instantiatePixiApp();
       }

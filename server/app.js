@@ -170,18 +170,6 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/readStateData.js')(db)
   );
 
-  app.get(
-    '/ajax/readLaunchStateData',
-    middlewareTokenAuthentication,
-    require('./ajax/readLaunchStateData.js')(db)
-  );
-
-  app.get(
-    '/ajax/readWorldStateData',
-    middlewareTokenAuthentication,
-    require('./ajax/readWorldStateData.js')(db)
-  );
-
   debug('setupLibrariesAndRoutes()');
   setupExpress();
 }
