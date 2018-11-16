@@ -5,9 +5,7 @@
 const debug = require('debug')('cogs:readLaunchStateData');
 
 module.exports = (db) => {
-  return (req, res) => {
-    const gameInstanceId = res.locals.gameInstanceId;
-
+  return (gameInstanceId, callback) => {
     (function init() {
       debug('init');
       findGameInstance();
@@ -23,9 +21,7 @@ module.exports = (db) => {
         (error, gameInstanceObject) => {
           if (error || !gameInstanceObject) {
             debug('findMapLayer: error:', error);
-            res
-              .status(503)
-              .send('503 Service Unavailable - Cannot find gameInstance');
+            callback('Cannot find gameInstance' + JSON.stringify(error));
             return;
           }
 
@@ -36,25 +32,24 @@ module.exports = (db) => {
     }
 
     function generateGameStateData(gameInstanceObject) {
-      const gameStateData = {};
-      gameStateData.gameState = gameInstanceObject.gameState;
+      const launchStateData = {};
+      launchStateData.gameState = gameInstanceObject.gameState;
 
-      gameStateData.players = [];
+      launchStateData.players = [];
       gameInstanceObject.playerArray.forEach((player) => {
-        gameStateData.players.push({ name: player.name });
+        launchStateData.players.push({ name: player.name });
       });
 
       debug(
-        'generateGameStateData: gameStateData.players.length',
-        gameStateData.players.length
+        'generateGameStateData: launchStateData.players.length',
+        launchStateData.players.length
       );
-      sendGameStateData(gameStateData);
+      sendGameStateData(launchStateData);
     }
 
-    function sendGameStateData(gameStateData) {
+    function sendGameStateData(launchStateData) {
       debug('sendGameStateData');
-      res.send(gameStateData);
-      debug('******************** ajax ********************');
+      callback(null, launchStateData);
     }
   };
 };

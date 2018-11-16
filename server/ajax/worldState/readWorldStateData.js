@@ -5,9 +5,7 @@
 const debug = require('debug')('cogs:readWorldStateData');
 
 module.exports = (db) => {
-  return (req, res) => {
-    const gameInstanceId = res.locals.gameInstanceId;
-
+  return (gameInstanceId, callback) => {
     (function init() {
       debug('init');
       findGameInstance();
@@ -23,9 +21,7 @@ module.exports = (db) => {
         (error, gameInstanceObject) => {
           if (error || !gameInstanceObject) {
             debug('findMapLayer: error:', error);
-            res
-              .status(503)
-              .send('503 Service Unavailable - Cannot find gameInstance');
+            callback('Cannot find gameInstance' + JSON.stringify(error));
             return;
           }
 
@@ -50,8 +46,7 @@ module.exports = (db) => {
 
     function sendGameStateData(worldStateData) {
       debug('sendGameStateData');
-      res.send(worldStateData);
-      debug('******************** ajax ********************');
+      callback(null, worldStateData);
     }
   };
 };

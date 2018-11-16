@@ -121,6 +121,18 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   const templateToHtml = require('./libraries/templateToHtml.js')();
   // const generateFigureManagerTree = require('./figure/generateFigureManagerTree.js')();
 
+  // state libraries
+  const readLaunchStateData = require('./ajax/launchState/readLaunchStateData.js')(
+    db
+  );
+  const readWorldStateData = require('./ajax/worldState/readWorldStateData.js')(
+    db
+  );
+  const stateNameVsLibraryMap = {
+    launchState: readLaunchStateData,
+    worldState: readWorldStateData
+  };
+
   // middlewares
   const middlewareTokenAuthentication = require('./ajax/middlewareTokenAuthentication.js')(
     db
@@ -167,7 +179,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   app.get(
     '/ajax/readStateData',
     middlewareTokenAuthentication,
-    require('./ajax/readStateData.js')(db)
+    require('./ajax/readStateData.js')(db, stateNameVsLibraryMap)
   );
 
   debug('setupLibrariesAndRoutes()');

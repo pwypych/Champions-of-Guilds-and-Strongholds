@@ -4,23 +4,18 @@
 
 const debug = require('debug')('cogs:readStateData');
 
-module.exports = (db) => {
+module.exports = (db, stateNameVsLibraryMap) => {
   return (req, res) => {
+    const gameInstanceId = res.locals.gameInstanceId;
+
     (function init() {
       debug('init');
-      getResponseLocals();
+      findGameState();
     })();
 
-    function getResponseLocals() {
-      const gameInstanceId = res.locals.gameInstanceId;
-
-      debug('getResponseLocals:', gameInstanceId);
-      findMapLayer(gameInstanceId);
-    }
-
-    function findMapLayer(gameInstanceId) {
+    function findGameState() {
       const query = { _id: gameInstanceId };
-      const options = {};
+      const options = { projection: { gameState: 1 } };
 
       db.collection('gameInstanceCollection').findOne(
         query,
@@ -34,15 +29,37 @@ module.exports = (db) => {
             return;
           }
 
-          debug('findMapLayer', gameInstanceObject._id);
-          sendMapLayer(gameInstanceObject.mapLayer);
+          debug('findGameInstance: _id:', gameInstanceObject._id);
+          debug('findGameInstance: gameState:', gameInstanceObject.gameState);
+          readStateDataFromStateLibrary(gameInstanceObject);
         }
       );
     }
 
-    function sendMapLayer(mapLayer) {
-      debug('sendMapLayer');
-      res.send(mapLayer);
+    function readStateDataFromStateLibrary(gameInstanceObject) {
+      const gameState = gameInstanceObject.gameState;
+      const _id = gameInstanceObject._id;
+
+      stateNameVsLibraryMap[gameState](_id, (error, stateData) => {
+        if (error || !stateData) {
+          debug('readStateDataFromStateLibrary: error:', error);
+          res
+            .status(503)
+            .send('503 Service Unavailable - Cannot find state for the game');
+          return;
+        }
+
+        debug(
+          'readStateDataFromStateLibrary',
+          JSON.stringify(stateData).substr(0, 200)
+        );
+        sendStateData(stateData);
+      });
+    }
+
+    function sendStateData(stateData) {
+      debug('sendStateData');
+      res.send(stateData);
       debug('******************** ajax ********************');
     }
   };
