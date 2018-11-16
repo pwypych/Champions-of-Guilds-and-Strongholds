@@ -8,11 +8,17 @@ module.exports = (db) => {
   return (req, res) => {
     (function init() {
       debug('init');
-      findMapLayer();
+      getResponseLocals();
     })();
 
-    function findMapLayer() {
-      const gameInstanceId = req.query.gameInstanceId;
+    function getResponseLocals() {
+      const gameInstanceId = res.locals.gameInstanceId;
+
+      debug('getResponseLocals:', gameInstanceId);
+      findMapLayer(gameInstanceId);
+    }
+
+    function findMapLayer(gameInstanceId) {
       const query = { _id: gameInstanceId };
       const options = {};
 
