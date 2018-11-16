@@ -5,89 +5,95 @@
     <meta charset="utf-8">
 
     <title>Champions of Guilds &amp; Strongholds</title>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet"> 
+
     <link rel="stylesheet" href="<%= viewModel.baseurl %>/style.css?v=<%= viewModel.timestamp %>">
+    <link rel="stylesheet" href="<%= viewModel.baseurl %>/ui.css?v=<%= viewModel.timestamp %>">
   </head>
 
   <body>
-    <h1>Champions of Guilds &amp; Strongholds - create game</h1>
+    <div class="modal-background margin-all">
+      <h1>Champions of Guilds &amp; Strongholds - create game</h1>
 
-    <form action="<%= viewModel.baseurl %>/gamePanel/createGameInstancePost" method="POST">
-      <button class="js-create" type="submit">Create Game</button>
+      <form action="<%= viewModel.baseurl %>/gamePanel/createGameInstancePost" method="POST">
+        <button class="js-create" type="submit">Create Game</button>
 
-      <div class="seperator-20"></div>
+        <div class="seperator-20"></div>
 
-      <span>Map:</span><br />
-      <select name="mapName">
-        <% viewModel.mapNameArray.forEach((mapName) => { %>
-          <option value="<%= mapName %>"><%= mapName %></option>
-        <% }); %>
-      </select>
-    </form>
+        <span>Map:</span><br />
+        <select name="mapName">
+          <% viewModel.mapNameArray.forEach((mapName) => { %>
+            <option value="<%= mapName %>"><%= mapName %></option>
+          <% }); %>
+        </select>
+      </form>
 
-    <br />
-    <hr />
-    <br />
+      <br />
+      <hr />
+      <br />
 
-    <h2>Current active game instances</h2>
+      <h2>Current active game instances</h2>
 
-    <table>
-      <tr class="bold">
-        <td>Game Instance ID</td>
-        <td>Map Name</td>
-        <td>Player Names</td>
-        <td>Player Links</td>
-        <td>API readMap</td>
-        <td>API readGameStateData</td>
-        <td>API readWorldStateData</td>
-        <td>Options</td>
-      </tr>
+      <div style="overflow-x:auto;">
+        <table>
+          <tr class="bold">
+            <td>Game Instance ID</td>
+            <td>Map Name</td>
+            <td>Player Names</td>
+            <td>Player Links</td>
+            <td>API readMap</td>
+            <td>API readGameStateData</td>
+            <td>API readWorldStateData</td>
+            <td>Options</td>
+          </tr>
 
-      <% viewModel.gameInstanceArray.forEach((gameInstance) => { %>
-        <tr>
-          <td><%= gameInstance._id %></td>
-          <td><%= gameInstance.mapName %></td>
-          <td>
-            <% gameInstance.playerArray.forEach((player) => { %>
-              <%= player.name %><br/>
-            <% }); %>
-          </td>
-          <td>
-            <% gameInstance.playerArray.forEach((player) => { %>
-              <% const uri = '/gameInstance?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
-              <a href="<%= viewModel.baseurl + uri %>">Open Map</a>
-              <br/>
-            <% }); %>
-          </td>
-          <td>
-            <% gameInstance.playerArray.forEach((player) => { %>
-              <% const uri = '/ajax/readMap?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
-              <a href="<%= viewModel.baseurl + uri %>">/ajax/readMap</a>
-              <br/>
-            <% }); %>
-          </td>
-          <td>
-            <% gameInstance.playerArray.forEach((player) => { %>
-              <% const uri = '/ajax/readGameStateData?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
-              <a href="<%= viewModel.baseurl + uri %>">/ajax/readGameStateData</a>
-              <br/>
-            <% }); %>
-          </td>
-          <td>
-            <% gameInstance.playerArray.forEach((player) => { %>
-              <% const uri = '/ajax/readWorldStateData?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
-              <a href="<%= viewModel.baseurl + uri %>">/ajax/readWorldStateData</a>
-              <br/>
-            <% }); %>
-          </td>
-          <td>
-            <form class="" action="/gamePanel/deleteGameInstancePost" method="post">
-              <input name="gameInstanceId" type="hidden" value="<%= gameInstance._id %>">
-              <button type="submit">Delete game</button>
-            </form>
-          </td>
-        </tr>
-      <% }); %>
-    </table>
-
+          <% viewModel.gameInstanceArray.forEach((gameInstance) => { %>
+            <tr>
+              <td><%= gameInstance._id %></td>
+              <td><%= gameInstance.mapName %></td>
+              <td>
+                <% gameInstance.playerArray.forEach((player) => { %>
+                  <%= player.name %><br/>
+                <% }); %>
+              </td>
+              <td>
+                <% gameInstance.playerArray.forEach((player) => { %>
+                  <% const uri = '/gameInstance?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
+                  <a href="<%= viewModel.baseurl + uri %>">Open Map</a>
+                  <br/>
+                <% }); %>
+              </td>
+              <td>
+                <% gameInstance.playerArray.forEach((player) => { %>
+                  <% const uri = '/ajax/readMap?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
+                  <a href="<%= viewModel.baseurl + uri %>">/ajax/readMap</a>
+                  <br/>
+                <% }); %>
+              </td>
+              <td>
+                <% gameInstance.playerArray.forEach((player) => { %>
+                  <% const uri = '/ajax/readGameStateData?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
+                  <a href="<%= viewModel.baseurl + uri %>">/ajax/readGameStateData</a>
+                  <br/>
+                <% }); %>
+              </td>
+              <td>
+                <% gameInstance.playerArray.forEach((player) => { %>
+                  <% const uri = '/ajax/readWorldStateData?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
+                  <a href="<%= viewModel.baseurl + uri %>">/ajax/readWorldStateData</a>
+                  <br/>
+                <% }); %>
+              </td>
+              <td>
+                <form class="" action="/gamePanel/deleteGameInstancePost" method="post">
+                  <input name="gameInstanceId" type="hidden" value="<%= gameInstance._id %>">
+                  <button type="submit">Delete game</button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+        </table>
+      </div>
+    </div>
   </body>
 </html>
