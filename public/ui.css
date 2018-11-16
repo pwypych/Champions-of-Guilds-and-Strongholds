@@ -1,0 +1,76 @@
+/* needed by pixi */
+::selection {
+  background: #4f1507; /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: #4f1507; /* Gecko Browsers */
+}
+
+body {
+  outline: 0;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 15px;
+  line-height: 26px;
+  color: #fff;
+  text-shadow: -3px -3px 0 #823c3d,  3px -3px 0 #823c3d, -3px 3px 0 #823c3d, 3px 3px 0 #823c3d;
+  background-color: #000;
+}
+
+button {
+  border: 9px solid;
+  border-image-source: url('/image/ui/border-image-button-up.png');
+  border-image-slice: 9 fill;
+  border-image-repeat: repeat;
+  background: none;
+
+  font-family: 'Press Start 2P', cursive;
+  font-size: 15px;
+  color: #fff;
+  text-shadow: -3px -3px 0 #376d03,  3px -3px 0 #376d03, -3px 3px 0 #376d03, 3px 3px 0 #376d03;
+  padding: 0px 0px 5px 5px
+}
+
+button:active {
+  padding: 3px 0px 2px 5px
+  border-image-source: url('/image/ui/border-image-button-down.png');
+}
+
+input {
+  height: 26px;
+  padding: 0px 6px;
+  border: 6px solid;
+  border-image-source: url('/image/ui/border-image-input.png');
+  border-image-slice: 6 fill;
+  border-image-repeat: repeat;
+
+  font-family: 'Press Start 2P', cursive;
+  font-size: 15px;
+  color: #fff;
+  text-shadow: -3px -3px 0 #823c3d,  3px -3px 0 #823c3d, -3px 3px 0 #823c3d, 3px 3px 0 #823c3d;
+}
+
+a {
+  color: #fff;
+  text-shadow: -3px -3px 0 #0084ff,  3px -3px 0 #0084ff, -3px 3px 0 #0084ff, 3px 3px 0 #0084ff;
+}
+
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal {
+  margin: 15% auto; /* 15% from the top and centered */
+  width: 70%;
+}
+
+.modal-background {
+  border: 15px solid;
+  border-image-source: url('/image/ui/border-image.png');
+  border-image-slice: 15 fill;
+  border-image-repeat: repeat;
+  padding: 0 10px;
+}
