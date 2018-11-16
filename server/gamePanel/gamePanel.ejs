@@ -41,8 +41,8 @@
             <td>Map Name</td>
             <td>Player Names</td>
             <td>Player Links</td>
-            <td>API readMap</td>
-            <td>API readGameStateData</td>
+            <td>API readStateData</td>
+            <td>API readLaunchStateData</td>
             <td>API readWorldStateData</td>
             <td>Options</td>
           </tr>
@@ -65,15 +65,15 @@
               </td>
               <td>
                 <% gameInstance.playerArray.forEach((player) => { %>
-                  <% const uri = '/ajax/readMap?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
-                  <a href="<%= viewModel.baseurl + uri %>">/ajax/readMap</a>
+                  <% const uri = '/ajax/readStateData?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
+                  <a href="<%= viewModel.baseurl + uri %>">/ajax/readStateData</a>
                   <br/>
                 <% }); %>
               </td>
               <td>
                 <% gameInstance.playerArray.forEach((player) => { %>
-                  <% const uri = '/ajax/readGameStateData?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
-                  <a href="<%= viewModel.baseurl + uri %>">/ajax/readGameStateData</a>
+                  <% const uri = '/ajax/readLaunchStateData?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
+                  <a href="<%= viewModel.baseurl + uri %>">/ajax/readLaunchStateData</a>
                   <br/>
                 <% }); %>
               </td>

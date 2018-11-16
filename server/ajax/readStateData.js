@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:readMap');
+const debug = require('debug')('cogs:readStateData');
 
 module.exports = (db) => {
   return (req, res) => {
