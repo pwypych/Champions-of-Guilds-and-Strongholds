@@ -123,10 +123,10 @@ function setupLibrariesAndRoutes(figureManagerTree) {
 
   // state libraries
   const readLaunchStateData = require('./ajax/launchState/readLaunchStateData.js')();
-  const readWorldStateData = require('./ajax/worldState/readWorldStateData.js')();
+  const generateWorldStateData = require('./ajax/worldState/generateWorldStateData.js')();
   const stateNameVsLibraryMap = {
     launchState: readLaunchStateData,
-    worldState: readWorldStateData
+    worldState: generateWorldStateData
   };
 
   // middlewares
