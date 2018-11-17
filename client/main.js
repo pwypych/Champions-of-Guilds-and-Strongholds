@@ -3,7 +3,7 @@
 'use strict';
 
 /* start.js */
-g.module.start = function start() {
+g.module.main = function main() {
   // authentication
   const auth = {};
   auth.gameInstanceId = $.url('?gameInstanceId');

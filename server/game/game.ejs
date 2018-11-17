@@ -23,22 +23,8 @@
 
     <div id="pixi" style="display: none;"><canvas id="pixi-canvas"></canvas></div>
 
-    <script>
-      'use strict';
-
-      const g = {};
-      g.module = {};
-    </script>
-
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/js/g.js"></script>
     <script type="text/javascript" src="<%= viewModel.baseurl %>/build/bundle.js"></script>
-    <script type="text/javascript" src="<%= viewModel.baseurl %>/build/bundle.js"></script>
-
-    <script>
-      'use strict';
-
-      window.onload = function() {
-        g.module.start();
-      }
-    </script>
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/js/start.js"></script>
   </body>
 </html>
