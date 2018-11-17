@@ -1,4 +1,5 @@
 'use strict';
 
 const g = {};
-g.module = {};
+g.game = {};
+g.launch = {};
