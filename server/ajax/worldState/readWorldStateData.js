@@ -33,7 +33,7 @@ module.exports = (db) => {
 
     function generateWorldStateData(gameInstanceObject) {
       const worldStateData = {};
-      worldStateData.gameState = gameInstanceObject.gameState;
+      worldStateData.state = gameInstanceObject.state;
 
       worldStateData.mapLayer = gameInstanceObject.mapLayer;
 
@@ -41,11 +41,11 @@ module.exports = (db) => {
         'generateWorldStateData: worldStateData.players.length',
         worldStateData.mapLayer.length
       );
-      sendGameStateData(worldStateData);
+      sendStateData(worldStateData);
     }
 
-    function sendGameStateData(worldStateData) {
-      debug('sendGameStateData');
+    function sendStateData(worldStateData) {
+      debug('sendStateData');
       callback(null, worldStateData);
     }
   };

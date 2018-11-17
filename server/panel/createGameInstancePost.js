@@ -64,7 +64,7 @@ module.exports = (environment, db, figureManagerTree) => {
 
       gameInstance.mapName = mapObject._id;
 
-      gameInstance.gameState = 'launchState';
+      gameInstance.state = 'launchState';
 
       gameInstance.playerArray = [];
 
