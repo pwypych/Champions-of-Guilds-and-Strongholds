@@ -28,7 +28,7 @@ module.exports = () => {
     let html;
 
     (function init() {
-      debug('init()', filename, viewModel);
+      // debug('init()', filename);
       loadFile();
     })();
 

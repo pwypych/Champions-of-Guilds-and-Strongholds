@@ -12,15 +12,31 @@ module.exports = (environment, db, templateToHtml) => {
 
     (function init() {
       debug('init');
-      sendResponce();
+      generateLaunch();
     })();
 
-    function sendResponce() {
-      templateToHtml(__filename, viewModel, (error, html) => {
-        debug('sendResponce():html', viewModel, html.length);
-        debug('******************** send ********************');
-        res.send(html);
+    function generateLaunch() {
+      const path = environment.basepath + '/server/gameInstance/launch.ejs';
+      templateToHtml(path, viewModel, (error, htmlLaunch) => {
+        viewModel.htmlLaunch = htmlLaunch;
+        debug('generateLaunch: htmlLaunch.length:', htmlLaunch.length);
+        generateTemplate();
       });
+    }
+
+    function generateTemplate() {
+      const path =
+        environment.basepath + '/server/gameInstance/gameInstance.ejs';
+      templateToHtml(path, viewModel, (error, html) => {
+        debug('generateTemplate html.length:', html.length);
+        sendResponce(html);
+      });
+    }
+
+    function sendResponce(html) {
+      debug('sendResponce():html.length:', html.length);
+      debug('******************** send ********************');
+      res.send(html);
     }
   };
 };
