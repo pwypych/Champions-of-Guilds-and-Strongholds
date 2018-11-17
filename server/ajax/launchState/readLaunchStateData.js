@@ -26,14 +26,14 @@ module.exports = (db) => {
           }
 
           debug('findGameInstance', gameInstanceObject._id);
-          generateGameStateData(gameInstanceObject);
+          generateStateData(gameInstanceObject);
         }
       );
     }
 
-    function generateGameStateData(gameInstanceObject) {
+    function generateStateData(gameInstanceObject) {
       const launchStateData = {};
-      launchStateData.gameState = gameInstanceObject.gameState;
+      launchStateData.state = gameInstanceObject.state;
 
       launchStateData.players = [];
       gameInstanceObject.playerArray.forEach((player) => {
@@ -41,14 +41,14 @@ module.exports = (db) => {
       });
 
       debug(
-        'generateGameStateData: launchStateData.players.length',
+        'generateStateData: launchStateData.players.length',
         launchStateData.players.length
       );
-      sendGameStateData(launchStateData);
+      sendStateData(launchStateData);
     }
 
-    function sendGameStateData(launchStateData) {
-      debug('sendGameStateData');
+    function sendStateData(launchStateData) {
+      debug('sendStateData');
       callback(null, launchStateData);
     }
   };

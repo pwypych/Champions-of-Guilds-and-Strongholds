@@ -64,7 +64,7 @@ module.exports = (environment, db, figureManagerTree) => {
 
       gameInstance.mapName = mapObject._id;
 
-      gameInstance.gameState = 'launchState';
+      gameInstance.state = 'launchState';
 
       gameInstance.playerArray = [];
 
@@ -167,7 +167,7 @@ module.exports = (environment, db, figureManagerTree) => {
     function sendResponce() {
       debug('sendResponce()');
       debug('******************** should redirect ********************');
-      res.redirect(environment.baseurl + '/gamePanel');
+      res.redirect(environment.baseurl + '/panel');
     }
 
     function toolConvertTiledLayer(tiledLayer) {

@@ -138,19 +138,19 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     db
   );
 
-  // redirect form homepage to gamePanel
+  // redirect form homepage to panel
   app.get('/', (req, res) => {
-    res.redirect('/gamePanel');
+    res.redirect('/panel');
   });
 
-  // gamePanel
+  // panel
   app.get(
-    '/gamePanel',
-    require('./gamePanel/gamePanel.js')(environment, db, templateToHtml)
+    '/panel',
+    require('./panel/panel.js')(environment, db, templateToHtml)
   );
   app.post(
-    '/gamePanel/createGameInstancePost',
-    require('./gamePanel/createGameInstancePost.js')(
+    '/panel/createGameInstancePost',
+    require('./panel/createGameInstancePost.js')(
       environment,
       db,
       figureManagerTree
@@ -158,8 +158,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   app.post(
-    '/gamePanel/deleteGameInstancePost',
-    require('./gamePanel/deleteGameInstancePost.js')(environment, db)
+    '/panel/deleteGameInstancePost',
+    require('./panel/deleteGameInstancePost.js')(environment, db)
   );
 
   // main game

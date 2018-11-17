@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:gamePanel');
+const debug = require('debug')('cogs:panel');
 
 module.exports = (environment, db, templateToHtml) => {
   return (req, res) => {

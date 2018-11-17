@@ -10,12 +10,12 @@ module.exports = (db, stateNameVsLibraryMap) => {
 
     (function init() {
       debug('init');
-      findGameState();
+      findState();
     })();
 
-    function findGameState() {
+    function findState() {
       const query = { _id: gameInstanceId };
-      const options = { projection: { gameState: 1 } };
+      const options = { projection: { state: 1 } };
 
       db.collection('gameInstanceCollection').findOne(
         query,
@@ -30,17 +30,17 @@ module.exports = (db, stateNameVsLibraryMap) => {
           }
 
           debug('findGameInstance: _id:', gameInstanceObject._id);
-          debug('findGameInstance: gameState:', gameInstanceObject.gameState);
+          debug('findGameInstance: state:', gameInstanceObject.state);
           readStateDataFromStateLibrary(gameInstanceObject);
         }
       );
     }
 
     function readStateDataFromStateLibrary(gameInstanceObject) {
-      const gameState = gameInstanceObject.gameState;
+      const state = gameInstanceObject.state;
       const _id = gameInstanceObject._id;
 
-      stateNameVsLibraryMap[gameState](_id, (error, stateData) => {
+      stateNameVsLibraryMap[state](_id, (error, stateData) => {
         if (error || !stateData) {
           debug('readStateDataFromStateLibrary: error:', error);
           res
