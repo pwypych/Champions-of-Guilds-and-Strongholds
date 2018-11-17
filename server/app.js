@@ -174,6 +174,12 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/stateDataGet.js')(db, stateNameVsLibraryMap)
   );
 
+  app.post(
+    '/ajax/launchState/playerNamePost',
+    middlewareTokenAuthentication,
+    require('./ajax/launchState/playerNamePost.js')(db)
+  );
+
   debug('setupLibrariesAndRoutes()');
   setupExpress();
 }
