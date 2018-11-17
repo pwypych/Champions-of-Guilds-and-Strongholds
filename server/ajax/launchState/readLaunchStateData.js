@@ -15,28 +15,24 @@ module.exports = (db) => {
       const query = { _id: gameId };
       const options = {};
 
-      db.collection('gameCollection').findOne(
-        query,
-        options,
-        (error, gameObject) => {
-          if (error || !gameObject) {
-            debug('findMapLayer: error:', error);
-            callback('Cannot find game' + JSON.stringify(error));
-            return;
-          }
-
-          debug('findGame', gameObject._id);
-          generateStateData(gameObject);
+      db.collection('gameCollection').findOne(query, options, (error, game) => {
+        if (error || !game) {
+          debug('findMapLayer: error:', error);
+          callback('Cannot find game' + JSON.stringify(error));
+          return;
         }
-      );
+
+        debug('findGame', game._id);
+        generateStateData(game);
+      });
     }
 
-    function generateStateData(gameObject) {
+    function generateStateData(game) {
       const launchStateData = {};
-      launchStateData.state = gameObject.state;
+      launchStateData.state = game.state;
 
       launchStateData.players = [];
-      gameObject.playerArray.forEach((player) => {
+      game.playerArray.forEach((player) => {
         launchStateData.players.push({ name: player.name });
       });
 
