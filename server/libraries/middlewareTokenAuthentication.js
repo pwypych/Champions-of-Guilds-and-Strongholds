@@ -35,9 +35,7 @@ module.exports = (db) => {
     function validateRequestQuery() {
       if (!shortid.isValid(gameId)) {
         debug('validateRequestQuery: Invalid gameId:', gameId);
-        res
-          .status(503)
-          .send('503 Service Unavailable - Invalid gameId');
+        res.status(503).send('503 Service Unavailable - Invalid gameId');
         return;
       }
 
@@ -55,34 +53,28 @@ module.exports = (db) => {
       const query = { _id: gameId };
       const options = {};
 
-      db.collection('gameCollection').findOne(
-        query,
-        options,
-        (error, game) => {
-          if (error) {
-            debug('findGameById: error:', error);
-            res
-              .status(503)
-              .send('503 Service Unavailable - Error', error.message);
-            return;
-          }
-
-          if (!game) {
-            res
-              .status(503)
-              .send('503 Service Unavailable - Cannot find gameId');
-            return;
-          }
-
-          debug('findGameById', game._id);
-          isPlayerTokenInGameObject(game.playerArray);
+      db.collection('gameCollection').findOne(query, options, (error, game) => {
+        if (error) {
+          debug('findGameById: error:', error);
+          res
+            .status(503)
+            .send('503 Service Unavailable - Error', error.message);
+          return;
         }
-      );
+
+        if (!game) {
+          res.status(503).send('503 Service Unavailable - Cannot find gameId');
+          return;
+        }
+
+        debug('findGameById', game._id);
+        isPlayerTokenInGameObject(game);
+      });
     }
 
-    function isPlayerTokenInGameObject(playerArray) {
+    function isPlayerTokenInGameObject(game) {
       let isFound = false;
-      playerArray.forEach((player) => {
+      game.playerArray.forEach((player) => {
         if (player.token === playerToken) {
           isFound = true;
         }
@@ -91,14 +83,12 @@ module.exports = (db) => {
       if (!isFound) {
         res
           .status(503)
-          .send(
-            '503 Service Unavailable - Cannot find playerToken in game'
-          );
+          .send('503 Service Unavailable - Cannot find playerToken in game');
         return;
       }
 
       res.locals.playerToken = playerToken;
-      res.locals.gameId = gameId;
+      res.locals.game = game;
 
       debug('isPlayerTokenInGameObject:', isFound);
       next();

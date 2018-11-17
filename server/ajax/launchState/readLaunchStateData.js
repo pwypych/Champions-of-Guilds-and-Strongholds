@@ -4,30 +4,14 @@
 
 const debug = require('debug')('cogs:readLaunchStateData');
 
-module.exports = (db) => {
-  return (gameId, callback) => {
+module.exports = () => {
+  return (game, callback) => {
     (function init() {
       debug('init');
-      findGame();
+      generateStateData();
     })();
 
-    function findGame() {
-      const query = { _id: gameId };
-      const options = {};
-
-      db.collection('gameCollection').findOne(query, options, (error, game) => {
-        if (error || !game) {
-          debug('findMapLayer: error:', error);
-          callback('Cannot find game' + JSON.stringify(error));
-          return;
-        }
-
-        debug('findGame', game._id);
-        generateStateData(game);
-      });
-    }
-
-    function generateStateData(game) {
+    function generateStateData() {
       const launchStateData = {};
       launchStateData.state = game.state;
 
