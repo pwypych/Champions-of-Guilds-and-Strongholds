@@ -21,7 +21,7 @@ module.exports = (db) => {
         typeof req.query.gameId === 'undefined' ||
         typeof req.query.playerToken === 'undefined'
       ) {
-        res.status(403).send('403 Forbbidden - Missing querry variable');
+        res.status(403).send('403 Forbbidden - Missing query variable');
         return;
       }
 
