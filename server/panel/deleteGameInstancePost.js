@@ -52,7 +52,7 @@ module.exports = (environment, db) => {
     function sendResponce() {
       debug('sendResponce()');
       debug('******************** should redirect ********************');
-      res.redirect(environment.baseurl + '/gamePanel');
+      res.redirect(environment.baseurl + '/panel');
     }
   };
 };
