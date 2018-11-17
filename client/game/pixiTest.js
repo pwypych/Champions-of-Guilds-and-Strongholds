@@ -2,8 +2,7 @@
 
 'use strict';
 
-/* pixiTest.js */
-g.module.pixiTest = () => {
+g.game.pixiTest = () => {
   const gameInstanceId = $.url('?gameInstanceId');
   const playerToken = $.url('?playerToken');
 
@@ -122,4 +121,3 @@ g.module.pixiTest = () => {
     viewport.addChild(sprite);
   }
 };
-/* /pixiTest.js */
