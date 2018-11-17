@@ -7,8 +7,8 @@
 
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet"> 
 
-    <link rel="stylesheet" href="<%= viewModel.baseurl %>/style.css?v=<%= viewModel.timestamp %>">
-    <link rel="stylesheet" href="<%= viewModel.baseurl %>/ui.css?v=<%= viewModel.timestamp %>">
+    <link rel="stylesheet" href="<%= viewModel.baseurl %>/css/style.css?v=<%= viewModel.timestamp %>">
+    <link rel="stylesheet" href="<%= viewModel.baseurl %>/css/ui.css?v=<%= viewModel.timestamp %>">
 
     <script type="text/javascript" src="<%= viewModel.baseurl %>/library/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="<%= viewModel.baseurl %>/library/url-2.5.3.js"></script>
@@ -18,26 +18,11 @@
   </head>
 
   <body>
-
     <%- viewModel.htmlLaunch %>
+    <%- viewModel.htmlPixi %>
 
-    <div id="pixi" style="display: none;"><canvas id="pixi-canvas"></canvas></div>
-
-    <script>
-      'use strict';
-
-      const g = {};
-      g.module = {};
-    </script>
-
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/js/g.js"></script>
     <script type="text/javascript" src="<%= viewModel.baseurl %>/build/bundle.js"></script>
-
-    <script>
-      'use strict';
-
-      window.onload = function() {
-        g.module.start();
-      }
-    </script>
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/js/start.js"></script>
   </body>
 </html>
