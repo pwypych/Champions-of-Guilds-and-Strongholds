@@ -3,7 +3,7 @@
 'use strict';
 
 g.game.pixiTest = () => {
-  const gameInstanceId = $.url('?gameInstanceId');
+  const gameId = $.url('?gameId');
   const playerToken = $.url('?playerToken');
 
   let app;
@@ -22,10 +22,10 @@ g.game.pixiTest = () => {
   function ajaxReadMapLayer() {
     console.log();
     $.get(
-      `/ajax/readStateData?gameInstanceId=${gameInstanceId}&playerToken=${playerToken}`,
+      `/ajax/stateDataGet?gameId=${gameId}&playerToken=${playerToken}`,
       (data) => {
-        console.log('GET api/readStateData', data);
-        mapLayer = data;
+        console.log('GET api/stateDataGet', data);
+        mapLayer = data.mapLayer;
         instantiatePixiApp();
       }
     );

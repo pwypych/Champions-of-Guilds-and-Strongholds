@@ -15,5 +15,5 @@ g.main = function main() {
 
   g.launch.launch(auth);
 
-  // g.module.pixiTest();
+  // g.game.pixiTest();
 };

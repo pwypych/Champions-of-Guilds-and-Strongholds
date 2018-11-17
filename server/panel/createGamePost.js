@@ -148,20 +148,17 @@ module.exports = (environment, db, figureManagerTree) => {
     }
 
     function insertGame() {
-      db.collection('gameCollection').insertOne(
-        game,
-        (error) => {
-          if (error) {
-            debug('insertGame: error:', error);
-            res
-              .status(503)
-              .send('503 Service Unavailable - Cannot insert game instance');
-          }
-
-          debug('insertGame', game.mapName);
-          sendResponce();
+      db.collection('gameCollection').insertOne(game, (error) => {
+        if (error) {
+          debug('insertGame: error:', error);
+          res
+            .status(503)
+            .send('503 Service Unavailable - Cannot insert game instance');
         }
-      );
+
+        debug('insertGame', game.mapName);
+        sendResponce();
+      });
     }
 
     function sendResponce() {
