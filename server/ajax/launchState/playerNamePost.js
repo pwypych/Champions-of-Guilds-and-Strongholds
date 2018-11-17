@@ -58,21 +58,30 @@ module.exports = (db) => {
     function updateGameByPlayerName(playerIndex) {
       const query = { _id: game._id };
       const $set = {};
-      const name = 'playerArray[' + playerIndex + '].name';
+      const name = 'playerArray.' + playerIndex + '.name';
       $set[name] = playerName;
       const update = { $set: $set };
       const options = {};
 
-      db.collection('game').update(query, update, options, (error) => {
-        if (error) {
-          debug('updateGameByPlayerName: error:', error);
-          res.status(503).send('503 Service Unavailable - Cannot update game');
-          return;
-        }
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('updateGameByPlayerName: error:', error);
+            res
+              .status(503)
+              .send('503 Service Unavailable - Cannot update game');
+            return;
+          }
 
-        debug('updateGameByPlayerName: $set:', $set);
-        sendResponce();
-      });
+          debug('updateGameByPlayerName: query:', query);
+          debug('updateGameByPlayerName: update:', update);
+          debug('updateGameByPlayerName: options:', options);
+          sendResponce();
+        }
+      );
     }
 
     function sendResponce() {
