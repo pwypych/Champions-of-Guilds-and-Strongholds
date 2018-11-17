@@ -8,17 +8,17 @@ module.exports = () => {
   return (game, callback) => {
     (function init() {
       debug('init');
-      generateWorldStateData();
+      generateData();
     })();
 
-    function generateWorldStateData() {
+    function generateData() {
       const worldStateData = {};
       worldStateData.state = game.state;
 
       worldStateData.mapLayer = game.mapLayer;
 
       debug(
-        'generateWorldStateData: worldStateData.players.length',
+        'generateData: worldStateData.players.length',
         worldStateData.mapLayer.length
       );
       sendStateData(worldStateData);
