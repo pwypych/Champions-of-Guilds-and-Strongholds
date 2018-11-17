@@ -12,21 +12,29 @@ module.exports = (environment, db, templateToHtml) => {
 
     (function init() {
       debug('init');
-      generateLaunch();
+      generatePixi();
     })();
+
+    function generatePixi() {
+      const path = environment.basepath + '/server/game/pixi.ejs';
+      templateToHtml(path, viewModel, (error, html) => {
+        viewModel.htmlPixi = html;
+        debug('generatePixi: html.length:', html.length);
+        generateLaunch();
+      });
+    }
 
     function generateLaunch() {
       const path = environment.basepath + '/server/game/launch.ejs';
-      templateToHtml(path, viewModel, (error, htmlLaunch) => {
-        viewModel.htmlLaunch = htmlLaunch;
-        debug('generateLaunch: htmlLaunch.length:', htmlLaunch.length);
+      templateToHtml(path, viewModel, (error, html) => {
+        viewModel.htmlLaunch = html;
+        debug('generateLaunch: html.length:', html.length);
         generateTemplate();
       });
     }
 
     function generateTemplate() {
-      const path =
-        environment.basepath + '/server/game/game.ejs';
+      const path = environment.basepath + '/server/game/game.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         debug('generateTemplate html.length:', html.length);
         sendResponce(html);
