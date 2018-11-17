@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:gameInstance');
+const debug = require('debug')('cogs:game');
 
 module.exports = (environment, db, templateToHtml) => {
   return (req, res) => {
@@ -16,7 +16,7 @@ module.exports = (environment, db, templateToHtml) => {
     })();
 
     function generateLaunch() {
-      const path = environment.basepath + '/server/gameInstance/launch.ejs';
+      const path = environment.basepath + '/server/game/launch.ejs';
       templateToHtml(path, viewModel, (error, htmlLaunch) => {
         viewModel.htmlLaunch = htmlLaunch;
         debug('generateLaunch: htmlLaunch.length:', htmlLaunch.length);
@@ -26,7 +26,7 @@ module.exports = (environment, db, templateToHtml) => {
 
     function generateTemplate() {
       const path =
-        environment.basepath + '/server/gameInstance/gameInstance.ejs';
+        environment.basepath + '/server/game/game.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         debug('generateTemplate html.length:', html.length);
         sendResponce(html);

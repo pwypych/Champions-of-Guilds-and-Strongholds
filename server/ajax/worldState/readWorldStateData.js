@@ -5,37 +5,37 @@
 const debug = require('debug')('cogs:readWorldStateData');
 
 module.exports = (db) => {
-  return (gameInstanceId, callback) => {
+  return (gameId, callback) => {
     (function init() {
       debug('init');
-      findGameInstance();
+      findGame();
     })();
 
-    function findGameInstance() {
-      const query = { _id: gameInstanceId };
+    function findGame() {
+      const query = { _id: gameId };
       const options = {};
 
-      db.collection('gameInstanceCollection').findOne(
+      db.collection('gameCollection').findOne(
         query,
         options,
-        (error, gameInstanceObject) => {
-          if (error || !gameInstanceObject) {
+        (error, gameObject) => {
+          if (error || !gameObject) {
             debug('findMapLayer: error:', error);
-            callback('Cannot find gameInstance' + JSON.stringify(error));
+            callback('Cannot find game' + JSON.stringify(error));
             return;
           }
 
-          debug('findGameInstance', gameInstanceObject._id);
-          generateWorldStateData(gameInstanceObject);
+          debug('findGame', gameObject._id);
+          generateWorldStateData(gameObject);
         }
       );
     }
 
-    function generateWorldStateData(gameInstanceObject) {
+    function generateWorldStateData(gameObject) {
       const worldStateData = {};
-      worldStateData.state = gameInstanceObject.state;
+      worldStateData.state = gameObject.state;
 
-      worldStateData.mapLayer = gameInstanceObject.mapLayer;
+      worldStateData.mapLayer = gameObject.mapLayer;
 
       debug(
         'generateWorldStateData: worldStateData.players.length',

@@ -40,31 +40,31 @@ module.exports = (environment, db, templateToHtml) => {
           viewModel.mapNameArray = mapNameArray;
 
           debug('findMapNameArray', mapNameArray);
-          findGameInstanceArray();
+          findGameArray();
         });
     }
 
-    function findGameInstanceArray() {
+    function findGameArray() {
       const query = {};
       const options = {};
       options.projection = { mapLayer: 0 };
 
-      db.collection('gameInstanceCollection')
+      db.collection('gameCollection')
         .find(query, options)
-        .toArray((error, gameInstanceArray) => {
+        .toArray((error, gameArray) => {
           if (error) {
-            debug('findGameInstanceArray: error:', error);
+            debug('findGameArray: error:', error);
             res
               .status(503)
               .send(
-                '503 Service Unavailable: Mongo error, cannot run find on gameInstanceCollection'
+                '503 Service Unavailable: Mongo error, cannot run find on gameCollection'
               );
             return;
           }
 
-          viewModel.gameInstanceArray = gameInstanceArray;
+          viewModel.gameArray = gameArray;
 
-          debug('findMapNameArray', gameInstanceArray);
+          debug('findMapNameArray', gameArray);
           sendResponce();
         });
     }

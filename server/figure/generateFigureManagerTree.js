@@ -7,8 +7,8 @@ const fs = require('fs');
 
 // figureManagerTree is an object that has all figureManager's
 // figureManager is a manager for given figure
-// figure is a generic representation of a figureInstance on gameInstance map
-// figureInstance is a data object in mapLayer in mongo gameInstanceCollection
+// figure is a generic representation of a figureInstance on game map
+// figureInstance is a data object in mapLayer in mongo gameCollection
 // figureManager is used to do stuff on figureInstance's
 // we can also use figureManager to produce figureInstance's
 // figureManager for given figure resides in the server/figure/[figureName] folder

@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:readStateData');
 
 module.exports = (db, stateNameVsLibraryMap) => {
   return (req, res) => {
-    const gameInstanceId = res.locals.gameInstanceId;
+    const gameId = res.locals.gameId;
 
     (function init() {
       debug('init');
@@ -14,31 +14,31 @@ module.exports = (db, stateNameVsLibraryMap) => {
     })();
 
     function findState() {
-      const query = { _id: gameInstanceId };
+      const query = { _id: gameId };
       const options = { projection: { state: 1 } };
 
-      db.collection('gameInstanceCollection').findOne(
+      db.collection('gameCollection').findOne(
         query,
         options,
-        (error, gameInstanceObject) => {
-          if (error || !gameInstanceObject) {
+        (error, gameObject) => {
+          if (error || !gameObject) {
             debug('findMapLayer: error:', error);
             res
               .status(503)
-              .send('503 Service Unavailable - Cannot find gameInstance');
+              .send('503 Service Unavailable - Cannot find game');
             return;
           }
 
-          debug('findGameInstance: _id:', gameInstanceObject._id);
-          debug('findGameInstance: state:', gameInstanceObject.state);
-          readStateDataFromStateLibrary(gameInstanceObject);
+          debug('findGame: _id:', gameObject._id);
+          debug('findGame: state:', gameObject.state);
+          readStateDataFromStateLibrary(gameObject);
         }
       );
     }
 
-    function readStateDataFromStateLibrary(gameInstanceObject) {
-      const state = gameInstanceObject.state;
-      const _id = gameInstanceObject._id;
+    function readStateDataFromStateLibrary(gameObject) {
+      const state = gameObject.state;
+      const _id = gameObject._id;
 
       stateNameVsLibraryMap[state](_id, (error, stateData) => {
         if (error || !stateData) {

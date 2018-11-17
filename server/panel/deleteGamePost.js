@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:deleteGameInstancePost');
+const debug = require('debug')('cogs:deleteGamePost');
 const shortid = require('shortid');
 
 module.exports = (environment, db) => {
@@ -13,7 +13,7 @@ module.exports = (environment, db) => {
     })();
 
     function checkRequestBody() {
-      if (!req.body.gameInstanceId) {
+      if (!req.body.gameId) {
         debug('validateShortId: error: ', req.body);
         res.status(503).send('503 Error - Wrong POST parameter');
         return;
@@ -23,29 +23,29 @@ module.exports = (environment, db) => {
     }
 
     function validateRequestBody() {
-      const gameInstanceId = req.body.gameInstanceId;
+      const gameId = req.body.gameId;
 
-      if (!shortid.isValid(gameInstanceId)) {
-        debug('validateShortId: error: ', gameInstanceId);
-        res.status(503).send('503 Error - gameInstanceId is not valid');
+      if (!shortid.isValid(gameId)) {
+        debug('validateShortId: error: ', gameId);
+        res.status(503).send('503 Error - gameId is not valid');
         return;
       }
-      debug('validateRequestBody', gameInstanceId);
-      deleteGame(gameInstanceId);
+      debug('validateRequestBody', gameId);
+      deleteGame(gameId);
     }
 
-    function deleteGame(gameInstanceId) {
-      db.collection('gameInstanceCollection').deleteOne(
-        { _id: gameInstanceId },
+    function deleteGame(gameId) {
+      db.collection('gameCollection').deleteOne(
+        { _id: gameId },
         (error) => {
           if (error) {
-            debug('deleteGameInstancePost: error:', error);
+            debug('deleteGamePost: error:', error);
             res.status(503).send('503 Error - Cannot delete game instance');
           }
         }
       );
 
-      debug('deleteGameInstancePost');
+      debug('deleteGamePost');
       sendResponce();
     }
 

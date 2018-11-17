@@ -5,38 +5,38 @@
 const debug = require('debug')('cogs:readLaunchStateData');
 
 module.exports = (db) => {
-  return (gameInstanceId, callback) => {
+  return (gameId, callback) => {
     (function init() {
       debug('init');
-      findGameInstance();
+      findGame();
     })();
 
-    function findGameInstance() {
-      const query = { _id: gameInstanceId };
+    function findGame() {
+      const query = { _id: gameId };
       const options = {};
 
-      db.collection('gameInstanceCollection').findOne(
+      db.collection('gameCollection').findOne(
         query,
         options,
-        (error, gameInstanceObject) => {
-          if (error || !gameInstanceObject) {
+        (error, gameObject) => {
+          if (error || !gameObject) {
             debug('findMapLayer: error:', error);
-            callback('Cannot find gameInstance' + JSON.stringify(error));
+            callback('Cannot find game' + JSON.stringify(error));
             return;
           }
 
-          debug('findGameInstance', gameInstanceObject._id);
-          generateStateData(gameInstanceObject);
+          debug('findGame', gameObject._id);
+          generateStateData(gameObject);
         }
       );
     }
 
-    function generateStateData(gameInstanceObject) {
+    function generateStateData(gameObject) {
       const launchStateData = {};
-      launchStateData.state = gameInstanceObject.state;
+      launchStateData.state = gameObject.state;
 
       launchStateData.players = [];
-      gameInstanceObject.playerArray.forEach((player) => {
+      gameObject.playerArray.forEach((player) => {
         launchStateData.players.push({ name: player.name });
       });
 

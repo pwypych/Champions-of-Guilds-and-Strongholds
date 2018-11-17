@@ -149,8 +149,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./panel/panel.js')(environment, db, templateToHtml)
   );
   app.post(
-    '/panel/createGameInstancePost',
-    require('./panel/createGameInstancePost.js')(
+    '/panel/createGamePost',
+    require('./panel/createGamePost.js')(
       environment,
       db,
       figureManagerTree
@@ -158,15 +158,15 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   app.post(
-    '/panel/deleteGameInstancePost',
-    require('./panel/deleteGameInstancePost.js')(environment, db)
+    '/panel/deleteGamePost',
+    require('./panel/deleteGamePost.js')(environment, db)
   );
 
   // main game
   app.get(
-    '/gameInstance',
+    '/game',
     middlewareTokenAuthentication,
-    require('./gameInstance/gameInstance.js')(environment, db, templateToHtml)
+    require('./game/game.js')(environment, db, templateToHtml)
   );
 
   // show Image

@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:createGameInstancePost');
+const debug = require('debug')('cogs:createGamePost');
 const shortid = require('shortid');
 const validator = require('validator');
 const _ = require('lodash');
@@ -10,7 +10,7 @@ const _ = require('lodash');
 module.exports = (environment, db, figureManagerTree) => {
   return (req, res) => {
     let mapObject;
-    const gameInstance = {};
+    const game = {};
 
     (function init() {
       debug('init');
@@ -55,31 +55,31 @@ module.exports = (environment, db, figureManagerTree) => {
         mapObject = data;
 
         debug('findMap: mapObject._id:', mapObject._id);
-        generateGameInstance();
+        generateGame();
       });
     }
 
-    function generateGameInstance() {
-      gameInstance._id = shortid.generate();
+    function generateGame() {
+      game._id = shortid.generate();
 
-      gameInstance.mapName = mapObject._id;
+      game.mapName = mapObject._id;
 
-      gameInstance.state = 'launchState';
+      game.state = 'launchState';
 
-      gameInstance.playerArray = [];
+      game.playerArray = [];
 
       const playerOne = {};
       playerOne.token = shortid.generate();
       playerOne.name = 'Player 1';
-      gameInstance.playerArray.push(playerOne);
+      game.playerArray.push(playerOne);
 
       const playerTwo = {};
       playerTwo.token = shortid.generate();
       playerTwo.name = 'Player 2';
-      gameInstance.playerArray.push(playerTwo);
+      game.playerArray.push(playerTwo);
 
-      // debug('gameInstance.mapLayer: %o', gameInstance.mapLayer);
-      debug('generateGameInstance', gameInstance._id);
+      // debug('game.mapLayer: %o', game.mapLayer);
+      debug('generateGame', game._id);
       convertFromTiled();
     }
 
@@ -109,10 +109,10 @@ module.exports = (environment, db, figureManagerTree) => {
 
     function instantiateFigures(mapLayerWithStrings) {
       const errorArray = [];
-      gameInstance.mapLayer = [];
+      game.mapLayer = [];
 
       mapLayerWithStrings.forEach((row, y) => {
-        gameInstance.mapLayer[y] = [];
+        game.mapLayer[y] = [];
         row.forEach((figureName, x) => {
           if (!figureManagerTree[figureName]) {
             const error = 'Cannot load figure ' + figureName;
@@ -131,7 +131,7 @@ module.exports = (environment, db, figureManagerTree) => {
           // Add unique id to each figure instance
           figure._id = shortid.generate();
 
-          gameInstance.mapLayer[y][x] = figure;
+          game.mapLayer[y][x] = figure;
         });
       });
 
@@ -144,21 +144,21 @@ module.exports = (environment, db, figureManagerTree) => {
       }
 
       debug('instantiateFigures');
-      insertGameInstance();
+      insertGame();
     }
 
-    function insertGameInstance() {
-      db.collection('gameInstanceCollection').insertOne(
-        gameInstance,
+    function insertGame() {
+      db.collection('gameCollection').insertOne(
+        game,
         (error) => {
           if (error) {
-            debug('insertGameInstance: error:', error);
+            debug('insertGame: error:', error);
             res
               .status(503)
               .send('503 Service Unavailable - Cannot insert game instance');
           }
 
-          debug('insertGameInstance', gameInstance.mapName);
+          debug('insertGame', game.mapName);
           sendResponce();
         }
       );

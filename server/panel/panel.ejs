@@ -15,7 +15,7 @@
     <div class="modal-background margin-all">
       <h1>Champions of Guilds &amp; Strongholds - create game</h1>
 
-      <form action="<%= viewModel.baseurl %>/panel/createGameInstancePost" method="POST">
+      <form action="<%= viewModel.baseurl %>/panel/createGamePost" method="POST">
         <button class="js-create" type="submit">Create Game</button>
 
         <div class="seperator-20"></div>
@@ -45,32 +45,32 @@
             <td>Options</td>
           </tr>
 
-          <% viewModel.gameInstanceArray.forEach((gameInstance) => { %>
+          <% viewModel.gameArray.forEach((game) => { %>
             <tr>
-              <td><%= gameInstance._id %></td>
-              <td><%= gameInstance.mapName %></td>
+              <td><%= game._id %></td>
+              <td><%= game.mapName %></td>
               <td>
-                <% gameInstance.playerArray.forEach((player) => { %>
+                <% game.playerArray.forEach((player) => { %>
                   <%= player.name %><br/>
                 <% }); %>
               </td>
               <td>
-                <% gameInstance.playerArray.forEach((player) => { %>
-                  <% const uri = '/gameInstance?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
+                <% game.playerArray.forEach((player) => { %>
+                  <% const uri = '/game?gameId=' + game._id + '&playerToken=' + player.token; %>
                   <a href="<%= viewModel.baseurl + uri %>">Open Map</a>
                   <br/>
                 <% }); %>
               </td>
               <td>
-                <% gameInstance.playerArray.forEach((player) => { %>
-                  <% const uri = '/ajax/readStateData?gameInstanceId=' + gameInstance._id + '&playerToken=' + player.token; %>
+                <% game.playerArray.forEach((player) => { %>
+                  <% const uri = '/ajax/readStateData?gameId=' + game._id + '&playerToken=' + player.token; %>
                   <a href="<%= viewModel.baseurl + uri %>">/ajax/readStateData</a>
                   <br/>
                 <% }); %>
               </td>
               <td>
-                <form class="" action="/panel/deleteGameInstancePost" method="post">
-                  <input name="gameInstanceId" type="hidden" value="<%= gameInstance._id %>">
+                <form class="" action="/panel/deleteGamePost" method="post">
+                  <input name="gameId" type="hidden" value="<%= game._id %>">
                   <button type="submit">Delete game</button>
                 </form>
               </td>
