@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:readStateData');
+const debug = require('debug')('cogs:stateDataGet');
 
 module.exports = (db, stateNameVsLibraryMap) => {
   return (req, res) => {
@@ -10,15 +10,15 @@ module.exports = (db, stateNameVsLibraryMap) => {
 
     (function init() {
       debug('init');
-      readStateDataFromStateLibrary();
+      stateDataGetFromStateLibrary();
     })();
 
-    function readStateDataFromStateLibrary() {
+    function stateDataGetFromStateLibrary() {
       const state = game.state;
 
       stateNameVsLibraryMap[state](game, (error, stateData) => {
         if (error || !stateData) {
-          debug('readStateDataFromStateLibrary: error:', error);
+          debug('stateDataGetFromStateLibrary: error:', error);
           res
             .status(503)
             .send('503 Service Unavailable - Cannot find state for the game');
@@ -26,7 +26,7 @@ module.exports = (db, stateNameVsLibraryMap) => {
         }
 
         debug(
-          'readStateDataFromStateLibrary',
+          'stateDataGetFromStateLibrary',
           JSON.stringify(stateData).substr(0, 200)
         );
         sendStateData(stateData);

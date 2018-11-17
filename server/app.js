@@ -169,9 +169,9 @@ function setupLibrariesAndRoutes(figureManagerTree) {
 
   // ajax
   app.get(
-    '/ajax/readStateData',
+    '/ajax/stateDataGet',
     middlewareTokenAuthentication,
-    require('./ajax/readStateData.js')(db, stateNameVsLibraryMap)
+    require('./ajax/stateDataGet.js')(db, stateNameVsLibraryMap)
   );
 
   debug('setupLibrariesAndRoutes()');
