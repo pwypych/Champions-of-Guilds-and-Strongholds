@@ -8,10 +8,10 @@ module.exports = () => {
   return (game, callback) => {
     (function init() {
       debug('init');
-      generateStateData();
+      generateData();
     })();
 
-    function generateStateData() {
+    function generateData() {
       const launchStateData = {};
       launchStateData.state = game.state;
 
@@ -21,7 +21,7 @@ module.exports = () => {
       });
 
       debug(
-        'generateStateData: launchStateData.players.length',
+        'generateData: launchStateData.players.length',
         launchStateData.players.length
       );
       sendStateData(launchStateData);
