@@ -134,7 +134,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   };
 
   // middlewares
-  const middlewareTokenAuthentication = require('./ajax/middlewareTokenAuthentication.js')(
+  const middlewareTokenAuthentication = require('./libraries/middlewareTokenAuthentication.js')(
     db
   );
 
@@ -150,11 +150,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
   app.post(
     '/panel/createGamePost',
-    require('./panel/createGamePost.js')(
-      environment,
-      db,
-      figureManagerTree
-    )
+    require('./panel/createGamePost.js')(environment, db, figureManagerTree)
   );
 
   app.post(
