@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.launch.launch = () => {
+g.launch.launch = (auth) => {
   const $launch = $('#js-launch');
   const $inputName = $launch.find('.js-input-name');
 
@@ -27,6 +27,6 @@ g.launch.launch = () => {
       playerName: $inputName.val()
     };
 
-    $.post('/ajax/launchState/playerNamePost', data);
+    $.post('/ajax/launchState/playerNamePost' + auth.uri, data);
   }
 };
