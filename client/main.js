@@ -16,7 +16,9 @@ g.main = function main() {
   // libraries
   const walkie = g.tool.walkie();
 
-  g.launch.launch(auth, walkie);
+  g.engine.stateInterval(auth, walkie);
+
+  // g.launch.launch(auth, walkie);
 
   // g.game.pixiTest();
 };
