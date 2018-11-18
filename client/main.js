@@ -16,7 +16,9 @@ g.main = function main() {
   // libraries
   const walkie = g.tool.walkie();
 
-  g.engine.stateInterval(auth, walkie);
+  g.engine.stateChange(walkie, auth);
+
+  g.engine.stateInterval(walkie, auth);
 
   // g.launch.launch(auth, walkie);
 

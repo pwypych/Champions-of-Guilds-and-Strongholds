@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.engine.stateInterval = (auth, walkie) => {
+g.engine.stateInterval = (walkie, auth) => {
   const every = 500;
 
   (function init() {
@@ -17,7 +17,12 @@ g.engine.stateInterval = (auth, walkie) => {
 
   function stateDataGet() {
     $.get('/ajax/stateDataGet' + auth.uri, (stateData) => {
-      walkie.triggerEvent('stateDataGet_', 'stateInterval', stateData);
+      walkie.triggerEvent(
+        'stateDataGet_',
+        'stateInterval.js',
+        stateData,
+        false
+      );
     });
   }
 };

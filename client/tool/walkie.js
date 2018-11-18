@@ -8,9 +8,9 @@ g.tool.walkie = () => {
   walkie.triggerEvent = (eventName, moduleName, data, isConsoleLog) => {
     if (isConsoleLog !== false) {
       if (!data || _.isEmpty(data)) {
-        console.log(moduleName, 'TRIGGER', eventName);
+        console.log(moduleName, '-> TRIGGER', eventName);
       } else {
-        console.log(moduleName, 'TRIGGER', eventName, data);
+        console.log(moduleName, '-> TRIGGER', eventName, ':', data);
       }
     }
     walkie.trigger(eventName, data);
@@ -21,9 +21,9 @@ g.tool.walkie = () => {
       const argsArray = _.values(args);
       if (isConsoleLog !== false) {
         if (!argsArray || _.isEmpty(argsArray)) {
-          console.log(moduleName, 'LISTEN', eventName);
+          console.log(moduleName, '<- LISTEN', eventName);
         } else {
-          console.log(moduleName, 'LISTEN', eventName, argsArray[0]);
+          console.log(moduleName, '<- LISTEN', eventName, ':', argsArray[0]);
         }
       }
       callback.apply(this, args);
