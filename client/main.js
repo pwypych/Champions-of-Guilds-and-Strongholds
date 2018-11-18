@@ -13,7 +13,10 @@ g.main = function main() {
   const html = {};
   html.pixi = $('#pixi');
 
-  g.launch.launch(auth);
+  // libraries
+  const walkie = g.tool.walkie();
+
+  g.launch.launch(auth, walkie);
 
   // g.game.pixiTest();
 };

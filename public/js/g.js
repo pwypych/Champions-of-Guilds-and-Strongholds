@@ -3,3 +3,4 @@
 const g = {};
 g.game = {};
 g.launch = {};
+g.tool = {};
