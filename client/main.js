@@ -18,8 +18,8 @@ g.main = function main() {
   g.engine.stateChange(walkie, auth);
   g.engine.stateInterval(walkie, auth);
 
-  g.launch.launchToggle(walkie);
-  g.launch.launchInputName(auth);
+  g.launch.launchToggle($body, walkie);
+  g.launch.launchInputName($body, auth);
   g.launch.launchTable($body, walkie);
 
   // g.game.pixiTest();

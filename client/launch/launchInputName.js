@@ -2,8 +2,8 @@
 
 'use strict';
 
-g.launch.launchInputName = (auth) => {
-  const $inputName = $('#js-launch .js-input-name');
+g.launch.launchInputName = ($body, auth) => {
+  const $inputName = $body.find('#js-launch .js-input-name');
 
   let writingTimeout;
 
