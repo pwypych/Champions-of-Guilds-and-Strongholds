@@ -29,6 +29,15 @@ module.exports = (environment, db, templateToHtml) => {
       templateToHtml(path, viewModel, (error, html) => {
         viewModel.htmlLaunch = html;
         debug('generateLaunch: html.length:', html.length);
+        generatePreload();
+      });
+    }
+
+    function generatePreload() {
+      const path = environment.basepath + '/server/game/preload.ejs';
+      templateToHtml(path, viewModel, (error, html) => {
+        viewModel.htmlPreload = html;
+        debug('generatePreload: html.length:', html.length);
         generateTemplate();
       });
     }
