@@ -2,19 +2,12 @@
 
 'use strict';
 
-g.launch.launch = (auth, walkie) => {
-  const $launch = $('#js-launch');
-  const $inputName = $launch.find('.js-input-name');
+g.launch.launchInputName = (auth) => {
+  const $inputName = $('#js-launch .js-input-name');
 
   let writingTimeout;
 
   (function init() {
-    $launch.show();
-
-    walkie.onEvent('playerNamePost_', 'launch', (data) => {
-      console.log('hello', data);
-    });
-
     inputNameOn();
   })();
 
@@ -31,9 +24,10 @@ g.launch.launch = (auth, walkie) => {
     const data = {
       playerName: $inputName.val()
     };
-
-    walkie.triggerEvent('playerNamePost_', 'launch', data, 'dupa', 'cos', true);
-
+    console.log(
+      'launchInputName: POST -> /ajax/launchState/playerNamePost',
+      data
+    );
     $.post('/ajax/launchState/playerNamePost' + auth.uri, data);
   }
 };
