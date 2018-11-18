@@ -35,7 +35,7 @@ module.exports = (db) => {
     function sanitizeRequestBody() {
       playerName = validator.whitelist(
         req.body.playerName,
-        'abcdefghijklmnopqrstuvwxyz01234567890 '
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 '
       );
       debug('checkRequestBody', playerName);
       getPlayerIndex();

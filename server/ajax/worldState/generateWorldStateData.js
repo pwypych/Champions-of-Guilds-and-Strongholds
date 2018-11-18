@@ -18,7 +18,7 @@ module.exports = () => {
       worldStateData.mapLayer = game.mapLayer;
 
       debug(
-        'generateData: worldStateData.players.length',
+        'generateData: worldStateData.mapLayer.length',
         worldStateData.mapLayer.length
       );
       sendStateData(worldStateData);

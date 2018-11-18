@@ -15,14 +15,14 @@ module.exports = () => {
       const launchStateData = {};
       launchStateData.state = game.state;
 
-      launchStateData.players = [];
+      launchStateData.playerArray = [];
       game.playerArray.forEach((player) => {
-        launchStateData.players.push({ name: player.name });
+        launchStateData.playerArray.push({ name: player.name });
       });
 
       debug(
-        'generateData: launchStateData.players.length',
-        launchStateData.players.length
+        'generateData: launchStateData.playerArray.length',
+        launchStateData.playerArray.length
       );
       sendStateData(launchStateData);
     }

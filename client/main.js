@@ -10,8 +10,7 @@ g.main = function main() {
   auth.uri = '?gameId=' + auth.gameId + '&playerToken=' + auth.playerToken;
 
   // html elements
-  const html = {};
-  html.pixi = $('#pixi');
+  const $body = $('body');
 
   // libraries
   const walkie = g.tool.walkie();
@@ -21,6 +20,7 @@ g.main = function main() {
 
   g.launch.launchToggle(walkie);
   g.launch.launchInputName(auth);
+  g.launch.launchTable($body, walkie);
 
   // g.game.pixiTest();
 };
