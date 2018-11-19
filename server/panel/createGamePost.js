@@ -90,6 +90,7 @@ module.exports = (environment, db, figureManagerTree) => {
         player.name = 'Player ' + (index + 1);
         player.color = colorArray[index];
         player.ready = false;
+        player.race = 'human';
         return player;
       });
       debug(
