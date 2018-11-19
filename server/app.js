@@ -180,6 +180,18 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/launchState/playerNamePost.js')(db)
   );
 
+  const everyPlayerReadyChecker = require('./ajax/launchState/everyPlayerReadyChecker.js')(
+    db
+  );
+  app.post(
+    '/ajax/launchState/playerReadyPost',
+    middlewareTokenAuthentication,
+    require('./ajax/launchState/playerReadyPost.js')(
+      db,
+      everyPlayerReadyChecker
+    )
+  );
+
   debug('setupLibrariesAndRoutes()');
   setupExpress();
 }
