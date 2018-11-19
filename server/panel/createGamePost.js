@@ -55,31 +55,49 @@ module.exports = (environment, db, figureManagerTree) => {
         mapObject = data;
 
         debug('findMap: mapObject._id:', mapObject._id);
-        generateGame();
+        generateGameProperties();
       });
     }
 
-    function generateGame() {
+    function generateGameProperties() {
       game._id = shortid.generate();
 
       game.mapName = mapObject._id;
 
       game.state = 'launchState';
 
-      game.playerArray = [];
-
-      const playerOne = {};
-      playerOne.token = shortid.generate();
-      playerOne.name = 'Player 1';
-      game.playerArray.push(playerOne);
-
-      const playerTwo = {};
-      playerTwo.token = shortid.generate();
-      playerTwo.name = 'Player 2';
-      game.playerArray.push(playerTwo);
-
       // debug('game.mapLayer: %o', game.mapLayer);
-      debug('generateGame', game._id);
+      debug('generateGameProperties', game._id);
+      generatePlayerArray();
+    }
+
+    function generatePlayerArray() {
+      const playerCount = 3;
+      const colorArray = [
+        'red',
+        'blue',
+        'green',
+        'violet',
+        'orange',
+        'brown',
+        'aqua',
+        'pink'
+      ];
+
+      game.playerArray = _.times(playerCount, (index) => {
+        const player = {};
+        player.token = shortid.generate();
+        player.name = 'Player ' + (index + 1);
+        player.color = colorArray[index];
+        player.ready = false;
+        player.race = 'human';
+        return player;
+      });
+
+      debug(
+        'generatePlayerArray:game.playerArray.length',
+        game.playerArray.length
+      );
       convertFromTiled();
     }
 

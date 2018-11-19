@@ -15,9 +15,13 @@ module.exports = () => {
       const launchStateData = {};
       launchStateData.state = game.state;
 
-      launchStateData.playerArray = [];
-      game.playerArray.forEach((player) => {
-        launchStateData.playerArray.push({ name: player.name });
+      launchStateData.playerArray = game.playerArray.map((player) => {
+        return {
+          name: player.name,
+          color: player.color,
+          race: player.race,
+          ready: player.ready
+        };
       });
 
       debug(

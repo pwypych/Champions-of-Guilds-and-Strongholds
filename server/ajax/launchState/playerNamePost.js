@@ -15,15 +15,12 @@ module.exports = (db) => {
       debug('init');
       checkRequestBody();
     })();
-    //  Check is req.body.playerName empty
+
     function checkRequestBody() {
       if (typeof req.body.playerName !== 'string') {
-        debug('checkRequestBody: playerName not a string: ', req.body);
         res
-          .status(503)
-          .send(
-            '503 Service Unavailable - Wrong POST parameter or empty playerName parameter'
-          );
+          .status(400)
+          .send('400 Bad Request - POST parameter playerName not defined');
         return;
       }
 
@@ -31,17 +28,24 @@ module.exports = (db) => {
       sanitizeRequestBody();
     }
 
-    // Sanitize player name
     function sanitizeRequestBody() {
       playerName = validator.whitelist(
         req.body.playerName,
         'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 '
       );
+
+      playerName = playerName.trim();
+      playerName = playerName.substr(0, 20);
+
+      if (playerName === '') {
+        res.status(400).send('400 Bad Request - Player name cannot be empty');
+        return;
+      }
+
       debug('checkRequestBody', playerName);
       getPlayerIndex();
     }
 
-    // Get player index from playerArray
     function getPlayerIndex() {
       let playerIndex;
       game.playerArray.forEach((player, index) => {
@@ -54,11 +58,10 @@ module.exports = (db) => {
       updateGameByPlayerName(playerIndex);
     }
 
-    // Update gameCollection in mongo
     function updateGameByPlayerName(playerIndex) {
       const query = { _id: game._id };
-      const $set = {};
       const name = 'playerArray.' + playerIndex + '.name';
+      const $set = {};
       $set[name] = playerName;
       const update = { $set: $set };
       const options = {};
@@ -76,9 +79,6 @@ module.exports = (db) => {
             return;
           }
 
-          debug('updateGameByPlayerName: query:', query);
-          debug('updateGameByPlayerName: update:', update);
-          debug('updateGameByPlayerName: options:', options);
           sendResponce();
         }
       );
