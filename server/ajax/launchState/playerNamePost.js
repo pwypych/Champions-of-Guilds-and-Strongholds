@@ -19,10 +19,8 @@ module.exports = (db) => {
     function checkRequestBody() {
       if (typeof req.body.playerName !== 'string') {
         res
-          .status(503)
-          .send(
-            '503 Service Unavailable - Wrong POST parameter or empty playerName parameter'
-          );
+          .status(400)
+          .send('400 Bad Request - POST parameter playerName not defined');
         return;
       }
 
@@ -35,6 +33,15 @@ module.exports = (db) => {
         req.body.playerName,
         'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 '
       );
+
+      playerName = playerName.trim();
+      playerName = playerName.substr(0, 5);
+
+      if (playerName === '') {
+        res.status(400).send('400 Bad Request - Player name cannot be empty');
+        return;
+      }
+
       debug('checkRequestBody', playerName);
       getPlayerIndex();
     }
