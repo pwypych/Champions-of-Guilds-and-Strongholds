@@ -79,7 +79,7 @@ function setupMongo() {
 
 /* eslint-disable global-require */
 function setupMapCollection() {
-  const generateMapCollection = require('./libraries/generateMapCollection.js')(
+  const generateMapCollection = require('./library/generateMapCollection.js')(
     environment,
     db
   );
@@ -118,7 +118,7 @@ function setupFigureManagerTree() {
 /* eslint-disable global-require */
 function setupLibrariesAndRoutes(figureManagerTree) {
   // libraries
-  const templateToHtml = require('./libraries/templateToHtml.js')();
+  const templateToHtml = require('./library/templateToHtml.js')();
   // const generateFigureManagerTree = require('./figure/generateFigureManagerTree.js')();
 
   // state libraries
@@ -130,7 +130,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   };
 
   // middlewares
-  const middlewareTokenAuthentication = require('./libraries/middlewareTokenAuthentication.js')(
+  const middlewareTokenAuthentication = require('./library/middlewareTokenAuthentication.js')(
     db
   );
 
@@ -164,7 +164,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   // show Image
   app.get(
     '/image/figure/:imageName.png',
-    require('./libraries/showImage.js')(environment)
+    require('./library/showImage.js')(environment)
   );
 
   // ajax

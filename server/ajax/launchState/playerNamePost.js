@@ -35,7 +35,7 @@ module.exports = (db) => {
       );
 
       playerName = playerName.trim();
-      playerName = playerName.substr(0, 5);
+      playerName = playerName.substr(0, 20);
 
       if (playerName === '') {
         res.status(400).send('400 Bad Request - Player name cannot be empty');
