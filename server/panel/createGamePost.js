@@ -115,13 +115,16 @@ module.exports = (environment, db, figureManagerTree) => {
         game.mapLayer[y] = [];
         row.forEach((figureName, x) => {
           if (!figureManagerTree[figureName]) {
-            const error = 'Cannot load figure ' + figureName;
+            const error =
+              'Cannot load figure that is required by the map: ' + figureName;
             errorArray.push(error);
             return;
           }
 
           if (!figureManagerTree[figureName].produce) {
-            const error = 'Cannot load blueprint for figure ' + figureName;
+            const error =
+              'Cannot load blueprint for figure that is required by the map: ' +
+              figureName;
             errorArray.push(error);
             return;
           }

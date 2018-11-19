@@ -5,7 +5,7 @@
 module.exports = () => {
   return {
     produce: () => {
-      return { name: 'startPosition', collision: true };
+      return { name: 'castlePosition', collision: true };
     }
   };
 };
