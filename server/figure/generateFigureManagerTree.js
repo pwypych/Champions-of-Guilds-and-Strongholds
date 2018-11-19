@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:generateFigureManagerTree');
+const debug = require('debug')('nope:cogs:generateFigureManagerTree');
 const fs = require('fs');
 
 // figureManagerTree is an object that has all figureManager's
@@ -23,7 +23,7 @@ module.exports = (environment) => {
 
     function scanBasepathFigureFolder() {
       fs.readdir(environment.basepathFigure, (error, folderNameArray) => {
-        // debug('scanBasepathFigureFolder: folderNameArray:', folderNameArray);
+        debug('scanBasepathFigureFolder: folderNameArray:', folderNameArray);
         forEachFolderName(folderNameArray);
       });
     }
@@ -31,7 +31,7 @@ module.exports = (environment) => {
     function forEachFolderName(folderNameArray) {
       folderNameArray.forEach((folderName) => {
         if (folderName !== 'generateFigureManagerTree.js') {
-          // debug('forEachFolderName', folderName);
+          debug('forEachFolderName', folderName);
           requireFigure(folderName);
         }
       });

@@ -28,6 +28,7 @@ function setupEnvironment() {
   environment.baseurl = 'http://localhost:3000';
   environment.basepath = path.join(__dirname, '..');
   environment.basepathTiledMap = environment.basepath + '/tiledMap';
+  environment.basepathTiledTileset = environment.basepath + '/tiledTileset';
   environment.basepathFigure = environment.basepath + '/server/figure';
 
   debug('setupEnvironment()', environment);

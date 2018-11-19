@@ -21,7 +21,13 @@
          "id":0,
          "image":"..\/server\/figure\/castle\/castle.png",
          "imageheight":96,
-         "imagewidth":96
+         "imagewidth":96,
+         "properties":[
+                {
+                 "name":"name",
+                 "type":"string",
+                 "value":"castle"
+                }]
         }],
  "tilewidth":96,
  "type":"tileset",

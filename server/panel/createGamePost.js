@@ -6,6 +6,7 @@ const debug = require('debug')('cogs:createGamePost');
 const shortid = require('shortid');
 const validator = require('validator');
 const _ = require('lodash');
+const fs = require('fs');
 
 module.exports = (environment, db, figureManagerTree) => {
   return (req, res) => {
@@ -98,10 +99,44 @@ module.exports = (environment, db, figureManagerTree) => {
         'generatePlayerArray:game.playerArray.length',
         game.playerArray.length
       );
-      convertFromTiled();
+      readTilesetFiles();
     }
 
-    function convertFromTiled() {
+    function readTilesetFiles() {
+      const filePathArray = [
+        environment.basepathTiledTileset + '/1x1.json',
+        environment.basepathTiledTileset + '/3x3.json'
+      ];
+      const tiledTilesetArrayDeep = [];
+
+      const done = _.after(filePathArray.length, () => {
+        const tiledTilesetArray = _.flatten(tiledTilesetArrayDeep);
+        debug('readTilesetFiles', tiledTilesetArray);
+        convertFromTiled(tiledTilesetArray);
+      });
+
+      filePathArray.forEach((filepath, index) => {
+        fs.readFile(filepath, 'utf8', (error, tiledTilesetString) => {
+          const tiledTilesetObject = JSON.parse(tiledTilesetString);
+
+          // all tilesets .json files in tiled starts at 0, but on tilemap the numbers starts from 1 up
+          // the tileset firstgid property in tilemap file tells what is the offset between tile id in tileset
+          // and tile id in tilemap layer
+          const tiledFirstGid =
+            mapObject.tiledMapObject.tilesets[index].firstgid;
+
+          const tiledTiles = toolConvertTilesetTileIndexes(
+            tiledTilesetObject.tiles,
+            tiledFirstGid
+          );
+
+          tiledTilesetArrayDeep.push(tiledTiles);
+          done();
+        });
+      });
+    }
+
+    function convertFromTiled(tiledTilesetArray) {
       // We convert tiled layer which is long array of numbers [0, 0, 0, 1, 0 ...] to two dimentional array of numbers
       const mapLayerWithNumbers = toolConvertTiledLayer(
         mapObject.tiledMapObject.layers[0]
@@ -112,10 +147,21 @@ module.exports = (environment, db, figureManagerTree) => {
       );
 
       // We convert tiled id of tile to its tile "value", that will become figureName
-      const mapLayerWithStrings = toolConvertNumbersToNames(
-        mapLayerWithNumbers,
-        mapObject.tiledTilesetObject.tiles
-      );
+      let mapLayerWithStrings;
+
+      try {
+        mapLayerWithStrings = toolConvertNumbersToNames(
+          mapLayerWithNumbers,
+          tiledTilesetArray
+        );
+      } catch (error) {
+        res.status(503);
+        res.send(
+          '503 Service Unavailable - Errors in Tiled tiles: ' + error.message
+        );
+        return;
+      }
+
       debug(
         'convertFromTiled:mapLayer:',
         JSON.stringify(mapLayerWithStrings).slice(0, 50)
@@ -188,6 +234,13 @@ module.exports = (environment, db, figureManagerTree) => {
       res.redirect(environment.baseurl + '/panel');
     }
 
+    function toolConvertTilesetTileIndexes(tileArray, tiledFirstGid) {
+      return tileArray.map((tileObject) => {
+        tileObject.id += tiledFirstGid;
+        return tileObject;
+      });
+    }
+
     function toolConvertTiledLayer(tiledLayer) {
       const data = tiledLayer.data;
       const height = tiledLayer.height;
@@ -216,7 +269,7 @@ module.exports = (environment, db, figureManagerTree) => {
       return mapLayer;
     }
 
-    function toolConvertNumbersToNames(mapLayerNumbers, tiledTileArray) {
+    function toolConvertNumbersToNames(mapLayerNumbers, tiledTilesetArray) {
       // we will fill that array with Names
       // slice with no arguments copies array
       const mapLayer = mapLayerNumbers.slice();
@@ -224,13 +277,10 @@ module.exports = (environment, db, figureManagerTree) => {
       // each y, x multidimentional array
       mapLayerNumbers.forEach((row, y) => {
         row.forEach((number, x) => {
-          // tiled saves id's within layers with +1 index because it uses 0 as empty
-          const tileNumberFromLayer = number - 1;
-
-          // searching for that tile number withing tiledTileArray
+          // searching for that tile number withing tiledTilesetArray
           let foundTiledTile;
-          tiledTileArray.forEach((tiledTile) => {
-            if (tiledTile.id === tileNumberFromLayer) {
+          tiledTilesetArray.forEach((tiledTile) => {
+            if (tiledTile.id === number) {
               foundTiledTile = tiledTile;
             }
           });
@@ -240,6 +290,12 @@ module.exports = (environment, db, figureManagerTree) => {
           if (!foundTiledTile) {
             mapLayer[y][x] = 'empty';
             return;
+          }
+
+          if (!foundTiledTile.properties) {
+            throw new Error(
+              'Tiled tile has no properties defined: ' + foundTiledTile.image
+            );
           }
 
           // tile properties are an array in tiled tileset. We must go through them to find 'name' property
@@ -252,8 +308,9 @@ module.exports = (environment, db, figureManagerTree) => {
 
           // if tile has no name property it is considered empty
           if (!foundValue) {
-            mapLayer[y][x] = 'empty';
-            return;
+            throw new Error(
+              'Tiled tile has no name property defined: ' + foundTiledTile.image
+            );
           }
 
           mapLayer[y][x] = foundValue;
