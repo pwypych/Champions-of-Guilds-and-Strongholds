@@ -3,17 +3,12 @@
 'use strict';
 
 g.main = function main() {
-  // authentication
-  const auth = {};
-  auth.gameId = $.url('?gameId');
-  auth.playerToken = $.url('?playerToken');
-  auth.uri = '?gameId=' + auth.gameId + '&playerToken=' + auth.playerToken;
-
-  // html elements
+  // html body
   const $body = $('body');
 
   // libraries
   const walkie = g.tool.walkie();
+  const auth = g.tool.auth();
 
   g.engine.stateChange(walkie, auth);
   g.engine.stateInterval(walkie, auth);
