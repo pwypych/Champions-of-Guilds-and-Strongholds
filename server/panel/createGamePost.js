@@ -93,6 +93,7 @@ module.exports = (environment, db, figureManagerTree) => {
         player.race = 'human';
         return player;
       });
+
       debug(
         'generatePlayerArray:game.playerArray.length',
         game.playerArray.length
