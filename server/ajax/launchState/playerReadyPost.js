@@ -29,7 +29,7 @@ module.exports = (db, everyPlayerReadyChecker) => {
     }
 
     function sanitizeRequestBody() {
-      if (playerReady !== 'ready') {
+      if (playerReady !== 'yes') {
         res.status(400).send('400 Bad Request - Player ready cannot be empty');
         return;
       }

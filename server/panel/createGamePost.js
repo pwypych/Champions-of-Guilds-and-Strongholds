@@ -90,7 +90,7 @@ module.exports = (environment, db, figureManagerTree) => {
         player.token = shortid.generate();
         player.name = 'Player ' + (index + 1);
         player.color = colorArray[index];
-        player.ready = false;
+        player.ready = 'no';
         player.race = 'human';
         return player;
       });
@@ -196,7 +196,7 @@ module.exports = (environment, db, figureManagerTree) => {
           const figure = figureManagerTree[figureName].produce();
 
           // Add unique id to each figure instance
-          figure._id = shortid.generate();
+          figure._id = figureName + '_y' + y + '_x' + x;
 
           game.mapLayer[y][x] = figure;
         });
