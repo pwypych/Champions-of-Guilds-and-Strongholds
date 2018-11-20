@@ -8,6 +8,7 @@ module.exports = (db, everyPlayerReadyChecker) => {
   return (req, res) => {
     const game = res.locals.game;
     const playerToken = res.locals.playerToken;
+
     let playerReady;
 
     (function init() {
@@ -17,28 +18,28 @@ module.exports = (db, everyPlayerReadyChecker) => {
 
     function checkRequestBody() {
       if (typeof req.body.playerReady !== 'string') {
-        res
-          .status(400)
-          .send('400 Bad Request - POST parameter playerReady not defined');
+        res.status(400);
+        res.send('400 Bad Request - POST parameter playerReady not defined');
         return;
       }
       playerReady = req.body.playerReady;
 
       debug('checkRequestBody', req.body);
-      sanitizeRequestBody();
+      checkIsReady();
     }
 
-    function sanitizeRequestBody() {
+    function checkIsReady() {
       if (playerReady !== 'yes') {
-        res.status(400).send('400 Bad Request - Player ready cannot be empty');
+        res.status(400);
+        res.send('400 Bad Request - playerReady parameter must be "yes"');
         return;
       }
 
-      debug('checkRequestBody: playerReady', playerReady);
-      getPlayerIndex();
+      debug('checkIsReady: playerReady', playerReady);
+      determinePlayerIndex();
     }
 
-    function getPlayerIndex() {
+    function determinePlayerIndex() {
       let playerIndex;
       game.playerArray.forEach((player, index) => {
         if (player.token === playerToken) {
@@ -46,12 +47,14 @@ module.exports = (db, everyPlayerReadyChecker) => {
         }
       });
 
-      debug('getPlayerIndex');
+      debug('determinePlayerIndex');
       updateGameByPlayerReady(playerIndex);
     }
 
     function updateGameByPlayerReady(playerIndex) {
       const query = { _id: game._id };
+
+      // We need to update an object inside mongo array, must use its index in $set query
       const ready = 'playerArray.' + playerIndex + '.ready';
       const $set = {};
       $set[ready] = playerReady;
@@ -65,9 +68,8 @@ module.exports = (db, everyPlayerReadyChecker) => {
         (error) => {
           if (error) {
             debug('updateGameByPlayerReady: error:', error);
-            res
-              .status(503)
-              .send('503 Service Unavailable - Cannot update game');
+            res.status(503);
+            res.send('503 Service Unavailable - Cannot update game');
             return;
           }
 
@@ -80,12 +82,11 @@ module.exports = (db, everyPlayerReadyChecker) => {
       everyPlayerReadyChecker(game._id, (error, isEveryPlayerReady) => {
         if (error) {
           debug('checkEveryPlayerReady: error:', error);
-          res
-            .status(503)
-            .send(
-              '503 Service Unavailable - Cannot check if every player ready:',
-              error
-            );
+          res.status(503);
+          res.send(
+            '503 Service Unavailable - Cannot check if every player ready:',
+            error
+          );
           return;
         }
 
@@ -110,9 +111,8 @@ module.exports = (db, everyPlayerReadyChecker) => {
         (error) => {
           if (error) {
             debug('updateGameState: error:', error);
-            res
-              .status(503)
-              .send('503 Service Unavailable - Cannot update game state');
+            res.status(503);
+            res.send('503 Service Unavailable - Cannot update game state');
             return;
           }
 

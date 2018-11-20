@@ -19,9 +19,9 @@ module.exports = (db, stateNameVsLibraryMap) => {
       stateNameVsLibraryMap[state](game, (error, stateData) => {
         if (error || !stateData) {
           debug('stateDataGetFromStateLibrary: error:', error);
-          res
-            .status(503)
-            .send('503 Service Unavailable - Cannot find state for the game');
+          res.status(503);
+          res.send('503 Service Unavailable - Cannot find state for the game');
+          debug('******************** ajax error ********************');
           return;
         }
 

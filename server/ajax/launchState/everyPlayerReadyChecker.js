@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:isEveryPlayerReady');
+const debug = require('debug')('cogs:everyPlayerReadyChecker');
 
 module.exports = (db) => {
   return (gameId, callback) => {
@@ -18,12 +18,12 @@ module.exports = (db) => {
       db.collection('gameCollection').findOne(query, options, (error, game) => {
         if (error) {
           debug('findGameById: error:', error);
-          callback('finf mongo error:' + JSON.stringify(error));
+          callback('find mongo error:' + JSON.stringify(error));
           return;
         }
 
         if (!game) {
-          callback('remove mongo error:' + JSON.stringify(error));
+          callback('game object is empty');
           return;
         }
 
