@@ -24,10 +24,12 @@ g.launch.launchInputName = ($body, auth) => {
     const data = {
       playerName: $inputName.val()
     };
-    console.log(
-      'launchInputName: POST -> /ajax/launchState/playerNamePost',
-      data
-    );
-    $.post('/ajax/launchState/playerNamePost' + auth.uri, data);
+
+    $.post('/ajax/launchState/playerNamePost' + auth.uri, data, () => {
+      console.log(
+        'launchInputName: POST -> /ajax/launchState/playerNamePost',
+        data
+      );
+    });
   }
 };

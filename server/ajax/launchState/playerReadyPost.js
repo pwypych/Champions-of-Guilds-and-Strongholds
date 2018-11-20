@@ -16,15 +16,15 @@ module.exports = (db, everyPlayerReadyChecker) => {
     })();
 
     function checkRequestBody() {
-      if (typeof req.body.playeReady !== 'string') {
+      if (typeof req.body.playerReady !== 'string') {
         res
           .status(400)
           .send('400 Bad Request - POST parameter playerReady not defined');
         return;
       }
-      playerReady = req.body.playeReady;
+      playerReady = req.body.playerReady;
 
-      debug('checkRequestBody');
+      debug('checkRequestBody', req.body);
       sanitizeRequestBody();
     }
 
