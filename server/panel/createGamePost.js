@@ -196,7 +196,7 @@ module.exports = (environment, db, figureManagerTree) => {
           const figure = figureManagerTree[figureName].produce();
 
           // Add unique id to each figure instance
-          figure._id = shortid.generate();
+          figure._id = figureName + '_y' + y + '_x' + x;
 
           game.mapLayer[y][x] = figure;
         });
