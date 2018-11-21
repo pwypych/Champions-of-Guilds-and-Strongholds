@@ -68,11 +68,26 @@ module.exports = (environment, db, figureManagerTree) => {
 
       // debug('game.mapLayer: %o', game.mapLayer);
       debug('generateGameProperties', game._id);
+      getMapPlayersCount();
+    }
+
+    function getMapPlayersCount() {
+      let playerCount = 0;
+      mapObject.mapLayerWithStrings.forEach((row) => {
+        row.forEach((tileName) => {
+          if (tileName === 'castle') {
+            playerCount += 1;
+          }
+        });
+      });
+
+      game.playerCount = playerCount;
+
+      debug('generateGameProperties: playerCount:', playerCount);
       generatePlayerArray();
     }
 
     function generatePlayerArray() {
-      const playerCount = 3;
       const colorArray = [
         'red',
         'blue',
@@ -84,7 +99,7 @@ module.exports = (environment, db, figureManagerTree) => {
         'pink'
       ];
 
-      game.playerArray = _.times(playerCount, (index) => {
+      game.playerArray = _.times(game.playerCount, (index) => {
         const player = {};
         player.token = shortid.generate();
         player.name = 'Player ' + (index + 1);
