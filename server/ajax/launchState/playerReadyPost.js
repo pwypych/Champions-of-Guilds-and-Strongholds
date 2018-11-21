@@ -91,7 +91,9 @@ module.exports = (db, everyPlayerReadyChecker) => {
         }
 
         if (isEveryPlayerReady) {
-          updateGameState();
+          setTimeout(() => {
+            updateGameState();
+          }, 5000);
           return;
         }
 
@@ -101,7 +103,7 @@ module.exports = (db, everyPlayerReadyChecker) => {
 
     function updateGameState() {
       const query = { _id: game._id };
-      const update = { $set: { state: 'launchCountdownState' } };
+      const update = { $set: { state: 'worldState' } };
       const options = {};
 
       db.collection('gameCollection').updateOne(
