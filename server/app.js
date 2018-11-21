@@ -134,6 +134,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   const middlewareTokenAuthentication = require('./library/middlewareTokenAuthentication.js')(
     db
   );
+  const middlewareAjaxStateAuth = require('./library/middlewareAjaxStateAuth.js');
 
   // redirect form homepage to panel
   app.get('/', (req, res) => {
@@ -178,6 +179,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   app.post(
     '/ajax/launchState/playerNamePost',
     middlewareTokenAuthentication,
+    middlewareAjaxStateAuth('launchState'),
     require('./ajax/launchState/playerNamePost.js')(db)
   );
 
@@ -187,6 +189,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   app.post(
     '/ajax/launchState/playerReadyPost',
     middlewareTokenAuthentication,
+    middlewareAjaxStateAuth('launchState'),
     require('./ajax/launchState/playerReadyPost.js')(
       db,
       everyPlayerReadyChecker
