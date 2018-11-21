@@ -21,15 +21,15 @@ g.launch.launchButtonReady = ($body, auth) => {
       playerReady: 'yes'
     };
 
-    console.log('sendPost');
+    $button.attr('disabled', 'disabled');
+    $inputName.attr('disabled', 'disabled');
+    console.log('sendPost:disable buttons');
+
     $.post('/ajax/launchState/playerReadyPost' + auth.uri, data, () => {
       console.log(
         'launchButtonReady: POST -> /ajax/launchState/playerReadyPost',
         data
       );
-
-      $button.attr('disabled', 'disabled');
-      $inputName.attr('disabled', 'disabled');
     });
   }
 };

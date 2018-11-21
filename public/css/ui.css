@@ -35,6 +35,12 @@ button:active {
   border-image-source: url('/image/ui/border-image-button-down.png');
 }
 
+button:disabled {
+  padding: 3px 0px 2px 5px;
+  text-shadow: -3px -3px 0 #343434,  3px -3px 0 #343434, -3px 3px 0 #343434, 3px 3px 0 #343434;
+  border-image-source: url('/image/ui/border-image-button-disabled.png');
+}
+
 button::-moz-focus-inner {
   border: 0;
 }
@@ -51,6 +57,11 @@ input {
   font-size: 15px;
   color: #fff;
   text-shadow: -3px -3px 0 #823c3d,  3px -3px 0 #823c3d, -3px 3px 0 #823c3d, 3px 3px 0 #823c3d;
+}
+
+input:disabled {
+  border-image-source: url('/image/ui/border-image-input-disabled.png');
+  text-shadow: -3px -3px 0 #343434,  3px -3px 0 #343434, -3px 3px 0 #343434, 3px 3px 0 #343434;
 }
 
 a {
