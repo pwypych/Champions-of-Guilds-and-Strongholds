@@ -131,9 +131,6 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   };
 
   // middlewares
-  const middlewareTokenAuthentication = require('./library/middlewareTokenAuthentication.js')(
-    db
-  );
 
   // redirect form homepage to panel
   app.get('/', (req, res) => {
@@ -158,7 +155,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   // main game
   app.get(
     '/game',
-    middlewareTokenAuthentication,
+    require('./library/middlewareTokenAuth.js')(db),
     require('./game/game.js')(environment, db, templateToHtml)
   );
 
@@ -171,13 +168,14 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   // ajax
   app.get(
     '/ajax/stateDataGet',
-    middlewareTokenAuthentication,
+    require('./library/middlewareTokenAuth.js')(db),
     require('./ajax/stateDataGet.js')(db, stateNameVsLibraryMap)
   );
 
   app.post(
     '/ajax/launchState/playerNamePost',
-    middlewareTokenAuthentication,
+    require('./library/middlewareTokenAuth.js')(db),
+    require('./library/middlewareAjaxStateAuth.js')('launchState'),
     require('./ajax/launchState/playerNamePost.js')(db)
   );
 
@@ -186,7 +184,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
   app.post(
     '/ajax/launchState/playerReadyPost',
-    middlewareTokenAuthentication,
+    require('./library/middlewareTokenAuth.js')(db),
+    require('./library/middlewareAjaxStateAuth.js')('launchState'),
     require('./ajax/launchState/playerReadyPost.js')(
       db,
       everyPlayerReadyChecker
