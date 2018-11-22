@@ -182,13 +182,17 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   const everyPlayerReadyChecker = require('./ajax/launchState/everyPlayerReadyChecker.js')(
     db
   );
+  const prepareGameAfterLaunch = require('./ajax/launchState/prepareGameAfterLaunch.js')(
+    db
+  );
   app.post(
     '/ajax/launchState/playerReadyPost',
     require('./library/middlewareTokenAuth.js')(db),
     require('./library/middlewareAjaxStateAuth.js')('launchState'),
     require('./ajax/launchState/playerReadyPost.js')(
       db,
-      everyPlayerReadyChecker
+      everyPlayerReadyChecker,
+      prepareGameAfterLaunch
     )
   );
 
