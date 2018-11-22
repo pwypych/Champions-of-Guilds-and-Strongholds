@@ -5,7 +5,7 @@
 module.exports = () => {
   return {
     produce: () => {
-      return { name: 'castle', spriteOffsetY: -32, collision: true };
+      return { name: 'castleRandom', spriteOffsetY: -32, collision: true };
     }
   };
 };

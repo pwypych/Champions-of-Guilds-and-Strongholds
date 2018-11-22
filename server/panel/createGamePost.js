@@ -75,7 +75,7 @@ module.exports = (environment, db, figureManagerTree) => {
       let playerCount = 0;
       mapObject.mapLayerWithStrings.forEach((row) => {
         row.forEach((tileName) => {
-          if (tileName === 'castle') {
+          if (tileName === 'castleRandom') {
             playerCount += 1;
           }
         });

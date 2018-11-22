@@ -19,14 +19,14 @@
  "tiles":[
         {
          "id":0,
-         "image":"..\/server\/figure\/castle\/castle.png",
+         "image":"..\/server\/figure\/castleRandom\/castleRandom.png",
          "imageheight":96,
          "imagewidth":96,
          "properties":[
                 {
                  "name":"name",
                  "type":"string",
-                 "value":"castle"
+                 "value":"castleRandom"
                 }]
         }],
  "tilewidth":96,
