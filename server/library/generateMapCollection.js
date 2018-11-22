@@ -46,7 +46,7 @@ module.exports = (environment, db) => {
     function forEachFolderName(folderNameArray) {
       const done = _.after(folderNameArray.length, () => {
         debug('forEachFolderName: done!');
-        afterForEach(folderNameArray.length);
+        checkForEachErrorArray(folderNameArray.length);
       });
 
       folderNameArray.forEach((folderName) => {
@@ -220,11 +220,10 @@ module.exports = (environment, db) => {
       db.collection('mapCollection').insertOne(mapObject, (error) => {
         if (error) {
           errorArray.push(
-            mapObject.folderName + ': ERROR: insert mongo error:',
-            error
+            mapObject.folderName +
+              ': ERROR: insert mongo error:' +
+              JSON.stringify(error)
           );
-          done();
-          return;
         }
 
         debug('insertMapObject');
@@ -232,8 +231,8 @@ module.exports = (environment, db) => {
       });
     }
 
-    function afterForEach(loadedMapCount) {
-      debug('afterForEach');
+    function checkForEachErrorArray(loadedMapCount) {
+      debug('checkForEachErrorArray');
       if (!_.isEmpty(errorArray)) {
         callback('\n ' + errorArray.join(' \n '));
         return;

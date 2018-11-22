@@ -4,7 +4,7 @@
 
 const debug = require('debug')('cogs:playerReadyPost');
 
-module.exports = (db, everyPlayerReadyChecker) => {
+module.exports = (db, everyPlayerReadyChecker, prepareGameAfterLaunch) => {
   return (req, res) => {
     const game = res.locals.game;
     const playerIndex = res.locals.playerIndex;
@@ -43,9 +43,9 @@ module.exports = (db, everyPlayerReadyChecker) => {
       const query = { _id: game._id };
 
       // We need to update an object inside mongo array, must use its index in $set query
-      const ready = 'playerArray.' + playerIndex + '.ready';
+      const mongoFieldToSet = 'playerArray.' + playerIndex + '.ready';
       const $set = {};
-      $set[ready] = playerReady;
+      $set[mongoFieldToSet] = playerReady;
       const update = { $set: $set };
       const options = {};
 
@@ -72,20 +72,37 @@ module.exports = (db, everyPlayerReadyChecker) => {
           debug('checkEveryPlayerReady: error:', error);
           res.status(503);
           res.send(
-            '503 Service Unavailable - Cannot check if every player ready:',
-            error
+            '503 Service Unavailable - Cannot check if every player ready:' +
+              JSON.stringify(error)
           );
           return;
         }
 
         if (isEveryPlayerReady) {
-          setTimeout(() => {
-            updateGameState();
-          }, 5000);
+          prepareGame();
           return;
         }
 
         sendResponce();
+      });
+    }
+
+    function prepareGame() {
+      prepareGameAfterLaunch(game, (error, playerUpdatedCount) => {
+        if (error) {
+          debug('prepareGame: error:', error);
+          res.status(503);
+          res.send(
+            '503 Service Unavailable - Cannot prepare game before start:' +
+              JSON.stringify(error)
+          );
+          return;
+        }
+
+        debug('prepareGame: playerUpdatedCount:', playerUpdatedCount);
+        setTimeout(() => {
+          updateGameState();
+        }, 5000);
       });
     }
 
