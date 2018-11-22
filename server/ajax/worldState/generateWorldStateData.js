@@ -5,7 +5,7 @@
 const debug = require('debug')('cogs:generateWorldStateData');
 
 module.exports = () => {
-  return (game, callback) => {
+  return (game, playerIndex, callback) => {
     (function init() {
       debug('init');
       generateData();

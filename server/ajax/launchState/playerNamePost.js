@@ -8,7 +8,7 @@ const validator = require('validator');
 module.exports = (db) => {
   return (req, res) => {
     const game = res.locals.game;
-    const playerToken = res.locals.playerToken;
+    const playerIndex = res.locals.playerIndex;
     let playerName;
 
     (function init() {
@@ -43,22 +43,10 @@ module.exports = (db) => {
       }
 
       debug('checkRequestBody', playerName);
-      getPlayerIndex();
+      updateGameByPlayerName();
     }
 
-    function getPlayerIndex() {
-      let playerIndex;
-      game.playerArray.forEach((player, index) => {
-        if (player.token === playerToken) {
-          playerIndex = index;
-        }
-      });
-
-      debug('getPlayerIndex');
-      updateGameByPlayerName(playerIndex);
-    }
-
-    function updateGameByPlayerName(playerIndex) {
+    function updateGameByPlayerName() {
       const query = { _id: game._id };
       const name = 'playerArray.' + playerIndex + '.name';
       const $set = {};

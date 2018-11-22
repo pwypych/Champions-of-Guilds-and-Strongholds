@@ -7,7 +7,7 @@ const debug = require('debug')('cogs:playerReadyPost');
 module.exports = (db, everyPlayerReadyChecker) => {
   return (req, res) => {
     const game = res.locals.game;
-    const playerToken = res.locals.playerToken;
+    const playerIndex = res.locals.playerIndex;
 
     let playerReady;
 
@@ -36,22 +36,10 @@ module.exports = (db, everyPlayerReadyChecker) => {
       }
 
       debug('checkIsReady: playerReady', playerReady);
-      determinePlayerIndex();
+      updateGameByPlayerReady();
     }
 
-    function determinePlayerIndex() {
-      let playerIndex;
-      game.playerArray.forEach((player, index) => {
-        if (player.token === playerToken) {
-          playerIndex = index;
-        }
-      });
-
-      debug('determinePlayerIndex');
-      updateGameByPlayerReady(playerIndex);
-    }
-
-    function updateGameByPlayerReady(playerIndex) {
+    function updateGameByPlayerReady() {
       const query = { _id: game._id };
 
       // We need to update an object inside mongo array, must use its index in $set query
