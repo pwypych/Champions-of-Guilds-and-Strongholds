@@ -7,6 +7,7 @@ const debug = require('debug')('cogs:stateDataGet');
 module.exports = (db, stateNameVsLibraryMap) => {
   return (req, res) => {
     const game = res.locals.game;
+    const playerIndex = res.locals.playerIndex;
 
     (function init() {
       debug('init');
@@ -16,7 +17,7 @@ module.exports = (db, stateNameVsLibraryMap) => {
     function stateDataGetFromStateLibrary() {
       const state = game.state;
 
-      stateNameVsLibraryMap[state](game, (error, stateData) => {
+      stateNameVsLibraryMap[state](game, playerIndex, (error, stateData) => {
         if (error || !stateData) {
           debug('stateDataGetFromStateLibrary: error:', error);
           res.status(503);

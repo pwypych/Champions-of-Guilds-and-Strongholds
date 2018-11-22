@@ -5,15 +5,17 @@
 const debug = require('debug')('cogs:generateLaunchStateData');
 
 module.exports = () => {
-  return (game, callback) => {
+  return (game, playerIndex, callback) => {
     (function init() {
       debug('init');
       generateData();
     })();
 
     function generateData() {
+      debug('playerIndex', playerIndex);
       const launchStateData = {};
       launchStateData.state = game.state;
+      launchStateData.playerIndex = playerIndex;
 
       launchStateData.playerArray = game.playerArray.map((player) => {
         return {
