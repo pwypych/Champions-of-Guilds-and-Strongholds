@@ -74,9 +74,11 @@ module.exports = (db) => {
 
     function isPlayerTokenInGameObject(game) {
       let isFound = false;
-      game.playerArray.forEach((player) => {
+      let playerIndex;
+      game.playerArray.forEach((player, index) => {
         if (player.token === playerToken) {
           isFound = true;
+          playerIndex = index;
         }
       });
 
@@ -87,7 +89,7 @@ module.exports = (db) => {
         return;
       }
 
-      res.locals.playerToken = playerToken;
+      res.locals.playerIndex = playerIndex;
       res.locals.game = game;
 
       debug('isPlayerTokenInGameObject:', isFound);
