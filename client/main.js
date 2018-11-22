@@ -19,5 +19,6 @@ g.main = function main() {
   g.launch.launchTable($body, walkie);
   g.launch.launchCountdown($body, walkie);
 
-  // g.game.pixiTest();
+  g.world.worldToggle($body, walkie);
+  g.world.pixiInit($body, auth);
 };

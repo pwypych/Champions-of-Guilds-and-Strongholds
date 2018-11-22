@@ -12,14 +12,14 @@ module.exports = (environment, db, templateToHtml) => {
 
     (function init() {
       debug('init');
-      generatePixi();
+      generateWorld();
     })();
 
-    function generatePixi() {
-      const path = environment.basepath + '/server/game/pixi.ejs';
+    function generateWorld() {
+      const path = environment.basepath + '/server/game/world.ejs';
       templateToHtml(path, viewModel, (error, html) => {
-        viewModel.htmlPixi = html;
-        debug('generatePixi: html.length:', html.length);
+        viewModel.htmlWorld = html;
+        debug('generateWorld: html.length:', html.length);
         generateLaunch();
       });
     }

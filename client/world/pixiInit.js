@@ -2,10 +2,7 @@
 
 'use strict';
 
-g.game.pixiTest = () => {
-  const gameId = $.url('?gameId');
-  const playerToken = $.url('?playerToken');
-
+g.world.pixiInit = ($body, auth) => {
   let app;
   let viewport;
 
@@ -15,25 +12,20 @@ g.game.pixiTest = () => {
   let mapLayer;
 
   (function init() {
-    console.log('init');
     ajaxReadMapLayer();
   })();
 
   function ajaxReadMapLayer() {
     console.log();
-    $.get(
-      `/ajax/stateDataGet?gameId=${gameId}&playerToken=${playerToken}`,
-      (data) => {
-        console.log('GET api/stateDataGet', data);
-        mapLayer = data.mapLayer;
-        instantiatePixiApp();
-      }
-    );
+    $.get('/ajax/stateDataGet' + auth.uri, (data) => {
+      console.log('GET api/stateDataGet', data);
+      mapLayer = data.mapLayer;
+      instantiatePixiApp();
+    });
   }
 
   function instantiatePixiApp() {
-    $('#pixi').show();
-    const eCanvas = document.getElementById('pixi-canvas');
+    const eCanvas = $body.find('#pixi-canvas').get(0);
 
     const options = {};
     options.width = window.innerWidth;
