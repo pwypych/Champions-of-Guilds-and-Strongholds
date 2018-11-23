@@ -4,7 +4,7 @@
 
 const debug = require('debug')('cogs:playerReadyPost');
 
-module.exports = (db, everyPlayerReadyChecker, prepareGameAfterLaunch) => {
+module.exports = (db, walkie) => {
   return (req, res) => {
     const game = res.locals.game;
     const playerIndex = res.locals.playerIndex;
@@ -61,68 +61,6 @@ module.exports = (db, everyPlayerReadyChecker, prepareGameAfterLaunch) => {
             return;
           }
 
-          checkEveryPlayerReady();
-        }
-      );
-    }
-
-    function checkEveryPlayerReady() {
-      everyPlayerReadyChecker(game._id, (error, isEveryPlayerReady) => {
-        if (error) {
-          debug('checkEveryPlayerReady: error:', error);
-          res.status(503);
-          res.send(
-            '503 Service Unavailable - Cannot check if every player ready:' +
-              JSON.stringify(error)
-          );
-          return;
-        }
-
-        if (isEveryPlayerReady) {
-          prepareGame();
-          return;
-        }
-
-        sendResponce();
-      });
-    }
-
-    function prepareGame() {
-      prepareGameAfterLaunch(game, (error) => {
-        if (error) {
-          debug('prepareGame: error:', error);
-          res.status(503);
-          res.send(
-            '503 Service Unavailable - Cannot prepare game before start:' +
-              JSON.stringify(error)
-          );
-          return;
-        }
-
-        debug('prepareGame');
-        setTimeout(() => {
-          updateGameState();
-        }, 5000);
-      });
-    }
-
-    function updateGameState() {
-      const query = { _id: game._id };
-      const update = { $set: { state: 'worldState' } };
-      const options = {};
-
-      db.collection('gameCollection').updateOne(
-        query,
-        update,
-        options,
-        (error) => {
-          if (error) {
-            debug('updateGameState: error:', error);
-            res.status(503);
-            res.send('503 Service Unavailable - Cannot update game state');
-            return;
-          }
-
           sendResponce();
         }
       );
@@ -130,6 +68,10 @@ module.exports = (db, everyPlayerReadyChecker, prepareGameAfterLaunch) => {
 
     function sendResponce() {
       res.send({ error: 0 });
+      debug('******************** ajax ********************');
+      walkie.triggerEvent('launchPlayerReady_', 'playerReadyPost.js', {
+        gameId: game._id
+      });
     }
   };
 };

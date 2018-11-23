@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:middlewareAjaxStateAuth');
+const debug = require('debug')('nope:cogs:middlewareAjaxStateAuth');
 
 module.exports = (neededState) => {
   return (req, res, next) => {

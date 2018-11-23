@@ -136,6 +136,9 @@ function setupLibrariesAndRoutes(figureManagerTree) {
 
   // middlewares
 
+  // listeners
+  require('./ajax/launchState/everyPlayerReadyChecker.js')(walkie, db)();
+
   // redirect form homepage to panel
   app.get('/', (req, res) => {
     res.redirect('/panel');
@@ -183,21 +186,15 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/launchState/playerNamePost.js')(db)
   );
 
-  const everyPlayerReadyChecker = require('./ajax/launchState/everyPlayerReadyChecker.js')(
-    db
-  );
   const prepareGameAfterLaunch = require('./ajax/launchState/prepareGameAfterLaunch.js')(
     db
   );
+
   app.post(
     '/ajax/launchState/playerReadyPost',
     require('./library/middlewareTokenAuth.js')(db),
     require('./library/middlewareAjaxStateAuth.js')('launchState'),
-    require('./ajax/launchState/playerReadyPost.js')(
-      db,
-      everyPlayerReadyChecker,
-      prepareGameAfterLaunch
-    )
+    require('./ajax/launchState/playerReadyPost.js')(db, walkie)
   );
 
   debug('setupLibrariesAndRoutes()');

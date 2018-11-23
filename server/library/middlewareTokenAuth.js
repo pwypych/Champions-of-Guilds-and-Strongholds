@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:middlewareTokenAuth');
+const debug = require('debug')('nope:cogs:middlewareTokenAuth');
 const shortid = require('shortid');
 
 module.exports = (db) => {

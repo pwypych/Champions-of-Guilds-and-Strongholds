@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:stateDataGet');
+const debug = require('debug')('nope:cogs:stateDataGet');
 
 module.exports = (db, stateNameVsLibraryMap) => {
   return (req, res) => {

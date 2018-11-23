@@ -4,26 +4,36 @@
 
 const debug = require('debug')('cogs:everyPlayerReadyChecker');
 
-module.exports = (db) => {
-  return (gameId, callback) => {
+module.exports = (walkie, db) => {
+  return () => {
     (function init() {
       debug('init');
-      findGameById();
+      onLaunchPlayerReady();
     })();
 
-    function findGameById() {
+    function onLaunchPlayerReady() {
+      walkie.onEvent(
+        'launchPlayerReady_',
+        'everyPlayerReadyChecker',
+        (data) => {
+          debug('onLaunchPlayerReady');
+          findGameById(data.gameId);
+        }
+      );
+    }
+
+    function findGameById(gameId) {
       const query = { _id: gameId };
       const options = {};
 
       db.collection('gameCollection').findOne(query, options, (error, game) => {
         if (error) {
           debug('findGameById: error:', error);
-          callback('find mongo error:' + JSON.stringify(error));
           return;
         }
 
         if (!game) {
-          callback('game object is empty');
+          debug('game object is empty');
           return;
         }
 
@@ -40,7 +50,15 @@ module.exports = (db) => {
         }
       });
 
-      callback(null, isEveryPlayerReady);
+      if (isEveryPlayerReady) {
+        debug('checkEveryPlayerReady', isEveryPlayerReady);
+        walkie.triggerEvent('everyPlayerReady_', 'everyPlayerReadyChecker.js', {
+          gameId: game._id
+        });
+        return;
+      }
+
+      debug('checkEveryPlayerReady', isEveryPlayerReady);
     }
   };
 };

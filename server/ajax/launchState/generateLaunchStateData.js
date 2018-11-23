@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:generateLaunchStateData');
+const debug = require('debug')('nope:cogs:generateLaunchStateData');
 
 module.exports = () => {
   return (game, playerIndex, callback) => {
