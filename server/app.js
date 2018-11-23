@@ -138,6 +138,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
 
   // listeners
   require('./ajax/launchState/everyPlayerReadyChecker.js')(walkie, db)();
+  require('./ajax/launchState/preparePlayerResource.js')(walkie, db)();
 
   // redirect form homepage to panel
   app.get('/', (req, res) => {
