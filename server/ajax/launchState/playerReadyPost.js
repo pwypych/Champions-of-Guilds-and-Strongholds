@@ -88,7 +88,7 @@ module.exports = (db, everyPlayerReadyChecker, prepareGameAfterLaunch) => {
     }
 
     function prepareGame() {
-      prepareGameAfterLaunch(game, (error, playerUpdatedCount) => {
+      prepareGameAfterLaunch(game, (error) => {
         if (error) {
           debug('prepareGame: error:', error);
           res.status(503);
@@ -99,7 +99,7 @@ module.exports = (db, everyPlayerReadyChecker, prepareGameAfterLaunch) => {
           return;
         }
 
-        debug('prepareGame: playerUpdatedCount:', playerUpdatedCount);
+        debug('prepareGame');
         setTimeout(() => {
           updateGameState();
         }, 5000);

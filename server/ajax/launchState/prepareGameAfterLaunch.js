@@ -31,7 +31,7 @@ module.exports = (db) => {
     function forEachPlayer() {
       const done = _.after(game.playerArray.length, () => {
         debug('forEachPlayer: done!');
-        checkForEachErrorArray(game.playerArray.length);
+        checkForEachErrorArray();
       });
 
       game.playerArray.forEach((player, playerIndex) => {
@@ -67,14 +67,32 @@ module.exports = (db) => {
       );
     }
 
-    function checkForEachErrorArray(playerUpdatedCount) {
+    function checkForEachErrorArray() {
       debug('checkForEachErrorArray');
       if (!_.isEmpty(errorArray)) {
         callback('\n ' + errorArray.join(' \n '));
         return;
       }
 
-      callback(null, playerUpdatedCount);
+      addEveryHeroFigure();
+    }
+
+    function addEveryHeroFigure() {
+      const heroStartPositionArray = [];
+      game.mapLayer.forEach((row, y) => {
+        row.forEach((figure, x) => {
+          if (figure.name === 'castleRandom') {
+            const heroStartPosition = {};
+            heroStartPosition.x = x;
+            heroStartPosition.y = y + 1;
+            heroStartPositionArray.push(heroStartPosition);
+          }
+        });
+      });
+      debug('heroStartPositionArray.length', heroStartPositionArray.length);
+
+      debug('addEveryHeroFigure');
+      callback(null);
     }
   };
 };
