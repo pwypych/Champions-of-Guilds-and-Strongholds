@@ -5,7 +5,11 @@
 module.exports = () => {
   return {
     produce: () => {
-      return { name: 'heroHuman', collision: true };
+      return {
+        name: 'heroHuman',
+        spriteOffsetY: -9,
+        collision: true
+      };
     }
   };
 };

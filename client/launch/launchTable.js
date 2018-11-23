@@ -15,7 +15,7 @@ g.launch.launchTable = ($body, walkie) => {
       'launchTable.js',
       (stateData) => {
         if (stateData.state === 'launchState') {
-          console.log('launchTable.js: update $table');
+          // console.log('launchTable.js: update $table');
           updateTable(stateData.playerArray);
         }
       },

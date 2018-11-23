@@ -18,6 +18,7 @@ g.main = function main() {
   g.launch.launchButtonReady($body, auth);
   g.launch.launchTable($body, walkie);
   g.launch.launchCountdown($body, walkie);
+  g.launch.launchDisableUi($body, walkie);
 
   g.world.worldToggle($body, walkie);
   g.world.pixiInit($body, auth);
