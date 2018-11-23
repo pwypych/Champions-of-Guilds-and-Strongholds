@@ -94,9 +94,9 @@ module.exports = (walkie, db) => {
       );
     }
 
-    function updateGameMeta(game) {
-      triggerPrepareReady(game);
-    }
+    // function updateGameMeta(game) {
+    //   triggerPrepareReady(game);
+    // }
 
     function triggerPrepareReady(game) {
       debug('triggerPrepareReady');
