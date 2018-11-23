@@ -19,8 +19,8 @@ g.world.pixiInit = ($body, auth) => {
     console.log();
     $.get('/ajax/stateDataGet' + auth.uri, (data) => {
       console.log('GET api/stateDataGet', data);
-      mapLayer = data.mapLayer;
-      instantiatePixiApp();
+      // mapLayer = data.mapLayer;
+      // instantiatePixiApp();
     });
   }
 
