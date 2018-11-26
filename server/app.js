@@ -142,6 +142,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     db
   )();
   require('./ajax/launchState/listener/preparePlayerResource.js')(walkie, db)();
+  require('./ajax/launchState/listener/prepareHeroFigure.js')(walkie, db)();
   require('./ajax/launchState/listener/launchCountdown.js')(walkie, db)();
 
   // redirect form homepage to panel

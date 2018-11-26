@@ -94,13 +94,13 @@ module.exports = (walkie, db) => {
       );
     }
 
-    // function updateGameMeta(game) {
+    // function updateGameMetaLaunch(game) {
     //   triggerPrepareReady(game);
     // }
 
     function triggerPrepareReady(game) {
       debug('triggerPrepareReady');
-      walkie.triggerEvent('prepareReady_', 'everyPlayerReadyChecker.js', {
+      walkie.triggerEvent('prepareReady_', 'preparePlayerResource.js', {
         gameId: game._id
       });
     }

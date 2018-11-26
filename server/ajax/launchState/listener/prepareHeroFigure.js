@@ -2,33 +2,44 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:prepareGameAfterLaunch');
-const _ = require('lodash');
+const debug = require('debug')('cogs:prepareHeroFigure');
+// const _ = require('lodash');
 
-module.exports = (db) => {
-  return (game, callback) => {
-    const errorArray = [];
-    const raceResourceMap = {
-      human: {
-        wood: 15,
-        stone: 5,
-        gold: 2000,
-        crystal: 7
-      },
-      orc: {
-        wood: 5,
-        stone: 15,
-        gold: 4000,
-        crystal: 2
-      }
-    };
-
+module.exports = (walkie, db) => {
+  return () => {
     (function init() {
       debug('init');
-      addEveryHeroFigure();
+      onEveryPlayerReady();
     })();
 
-    function addEveryHeroFigure() {
+    function onEveryPlayerReady() {
+      walkie.onEvent('everyPlayerReady_', 'prepareHeroFigure.js', (data) => {
+        debug('onEveryPlayerReady');
+        findGameById(data.gameId);
+      });
+    }
+
+    function findGameById(gameId) {
+      const query = { _id: gameId };
+      const options = {};
+
+      db.collection('gameCollection').findOne(query, options, (error, game) => {
+        if (error) {
+          debug('findGameById: error:', error);
+          return;
+        }
+
+        if (!game) {
+          debug('game object is empty');
+          return;
+        }
+
+        debug('findGameById', game._id);
+        addEveryHeroFigure(game);
+      });
+    }
+
+    function addEveryHeroFigure(game) {
       const heroStartPositionArray = [];
       game.mapLayer.forEach((row, y) => {
         row.forEach((figure, x) => {
@@ -43,7 +54,14 @@ module.exports = (db) => {
       debug('heroStartPositionArray.length', heroStartPositionArray.length);
 
       debug('addEveryHeroFigure');
-      callback(null);
+      triggerPrepareReady(game);
+    }
+
+    function triggerPrepareReady(game) {
+      debug('triggerPrepareReady');
+      walkie.triggerEvent('prepareReady_', 'prepareHeroFigure.js', {
+        gameId: game._id
+      });
     }
   };
 };
