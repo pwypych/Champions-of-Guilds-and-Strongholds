@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.world.pixiInit = ($body, auth) => {
+g.world.pixiInit = (walkie, $body, auth) => {
   let app;
   let viewport;
 
@@ -12,25 +12,40 @@ g.world.pixiInit = ($body, auth) => {
   let mapLayer;
 
   (function init() {
-    ajaxReadMapLayer();
+    onStateChange();
   })();
+
+  function onStateChange() {
+    walkie.onEvent('stateChange_', 'worldToggle.js', (state) => {
+      if (state === 'worldState') {
+        ajaxReadMapLayer();
+      }
+    });
+  }
 
   function ajaxReadMapLayer() {
     console.log();
     $.get('/ajax/stateDataGet' + auth.uri, (data) => {
       console.log('GET api/stateDataGet', data);
-      // mapLayer = data.mapLayer;
-      // instantiatePixiApp();
+      mapLayer = data.mapLayer;
+      instantiatePixiApp();
     });
   }
 
   function instantiatePixiApp() {
-    const eCanvas = $body.find('#pixi-canvas').get(0);
+    const $canvas = $('<canvas id="pixi-canvas"></canvas>');
+    const eCanvas = $canvas.get(0);
+
+    const $world = $body.find('#js-world');
+    $world.empty();
+    $world.append($canvas);
+
+    PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
     const options = {};
     options.width = window.innerWidth;
     options.height = window.innerHeight;
-    options.resolution = window.devicePixelRatio; // So retina (double pixel displays works correctly)
+    options.resolution = 2; // double pixel ratio
     options.view = eCanvas;
 
     app = new PIXI.Application(options);
@@ -56,6 +71,9 @@ g.world.pixiInit = ($body, auth) => {
     viewport.pinch();
     viewport.wheel();
     viewport.decelerate();
+
+    // align screen to have a little margin
+    viewport.moveCorner(-32, -32);
 
     // viewport.on('clicked', (e) =>
     //   console.log('clicked (' + e.world.x + ',' + e.world.y + ')')
@@ -84,8 +102,23 @@ g.world.pixiInit = ($body, auth) => {
 
     // start loading images
     PIXI.loader.load(() => {
-      forEachFigure();
+      drawBackground();
     });
+  }
+
+  function drawBackground() {
+    const background = new PIXI.Graphics();
+    const color = 0xc7c7c7;
+    background.beginFill(color);
+    const x = 0;
+    const y = 0;
+    const width = viewport.worldWidth;
+    const height = viewport.worldHeight;
+    background.drawRect(x, y, width, height);
+
+    viewport.addChild(background);
+
+    forEachFigure();
   }
 
   function forEachFigure() {

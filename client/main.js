@@ -21,5 +21,5 @@ g.main = function main() {
   g.launch.launchDisableUi($body, walkie);
 
   g.world.worldToggle($body, walkie);
-  g.world.pixiInit($body, auth);
+  g.world.pixiInit(walkie, $body, auth);
 };
