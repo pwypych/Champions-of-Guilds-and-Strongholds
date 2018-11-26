@@ -20,6 +20,9 @@ g.main = function main() {
   g.launch.launchCountdown($body, walkie);
   g.launch.launchDisableUi($body, walkie);
 
+  const app = g.world.initPixi($body);
+  const viewport = g.world.initViewport(app);
+
   g.world.worldToggle($body, walkie);
-  g.world.pixiInit(walkie, $body, auth);
+  g.world.worldRender(walkie, auth, viewport);
 };

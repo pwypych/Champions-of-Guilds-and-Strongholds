@@ -2,14 +2,11 @@
 
 'use strict';
 
-g.world.pixiInit = (walkie, $body, auth) => {
-  let app;
-  let viewport;
+g.world.worldRender = (walkie, auth, viewport) => {
+  let mapLayer;
 
   const blockWidthPx = 32;
   const blockHeightPx = 32;
-
-  let mapLayer;
 
   (function init() {
     onStateChange();
@@ -24,61 +21,16 @@ g.world.pixiInit = (walkie, $body, auth) => {
   }
 
   function ajaxReadMapLayer() {
-    console.log();
     $.get('/ajax/stateDataGet' + auth.uri, (data) => {
       console.log('GET api/stateDataGet', data);
       mapLayer = data.mapLayer;
-      instantiatePixiApp();
+      setViewportDimentions();
     });
   }
 
-  function instantiatePixiApp() {
-    const $canvas = $('<canvas id="pixi-canvas"></canvas>');
-    const eCanvas = $canvas.get(0);
-
-    const $world = $body.find('#js-world');
-    $world.empty();
-    $world.append($canvas);
-
-    PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
-
-    const options = {};
-    options.width = window.innerWidth;
-    options.height = window.innerHeight;
-    options.resolution = 2; // double pixel ratio
-    options.view = eCanvas;
-
-    app = new PIXI.Application(options);
-
-    instantiateViewport();
-  }
-
-  function instantiateViewport() {
-    const options = {};
-    options.screenWidth = window.innerWidth;
-    options.screenHeight = window.innerHeight;
-    options.worldWidth = mapLayer[0].length * blockWidthPx;
-    options.worldHeight = mapLayer.length * blockHeightPx;
-
-    viewport = new PIXI.extras.Viewport(options);
-
-    // console.log(viewport);
-
-    app.stage.addChild(viewport);
-
-    // activate plugins
-    viewport.drag({ clampWheel: true });
-    viewport.pinch();
-    viewport.wheel();
-    viewport.decelerate();
-
-    // align screen to have a little margin
-    viewport.moveCorner(-32, -32);
-
-    // viewport.on('clicked', (e) =>
-    //   console.log('clicked (' + e.world.x + ',' + e.world.y + ')')
-    // );
-
+  function setViewportDimentions() {
+    viewport.worldWidth = mapLayer[0].length * blockWidthPx;
+    viewport.worldHeight = mapLayer.length * blockHeightPx;
     loadImages();
   }
 
