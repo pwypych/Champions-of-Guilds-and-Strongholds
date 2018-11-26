@@ -39,8 +39,7 @@ module.exports = (walkie, db) => {
             debug('updateGameState: error:', error);
             return;
           }
-
-          fireCountdown();
+          // End
         }
       );
     }
