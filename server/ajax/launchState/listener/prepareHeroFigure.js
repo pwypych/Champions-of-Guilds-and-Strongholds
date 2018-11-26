@@ -54,7 +54,31 @@ module.exports = (walkie, db) => {
       debug('heroStartPositionArray.length', heroStartPositionArray.length);
 
       debug('addEveryHeroFigure');
-      triggerPrepareReady(game);
+      updateGameMetaLaunch(game);
+    }
+
+    function updateGameMetaLaunch(game) {
+      const query = { _id: game._id };
+
+      // We need to update an object inside mongo array, must use its index in $set query
+      const mongoFieldToSet = 'meta.launchState.isPrepareHeroFigure';
+      const $set = {};
+      $set[mongoFieldToSet] = true;
+      const update = { $set: $set };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug(game._id, ': ERROR: update mongo error:', error);
+          }
+
+          triggerPrepareReady(game);
+        }
+      );
     }
 
     function triggerPrepareReady(game) {
