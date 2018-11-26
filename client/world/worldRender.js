@@ -76,24 +76,30 @@ g.world.worldRender = (walkie, auth, viewport) => {
   function forEachFigure() {
     mapLayer.forEach((row, y) => {
       row.forEach((figure, x) => {
-        instantiateSprites(figure.name, x, y);
+        instantiateSprites(figure, x, y);
       });
     });
   }
 
-  function instantiateSprites(figureName, x, y) {
-    if (figureName === 'empty') {
+  function instantiateSprites(figure, x, y) {
+    if (figure.name === 'empty') {
       return;
     }
 
-    const texture = PIXI.loader.resources[figureName].texture;
+    const texture = PIXI.loader.resources[figure.name].texture;
     const sprite = new PIXI.Sprite(texture);
 
-    sprite.width = blockWidthPx;
-    sprite.height = blockHeightPx;
+    sprite.anchor = { x: 0, y: 1 };
+
+    // sprite.width = blockWidthPx;
+    // sprite.height = blockHeightPx;
 
     sprite.x = x * blockWidthPx;
-    sprite.y = y * blockHeightPx;
+    sprite.y = y * blockHeightPx + blockHeightPx;
+
+    if (figure.spriteOffsetX) {
+      sprite.x += figure.spriteOffsetX;
+    }
 
     viewport.addChild(sprite);
   }
