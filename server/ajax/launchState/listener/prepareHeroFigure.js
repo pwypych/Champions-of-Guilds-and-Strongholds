@@ -9,14 +9,18 @@ module.exports = (walkie, db, figureManagerTree) => {
   return () => {
     (function init() {
       debug('init');
-      onEveryPlayerReady();
+      onPreparePlayerResources();
     })();
 
-    function onEveryPlayerReady() {
-      walkie.onEvent('everyPlayerReady_', 'prepareHeroFigure.js', (data) => {
-        debug('onEveryPlayerReady');
-        findGameById(data.gameId);
-      });
+    function onPreparePlayerResources() {
+      walkie.onEvent(
+        'preparePlayerResources_',
+        'prepareHeroFigure.js',
+        (data) => {
+          debug('onPreparePlayerResources');
+          findGameById(data.gameId);
+        }
+      );
     }
 
     function findGameById(gameId) {
@@ -154,9 +158,8 @@ module.exports = (walkie, db, figureManagerTree) => {
     function triggerPrepareReady(game) {
       debug('triggerPrepareReady');
 
-      walkie.triggerEvent('prepareReady_', 'prepareHeroFigure.js', {
-        gameId: game._id,
-        flagName: 'isPrepareHeroFigure'
+      walkie.triggerEvent('prepareHeroFigure_', 'prepareHeroFigure.js', {
+        gameId: game._id
       });
     }
   };

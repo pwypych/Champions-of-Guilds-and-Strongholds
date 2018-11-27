@@ -97,10 +97,13 @@ module.exports = (walkie, db) => {
 
     function triggerPrepareReady(game) {
       debug('triggerPrepareReady');
-      walkie.triggerEvent('prepareReady_', 'preparePlayerResource.js', {
-        gameId: game._id,
-        flagName: 'isPreparePlayerResources'
-      });
+      walkie.triggerEvent(
+        'preparePlayerResources_',
+        'preparePlayerResource.js',
+        {
+          gameId: game._id
+        }
+      );
     }
   };
 };

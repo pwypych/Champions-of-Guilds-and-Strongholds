@@ -8,75 +8,14 @@ module.exports = (walkie, db) => {
   return () => {
     (function init() {
       debug('init');
-      onPrepareReady();
+      onPrepareHeroHigure();
     })();
 
-    function onPrepareReady() {
-      walkie.onEvent('prepareReady_', 'launchCountdown.js', (data) => {
-        debug('onPrepareReady');
-        updateGameMetaLaunch(data);
+    function onPrepareHeroHigure() {
+      walkie.onEvent('prepareHeroFigure_', 'launchCountdown.js', (data) => {
+        debug('onPrepareHeroHigure');
+        fireCountdown(data.gameId);
       });
-    }
-
-    function updateGameMetaLaunch(data) {
-      const query = { _id: data.gameId };
-      const mongoFieldToSet = 'meta.launchState.' + data.flagName;
-      const $set = {};
-      $set[mongoFieldToSet] = true;
-      const update = { $set: $set };
-      const options = {};
-
-      db.collection('gameCollection').updateOne(
-        query,
-        update,
-        options,
-        (error) => {
-          if (error) {
-            debug(data.gameId, ': ERROR: update mongo error:', error);
-            return;
-          }
-
-          debug('updateGameMetaLaunch: data.flagName:', data.flagName);
-          findLaunchStateMeta(data.gameId);
-        }
-      );
-    }
-
-    function findLaunchStateMeta(gameId) {
-      const query = { _id: gameId };
-      const options = {};
-
-      db.collection('gameCollection').findOne(query, options, (error, game) => {
-        if (error) {
-          debug('findGameById: error:', error);
-          return;
-        }
-
-        if (!game) {
-          debug('game object is empty');
-          return;
-        }
-
-        debug('findLaunchStateMeta', game._id);
-        checkLaunchStateMeta(game);
-      });
-    }
-
-    function checkLaunchStateMeta(game) {
-      const launchStateMeta = game.meta.launchState;
-
-      if (!launchStateMeta.isPreparePlayerResources) {
-        debug('checkLaunchStateMeta: isPreparePlayerResources: no!');
-        return;
-      }
-
-      if (!launchStateMeta.isPrepareHeroFigure) {
-        debug('checkLaunchStateMeta: isPrepareHeroFigure: no!');
-        return;
-      }
-
-      debug('checkLaunchStateMeta', launchStateMeta);
-      fireCountdown(game._id);
     }
 
     function fireCountdown(gameId) {
