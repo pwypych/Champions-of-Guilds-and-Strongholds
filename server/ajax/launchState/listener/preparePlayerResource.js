@@ -86,6 +86,7 @@ module.exports = (walkie, db) => {
         (error, result) => {
           if (error) {
             debug(player.name, ': ERROR: insert mongo error:', error);
+            return;
           }
 
           debug('updatePlayerResources', result.result);
@@ -96,12 +97,9 @@ module.exports = (walkie, db) => {
 
     function updateGameMetaLaunch(game) {
       const query = { _id: game._id };
-
-      // We need to update an object inside mongo array, must use its index in $set query
-      const mongoFieldToSet = 'meta.launchState.isPreparePlayerResources';
-      const $set = {};
-      $set[mongoFieldToSet] = true;
-      const update = { $set: $set };
+      const update = {
+        $set: { 'meta.launchState.isPreparePlayerResources': true }
+      };
       const options = {};
 
       db.collection('gameCollection').updateOne(
@@ -111,6 +109,7 @@ module.exports = (walkie, db) => {
         (error) => {
           if (error) {
             debug(game._id, ': ERROR: update mongo error:', error);
+            return;
           }
 
           triggerPrepareReady(game);
