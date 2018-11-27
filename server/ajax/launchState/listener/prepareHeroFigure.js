@@ -35,11 +35,11 @@ module.exports = (walkie, db, figureManagerTree) => {
         }
 
         debug('findGameById', game._id);
-        addEveryHeroFigure(game);
+        generateHeroStartPositionArray(game);
       });
     }
 
-    function addEveryHeroFigure(game) {
+    function generateHeroStartPositionArray(game) {
       const heroStartPositionArray = [];
       game.mapLayer.forEach((row, y) => {
         row.forEach((figure, x) => {
@@ -51,9 +51,11 @@ module.exports = (walkie, db, figureManagerTree) => {
           }
         });
       });
-      debug('heroStartPositionArray.length', heroStartPositionArray.length);
 
-      debug('addEveryHeroFigure');
+      debug(
+        'generateHeroStartPositionArray: heroStartPositionArray.length:',
+        heroStartPositionArray.length
+      );
       forEachHeroStartPosition(heroStartPositionArray, game);
     }
 
@@ -63,36 +65,37 @@ module.exports = (walkie, db, figureManagerTree) => {
         updateGameMetaLaunch(game);
       });
 
-      heroStartPositionArray.forEach((playerStartPosition, playerIndex) => {
-        debug('forEachPlayer', playerStartPosition);
-        isStartPositionAvailable(game, playerStartPosition, playerIndex, done);
+      // We assume that playerIndex is based on position on mapLayer
+      heroStartPositionArray.forEach((heroStartPosition, playerIndex) => {
+        debug('forEachHeroStartPosition', heroStartPosition);
+        isStartPositionAvailable(game, heroStartPosition, playerIndex, done);
       });
     }
 
     function isStartPositionAvailable(
       game,
-      playerStartPosition,
+      heroStartPosition,
       playerIndex,
       done
     ) {
-      if (!game.mapLayer[playerStartPosition.y][playerStartPosition.x]) {
+      if (!game.mapLayer[heroStartPosition.y][heroStartPosition.x]) {
         debug('Hero startPosition not exist');
+        done();
         return;
       }
 
-      debug('isStartPositionAvailable', playerStartPosition);
-      instantiateHeroFigure(playerStartPosition, game, playerIndex, done);
+      debug('isStartPositionAvailable: yes!');
+      instantiateHeroFigure(heroStartPosition, game, playerIndex, done);
     }
 
-    function instantiateHeroFigure(
-      playerStartPosition,
-      game,
-      playerIndex,
-      done
-    ) {
-      const figureName = 'heroHuman';
+    function instantiateHeroFigure(heroStartPosition, game, playerIndex, done) {
+      const race = game.playerArray[playerIndex].race;
+      const raceCapital = race.charAt(0).toUpperCase() + race.slice(1);
+      const figureName = 'hero' + raceCapital;
+
       if (!figureManagerTree[figureName]) {
         debug('Cannot load figure that is required by the map: ' + figureName);
+        done();
         return;
       }
 
@@ -101,32 +104,36 @@ module.exports = (walkie, db, figureManagerTree) => {
           'Cannot load blueprint for figure that is required by the map: ' +
             figureName
         );
+        done();
         return;
       }
 
-      const figure = figureManagerTree[figureName].produce();
+      const heroFigure = figureManagerTree[figureName].produce();
 
-      // Add unique id to each figure instance
-      figure._id = figureName + '_playerIndex' + playerIndex;
-      figure.playerIndex = playerIndex;
+      heroFigure._id = figureName + '_playerIndex' + playerIndex;
+      heroFigure.playerIndex = playerIndex;
 
-      debug('instantiateHeroFigure:', figure);
-      replaceFoundFigureWithHero(playerStartPosition, game, figure, done);
+      debug('instantiateHeroFigure:', heroFigure);
+      replaceMapFigureWitheHeroFigure(
+        heroStartPosition,
+        game,
+        heroFigure,
+        done
+      );
     }
 
-    function replaceFoundFigureWithHero(
-      playerStartPosition,
+    function replaceMapFigureWitheHeroFigure(
+      heroStartPosition,
       game,
-      figure,
+      heroFigure,
       done
     ) {
       const query = { _id: game._id };
 
-      // We need to update an object inside mongo array, must use its index in $set query
       const mongoFieldToSet =
-        'mapLayer.' + playerStartPosition.y + '.' + playerStartPosition.x;
+        'mapLayer.' + heroStartPosition.y + '.' + heroStartPosition.x;
       const $set = {};
-      $set[mongoFieldToSet] = figure;
+      $set[mongoFieldToSet] = heroFigure;
       const update = { $set: $set };
       const options = {};
 
@@ -146,12 +153,7 @@ module.exports = (walkie, db, figureManagerTree) => {
 
     function updateGameMetaLaunch(game) {
       const query = { _id: game._id };
-
-      // We need to update an object inside mongo array, must use its index in $set query
-      const mongoFieldToSet = 'meta.launchState.isPrepareHeroFigure';
-      const $set = {};
-      $set[mongoFieldToSet] = true;
-      const update = { $set: $set };
+      const update = { $set: { 'meta.launchState.isPrepareHeroFigure': true } };
       const options = {};
 
       db.collection('gameCollection').updateOne(
