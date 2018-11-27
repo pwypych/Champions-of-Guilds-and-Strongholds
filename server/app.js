@@ -203,6 +203,13 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/launchState/playerReadyPost.js')(db, walkie)
   );
 
+  app.post(
+    '/ajax/worldState/hero/moveTo',
+    require('./library/middlewareTokenAuth.js')(db),
+    require('./library/middlewareAjaxStateAuth.js')('worldState'),
+    require('./ajax/worldState/hero/moveTo.js')(db)
+  );
+
   debug('setupLibrariesAndRoutes()');
   setupExpress(walkie);
 }
