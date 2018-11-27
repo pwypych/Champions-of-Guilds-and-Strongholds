@@ -8,12 +8,12 @@ module.exports = (walkie, db) => {
   return () => {
     (function init() {
       debug('init');
-      onPrepareReady();
+      onPrepareHeroHigure();
     })();
 
-    function onPrepareReady() {
-      walkie.onEvent('prepareReady_', 'launchCountdown.js', (data) => {
-        debug('onPrepareReady');
+    function onPrepareHeroHigure() {
+      walkie.onEvent('prepareHeroFigure_', 'launchCountdown.js', (data) => {
+        debug('onPrepareHeroHigure');
         fireCountdown(data.gameId);
       });
     }

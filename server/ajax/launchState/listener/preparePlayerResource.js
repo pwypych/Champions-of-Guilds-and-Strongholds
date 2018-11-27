@@ -61,7 +61,7 @@ module.exports = (walkie, db) => {
     function forEachPlayer(game) {
       const done = _.after(game.playerArray.length, () => {
         debug('forEachPlayer: done!');
-        updateGameMetaLaunch(game);
+        triggerPrepareReady(game);
       });
 
       game.playerArray.forEach((player, playerIndex) => {
@@ -95,33 +95,15 @@ module.exports = (walkie, db) => {
       );
     }
 
-    function updateGameMetaLaunch(game) {
-      const query = { _id: game._id };
-      const update = {
-        $set: { 'meta.launchState.isPreparePlayerResources': true }
-      };
-      const options = {};
-
-      db.collection('gameCollection').updateOne(
-        query,
-        update,
-        options,
-        (error) => {
-          if (error) {
-            debug(game._id, ': ERROR: update mongo error:', error);
-            return;
-          }
-
-          triggerPrepareReady(game);
-        }
-      );
-    }
-
     function triggerPrepareReady(game) {
       debug('triggerPrepareReady');
-      walkie.triggerEvent('prepareReady_', 'preparePlayerResource.js', {
-        gameId: game._id
-      });
+      walkie.triggerEvent(
+        'preparePlayerResources_',
+        'preparePlayerResource.js',
+        {
+          gameId: game._id
+        }
+      );
     }
   };
 };

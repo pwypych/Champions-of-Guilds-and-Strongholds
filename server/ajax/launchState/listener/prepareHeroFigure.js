@@ -9,14 +9,18 @@ module.exports = (walkie, db, figureManagerTree) => {
   return () => {
     (function init() {
       debug('init');
-      onEveryPlayerReady();
+      onPreparePlayerResources();
     })();
 
-    function onEveryPlayerReady() {
-      walkie.onEvent('everyPlayerReady_', 'prepareHeroFigure.js', (data) => {
-        debug('onEveryPlayerReady');
-        findGameById(data.gameId);
-      });
+    function onPreparePlayerResources() {
+      walkie.onEvent(
+        'preparePlayerResources_',
+        'prepareHeroFigure.js',
+        (data) => {
+          debug('onPreparePlayerResources');
+          findGameById(data.gameId);
+        }
+      );
     }
 
     function findGameById(gameId) {
@@ -62,7 +66,7 @@ module.exports = (walkie, db, figureManagerTree) => {
     function forEachHeroStartPosition(heroStartPositionArray, game) {
       const done = _.after(heroStartPositionArray.length, () => {
         debug('forEachHeroStartPosition: done!');
-        updateGameMetaLaunch(game);
+        triggerPrepareReady(game);
       });
 
       // We assume that playerIndex is based on position on mapLayer
@@ -151,28 +155,10 @@ module.exports = (walkie, db, figureManagerTree) => {
       );
     }
 
-    function updateGameMetaLaunch(game) {
-      const query = { _id: game._id };
-      const update = { $set: { 'meta.launchState.isPrepareHeroFigure': true } };
-      const options = {};
-
-      db.collection('gameCollection').updateOne(
-        query,
-        update,
-        options,
-        (error) => {
-          if (error) {
-            debug(game._id, ': ERROR: update mongo error:', error);
-          }
-
-          triggerPrepareReady(game);
-        }
-      );
-    }
-
     function triggerPrepareReady(game) {
       debug('triggerPrepareReady');
-      walkie.triggerEvent('prepareReady_', 'prepareHeroFigure.js', {
+
+      walkie.triggerEvent('prepareHeroFigure_', 'prepareHeroFigure.js', {
         gameId: game._id
       });
     }
