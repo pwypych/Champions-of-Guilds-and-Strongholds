@@ -14,8 +14,45 @@ module.exports = (walkie, db) => {
     function onPrepareReady() {
       walkie.onEvent('prepareReady_', 'launchCountdown.js', (data) => {
         debug('onPrepareReady');
-        fireCountdown(data.gameId);
+        findLaunchStateMeta(data.gameId);
       });
+    }
+
+    function findLaunchStateMeta(gameId) {
+      const query = { _id: gameId };
+      const options = {};
+
+      db.collection('gameCollection').findOne(query, options, (error, game) => {
+        if (error) {
+          debug('findGameById: error:', error);
+          return;
+        }
+
+        if (!game) {
+          debug('game object is empty');
+          return;
+        }
+
+        debug('findLaunchStateMeta', game._id);
+        checkLaunchStateMeta(game);
+      });
+    }
+
+    function checkLaunchStateMeta(game) {
+      const launchStateMeta = game.meta.launchState;
+
+      if (!launchStateMeta.isPreparePlayerResources) {
+        debug('checkLaunchStateMeta: isPreparePlayerResources: no!');
+        return;
+      }
+
+      if (!launchStateMeta.isPrepareHeroFigure) {
+        debug('checkLaunchStateMeta: isPrepareHeroFigure: no!');
+        return;
+      }
+
+      debug('checkLaunchStateMeta', launchStateMeta);
+      fireCountdown(game._id);
     }
 
     function fireCountdown(gameId) {
