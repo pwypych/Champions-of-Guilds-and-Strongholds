@@ -14,6 +14,7 @@ module.exports = () => {
     function generateData() {
       const worldStateData = {};
       worldStateData.state = game.state;
+      worldStateData.playerIndex = playerIndex;
 
       worldStateData.mapLayer = game.mapLayer;
 

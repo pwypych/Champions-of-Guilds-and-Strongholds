@@ -7,6 +7,7 @@ module.exports = () => {
     produce: () => {
       return {
         name: 'heroHuman',
+        type: 'hero',
         spriteOffsetX: -9,
         collision: true
       };

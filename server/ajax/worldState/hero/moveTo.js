@@ -10,9 +10,12 @@ module.exports = (db) => {
     const playerIndex = res.locals.playerIndex;
 
     // check if possible
+    // check if hero is one step from wished position
     // check if not moving
-    // move
     // update db to is moving
+    // find hero
+    // move hero
+    // instantiate empty where here was standing
     // wait 500ms
     // update db to not moving
 
@@ -45,12 +48,13 @@ module.exports = (db) => {
     }
 
     function checkIsPossible() {
-      if (!game.mapLayer[moveToY][moveToX]) {
+      if (!game.mapLayer[moveToY] || !game.mapLayer[moveToY][moveToX]) {
         debug(
           'checkIsPossible: map position not found: moveToY, moveToX:',
           moveToY,
           moveToX
         );
+        res.send({ error: 'map position not found' });
         return;
       }
 
@@ -60,6 +64,7 @@ module.exports = (db) => {
           moveToY,
           moveToX
         );
+        res.send({ error: 'collision' });
         return;
       }
 

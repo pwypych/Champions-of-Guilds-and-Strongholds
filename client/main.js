@@ -25,4 +25,5 @@ g.main = function main() {
 
   g.world.worldToggle($body, walkie);
   g.world.worldRender(walkie, auth, viewport);
+  g.world.worldKeyboard(walkie, auth);
 };
