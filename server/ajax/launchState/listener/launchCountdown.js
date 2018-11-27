@@ -14,8 +14,32 @@ module.exports = (walkie, db) => {
     function onPrepareReady() {
       walkie.onEvent('prepareReady_', 'launchCountdown.js', (data) => {
         debug('onPrepareReady');
-        findLaunchStateMeta(data.gameId);
+        updateGameMetaLaunch(data);
       });
+    }
+
+    function updateGameMetaLaunch(data) {
+      const query = { _id: data.gameId };
+      const mongoFieldToSet = 'meta.launchState.' + data.flagName;
+      const $set = {};
+      $set[mongoFieldToSet] = true;
+      const update = { $set: $set };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug(data.gameId, ': ERROR: update mongo error:', error);
+            return;
+          }
+
+          debug('updateGameMetaLaunch: data.flagName:', data.flagName);
+          findLaunchStateMeta(data.gameId);
+        }
+      );
     }
 
     function findLaunchStateMeta(gameId) {
