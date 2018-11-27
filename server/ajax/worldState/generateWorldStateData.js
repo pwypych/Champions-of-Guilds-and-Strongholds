@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:generateWorldStateData');
+const debug = require('debug')('nope:cogs:generateWorldStateData');
 
 module.exports = () => {
   return (game, playerIndex, callback) => {
