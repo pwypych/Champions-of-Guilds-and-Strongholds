@@ -122,10 +122,6 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   const templateToHtml = require('./library/templateToHtml.js')();
   const walkie = require('./library/walkie.js')();
 
-  walkie.onEvent('serverStarted_', 'app.js', (data) => {
-    debug('walkie is working', data);
-  });
-
   // state libraries
   const generateLaunchStateData = require('./ajax/launchState/generateLaunchStateData.js')();
   const generateWorldStateData = require('./ajax/worldState/generateWorldStateData.js')();
@@ -219,5 +215,4 @@ function setupExpress(walkie) {
   debug('setupExpress()');
   debug('******************** start ********************');
   app.listen(3000);
-  walkie.triggerEvent('serverStarted_', 'app.js', { port: 3000, dupa: 'dupa' });
 }
