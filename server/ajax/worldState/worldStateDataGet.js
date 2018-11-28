@@ -6,7 +6,8 @@ const debug = require('debug')('nope:cogs:worldStateDataGet');
 
 module.exports = () => {
   return (req, res, next) => {
-    const state = res.locals.game.state;
+    const game = res.locals.game;
+    const playerIndex = res.locals.playerIndex;
 
     (function init() {
       debug('init');
@@ -14,7 +15,7 @@ module.exports = () => {
     })();
 
     function compareState() {
-      if (state !== 'worldState') {
+      if (game.state !== 'worldState') {
         debug('compareState: not worldState!');
         next();
         return;
@@ -24,9 +25,23 @@ module.exports = () => {
 
     function generateData() {
       const worldStateData = {};
-      worldStateData.state = state;
-      worldStateData.playerIndex = res.locals.playerIndex;
-      worldStateData.mapLayer = res.locals.game.mapLayer;
+      worldStateData.state = game.state;
+      worldStateData.playerIndex = playerIndex;
+      worldStateData.mapLayer = game.mapLayer;
+
+      worldStateData.playerArray = res.locals.game.playerArray.map(
+        (player, index) => {
+          if (index === playerIndex) {
+            return player;
+          }
+          const enemy = {
+            name: player.name,
+            color: player.color,
+            race: player.race
+          };
+          return enemy;
+        }
+      );
 
       debug(
         'generateData: worldStateData.mapLayer.length',
