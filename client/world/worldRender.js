@@ -3,7 +3,7 @@
 'use strict';
 
 g.world.worldRender = (walkie, auth, viewport) => {
-  let mapLayer;
+  let stateData;
 
   const blockWidthPx = 32;
   const blockHeightPx = 32;
@@ -23,21 +23,21 @@ g.world.worldRender = (walkie, auth, viewport) => {
   function ajaxReadMapLayer() {
     $.get('/ajax/stateDataGet' + auth.uri, (data) => {
       console.log('GET api/stateDataGet', data);
-      mapLayer = data.mapLayer;
+      stateData = data;
       setViewportDimentions();
     });
   }
 
   function setViewportDimentions() {
-    viewport.worldWidth = mapLayer[0].length * blockWidthPx;
-    viewport.worldHeight = mapLayer.length * blockHeightPx;
+    viewport.worldWidth = stateData.mapLayer[0].length * blockWidthPx;
+    viewport.worldHeight = stateData.mapLayer.length * blockHeightPx;
     loadImages();
   }
 
   function loadImages() {
     // find all figure names
     const figureNameArray = [];
-    mapLayer.forEach((row) => {
+    stateData.mapLayer.forEach((row) => {
       row.forEach((figure) => {
         figureNameArray.push(figure.name);
       });
@@ -51,6 +51,9 @@ g.world.worldRender = (walkie, auth, viewport) => {
     figureNameUniqueArray.forEach((figureName) => {
       PIXI.loader.add(figureName, `/image/figure/${figureName}.png`);
     });
+
+    // @todo, use special module to load all images
+    PIXI.loader.add('human', '/image/hero/human.png');
 
     // start loading images
     PIXI.loader.load(() => {
@@ -74,11 +77,13 @@ g.world.worldRender = (walkie, auth, viewport) => {
   }
 
   function forEachFigure() {
-    mapLayer.forEach((row, y) => {
+    stateData.mapLayer.forEach((row, y) => {
       row.forEach((figure, x) => {
         instantiateSprites(figure, x, y);
       });
     });
+
+    triggerWorldRenderDone();
   }
 
   function instantiateSprites(figure, x, y) {
@@ -102,5 +107,9 @@ g.world.worldRender = (walkie, auth, viewport) => {
     }
 
     viewport.addChild(sprite);
+  }
+
+  function triggerWorldRenderDone() {
+    walkie.triggerEvent('worldRenderDone_', 'worldRender.js', stateData);
   }
 };

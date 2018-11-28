@@ -32,12 +32,20 @@ module.exports = () => {
       worldStateData.playerArray = res.locals.game.playerArray.map(
         (player, index) => {
           if (index === playerIndex) {
-            return player;
+            return {
+              name: player.name,
+              color: player.color,
+              race: player.race,
+              resources: player.resources,
+              hero: player.hero
+            };
           }
+
           const enemy = {
             name: player.name,
             color: player.color,
-            race: player.race
+            race: player.race,
+            hero: player.hero
           };
           return enemy;
         }

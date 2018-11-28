@@ -7,8 +7,8 @@ g.world.worldKeyboard = (walkie, auth) => {
   let heroX;
 
   (function init() {
-    onStateChange();
     onStateDataGet();
+    onStateChange();
   })();
 
   function onStateDataGet() {
@@ -25,18 +25,11 @@ g.world.worldKeyboard = (walkie, auth) => {
   }
 
   function findHeroYX(stateData) {
-    const mapLayer = stateData.mapLayer;
+    const playerArray = stateData.playerArray;
     const playerIndex = stateData.playerIndex;
 
-    mapLayer.forEach((row, y) => {
-      row.forEach((figure, x) => {
-        if (figure.type === 'hero' && figure.playerIndex === playerIndex) {
-          heroY = y;
-          heroX = x;
-          // console.log('heroFoundOn', y, x);
-        }
-      });
-    });
+    heroX = parseInt(playerArray[playerIndex].hero.x, 10);
+    heroY = parseInt(playerArray[playerIndex].hero.y, 10);
   }
 
   function onStateChange() {

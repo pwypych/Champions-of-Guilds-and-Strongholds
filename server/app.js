@@ -200,11 +200,11 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   debug('setupLibrariesAndRoutes()');
-  setupExpress(walkie);
+  setupExpress();
 }
 /* eslint-enable global-require */
 
-function setupExpress(walkie) {
+function setupExpress() {
   debug('setupExpress()');
   debug('******************** start ********************');
   app.listen(3000);
