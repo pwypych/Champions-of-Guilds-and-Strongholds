@@ -122,14 +122,6 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   const templateToHtml = require('./library/templateToHtml.js')();
   const walkie = require('./library/walkie.js')();
 
-  // state libraries
-  const generateLaunchStateData = require('./ajax/launchState/generateLaunchStateData.js')();
-  const generateWorldStateData = require('./ajax/worldState/generateWorldStateData.js')();
-  const stateNameVsLibraryMap = {
-    launchState: generateLaunchStateData,
-    worldState: generateWorldStateData
-  };
-
   // middlewares
 
   // listeners
@@ -182,7 +174,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   app.get(
     '/ajax/stateDataGet',
     require('./library/middlewareTokenAuth.js')(db),
-    require('./ajax/stateDataGet.js')(db, stateNameVsLibraryMap)
+    require('./ajax/launchState/launchStateDataGet.js')(),
+    require('./ajax/worldState/worldStateDataGet.js')()
   );
 
   app.post(
