@@ -53,7 +53,7 @@ g.world.worldRender = (walkie, auth, viewport) => {
     });
 
     // @todo, use special module to load all images
-    PIXI.loader.add('human', '/image/hero/human.png');
+    PIXI.loader.add('human', '/sprite/hero/human.png');
 
     // start loading images
     PIXI.loader.load(() => {
