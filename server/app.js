@@ -121,6 +121,9 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   // libraries
   const templateToHtml = require('./library/templateToHtml.js')();
   const walkie = require('./library/walkie.js')();
+  const setupSpriteUrlArray = require('./library/generateSpriteUrlArray.js')(
+    environment
+  );
 
   // middlewares
 
