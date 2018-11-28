@@ -5,7 +5,7 @@
 const debug = require('debug')('cogs:prepareHeroFigure');
 const _ = require('lodash');
 
-module.exports = (walkie, db, figureManagerTree) => {
+module.exports = (walkie, db) => {
   return () => {
     (function init() {
       debug('init');
@@ -69,9 +69,10 @@ module.exports = (walkie, db, figureManagerTree) => {
         triggerPrepareReady(game);
       });
 
+      debug('forEachHeroStartPosition');
+
       // We assume that playerIndex is based on position on mapLayer
       heroStartPositionArray.forEach((heroStartPosition, playerIndex) => {
-        debug('forEachHeroStartPosition', heroStartPosition);
         isStartPositionAvailable(game, heroStartPosition, playerIndex, done);
       });
     }
@@ -89,55 +90,24 @@ module.exports = (walkie, db, figureManagerTree) => {
       }
 
       debug('isStartPositionAvailable: yes!');
-      instantiateHeroFigure(heroStartPosition, game, playerIndex, done);
+      instantiateHero(heroStartPosition, game, playerIndex, done);
     }
 
-    function instantiateHeroFigure(heroStartPosition, game, playerIndex, done) {
-      const race = game.playerArray[playerIndex].race;
-      const raceCapital = race.charAt(0).toUpperCase() + race.slice(1);
-      const figureName = 'hero' + raceCapital;
+    function instantiateHero(heroStartPosition, game, playerIndex, done) {
+      const hero = {};
+      hero.x = heroStartPosition.x;
+      hero.y = heroStartPosition.y;
 
-      if (!figureManagerTree[figureName]) {
-        debug('Cannot load figure that is required by the map: ' + figureName);
-        done();
-        return;
-      }
-
-      if (!figureManagerTree[figureName].produce) {
-        debug(
-          'Cannot load blueprint for figure that is required by the map: ' +
-            figureName
-        );
-        done();
-        return;
-      }
-
-      const heroFigure = figureManagerTree[figureName].produce();
-
-      heroFigure._id = figureName + '_playerIndex' + playerIndex;
-      heroFigure.playerIndex = playerIndex;
-
-      debug('instantiateHeroFigure:', heroFigure);
-      replaceMapFigureWitheHeroFigure(
-        heroStartPosition,
-        game,
-        heroFigure,
-        done
-      );
+      debug('instantiateHero: hero:', hero);
+      updateHero(hero, game, playerIndex, done);
     }
 
-    function replaceMapFigureWitheHeroFigure(
-      heroStartPosition,
-      game,
-      heroFigure,
-      done
-    ) {
+    function updateHero(hero, game, playerIndex, done) {
       const query = { _id: game._id };
 
-      const mongoFieldToSet =
-        'mapLayer.' + heroStartPosition.y + '.' + heroStartPosition.x;
+      const mongoFieldToSet = 'playerArray.' + playerIndex + '.hero';
       const $set = {};
-      $set[mongoFieldToSet] = heroFigure;
+      $set[mongoFieldToSet] = hero;
       const update = { $set: $set };
       const options = {};
 
