@@ -18,9 +18,6 @@ module.exports = (db) => {
     // wait 500ms
     // update db to not moving
 
-    let moveToX;
-    let moveToY;
-
     (function init() {
       debug('init');
       checkRequestBody();
@@ -39,14 +36,14 @@ module.exports = (db) => {
         return;
       }
 
-      moveToX = parseInt(req.body.moveToX, 10);
-      moveToY = parseInt(req.body.moveToY, 10);
+      const moveToX = parseInt(req.body.moveToX, 10);
+      const moveToY = parseInt(req.body.moveToY, 10);
 
       debug('checkRequestBody', req.body);
-      checkIsPossible();
+      checkIsPossible(moveToX, moveToY);
     }
 
-    function checkIsPossible() {
+    function checkIsPossible(moveToX, moveToY) {
       if (!game.mapLayer[moveToY] || !game.mapLayer[moveToY][moveToX]) {
         debug(
           'checkIsPossible: map position not found: moveToY, moveToX:',
@@ -73,8 +70,36 @@ module.exports = (db) => {
         moveToX
       );
 
-      res.send({ error: 0 });
-      debug('******************** ajax ********************');
+      updateHeroPosition(moveToX, moveToY);
+    }
+
+    function updateHeroPosition(moveToX, moveToY) {
+      const query = { _id: game._id };
+      const mongoPathX = 'playerArray.' + playerIndex + '.hero.x';
+      const mongoPathY = 'playerArray.' + playerIndex + '.hero.y';
+      const $set = {};
+      $set[mongoPathX] = moveToX;
+      $set[mongoPathY] = moveToY;
+      const update = { $set: $set };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('updateHeroPosition: error:', error);
+            res
+              .status(503)
+              .send('503 Service Unavailable - Cannot update game');
+            return;
+          }
+
+          res.send({ error: 0 });
+          debug('******************** ajax ********************');
+        }
+      );
     }
   };
 };
