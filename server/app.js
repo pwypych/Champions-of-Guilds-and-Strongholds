@@ -122,8 +122,6 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   const templateToHtml = require('./library/templateToHtml.js')();
   const walkie = require('./library/walkie.js')();
 
-  // middlewares
-
   // listeners
   require('./ajax/launchState/listener/everyPlayerReadyChecker.js')(
     walkie,
@@ -164,12 +162,6 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./game/game.js')(environment, db, templateToHtml)
   );
 
-  // show Image
-  app.get(
-    '/image/figure/:imageName.png',
-    require('./library/showImage.js')(environment)
-  );
-
   // ajax
   app.get(
     '/ajax/stateDataGet',
@@ -190,6 +182,12 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareTokenAuth.js')(db),
     require('./library/middlewareAjaxStateAuth.js')('launchState'),
     require('./ajax/launchState/playerReadyPost.js')(db, walkie)
+  );
+
+  app.get(
+    '/ajax/worldState/load/spriteFilenameArray',
+    require('./library/middlewareTokenAuth.js')(db),
+    require('./ajax/worldState/load/spriteFilenameArrayGet.js')(environment)
   );
 
   app.post(
