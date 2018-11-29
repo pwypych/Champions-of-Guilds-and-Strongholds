@@ -77,9 +77,13 @@ g.world.worldKeyboard = (walkie, auth) => {
         moveToX: moveToX
       };
 
-      $.post('/ajax/worldState/hero/moveTo' + auth.uri, data, (responce) => {
-        console.log('sendRequest: responce:', responce);
-      });
+      $.post(
+        '/ajax/worldState/hero/moveToPost' + auth.uri,
+        data,
+        (responce) => {
+          console.log('sendRequest: responce:', responce);
+        }
+      );
     }
   }
 

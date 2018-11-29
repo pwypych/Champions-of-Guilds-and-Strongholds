@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:ajax:worldState:hero:moveTo');
+const debug = require('debug')('cogs:ajax:worldState:hero:moveToPost');
 
 module.exports = (db) => {
   return (req, res) => {
