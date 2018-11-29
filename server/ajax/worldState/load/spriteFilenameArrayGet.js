@@ -22,14 +22,14 @@ module.exports = (environment) => {
         }
 
         debug('scanSpriteFolder', files);
-        checkIsEverySrpiteFilePng(files);
+        checkIsEverySpriteFilePng(files);
       });
     }
 
-    function checkIsEverySrpiteFilePng(files) {
+    function checkIsEverySpriteFilePng(files) {
       const spriteFilenameArray = [];
       files.forEach((spriteName) => {
-        let spriteNameExtension = spriteName.substring(
+        const spriteNameExtension = spriteName.substring(
           spriteName.length - 3,
           spriteName.length
         );
