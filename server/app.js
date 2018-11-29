@@ -124,7 +124,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   const setupSpriteUrlArray = require('./library/generateSpriteUrlArray.js')(
     environment
   );
-
+  setupSpriteUrlArray();
   // middlewares
 
   // listeners
@@ -174,6 +174,12 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   // ajax
+  app.get(
+    '/ajax/worldState/load/spriteFilenameArray',
+    require('./library/middlewareTokenAuth.js')(db),
+    require('./ajax/worldState/load/spriteFilenameArrayGet.js')(environment)
+  );
+
   app.get(
     '/ajax/stateDataGet',
     require('./library/middlewareTokenAuth.js')(db),

@@ -7,20 +7,33 @@ const fs = require('fs');
 
 module.exports = (environment) => {
   return () => {
-    const spriteFolderArray = ['sprite/hero', 'sprite,mapLayer'];
-    const spriteUrlArray = [];
+    const spriteFolder = environment.basepath + '/public/sprite';
+    let spriteFilenameArray;
 
     (function init() {
       debug('init');
-      compareState();
+      scanSpriteFolder();
     })();
 
-    // wszystko na _after  
-    function scanSpriteFolderArray() {
-      let path
-      fs.readdir(spriteFolderArray[0], (error, files) {
+    function scanSpriteFolder() {
+      fs.readdir(spriteFolder, (error, files) => {
+        if (error) {
+          debug('Cannot read file');
+          return;
+        }
 
-      })
+        debug('scanSpriteFolder', files);
+        afterForEachSpriteFolder();
+      });
+    }
+
+    function isEvery(files) {}
+
+    function afterForEachSpriteFolder() {
+      debug(
+        'afterForEachSpriteFolder: spriteFilenameArray:',
+        spriteFilenameArray
+      );
     }
   };
 };

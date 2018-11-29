@@ -63,7 +63,7 @@
               </td>
               <td>
                 <% game.playerArray.forEach((player) => { %>
-                  <% const uri = '/ajax/stateDataGet?gameId=' + game._id + '&playerToken=' + player.token; %>
+                  <% const uri = '/ajax/worldState/load/spriteFilenameArray?gameId=' + game._id + '&playerToken=' + player.token; %>
                   <a href="<%= viewModel.baseurl + uri %>">/ajax/stateDataGet</a>
                   <br/>
                 <% }); %>
