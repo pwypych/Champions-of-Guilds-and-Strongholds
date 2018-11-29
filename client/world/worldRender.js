@@ -13,52 +13,23 @@ g.world.worldRender = (walkie, auth, viewport) => {
   })();
 
   function onStateChange() {
-    walkie.onEvent('stateChange_', 'worldToggle.js', (state) => {
-      if (state === 'worldState') {
-        ajaxReadMapLayer();
-      }
-    });
-  }
-
-  function ajaxReadMapLayer() {
-    $.get('/ajax/stateDataGet' + auth.uri, (data) => {
-      console.log('GET api/stateDataGet', data);
-      stateData = data;
-      setViewportDimentions();
-    });
+    walkie.onEvent(
+      'stateDataGet_',
+      'worldToggle.js',
+      (data) => {
+        if (data.state === 'worldState') {
+          stateData = data;
+          setViewportDimentions();
+        }
+      },
+      false
+    );
   }
 
   function setViewportDimentions() {
     viewport.worldWidth = stateData.mapLayer[0].length * blockWidthPx;
     viewport.worldHeight = stateData.mapLayer.length * blockHeightPx;
-    loadImages();
-  }
-
-  function loadImages() {
-    // find all figure names
-    const figureNameArray = [];
-    stateData.mapLayer.forEach((row) => {
-      row.forEach((figure) => {
-        figureNameArray.push(figure.name);
-      });
-    });
-
-    // only unique names
-    const figureNameUniqueArray = _.uniq(figureNameArray);
-
-    console.log('figureNameUniqueArray', figureNameUniqueArray);
-
-    figureNameUniqueArray.forEach((figureName) => {
-      PIXI.loader.add(figureName, `/image/figure/${figureName}.png`);
-    });
-
-    // @todo, use special module to load all images
-    PIXI.loader.add('human', '/sprite/hero/human.png');
-
-    // start loading images
-    PIXI.loader.load(() => {
-      drawBackground();
-    });
+    drawBackground();
   }
 
   function drawBackground() {
@@ -110,6 +81,6 @@ g.world.worldRender = (walkie, auth, viewport) => {
   }
 
   function triggerWorldRenderDone() {
-    walkie.triggerEvent('worldRenderDone_', 'worldRender.js', stateData);
+    walkie.triggerEvent('worldRenderDone_', 'worldRender.js', stateData, false);
   }
 };

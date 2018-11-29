@@ -15,7 +15,6 @@ module.exports = (db) => {
     // update db to is moving
     // find hero
     // move hero
-    // instantiate empty where here was standing
     // wait 500ms
     // update db to not moving
 

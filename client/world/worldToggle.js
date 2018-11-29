@@ -10,14 +10,19 @@ g.world.worldToggle = ($body, walkie) => {
   })();
 
   function onStateChange() {
-    walkie.onEvent('stateChange_', 'worldToggle.js', (state) => {
-      if (state === 'worldState') {
-        console.log('worldToggle.js: show $world');
-        $world.show();
-      } else {
-        console.log('worldToggle.js: hide $world');
-        $world.hide();
-      }
-    });
+    walkie.onEvent(
+      'stateChange_',
+      'worldToggle.js',
+      (state) => {
+        if (state === 'worldState') {
+          console.log('worldToggle.js: show $world');
+          $world.show();
+        } else {
+          console.log('worldToggle.js: hide $world');
+          $world.hide();
+        }
+      },
+      false
+    );
   }
 };

@@ -13,10 +13,15 @@ g.world.worldHero = (walkie, auth, viewport) => {
   })();
 
   function onStateChange() {
-    walkie.onEvent('worldRenderDone_', 'worldHero.js', (data) => {
-      stateData = data;
-      forEachPlayer();
-    });
+    walkie.onEvent(
+      'worldRenderDone_',
+      'worldHero.js',
+      (data) => {
+        stateData = data;
+        forEachPlayer();
+      },
+      false
+    );
   }
 
   function forEachPlayer() {
@@ -26,7 +31,7 @@ g.world.worldHero = (walkie, auth, viewport) => {
   }
 
   function instantiateHeroSprite(x, y) {
-    const texture = PIXI.loader.resources['human'].texture;
+    const texture = PIXI.loader.resources['heroHuman'].texture;
     const sprite = new PIXI.Sprite(texture);
 
     sprite.anchor = { x: 0, y: 1 };
