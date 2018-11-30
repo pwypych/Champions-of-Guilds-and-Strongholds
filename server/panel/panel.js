@@ -4,6 +4,8 @@
 
 const debug = require('debug')('cogs:panel');
 
+// What does this module do?
+// Finds availiable maps and created games and generates html from it
 module.exports = (environment, db, templateToHtml) => {
   return (req, res) => {
     const viewModel = {};

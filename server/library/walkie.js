@@ -5,6 +5,8 @@
 const EventEmitter = require('events');
 const _ = require('lodash');
 
+// What does this module do?
+// Creates walkie eventEmitter that helps other modules to emmit and listen events
 module.exports = () => {
   const emitter = new EventEmitter();
 

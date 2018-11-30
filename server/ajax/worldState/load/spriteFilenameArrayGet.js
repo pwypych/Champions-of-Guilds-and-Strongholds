@@ -27,16 +27,18 @@ module.exports = (environment) => {
     }
 
     function checkIsEverySpriteFilePng(files) {
-      const spriteFilenameArray = [];
-      files.forEach((spriteName) => {
-        const spriteNameExtension = spriteName.substring(
-          spriteName.length - 3,
-          spriteName.length
+      const spriteFilenameArray = files.filter((spriteFileName) => {
+        const spriteNameExtension = spriteFileName.substring(
+          spriteFileName.length - 3,
+          spriteFileName.length
         );
-        if (spriteNameExtension === 'png') {
-          spriteFilenameArray.push(spriteName);
+
+        if (spriteNameExtension !== 'png') {
+          return false;
         }
-        debug('spriteName', spriteName);
+
+        debug('spriteFileName - true', spriteFileName);
+        return true;
       });
 
       sendStateData(spriteFilenameArray);

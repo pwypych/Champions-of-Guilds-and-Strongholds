@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Validates player token and gameId, check is this player belong to this game
 const debug = require('debug')('nope:cogs:middlewareTokenAuth');
 const shortid = require('shortid');
 
