@@ -2,9 +2,9 @@
 
 'use strict';
 
-g.world.worldHero = (walkie, auth, viewport, charm) => {
+g.world.worldEnemy = (walkie, auth, viewport) => {
   let stateData;
-  let sprite;
+  let isMoving = false;
 
   const blockWidthPx = 32;
   const blockHeightPx = 32;
@@ -20,21 +20,22 @@ g.world.worldHero = (walkie, auth, viewport, charm) => {
       'worldHero.js',
       (data) => {
         stateData = data;
-        findHero();
+        forEachPlayer();
       },
       false
     );
   }
 
-  function findHero() {
-    const hero = stateData.playerArray[stateData.playerIndex].hero;
-    instantiateHeroSprite(hero.x, hero.y);
+  function forEachPlayer() {
+    stateData.playerArray.forEach((player, index) => {
+      instantiateHeroSprite(player.hero.x, player.hero.y);
+    });
   }
 
   function instantiateHeroSprite(x, y) {
     const figureName = 'heroHuman';
     const texture = PIXI.loader.resources[figureName].texture;
-    sprite = new PIXI.Sprite(texture);
+    const sprite = new PIXI.Sprite(texture);
 
     sprite.anchor = { x: 0, y: 1 };
 
@@ -48,18 +49,11 @@ g.world.worldHero = (walkie, auth, viewport, charm) => {
   }
 
   function onHeroMoveTo() {
-    walkie.onEvent('heroMoveTo_', 'worldHero.js', (data) => {
-      console.log(
-        'end slide on',
-        data.moveToX * blockWidthPx,
-        data.moveToY * blockHeightPx + blockHeightPx
-      );
-      charm.slide(
-        sprite,
-        data.moveToX * blockWidthPx,
-        data.moveToY * blockHeightPx,
-        30
-      );
+    walkie.onEvent('heroMoveTo_', 'worldHero.js', () => {
+      isMoving = true;
+      setTimeout(() => {
+        isMoving = false;
+      });
     });
   }
 };

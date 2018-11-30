@@ -14,7 +14,8 @@ module.exports = {
     _: false,
     $: false,
     PIXI: false,
-    g: false
+    g: false,
+    Charm: false
   },
   rules: {
     'no-use-before-define': ['error', { functions: false }], // Can use hoisting of functions

@@ -77,13 +77,16 @@ g.world.worldKeyboard = (walkie, auth) => {
         moveToX: moveToX
       };
 
-      $.post(
-        '/ajax/worldState/hero/moveToPost' + auth.uri,
-        data,
-        (responce) => {
-          console.log('sendRequest: responce:', responce);
-        }
-      );
+      $.post('/ajax/worldState/hero/moveToPost' + auth.uri, data, () => {
+        triggerHeroMoveTo(moveToY, moveToX);
+      });
+    }
+
+    function triggerHeroMoveTo(moveToY, moveToX) {
+      walkie.triggerEvent('heroMoveTo_', 'worldKeyboard', {
+        moveToY: moveToY,
+        moveToX: moveToX
+      });
     }
   }
 
