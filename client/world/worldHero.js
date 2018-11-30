@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.world.worldHero = (walkie, auth, viewport, charm) => {
+g.world.worldHero = (walkie, auth, viewport) => {
   let stateData;
   let sprite;
 
@@ -49,17 +49,34 @@ g.world.worldHero = (walkie, auth, viewport, charm) => {
 
   function onHeroMoveTo() {
     walkie.onEvent('heroMoveTo_', 'worldHero.js', (data) => {
+      const heroSpriteOffsetX = -9;
+
+      const tweenX = data.moveToX * blockWidthPx + heroSpriteOffsetX;
+      const tweenY = data.moveToY * blockHeightPx + blockHeightPx;
+      const heroX = sprite.x;
+      const heroY = sprite.y;
       console.log(
-        'end slide on',
-        data.moveToX * blockWidthPx,
-        data.moveToY * blockHeightPx + blockHeightPx
+        'end slide on:',
+        tweenX,
+        tweenY,
+        'hero currently on:',
+        heroX,
+        heroY
       );
-      charm.slide(
-        sprite,
-        data.moveToX * blockWidthPx,
-        data.moveToY * blockHeightPx,
-        30
-      );
+
+      const path = new PIXI.tween.TweenPath();
+      path.moveTo(heroX, heroY).lineTo(tweenX, tweenY);
+
+      const gPath = new PIXI.Graphics();
+      gPath.lineStyle(1, 0xffffff, 1);
+      gPath.drawPath(path);
+      viewport.addChild(gPath);
+
+      const tween = PIXI.tweenManager.createTween(sprite);
+      tween.path = path;
+      tween.time = 12000;
+      tween.loop = false;
+      tween.start();
     });
   }
 };

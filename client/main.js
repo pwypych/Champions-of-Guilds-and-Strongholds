@@ -16,14 +16,14 @@ g.main = function main() {
   function setupPixi($body) {
     const app = g.world.initPixi($body);
     const viewport = g.world.initViewport(app);
-    const charm = g.world.initCharm(app);
+    g.world.initTween(app);
 
     g.world.initImages(() => {
-      setupLibraries($body, app, viewport, charm);
+      setupLibraries($body, app, viewport);
     });
   }
 
-  function setupLibraries($body, app, viewport, charm) {
+  function setupLibraries($body, app, viewport) {
     const walkie = g.tool.walkie();
     const auth = g.tool.auth();
 
@@ -39,7 +39,7 @@ g.main = function main() {
 
     g.world.worldToggle($body, walkie);
     g.world.worldRender(walkie, auth, viewport);
-    g.world.worldHero(walkie, auth, viewport, charm);
+    g.world.worldHero(walkie, auth, viewport);
     g.world.worldKeyboard(walkie, auth);
   }
 };
