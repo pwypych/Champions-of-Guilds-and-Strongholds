@@ -5,6 +5,8 @@
 const debug = require('debug')('cogs:deleteGamePost');
 const shortid = require('shortid');
 
+// What does this module do?
+// Delete game instance on player button click
 module.exports = (environment, db) => {
   return (req, res) => {
     (function init() {
@@ -35,15 +37,12 @@ module.exports = (environment, db) => {
     }
 
     function deleteGame(gameId) {
-      db.collection('gameCollection').deleteOne(
-        { _id: gameId },
-        (error) => {
-          if (error) {
-            debug('deleteGamePost: error:', error);
-            res.status(503).send('503 Error - Cannot delete game instance');
-          }
+      db.collection('gameCollection').deleteOne({ _id: gameId }, (error) => {
+        if (error) {
+          debug('deleteGamePost: error:', error);
+          res.status(503).send('503 Error - Cannot delete game instance');
         }
-      );
+      });
 
       debug('deleteGamePost');
       sendResponce();

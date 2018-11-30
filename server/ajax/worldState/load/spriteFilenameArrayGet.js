@@ -32,10 +32,8 @@ module.exports = (environment) => {
           spriteFileName.length - 3,
           spriteFileName.length
         );
-        debug('spriteNameExtension', spriteNameExtension);
 
         if (spriteNameExtension !== 'png') {
-          debug('spriteFileName - false', spriteFileName);
           return false;
         }
 

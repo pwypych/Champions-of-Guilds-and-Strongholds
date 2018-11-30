@@ -12,6 +12,9 @@ const _ = require('lodash');
 
 // @todo
 // refactor names, tool functions should be located in waterfall
+
+// What does this module do?
+// Reloads tiled map files into database
 module.exports = (environment, db) => {
   return (callback) => {
     const errorArray = [];

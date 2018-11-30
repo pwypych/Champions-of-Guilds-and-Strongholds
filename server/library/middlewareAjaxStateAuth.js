@@ -4,6 +4,8 @@
 
 const debug = require('debug')('nope:cogs:middlewareAjaxStateAuth');
 
+// What does this module do?
+// Check that module can be runned with a state send by a user
 module.exports = (neededState) => {
   return (req, res, next) => {
     const state = res.locals.game.state;
