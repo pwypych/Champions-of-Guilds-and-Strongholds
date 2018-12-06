@@ -25,7 +25,13 @@ let db;
 })();
 
 function setupEnvironment() {
-  environment.baseurl = 'http://localhost:3000';
+  if (__dirname.substr(0, 11) === '/home/galw/') {
+    environment.env = 'dev';
+    environment.baseurl = 'http://localhost:3000';
+  } else {
+    environment.env = 'prod';
+    environment.baseurl = 'https://axe.cogs.ovh';
+  }
   environment.basepath = path.join(__dirname, '..');
   environment.basepathTiledMap = environment.basepath + '/tiledMap';
   environment.basepathTiledTileset = environment.basepath + '/tiledTileset';
