@@ -106,7 +106,7 @@ g.world.worldHero = (walkie, auth, viewport) => {
 
     const tween = PIXI.tweenManager.createTween(sprite);
     tween.path = path;
-    tween.time = 24000;
+    tween.time = 16000;
     tween.loop = false;
     tween.start();
   }
