@@ -153,7 +153,7 @@ module.exports = (db) => {
           res.send({ error: 0 });
           debug('******************** ajax ********************');
 
-          setTimeout(deleteJustMovedFlag, 500);
+          setTimeout(deleteJustMovedFlag, 300);
         }
       );
     }
