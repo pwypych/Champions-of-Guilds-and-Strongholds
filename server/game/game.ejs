@@ -24,8 +24,8 @@
 
     <%- viewModel.htmlPreload %>
 
-    <script type="text/javascript" src="<%= viewModel.baseurl %>/js/g.js"></script>
-    <script type="text/javascript" src="<%= viewModel.baseurl %>/build/bundle.js"></script>
-    <script type="text/javascript" src="<%= viewModel.baseurl %>/js/start.js"></script>
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/js/g.js?v=<%= viewModel.timestamp %>"></script>
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/build/bundle.js?v=<%= viewModel.timestamp %>"></script>
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/js/start.js?v=<%= viewModel.timestamp %>"></script>
   </body>
 </html>
