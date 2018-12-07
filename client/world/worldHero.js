@@ -6,8 +6,7 @@ g.world.worldHero = (walkie, auth, viewport) => {
   let stateData;
   let sprite;
 
-  let lastKnownX;
-  let lastKnownY;
+  const lastPosition = [];
 
   const blockWidthPx = 32;
   const blockHeightPx = 32;
@@ -32,11 +31,13 @@ g.world.worldHero = (walkie, auth, viewport) => {
   function findHero() {
     $('body').css('cursor', 'default');
 
-    const hero = stateData.playerArray[stateData.playerIndex].hero;
-    instantiateHeroSprite(hero.x, hero.y);
+    // const hero = stateData.playerArray[stateData.playerIndex].hero;
+    stateData.playerArray.forEach((player, playerIndex) => {
+      instantiateHeroSprite(player.hero.x, player.hero.y, playerIndex);
+    });
   }
 
-  function instantiateHeroSprite(x, y) {
+  function instantiateHeroSprite(x, y, playerIndex) {
     const figureName = 'heroHuman';
     const texture = PIXI.loader.resources[figureName].texture;
     sprite = new PIXI.Sprite(texture);
@@ -51,26 +52,31 @@ g.world.worldHero = (walkie, auth, viewport) => {
 
     viewport.addChild(sprite);
 
-    checkPositionChange(x, y);
+    checkPositionChange(x, y, playerIndex);
   }
 
-  function checkPositionChange(x, y) {
-    console.log('hero now: ', y, x);
-    console.log('last known: ', lastKnownY, lastKnownX);
-    if (typeof lastKnownX === 'undefined') {
-      lastKnownX = x;
+  function checkPositionChange(x, y, playerIndex) {
+    console.log('hero now: ', y, x, 'playerIndex', playerIndex);
+    console.log('last known: ', lastPosition);
+    if (typeof lastPosition[playerIndex] === 'undefined') {
+      lastPosition[playerIndex] = { x: x, y: y };
     }
 
-    if (typeof lastKnownY === 'undefined') {
-      lastKnownY = y;
-    }
+    const lastKnownX = lastPosition[playerIndex].x;
+    const lastKnownY = lastPosition[playerIndex].y;
 
     if (lastKnownX !== x || lastKnownY !== y) {
-      tweenHeroToNewPosition(x, y);
+      tweenHeroToNewPosition(x, y, lastKnownX, lastKnownY, playerIndex);
     }
   }
 
-  function tweenHeroToNewPosition(moveToX, moveToY) {
+  function tweenHeroToNewPosition(
+    moveToX,
+    moveToY,
+    lastKnownX,
+    lastKnownY,
+    playerIndex
+  ) {
     const heroSpriteOffsetX = -9;
 
     const tweenX = moveToX * blockWidthPx + heroSpriteOffsetX;
@@ -78,8 +84,8 @@ g.world.worldHero = (walkie, auth, viewport) => {
     const heroX = lastKnownX * blockWidthPx + heroSpriteOffsetX;
     const heroY = lastKnownY * blockHeightPx + blockHeightPx;
 
-    lastKnownX = moveToX;
-    lastKnownY = moveToY;
+    lastPosition[playerIndex].x = moveToX;
+    lastPosition[playerIndex].y = moveToY;
 
     console.log(
       'end slide on:',
