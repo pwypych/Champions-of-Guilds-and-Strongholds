@@ -4,6 +4,8 @@
 
 const debug = require('debug')('cogs:everyPlayerReadyChecker');
 
+// What does this module do?
+// Check is every player ready
 module.exports = (walkie, db) => {
   return () => {
     (function init() {

@@ -4,6 +4,8 @@
 
 const debug = require('debug')('cogs:ajax:worldState:hero:moveToPost');
 
+// What does this module do?
+// Change hero position on map
 module.exports = (db) => {
   return (req, res) => {
     const game = res.locals.game;

@@ -12,6 +12,9 @@ const fs = require('fs');
 // figureManager is used to do stuff on figureInstance's
 // we can also use figureManager to produce figureInstance's
 // figureManager for given figure resides in the server/figure/[figureName] folder
+
+// What does this module do?
+// Generates array with required all figures .js files
 module.exports = (environment) => {
   return (callback) => {
     const figureManagerTree = {};

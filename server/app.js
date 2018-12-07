@@ -25,7 +25,10 @@ let db;
 })();
 
 function setupEnvironment() {
-  if (__dirname.substr(0, 11) === '/home/galw/') {
+  if (
+    __dirname.substr(0, 11) === '/home/galw/' ||
+    __dirname.substr(0, 14) === '/home/piotrek/'
+  ) {
     environment.env = 'dev';
     environment.baseurl = 'http://localhost:3000';
   } else {
