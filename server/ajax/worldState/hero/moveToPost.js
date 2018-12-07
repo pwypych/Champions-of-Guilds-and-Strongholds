@@ -10,15 +10,17 @@ module.exports = (db) => {
   return (req, res) => {
     const game = res.locals.game;
     const playerIndex = res.locals.playerIndex;
+    const hero = game.playerArray[playerIndex].hero;
+    let moveToX;
+    let moveToY;
 
-    // check if possible
-    // check if hero is one step from wished position
-    // check if not moving
-    // update db to is moving
-    // find hero
-    // move hero
+    // X check if possible
+    // X check if hero is one step from wished position
+    // X check if just moved
+    // X move hero
+    // X update db to just moved
     // wait 500ms
-    // update db to not moving
+    // update db delete just moved flag
 
     (function init() {
       debug('init');
@@ -38,14 +40,14 @@ module.exports = (db) => {
         return;
       }
 
-      const moveToX = parseInt(req.body.moveToX, 10);
-      const moveToY = parseInt(req.body.moveToY, 10);
+      moveToX = parseInt(req.body.moveToX, 10);
+      moveToY = parseInt(req.body.moveToY, 10);
 
       debug('checkRequestBody', req.body);
-      checkIsPossible(moveToX, moveToY);
+      checkIsPossible();
     }
 
-    function checkIsPossible(moveToX, moveToY) {
+    function checkIsPossible() {
       if (!game.mapLayer[moveToY] || !game.mapLayer[moveToY][moveToX]) {
         debug(
           'checkIsPossible: map position not found: moveToY, moveToX:',
@@ -72,16 +74,63 @@ module.exports = (db) => {
         moveToX
       );
 
-      updateHeroPosition(moveToX, moveToY);
+      isOneStepFromWishedPosition();
     }
 
-    function updateHeroPosition(moveToX, moveToY) {
+    function isOneStepFromWishedPosition() {
+      const distanceX = Math.abs(hero.x - moveToX);
+      const distanceY = Math.abs(hero.y - moveToY);
+
+      if (distanceX !== 0 && distanceX !== 1) {
+        debug(
+          'isOneStepFromWishedPosition: cannot move more than one step:',
+          moveToY,
+          moveToX
+        );
+        res.send({ error: 'Cannot move more than one step' });
+        return;
+      }
+
+      if (distanceY !== 0 && distanceY !== 1) {
+        debug(
+          'isOneStepFromWishedPosition: cannot move more than one step:',
+          moveToY,
+          moveToX
+        );
+        res.send({ error: 'Cannot move more than one step' });
+        return;
+      }
+
+      debug(
+        'isOneStepFromWishedPosition: distanceX',
+        distanceX,
+        'distanceY',
+        distanceY
+      );
+      checkIfJustMoved();
+    }
+
+    function checkIfJustMoved() {
+      const isJustMoved = hero.justMoved;
+      if (isJustMoved) {
+        debug('checkIfJustMoved: hero was just moved:', moveToY, moveToX);
+        res.send({ error: 'hero was just moved' });
+        return;
+      }
+
+      debug('checkIfJustMoved: isJustMoved', isJustMoved);
+      updateHeroPosition();
+    }
+
+    function updateHeroPosition() {
       const query = { _id: game._id };
       const mongoPathX = 'playerArray.' + playerIndex + '.hero.x';
       const mongoPathY = 'playerArray.' + playerIndex + '.hero.y';
+      const mongoJustMoved = 'playerArray.' + playerIndex + '.hero.justMoved';
       const $set = {};
       $set[mongoPathX] = moveToX;
       $set[mongoPathY] = moveToY;
+      $set[mongoJustMoved] = true;
       const update = { $set: $set };
       const options = {};
 
@@ -98,6 +147,32 @@ module.exports = (db) => {
             return;
           }
 
+          debug('updateHeroPosition: isJustMoved set to true');
+          setTimeout(deleteJustMovedFlag, 500);
+        }
+      );
+    }
+
+    function deleteJustMovedFlag() {
+      const query = { _id: game._id };
+      const mongoJustMoved = 'playerArray.' + playerIndex + '.hero.justMoved';
+      const $set = {};
+      $set[mongoJustMoved] = false;
+      const update = { $set: $set };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('updateHeroPosition: error:', error);
+            res
+              .status(503)
+              .send('503 Service Unavailable - Cannot update game');
+            return;
+          }
           res.send({ error: 0 });
           debug('******************** ajax ********************');
         }
