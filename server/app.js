@@ -25,7 +25,6 @@ let db;
 })();
 
 function setupEnvironment() {
-  console.log('__dirname', __dirname);
   if (
     __dirname.substr(0, 11) === '/home/galw/' ||
     __dirname.substr(0, 14) === '/home/piotrek/'

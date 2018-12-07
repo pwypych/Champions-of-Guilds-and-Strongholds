@@ -4,6 +4,8 @@
 
 const debug = require('debug')('nope:cogs:launchStateDataGet');
 
+// What does this module do?
+// Send info about players setup
 module.exports = () => {
   return (req, res, next) => {
     const state = res.locals.game.state;

@@ -5,6 +5,8 @@
 const debug = require('debug')('cogs:preparePlayerResource');
 const _ = require('lodash');
 
+// What does this module do?
+// Set every player resources depence on race
 module.exports = (walkie, db) => {
   return () => {
     const raceResourceMap = {

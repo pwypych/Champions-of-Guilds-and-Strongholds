@@ -4,6 +4,8 @@
 
 const debug = require('debug')('cogs:playerReadyPost');
 
+// What does this module do?
+// Set player ready to 'yes' in db
 module.exports = (db, walkie) => {
   return (req, res) => {
     const game = res.locals.game;

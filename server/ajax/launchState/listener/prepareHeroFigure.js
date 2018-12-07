@@ -5,6 +5,8 @@
 const debug = require('debug')('cogs:prepareHeroFigure');
 const _ = require('lodash');
 
+// What does this module do?
+// Place every hero figure in front of a castle
 module.exports = (walkie, db) => {
   return () => {
     (function init() {

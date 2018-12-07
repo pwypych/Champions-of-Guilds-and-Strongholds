@@ -4,6 +4,8 @@
 
 const debug = require('debug')('cogs:launchCountdown');
 
+// What does this module do?
+// Change game state to worldState
 module.exports = (walkie, db) => {
   return () => {
     (function init() {

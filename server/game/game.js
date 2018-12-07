@@ -4,6 +4,8 @@
 
 const debug = require('debug')('cogs:game');
 
+// What does this module do?
+//
 module.exports = (environment, db, templateToHtml) => {
   return (req, res) => {
     const viewModel = {};

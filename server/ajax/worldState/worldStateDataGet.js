@@ -4,6 +4,8 @@
 
 const debug = require('debug')('nope:cogs:worldStateDataGet');
 
+// What does this module do?
+// Send info about player and opponents
 module.exports = () => {
   return (req, res, next) => {
     const game = res.locals.game;
