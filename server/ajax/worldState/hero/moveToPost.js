@@ -19,8 +19,8 @@ module.exports = (db) => {
     // X check if just moved
     // X move hero
     // X update db to just moved
-    // wait 500ms
-    // update db delete just moved flag
+    // X wait 500ms
+    // X update db delete just moved flag
 
     (function init() {
       debug('init');
@@ -112,6 +112,7 @@ module.exports = (db) => {
 
     function checkIfJustMoved() {
       const isJustMoved = hero.justMoved;
+
       if (isJustMoved) {
         debug('checkIfJustMoved: hero was just moved:', moveToY, moveToX);
         res.send({ error: 'hero was just moved' });
@@ -148,6 +149,10 @@ module.exports = (db) => {
           }
 
           debug('updateHeroPosition: isJustMoved set to true');
+
+          res.send({ error: 0 });
+          debug('******************** ajax ********************');
+
           setTimeout(deleteJustMovedFlag, 500);
         }
       );
@@ -156,9 +161,9 @@ module.exports = (db) => {
     function deleteJustMovedFlag() {
       const query = { _id: game._id };
       const mongoJustMoved = 'playerArray.' + playerIndex + '.hero.justMoved';
-      const $set = {};
-      $set[mongoJustMoved] = false;
-      const update = { $set: $set };
+      const $unset = {};
+      $unset[mongoJustMoved] = 'unset';
+      const update = { $unset: $unset };
       const options = {};
 
       db.collection('gameCollection').updateOne(
@@ -168,13 +173,8 @@ module.exports = (db) => {
         (error) => {
           if (error) {
             debug('updateHeroPosition: error:', error);
-            res
-              .status(503)
-              .send('503 Service Unavailable - Cannot update game');
-            return;
           }
-          res.send({ error: 0 });
-          debug('******************** ajax ********************');
+          debug('deleteJustMovedFlag: Done!');
         }
       );
     }
