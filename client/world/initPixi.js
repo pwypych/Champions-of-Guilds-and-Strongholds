@@ -14,6 +14,7 @@ g.world.initPixi = ($body) => {
   options.width = window.innerWidth;
   options.height = window.innerHeight;
   options.resolution = 2; // double pixel ratio
+  options.forceCanvas = true;
   options.view = eCanvas;
 
   const app = new PIXI.Application(options);

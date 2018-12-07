@@ -29,6 +29,12 @@ g.world.worldRender = (walkie, auth, viewport) => {
   function setViewportDimentions() {
     viewport.worldWidth = stateData.mapLayer[0].length * blockWidthPx;
     viewport.worldHeight = stateData.mapLayer.length * blockHeightPx;
+    removeViewportChildren();
+  }
+
+  function removeViewportChildren() {
+    viewport.removeChildren(); // to prevent memory leak
+
     drawBackground();
   }
 
