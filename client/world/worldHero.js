@@ -56,8 +56,6 @@ g.world.worldHero = (walkie, auth, viewport) => {
   }
 
   function checkPositionChange(x, y, playerIndex) {
-    console.log('hero now: ', y, x, 'playerIndex', playerIndex);
-    console.log('last known: ', lastPosition);
     if (typeof lastPosition[playerIndex] === 'undefined') {
       lastPosition[playerIndex] = { x: x, y: y };
     }
