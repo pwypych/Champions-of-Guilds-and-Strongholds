@@ -44,29 +44,35 @@ g.world.worldKeyboard = (walkie, auth) => {
   function addListeners() {
     $(document).keydown((event) => {
       const moveArray = [];
+      const keyboardMap = { LEFT: 37, RIGHT: 39, UP: 38, DOWN: 40 };
 
-      if (event.which === 37) {
+      if (event.which === keyboardMap.LEFT) {
+        moveArray.push({ x: heroX, y: heroY });
         moveArray.push({ x: heroX - 1, y: heroY });
         moveArray.push({ x: heroX - 2, y: heroY });
         moveArray.push({ x: heroX - 2, y: heroY - 1 });
       }
 
-      if (event.which === 38) {
-        moveArray.push({ x: heroX, y: heroY - 1 });
-        moveArray.push({ x: heroX, y: heroY - 2 });
-        moveArray.push({ x: heroX - 1, y: heroY - 2 });
-      }
-
-      if (event.which === 39) {
+      if (event.which === keyboardMap.RIGHT) {
+        moveArray.push({ x: heroX, y: heroY });
         moveArray.push({ x: heroX + 1, y: heroY });
         moveArray.push({ x: heroX + 2, y: heroY });
         moveArray.push({ x: heroX + 2, y: heroY + 1 });
       }
 
-      if (event.which === 40) {
+      if (event.which === keyboardMap.UP) {
+        moveArray.push({ x: heroX, y: heroY });
+        moveArray.push({ x: heroX, y: heroY - 1 });
+        moveArray.push({ x: heroX, y: heroY - 2 });
+        moveArray.push({ x: heroX + 1, y: heroY - 2 });
+        console.log('!!!!!!!!', moveArray);
+      }
+
+      if (event.which === keyboardMap.DOWN) {
+        moveArray.push({ x: heroX, y: heroY });
         moveArray.push({ x: heroX, y: heroY + 1 });
         moveArray.push({ x: heroX, y: heroY + 2 });
-        moveArray.push({ x: heroX + 1, y: heroY + 2 });
+        moveArray.push({ x: heroX - 1, y: heroY + 2 });
       }
 
       if (!_.isEmpty(moveArray)) {
