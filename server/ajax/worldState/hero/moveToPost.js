@@ -13,6 +13,7 @@ module.exports = (db) => {
     const hero = game.playerArray[playerIndex].hero;
     let moveToX;
     let moveToY;
+    const pathArray = [];
 
     // X check if possible
     // X check if hero is one step from wished position
@@ -28,77 +29,113 @@ module.exports = (db) => {
     })();
 
     function checkRequestBody() {
-      if (typeof req.body.moveToX !== 'string') {
-        res.status(400);
-        res.send('400 Bad Request - POST parameter moveToX not defined');
-        return;
-      }
+      req.body.moveArray.forEach((wishedPosition) => {
+        if (typeof wishedPosition.x !== 'string') {
+          res.status(400);
+          res.send('400 Bad Request - POST parameter moveToX not defined');
+          return;
+        }
 
-      if (typeof req.body.moveToY !== 'string') {
-        res.status(400);
-        res.send('400 Bad Request - POST parameter moveToX not defined');
-        return;
-      }
+        if (typeof wishedPosition.y !== 'string') {
+          res.status(400);
+          res.send('400 Bad Request - POST parameter moveToX not defined');
+          return;
+        }
 
-      moveToX = parseInt(req.body.moveToX, 10);
-      moveToY = parseInt(req.body.moveToY, 10);
+        wishedPosition.x = parseInt(wishedPosition.x, 10);
+        wishedPosition.y = parseInt(wishedPosition.y, 10);
+        pathArray.push(wishedPosition);
+      });
 
-      debug('checkRequestBody', req.body);
-      checkIsPossible();
+      debug('checkRequestBody: req.body', req.body);
+      debug('checkRequestBody: wishedPosition', pathArray);
+      checkHeroFirstMove();
     }
 
-    function checkIsPossible() {
-      if (!game.mapLayer[moveToY] || !game.mapLayer[moveToY][moveToX]) {
+    function forEachWishedPosition(pathArray) {
+      const done = _.after(pathArray.length, () => {
+        debug('forEachPlayer: done!');
+        triggerPrepareReady(game);
+      });
+
+      pathArray.forEach((place, moveIndex) => {
+        debug('forEachWishedPosition', place);
+        checkRequestBody(place, moveIndex, done);
+      });
+    }
+
+    function deleteJustMovedFlag() {
+      const query = { _id: game._id };
+      const mongoJustMoved = 'playerArray.' + playerIndex + '.hero.justMoved';
+      const $unset = {};
+      $unset[mongoJustMoved] = 'unset';
+      const update = { $unset: $unset };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('updateHeroPosition: error:', error);
+          }
+          debug('deleteJustMovedFlag: Done!');
+        }
+      );
+    }
+
+    // ---------- TOOLS ----------
+    function toolCheckIsPossible(positionPoint) {
+      if (
+        !game.mapLayer[positionPoint.y] ||
+        !game.mapLayer[positionPoint.y][positionPoint.x]
+      ) {
         debug(
           'checkIsPossible: map position not found: moveToY, moveToX:',
-          moveToY,
-          moveToX
+          positionPoint.y,
+          positionPoint.x
         );
-        res.send({ error: 'map position not found' });
-        return;
+        return false;
       }
 
-      if (game.mapLayer[moveToY][moveToX].collision) {
+      if (game.mapLayer[positionPoint.y][positionPoint.x].collision) {
         debug(
           'checkIsPossible: cannot move because collision on: moveToY, moveToX:',
-          moveToY,
-          moveToX
+          positionPoint.y,
+          positionPoint.x
         );
-        res.send({ error: 'collision' });
-        return;
+        return false;
       }
 
       debug(
         'checkIsPossible: yes! will move to: moveToY, moveToX:',
-        moveToY,
-        moveToX
+        positionPoint.y,
+        positionPoint.x
       );
-
-      isOneStepFromWishedPosition();
+      return true;
     }
 
-    function isOneStepFromWishedPosition() {
-      const distanceX = Math.abs(hero.x - moveToX);
-      const distanceY = Math.abs(hero.y - moveToY);
+    function toolIsOneStepFromWishedPosition(startPosition, endPosition) {
+      const distanceX = Math.abs(startPosition.x - endPosition.x);
+      const distanceY = Math.abs(startPosition.y - endPosition.y);
 
       if (distanceX !== 0 && distanceX !== 1) {
         debug(
           'isOneStepFromWishedPosition: cannot move more than one step:',
-          moveToY,
-          moveToX
+          endPosition.y,
+          endPosition.x
         );
-        res.send({ error: 'Cannot move more than one step' });
-        return;
+        return false;
       }
 
       if (distanceY !== 0 && distanceY !== 1) {
         debug(
           'isOneStepFromWishedPosition: cannot move more than one step:',
-          moveToY,
-          moveToX
+          endPosition.y,
+          endPosition.x
         );
-        res.send({ error: 'Cannot move more than one step' });
-        return;
+        return false;
       }
 
       debug(
@@ -107,20 +144,23 @@ module.exports = (db) => {
         'distanceY',
         distanceY
       );
-      checkIfJustMoved();
+      return true;
     }
 
-    function checkIfJustMoved() {
+    function toolCheckIfJustMoved(positionPoint) {
       const isJustMoved = hero.justMoved;
 
       if (isJustMoved) {
-        debug('checkIfJustMoved: hero was just moved:', moveToY, moveToX);
-        res.send({ error: 'hero was just moved' });
-        return;
+        debug(
+          'checkIfJustMoved: hero was just moved:',
+          positionPoint.y,
+          positionPoint.x
+        );
+        return false;
       }
 
       debug('checkIfJustMoved: isJustMoved', isJustMoved);
-      updateHeroPosition();
+      return true;
     }
 
     function updateHeroPosition() {
@@ -154,27 +194,6 @@ module.exports = (db) => {
           debug('******************** ajax ********************');
 
           setTimeout(deleteJustMovedFlag, 300);
-        }
-      );
-    }
-
-    function deleteJustMovedFlag() {
-      const query = { _id: game._id };
-      const mongoJustMoved = 'playerArray.' + playerIndex + '.hero.justMoved';
-      const $unset = {};
-      $unset[mongoJustMoved] = 'unset';
-      const update = { $unset: $unset };
-      const options = {};
-
-      db.collection('gameCollection').updateOne(
-        query,
-        update,
-        options,
-        (error) => {
-          if (error) {
-            debug('updateHeroPosition: error:', error);
-          }
-          debug('deleteJustMovedFlag: Done!');
         }
       );
     }

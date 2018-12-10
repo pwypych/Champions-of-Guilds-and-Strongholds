@@ -46,27 +46,27 @@ g.world.worldKeyboard = (walkie, auth) => {
       const moveArray = [];
 
       if (event.which === 37) {
-        moveArray.push([heroX - 1, heroY]);
-        moveArray.push([heroX - 2, heroY]);
-        moveArray.push([heroX - 2, heroY - 1]);
+        moveArray.push({ x: heroX - 1, y: heroY });
+        moveArray.push({ x: heroX - 2, y: heroY });
+        moveArray.push({ x: heroX - 2, y: heroY - 1 });
       }
 
       if (event.which === 38) {
-        moveArray.push([heroX, heroY - 1]);
-        moveArray.push([heroX, heroY - 2]);
-        moveArray.push([heroX - 1, heroY - 2]);
+        moveArray.push({ x: heroX, y: heroY - 1 });
+        moveArray.push({ x: heroX, y: heroY - 2 });
+        moveArray.push({ x: heroX - 1, y: heroY - 2 });
       }
 
       if (event.which === 39) {
-        moveArray.push([heroX + 1, heroY]);
-        moveArray.push([heroX + 2, heroY]);
-        moveArray.push([heroX + 2, heroY + 1]);
+        moveArray.push({ x: heroX + 1, y: heroY });
+        moveArray.push({ x: heroX + 2, y: heroY });
+        moveArray.push({ x: heroX + 2, y: heroY + 1 });
       }
 
       if (event.which === 40) {
-        moveArray.push([heroX, heroY + 1]);
-        moveArray.push([heroX, heroY + 2]);
-        moveArray.push([heroX + 1, heroY + 2]);
+        moveArray.push({ x: heroX, y: heroY + 1 });
+        moveArray.push({ x: heroX, y: heroY + 2 });
+        moveArray.push({ x: heroX + 1, y: heroY + 2 });
       }
 
       if (!_.isEmpty(moveArray)) {
