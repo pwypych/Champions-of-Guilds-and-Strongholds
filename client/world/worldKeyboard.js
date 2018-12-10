@@ -43,50 +43,48 @@ g.world.worldKeyboard = (walkie, auth) => {
 
   function addListeners() {
     $(document).keydown((event) => {
-      let moveToY;
-      let moveToX;
+      const moveArray = [];
 
       if (event.which === 37) {
-        moveToY = heroY;
-        moveToX = heroX - 1;
+        moveArray.push([heroX - 1, heroY]);
+        moveArray.push([heroX - 2, heroY]);
+        moveArray.push([heroX - 2, heroY - 1]);
       }
 
       if (event.which === 38) {
-        moveToY = heroY - 1;
-        moveToX = heroX;
+        moveArray.push([heroX, heroY - 1]);
+        moveArray.push([heroX, heroY - 2]);
+        moveArray.push([heroX - 1, heroY - 2]);
       }
 
       if (event.which === 39) {
-        moveToY = heroY;
-        moveToX = heroX + 1;
+        moveArray.push([heroX + 1, heroY]);
+        moveArray.push([heroX + 2, heroY]);
+        moveArray.push([heroX + 2, heroY + 1]);
       }
 
       if (event.which === 40) {
-        moveToY = heroY + 1;
-        moveToX = heroX;
+        moveArray.push([heroX, heroY + 1]);
+        moveArray.push([heroX, heroY + 2]);
+        moveArray.push([heroX + 1, heroY + 2]);
       }
 
-      if (typeof moveToY !== 'undefined' && typeof moveToX !== 'undefined') {
-        sendRequest(moveToY, moveToX);
+      if (!_.isEmpty(moveArray)) {
+        sendRequest(moveArray);
       }
     });
 
-    function sendRequest(moveToY, moveToX) {
-      const data = {
-        moveToY: moveToY,
-        moveToX: moveToX
-      };
-
+    function sendRequest(moveArray) {
+      const data = { moveArray: moveArray };
+      console.log('moveArray', moveArray);
       $.post('/ajax/worldState/hero/moveToPost' + auth.uri, data, () => {
-        triggerHeroMoveTo(moveToY, moveToX);
+        triggerHeroMoveTo(moveArray);
       });
     }
 
-    function triggerHeroMoveTo(moveToY, moveToX) {
-      walkie.triggerEvent('heroMoveTo_', 'worldKeyboard', {
-        moveToY: moveToY,
-        moveToX: moveToX
-      });
+    function triggerHeroMoveTo(moveArray) {
+      // walkie.triggerEvent('heroMoveTo_', 'worldKeyboard', {
+      // });
     }
   }
 

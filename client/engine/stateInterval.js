@@ -3,7 +3,7 @@
 'use strict';
 
 g.engine.stateInterval = (walkie, auth) => {
-  const every = 300;
+  const every = 2000;
 
   (function init() {
     createInterval();
