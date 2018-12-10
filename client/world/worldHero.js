@@ -12,11 +12,11 @@ g.world.worldHero = (walkie, auth, viewport) => {
   const blockHeightPx = 32;
 
   (function init() {
-    onStateChange();
+    onWorldRenderDone();
     onHeroMoveTo();
   })();
 
-  function onStateChange() {
+  function onWorldRenderDone() {
     walkie.onEvent(
       'worldRenderDone_',
       'worldHero.js',
@@ -56,8 +56,8 @@ g.world.worldHero = (walkie, auth, viewport) => {
   }
 
   function checkPositionChange(x, y, playerIndex) {
-    console.log('hero now: ', y, x, 'playerIndex', playerIndex);
-    console.log('last known: ', lastPosition);
+    // console.log('hero now: ', y, x, 'playerIndex', playerIndex);
+    // console.log('last known: ', lastPosition);
     if (typeof lastPosition[playerIndex] === 'undefined') {
       lastPosition[playerIndex] = { x: x, y: y };
     }
@@ -87,14 +87,14 @@ g.world.worldHero = (walkie, auth, viewport) => {
     lastPosition[playerIndex].x = moveToX;
     lastPosition[playerIndex].y = moveToY;
 
-    console.log(
-      'end slide on:',
-      tweenX,
-      tweenY,
-      'hero currently on:',
-      heroX,
-      heroY
-    );
+    // console.log(
+    //   'end slide on:',
+    //   tweenX,
+    //   tweenY,
+    //   'hero currently on:',
+    //   heroX,
+    //   heroY
+    // );
 
     const path = new PIXI.tween.TweenPath();
     path.moveTo(heroX, heroY).lineTo(tweenX, tweenY);

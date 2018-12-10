@@ -41,5 +41,7 @@ g.main = function main() {
     g.world.worldRender(walkie, auth, viewport);
     g.world.worldHero(walkie, auth, viewport);
     g.world.worldKeyboard(walkie, auth);
+    g.world.worldSingleClick(walkie, auth, viewport);
+    g.world.worldPath(walkie, auth, viewport);
   }
 };
