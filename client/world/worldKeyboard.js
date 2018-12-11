@@ -43,57 +43,65 @@ g.world.worldKeyboard = (walkie, auth) => {
 
   function addListeners() {
     $(document).keydown((event) => {
-      const moveArray = [];
+      const pavement = [];
       const keyboardMap = { LEFT: 37, RIGHT: 39, UP: 38, DOWN: 40 };
 
       if (event.which === keyboardMap.LEFT) {
-        moveArray.push({ x: heroX, y: heroY });
-        moveArray.push({ x: heroX - 1, y: heroY });
-        moveArray.push({ x: heroX - 2, y: heroY });
-        moveArray.push({ x: heroX - 2, y: heroY - 1 });
+        pavement.push({
+          fromX: heroX,
+          fromY: heroY,
+          toX: heroX - 1,
+          toY: heroY
+        });
+        pavement.push({
+          fromX: heroX - 1,
+          fromY: heroY,
+          toX: heroX - 2,
+          toY: heroY
+        });
+        pavement.push({
+          fromX: heroX - 2,
+          fromY: heroY,
+          toX: heroX - 2,
+          toY: heroY - 1
+        });
       }
 
       if (event.which === keyboardMap.RIGHT) {
-        moveArray.push({ x: heroX, y: heroY });
-        moveArray.push({ x: heroX + 1, y: heroY });
-        moveArray.push({ x: heroX + 2, y: heroY });
-        moveArray.push({ x: heroX + 2, y: heroY + 1 });
+        // pavement.push({ x: heroX, y: heroY });
+        // pavement.push({ x: heroX + 1, y: heroY });
+        // pavement.push({ x: heroX + 2, y: heroY });
+        // pavement.push({ x: heroX + 2, y: heroY + 1 });
       }
 
       if (event.which === keyboardMap.UP) {
-        moveArray.push({ x: heroX, y: heroY });
-        moveArray.push({ x: heroX, y: heroY - 1 });
-        moveArray.push({ x: heroX, y: heroY - 2 });
-        moveArray.push({ x: heroX + 1, y: heroY - 2 });
-        console.log('!!!!!!!!', moveArray);
+        // pavement.push({ x: heroX, y: heroY });
+        // pavement.push({ x: heroX, y: heroY - 1 });
+        // pavement.push({ x: heroX, y: heroY - 2 });
+        // pavement.push({ x: heroX + 1, y: heroY - 2 });
+        console.log('!!!!!!!!', pavement);
       }
 
       if (event.which === keyboardMap.DOWN) {
-        moveArray.push({ x: heroX, y: heroY });
-        moveArray.push({ x: heroX, y: heroY + 1 });
-        moveArray.push({ x: heroX, y: heroY + 2 });
-        moveArray.push({ x: heroX - 1, y: heroY + 2 });
+        // pavement.push({ x: heroX, y: heroY });
+        // pavement.push({ x: heroX, y: heroY + 1 });
+        // pavement.push({ x: heroX, y: heroY + 2 });
+        // pavement.push({ x: heroX - 1, y: heroY + 2 });
       }
 
-      if (!_.isEmpty(moveArray)) {
-        sendRequest(moveArray);
+      if (!_.isEmpty(pavement)) {
+        sendRequest(pavement);
       }
     });
 
-    function sendRequest(moveArray) {
-      const data = { moveArray: moveArray };
-      console.log('moveArray', moveArray);
-      $.post('/ajax/worldState/hero/moveToPost' + auth.uri, data, () => {
-        triggerHeroMoveTo(moveArray);
-      });
-    }
-
-    function triggerHeroMoveTo(moveArray) {
-      // walkie.triggerEvent('heroMoveTo_', 'worldKeyboard', {
-      // });
+    function sendRequest(pavement) {
+      const data = { heroPavement: pavement };
+      console.log('pavement', pavement);
+      $.post(
+        '/ajax/worldState/hero/heroPavementGet' + auth.uri,
+        data,
+        () => {}
+      );
     }
   }
-
-  // wait on tick?
-  // run animation
 };
