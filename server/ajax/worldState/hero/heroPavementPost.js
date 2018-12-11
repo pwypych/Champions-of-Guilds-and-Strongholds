@@ -62,7 +62,7 @@ module.exports = (walkie) => {
       walkie.triggerEvent('wishedHeroPavement_', 'heroPavementPost.js', {
         gameId: game._id,
         playerIndex: playerIndex,
-        pathArray: heroPavement
+        heroPavement: heroPavement
       });
     }
   };
