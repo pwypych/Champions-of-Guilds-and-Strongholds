@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// It listens to mouse click events, generates path through library and sends path events
 g.world.worldSingleClick = (walkie, auth, viewport) => {
   let stateData;
 
@@ -10,6 +12,9 @@ g.world.worldSingleClick = (walkie, auth, viewport) => {
 
   let clickX;
   let clickY;
+
+  let lastPathPositionX;
+  let lastPathPositionY;
 
   (function init() {
     onStateDataGet();
@@ -87,6 +92,29 @@ g.world.worldSingleClick = (walkie, auth, viewport) => {
     const pathArray = pathArrayOfArrays.map((path) => {
       return { x: path[0], y: path[1] };
     });
+
+    triggerEvents(pathArray);
+  }
+
+  function triggerEvents(pathArray) {
+    if (lastPathPositionX && lastPathPositionY) {
+      if (lastPathPositionX === clickX && lastPathPositionY === clickY) {
+        lastPathPositionX = undefined;
+        lastPathPositionY = undefined;
+        walkie.triggerEvent('pathAccepted_', 'worldSingleClick.js', {
+          pathArray: pathArray
+        });
+        return;
+      }
+    }
+
+    if (!_.isEmpty(pathArray) && pathArray.length > 1) {
+      lastPathPositionX = pathArray[pathArray.length - 1].x;
+      lastPathPositionY = pathArray[pathArray.length - 1].y;
+    } else {
+      lastPathPositionX = undefined;
+      lastPathPositionY = undefined;
+    }
 
     if (!_.isEmpty(pathArray) && pathArray.length > 1) {
       walkie.triggerEvent('pathCalculated_', 'worldSingleClick.js', {

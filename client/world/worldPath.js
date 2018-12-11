@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// It listens to path events, and renders path accordingly
 g.world.worldPath = (walkie, auth, viewport) => {
   let pathArray;
   let gPathArray = [];
@@ -12,6 +14,7 @@ g.world.worldPath = (walkie, auth, viewport) => {
   (function init() {
     onPathCalculated();
     onPathImpossible();
+    onPathAccepted();
     onWorldRenderDone();
   })();
 
@@ -25,6 +28,12 @@ g.world.worldPath = (walkie, auth, viewport) => {
 
   function onPathImpossible() {
     walkie.onEvent('pathImpossible_', 'worldPath.js', () => {
+      toolRemoveOldPath();
+    });
+  }
+
+  function onPathAccepted() {
+    walkie.onEvent('pathAccepted_', 'worldPath.js', () => {
       toolRemoveOldPath();
     });
   }
