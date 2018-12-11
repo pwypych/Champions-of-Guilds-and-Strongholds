@@ -3,6 +3,7 @@
 'use strict';
 
 const debug = require('debug')('cogs:ajax:worldState:hero:moveToPost');
+const async = require('async');
 
 // What does this module do?
 // Change hero position on map
@@ -47,29 +48,75 @@ module.exports = (db) => {
         pathArray.push(wishedPosition);
       });
 
-      debug('checkRequestBody: req.body', req.body);
       debug('checkRequestBody: wishedPosition', pathArray);
-      checkHeroFirstMove();
+      forEachWishedPosition();
     }
 
-    function forEachWishedPosition(pathArray) {
-      const done = _.after(pathArray.length, () => {
-        debug('forEachPlayer: done!');
-        triggerPrepareReady(game);
-      });
+    function forEachWishedPosition() {
+      let index = 0;
+      async.eachSeries(
+        pathArray,
+        (currentPosition, done) => {
+          let wishedPosition = pathArray[index + 1];
 
-      pathArray.forEach((place, moveIndex) => {
-        debug('forEachWishedPosition', place);
-        checkRequestBody(place, moveIndex, done);
-      });
+          if (index === pathArray.length - 1) {
+            done();
+            return;
+          }
+
+          debug('currentPosition', currentPosition);
+          debug('wishedPosition', wishedPosition);
+
+          moveHeroOneTile(currentPosition, wishedPosition, index, done);
+          index += 1;
+        },
+        (error) => {
+          debug('done', index);
+          res.send({ error: 0 });
+        }
+      );
     }
 
-    function deleteJustMovedFlag() {
+    function moveHeroOneTile(currentPosition, wishedPosition, index, done) {
+      debug('moveHeroOneTile: index', index);
+      // if (!toolCheckIsPossible(wishedPosition)) {
+      //   done();
+      //   return;
+      // }
+
+      // if (!toolCheckIfJustMoved(currentPosition)) {
+      //   done();
+      //   return;
+      // }
+      // debug('moveHeroOneTile:toolCheckIfJustMoved');
+
+      // if (!toolIsOneStepFromWishedPosition(currentPosition, wishedPosition)) {
+      //   done();
+      //   return;
+      // }
+
+      if (!toolUpdateHeroPosition(wishedPosition)) {
+        done();
+        return;
+      }
+
+      debug('moveHeroOneTile: Hero moved');
+
+      done();
+    }
+
+    // ---------- TOOLS ----------
+
+    function toolUpdateHeroPosition(positionPoint) {
       const query = { _id: game._id };
+      const mongoPathX = 'playerArray.' + playerIndex + '.hero.x';
+      const mongoPathY = 'playerArray.' + playerIndex + '.hero.y';
       const mongoJustMoved = 'playerArray.' + playerIndex + '.hero.justMoved';
-      const $unset = {};
-      $unset[mongoJustMoved] = 'unset';
-      const update = { $unset: $unset };
+      const $set = {};
+      $set[mongoPathX] = positionPoint.x;
+      $set[mongoPathY] = positionPoint.y;
+      $set[mongoJustMoved] = true;
+      const update = { $set: $set };
       const options = {};
 
       db.collection('gameCollection').updateOne(
@@ -79,13 +126,18 @@ module.exports = (db) => {
         (error) => {
           if (error) {
             debug('updateHeroPosition: error:', error);
+            return false;
           }
-          debug('deleteJustMovedFlag: Done!');
+
+          // debug('updateHeroPosition: isJustMoved set to true');
+          debug('******************** ajax ********************');
+          // setTimeout(() => {
+          //   done()
+          // }, 300);
+          return true;
         }
       );
     }
-
-    // ---------- TOOLS ----------
     function toolCheckIsPossible(positionPoint) {
       if (
         !game.mapLayer[positionPoint.y] ||
@@ -163,16 +215,12 @@ module.exports = (db) => {
       return true;
     }
 
-    function updateHeroPosition() {
+    function toolDeleteJustMovedFlag() {
       const query = { _id: game._id };
-      const mongoPathX = 'playerArray.' + playerIndex + '.hero.x';
-      const mongoPathY = 'playerArray.' + playerIndex + '.hero.y';
       const mongoJustMoved = 'playerArray.' + playerIndex + '.hero.justMoved';
-      const $set = {};
-      $set[mongoPathX] = moveToX;
-      $set[mongoPathY] = moveToY;
-      $set[mongoJustMoved] = true;
-      const update = { $set: $set };
+      const $unset = {};
+      $unset[mongoJustMoved] = 'unset';
+      const update = { $unset: $unset };
       const options = {};
 
       db.collection('gameCollection').updateOne(
@@ -182,18 +230,8 @@ module.exports = (db) => {
         (error) => {
           if (error) {
             debug('updateHeroPosition: error:', error);
-            res
-              .status(503)
-              .send('503 Service Unavailable - Cannot update game');
-            return;
           }
-
-          debug('updateHeroPosition: isJustMoved set to true');
-
-          res.send({ error: 0 });
-          debug('******************** ajax ********************');
-
-          setTimeout(deleteJustMovedFlag, 300);
+          debug('toolDeleteJustMovedFlag: Done!');
         }
       );
     }

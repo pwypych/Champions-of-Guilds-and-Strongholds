@@ -206,6 +206,13 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/worldState/hero/moveToPost.js')(db)
   );
 
+  app.post(
+    '/ajax/worldState/heroPavementGet',
+    require('./library/middlewareTokenAuth.js')(db),
+    require('./library/middlewareAjaxStateAuth.js')('worldState'),
+    require('./ajax/worldState/heroPavementGet.js')(walkie)
+  );
+
   debug('setupLibrariesAndRoutes()');
   setupExpress();
 }
