@@ -18,14 +18,15 @@ g.main = function main() {
     const viewport = g.world.initViewport(app);
     g.world.initTween(app);
 
-    g.world.initImages(() => {
-      setupLibraries($body, app, viewport);
+    const auth = g.tool.auth();
+
+    g.world.initImages(auth, () => {
+      setupLibraries($body, app, viewport, auth);
     });
   }
 
-  function setupLibraries($body, app, viewport) {
+  function setupLibraries($body, app, viewport, auth) {
     const walkie = g.tool.walkie();
-    const auth = g.tool.auth();
 
     g.engine.stateChange(walkie, auth);
     g.engine.stateInterval(walkie, auth);

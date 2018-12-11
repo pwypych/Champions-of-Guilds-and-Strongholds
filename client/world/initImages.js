@@ -2,24 +2,41 @@
 
 'use strict';
 
-g.world.initImages = (callback) => {
-  const spriteFilenameArray = [
-    'castleRandom.png',
-    'dirt.png',
-    'rock.png',
-    'tree.png',
-    'empty.png',
-    'heroHuman.png'
-  ];
+g.world.initImages = (auth, callback) => {
+  (function init() {
+    getSpriteFilenameArray();
+  })();
 
-  spriteFilenameArray.forEach((spriteFilename) => {
-    const uri = '/sprite/' + spriteFilename;
-    const name = spriteFilename.substr(0, spriteFilename.length - 4);
-    console.log('initImages:', name, uri);
-    PIXI.loader.add(name, uri);
-  });
+  // spriteFilenameArray = [
+  //   'castleRandom.png',
+  //   'dirt.png',
+  //   'rock.png',
+  //   ...
+  // ];
 
-  PIXI.loader.load(() => {
-    callback();
-  });
+  function getSpriteFilenameArray() {
+    $.get(
+      '/ajax/worldState/load/spriteFilenameArray' + auth.uri,
+      (spriteFilenameArray) => {
+        forEachSpriteFilename(spriteFilenameArray);
+      }
+    );
+  }
+
+  function forEachSpriteFilename(spriteFilenameArray) {
+    spriteFilenameArray.forEach((spriteFilename) => {
+      const uri = '/sprite/' + spriteFilename;
+      const name = spriteFilename.substr(0, spriteFilename.length - 4);
+      console.log('initImages:', name, uri);
+      PIXI.loader.add(name, uri);
+    });
+
+    loadSprites();
+  }
+
+  function loadSprites() {
+    PIXI.loader.load(() => {
+      callback();
+    });
+  }
 };
