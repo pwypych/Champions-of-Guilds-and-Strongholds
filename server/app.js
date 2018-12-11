@@ -207,10 +207,10 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   app.post(
-    '/ajax/worldState/heroPavementGet',
+    '/ajax/worldState/hero/heroPavementPost',
     require('./library/middlewareTokenAuth.js')(db),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/worldState/heroPavementGet.js')(walkie)
+    require('./ajax/worldState/hero/heroPavementPost.js')(walkie)
   );
 
   debug('setupLibrariesAndRoutes()');

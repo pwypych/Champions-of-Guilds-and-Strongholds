@@ -68,25 +68,66 @@ g.world.worldKeyboard = (walkie, auth) => {
       }
 
       if (event.which === keyboardMap.RIGHT) {
-        // pavement.push({ x: heroX, y: heroY });
-        // pavement.push({ x: heroX + 1, y: heroY });
-        // pavement.push({ x: heroX + 2, y: heroY });
-        // pavement.push({ x: heroX + 2, y: heroY + 1 });
+        pavement.push({
+          fromX: heroX,
+          fromY: heroY,
+          toX: heroX + 1,
+          toY: heroY
+        });
+        pavement.push({
+          fromX: heroX + 1,
+          fromY: heroY,
+          toX: heroX + 2,
+          toY: heroY
+        });
+        pavement.push({
+          fromX: heroX + 2,
+          fromY: heroY,
+          toX: heroX + 2,
+          toY: heroY + 1
+        });
       }
 
       if (event.which === keyboardMap.UP) {
-        // pavement.push({ x: heroX, y: heroY });
-        // pavement.push({ x: heroX, y: heroY - 1 });
-        // pavement.push({ x: heroX, y: heroY - 2 });
-        // pavement.push({ x: heroX + 1, y: heroY - 2 });
-        console.log('!!!!!!!!', pavement);
+        pavement.push({
+          fromX: heroX,
+          fromY: heroY,
+          toX: heroX,
+          toY: heroY - 1
+        });
+        pavement.push({
+          fromX: heroX,
+          fromY: heroY - 1,
+          toX: heroX,
+          toY: heroY - 2
+        });
+        pavement.push({
+          fromX: heroX,
+          fromY: heroY - 2,
+          toX: heroX + 1,
+          toY: heroY - 2
+        });
       }
 
       if (event.which === keyboardMap.DOWN) {
-        // pavement.push({ x: heroX, y: heroY });
-        // pavement.push({ x: heroX, y: heroY + 1 });
-        // pavement.push({ x: heroX, y: heroY + 2 });
-        // pavement.push({ x: heroX - 1, y: heroY + 2 });
+        pavement.push({
+          fromX: heroX,
+          fromY: heroY,
+          toX: heroX,
+          toY: heroY + 1
+        });
+        pavement.push({
+          fromX: heroX,
+          fromY: heroY + 1,
+          toX: heroX,
+          toY: heroY + 2
+        });
+        pavement.push({
+          fromX: heroX,
+          fromY: heroY + 2,
+          toX: heroX - 1,
+          toY: heroY + 2
+        });
       }
 
       if (!_.isEmpty(pavement)) {
