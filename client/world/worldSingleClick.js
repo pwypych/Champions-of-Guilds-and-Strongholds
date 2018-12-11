@@ -4,74 +4,48 @@
 
 // What does this module do?
 // It listens to mouse click events, generates path through library and sends path events
-g.world.worldSingleClick = (walkie, auth, viewport) => {
-  let stateData;
-
-  let heroX;
-  let heroY;
-
-  let clickX;
-  let clickY;
-
+g.world.worldSingleClick = (walkie, auth, viewport, freshStateData) => {
   let lastPathPositionX;
   let lastPathPositionY;
 
   (function init() {
-    onStateDataGet();
-    onStateChange();
+    addListener();
   })();
-
-  function onStateDataGet() {
-    walkie.onEvent(
-      'stateDataGet_',
-      'worldSingleClick.js',
-      (data) => {
-        if (data.state === 'worldState') {
-          stateData = data;
-          findHeroYX();
-        }
-      },
-      false
-    );
-  }
-
-  function findHeroYX() {
-    const playerArray = stateData.playerArray;
-    const playerIndex = stateData.playerIndex;
-
-    heroX = parseInt(playerArray[playerIndex].hero.x, 10);
-    heroY = parseInt(playerArray[playerIndex].hero.y, 10);
-  }
-
-  function onStateChange() {
-    walkie.onEvent('stateChange_', 'worldSingleClick.js', (state) => {
-      if (state === 'worldState') {
-        addListener();
-      } else {
-        removeListener();
-      }
-    });
-  }
-
-  function removeListener() {
-    viewport.removeListener('clicked');
-  }
 
   function addListener() {
     viewport.on('clicked', (event) => {
-      clickX = Math.floor(event.world.x / 32);
-      clickY = Math.floor(event.world.y / 32);
-      generatePathGrid();
+      if (freshStateData().state !== 'worldState') {
+        return;
+      }
+
+      calculateClickedTile(event);
     });
   }
 
-  function generatePathGrid() {
-    const width = stateData.mapLayer[0].length;
-    const height = stateData.mapLayer.length;
+  function calculateClickedTile(event) {
+    const clickX = Math.floor(event.world.x / 32);
+    const clickY = Math.floor(event.world.y / 32);
+
+    findHeroYX(clickX, clickY);
+  }
+
+  function findHeroYX(clickX, clickY) {
+    const playerArray = freshStateData().playerArray;
+    const playerIndex = freshStateData().playerIndex;
+
+    const heroX = parseInt(playerArray[playerIndex].hero.x, 10);
+    const heroY = parseInt(playerArray[playerIndex].hero.y, 10);
+
+    generatePathGrid(clickX, clickY, heroX, heroY);
+  }
+
+  function generatePathGrid(clickX, clickY, heroX, heroY) {
+    const width = freshStateData().mapLayer[0].length;
+    const height = freshStateData().mapLayer.length;
 
     const grid = new PF.Grid(width, height);
 
-    stateData.mapLayer.forEach((row, y) => {
+    freshStateData().mapLayer.forEach((row, y) => {
       row.forEach((figure, x) => {
         if (figure.collision) {
           grid.setWalkableAt(x, y, false);
@@ -93,10 +67,10 @@ g.world.worldSingleClick = (walkie, auth, viewport) => {
       return { x: path[0], y: path[1] };
     });
 
-    triggerEvents(pathArray);
+    triggerEvents(pathArray, clickX, clickY);
   }
 
-  function triggerEvents(pathArray) {
+  function triggerEvents(pathArray, clickX, clickY) {
     if (lastPathPositionX && lastPathPositionY) {
       if (lastPathPositionX === clickX && lastPathPositionY === clickY) {
         lastPathPositionX = undefined;
