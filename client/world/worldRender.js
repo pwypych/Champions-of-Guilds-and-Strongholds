@@ -17,10 +17,12 @@ g.world.worldRender = (walkie, auth, viewport) => {
       'stateDataGet_',
       'worldToggle.js',
       (data) => {
-        if (data.state === 'worldState') {
-          stateData = data;
-          setViewportDimentions();
+        if (data.state !== 'worldState') {
+          return;
         }
+
+        stateData = data;
+        setViewportDimentions();
       },
       false
     );
@@ -87,6 +89,6 @@ g.world.worldRender = (walkie, auth, viewport) => {
   }
 
   function triggerWorldRenderDone() {
-    walkie.triggerEvent('worldRenderDone_', 'worldRender.js', stateData, false);
+    walkie.triggerEvent('worldRenderDone_', 'worldRender.js', {}, false);
   }
 };

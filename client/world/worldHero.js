@@ -2,8 +2,7 @@
 
 'use strict';
 
-g.world.worldHero = (walkie, auth, viewport) => {
-  let stateData;
+g.world.worldHero = (walkie, auth, viewport, freshStateData) => {
   let sprite;
 
   const lastPosition = [];
@@ -20,8 +19,7 @@ g.world.worldHero = (walkie, auth, viewport) => {
     walkie.onEvent(
       'worldRenderDone_',
       'worldHero.js',
-      (data) => {
-        stateData = data;
+      () => {
         findHero();
       },
       false
@@ -31,8 +29,7 @@ g.world.worldHero = (walkie, auth, viewport) => {
   function findHero() {
     $('body').css('cursor', 'default');
 
-    // const hero = stateData.playerArray[stateData.playerIndex].hero;
-    stateData.playerArray.forEach((player, playerIndex) => {
+    freshStateData().playerArray.forEach((player, playerIndex) => {
       instantiateHeroSprite(player.hero.x, player.hero.y, playerIndex);
     });
   }

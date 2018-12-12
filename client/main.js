@@ -31,7 +31,7 @@ g.main = function main() {
     g.engine.stateChange(walkie, auth);
     g.engine.stateInterval(walkie, auth);
 
-    const stateData = g.engine.freshStateData(walkie);
+    const freshStateData = g.engine.freshStateData(walkie);
 
     g.launch.launchToggle($body, walkie);
     g.launch.launchInputName($body, auth);
@@ -42,9 +42,9 @@ g.main = function main() {
 
     g.world.worldToggle($body, walkie);
     g.world.worldRender(walkie, auth, viewport);
-    g.world.worldHero(walkie, auth, viewport);
+    g.world.worldHero(walkie, auth, viewport, freshStateData);
     g.world.worldKeyboard(walkie, auth);
-    g.world.worldSingleClick(walkie, auth, viewport, stateData);
+    g.world.worldSingleClick(walkie, auth, viewport, freshStateData);
     g.world.worldPath(walkie, auth, viewport);
     g.world.worldJourney(walkie, auth);
   }
