@@ -59,11 +59,16 @@ module.exports = (walkie) => {
     function sendResponce(heroJourney) {
       res.send({ error: 0 });
       debug('******************** ajax ********************');
-      walkie.triggerEvent('wishedHeroJourney_', 'heroJourneyPost.js', {
-        gameId: game._id,
-        playerIndex: playerIndex,
-        heroJourney: heroJourney
-      });
+      walkie.triggerEvent(
+        'wishedHeroJourney_',
+        'heroJourneyPost.js',
+        {
+          gameId: game._id,
+          playerIndex: playerIndex,
+          heroJourney: heroJourney
+        },
+        false
+      );
     }
   };
 };

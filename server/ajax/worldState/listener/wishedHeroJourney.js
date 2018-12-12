@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:wishedHeroJourney');
 const async = require('async');
 
 // What does this module do?
-// Get wishedHeroJourney and emmit event that move hero by one step
+// Get wishedHeroJourney_ and emmits wishedHeroStep_ events by a defined timer
 module.exports = (walkie, db) => {
   return () => {
     (function init() {
@@ -15,133 +15,157 @@ module.exports = (walkie, db) => {
     })();
 
     function onWishedHeroJourney() {
-      walkie.onEvent('wishedHeroJourney_', 'wishedHeroJourney.js', (data) => {
-        const gameId = data.gameId;
-        const heroJourney = data.heroJourney;
-        const playerIndex = data.playerIndex;
-        debug('onWishedHeroJourney');
-        findGameById(gameId, heroJourney, playerIndex);
-      });
+      walkie.onEvent(
+        'wishedHeroJourney_',
+        'wishedHeroJourney.js',
+        (data) => {
+          debug('******************** listener start ********************');
+          const ctx = {};
+          ctx.gameId = data.gameId;
+          ctx.playerIndex = data.playerIndex;
+          ctx.heroJourney = data.heroJourney;
+          debug('onWishedHeroJourney: ctx:', ctx);
+          findGameById(ctx);
+        },
+        false
+      );
     }
 
-    function findGameById(gameId, heroJourney, playerIndex) {
+    function findGameById(ctx) {
+      const gameId = ctx.gameId;
+      const playerIndex = ctx.playerIndex;
+
       const query = { _id: gameId };
       const options = {};
+      options.projection = { playerArray: 1 };
 
       db.collection('gameCollection').findOne(query, options, (error, game) => {
-        if (error) {
-          debug('findGameById: error:', error);
-          return;
-        }
-
-        if (!game) {
-          debug('game object is empty');
-          return;
-        }
-
-        debug('findGameById', game._id);
-        checkWishedHeroJourneyListenerWorking(
-          gameId,
-          heroJourney,
-          playerIndex,
-          game.playerArray[playerIndex].hero
-        );
+        debug('findGameById: gameId:', game._id, ' | error: ', error);
+        ctx.hero = game.playerArray[playerIndex].hero;
+        checkIsBegingMoved(ctx);
       });
     }
 
-    function checkWishedHeroJourneyListenerWorking(
-      gameId,
-      heroJourney,
-      playerIndex,
-      hero
-    ) {
-      if (hero.wishedHeroJourneyListenerWorking) {
-        debug('Hero in beeing moved right now');
+    function checkIsBegingMoved(ctx) {
+      const hero = ctx.hero;
+
+      if (hero.isBegingMoved) {
+        debug('checkIsBegingMoved: Yes');
         return;
       }
 
-      compareHeroPositionWithJourneyFirstStepFrom(
-        gameId,
-        heroJourney,
-        playerIndex,
-        hero
-      );
+      setIsBegingMoved(ctx);
     }
 
-    function compareHeroPositionWithJourneyFirstStepFrom(
-      gameId,
-      heroJourney,
-      playerIndex,
-      hero
-    ) {
-      if (heroJourney[0].fromX !== hero.x || heroJourney[0].fromY !== hero.y) {
-        debug(
-          'compareHeroPositionWithJourneyFirstStepFrom: hero position error:'
-        );
-        return;
-      }
+    // function forEachWishedHeroJourney(gameId, heroJourney, playerIndex) {
+    //   async.eachSeries(
+    //     heroJourney,
+    //     (wishedStep, done) => {
+    //       findCurrentHeroPosition(wishedStep, done);
+    //     },
+    //     (error) => {
+    //       debug('done');
+    //       res.send({ error: 0 });
+    //     }
+    //   );
+    // }
 
-      triggerWishedHeroStep(gameId, heroJourney, playerIndex);
-    }
+    function setIsBegingMoved(ctx) {
+      const gameId = ctx.gameId;
+      const playerIndex = ctx.playerIndex;
 
-    function forEachWishedHeroJourney(gameId, heroJourney, playerIndex) {
-      async.eachSeries(
-        heroJourney,
-        (wishedStep, done) => {
-          findCurrentHeroPosition(wishedStep, done);
-        },
+      const query = { _id: gameId };
+      const string = 'playerArray.' + playerIndex + '.hero.isBegingMoved';
+      const $set = {};
+      $set[string] = true;
+      const update = { $set: $set };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
         (error) => {
-          debug('done');
-          res.send({ error: 0 });
+          debug('setIsBegingMoved: error: ', error);
+          triggerWishedHeroStep(ctx);
         }
       );
     }
 
-    function triggerWishedHeroStep(gameId, heroJourney, playerIndex) {
-      debug('triggerWishedHeroStep');
+    function triggerWishedHeroStep(ctx) {
+      const gameId = ctx.gameId;
+      const playerIndex = ctx.playerIndex;
+      const wishedHeroStep = ctx.heroJourney[0];
 
-      walkie.triggerEvent('wishedHeroStep', 'wishedHeroJourney.js', {
+      debug('triggerWishedHeroStep: ctx:', ctx);
+      walkie.triggerEvent('wishedHeroStep_', 'wishedHeroJourney.js', {
         gameId: gameId,
         playerIndex: playerIndex,
-        wishedHeroStep: heroJourney[0]
+        wishedHeroStep: wishedHeroStep
       });
+
+      waitBeforeChecking(ctx);
     }
 
-    function findCurrentHeroPosition(gameId, heroJourney, playerIndex) {
+    function waitBeforeChecking(ctx) {
+      setTimeout(() => {
+        debug('******************** after timeout ********************');
+        findCurrentHeroPosition(ctx);
+      }, 500);
+    }
+
+    function findCurrentHeroPosition(ctx) {
+      const gameId = ctx.gameId;
+      const playerIndex = ctx.playerIndex;
+
       const query = { _id: gameId };
       const options = {};
+      options.projection = { playerArray: 1 };
 
       db.collection('gameCollection').findOne(query, options, (error, game) => {
-        if (error) {
-          debug('findGameById: error:', error);
-          return;
-        }
+        debug('findCurrentHeroPosition: gameId:', game._id);
+        debug('findCurrentHeroPosition: error:', error);
+        ctx.heroNew = game.playerArray[playerIndex].hero;
 
-        if (!game) {
-          debug('game object is empty');
-          return;
-        }
-
-        debug('findGameById', game._id);
-        wasHeroMoved(
-          gameId,
-          heroJourney,
-          playerIndex,
-          game.playerArray[playerIndex].hero
-        );
+        checkWasHeroMoved(ctx);
       });
     }
 
-    function wasHeroMoved(gameId, heroJourney, playerIndex, hero) {}
+    function checkWasHeroMoved(ctx) {
+      const heroNew = ctx.heroNew;
+      const wishedHeroStep = ctx.heroJourney[0];
+      if (heroNew.x === wishedHeroStep.toX) {
+        if (heroNew.y === wishedHeroStep.toY) {
+          debug('checkWasHeroMoved: Yes!');
+          // done (next iteration)!
+          return;
+        }
+      }
 
-    function triggerWishedHeroStep(game) {
-      debug('triggerWishedHeroStep');
+      debug('checkWasHeroMoved: No!');
+      unsetIsBegingMoved(ctx);
+    }
 
-      walkie.triggerEvent('wishedHeroStep', 'wishedHeroJourney.js', {
-        gameId: game._id,
-        playerIndex: playerIndex,
-        wishedHeroStep: heroJourney
-      });
+    function unsetIsBegingMoved(ctx) {
+      const gameId = ctx.gameId;
+      const playerIndex = ctx.playerIndex;
+
+      const query = { _id: gameId };
+      const string = 'playerArray.' + playerIndex + '.hero.isBegingMoved';
+      const $unset = {};
+      $unset[string] = true;
+      const update = { $unset: $unset };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          debug('unsetIsBegingMoved: Done! | error: ', error);
+          // done (next iteration)!
+        }
+      );
     }
   };
 };
