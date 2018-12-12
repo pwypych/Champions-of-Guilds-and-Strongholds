@@ -2,11 +2,11 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:heroPavementPost');
+const debug = require('debug')('cogs:heroJourneyPost');
 const validator = require('validator');
 
 // What does this module do?
-// Get herpPavement, make initial verification
+// Get herpJourney, make initial verification
 module.exports = (walkie) => {
   return (req, res) => {
     const game = res.locals.game;
@@ -18,10 +18,10 @@ module.exports = (walkie) => {
     })();
 
     function checkRequestBody() {
-      const heroPavement = [];
+      const heroJourney = [];
       let isError = false;
 
-      req.body.heroPavement.forEach((step) => {
+      req.body.heroJourney.forEach((step) => {
         if (
           typeof step.fromX === 'undefined' ||
           typeof step.fromY === 'undefined' ||
@@ -32,7 +32,7 @@ module.exports = (walkie) => {
           !validator.isNumeric(step.toX) ||
           !validator.isNumeric(step.toY)
         ) {
-          debug('POST parameter heroPavement not valid');
+          debug('POST parameter heroJourney not valid');
           isError = true;
           return;
         }
@@ -42,7 +42,7 @@ module.exports = (walkie) => {
         varifiedStep.fromY = parseInt(step.fromY, 10);
         varifiedStep.toX = parseInt(step.toX, 10);
         varifiedStep.toY = parseInt(step.toY, 10);
-        heroPavement.push(varifiedStep);
+        heroJourney.push(varifiedStep);
       });
 
       if (isError) {
@@ -52,17 +52,17 @@ module.exports = (walkie) => {
         return;
       }
 
-      debug('checkRequestBody: heroPathArray', heroPavement);
-      sendResponce(heroPavement);
+      debug('checkRequestBody: heroPathArray', heroJourney);
+      sendResponce(heroJourney);
     }
 
-    function sendResponce(heroPavement) {
+    function sendResponce(heroJourney) {
       res.send({ error: 0 });
       debug('******************** ajax ********************');
-      walkie.triggerEvent('wishedHeroPavement_', 'heroPavementPost.js', {
+      walkie.triggerEvent('wishedHeroJourney_', 'heroJourneyPost.js', {
         gameId: game._id,
         playerIndex: playerIndex,
-        heroPavement: heroPavement
+        heroJourney: heroJourney
       });
     }
   };

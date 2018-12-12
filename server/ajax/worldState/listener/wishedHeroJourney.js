@@ -2,29 +2,29 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:wishedHeroPavement');
+const debug = require('debug')('cogs:wishedHeroJourney');
 const async = require('async');
 
 // What does this module do?
-// Get wishedHeroPavement and emmit event that move hero by one step
+// Get wishedHeroJourney and emmit event that move hero by one step
 module.exports = (walkie, db) => {
   return () => {
     // NIE MOŻE BYĆ DO GLOBALA BO LISTENER
     let gameId;
-    let heroPavement;
+    let heroJourney;
     let playerIndex;
 
     (function init() {
       debug('init');
-      onWishedHeroPavement();
+      onWishedHeroJourney();
     })();
 
-    function onWishedHeroPavement() {
-      walkie.onEvent('wishedHeroPavement_', 'wishedHeroPavement.js', (data) => {
+    function onWishedHeroJourney() {
+      walkie.onEvent('wishedHeroJourney_', 'wishedHeroJourney.js', (data) => {
         gameId = data.gameId;
-        heroPavement = data.heroPavement;
+        heroJourney = data.heroJourney;
         playerIndex = data.playerIndex;
-        debug('onWishedHeroPavement');
+        debug('onWishedHeroJourney');
         findGameById();
       });
     }
@@ -45,25 +45,25 @@ module.exports = (walkie, db) => {
         }
 
         debug('findGameById', game._id);
-        checkWishedHeroPavementListenerWorking(game);
+        checkWishedHeroJourneyListenerWorking(game);
       });
     }
 
-    function checkWishedHeroPavementListenerWorking(game) {
-      const wishedHeroPavementListenerWorking =
-        game.playerArray[playerIndex].hero.wishedHeroPavementListenerWorking;
+    function checkWishedHeroJourneyListenerWorking(game) {
+      const wishedHeroJourneyListenerWorking =
+        game.playerArray[playerIndex].hero.wishedHeroJourneyListenerWorking;
 
-      if (wishedHeroPavementListenerWorking) {
+      if (wishedHeroJourneyListenerWorking) {
         debug('Hero in beeing moved right now');
         return;
       }
 
-      forEachWishedHeroPavement();
+      forEachWishedHeroJourney();
     }
 
-    function forEachWishedHeroPavement() {
+    function forEachWishedHeroJourney() {
       async.eachSeries(
-        heroPavement,
+        heroJourney,
         (wishedStep, done) => {
           findCurrentHeroPosition(wishedStep, done);
         },
@@ -99,10 +99,10 @@ module.exports = (walkie, db) => {
     function triggerWishedHeroStep(game) {
       debug('triggerWishedHeroStep');
 
-      walkie.triggerEvent('wishedHeroStep', 'wishedHeroPavement.js', {
+      walkie.triggerEvent('wishedHeroStep', 'wishedHeroJourney.js', {
         gameId: game._id,
         playerIndex: playerIndex,
-        wishedHeroStep: heroPavement
+        wishedHeroStep: heroJourney
       });
     }
   };
