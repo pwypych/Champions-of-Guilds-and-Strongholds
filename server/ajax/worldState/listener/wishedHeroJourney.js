@@ -9,11 +9,6 @@ const async = require('async');
 // Get wishedHeroJourney and emmit event that move hero by one step
 module.exports = (walkie, db) => {
   return () => {
-    // NIE MOŻE BYĆ DO GLOBALA BO LISTENER
-    let gameId;
-    let heroJourney;
-    let playerIndex;
-
     (function init() {
       debug('init');
       onWishedHeroJourney();
@@ -21,15 +16,15 @@ module.exports = (walkie, db) => {
 
     function onWishedHeroJourney() {
       walkie.onEvent('wishedHeroJourney_', 'wishedHeroJourney.js', (data) => {
-        gameId = data.gameId;
-        heroJourney = data.heroJourney;
-        playerIndex = data.playerIndex;
+        const gameId = data.gameId;
+        const heroJourney = data.heroJourney;
+        const playerIndex = data.playerIndex;
         debug('onWishedHeroJourney');
-        findGameById();
+        findGameById(gameId, heroJourney, playerIndex);
       });
     }
 
-    function findGameById() {
+    function findGameById(gameId, heroJourney, playerIndex) {
       const query = { _id: gameId };
       const options = {};
 
@@ -45,23 +40,51 @@ module.exports = (walkie, db) => {
         }
 
         debug('findGameById', game._id);
-        checkWishedHeroJourneyListenerWorking(game);
+        checkWishedHeroJourneyListenerWorking(
+          gameId,
+          heroJourney,
+          playerIndex,
+          game.playerArray[playerIndex].hero
+        );
       });
     }
 
-    function checkWishedHeroJourneyListenerWorking(game) {
-      const wishedHeroJourneyListenerWorking =
-        game.playerArray[playerIndex].hero.wishedHeroJourneyListenerWorking;
-
-      if (wishedHeroJourneyListenerWorking) {
+    function checkWishedHeroJourneyListenerWorking(
+      gameId,
+      heroJourney,
+      playerIndex,
+      hero
+    ) {
+      if (hero.wishedHeroJourneyListenerWorking) {
         debug('Hero in beeing moved right now');
         return;
       }
 
-      forEachWishedHeroJourney();
+      compareHeroPositionWithJourneyFirstStepFrom(
+        gameId,
+        heroJourney,
+        playerIndex,
+        hero
+      );
     }
 
-    function forEachWishedHeroJourney() {
+    function compareHeroPositionWithJourneyFirstStepFrom(
+      gameId,
+      heroJourney,
+      playerIndex,
+      hero
+    ) {
+      if (heroJourney[0].fromX !== hero.x || heroJourney[0].fromY !== hero.y) {
+        debug(
+          'compareHeroPositionWithJourneyFirstStepFrom: hero position error:'
+        );
+        return;
+      }
+
+      triggerWishedHeroStep(gameId, heroJourney, playerIndex);
+    }
+
+    function forEachWishedHeroJourney(gameId, heroJourney, playerIndex) {
       async.eachSeries(
         heroJourney,
         (wishedStep, done) => {
@@ -74,7 +97,17 @@ module.exports = (walkie, db) => {
       );
     }
 
-    function findCurrentHeroPosition(done) {
+    function triggerWishedHeroStep(gameId, heroJourney, playerIndex) {
+      debug('triggerWishedHeroStep');
+
+      walkie.triggerEvent('wishedHeroStep', 'wishedHeroJourney.js', {
+        gameId: gameId,
+        playerIndex: playerIndex,
+        wishedHeroStep: heroJourney[0]
+      });
+    }
+
+    function findCurrentHeroPosition(gameId, heroJourney, playerIndex) {
       const query = { _id: gameId };
       const options = {};
 
@@ -90,11 +123,16 @@ module.exports = (walkie, db) => {
         }
 
         debug('findGameById', game._id);
-        wasHeroMoved(game.playerArray[playerIndex].hero);
+        wasHeroMoved(
+          gameId,
+          heroJourney,
+          playerIndex,
+          game.playerArray[playerIndex].hero
+        );
       });
     }
 
-    function wasHeroMoved(hero) {}
+    function wasHeroMoved(gameId, heroJourney, playerIndex, hero) {}
 
     function triggerWishedHeroStep(game) {
       debug('triggerWishedHeroStep');
