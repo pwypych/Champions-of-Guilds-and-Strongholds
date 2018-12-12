@@ -138,6 +138,8 @@ module.exports = (walkie, db) => {
         if (heroNew.y === wishedHeroStep.toY) {
           debug('checkWasHeroMoved: Yes!');
           // done (next iteration)!
+          // and then
+          unsetIsBegingMoved(ctx);
           return;
         }
       }
