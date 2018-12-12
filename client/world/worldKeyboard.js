@@ -43,23 +43,23 @@ g.world.worldKeyboard = (walkie, auth) => {
 
   function addListeners() {
     $(document).keydown((event) => {
-      const pavement = [];
+      const journey = [];
       const keyboardMap = { LEFT: 37, RIGHT: 39, UP: 38, DOWN: 40 };
 
       if (event.which === keyboardMap.LEFT) {
-        pavement.push({
+        journey.push({
           fromX: heroX,
           fromY: heroY,
           toX: heroX - 1,
           toY: heroY
         });
-        pavement.push({
+        journey.push({
           fromX: heroX - 1,
           fromY: heroY,
           toX: heroX - 2,
           toY: heroY
         });
-        pavement.push({
+        journey.push({
           fromX: heroX - 2,
           fromY: heroY,
           toX: heroX - 2,
@@ -68,19 +68,19 @@ g.world.worldKeyboard = (walkie, auth) => {
       }
 
       if (event.which === keyboardMap.RIGHT) {
-        pavement.push({
+        journey.push({
           fromX: heroX,
           fromY: heroY,
           toX: heroX + 1,
           toY: heroY
         });
-        pavement.push({
+        journey.push({
           fromX: heroX + 1,
           fromY: heroY,
           toX: heroX + 2,
           toY: heroY
         });
-        pavement.push({
+        journey.push({
           fromX: heroX + 2,
           fromY: heroY,
           toX: heroX + 2,
@@ -89,19 +89,19 @@ g.world.worldKeyboard = (walkie, auth) => {
       }
 
       if (event.which === keyboardMap.UP) {
-        pavement.push({
+        journey.push({
           fromX: heroX,
           fromY: heroY,
           toX: heroX,
           toY: heroY - 1
         });
-        pavement.push({
+        journey.push({
           fromX: heroX,
           fromY: heroY - 1,
           toX: heroX,
           toY: heroY - 2
         });
-        pavement.push({
+        journey.push({
           fromX: heroX,
           fromY: heroY - 2,
           toX: heroX + 1,
@@ -110,19 +110,19 @@ g.world.worldKeyboard = (walkie, auth) => {
       }
 
       if (event.which === keyboardMap.DOWN) {
-        pavement.push({
+        journey.push({
           fromX: heroX,
           fromY: heroY,
           toX: heroX,
           toY: heroY + 1
         });
-        pavement.push({
+        journey.push({
           fromX: heroX,
           fromY: heroY + 1,
           toX: heroX,
           toY: heroY + 2
         });
-        pavement.push({
+        journey.push({
           fromX: heroX,
           fromY: heroY + 2,
           toX: heroX - 1,
@@ -130,16 +130,16 @@ g.world.worldKeyboard = (walkie, auth) => {
         });
       }
 
-      if (!_.isEmpty(pavement)) {
-        sendRequest(pavement);
+      if (!_.isEmpty(journey)) {
+        sendRequest(journey);
       }
     });
 
-    function sendRequest(pavement) {
-      const data = { heroPavement: pavement };
-      console.log('pavement', pavement);
+    function sendRequest(journey) {
+      const data = { heroJourney: journey };
+      console.log('journey', journey);
       $.post(
-        '/ajax/worldState/hero/heroPavementGet' + auth.uri,
+        '/ajax/worldState/hero/heroJourneyPost' + auth.uri,
         data,
         () => {}
       );

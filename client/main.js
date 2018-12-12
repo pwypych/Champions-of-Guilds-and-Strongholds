@@ -46,6 +46,6 @@ g.main = function main() {
     g.world.worldKeyboard(walkie, auth);
     g.world.worldSingleClick(walkie, auth, viewport, stateData);
     g.world.worldPath(walkie, auth, viewport);
-    g.world.worldPavement(walkie, auth);
+    g.world.worldJourney(walkie, auth);
   }
 };
