@@ -131,7 +131,40 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   const templateToHtml = require('./library/templateToHtml.js')();
   const walkie = require('./library/walkie.js')();
 
-  // listeners
+  // noState endpoints
+  app.get('/', (req, res) => {
+    res.redirect('/panel');
+  });
+
+  app.get(
+    '/panel',
+    require('./panel/panel.js')(environment, db, templateToHtml)
+  );
+
+  app.post(
+    '/panel/createGamePost',
+    require('./panel/createGamePost.js')(environment, db, figureManagerTree)
+  );
+
+  app.post(
+    '/panel/deleteGamePost',
+    require('./panel/deleteGamePost.js')(environment, db)
+  );
+
+  app.get(
+    '/game',
+    require('./library/middlewareTokenAuth.js')(db),
+    require('./game/game.js')(environment, db, templateToHtml)
+  );
+
+  app.get(
+    '/ajax/stateDataGet',
+    require('./library/middlewareTokenAuth.js')(db),
+    require('./ajax/launchState/launchStateDataGet.js')(),
+    require('./ajax/worldState/worldStateDataGet.js')()
+  );
+
+  // launchState listeners
   require('./ajax/launchState/listener/everyPlayerReadyChecker.js')(
     walkie,
     db
@@ -144,41 +177,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   )();
   require('./ajax/launchState/listener/launchCountdown.js')(walkie, db)();
 
-  // redirect form homepage to panel
-  app.get('/', (req, res) => {
-    res.redirect('/panel');
-  });
-
-  // panel
-  app.get(
-    '/panel',
-    require('./panel/panel.js')(environment, db, templateToHtml)
-  );
-  app.post(
-    '/panel/createGamePost',
-    require('./panel/createGamePost.js')(environment, db, figureManagerTree)
-  );
-
-  app.post(
-    '/panel/deleteGamePost',
-    require('./panel/deleteGamePost.js')(environment, db)
-  );
-
-  // main game
-  app.get(
-    '/game',
-    require('./library/middlewareTokenAuth.js')(db),
-    require('./game/game.js')(environment, db, templateToHtml)
-  );
-
-  // ajax
-  app.get(
-    '/ajax/stateDataGet',
-    require('./library/middlewareTokenAuth.js')(db),
-    require('./ajax/launchState/launchStateDataGet.js')(),
-    require('./ajax/worldState/worldStateDataGet.js')()
-  );
-
+  // launchState endpoints
   app.post(
     '/ajax/launchState/playerNamePost',
     require('./library/middlewareTokenAuth.js')(db),
@@ -199,6 +198,9 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/worldState/load/spriteFilenameArrayGet.js')(environment)
   );
 
+  // worldState listeners
+
+  // worldState endpoints
   app.post(
     '/ajax/worldState/hero/moveToPost',
     require('./library/middlewareTokenAuth.js')(db),
