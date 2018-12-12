@@ -200,6 +200,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
 
   // worldState listeners
   require('./ajax/worldState/listener/wishedHeroJourney.js')(walkie, db)();
+  require('./ajax/worldState/listener/wishedHeroStep.js')(walkie, db)();
+  require('./ajax/worldState/listener/verifiedHeroStep.js')(walkie, db)();
 
   // worldState endpoints
   app.post(

@@ -3,7 +3,7 @@
 'use strict';
 
 const debug = require('debug')('cogs:wishedHeroJourney');
-const async = require('async');
+// const async = require('async');
 
 // What does this module do?
 // Get wishedHeroJourney_ and emmits wishedHeroStep_ events by a defined timer

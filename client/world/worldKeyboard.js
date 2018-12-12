@@ -53,18 +53,6 @@ g.world.worldKeyboard = (walkie, auth) => {
           toX: heroX - 1,
           toY: heroY
         });
-        journey.push({
-          fromX: heroX - 1,
-          fromY: heroY,
-          toX: heroX - 2,
-          toY: heroY
-        });
-        journey.push({
-          fromX: heroX - 2,
-          fromY: heroY,
-          toX: heroX - 2,
-          toY: heroY - 1
-        });
       }
 
       if (event.which === keyboardMap.RIGHT) {
@@ -73,18 +61,6 @@ g.world.worldKeyboard = (walkie, auth) => {
           fromY: heroY,
           toX: heroX + 1,
           toY: heroY
-        });
-        journey.push({
-          fromX: heroX + 1,
-          fromY: heroY,
-          toX: heroX + 2,
-          toY: heroY
-        });
-        journey.push({
-          fromX: heroX + 2,
-          fromY: heroY,
-          toX: heroX + 2,
-          toY: heroY + 1
         });
       }
 
@@ -95,18 +71,6 @@ g.world.worldKeyboard = (walkie, auth) => {
           toX: heroX,
           toY: heroY - 1
         });
-        journey.push({
-          fromX: heroX,
-          fromY: heroY - 1,
-          toX: heroX,
-          toY: heroY - 2
-        });
-        journey.push({
-          fromX: heroX,
-          fromY: heroY - 2,
-          toX: heroX + 1,
-          toY: heroY - 2
-        });
       }
 
       if (event.which === keyboardMap.DOWN) {
@@ -115,18 +79,6 @@ g.world.worldKeyboard = (walkie, auth) => {
           fromY: heroY,
           toX: heroX,
           toY: heroY + 1
-        });
-        journey.push({
-          fromX: heroX,
-          fromY: heroY + 1,
-          toX: heroX,
-          toY: heroY + 2
-        });
-        journey.push({
-          fromX: heroX,
-          fromY: heroY + 2,
-          toX: heroX - 1,
-          toY: heroY + 2
         });
       }
 
