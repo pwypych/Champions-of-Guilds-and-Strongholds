@@ -143,6 +143,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     figureManagerTree
   )();
   require('./ajax/launchState/listener/launchCountdown.js')(walkie, db)();
+  require('./ajax/worldState/listener/wishedHeroStep.js')(walkie, db)();
+  require('./ajax/worldState/listener/verifiedHeroStep.js')(walkie, db)();
 
   // redirect form homepage to panel
   app.get('/', (req, res) => {

@@ -6,20 +6,20 @@ const debug = require('debug')('cogs:wishedHeroJourney');
 const async = require('async');
 
 // What does this module do?
-// Get wishedHeroJourney and emmit event that move hero by one step
+// Verify wished hero step
 module.exports = (walkie, db) => {
   return () => {
     (function init() {
       debug('init');
-      onWishedHeroJourney();
+      onWishedHeroStep();
     })();
 
-    function onWishedHeroJourney() {
-      walkie.onEvent('wishedHeroJourney_', 'wishedHeroJourney.js', (data) => {
+    function onWishedHeroStep() {
+      walkie.onEvent('wishedHeroStep_', 'wishedHeroJourney.js', (data) => {
         const gameId = data.gameId;
         const heroJourney = data.heroJourney;
         const playerIndex = data.playerIndex;
-        debug('onWishedHeroJourney');
+        debug('onWishedHeroStep');
         findGameById(gameId, heroJourney, playerIndex);
       });
     }
