@@ -41,7 +41,7 @@ g.main = function main() {
     g.launch.launchDisableUi($body, walkie);
 
     g.world.worldToggle($body, walkie);
-    g.world.worldRender(walkie, auth, viewport);
+    g.world.worldRender(walkie, auth, viewport, freshStateData);
     g.world.worldHero(walkie, auth, viewport, freshStateData);
     g.world.worldKeyboard(walkie, auth);
     g.world.worldSingleClick(walkie, auth, viewport, freshStateData);
