@@ -41,6 +41,7 @@ module.exports = (walkie, db) => {
       db.collection('gameCollection').findOne(query, options, (error, game) => {
         debug('findGameById: gameId:', game._id, ' | error: ', error);
         ctx.hero = game.playerArray[playerIndex].hero;
+
         checkIsBegingMoved(ctx);
       });
     }

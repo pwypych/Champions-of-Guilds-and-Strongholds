@@ -218,6 +218,13 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/worldState/hero/heroJourneyPost.js')(walkie)
   );
 
+  app.post(
+    '/ajax/worldState/hero/heroJourneyCancelPost',
+    require('./library/middlewareTokenAuth.js')(db),
+    require('./library/middlewareAjaxStateAuth.js')('worldState'),
+    require('./ajax/worldState/hero/heroJourneyCancelPost.js')(db)
+  );
+
   debug('setupLibrariesAndRoutes()');
   setupExpress();
 }
