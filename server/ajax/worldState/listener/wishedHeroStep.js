@@ -15,18 +15,22 @@ module.exports = (walkie, db) => {
 
     function onWishedHeroStep() {
       walkie.onEvent('wishedHeroStep_', 'wishedHeroStep.js', (data) => {
-        const gameId = data.gameId;
-        const wishedHeroStep = data.wishedHeroStep;
-        const playerIndex = data.playerIndex;
+        const ctx = {};
+        ctx.gameId = data.gameId;
+        ctx.wishedHeroStep = data.wishedHeroStep;
+        ctx.playerIndex = data.playerIndex;
 
         debug('onWishedHeroStep: wishedHeroStep:', wishedHeroStep);
         debug('onWishedHeroStep: gameId:', gameId);
         debug('onWishedHeroStep: playerIndex:', playerIndex);
-        findGameById(gameId, wishedHeroStep, playerIndex);
+        findGameById(ctx);
       });
     }
 
-    function findGameById(gameId, heroJourney, playerIndex) {
+    function findGameById(ctx) {
+      const gameId = ctx.gameId;
+      const playerIndex = ctx.playerIndex;
+
       const query = { _id: gameId };
       const options = {};
 
@@ -41,25 +45,21 @@ module.exports = (walkie, db) => {
           return;
         }
 
+        ctx.mapLayer = game.mapLayer;
+        ctx.hero = game.playerArray[playerIndex].hero;
+
         debug('findGameById', game._id);
-        checkIsHeroWishedPositionPossible(
-          gameId,
-          heroJourney,
-          playerIndex,
-          game
-        );
+        checkIsHeroWishedPositionPossible(ctx);
       });
     }
 
-    function checkIsHeroWishedPositionPossible(
-      gameId,
-      wishedHeroStep,
-      playerIndex,
-      game
-    ) {
+    function checkIsHeroWishedPositionPossible(ctx) {
+      const mapLayer = ctx.mapLayer;
+      const wishedHeroStep = ctx.wishedHeroStep;
+
       if (
-        !game.mapLayer[wishedHeroStep.toY] ||
-        !game.mapLayer[wishedHeroStep.toY][wishedHeroStep.toX]
+        !mapLayer[wishedHeroStep.toY] ||
+        !mapLayer[wishedHeroStep.toY][wishedHeroStep.toX]
       ) {
         debug(
           'checkIsHeroWishedPositionPossible: map position not found: moveToY, moveToX:',
@@ -70,21 +70,13 @@ module.exports = (walkie, db) => {
       }
 
       debug('checkIsHeroWishedPositionPossible:', wishedHeroStep);
-      checkIsHeroOneStepFromWishedPosition(
-        gameId,
-        wishedHeroStep,
-        playerIndex,
-        game
-      );
+      checkIsHeroOneStepFromWishedPosition(ctx);
     }
 
-    function checkIsHeroOneStepFromWishedPosition(
-      gameId,
-      wishedHeroStep,
-      playerIndex,
-      game
-    ) {
-      const hero = game.playerArray[playerIndex].hero;
+    function checkIsHeroOneStepFromWishedPosition(ctx) {
+      const hero = ctx.hero;
+      const wishedHeroStep = ctx.wishedHeroStep;
+
       const distanceX = Math.abs(hero.x - wishedHeroStep.toX);
       const distanceY = Math.abs(hero.y - wishedHeroStep.toY);
 
@@ -112,16 +104,14 @@ module.exports = (walkie, db) => {
         'distanceY',
         distanceY
       );
-      checkIsHeroWishedPositionEmpty(gameId, wishedHeroStep, playerIndex, game);
+      checkIsHeroWishedPositionEmpty(ctx);
     }
 
-    function checkIsHeroWishedPositionEmpty(
-      gameId,
-      wishedHeroStep,
-      playerIndex,
-      game
-    ) {
-      if (game.mapLayer[wishedHeroStep.toY][wishedHeroStep.toX].collision) {
+    function checkIsHeroWishedPositionEmpty(ctx) {
+      const mapLayer = ctx.mapLayer;
+      const wishedHeroStep = ctx.wishedHeroStep;
+
+      if (mapLayer[wishedHeroStep.toY][wishedHeroStep.toX].collision) {
         debug(
           'checkIsHeroWishedPositionPossible: cannot move because collision on: moveToY, moveToX:',
           wishedHeroStep.toY,
@@ -129,11 +119,14 @@ module.exports = (walkie, db) => {
         );
         return;
       }
-      triggerWishedHeroStep(gameId, wishedHeroStep, playerIndex);
+      triggerWishedHeroStep(ctx);
     }
 
-    function triggerWishedHeroStep(gameId, wishedHeroStep, playerIndex) {
+    function triggerWishedHeroStep(ctx) {
       debug('triggerWishedHeroStep');
+      const gameId = ctx.gameId;
+      const playerIndex = ctx.playerIndex;
+      const wishedHeroStep = ctx.wishedHeroStep;
 
       walkie.triggerEvent('verifiedHeroStep_', 'wishedHeroStep.js', {
         gameId: gameId,
