@@ -35,16 +35,7 @@ module.exports = (walkie, db) => {
       const options = {};
 
       db.collection('gameCollection').findOne(query, options, (error, game) => {
-        if (error) {
-          debug('findGameById: error:', error);
-          return;
-        }
-
-        if (!game) {
-          debug('findGameById: game object is empty');
-          return;
-        }
-
+        debug('findGameById: gameId:', game._id, ' | error: ', error);
         ctx.mapLayer = game.mapLayer;
         ctx.hero = game.playerArray[playerIndex].hero;
 
