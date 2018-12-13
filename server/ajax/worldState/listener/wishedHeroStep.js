@@ -20,9 +20,9 @@ module.exports = (walkie, db) => {
         ctx.wishedHeroStep = data.wishedHeroStep;
         ctx.playerIndex = data.playerIndex;
 
-        debug('onWishedHeroStep: wishedHeroStep:', wishedHeroStep);
-        debug('onWishedHeroStep: gameId:', gameId);
-        debug('onWishedHeroStep: playerIndex:', playerIndex);
+        debug('onWishedHeroStep: wishedHeroStep:', ctx.wishedHeroStep);
+        debug('onWishedHeroStep: gameId:', ctx.gameId);
+        debug('onWishedHeroStep: playerIndex:', ctx.playerIndex);
         findGameById(ctx);
       });
     }
