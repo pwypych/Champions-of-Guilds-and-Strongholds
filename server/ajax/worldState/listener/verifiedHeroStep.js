@@ -14,16 +14,21 @@ module.exports = (walkie, db) => {
     })();
 
     function onVerifiedHeroStep() {
-      walkie.onEvent('verifiedHeroStep_', 'verifiedHeroStep.js', (data) => {
-        const gameId = data.gameId;
-        const verifiedHeroStep = data.verifiedHeroStep;
-        const playerIndex = data.playerIndex;
+      walkie.onEvent(
+        'verifiedHeroStep_',
+        'verifiedHeroStep.js',
+        (data) => {
+          const gameId = data.gameId;
+          const verifiedHeroStep = data.verifiedHeroStep;
+          const playerIndex = data.playerIndex;
 
-        debug('onVerifiedHeroStep: verifiedHeroStep:', verifiedHeroStep);
-        debug('onVerifiedHeroStep: gameId:', gameId);
-        debug('onVerifiedHeroStep: playerIndex:', playerIndex);
-        updateHeroPosition(gameId, verifiedHeroStep, playerIndex);
-      });
+          debug('onVerifiedHeroStep: verifiedHeroStep:', verifiedHeroStep);
+          debug('onVerifiedHeroStep: gameId:', gameId);
+          debug('onVerifiedHeroStep: playerIndex:', playerIndex);
+          updateHeroPosition(gameId, verifiedHeroStep, playerIndex);
+        },
+        false
+      );
     }
 
     function updateHeroPosition(gameId, verifiedHeroStep, playerIndex) {

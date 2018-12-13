@@ -14,16 +14,21 @@ module.exports = (walkie, db) => {
     })();
 
     function onWishedHeroStep() {
-      walkie.onEvent('wishedHeroStep_', 'wishedHeroStep.js', (data) => {
-        const gameId = data.gameId;
-        const wishedHeroStep = data.wishedHeroStep;
-        const playerIndex = data.playerIndex;
+      walkie.onEvent(
+        'wishedHeroStep_',
+        'wishedHeroStep.js',
+        (data) => {
+          const gameId = data.gameId;
+          const wishedHeroStep = data.wishedHeroStep;
+          const playerIndex = data.playerIndex;
 
-        debug('onWishedHeroStep: wishedHeroStep:', wishedHeroStep);
-        debug('onWishedHeroStep: gameId:', gameId);
-        debug('onWishedHeroStep: playerIndex:', playerIndex);
-        findGameById(gameId, wishedHeroStep, playerIndex);
-      });
+          debug('onWishedHeroStep: wishedHeroStep:', wishedHeroStep);
+          debug('onWishedHeroStep: gameId:', gameId);
+          debug('onWishedHeroStep: playerIndex:', playerIndex);
+          findGameById(gameId, wishedHeroStep, playerIndex);
+        },
+        false
+      );
     }
 
     function findGameById(gameId, heroJourney, playerIndex) {
@@ -129,17 +134,22 @@ module.exports = (walkie, db) => {
         );
         return;
       }
-      triggerWishedHeroStep(gameId, wishedHeroStep, playerIndex);
+      triggerVerifiedHeroStep(gameId, wishedHeroStep, playerIndex);
     }
 
-    function triggerWishedHeroStep(gameId, wishedHeroStep, playerIndex) {
-      debug('triggerWishedHeroStep');
+    function triggerVerifiedHeroStep(gameId, wishedHeroStep, playerIndex) {
+      debug('triggerVerifiedHeroStep');
 
-      walkie.triggerEvent('verifiedHeroStep_', 'wishedHeroStep.js', {
-        gameId: gameId,
-        playerIndex: playerIndex,
-        verifiedHeroStep: wishedHeroStep
-      });
+      walkie.triggerEvent(
+        'verifiedHeroStep_',
+        'wishedHeroStep.js',
+        {
+          gameId: gameId,
+          playerIndex: playerIndex,
+          verifiedHeroStep: wishedHeroStep
+        },
+        false
+      );
     }
   };
 };

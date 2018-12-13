@@ -53,12 +53,12 @@ module.exports = (walkie) => {
       }
 
       debug('checkRequestBody: heroPathArray', heroJourney);
-      sendResponce(heroJourney);
+      triggerWishedHeroJourney(heroJourney);
     }
 
-    function sendResponce(heroJourney) {
+    function triggerWishedHeroJourney(heroJourney) {
       res.send({ error: 0 });
-      debug('******************** ajax ********************');
+      debug('triggerWishedHeroJourney');
       walkie.triggerEvent(
         'wishedHeroJourney_',
         'heroJourneyPost.js',

@@ -97,7 +97,7 @@ g.world.worldHero = (walkie, auth, viewport, freshStateData) => {
     const gPath = new PIXI.Graphics();
     gPath.lineStyle(1, 0xffffff, 1);
     gPath.drawPath(path);
-    viewport.addChild(gPath);
+    // viewport.addChild(gPath);
 
     const tween = PIXI.tweenManager.createTween(sprite);
     tween.path = path;

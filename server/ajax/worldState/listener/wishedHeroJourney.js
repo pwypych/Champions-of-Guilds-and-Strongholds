@@ -3,7 +3,7 @@
 'use strict';
 
 const debug = require('debug')('cogs:wishedHeroJourney');
-// const async = require('async');
+const async = require('async');
 
 // What does this module do?
 // Get wishedHeroJourney_ and emmits wishedHeroStep_ events by a defined timer
@@ -19,12 +19,11 @@ module.exports = (walkie, db) => {
         'wishedHeroJourney_',
         'wishedHeroJourney.js',
         (data) => {
-          debug('******************** listener start ********************');
           const ctx = {};
           ctx.gameId = data.gameId;
           ctx.playerIndex = data.playerIndex;
           ctx.heroJourney = data.heroJourney;
-          debug('onWishedHeroJourney: ctx:', ctx);
+          debug('onWishedHeroJourney: ctx.heroJourney:', ctx.heroJourney);
           findGameById(ctx);
         },
         false
@@ -54,23 +53,28 @@ module.exports = (walkie, db) => {
         return;
       }
 
-      setIsBegingMoved(ctx);
+      forEachWishedHeroJourney(ctx);
     }
 
-    // function forEachWishedHeroJourney(gameId, heroJourney, playerIndex) {
-    //   async.eachSeries(
-    //     heroJourney,
-    //     (wishedStep, done) => {
-    //       findCurrentHeroPosition(wishedStep, done);
-    //     },
-    //     (error) => {
-    //       debug('done');
-    //       res.send({ error: 0 });
-    //     }
-    //   );
-    // }
+    function forEachWishedHeroJourney(ctx) {
+      const heroJourney = ctx.heroJourney;
+      async.eachSeries(
+        heroJourney,
+        (wishedHeroStep, done) => {
+          debug('forEachWishedHeroJourney: Start one iteration!');
+          ctx.done = done;
+          ctx.wishedHeroStep = wishedHeroStep;
+          updateSetIsBegingMoved(ctx);
+        },
+        (error) => {
+          debug('forEachWishedHeroJourney: error:', error);
+          debug('forEachWishedHeroJourney: Done!');
+          debug('******************** async job done ********************');
+        }
+      );
+    }
 
-    function setIsBegingMoved(ctx) {
+    function updateSetIsBegingMoved(ctx) {
       const gameId = ctx.gameId;
       const playerIndex = ctx.playerIndex;
 
@@ -86,7 +90,7 @@ module.exports = (walkie, db) => {
         update,
         options,
         (error) => {
-          debug('setIsBegingMoved: error: ', error);
+          debug('updateSetIsBegingMoved: error: ', error);
           triggerWishedHeroStep(ctx);
         }
       );
@@ -95,21 +99,26 @@ module.exports = (walkie, db) => {
     function triggerWishedHeroStep(ctx) {
       const gameId = ctx.gameId;
       const playerIndex = ctx.playerIndex;
-      const wishedHeroStep = ctx.heroJourney[0];
+      const wishedHeroStep = ctx.wishedHeroStep;
 
-      debug('triggerWishedHeroStep: ctx:', ctx);
-      walkie.triggerEvent('wishedHeroStep_', 'wishedHeroJourney.js', {
-        gameId: gameId,
-        playerIndex: playerIndex,
-        wishedHeroStep: wishedHeroStep
-      });
+      debug('triggerWishedHeroStep: ctx.wishedHeroStep:', wishedHeroStep);
+      walkie.triggerEvent(
+        'wishedHeroStep_',
+        'wishedHeroJourney.js',
+        {
+          gameId: gameId,
+          playerIndex: playerIndex,
+          wishedHeroStep: wishedHeroStep
+        },
+        false
+      );
 
       waitBeforeChecking(ctx);
     }
 
     function waitBeforeChecking(ctx) {
       setTimeout(() => {
-        debug('******************** after timeout ********************');
+        debug('waitBeforeChecking: After waiting 500ms!');
         findCurrentHeroPosition(ctx);
       }, 500);
     }
@@ -133,22 +142,22 @@ module.exports = (walkie, db) => {
 
     function checkWasHeroMoved(ctx) {
       const heroNew = ctx.heroNew;
-      const wishedHeroStep = ctx.heroJourney[0];
+      const wishedHeroStep = ctx.wishedHeroStep;
+
+      let wasHeroMoved = false;
+
       if (heroNew.x === wishedHeroStep.toX) {
         if (heroNew.y === wishedHeroStep.toY) {
           debug('checkWasHeroMoved: Yes!');
-          // done (next iteration)!
-          // and then
-          unsetIsBegingMoved(ctx);
-          return;
+          wasHeroMoved = true;
         }
       }
 
-      debug('checkWasHeroMoved: No!');
-      unsetIsBegingMoved(ctx);
+      debug('checkWasHeroMoved: wasHeroMoved:', wasHeroMoved);
+      updateUnsetIsBegingMoved(ctx, wasHeroMoved);
     }
 
-    function unsetIsBegingMoved(ctx) {
+    function updateUnsetIsBegingMoved(ctx, wasHeroMoved) {
       const gameId = ctx.gameId;
       const playerIndex = ctx.playerIndex;
 
@@ -164,8 +173,12 @@ module.exports = (walkie, db) => {
         update,
         options,
         (error) => {
-          debug('unsetIsBegingMoved: Done! | error: ', error);
-          // done (next iteration)!
+          debug('updateUnsetIsBegingMoved: Done! | error: ', error);
+          if (wasHeroMoved) {
+            ctx.done();
+          } else {
+            ctx.done('Hero was not moved correctly last step');
+          }
         }
       );
     }
