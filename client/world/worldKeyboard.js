@@ -44,7 +44,7 @@ g.world.worldKeyboard = (walkie, auth) => {
   function addListeners() {
     $(document).keydown((event) => {
       const journey = [];
-      const keyboardMap = { LEFT: 37, RIGHT: 39, UP: 38, DOWN: 40 };
+      const keyboardMap = { LEFT: 37, RIGHT: 39, UP: 38, DOWN: 40, SPACE: 32 };
 
       if (event.which === keyboardMap.LEFT) {
         journey.push({
@@ -82,16 +82,30 @@ g.world.worldKeyboard = (walkie, auth) => {
         });
       }
 
+      if (event.which === keyboardMap.SPACE) {
+        postHeroJourneyCancel(journey);
+        return;
+      }
+
       if (!_.isEmpty(journey)) {
-        sendRequest(journey);
+        postHeroJourney(journey);
       }
     });
 
-    function sendRequest(journey) {
+    function postHeroJourney(journey) {
       const data = { heroJourney: journey };
       console.log('journey', journey);
       $.post(
         '/ajax/worldState/hero/heroJourneyPost' + auth.uri,
+        data,
+        () => {}
+      );
+    }
+
+    function postHeroJourneyCancel() {
+      const data = { heroJourneyCancel: 'true' };
+      $.post(
+        '/ajax/worldState/hero/heroJourneyCancelPost' + auth.uri,
         data,
         () => {}
       );
