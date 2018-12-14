@@ -192,18 +192,18 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/launchState/playerReadyPost.js')(db, walkie)
   );
 
-  app.get(
-    '/ajax/worldState/load/spriteFilenameArray',
-    require('./library/middlewareTokenAuth.js')(db),
-    require('./ajax/worldState/load/spriteFilenameArrayGet.js')(environment)
-  );
-
   // worldState listeners
   require('./ajax/worldState/listener/wishedHeroJourney.js')(walkie, db)();
   require('./ajax/worldState/listener/wishedHeroStep.js')(walkie, db)();
   require('./ajax/worldState/listener/verifiedHeroStep.js')(walkie, db)();
 
   // worldState endpoints
+  app.get(
+    '/ajax/worldState/load/spriteFilenameArray',
+    require('./library/middlewareTokenAuth.js')(db),
+    require('./ajax/worldState/load/spriteFilenameArrayGet.js')(environment)
+  );
+
   app.post(
     '/ajax/worldState/hero/moveToPost',
     require('./library/middlewareTokenAuth.js')(db),

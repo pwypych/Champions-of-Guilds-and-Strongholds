@@ -11,9 +11,6 @@ const _ = require('lodash');
 // Creates game in db based on map choosen by a player, sets starting properties
 module.exports = (environment, db, figureManagerTree) => {
   return (req, res) => {
-    let mapObject;
-    const game = {};
-
     (function init() {
       debug('init');
       checkRequestBody();
@@ -53,26 +50,29 @@ module.exports = (environment, db, figureManagerTree) => {
           return;
         }
 
-        mapObject = data;
+        const mapObject = data;
 
         debug('findMap: mapObject._id:', mapObject._id);
-        generateGameProperties();
+        generateGameEntity(mapObject);
       });
     }
 
-    function generateGameProperties() {
-      game._id = shortid.generate();
+    function generateGameEntity(mapObject) {
+      const entities = {};
 
-      game.mapName = mapObject._id;
+      const id = 'game__' + shortid.generate();
 
-      game.state = 'launchState';
+      entities._id = id; // mongo id for that game is the same as entitie id for gameEntity
 
-      // debug('game.mapLayer: %o', game.mapLayer);
-      debug('generateGameProperties', game._id);
-      getMapPlayersCount();
+      entities[id] = {};
+      entities[id].mapName = mapObject._id;
+      entities[id].state = 'launchState';
+
+      debug('generateGameEntity', entities[id]);
+      calculatePlayerCount(mapObject, entities);
     }
 
-    function getMapPlayersCount() {
+    function calculatePlayerCount(mapObject, entities) {
       let playerCount = 0;
       mapObject.mapLayerWithStrings.forEach((row) => {
         row.forEach((tileName) => {
@@ -82,13 +82,11 @@ module.exports = (environment, db, figureManagerTree) => {
         });
       });
 
-      game.playerCount = playerCount;
-
-      debug('generateGameProperties: playerCount:', playerCount);
-      generatePlayerArray();
+      debug('calculatePlayerCount: playerCount:', playerCount);
+      generatePlayerEntities(mapObject, entities, playerCount);
     }
 
-    function generatePlayerArray() {
+    function generatePlayerEntities(mapObject, entities, playerCount) {
       const colorArray = [
         'red',
         'blue',
@@ -100,30 +98,29 @@ module.exports = (environment, db, figureManagerTree) => {
         'pink'
       ];
 
-      game.playerArray = _.times(game.playerCount, (index) => {
-        const player = {};
-        player.token = shortid.generate();
-        player.name = 'Player ' + (index + 1);
-        player.color = colorArray[index];
-        player.ready = 'no';
-        player.race = 'human';
-        return player;
+      _.times(playerCount, (index) => {
+        const id = 'player__' + shortid.generate();
+        entities[id] = {};
+        entities[id].playerToken = 'playerToken_' + shortid.generate();
+        entities[id].name = 'Player ' + (index + 1);
+        entities[id].color = colorArray[index];
+        entities[id].readyForLaunch = 'no';
+        entities[id].race = 'human';
+        debug('generatePlayerEntities: playerEntity:', entities[id]);
       });
 
-      debug(
-        'generatePlayerArray:game.playerArray.length',
-        game.playerArray.length
-      );
-      instantiateFigures();
+      generateFigureEntities(mapObject, entities);
     }
 
-    function instantiateFigures() {
+    function generateFigureEntities(mapObject, entities) {
       const errorArray = [];
-      game.mapLayer = [];
 
       mapObject.mapLayerWithStrings.forEach((row, y) => {
-        game.mapLayer[y] = [];
         row.forEach((figureName, x) => {
+          if (figureName === 'empty') {
+            return;
+          }
+
           if (!figureManagerTree[figureName]) {
             const error =
               'Cannot load figure that is required by the map: ' + figureName;
@@ -139,29 +136,31 @@ module.exports = (environment, db, figureManagerTree) => {
             return;
           }
 
-          const figure = figureManagerTree[figureName].produce();
+          const entity = figureManagerTree[figureName].produce();
 
           // Add unique id to each figure instance
-          figure._id = figureName + '_y' + y + '_x' + x;
+          const id = figureName + '_figure__' + shortid.generate();
+          entity.position = { x: x, y: y };
+          entity.existsInState = 'worldState';
 
-          game.mapLayer[y][x] = figure;
+          entities[id] = entity;
         });
       });
 
       if (!_.isEmpty(errorArray)) {
-        debug('instantiateFigures: errorArray:', errorArray);
+        debug('generateFigureEntities: errorArray:', errorArray);
         res
           .status(503)
           .send('503 Service Unavailable - ' + JSON.stringify(errorArray));
         return;
       }
 
-      debug('instantiateFigures');
-      insertGame();
+      debug('generateFigureEntities');
+      insertGame(entities);
     }
 
-    function insertGame() {
-      db.collection('gameCollection').insertOne(game, (error) => {
+    function insertGame(entities) {
+      db.collection('gameCollection').insertOne(entities, (error) => {
         if (error) {
           debug('insertGame: error:', error);
           res
@@ -169,7 +168,7 @@ module.exports = (environment, db, figureManagerTree) => {
             .send('503 Service Unavailable - Cannot insert game instance');
         }
 
-        debug('insertGame', game.mapName);
+        debug('insertGame: _.size(entities):', _.size(entities));
         sendResponce();
       });
     }

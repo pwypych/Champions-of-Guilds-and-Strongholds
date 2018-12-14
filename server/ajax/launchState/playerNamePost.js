@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:playerNamePost');
 const validator = require('validator');
 
 // What does this module do?
-// Update player name in db
+// Endpoint that updates player name for game in db
 module.exports = (db) => {
   return (req, res) => {
     const game = res.locals.game;
