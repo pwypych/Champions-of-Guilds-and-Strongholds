@@ -5,7 +5,7 @@
 const debug = require('debug')('nope:cogs:middlewareAjaxStateAuth');
 
 // What does this module do?
-// Check that module can be runned with a state send by a user
+// Ensure that endpoint can be accessed only for game in neededState
 module.exports = (neededState) => {
   return (req, res, next) => {
     (function init() {
@@ -14,23 +14,23 @@ module.exports = (neededState) => {
     })();
 
     function compareStates() {
-      const _id = res.locals.entities._id;
-      const gameState = res.locals.entities[_id].state;
+      const gameId = res.locals.entities._id;
+      const state = res.locals.entities[gameId].state;
 
-      if (gameState !== neededState) {
-        // State is not the same
-        debug('compareStates: invalid gameState:', gameState);
+      if (state !== neededState) {
+        let message = '';
+        message += 'Actual game state is: ';
+        message += state;
+        message += '. While state needed by endpoint is: ';
+        message += neededState;
+
+        debug('compareStates:', message);
         res.status(503);
-        res.send(
-          '503 Service Unavailable - Actual game state is: ' +
-            gameState +
-            '. While state needed by endpoint is: ' +
-            neededState
-        );
+        res.send('503 Service Unavailable - ' + message);
         return;
       }
 
-      debug('compareStates:', gameState);
+      debug('compareStates: Auth passed! state:', state);
       next();
     }
   };
