@@ -10,9 +10,6 @@ const _ = require('lodash');
 
 module.exports = (db) => {
   return (req, res, next) => {
-    let gameId;
-    let playerToken;
-
     (function init() {
       debug('init');
       checkRequestQuery();
@@ -28,14 +25,14 @@ module.exports = (db) => {
         return;
       }
 
-      gameId = req.query.gameId;
-      playerToken = req.query.playerToken;
+      const gameId = req.query.gameId;
+      const playerToken = req.query.playerToken;
 
       debug('checkRequestQuery:', playerToken, gameId);
-      validateRequestQuery();
+      validateRequestQuery(gameId, playerToken);
     }
 
-    function validateRequestQuery() {
+    function validateRequestQuery(gameId, playerToken) {
       if (!shortid.isValid(gameId)) {
         debug('validateRequestQuery: Invalid gameId:', gameId);
         res.status(503).send('503 Service Unavailable - Invalid gameId');
@@ -49,10 +46,10 @@ module.exports = (db) => {
       }
 
       debug('validateRequestQuery');
-      findGameById();
+      findGameById(gameId, playerToken);
     }
 
-    function findGameById() {
+    function findGameById(gameId, playerToken) {
       const query = { _id: gameId };
       const options = {};
 
@@ -71,11 +68,11 @@ module.exports = (db) => {
         }
 
         debug('findGameById', game._id);
-        findEntityWithPlayerToken(game);
+        findEntityWithPlayerToken(game, gameId, playerToken);
       });
     }
 
-    function findEntityWithPlayerToken(game) {
+    function findEntityWithPlayerToken(game, gameId, playerToken) {
       let isFound = false;
       let playerId;
       _.forEach(game, (entity, id) => {
