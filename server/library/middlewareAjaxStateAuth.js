@@ -8,28 +8,29 @@ const debug = require('debug')('nope:cogs:middlewareAjaxStateAuth');
 // Check that module can be runned with a state send by a user
 module.exports = (neededState) => {
   return (req, res, next) => {
-    const state = res.locals.game.state;
-
     (function init() {
       debug('init');
       compareStates();
     })();
 
     function compareStates() {
-      if (state !== neededState) {
+      const _id = res.locals.entities._id;
+      const gameState = res.locals.entities[_id].state;
+
+      if (gameState !== neededState) {
         // State is not the same
-        debug('compareStates: invalid gameState:', state);
+        debug('compareStates: invalid gameState:', gameState);
         res.status(503);
         res.send(
           '503 Service Unavailable - Actual game state is: ' +
-            state +
+            gameState +
             '. While state needed by endpoint is: ' +
             neededState
         );
         return;
       }
 
-      debug('compareStates:', state);
+      debug('compareStates:', gameState);
       next();
     }
   };
