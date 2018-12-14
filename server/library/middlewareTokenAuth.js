@@ -6,6 +6,7 @@
 // Validates player token and gameId, check is this player belong to this game
 const debug = require('debug')('nope:cogs:middlewareTokenAuth');
 const shortid = require('shortid');
+const _ = require('lodash');
 
 module.exports = (db) => {
   return (req, res, next) => {
@@ -70,17 +71,17 @@ module.exports = (db) => {
         }
 
         debug('findGameById', game._id);
-        isPlayerTokenInGameObject(game);
+        findEntityWithPlayerToken(game);
       });
     }
 
-    function isPlayerTokenInGameObject(game) {
+    function findEntityWithPlayerToken(game) {
       let isFound = false;
-      let playerIndex;
-      game.playerArray.forEach((player, index) => {
-        if (player.token === playerToken) {
+      let playerId;
+      _.forEach(game, (entity, id) => {
+        if (entity.playerToken === playerToken) {
           isFound = true;
-          playerIndex = index;
+          playerId = id;
         }
       });
 
@@ -91,10 +92,10 @@ module.exports = (db) => {
         return;
       }
 
-      res.locals.playerIndex = playerIndex;
-      res.locals.game = game;
+      res.locals.playerId = playerId;
+      res.locals.entities = game;
 
-      debug('isPlayerTokenInGameObject:', isFound);
+      debug('findEntityWithPlayerToken:', isFound);
       next();
     }
   };
