@@ -45,27 +45,33 @@
             <td>Options</td>
           </tr>
 
-          <% viewModel.gameArray.forEach((game) => { %>
+          <% viewModel.games.forEach((game) => { %>
             <tr>
               <td><%= game._id %></td>
-              <td><%= game.mapName %></td>
+              <td><%= game[game._id].mapName %></td>
               <td>
-                <% game.playerArray.forEach((player) => { %>
-                  <%= player.name %><br/>
+                <% viewModel._.forEach(game, (entity) => { %>
+                  <% if (entity.playerToken && entity.name) { %>
+                    <%= entity.name %><br/>
+                  <% } %>
                 <% }); %>
               </td>
               <td>
-                <% game.playerArray.forEach((player) => { %>
-                  <% const uri = '/game?gameId=' + game._id + '&playerToken=' + player.token; %>
-                  <a href="<%= viewModel.baseurl + uri %>">Open Map</a>
-                  <br/>
+                <% viewModel._.forEach(game, (entity) => { %>
+                  <% if (entity.playerToken && entity.name) { %>
+                    <% const uri = '/game?gameId=' + game._id + '&playerToken=' + entity.playerToken; %>
+                    <a href="<%= viewModel.baseurl + uri %>">Open Map</a>
+                    <br/>
+                  <% } %>
                 <% }); %>
               </td>
               <td>
-                <% game.playerArray.forEach((player) => { %>
-                  <% const uri = '/ajax/stateDataGet?gameId=' + game._id + '&playerToken=' + player.token; %>
-                  <a href="<%= viewModel.baseurl + uri %>">/ajax/stateDataGet</a>
-                  <br/>
+                <% viewModel._.forEach(game, (entity) => { %>
+                  <% if (entity.playerToken && entity.name) { %>
+                    <% const uri = '/ajax/stateDataGet?gameId=' + game._id + '&playerToken=' + entity.playerToken; %>
+                    <a href="<%= viewModel.baseurl + uri %>">/ajax/stateDataGet</a>
+                    <br/>
+                  <% } %>
                 <% }); %>
               </td>
               <td>

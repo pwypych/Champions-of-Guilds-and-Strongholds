@@ -3,21 +3,23 @@
 'use strict';
 
 const debug = require('debug')('cogs:panel');
+const _ = require('lodash');
 
 // What does this module do?
 // Finds availiable maps and created games and generates html from it
 module.exports = (environment, db, templateToHtml) => {
   return (req, res) => {
-    const viewModel = {};
-    viewModel.baseurl = environment.baseurl;
-    viewModel.timestamp = Date.now();
-
     (function init() {
+      const viewModel = {};
+      viewModel.baseurl = environment.baseurl;
+      viewModel.timestamp = Date.now();
+      viewModel._ = _;
+
       debug('init');
-      findMapNameArray();
+      findMapNames(viewModel);
     })();
 
-    function findMapNameArray() {
+    function findMapNames(viewModel) {
       const query = {};
       const options = {};
       options.projection = { _id: 1 };
@@ -26,7 +28,7 @@ module.exports = (environment, db, templateToHtml) => {
         .find(query, options)
         .toArray((error, mapArray) => {
           if (error) {
-            debug('findMapNameArray: error:', error);
+            debug('findMapNames: error:', error);
             res
               .status(503)
               .send(
@@ -41,21 +43,21 @@ module.exports = (environment, db, templateToHtml) => {
 
           viewModel.mapNameArray = mapNameArray;
 
-          debug('findMapNameArray', mapNameArray);
-          findGameArray();
+          debug('findMapNames', mapNameArray);
+          findGames(viewModel);
         });
     }
 
-    function findGameArray() {
+    function findGames(viewModel) {
       const query = {};
       const options = {};
       options.projection = { mapLayer: 0 };
 
       db.collection('gameCollection')
         .find(query, options)
-        .toArray((error, gameArray) => {
+        .toArray((error, games) => {
           if (error) {
-            debug('findGameArray: error:', error);
+            debug('findGames: error:', error);
             res
               .status(503)
               .send(
@@ -64,14 +66,14 @@ module.exports = (environment, db, templateToHtml) => {
             return;
           }
 
-          viewModel.gameArray = gameArray;
+          viewModel.games = games;
 
-          debug('findMapNameArray', gameArray);
-          sendResponce();
+          debug('findGames', games);
+          sendResponce(viewModel);
         });
     }
 
-    function sendResponce() {
+    function sendResponce(viewModel) {
       templateToHtml(__filename, viewModel, (error, html) => {
         debug('sendResponce():html', viewModel, html.length);
         debug('******************** send ********************');
