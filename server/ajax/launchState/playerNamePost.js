@@ -9,10 +9,6 @@ const validator = require('validator');
 // Endpoint that updates player name for game in db
 module.exports = (db) => {
   return (req, res) => {
-    const game = res.locals.game;
-    const playerIndex = res.locals.playerIndex;
-    let playerName;
-
     (function init() {
       debug('init');
       checkRequestBody();
@@ -31,7 +27,7 @@ module.exports = (db) => {
     }
 
     function sanitizeRequestBody() {
-      playerName = validator.whitelist(
+      let playerName = validator.whitelist(
         req.body.playerName,
         'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 '
       );
@@ -45,12 +41,14 @@ module.exports = (db) => {
       }
 
       debug('checkRequestBody', playerName);
-      updateGameByPlayerName();
+      updateGameByPlayerName(playerName);
     }
 
-    function updateGameByPlayerName() {
-      const query = { _id: game._id };
-      const name = 'playerArray.' + playerIndex + '.name';
+    function updateGameByPlayerName(playerName) {
+      const entities = res.locals.entities;
+      const playerId = res.locals.playerId;
+      const query = { _id: entities._id };
+      const name = playerId + '.name';
       const $set = {};
       $set[name] = playerName;
       const update = { $set: $set };
