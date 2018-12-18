@@ -8,29 +8,25 @@ const debug = require('debug')('cogs:playerReadyPost');
 // Set player ready to 'yes' in db
 module.exports = (db, walkie) => {
   return (req, res) => {
-    const game = res.locals.game;
-    const playerIndex = res.locals.playerIndex;
-
-    let playerReady;
-
     (function init() {
       debug('init');
-      checkRequestBody();
+      const entities = res.locals.entities;
+      checkRequestBody(entities);
     })();
 
-    function checkRequestBody() {
+    function checkRequestBody(entities) {
       if (typeof req.body.playerReady !== 'string') {
         res.status(400);
         res.send('400 Bad Request - POST parameter playerReady not defined');
         return;
       }
-      playerReady = req.body.playerReady;
+      const playerReady = req.body.playerReady;
 
       debug('checkRequestBody', req.body);
-      checkIsReady();
+      checkIsReady(entities, playerReady);
     }
 
-    function checkIsReady() {
+    function checkIsReady(entities, playerReady) {
       if (playerReady !== 'yes') {
         res.status(400);
         res.send('400 Bad Request - playerReady parameter must be "yes"');
@@ -38,14 +34,15 @@ module.exports = (db, walkie) => {
       }
 
       debug('checkIsReady: playerReady', playerReady);
-      updateGameByPlayerReady();
+      updateGameByPlayerReady(entities, playerReady);
     }
 
-    function updateGameByPlayerReady() {
-      const query = { _id: game._id };
+    function updateGameByPlayerReady(entities, playerReady) {
+      const playerId = res.locals.playerId;
+      const query = { _id: entities._id };
 
       // We need to update an object inside mongo array, must use its index in $set query
-      const mongoFieldToSet = 'playerArray.' + playerIndex + '.ready';
+      const mongoFieldToSet = playerId + '.readyForLaunch';
       const $set = {};
       $set[mongoFieldToSet] = playerReady;
       const update = { $set: $set };
@@ -63,16 +60,16 @@ module.exports = (db, walkie) => {
             return;
           }
 
-          sendResponce();
+          sendResponce(entities);
         }
       );
     }
 
-    function sendResponce() {
+    function sendResponce(entities) {
       res.send({ error: 0 });
       debug('******************** ajax ********************');
       walkie.triggerEvent('launchPlayerReady_', 'playerReadyPost.js', {
-        gameId: game._id
+        gameId: entities._id
       });
     }
   };

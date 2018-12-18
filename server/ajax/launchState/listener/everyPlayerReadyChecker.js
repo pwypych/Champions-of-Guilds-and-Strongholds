@@ -3,6 +3,7 @@
 'use strict';
 
 const debug = require('debug')('cogs:everyPlayerReadyChecker');
+const _ = require('lodash');
 
 // What does this module do?
 // Check is every player ready
@@ -39,23 +40,27 @@ module.exports = (walkie, db) => {
           return;
         }
 
-        debug('findGameById', game._id);
-        checkEveryPlayerReady(game);
+        const entities = game;
+        debug('findGameById', entities._id);
+        checkEveryPlayerReady(entities);
       });
     }
 
-    function checkEveryPlayerReady(game) {
+    function checkEveryPlayerReady(entities) {
       let isEveryPlayerReady = true;
-      game.playerArray.forEach((player) => {
-        if (player.ready === 'no') {
-          isEveryPlayerReady = false;
+
+      _.forEach(entities, (entity) => {
+        if (entity.playerData && entity.plaerToken) {
+          if (entity.plaeryData.readyForaLaunch === 'no') {
+            isEveryPlayerReady = false;
+          }
         }
       });
 
       if (isEveryPlayerReady) {
         debug('checkEveryPlayerReady', isEveryPlayerReady);
         walkie.triggerEvent('everyPlayerReady_', 'everyPlayerReadyChecker.js', {
-          gameId: game._id
+          gameId: entities._id
         });
         return;
       }
