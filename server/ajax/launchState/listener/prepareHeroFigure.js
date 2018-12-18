@@ -4,6 +4,7 @@
 
 const debug = require('debug')('cogs:prepareHeroFigure');
 const _ = require('lodash');
+const shortId = require('shortid');
 
 // What does this module do?
 // Place every hero figure in front of a castle
@@ -32,94 +33,66 @@ module.exports = (walkie, db) => {
       db.collection('gameCollection').findOne(query, options, (error, game) => {
         const entities = game;
         debug('findGameById', entities._id, 'error:', error);
-        generateHeroStartPositionArray(entities);
+        generateHeroArray(entities);
       });
     }
 
-    function generateHeroStartPositionArray(entities) {
-      const heroStartPositionArray = [];
-
-      _.forEach(entities, (entity) => {
-        if (entity.figure === 'castleRandom') {
-          const heroStartPosition = {};
-          heroStartPosition.x = entity.position.x;
-          heroStartPosition.y = entity.position.y + 1;
-          heroStartPositionArray.push(heroStartPosition);
-        }
-      });
-
-      debug(
-        'generateHeroStartPositionArray: heroStartPositionArray.length:',
-        heroStartPositionArray.length
-      );
-      generatePlayerIdArray(heroStartPositionArray, entities);
-    }
-
-    function generatePlayerIdArray(heroStartPositionArray, entities) {
-      const playerIdArray = [];
+    function generateHeroArray(entities) {
+      const playerArray = [];
+      const castleRandomArray = [];
 
       _.forEach(entities, (entity, id) => {
         if (entity.playerData) {
-          playerIdArray.push(id);
+          entity.id = id;
+          playerArray.push(entity);
+        }
+
+        if (entity.figure === 'castleRandom') {
+          entity.id = id;
+          castleRandomArray.push(entity);
         }
       });
 
-      debug('generatePlayerIdArray', playerIdArray);
-      forEachHeroStartPosition(heroStartPositionArray, playerIdArray, entities);
-    }
-
-    function forEachHeroStartPosition(
-      heroStartPositionArray,
-      playerIdArray,
-      entities
-    ) {
-      const done = _.after(heroStartPositionArray.length, () => {
-        debug('forEachHeroStartPosition: done!');
-        triggerPrepareReady(entities);
-      });
-
-      debug('forEachHeroStartPosition');
-
-      // We assume that playerIndex is based on position on mapLayer
-      heroStartPositionArray.forEach((heroStartPosition, playerIndex) => {
-        isStartPositionAvailable(
-          entities,
-          heroStartPosition,
-          playerIndex,
-          done
-        );
-      });
-    }
-
-    function isStartPositionAvailable(
-      entities,
-      heroStartPosition,
-      playerIndex,
-      done
-    ) {
-      if (!game.mapLayer[heroStartPosition.y][heroStartPosition.x]) {
-        debug('Hero startPosition not exist');
-        done();
-        return;
+      if (playerArray.length !== castleRandomArray.length) {
+        throw new Error('Castle and Player number are not equal');
       }
 
-      debug('isStartPositionAvailable: yes!');
-      instantiateHero(heroStartPosition, game, playerIndex, done);
+      const heroArray = [];
+      _.forEach(playerArray, (player, index) => {
+        const hero = {};
+        hero.owner = player.id;
+        hero.position = {};
+        hero.position.x = castleRandomArray[index].position.x;
+        hero.position.y = castleRandomArray[index].position.y + 1;
+        hero.figure = 'heroHuman';
+        hero.existsInState = 'worldState';
+        heroArray.push(hero);
+      });
+
+      const gameId = entities._id;
+
+      debug('generateHeroArray: heroArray.length:', heroArray);
+      forEachHeroArray(heroArray, gameId);
     }
 
-    function instantiateHero(heroStartPosition, game, playerIndex, done) {
-      const hero = {};
-      hero.x = heroStartPosition.x;
-      hero.y = heroStartPosition.y;
+    function forEachHeroArray(heroArray, gameId) {
+      const done = _.after(heroArray.length, () => {
+        debug('forEachHeroArray: done!');
+        triggerPrepareReady(gameId);
+      });
 
-      debug('instantiateHero: hero:', hero);
-      updateHero(hero, game, playerIndex, done);
+      debug('forEachHeroArray');
+
+      // We assume that playerIndex is based on position on mapLayer
+      heroArray.forEach((hero) => {
+        updateGame(hero, gameId, done);
+      });
     }
 
-    function updateHero(hero, game, playerIndex, done) {
-      const query = { _id: game._id };
+    function updateGame(hero, gameId, done) {
+      const query = { _id: gameId };
 
-      const mongoFieldToSet = 'playerArray.' + playerIndex + '.hero';
+      const mongoFieldToSet = 'hero__' + shortId.generate();
       const $set = {};
       $set[mongoFieldToSet] = hero;
       const update = { $set: $set };
@@ -131,7 +104,7 @@ module.exports = (walkie, db) => {
         options,
         (error) => {
           if (error) {
-            debug(game._id, ': ERROR: update mongo error:', error);
+            debug(gameId, ': ERROR: update mongo error:', error);
           }
 
           done();
@@ -139,11 +112,11 @@ module.exports = (walkie, db) => {
       );
     }
 
-    function triggerPrepareReady(game) {
+    function triggerPrepareReady(gameId) {
       debug('triggerPrepareReady');
 
       walkie.triggerEvent('prepareHeroFigure_', 'prepareHeroFigure.js', {
-        gameId: game._id
+        gameId: gameId
       });
     }
   };
