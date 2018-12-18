@@ -66,15 +66,16 @@ module.exports = (db) => {
           return;
         }
 
-        debug('findGameById', game._id);
-        findEntityWithPlayerToken(game, playerToken);
+        const entities = game;
+        debug('findGameById', entities._id);
+        findEntityWithPlayerToken(entities, playerToken);
       });
     }
 
-    function findEntityWithPlayerToken(game, playerToken) {
+    function findEntityWithPlayerToken(entities, playerToken) {
       let playerId = '';
 
-      _.forEach(game, (entity, id) => {
+      _.forEach(entities, (entity, id) => {
         if (entity.playerToken === playerToken) {
           playerId = id;
         }
@@ -88,7 +89,7 @@ module.exports = (db) => {
       }
 
       res.locals.playerId = playerId;
-      res.locals.entities = game;
+      res.locals.entities = entities;
 
       debug('findEntityWithPlayerToken: playerId:', playerId);
       next();
