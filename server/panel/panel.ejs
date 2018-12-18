@@ -51,14 +51,14 @@
               <td><%= game[game._id].mapName %></td>
               <td>
                 <% viewModel._.forEach(game, (entity) => { %>
-                  <% if (entity.playerToken && entity.name) { %>
-                    <%= entity.name %><br/>
+                  <% if (entity.playerToken && entity.playerData) { %>
+                    <%= entity.playerData.name %><br/>
                   <% } %>
                 <% }); %>
               </td>
               <td>
                 <% viewModel._.forEach(game, (entity) => { %>
-                  <% if (entity.playerToken && entity.name) { %>
+                  <% if (entity.playerToken && entity.playerData) { %>
                     <% const uri = '/game?gameId=' + game._id + '&playerToken=' + entity.playerToken; %>
                     <a href="<%= viewModel.baseurl + uri %>">Open Map</a>
                     <br/>
@@ -67,7 +67,7 @@
               </td>
               <td>
                 <% viewModel._.forEach(game, (entity) => { %>
-                  <% if (entity.playerToken && entity.name) { %>
+                  <% if (entity.playerToken && entity.playerData) { %>
                     <% const uri = '/ajax/stateDataGet?gameId=' + game._id + '&playerToken=' + entity.playerToken; %>
                     <a href="<%= viewModel.baseurl + uri %>">/ajax/stateDataGet</a>
                     <br/>

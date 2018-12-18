@@ -102,10 +102,11 @@ module.exports = (environment, db, figureManagerTree) => {
         const id = 'player__' + shortid.generate();
         entities[id] = {};
         entities[id].playerToken = 'playerToken_' + shortid.generate();
-        entities[id].name = 'Player ' + (index + 1);
-        entities[id].color = colorArray[index];
+        entities[id].playerData = {};
+        entities[id].playerData.name = 'Player ' + (index + 1);
+        entities[id].playerData.race = 'human';
+        entities[id].playerData.color = colorArray[index];
         entities[id].readyForLaunch = 'no';
-        entities[id].race = 'human';
         debug('generatePlayerEntities: playerEntity:', entities[id]);
       });
 
