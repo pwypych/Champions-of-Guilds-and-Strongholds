@@ -13,22 +13,25 @@ g.launch.launchCountdown = ($body, walkie) => {
 
   function onStateDataGet() {
     walkie.onEvent(
-      'stateDataGet_',
+      'entitiesGet_',
       'launchTable.js',
-      (stateData) => {
-        if (stateData.state === 'launchState') {
-          checkEveryPlayerReady(stateData.playerArray);
+      (entities) => {
+        if (entities[entities._id].state === 'launchState') {
+          checkEveryPlayerReady(entities);
         }
       },
       false
     );
   }
 
-  function checkEveryPlayerReady(playerArray) {
+  function checkEveryPlayerReady(entities) {
     let isEveryPlayerReady = true;
-    playerArray.forEach((player) => {
-      if (player.ready === 'no') {
-        isEveryPlayerReady = false;
+
+    _.forEach(entities, (entity) => {
+      if (entity.playerData) {
+        if (entity.playerData.readyForLaunch === 'no') {
+          isEveryPlayerReady = false;
+        }
       }
     });
 

@@ -12,21 +12,22 @@ g.launch.launchDisableUi = ($body, walkie) => {
 
   function onStateDataGet() {
     walkie.onEvent(
-      'stateDataGet_',
+      'entitiesGet_',
       'launchTable.js',
-      (stateData) => {
-        if (stateData.state === 'launchState') {
+      (entities) => {
+        if (entities[entities._id].state === 'launchState') {
           console.log('launchTable.js: update $table');
-          disableUi(stateData.playerIndex, stateData.playerArray);
+          disableUi(entities);
         }
       },
       false
     );
   }
 
-  function disableUi(playerIndex, playerArray) {
-    const player = playerArray[playerIndex];
-    if (player.ready === 'yes') {
+  function disableUi(entities) {
+    const player = _.find(entities, 'playerCurrent');
+
+    if (player.playerData.readyForLaunch === 'yes') {
       $button.attr('disabled', 'disabled');
       $inputName.attr('disabled', 'disabled');
     }
