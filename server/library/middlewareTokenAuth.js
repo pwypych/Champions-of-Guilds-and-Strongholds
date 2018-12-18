@@ -73,7 +73,7 @@ module.exports = (db) => {
     }
 
     function findEntityWithPlayerToken(entities, playerToken) {
-      let playerId = '';
+      let playerId;
 
       _.forEach(entities, (entity, id) => {
         if (entity.playerToken === playerToken) {
@@ -81,7 +81,7 @@ module.exports = (db) => {
         }
       });
 
-      if (playerId === '') {
+      if (!playerId) {
         res
           .status(503)
           .send('503 Service Unavailable - Cannot find playerToken in game');
