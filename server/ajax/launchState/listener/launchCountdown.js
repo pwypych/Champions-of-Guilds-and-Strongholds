@@ -29,7 +29,10 @@ module.exports = (walkie, db) => {
 
     function updateGameState(gameId) {
       const query = { _id: gameId };
-      const update = { $set: { state: 'worldState' } };
+      const mongoFieldToSet = gameId + '.state';
+      const $set = {};
+      $set[mongoFieldToSet] = 'worldState';
+      const update = { $set: $set };
       const options = {};
 
       db.collection('gameCollection').updateOne(

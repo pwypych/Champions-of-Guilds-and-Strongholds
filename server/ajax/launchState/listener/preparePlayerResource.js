@@ -55,27 +55,47 @@ module.exports = (walkie, db) => {
           return;
         }
 
-        debug('findGameById', game._id);
-        forEachPlayer(game);
+        const entities = game;
+        debug('findGameById', entities._id);
+        generatePlayerEntityArray(entities);
       });
     }
 
-    function forEachPlayer(game) {
-      const done = _.after(game.playerArray.length, () => {
+    function generatePlayerEntityArray(entities) {
+      const playerEntityArray = [];
+
+      _.forEach(entities, (entity, id) => {
+        if (entity.playerToken && entity.playerData) {
+          const player = {};
+          player.id = id;
+          player.race = entity.playerData.race;
+          playerEntityArray.push(player);
+        }
+      });
+
+      debug(
+        'generatePlayerEntityArray: playerEntityArray.length',
+        playerEntityArray.length
+      );
+      forEachPlayer(entities, playerEntityArray);
+    }
+
+    function forEachPlayer(entities, playerEntityArray) {
+      const done = _.after(playerEntityArray.length, () => {
         debug('forEachPlayer: done!');
-        triggerPrepareReady(game);
+        triggerPrepareReady(entities);
       });
 
-      game.playerArray.forEach((player, playerIndex) => {
+      playerEntityArray.forEach((player, playerIndex) => {
         debug('forEachPlayer', player);
-        updatePlayerResources(game, player, playerIndex, done);
+        updatePlayerResources(entities, player, playerIndex, done);
       });
     }
 
-    function updatePlayerResources(game, player, playerIndex, done) {
-      const query = { _id: game._id };
+    function updatePlayerResources(entities, player, playerIndex, done) {
+      const query = { _id: entities._id };
 
-      const mongoFieldToSet = 'playerArray.' + playerIndex + '.resources';
+      const mongoFieldToSet = player.id + '.playerResources';
       const $set = {};
       $set[mongoFieldToSet] = raceResourceMap[player.race];
       const update = { $set: $set };
@@ -97,13 +117,13 @@ module.exports = (walkie, db) => {
       );
     }
 
-    function triggerPrepareReady(game) {
+    function triggerPrepareReady(entities) {
       debug('triggerPrepareReady');
       walkie.triggerEvent(
         'preparePlayerResources_',
         'preparePlayerResource.js',
         {
-          gameId: game._id
+          gameId: entities._id
         }
       );
     }
