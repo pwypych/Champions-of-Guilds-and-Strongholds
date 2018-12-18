@@ -50,8 +50,8 @@ module.exports = (walkie, db) => {
       let isEveryPlayerReady = true;
 
       _.forEach(entities, (entity) => {
-        if (entity.playerData && entity.plaerToken) {
-          if (entity.plaeryData.readyForaLaunch === 'no') {
+        if (entity.playerData && entity.playerToken) {
+          if (entity.playerData.readyForLaunch === 'no') {
             isEveryPlayerReady = false;
           }
         }
