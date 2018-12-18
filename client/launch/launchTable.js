@@ -11,19 +11,19 @@ g.launch.launchTable = ($body, walkie) => {
 
   function onStateDataGet() {
     walkie.onEvent(
-      'stateDataGet_',
+      'entitiesGet_',
       'launchTable.js',
-      (stateData) => {
-        if (stateData.state === 'launchState') {
+      (entities) => {
+        if (entities[entities._id].state === 'launchState') {
           // console.log('launchTable.js: update $table');
-          updateTable(stateData.playerArray);
+          updateTable(entities);
         }
       },
       false
     );
   }
 
-  function updateTable(playerArray) {
+  function updateTable(entities) {
     $table.empty();
     const $title = $('<tr></tr>');
     $title.append('<td>Name</td>');
@@ -32,12 +32,16 @@ g.launch.launchTable = ($body, walkie) => {
     $title.append('<td>Ready</td>');
     $table.append($title);
 
-    playerArray.forEach((player) => {
+    _.forEach(entities, (entity) => {
+      if (!entity.playerData) {
+        return;
+      }
+
       const $tr = $('<tr></tr>');
-      $tr.append('<td>' + (player.name || 'Player') + '</td>');
-      $tr.append('<td>' + (player.color || 'Default') + '</td>');
-      $tr.append('<td>' + (player.race || 'Random') + '</td>');
-      $tr.append('<td>' + (player.ready || 'No') + '</td>');
+      $tr.append('<td>' + (entity.playerData.name || 'Player') + '</td>');
+      $tr.append('<td>' + (entity.playerData.color || 'Default') + '</td>');
+      $tr.append('<td>' + (entity.playerData.race || 'Random') + '</td>');
+      $tr.append('<td>' + (entity.playerData.ready || 'No') + '</td>');
       $table.append($tr);
     });
   }

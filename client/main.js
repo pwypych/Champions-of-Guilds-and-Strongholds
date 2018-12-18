@@ -29,7 +29,7 @@ g.main = function main() {
     const walkie = g.tool.walkie();
 
     g.engine.stateChange(walkie, auth);
-    g.engine.stateInterval(walkie, auth);
+    g.engine.entitiesInterval(walkie, auth);
 
     const freshStateData = g.engine.freshStateData(walkie);
 

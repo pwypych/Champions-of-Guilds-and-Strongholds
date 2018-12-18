@@ -6,24 +6,26 @@ g.engine.stateChange = (walkie) => {
   let currentState;
 
   (function init() {
-    onStateDataGet();
+    onEntitiesGet();
   })();
 
-  function onStateDataGet() {
+  function onEntitiesGet() {
     walkie.onEvent(
-      'stateDataGet_',
+      'entitiesGet_',
       'stateChange.js',
-      (stateData) => {
-        compareWithOldState(stateData.state);
+      (entities) => {
+        compareWithOldState(entities);
       },
       false
     );
   }
 
-  function compareWithOldState(state) {
-    if (currentState !== state) {
-      walkie.triggerEvent('stateChange_', 'stateChange.js', state);
-      currentState = state;
+  function compareWithOldState(entities) {
+    const gameEntity = entities[entities._id];
+
+    if (currentState !== gameEntity.state) {
+      walkie.triggerEvent('stateChange_', 'stateChange.js', gameEntity.state);
+      currentState = gameEntity.state;
     }
   }
 };

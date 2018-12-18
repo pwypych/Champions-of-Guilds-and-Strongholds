@@ -34,6 +34,7 @@ module.exports = () => {
       const playerId = res.locals.playerId;
 
       const launchEntities = {};
+      launchEntities._id = entities._id;
 
       _.forEach(entities, (entity, id) => {
         // game entity
