@@ -2,62 +2,67 @@
 
 'use strict';
 
-const debug = require('debug')('nope:cogs:worldStateDataGet');
+const debug = require('debug')('cogs:worldStateDataGet');
+const _ = require('lodash');
 
 // What does this module do?
 // Send info about player and opponents
 module.exports = () => {
   return (req, res, next) => {
-    const game = res.locals.game;
-    const playerIndex = res.locals.playerIndex;
-
     (function init() {
       debug('init');
-      compareState();
+      const entities = res.locals.entities;
+
+      compareState(entities);
     })();
 
-    function compareState() {
-      if (game.state !== 'worldState') {
+    function compareState(entities) {
+      const gameId = entities._id;
+      const gameEntity = entities[gameId];
+
+      if (gameEntity.state !== 'worldState') {
         debug('compareState: not worldState!');
         next();
         return;
       }
-      generateData();
+
+      debug('compareState: state ok!', gameEntity.state);
+      generateWorldEntities(entities);
     }
 
-    function generateData() {
-      const worldStateData = {};
-      worldStateData.state = game.state;
-      worldStateData.playerIndex = playerIndex;
-      worldStateData.mapLayer = game.mapLayer;
+    function generateWorldEntities(entities) {
+      const playerId = res.locals.playerId;
 
-      worldStateData.playerArray = res.locals.game.playerArray.map(
-        (player, index) => {
-          if (index === playerIndex) {
-            return {
-              name: player.name,
-              color: player.color,
-              race: player.race,
-              resources: player.resources,
-              hero: player.hero
-            };
-          }
+      const worldEntities = {};
+      worldEntities._id = entities._id;
 
-          const enemy = {
-            name: player.name,
-            color: player.color,
-            race: player.race,
-            hero: player.hero
-          };
-          return enemy;
+      _.forEach(entities, (entity, id) => {
+        // Game entity
+        if (entity.mapName && entity.state) {
+          worldEntities[id] = entity;
         }
-      );
 
-      debug(
-        'generateData: worldStateData.mapLayer.length',
-        worldStateData.mapLayer.length
-      );
-      sendStateData(worldStateData);
+        // Player entities
+        if (entity.playerToken && entity.playerData) {
+          worldEntities[id] = {
+            playerData: entity.playerData
+          };
+
+          // Player current
+          if (id === playerId) {
+            worldEntities[id].playerCurrent = true;
+            worldEntities[id].playerResources = entity.playerResources;
+          }
+        }
+
+        // Figure entities
+        if (entity.figure) {
+          worldEntities[id] = entity;
+        }
+      });
+
+      debug('generateData: worldEntities', worldEntities);
+      sendStateData(worldEntities);
     }
 
     function sendStateData(stateData) {

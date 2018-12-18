@@ -19,14 +19,14 @@ module.exports = () => {
     function compareState(entities) {
       const gameId = entities._id;
       const gameEntity = entities[gameId];
-      const state = gameEntity.state;
 
-      if (state !== 'launchState') {
+      if (gameEntity.state !== 'launchState') {
         debug('compareState: not launchState!');
         next();
         return;
       }
 
+      debug('compareState: state ok!', gameEntity.state);
       generateLaunchEntities(entities);
     }
 
@@ -37,18 +37,18 @@ module.exports = () => {
       launchEntities._id = entities._id;
 
       _.forEach(entities, (entity, id) => {
-        // game entity
-        if (entity.mapName || entity.state) {
+        // Game entity
+        if (entity.mapName && entity.state) {
           launchEntities[id] = entity;
         }
 
-        // player entities
-        if (entity.playerToken || entity.playerData) {
+        // Player entities
+        if (entity.playerToken && entity.playerData) {
           launchEntities[id] = {
             playerData: entity.playerData
           };
 
-          // player current
+          // Player current
           if (id === playerId) {
             launchEntities[id].playerCurrent = true;
           }
