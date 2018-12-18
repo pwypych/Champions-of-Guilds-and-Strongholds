@@ -30,57 +30,69 @@ module.exports = (walkie, db) => {
       const options = {};
 
       db.collection('gameCollection').findOne(query, options, (error, game) => {
-        if (error) {
-          debug('findGameById: error:', error);
-          return;
-        }
-
-        if (!game) {
-          debug('game object is empty');
-          return;
-        }
-
-        debug('findGameById', game._id);
-        generateHeroStartPositionArray(game);
+        const entities = game;
+        debug('findGameById', entities._id, 'error:', error);
+        generateHeroStartPositionArray(entities);
       });
     }
 
-    function generateHeroStartPositionArray(game) {
+    function generateHeroStartPositionArray(entities) {
       const heroStartPositionArray = [];
-      game.mapLayer.forEach((row, y) => {
-        row.forEach((figure, x) => {
-          if (figure.name === 'castleRandom') {
-            const heroStartPosition = {};
-            heroStartPosition.x = x;
-            heroStartPosition.y = y + 1;
-            heroStartPositionArray.push(heroStartPosition);
-          }
-        });
+
+      _.forEach(entities, (entity) => {
+        if (entity.figure === 'castleRandom') {
+          const heroStartPosition = {};
+          heroStartPosition.x = entity.position.x;
+          heroStartPosition.y = entity.position.y + 1;
+          heroStartPositionArray.push(heroStartPosition);
+        }
       });
 
       debug(
         'generateHeroStartPositionArray: heroStartPositionArray.length:',
         heroStartPositionArray.length
       );
-      forEachHeroStartPosition(heroStartPositionArray, game);
+      generatePlayerIdArray(heroStartPositionArray, entities);
     }
 
-    function forEachHeroStartPosition(heroStartPositionArray, game) {
+    function generatePlayerIdArray(heroStartPositionArray, entities) {
+      const playerIdArray = [];
+
+      _.forEach(entities, (entity, id) => {
+        if (entity.playerData) {
+          playerIdArray.push(id);
+        }
+      });
+
+      debug('generatePlayerIdArray', playerIdArray);
+      forEachHeroStartPosition(heroStartPositionArray, playerIdArray, entities);
+    }
+
+    function forEachHeroStartPosition(
+      heroStartPositionArray,
+      playerIdArray,
+      entities
+    ) {
       const done = _.after(heroStartPositionArray.length, () => {
         debug('forEachHeroStartPosition: done!');
-        triggerPrepareReady(game);
+        triggerPrepareReady(entities);
       });
 
       debug('forEachHeroStartPosition');
 
       // We assume that playerIndex is based on position on mapLayer
       heroStartPositionArray.forEach((heroStartPosition, playerIndex) => {
-        isStartPositionAvailable(game, heroStartPosition, playerIndex, done);
+        isStartPositionAvailable(
+          entities,
+          heroStartPosition,
+          playerIndex,
+          done
+        );
       });
     }
 
     function isStartPositionAvailable(
-      game,
+      entities,
       heroStartPosition,
       playerIndex,
       done
