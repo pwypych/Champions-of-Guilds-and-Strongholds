@@ -47,8 +47,9 @@ module.exports = (db) => {
     function updateGameByPlayerName(playerName) {
       const entities = res.locals.entities;
       const playerId = res.locals.playerId;
+
       const query = { _id: entities._id };
-      const name = playerId + '.name';
+      const name = playerId + '.playerData.name';
       const $set = {};
       $set[name] = playerName;
       const update = { $set: $set };

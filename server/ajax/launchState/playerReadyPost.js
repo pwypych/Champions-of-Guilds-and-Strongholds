@@ -42,7 +42,7 @@ module.exports = (db, walkie) => {
       const query = { _id: entities._id };
 
       // We need to update an object inside mongo array, must use its index in $set query
-      const mongoFieldToSet = playerId + '.readyForLaunch';
+      const mongoFieldToSet = playerId + '.playerData.readyForLaunch';
       const $set = {};
       $set[mongoFieldToSet] = playerReady;
       const update = { $set: $set };
