@@ -2,56 +2,66 @@
 
 'use strict';
 
-const debug = require('debug')('nope:cogs:launchStateDataGet');
+const debug = require('debug')('cogs:launchStateDataGet');
+const _ = require('lodash');
 
 // What does this module do?
 // Send info about players setup
 module.exports = () => {
   return (req, res, next) => {
-    const state = res.locals.game.state;
-    const playerIndex = res.locals.playerIndex;
-
     (function init() {
       debug('init');
-      compareState();
+      const entities = res.locals.entities;
+
+      compareState(entities);
     })();
 
-    function compareState() {
+    function compareState(entities) {
+      const gameId = entities._id;
+      const gameEntity = entities[gameId];
+      const state = gameEntity.state;
+
       if (state !== 'launchState') {
         debug('compareState: not launchState!');
         next();
         return;
       }
-      generateData();
+
+      generateLaunchEntities(entities);
     }
 
-    function generateData() {
-      debug('playerIndex', playerIndex);
-      const launchStateData = {};
-      launchStateData.state = state;
-      launchStateData.playerIndex = playerIndex;
+    function generateLaunchEntities(entities) {
+      const playerId = res.locals.playerId;
 
-      launchStateData.playerArray = res.locals.game.playerArray.map(
-        (player) => {
-          return {
-            name: player.name,
-            color: player.color,
-            race: player.race,
-            ready: player.ready
-          };
+      const launchEntities = {};
+
+      _.forEach(entities, (entity, id) => {
+        // game entity
+        if (entity.mapName || entity.state) {
+          launchEntities[id] = entity;
         }
-      );
 
-      debug(
-        'generateData: launchStateData.playerArray.length',
-        launchStateData.playerArray.length
-      );
-      sendStateData(launchStateData);
+        // player entities
+        if (entity.playerToken || entity.playerData) {
+          launchEntities[id] = {
+            playerData: entity.playerData
+          };
+
+          // player current
+          if (id === playerId) {
+            launchEntities[id].playerCurrent = true;
+          }
+        }
+      });
+
+      debug('generateLaunchEntities: launchEntities', launchEntities);
+
+      sendResponce(launchEntities);
     }
 
-    function sendStateData(stateData) {
-      debug('sendStateData');
-      res.send(stateData);
+    function sendResponce(launchEntities) {
+      debug('sendResponce');
+      res.send(launchEntities);
       debug('******************** ajax ********************');
     }
   };
