@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:heroJourneyPost');
 const validator = require('validator');
 
 // What does this module do?
-// Get heroJourney and heroId, make initial verification
+// Endpoint, accepts wished hero journey for a hero, initial verifies, triggers wishedHeroJourney_
 module.exports = (walkie) => {
   return (req, res) => {
     (function init() {
@@ -34,12 +34,12 @@ module.exports = (walkie) => {
           return;
         }
 
-        const varifiedStep = {};
-        varifiedStep.fromX = parseInt(step.fromX, 10);
-        varifiedStep.fromY = parseInt(step.fromY, 10);
-        varifiedStep.toX = parseInt(step.toX, 10);
-        varifiedStep.toY = parseInt(step.toY, 10);
-        heroJourney.push(varifiedStep);
+        const parsedStep = {};
+        parsedStep.fromX = parseInt(step.fromX, 10);
+        parsedStep.fromY = parseInt(step.fromY, 10);
+        parsedStep.toX = parseInt(step.toX, 10);
+        parsedStep.toY = parseInt(step.toY, 10);
+        heroJourney.push(parsedStep);
       });
 
       if (isError) {

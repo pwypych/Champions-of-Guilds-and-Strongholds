@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:worldEntitiesGet');
+const debug = require('debug')('nope:cogs:worldEntitiesGet');
 const _ = require('lodash');
 
 // What does this module do?

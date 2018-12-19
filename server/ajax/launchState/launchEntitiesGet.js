@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:launchEntitiesGet');
+const debug = require('debug')('nope:cogs:launchEntitiesGet');
 const _ = require('lodash');
 
 // What does this module do?

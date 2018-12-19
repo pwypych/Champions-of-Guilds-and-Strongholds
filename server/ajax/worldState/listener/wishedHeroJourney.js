@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:wishedHeroJourney');
 const async = require('async');
 
 // What does this module do?
-// Get wishedHeroJourney_ and emmits wishedHeroStep_ events by a defined timer
+// Listens to wishedHeroJourney_ and emmits wishedHeroStep_ events by a defined timer
 module.exports = (walkie, db) => {
   return () => {
     (function init() {
@@ -41,12 +41,12 @@ module.exports = (walkie, db) => {
       projection[heroId] = 1;
       options.projection = projection;
 
-      db.collection('gameCollection').find(
+      db.collection('gameCollection').findOne(
         query,
         options,
-        (error, heroEntity) => {
-          debug('findHeroById: heroEntity:', heroEntity, ' | error: ', error);
-          ctx.hero = heroEntity;
+        (error, entities) => {
+          debug('findHeroById: heroEntity:', entities, ' | error: ', error);
+          ctx.hero = entities[heroId];
 
           checkIsBegingMoved(ctx);
         }
@@ -69,7 +69,12 @@ module.exports = (walkie, db) => {
       const playerId = ctx.playerId;
 
       if (hero.owner !== playerId) {
-        debug('checkHeroOwnerComponent: owner and playerId are different');
+        debug(
+          'checkHeroOwnerComponent: owner and playerId are different, hero.owner:',
+          hero.owner,
+          'playerId',
+          playerId
+        );
         return;
       }
 
@@ -159,9 +164,9 @@ module.exports = (walkie, db) => {
       db.collection('gameCollection').findOne(
         query,
         options,
-        (error, currentHero) => {
+        (error, entities) => {
           debug('findCurrentHeroPosition: error:', error);
-          ctx.heroNew = currentHero;
+          ctx.heroNew = entities[heroId];
 
           checkWasHeroMoved(ctx);
         }
