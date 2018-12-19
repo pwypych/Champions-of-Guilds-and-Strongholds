@@ -48,7 +48,7 @@
           <% viewModel.games.forEach((game) => { %>
             <tr>
               <td><%= game._id %></td>
-              <td><%= game[game._id].mapName %></td>
+              <td><%= game[game._id].mapData.name %></td>
               <td>
                 <% viewModel._.forEach(game, (entity) => { %>
                   <% if (entity.playerToken && entity.playerData) { %>

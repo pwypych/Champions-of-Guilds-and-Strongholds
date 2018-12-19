@@ -65,7 +65,10 @@ module.exports = (environment, db, figureManagerTree) => {
       entities._id = id; // mongo id for that game is the same as entitie id for gameEntity
 
       entities[id] = {};
-      entities[id].mapName = mapObject._id;
+      entities[id].mapData = {};
+      entities[id].mapData.name = mapObject._id;
+      entities[id].mapData.width = mapObject.mapLayerWithStrings[0].length;
+      entities[id].mapData.height = mapObject.mapLayerWithStrings.length;
       entities[id].state = 'launchState';
 
       debug('generateGameEntity', entities[id]);

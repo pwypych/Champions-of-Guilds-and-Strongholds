@@ -38,7 +38,7 @@ module.exports = () => {
 
       _.forEach(entities, (entity, id) => {
         // Game entity
-        if (entity.mapName && entity.state) {
+        if (entity.mapData && entity.state) {
           worldEntities[id] = entity;
         }
 

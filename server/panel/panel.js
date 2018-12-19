@@ -68,14 +68,14 @@ module.exports = (environment, db, templateToHtml) => {
 
           viewModel.games = games;
 
-          debug('findGames', games);
+          debug('findGames', games.length);
           sendResponce(viewModel);
         });
     }
 
     function sendResponce(viewModel) {
       templateToHtml(__filename, viewModel, (error, html) => {
-        debug('sendResponce():html', viewModel, html.length);
+        debug('sendResponce():html', html.length);
         debug('******************** send ********************');
         res.send(html);
       });
