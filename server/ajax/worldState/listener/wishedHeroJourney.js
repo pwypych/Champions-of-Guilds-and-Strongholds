@@ -21,7 +21,7 @@ module.exports = (walkie, db) => {
         (data) => {
           const ctx = {};
           ctx.gameId = data.gameId;
-          ctx.playerIndex = data.playerIndex;
+          ctx.playerId = data.playerId;
           ctx.heroJourney = data.heroJourney;
           debug('onWishedHeroJourney: ctx.heroJourney:', ctx.heroJourney);
           findGameById(ctx);
@@ -32,7 +32,7 @@ module.exports = (walkie, db) => {
 
     function findGameById(ctx) {
       const gameId = ctx.gameId;
-      const playerIndex = ctx.playerIndex;
+      const playerId = ctx.playerId;
 
       const query = { _id: gameId };
       const options = {};
