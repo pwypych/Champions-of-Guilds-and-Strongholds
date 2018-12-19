@@ -64,6 +64,9 @@ module.exports = (walkie, db) => {
         hero.position = {};
         hero.position.x = castleRandomArray[index].position.x;
         hero.position.y = castleRandomArray[index].position.y + 1;
+        hero.spriteOffset = {};
+        hero.spriteOffset.x = -9;
+        hero.spriteOffset.y = 0;
         hero.figure = 'heroHuman';
         hero.existsInState = 'worldState';
         heroArray.push(hero);
