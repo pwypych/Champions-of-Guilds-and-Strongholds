@@ -7,26 +7,26 @@ g.world.worldKeyboard = (walkie, auth) => {
   let heroX;
 
   (function init() {
-    onStateDataGet();
+    onEntitiesGet();
     onStateChange();
   })();
 
-  function onStateDataGet() {
+  function onEntitiesGet() {
     walkie.onEvent(
-      'stateDataGet_',
+      'entitiesGet_',
       'worldKeyboard',
-      (stateData) => {
-        if (stateData.state === 'worldState') {
-          findHeroYX(stateData);
+      (entities) => {
+        if (entities[entities._id].state === 'worldState') {
+          findHeroYX(entities);
         }
       },
       false
     );
   }
 
-  function findHeroYX(stateData) {
-    const playerArray = stateData.playerArray;
-    const playerIndex = stateData.playerIndex;
+  function findHeroYX(entities) {
+    const playerArray = entities.playerArray;
+    const playerIndex = entities.playerIndex;
 
     heroX = parseInt(playerArray[playerIndex].hero.x, 10);
     heroY = parseInt(playerArray[playerIndex].hero.y, 10);

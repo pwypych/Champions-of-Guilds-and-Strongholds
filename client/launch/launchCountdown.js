@@ -8,10 +8,10 @@ g.launch.launchCountdown = ($body, walkie) => {
   let isCountDownRunning = false;
 
   (function init() {
-    onStateDataGet();
+    onEntitiesGet();
   })();
 
-  function onStateDataGet() {
+  function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
       'launchTable.js',

@@ -4,7 +4,7 @@
 
 // What does this module do?
 // It listens to mouse click events, generates path through library and sends path events
-g.world.worldSingleClick = (walkie, auth, viewport, freshStateData) => {
+g.world.worldSingleClick = (walkie, auth, viewport, freshEntities) => {
   let lastPathPositionX;
   let lastPathPositionY;
 
@@ -14,7 +14,7 @@ g.world.worldSingleClick = (walkie, auth, viewport, freshStateData) => {
 
   function addListener() {
     viewport.on('clicked', (event) => {
-      if (freshStateData().state !== 'worldState') {
+      if (freshEntities().state !== 'worldState') {
         return;
       }
 
@@ -30,8 +30,8 @@ g.world.worldSingleClick = (walkie, auth, viewport, freshStateData) => {
   }
 
   function findHeroYX(clickX, clickY) {
-    const playerArray = freshStateData().playerArray;
-    const playerIndex = freshStateData().playerIndex;
+    const playerArray = freshEntities().playerArray;
+    const playerIndex = freshEntities().playerIndex;
 
     const heroX = parseInt(playerArray[playerIndex].hero.x, 10);
     const heroY = parseInt(playerArray[playerIndex].hero.y, 10);
@@ -40,12 +40,12 @@ g.world.worldSingleClick = (walkie, auth, viewport, freshStateData) => {
   }
 
   function generatePathGrid(clickX, clickY, heroX, heroY) {
-    const width = freshStateData().mapLayer[0].length;
-    const height = freshStateData().mapLayer.length;
+    const width = freshEntities().mapLayer[0].length;
+    const height = freshEntities().mapLayer.length;
 
     const grid = new PF.Grid(width, height);
 
-    freshStateData().mapLayer.forEach((row, y) => {
+    freshEntities().mapLayer.forEach((row, y) => {
       row.forEach((figure, x) => {
         if (figure.collision) {
           grid.setWalkableAt(x, y, false);

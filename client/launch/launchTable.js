@@ -6,10 +6,10 @@ g.launch.launchTable = ($body, walkie) => {
   const $table = $body.find('#js-launch .js-table-name');
 
   (function init() {
-    onStateDataGet();
+    onEntitiesGet();
   })();
 
-  function onStateDataGet() {
+  function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
       'launchTable.js',

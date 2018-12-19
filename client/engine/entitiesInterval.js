@@ -18,7 +18,7 @@ g.engine.entitiesInterval = (walkie, auth) => {
   }
 
   function entitiesGet() {
-    $.get('/ajax/stateDataGet' + auth.uri, (entities) => {
+    $.get('/ajax/entitiesGet' + auth.uri, (entities) => {
       walkie.triggerEvent(
         'entitiesGet_',
         'entitiesInterval.js',

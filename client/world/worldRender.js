@@ -2,20 +2,20 @@
 
 'use strict';
 
-g.world.worldRender = (walkie, auth, viewport, freshStateData) => {
+g.world.worldRender = (walkie, auth, viewport, freshEntities) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
   (function init() {
-    onStateDataGet();
+    onEntitiesGet();
   })();
 
-  function onStateDataGet() {
+  function onEntitiesGet() {
     walkie.onEvent(
-      'stateDataGet_',
+      'entitiesGet_',
       'worldToggle.js',
       () => {
-        if (freshStateData().state !== 'worldState') {
+        if (freshEntities().state !== 'worldState') {
           return;
         }
 
@@ -26,8 +26,8 @@ g.world.worldRender = (walkie, auth, viewport, freshStateData) => {
   }
 
   function setViewportDimentions() {
-    viewport.worldWidth = freshStateData().mapLayer[0].length * blockWidthPx;
-    viewport.worldHeight = freshStateData().mapLayer.length * blockHeightPx;
+    viewport.worldWidth = freshEntities().mapLayer[0].length * blockWidthPx;
+    viewport.worldHeight = freshEntities().mapLayer.length * blockHeightPx;
     removeViewportChildren();
   }
 
@@ -53,7 +53,7 @@ g.world.worldRender = (walkie, auth, viewport, freshStateData) => {
   }
 
   function forEachFigure() {
-    freshStateData().mapLayer.forEach((row, y) => {
+    freshEntities().mapLayer.forEach((row, y) => {
       row.forEach((figure, x) => {
         instantiateSprites(figure, x, y);
       });

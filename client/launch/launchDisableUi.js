@@ -7,10 +7,10 @@ g.launch.launchDisableUi = ($body, walkie) => {
   const $inputName = $body.find('#js-launch .js-input-name');
 
   (function init() {
-    onStateDataGet();
+    onEntitiesGet();
   })();
 
-  function onStateDataGet() {
+  function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
       'launchTable.js',
