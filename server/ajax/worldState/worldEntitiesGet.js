@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:worldStateDataGet');
+const debug = require('debug')('cogs:worldEntitiesGet');
 const _ = require('lodash');
 
 // What does this module do?
@@ -62,12 +62,12 @@ module.exports = () => {
       });
 
       debug('generateData: worldEntities', worldEntities);
-      sendStateData(worldEntities);
+      sendWorldEntities(worldEntities);
     }
 
-    function sendStateData(stateData) {
-      debug('sendStateData');
-      res.send(stateData);
+    function sendWorldEntities(worldEntities) {
+      debug('sendWorldEntities');
+      res.send(worldEntities);
       debug('******************** ajax ********************');
     }
   };

@@ -158,10 +158,10 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   app.get(
-    '/ajax/stateDataGet',
+    '/ajax/entitiesGet',
     require('./library/middlewareTokenAuth.js')(db),
-    require('./ajax/launchState/launchStateDataGet.js')(),
-    require('./ajax/worldState/worldStateDataGet.js')()
+    require('./ajax/launchState/launchEntitiesGet.js')(),
+    require('./ajax/worldState/worldEntitiesGet.js')()
   );
 
   // launchState listeners
