@@ -9,9 +9,6 @@ const validator = require('validator');
 // Get herpJourney, make initial verification
 module.exports = (walkie) => {
   return (req, res) => {
-    const game = res.locals.game;
-    const playerIndex = res.locals.playerIndex;
-
     (function init() {
       debug('init');
       checkRequestBody();
@@ -52,19 +49,21 @@ module.exports = (walkie) => {
         return;
       }
 
-      debug('checkRequestBody: heroPathArray', heroJourney);
+      debug('checkRequestBody: heroJourney', heroJourney);
       triggerWishedHeroJourney(heroJourney);
     }
 
     function triggerWishedHeroJourney(heroJourney) {
+      const entities = res.locals.entities;
+      const playerId = res.locals.playerId;
       res.send({ error: 0 });
       debug('triggerWishedHeroJourney');
       walkie.triggerEvent(
         'wishedHeroJourney_',
         'heroJourneyPost.js',
         {
-          gameId: game._id,
-          playerIndex: playerIndex,
+          gameId: entities._id,
+          playerId: playerId,
           heroJourney: heroJourney
         },
         false
