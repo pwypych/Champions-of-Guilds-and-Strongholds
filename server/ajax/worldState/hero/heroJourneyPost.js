@@ -6,18 +6,15 @@ const debug = require('debug')('cogs:heroJourneyPost');
 const validator = require('validator');
 
 // What does this module do?
-// Get herpJourney, make initial verification
+// Get heroJourney and heroId, make initial verification
 module.exports = (walkie) => {
   return (req, res) => {
-    const game = res.locals.game;
-    const playerIndex = res.locals.playerIndex;
-
     (function init() {
       debug('init');
-      checkRequestBody();
+      checkRequestBodyHeroJourney();
     })();
 
-    function checkRequestBody() {
+    function checkRequestBodyHeroJourney() {
       const heroJourney = [];
       let isError = false;
 
@@ -52,20 +49,37 @@ module.exports = (walkie) => {
         return;
       }
 
-      debug('checkRequestBody: heroPathArray', heroJourney);
-      triggerWishedHeroJourney(heroJourney);
+      debug('checkRequestBodyHeroJourney: heroJourney', heroJourney);
+      checkRequestBodyHeroId(heroJourney);
     }
 
-    function triggerWishedHeroJourney(heroJourney) {
+    function checkRequestBodyHeroId(heroJourney) {
+      const heroId = req.body.heroId;
+
+      if (typeof heroId === 'undefined') {
+        res.status(400);
+        res.send({ error: 'POST parameter error' });
+        debug('******************** error ********************');
+        return;
+      }
+
+      debug('checkRequestBodyHeroId: heroId', heroId);
+      triggerWishedHeroJourney(heroJourney, heroId);
+    }
+
+    function triggerWishedHeroJourney(heroJourney, heroId) {
+      const entities = res.locals.entities;
+      const playerId = res.locals.playerId;
       res.send({ error: 0 });
       debug('triggerWishedHeroJourney');
       walkie.triggerEvent(
         'wishedHeroJourney_',
         'heroJourneyPost.js',
         {
-          gameId: game._id,
-          playerIndex: playerIndex,
-          heroJourney: heroJourney
+          gameId: entities._id,
+          playerId: playerId,
+          heroJourney: heroJourney,
+          heroId: heroId
         },
         false
       );

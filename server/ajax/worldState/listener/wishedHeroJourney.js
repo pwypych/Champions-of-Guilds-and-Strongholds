@@ -21,29 +21,36 @@ module.exports = (walkie, db) => {
         (data) => {
           const ctx = {};
           ctx.gameId = data.gameId;
-          ctx.playerIndex = data.playerIndex;
+          ctx.playerId = data.playerId;
           ctx.heroJourney = data.heroJourney;
+          ctx.heroId = data.heroId;
           debug('onWishedHeroJourney: ctx.heroJourney:', ctx.heroJourney);
-          findGameById(ctx);
+          findHeroById(ctx);
         },
         false
       );
     }
 
-    function findGameById(ctx) {
+    function findHeroById(ctx) {
       const gameId = ctx.gameId;
-      const playerIndex = ctx.playerIndex;
+      const heroId = ctx.heroId;
 
       const query = { _id: gameId };
       const options = {};
-      options.projection = { playerArray: 1 };
+      const projection = {};
+      projection[heroId] = 1;
+      options.projection = projection;
 
-      db.collection('gameCollection').findOne(query, options, (error, game) => {
-        debug('findGameById: gameId:', game._id, ' | error: ', error);
-        ctx.hero = game.playerArray[playerIndex].hero;
+      db.collection('gameCollection').find(
+        query,
+        options,
+        (error, heroEntity) => {
+          debug('findHeroById: heroEntity:', heroEntity, ' | error: ', error);
+          ctx.hero = heroEntity;
 
-        checkIsBegingMoved(ctx);
-      });
+          checkIsBegingMoved(ctx);
+        }
+      );
     }
 
     function checkIsBegingMoved(ctx) {
@@ -54,6 +61,19 @@ module.exports = (walkie, db) => {
         return;
       }
 
+      checkHeroOwnerComponent(ctx);
+    }
+
+    function checkHeroOwnerComponent(ctx) {
+      const hero = ctx.hero;
+      const playerId = ctx.playerId;
+
+      if (hero.owner !== playerId) {
+        debug('checkHeroOwnerComponent: owner and playerId are different');
+        return;
+      }
+
+      debug('checkHeroOwnerComponent: hero.owner:', hero.owner);
       forEachWishedHeroJourney(ctx);
     }
 
@@ -77,10 +97,10 @@ module.exports = (walkie, db) => {
 
     function updateSetIsBegingMoved(ctx) {
       const gameId = ctx.gameId;
-      const playerIndex = ctx.playerIndex;
+      const heroId = ctx.heroId;
 
       const query = { _id: gameId };
-      const string = 'playerArray.' + playerIndex + '.hero.isBegingMoved';
+      const string = heroId + '.isBegingMoved';
       const $set = {};
       $set[string] = true;
       const update = { $set: $set };
@@ -99,7 +119,8 @@ module.exports = (walkie, db) => {
 
     function triggerWishedHeroStep(ctx) {
       const gameId = ctx.gameId;
-      const playerIndex = ctx.playerIndex;
+      const playerId = ctx.playerId;
+      const heroId = ctx.heroId;
       const wishedHeroStep = ctx.wishedHeroStep;
 
       debug('triggerWishedHeroStep: ctx.wishedHeroStep:', wishedHeroStep);
@@ -108,7 +129,8 @@ module.exports = (walkie, db) => {
         'wishedHeroJourney.js',
         {
           gameId: gameId,
-          playerIndex: playerIndex,
+          playerId: playerId,
+          heroId: heroId,
           wishedHeroStep: wishedHeroStep
         },
         false
@@ -126,19 +148,24 @@ module.exports = (walkie, db) => {
 
     function findCurrentHeroPosition(ctx) {
       const gameId = ctx.gameId;
-      const playerIndex = ctx.playerIndex;
+      const heroId = ctx.heroId;
 
       const query = { _id: gameId };
       const options = {};
-      options.projection = { playerArray: 1 };
+      const projection = {};
+      projection[heroId] = 1;
+      options.projection = projection;
 
-      db.collection('gameCollection').findOne(query, options, (error, game) => {
-        debug('findCurrentHeroPosition: gameId:', game._id);
-        debug('findCurrentHeroPosition: error:', error);
-        ctx.heroNew = game.playerArray[playerIndex].hero;
+      db.collection('gameCollection').findOne(
+        query,
+        options,
+        (error, currentHero) => {
+          debug('findCurrentHeroPosition: error:', error);
+          ctx.heroNew = currentHero;
 
-        checkWasHeroMoved(ctx);
-      });
+          checkWasHeroMoved(ctx);
+        }
+      );
     }
 
     function checkWasHeroMoved(ctx) {
@@ -147,8 +174,8 @@ module.exports = (walkie, db) => {
 
       let wasHeroMoved = false;
 
-      if (heroNew.x === wishedHeroStep.toX) {
-        if (heroNew.y === wishedHeroStep.toY) {
+      if (heroNew.position.x === wishedHeroStep.toX) {
+        if (heroNew.position.y === wishedHeroStep.toY) {
           debug('checkWasHeroMoved: Yes!');
           wasHeroMoved = true;
         }
@@ -160,10 +187,10 @@ module.exports = (walkie, db) => {
 
     function updateUnsetIsBegingMoved(ctx, wasHeroMoved) {
       const gameId = ctx.gameId;
-      const playerIndex = ctx.playerIndex;
+      const heroId = ctx.heroId;
 
       const query = { _id: gameId };
-      const string = 'playerArray.' + playerIndex + '.hero.isBegingMoved';
+      const string = heroId + '.isBegingMoved';
       const $unset = {};
       $unset[string] = true;
       const update = { $unset: $unset };
