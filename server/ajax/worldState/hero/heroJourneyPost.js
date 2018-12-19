@@ -6,15 +6,15 @@ const debug = require('debug')('cogs:heroJourneyPost');
 const validator = require('validator');
 
 // What does this module do?
-// Get herpJourney, make initial verification
+// Get heroJourney and heroId, make initial verification
 module.exports = (walkie) => {
   return (req, res) => {
     (function init() {
       debug('init');
-      checkRequestBody();
+      checkRequestBodyHeroJourney();
     })();
 
-    function checkRequestBody() {
+    function checkRequestBodyHeroJourney() {
       const heroJourney = [];
       let isError = false;
 
@@ -49,11 +49,25 @@ module.exports = (walkie) => {
         return;
       }
 
-      debug('checkRequestBody: heroJourney', heroJourney);
-      triggerWishedHeroJourney(heroJourney);
+      debug('checkRequestBodyHeroJourney: heroJourney', heroJourney);
+      checkRequestBodyHeroId(heroJourney);
     }
 
-    function triggerWishedHeroJourney(heroJourney) {
+    function checkRequestBodyHeroId(heroJourney) {
+      const heroId = req.body.heroId;
+
+      if (typeof heroId === 'undefined') {
+        res.status(400);
+        res.send({ error: 'POST parameter error' });
+        debug('******************** error ********************');
+        return;
+      }
+
+      debug('checkRequestBodyHeroId: heroId', heroId);
+      triggerWishedHeroJourney(heroJourney, heroId);
+    }
+
+    function triggerWishedHeroJourney(heroJourney, heroId) {
       const entities = res.locals.entities;
       const playerId = res.locals.playerId;
       res.send({ error: 0 });
@@ -64,7 +78,8 @@ module.exports = (walkie) => {
         {
           gameId: entities._id,
           playerId: playerId,
-          heroJourney: heroJourney
+          heroJourney: heroJourney,
+          heroId: heroId
         },
         false
       );
