@@ -205,13 +205,6 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   app.post(
-    '/ajax/worldState/hero/moveToPost',
-    require('./library/middlewareTokenAuth.js')(db),
-    require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/worldState/hero/moveToPost.js')(db)
-  );
-
-  app.post(
     '/ajax/worldState/hero/heroJourneyPost',
     require('./library/middlewareTokenAuth.js')(db),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
