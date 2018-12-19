@@ -41,7 +41,7 @@
             <td>Map Name</td>
             <td>Player Names</td>
             <td>Player Links</td>
-            <td>API stateDataGet</td>
+            <td>API entitiesGet</td>
             <td>Options</td>
           </tr>
 
@@ -68,8 +68,8 @@
               <td>
                 <% viewModel._.forEach(game, (entity) => { %>
                   <% if (entity.playerToken && entity.playerData) { %>
-                    <% const uri = '/ajax/stateDataGet?gameId=' + game._id + '&playerToken=' + entity.playerToken; %>
-                    <a href="<%= viewModel.baseurl + uri %>">/ajax/stateDataGet</a>
+                    <% const uri = '/ajax/entitiesGet?gameId=' + game._id + '&playerToken=' + entity.playerToken; %>
+                    <a href="<%= viewModel.baseurl + uri %>">/ajax/entitiesGet</a>
                     <br/>
                   <% } %>
                 <% }); %>

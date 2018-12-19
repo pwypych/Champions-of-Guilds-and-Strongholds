@@ -43,11 +43,11 @@ module.exports = (environment) => {
         return true;
       });
 
-      sendStateData(spriteFilenameArray);
+      sendFilenameArray(spriteFilenameArray);
     }
 
-    function sendStateData(spriteFilenameArray) {
-      debug('sendStateData');
+    function sendFilenameArray(spriteFilenameArray) {
+      debug('sendFilenameArray');
       res.send(spriteFilenameArray);
       debug('******************** ajax ********************');
     }
