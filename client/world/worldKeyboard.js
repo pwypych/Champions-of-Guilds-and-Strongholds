@@ -2,49 +2,49 @@
 
 'use strict';
 
-g.world.worldKeyboard = (walkie, auth) => {
-  let heroY;
-  let heroX;
-
+g.world.worldKeyboard = (walkie, auth, freshEntities) => {
   (function init() {
-    onEntitiesGet();
-    onStateChange();
+    addListener();
   })();
 
-  function onEntitiesGet() {
-    walkie.onEvent(
-      'entitiesGet_',
-      'worldKeyboard',
-      (entities) => {
-        if (entities[entities._id].state === 'worldState') {
-          findHeroYX(entities);
-        }
-      },
-      false
-    );
-  }
-
-  function findHeroYX(entities) {
-    const playerArray = entities.playerArray;
-    const playerIndex = entities.playerIndex;
-
-    heroX = parseInt(playerArray[playerIndex].hero.x, 10);
-    heroY = parseInt(playerArray[playerIndex].hero.y, 10);
-  }
-
-  function onStateChange() {
-    walkie.onEvent('stateChange_', 'worldKeyboard.js', (state) => {
-      if (state === 'worldState') {
-        addListeners();
-      }
-      // @todo remove listeners on other state
-    });
-  }
-
-  function addListeners() {
+  function addListener() {
     $(document).keydown((event) => {
+      const gameEntity = freshEntities()[freshEntities()._id];
+      if (gameEntity.state !== 'worldState') {
+        return;
+      }
+
+      findHeroPosition(event);
+    });
+
+    function findHeroPosition(event) {
+      const entities = freshEntities();
+
+      let playerId;
+      _.forEach(entities, (entity, id) => {
+        if (entity.playerCurrent) {
+          playerId = id;
+        }
+      });
+
+      let hero;
+      let heroId;
+      _.forEach(entities, (entity, id) => {
+        if (entity.figure === 'heroHuman' && entity.owner === playerId) {
+          hero = entity;
+          heroId = id;
+        }
+      });
+
+      scanKeys(event, hero, heroId);
+    }
+
+    function scanKeys(event, hero, heroId) {
       const journey = [];
       const keyboardMap = { LEFT: 37, RIGHT: 39, UP: 38, DOWN: 40, SPACE: 32 };
+
+      const heroX = hero.position.x;
+      const heroY = hero.position.y;
 
       if (event.which === keyboardMap.LEFT) {
         journey.push({
@@ -88,12 +88,12 @@ g.world.worldKeyboard = (walkie, auth) => {
       }
 
       if (!_.isEmpty(journey)) {
-        postHeroJourney(journey);
+        postHeroJourney(journey, heroId);
       }
-    });
+    }
 
-    function postHeroJourney(journey) {
-      const data = { heroJourney: journey };
+    function postHeroJourney(journey, heroId) {
+      const data = { heroJourney: journey, heroId: heroId };
       console.log('journey', journey);
       $.post(
         '/ajax/worldState/hero/heroJourneyPost' + auth.uri,

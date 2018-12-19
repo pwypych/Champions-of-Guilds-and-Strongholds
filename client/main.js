@@ -32,6 +32,7 @@ g.main = function main() {
     g.engine.entitiesInterval(walkie, auth);
 
     const freshEntities = g.engine.freshEntities(walkie);
+    const spriteBucket = g.engine.spriteBucket();
 
     g.launch.launchToggle($body, walkie);
     g.launch.launchInputName($body, auth);
@@ -41,11 +42,12 @@ g.main = function main() {
     g.launch.launchDisableUi($body, walkie);
 
     g.world.worldToggle($body, walkie);
-    g.world.worldRender(walkie, auth, viewport, freshEntities);
-    g.world.worldHero(walkie, auth, viewport, freshEntities);
-    g.world.worldKeyboard(walkie, auth);
-    g.world.worldSingleClick(walkie, auth, viewport, freshEntities);
-    g.world.worldPath(walkie, auth, viewport);
-    g.world.worldJourney(walkie, auth);
+    g.world.worldRender(walkie, auth, viewport, freshEntities, spriteBucket);
+    g.world.entityChanges(walkie, freshEntities);
+    // g.world.worldHero(walkie, auth, viewport, freshEntities);
+    g.world.worldKeyboard(walkie, auth, freshEntities);
+    // g.world.worldSingleClick(walkie, auth, viewport, freshEntities);
+    // g.world.worldPath(walkie, auth, viewport);
+    // g.world.worldJourney(walkie, auth);
   }
 };

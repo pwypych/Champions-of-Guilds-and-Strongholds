@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.world.worldRender = (walkie, auth, viewport, freshEntities) => {
+g.world.worldRender = (walkie, auth, viewport, freshEntities, spriteBucket) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
@@ -15,7 +15,9 @@ g.world.worldRender = (walkie, auth, viewport, freshEntities) => {
       'entitiesGet_',
       'worldToggle.js',
       () => {
-        if (freshEntities().state !== 'worldState') {
+        const gameEntity = freshEntities()[freshEntities()._id];
+
+        if (gameEntity.state !== 'worldState') {
           return;
         }
 
@@ -26,13 +28,26 @@ g.world.worldRender = (walkie, auth, viewport, freshEntities) => {
   }
 
   function setViewportDimentions() {
-    viewport.worldWidth = freshEntities().mapLayer[0].length * blockWidthPx;
-    viewport.worldHeight = freshEntities().mapLayer.length * blockHeightPx;
+    const gameEntity = freshEntities()[freshEntities()._id];
+
+    viewport.worldWidth = gameEntity.mapData.width * blockWidthPx;
+    viewport.worldHeight = gameEntity.mapData.height * blockHeightPx;
+
     removeViewportChildren();
   }
 
   function removeViewportChildren() {
-    viewport.removeChildren(); // to prevent memory leak
+    // to prevent memory leak
+    viewport.removeChildren();
+
+    cleanSpriteBucket();
+  }
+
+  function cleanSpriteBucket() {
+    // to prevent memory leak
+    Object.keys(spriteBucket).forEach((key) => {
+      delete spriteBucket[key];
+    });
 
     drawBackground();
   }
@@ -53,36 +68,31 @@ g.world.worldRender = (walkie, auth, viewport, freshEntities) => {
   }
 
   function forEachFigure() {
-    freshEntities().mapLayer.forEach((row, y) => {
-      row.forEach((figure, x) => {
-        instantiateSprites(figure, x, y);
-      });
+    _.forEach(freshEntities(), (entity, id) => {
+      if (entity.figure && entity.position) {
+        instantiateSprites(entity, id);
+      }
     });
 
     triggerWorldRenderDone();
   }
 
-  function instantiateSprites(figure, x, y) {
-    if (figure.name === 'empty') {
-      return;
-    }
-
-    const texture = PIXI.loader.resources[figure.name].texture;
+  function instantiateSprites(entity, id) {
+    const texture = PIXI.loader.resources[entity.figure].texture;
     const sprite = new PIXI.Sprite(texture);
 
     sprite.anchor = { x: 0, y: 1 };
 
-    // sprite.width = blockWidthPx;
-    // sprite.height = blockHeightPx;
+    sprite.x = entity.position.x * blockWidthPx;
+    sprite.y = entity.position.y * blockHeightPx + blockHeightPx;
 
-    sprite.x = x * blockWidthPx;
-    sprite.y = y * blockHeightPx + blockHeightPx;
-
-    if (figure.spriteOffsetX) {
-      sprite.x += figure.spriteOffsetX;
+    if (entity.spriteOffset) {
+      sprite.x += entity.spriteOffset.x;
+      sprite.y += entity.spriteOffset.y;
     }
 
     viewport.addChild(sprite);
+    spriteBucket[id] = sprite;
   }
 
   function triggerWorldRenderDone() {
