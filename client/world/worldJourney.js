@@ -5,14 +5,21 @@
 // What does this module do
 // It listens to pathAccepted_ events, converts to journey and posts it to server
 g.world.worldJourney = (walkie, auth) => {
+  let journeyQueuedToSend;
+  let heroIdQueuedToSend;
+
   (function init() {
     onPathAccepted();
+    onEntitiesGet();
   })();
 
   function onPathAccepted() {
     walkie.onEvent('pathAccepted_', 'worldJourney.js', (data) => {
       const pathArray = data.pathArray;
       const heroId = data.heroId;
+
+      $('body').css('cursor', 'wait');
+
       convertPathToJourney(pathArray, heroId);
     });
   }
@@ -34,13 +41,33 @@ g.world.worldJourney = (walkie, auth) => {
       });
     });
 
-    sendRequest(journey, heroId);
+    journeyQueuedToSend = journey;
+    heroIdQueuedToSend = heroId;
+  }
+
+  function onEntitiesGet() {
+    walkie.onEvent(
+      'entitiesGet_',
+      'worldToggle.js',
+      () => {
+        if (journeyQueuedToSend && heroIdQueuedToSend) {
+          sendRequest(journeyQueuedToSend, heroIdQueuedToSend);
+        }
+      },
+      false
+    );
   }
 
   function sendRequest(journey, heroId) {
     const data = { heroJourney: journey, heroId: heroId };
     $.post('/ajax/worldState/hero/heroJourneyPost' + auth.uri, data, () => {
       console.log('worldJourney.js: POST heroJourneyPost');
+      journeyQueuedToSend = undefined;
+      heroIdQueuedToSend = undefined;
+
+      setTimeout(() => {
+        $('body').css('cursor', 'default');
+      }, 500);
     });
   }
 };

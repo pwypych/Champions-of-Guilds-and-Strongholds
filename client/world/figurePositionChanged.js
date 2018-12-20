@@ -2,9 +2,12 @@
 
 'use strict';
 
-g.world.figurePositionChanged = (walkie, viewport, freshEntities) => {
-  const lastPosition = [];
-
+g.world.figurePositionChanged = (
+  walkie,
+  viewport,
+  freshEntities,
+  spriteBucket
+) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
@@ -21,58 +24,113 @@ g.world.figurePositionChanged = (walkie, viewport, freshEntities) => {
         const fromPosition = data.fromPosition;
         const toPosition = data.toPosition;
 
-        findFigure(figureId, fromPosition, toPosition);
+        generatePathArray(figureId, fromPosition, toPosition);
       },
       false
     );
   }
 
-  function findFigure(figureId, fromPosition, toPosition) {
-    // const figure = freshEntities()[figureId];
-    findSprite(figureId, fromPosition, toPosition);
+  function generatePathArray(figureId, fromPosition, toPosition) {
+    const gameEntity = freshEntities()[freshEntities()._id];
+    const width = gameEntity.mapData.width;
+    const height = gameEntity.mapData.height;
+
+    const grid = new PF.Grid(width, height);
+
+    _.forEach(freshEntities(), (entity) => {
+      if (entity.collision) {
+        grid.setWalkableAt(entity.position.x, entity.position.y, false);
+      }
+    });
+
+    const finder = new PF.AStarFinder({ allowDiagonal: true });
+
+    const pathArrayOfArrays = finder.findPath(
+      fromPosition.x,
+      fromPosition.y,
+      toPosition.x,
+      toPosition.y,
+      grid
+    );
+
+    const pathArray = pathArrayOfArrays.map((path) => {
+      return { x: path[0], y: path[1] };
+    });
+
+    convertPathToJourney(pathArray, figureId);
   }
 
-  function findSprite(x, y, playerIndex) {
-    checkPositionChange(x, y, playerIndex);
+  function convertPathToJourney(pathArray, figureId) {
+    const journey = [];
+    pathArray.forEach((pointFrom, index) => {
+      if (index === pathArray.length - 1) {
+        return;
+      }
+
+      const pointTo = pathArray[index + 1];
+
+      journey.push({
+        fromX: pointFrom.x,
+        fromY: pointFrom.y,
+        toX: pointTo.x,
+        toY: pointTo.y
+      });
+    });
+
+    findSpriteAndSpriteOffset(journey, figureId);
   }
 
-  function tweenFigureToNewPosition(
-    moveToX,
-    moveToY,
-    lastKnownX,
-    lastKnownY,
-    playerIndex
-  ) {
-    const heroSpriteOffsetX = -9;
+  function findSpriteAndSpriteOffset(journey, figureId) {
+    const sprite = spriteBucket[figureId];
+    if (!sprite) {
+      console.log('figurePositionChanged: ERROR, cannot find sprite');
+      return;
+    }
 
-    const tweenX = moveToX * blockWidthPx + heroSpriteOffsetX;
-    const tweenY = moveToY * blockHeightPx + blockHeightPx;
-    const heroX = lastKnownX * blockWidthPx + heroSpriteOffsetX;
-    const heroY = lastKnownY * blockHeightPx + blockHeightPx;
+    let spriteOffset = freshEntities()[figureId].spriteOffset;
+    if (!spriteOffset) {
+      spriteOffset = { x: 0, y: 0 };
+    }
 
-    lastPosition[playerIndex].x = moveToX;
-    lastPosition[playerIndex].y = moveToY;
+    generateTweenPath(journey, sprite, spriteOffset);
+  }
 
-    // console.log(
-    //   'end slide on:',
-    //   tweenX,
-    //   tweenY,
-    //   'hero currently on:',
-    //   heroX,
-    //   heroY
-    // );
+  function generateTweenPath(journey, sprite, spriteOffset) {
+    const tweenPath = new PIXI.tween.TweenPath();
+    const journeyLength = journey.length;
 
-    const path = new PIXI.tween.TweenPath();
-    path.moveTo(heroX, heroY).lineTo(tweenX, tweenY);
+    journey.forEach((step) => {
+      const fromXPixel = step.fromX * blockWidthPx + spriteOffset.x;
+      const fromYPixel =
+        step.fromY * blockHeightPx + blockHeightPx + spriteOffset.y;
+      const toXPixel = step.toX * blockWidthPx + spriteOffset.x;
+      const toYPixel =
+        step.toY * blockHeightPx + blockHeightPx + spriteOffset.y;
 
+      // console.log(
+      //   'end slide on pixel:',
+      //   toXPixel,
+      //   toYPixel,
+      //   ' currently on pixel:',
+      //   fromXPixel,
+      //   fromYPixel
+      // );
+
+      tweenPath.moveTo(fromXPixel, fromYPixel).lineTo(toXPixel, toYPixel);
+    });
+
+    tweenFigureToNewPosition(tweenPath, sprite, journeyLength);
+  }
+
+  function tweenFigureToNewPosition(tweenPath, sprite, journeyLength) {
     const gPath = new PIXI.Graphics();
     gPath.lineStyle(1, 0xffffff, 1);
-    gPath.drawPath(path);
+    gPath.drawPath(tweenPath);
     // viewport.addChild(gPath);
 
     const tween = PIXI.tweenManager.createTween(sprite);
-    tween.path = path;
-    tween.time = 16000;
+    tween.path = tweenPath;
+    tween.time = 250 * 60 * journeyLength;
     tween.loop = false;
     tween.start();
   }

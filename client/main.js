@@ -44,7 +44,12 @@ g.main = function main() {
     g.world.worldToggle($body, walkie);
     g.world.worldRender(walkie, auth, viewport, freshEntities, spriteBucket);
     g.world.entityChanges(walkie, freshEntities);
-    // g.world.figurePositionChanged(walkie, viewport, freshEntities);
+    g.world.figurePositionChanged(
+      walkie,
+      viewport,
+      freshEntities,
+      spriteBucket
+    );
     g.world.worldKeyboard(walkie, auth, freshEntities);
     g.world.worldSingleClick(walkie, auth, viewport, freshEntities);
     g.world.worldPath(walkie, auth, viewport);

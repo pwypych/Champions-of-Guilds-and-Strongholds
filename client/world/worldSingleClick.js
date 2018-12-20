@@ -64,10 +64,10 @@ g.world.worldSingleClick = (walkie, auth, viewport, freshEntities) => {
     heroPositon.x = parseInt(hero.position.x, 10);
     heroPositon.y = parseInt(hero.position.y, 10);
 
-    generatePathGrid(click, heroPositon, heroId);
+    generatePathArray(click, heroPositon, heroId);
   }
 
-  function generatePathGrid(click, heroPositon, heroId) {
+  function generatePathArray(click, heroPositon, heroId) {
     const gameEntity = freshEntities()[freshEntities()._id];
     const width = gameEntity.mapData.width;
     const height = gameEntity.mapData.height;

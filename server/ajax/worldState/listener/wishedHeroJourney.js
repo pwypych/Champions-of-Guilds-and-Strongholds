@@ -148,7 +148,7 @@ module.exports = (walkie, db) => {
       setTimeout(() => {
         debug('waitBeforeChecking: After waiting 500ms!');
         findCurrentHeroPosition(ctx);
-      }, 500);
+      }, 250);
     }
 
     function findCurrentHeroPosition(ctx) {
