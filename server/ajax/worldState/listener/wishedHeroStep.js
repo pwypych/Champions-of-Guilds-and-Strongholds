@@ -72,7 +72,7 @@ module.exports = (walkie, db) => {
         wishedHeroStep.toX > mapWidth
       ) {
         debug(
-          'checkIsHeroWishedPositionPossible: map position not found: moveToY, moveToX:',
+          'checkIsHeroWishedPositionPossible: map position not found: toY, toX:',
           wishedHeroStep.toY,
           wishedHeroStep.toX
         );
@@ -123,13 +123,13 @@ module.exports = (walkie, db) => {
         'distanceY',
         distanceY
       );
-      checkIsHeroWishedPositionEmpty(ctx);
+      checkIsWishedPositionCollidable(ctx);
     }
 
-    function checkIsHeroWishedPositionEmpty(ctx) {
+    function checkIsWishedPositionCollidable(ctx) {
       const entities = ctx.entities;
       const wishedHeroStep = ctx.wishedHeroStep;
-      let canHeroMove = true;
+      let isWishedPositionCollidable = false;
 
       _.forEach(entities, (entitiy) => {
         if (entitiy.figure) {
@@ -138,16 +138,19 @@ module.exports = (walkie, db) => {
             entitiy.position.y === wishedHeroStep.toY
           ) {
             if (entitiy.collision === true) {
-              canHeroMove = false;
+              isWishedPositionCollidable = true;
             }
           }
         }
       });
 
-      debug('checkIsHeroWishedPositionEmpty: canHeroMove:', canHeroMove);
-      if (!canHeroMove) {
+      debug(
+        'checkIsWishedPositionCollidable: isWishedPositionCollidable:',
+        isWishedPositionCollidable
+      );
+      if (isWishedPositionCollidable) {
         debug(
-          'checkIsHeroWishedPositionPossible: cannot move because collision on: moveToY, moveToX:',
+          'checkIsWishedPositionCollidable: cannot move because collision on: moveToY, moveToX:',
           wishedHeroStep.toY,
           wishedHeroStep.toX
         );
@@ -159,12 +162,14 @@ module.exports = (walkie, db) => {
     function triggerWishedHeroStep(ctx) {
       debug('triggerWishedHeroStep');
       const gameId = ctx.gameId;
-      const playerIndex = ctx.playerIndex;
+      const playerId = ctx.playerId;
+      const heroId = ctx.heroId;
       const wishedHeroStep = ctx.wishedHeroStep;
 
       walkie.triggerEvent('verifiedHeroStep_', 'wishedHeroStep.js', {
         gameId: gameId,
-        playerIndex: playerIndex,
+        playerId: playerId,
+        heroId: heroId,
         verifiedHeroStep: wishedHeroStep
       });
     }
