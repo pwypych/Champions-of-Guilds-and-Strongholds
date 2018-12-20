@@ -12,11 +12,12 @@ g.world.worldJourney = (walkie, auth) => {
   function onPathAccepted() {
     walkie.onEvent('pathAccepted_', 'worldJourney.js', (data) => {
       const pathArray = data.pathArray;
-      convertPathToJourney(pathArray);
+      const heroId = data.heroId;
+      convertPathToJourney(pathArray, heroId);
     });
   }
 
-  function convertPathToJourney(pathArray) {
+  function convertPathToJourney(pathArray, heroId) {
     const journey = [];
     pathArray.forEach((pointFrom, index) => {
       if (index === pathArray.length - 1) {
@@ -33,11 +34,13 @@ g.world.worldJourney = (walkie, auth) => {
       });
     });
 
-    sendRequest(journey);
+    sendRequest(journey, heroId);
   }
 
-  function sendRequest(journey) {
-    const data = { heroJourney: journey };
-    $.post('/ajax/worldState/hero/heroJourneyPost' + auth.uri, data, () => {});
+  function sendRequest(journey, heroId) {
+    const data = { heroJourney: journey, heroId: heroId };
+    $.post('/ajax/worldState/hero/heroJourneyPost' + auth.uri, data, () => {
+      console.log('worldJourney.js: POST heroJourneyPost');
+    });
   }
 };

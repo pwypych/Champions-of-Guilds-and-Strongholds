@@ -47,7 +47,7 @@ g.main = function main() {
     // g.world.worldHero(walkie, auth, viewport, freshEntities);
     g.world.worldKeyboard(walkie, auth, freshEntities);
     g.world.worldSingleClick(walkie, auth, viewport, freshEntities);
-    // g.world.worldPath(walkie, auth, viewport);
-    // g.world.worldJourney(walkie, auth);
+    g.world.worldPath(walkie, auth, viewport);
+    g.world.worldJourney(walkie, auth);
   }
 };

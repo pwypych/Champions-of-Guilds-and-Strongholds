@@ -27,7 +27,7 @@ g.world.initImages = (auth, callback) => {
     spriteFilenameArray.forEach((spriteFilename) => {
       const uri = '/sprite/' + spriteFilename;
       const name = spriteFilename.substr(0, spriteFilename.length - 4);
-      console.log('initImages:', name, uri);
+      console.log('initImages.js:', name, uri);
       PIXI.loader.add(name, uri);
     });
 

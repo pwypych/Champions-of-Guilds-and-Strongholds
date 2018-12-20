@@ -44,12 +44,14 @@ module.exports = (walkie) => {
 
       if (isError) {
         res.status(400);
-        res.send({ error: 'POST parameter error' });
+        res.send({
+          error: 'POST parameter error, heroJourney parameter not valid'
+        });
         debug('******************** error ********************');
         return;
       }
 
-      debug('checkRequestBodyHeroJourney: heroJourney', heroJourney);
+      debug('checkRequestBodyHeroJourney: req.body', req.body);
       checkRequestBodyHeroId(heroJourney);
     }
 
@@ -58,7 +60,7 @@ module.exports = (walkie) => {
 
       if (typeof heroId === 'undefined') {
         res.status(400);
-        res.send({ error: 'POST parameter error' });
+        res.send({ error: 'POST parameter error, heroId parameter not valid' });
         debug('******************** error ********************');
         return;
       }

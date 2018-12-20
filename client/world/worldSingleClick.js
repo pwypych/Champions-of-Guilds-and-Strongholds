@@ -48,13 +48,15 @@ g.world.worldSingleClick = (walkie, auth, viewport, freshEntities) => {
     const entities = freshEntities();
 
     let hero;
-    _.forEach(entities, (entity) => {
+    let heroId;
+    _.forEach(entities, (entity, id) => {
       if (
         entity.figure === 'heroHuman' &&
         entity.owner === playerId &&
         entity.position
       ) {
         hero = entity;
+        heroId = id;
       }
     });
 
@@ -62,10 +64,10 @@ g.world.worldSingleClick = (walkie, auth, viewport, freshEntities) => {
     heroPositon.x = parseInt(hero.position.x, 10);
     heroPositon.y = parseInt(hero.position.y, 10);
 
-    generatePathGrid(click, heroPositon);
+    generatePathGrid(click, heroPositon, heroId);
   }
 
-  function generatePathGrid(click, heroPositon) {
+  function generatePathGrid(click, heroPositon, heroId) {
     const gameEntity = freshEntities()[freshEntities()._id];
     const width = gameEntity.mapData.width;
     const height = gameEntity.mapData.height;
@@ -92,15 +94,16 @@ g.world.worldSingleClick = (walkie, auth, viewport, freshEntities) => {
       return { x: path[0], y: path[1] };
     });
 
-    triggerEvents(pathArray, click);
+    triggerEvents(pathArray, click, heroId);
   }
 
-  function triggerEvents(pathArray, click) {
+  function triggerEvents(pathArray, click, heroId) {
     if (lastPathPositionX && lastPathPositionY) {
       if (lastPathPositionX === click.x && lastPathPositionY === click.y) {
         lastPathPositionX = undefined;
         lastPathPositionY = undefined;
         walkie.triggerEvent('pathAccepted_', 'worldSingleClick.js', {
+          heroId: heroId,
           pathArray: pathArray
         });
         return;
@@ -117,6 +120,7 @@ g.world.worldSingleClick = (walkie, auth, viewport, freshEntities) => {
 
     if (!_.isEmpty(pathArray) && pathArray.length > 1) {
       walkie.triggerEvent('pathCalculated_', 'worldSingleClick.js', {
+        heroId: heroId,
         pathArray: pathArray
       });
     } else {
