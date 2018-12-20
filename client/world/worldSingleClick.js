@@ -98,7 +98,14 @@ g.world.worldSingleClick = (walkie, auth, viewport, freshEntities) => {
   }
 
   function triggerEvents(pathArray, click, heroId) {
-    if (lastPathPositionX && lastPathPositionY) {
+    console.log('lastPathPositionX', lastPathPositionX);
+    console.log('lastPathPositionY', lastPathPositionY);
+    console.log('click', click);
+
+    if (
+      typeof lastPathPositionX !== 'undefined' &&
+      typeof lastPathPositionY !== 'undefined'
+    ) {
       if (lastPathPositionX === click.x && lastPathPositionY === click.y) {
         lastPathPositionX = undefined;
         lastPathPositionY = undefined;
