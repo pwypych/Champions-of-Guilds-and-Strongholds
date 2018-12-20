@@ -48,6 +48,8 @@ g.world.entityChanges = (walkie, freshEntities) => {
         }
       }
     });
+
+    oldEntities = freshEntities();
   }
 
   function triggerFigurePositionChanged(data) {
