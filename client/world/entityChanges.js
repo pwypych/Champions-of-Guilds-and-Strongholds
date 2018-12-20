@@ -40,9 +40,9 @@ g.world.entityChanges = (walkie, freshEntities) => {
       if (entity.figure && entity.position) {
         if (!_.isEqual(entity.position, oldEntities[id].position)) {
           const data = {
-            id: id,
-            from: oldEntities[id].position,
-            to: entity.position
+            figureId: id,
+            fromPosition: oldEntities[id].position,
+            toPosition: entity.position
           };
           triggerFigurePositionChanged(data);
         }
