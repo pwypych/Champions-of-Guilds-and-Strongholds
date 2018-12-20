@@ -14,7 +14,8 @@ g.world.worldSingleClick = (walkie, auth, viewport, freshEntities) => {
 
   function addListener() {
     viewport.on('clicked', (event) => {
-      if (freshEntities().state !== 'worldState') {
+      const gameEntity = freshEntities()[freshEntities()._id];
+      if (gameEntity.state !== 'worldState') {
         return;
       }
 
@@ -23,43 +24,67 @@ g.world.worldSingleClick = (walkie, auth, viewport, freshEntities) => {
   }
 
   function calculateClickedTile(event) {
-    const clickX = Math.floor(event.world.x / 32);
-    const clickY = Math.floor(event.world.y / 32);
+    const click = {};
+    click.x = Math.floor(event.world.x / 32);
+    click.y = Math.floor(event.world.y / 32);
 
-    findHeroYX(clickX, clickY);
+    findPlayerId(click);
   }
 
-  function findHeroYX(clickX, clickY) {
-    const playerArray = freshEntities().playerArray;
-    const playerIndex = freshEntities().playerIndex;
+  function findPlayerId(click) {
+    const entities = freshEntities();
 
-    const heroX = parseInt(playerArray[playerIndex].hero.x, 10);
-    const heroY = parseInt(playerArray[playerIndex].hero.y, 10);
+    let playerId;
+    _.forEach(entities, (entity, id) => {
+      if (entity.playerCurrent) {
+        playerId = id;
+      }
+    });
 
-    generatePathGrid(clickX, clickY, heroX, heroY);
+    findHeroPosition(click, playerId);
   }
 
-  function generatePathGrid(clickX, clickY, heroX, heroY) {
-    const width = freshEntities().mapLayer[0].length;
-    const height = freshEntities().mapLayer.length;
+  function findHeroPosition(click, playerId) {
+    const entities = freshEntities();
+
+    let hero;
+    _.forEach(entities, (entity) => {
+      if (
+        entity.figure === 'heroHuman' &&
+        entity.owner === playerId &&
+        entity.position
+      ) {
+        hero = entity;
+      }
+    });
+
+    const heroPositon = {};
+    heroPositon.x = parseInt(hero.position.x, 10);
+    heroPositon.y = parseInt(hero.position.y, 10);
+
+    generatePathGrid(click, heroPositon);
+  }
+
+  function generatePathGrid(click, heroPositon) {
+    const gameEntity = freshEntities()[freshEntities()._id];
+    const width = gameEntity.mapData.width;
+    const height = gameEntity.mapData.height;
 
     const grid = new PF.Grid(width, height);
 
-    freshEntities().mapLayer.forEach((row, y) => {
-      row.forEach((figure, x) => {
-        if (figure.collision) {
-          grid.setWalkableAt(x, y, false);
-        }
-      });
+    _.forEach(freshEntities(), (entity) => {
+      if (entity.collision) {
+        grid.setWalkableAt(entity.position.x, entity.position.y, false);
+      }
     });
 
     const finder = new PF.AStarFinder({ allowDiagonal: true });
 
     const pathArrayOfArrays = finder.findPath(
-      heroX,
-      heroY,
-      clickX,
-      clickY,
+      heroPositon.x,
+      heroPositon.y,
+      click.x,
+      click.y,
       grid
     );
 
@@ -67,12 +92,12 @@ g.world.worldSingleClick = (walkie, auth, viewport, freshEntities) => {
       return { x: path[0], y: path[1] };
     });
 
-    triggerEvents(pathArray, clickX, clickY);
+    triggerEvents(pathArray, click);
   }
 
-  function triggerEvents(pathArray, clickX, clickY) {
+  function triggerEvents(pathArray, click) {
     if (lastPathPositionX && lastPathPositionY) {
-      if (lastPathPositionX === clickX && lastPathPositionY === clickY) {
+      if (lastPathPositionX === click.x && lastPathPositionY === click.y) {
         lastPathPositionX = undefined;
         lastPathPositionY = undefined;
         walkie.triggerEvent('pathAccepted_', 'worldSingleClick.js', {

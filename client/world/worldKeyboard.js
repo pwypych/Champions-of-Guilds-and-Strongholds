@@ -14,10 +14,10 @@ g.world.worldKeyboard = (walkie, auth, freshEntities) => {
         return;
       }
 
-      findHeroPosition(event);
+      findPlayerId(event);
     });
 
-    function findHeroPosition(event) {
+    function findPlayerId(event) {
       const entities = freshEntities();
 
       let playerId;
@@ -26,6 +26,12 @@ g.world.worldKeyboard = (walkie, auth, freshEntities) => {
           playerId = id;
         }
       });
+
+      findHeroPosition(event, playerId);
+    }
+
+    function findHeroPosition(event, playerId) {
+      const entities = freshEntities();
 
       let hero;
       let heroId;
