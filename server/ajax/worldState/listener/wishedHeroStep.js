@@ -19,13 +19,11 @@ module.exports = (walkie, db) => {
         const ctx = {};
         ctx.gameId = data.gameId;
         ctx.wishedHeroStep = data.wishedHeroStep;
-        ctx.playerId = data.playerId;
         ctx.heroId = data.heroId;
 
         debug('onWishedHeroStep: wishedHeroStep:', ctx.wishedHeroStep);
         debug('onWishedHeroStep: gameId:', ctx.gameId);
         debug('onWishedHeroStep: heroId:', ctx.heroId);
-        debug('onWishedHeroStep: playerId:', ctx.playerId);
         findGameById(ctx);
       });
     }
@@ -162,13 +160,11 @@ module.exports = (walkie, db) => {
     function triggerWishedHeroStep(ctx) {
       debug('triggerWishedHeroStep');
       const gameId = ctx.gameId;
-      const playerId = ctx.playerId;
       const heroId = ctx.heroId;
       const wishedHeroStep = ctx.wishedHeroStep;
 
       walkie.triggerEvent('verifiedHeroStep_', 'wishedHeroStep.js', {
         gameId: gameId,
-        playerId: playerId,
         heroId: heroId,
         verifiedHeroStep: wishedHeroStep
       });
