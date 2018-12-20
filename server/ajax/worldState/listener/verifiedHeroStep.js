@@ -18,24 +18,28 @@ module.exports = (walkie, db) => {
         'verifiedHeroStep_',
         'verifiedHeroStep.js',
         (data) => {
-          const gameId = data.gameId;
-          const verifiedHeroStep = data.verifiedHeroStep;
-          const playerIndex = data.playerIndex;
+          const ctx = {};
+          ctx.gameId = data.gameId;
+          ctx.heroId = data.heroId;
+          ctx.verifiedHeroStep = data.verifiedHeroStep;
 
-          debug('onVerifiedHeroStep: verifiedHeroStep:', verifiedHeroStep);
-          debug('onVerifiedHeroStep: gameId:', gameId);
-          debug('onVerifiedHeroStep: playerIndex:', playerIndex);
-          updateHeroPosition(gameId, verifiedHeroStep, playerIndex);
+          debug('onVerifiedHeroStep: verifiedHeroStep:', ctx.verifiedHeroStep);
+          debug('onVerifiedHeroStep: gameId:', ctx.gameId);
+          updateHeroPosition(ctx);
         },
         false
       );
     }
 
-    function updateHeroPosition(gameId, verifiedHeroStep, playerIndex) {
+    function updateHeroPosition(ctx) {
+      const gameId = ctx.gameId;
+      const heroId = ctx.heroId;
+      const verifiedHeroStep = ctx.verifiedHeroStep;
+
       const query = { _id: gameId };
 
-      const mongoFieldToSetHeroX = 'playerArray.' + playerIndex + '.hero.x';
-      const mongoFieldToSetHeroY = 'playerArray.' + playerIndex + '.hero.y';
+      const mongoFieldToSetHeroX = heroId + '.position.x';
+      const mongoFieldToSetHeroY = heroId + '.position.y';
       const $set = {};
       $set[mongoFieldToSetHeroX] = verifiedHeroStep.toX;
       $set[mongoFieldToSetHeroY] = verifiedHeroStep.toY;

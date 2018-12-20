@@ -3,6 +3,7 @@
 'use strict';
 
 const debug = require('debug')('cogs:wishedHeroStep');
+const _ = require('lodash');
 
 // What does this module do?
 // Verify wishedHeroStep_ and decide what to do
@@ -18,49 +19,68 @@ module.exports = (walkie, db) => {
         const ctx = {};
         ctx.gameId = data.gameId;
         ctx.wishedHeroStep = data.wishedHeroStep;
-        ctx.playerIndex = data.playerIndex;
+        ctx.heroId = data.heroId;
 
         debug('onWishedHeroStep: wishedHeroStep:', ctx.wishedHeroStep);
         debug('onWishedHeroStep: gameId:', ctx.gameId);
-        debug('onWishedHeroStep: playerIndex:', ctx.playerIndex);
+        debug('onWishedHeroStep: heroId:', ctx.heroId);
         findGameById(ctx);
       });
     }
 
     function findGameById(ctx) {
       const gameId = ctx.gameId;
-      const playerIndex = ctx.playerIndex;
+      const heroId = ctx.heroId;
 
       const query = { _id: gameId };
       const options = {};
 
-      db.collection('gameCollection').findOne(query, options, (error, game) => {
-        debug('findGameById: gameId:', game._id, ' | error: ', error);
-        ctx.mapLayer = game.mapLayer;
-        ctx.hero = game.playerArray[playerIndex].hero;
+      db.collection('gameCollection').findOne(
+        query,
+        options,
+        (error, entities) => {
+          debug('findGameById: gameId:', entities._id, ' | error: ', error);
+          ctx.entities = entities;
+          ctx.hero = entities[heroId];
 
-        debug('findGameById', game._id);
-        checkIsHeroWishedPositionPossible(ctx);
-      });
+          debug('findGameById', entities._id);
+          debug('findGameById:ctx.hero:', ctx.hero);
+          checkIsHeroWishedPositionPossible(ctx);
+        }
+      );
     }
 
     function checkIsHeroWishedPositionPossible(ctx) {
-      const mapLayer = ctx.mapLayer;
+      const gameId = ctx.gameId;
+      const gameEntity = ctx.entities[gameId];
       const wishedHeroStep = ctx.wishedHeroStep;
+      const mapWidth = gameEntity.mapData.width - 1;
+      const mapHeight = gameEntity.mapData.height - 1;
 
+      debug(
+        'checkIsHeroWishedPositionPossible: wishedHeroStep.toY',
+        wishedHeroStep.toY,
+        'wishedHeroStep.toX:',
+        wishedHeroStep.toX
+      );
       if (
-        !mapLayer[wishedHeroStep.toY] ||
-        !mapLayer[wishedHeroStep.toY][wishedHeroStep.toX]
+        wishedHeroStep.toY < 0 ||
+        wishedHeroStep.toY > mapHeight ||
+        wishedHeroStep.toX < 0 ||
+        wishedHeroStep.toX > mapWidth
       ) {
         debug(
-          'checkIsHeroWishedPositionPossible: map position not found: moveToY, moveToX:',
+          'checkIsHeroWishedPositionPossible: map position not found: toY, toX:',
           wishedHeroStep.toY,
           wishedHeroStep.toX
         );
         return;
       }
 
-      debug('checkIsHeroWishedPositionPossible:', wishedHeroStep);
+      debug(
+        'checkIsHeroWishedPositionPossible: wishedHeroStep:',
+        wishedHeroStep
+      );
       checkIsHeroOneStepFromWishedPosition(ctx);
     }
 
@@ -68,8 +88,14 @@ module.exports = (walkie, db) => {
       const hero = ctx.hero;
       const wishedHeroStep = ctx.wishedHeroStep;
 
-      const distanceX = Math.abs(hero.x - wishedHeroStep.toX);
-      const distanceY = Math.abs(hero.y - wishedHeroStep.toY);
+      debug(
+        'checkIsHeroOneStepFromWishedPosition: hero.position.x:',
+        hero.position.x,
+        'hero.position.y:',
+        hero.position.y
+      );
+      const distanceX = Math.abs(hero.position.x - wishedHeroStep.toX);
+      const distanceY = Math.abs(hero.position.y - wishedHeroStep.toY);
 
       if (distanceX !== 0 && distanceX !== 1) {
         debug(
@@ -95,16 +121,34 @@ module.exports = (walkie, db) => {
         'distanceY',
         distanceY
       );
-      checkIsHeroWishedPositionEmpty(ctx);
+      checkIsWishedPositionCollidable(ctx);
     }
 
-    function checkIsHeroWishedPositionEmpty(ctx) {
-      const mapLayer = ctx.mapLayer;
+    function checkIsWishedPositionCollidable(ctx) {
+      const entities = ctx.entities;
       const wishedHeroStep = ctx.wishedHeroStep;
+      let isWishedPositionCollidable = false;
 
-      if (mapLayer[wishedHeroStep.toY][wishedHeroStep.toX].collision) {
+      _.forEach(entities, (entitiy) => {
+        if (entitiy.figure) {
+          if (
+            entitiy.position.x === wishedHeroStep.toX &&
+            entitiy.position.y === wishedHeroStep.toY
+          ) {
+            if (entitiy.collision === true) {
+              isWishedPositionCollidable = true;
+            }
+          }
+        }
+      });
+
+      debug(
+        'checkIsWishedPositionCollidable: isWishedPositionCollidable:',
+        isWishedPositionCollidable
+      );
+      if (isWishedPositionCollidable) {
         debug(
-          'checkIsHeroWishedPositionPossible: cannot move because collision on: moveToY, moveToX:',
+          'checkIsWishedPositionCollidable: cannot move because collision on: moveToY, moveToX:',
           wishedHeroStep.toY,
           wishedHeroStep.toX
         );
@@ -116,12 +160,12 @@ module.exports = (walkie, db) => {
     function triggerWishedHeroStep(ctx) {
       debug('triggerWishedHeroStep');
       const gameId = ctx.gameId;
-      const playerIndex = ctx.playerIndex;
+      const heroId = ctx.heroId;
       const wishedHeroStep = ctx.wishedHeroStep;
 
       walkie.triggerEvent('verifiedHeroStep_', 'wishedHeroStep.js', {
         gameId: gameId,
-        playerIndex: playerIndex,
+        heroId: heroId,
         verifiedHeroStep: wishedHeroStep
       });
     }
