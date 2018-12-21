@@ -42,6 +42,7 @@ g.main = function main() {
     g.launch.launchDisableUi($body, walkie);
 
     g.world.worldToggle($body, walkie);
+    g.world.informationButton($body);
     g.world.worldRender(walkie, auth, viewport, freshEntities, spriteBucket);
     g.world.entityChanges(walkie, freshEntities);
     g.world.figurePositionChanged(
