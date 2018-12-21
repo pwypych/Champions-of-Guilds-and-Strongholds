@@ -69,6 +69,8 @@ module.exports = (walkie, db) => {
         hero.spriteOffset.y = 0;
         hero.figure = 'heroHuman';
         hero.existsInState = 'worldState';
+        hero.heroStats.movement = 15;
+        hero.heroStats.movementMax = 15;
         heroArray.push(hero);
       });
 
