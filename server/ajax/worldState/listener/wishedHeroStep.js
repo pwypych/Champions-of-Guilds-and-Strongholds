@@ -45,9 +45,24 @@ module.exports = (walkie, db) => {
 
           debug('findGameById', entities._id);
           debug('findGameById:ctx.hero:', ctx.hero);
-          checkIsHeroWishedPositionPossible(ctx);
+          checkHeroMovementPoints(ctx);
         }
       );
+    }
+
+    function checkHeroMovementPoints(ctx) {
+      const hero = ctx.hero;
+
+      if (hero.heroStats.movement < 1) {
+        debug('checkHeroMovementPoints: No movements points left');
+        return;
+      }
+
+      debug(
+        'checkHeroMovementPoints: hero.heroStats.movement:',
+        hero.heroStats.movement
+      );
+      checkIsHeroWishedPositionPossible(ctx);
     }
 
     function checkIsHeroWishedPositionPossible(ctx) {
