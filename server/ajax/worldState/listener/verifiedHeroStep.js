@@ -43,7 +43,12 @@ module.exports = (walkie, db) => {
       const $set = {};
       $set[mongoFieldToSetHeroX] = verifiedHeroStep.toX;
       $set[mongoFieldToSetHeroY] = verifiedHeroStep.toY;
-      const update = { $set: $set };
+
+      const mongoFieldToSetMovement = heroId + '.heroStats.movement';
+      const $inc = {};
+      $inc[mongoFieldToSetMovement] = -1;
+
+      const update = { $set: $set, $inc: $inc };
       const options = {};
 
       db.collection('gameCollection').updateOne(

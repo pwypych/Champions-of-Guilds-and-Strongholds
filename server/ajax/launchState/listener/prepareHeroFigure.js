@@ -61,14 +61,20 @@ module.exports = (walkie, db) => {
       _.forEach(playerArray, (player, index) => {
         const hero = {};
         hero.owner = player.id;
+        hero.figure = 'heroHuman';
+        hero.existsInState = 'worldState';
+
         hero.position = {};
         hero.position.x = castleRandomArray[index].position.x;
         hero.position.y = castleRandomArray[index].position.y + 1;
+
         hero.spriteOffset = {};
         hero.spriteOffset.x = -9;
         hero.spriteOffset.y = 0;
-        hero.figure = 'heroHuman';
-        hero.existsInState = 'worldState';
+
+        hero.heroStats = {};
+        hero.heroStats.movement = 15;
+        hero.heroStats.movementMax = 15;
         heroArray.push(hero);
       });
 
