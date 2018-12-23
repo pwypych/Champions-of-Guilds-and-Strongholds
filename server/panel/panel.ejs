@@ -28,61 +28,49 @@
         </select>
       </form>
 
-      <br />
+      <div class="seperator-10"></div>
       <hr />
-      <br />
+      <div class="seperator-10"></div>
 
       <h2>Game instances</h2>
 
-      <div style="overflow-x:auto;">
-        <table>
-          <tr class="bold">
-            <td>ID</td>
-            <td>Map Name</td>
-            <td>Player Names</td>
-            <td>Player Links</td>
-            <td>API entitiesGet</td>
-            <td>Options</td>
-          </tr>
+      <div class="seperator-10"></div>
+      <hr />
+      <div class="seperator-10"></div>
 
-          <% viewModel.games.forEach((game) => { %>
-            <tr>
-              <td><%= game._id %></td>
-              <td><%= game[game._id].mapData.name %></td>
-              <td>
-                <% viewModel._.forEach(game, (entity) => { %>
-                  <% if (entity.playerToken && entity.playerData) { %>
-                    <%= entity.playerData.name %><br/>
-                  <% } %>
-                <% }); %>
-              </td>
-              <td>
-                <% viewModel._.forEach(game, (entity) => { %>
-                  <% if (entity.playerToken && entity.playerData) { %>
-                    <% const uri = '/game?gameId=' + game._id + '&playerToken=' + entity.playerToken; %>
-                    <a href="<%= viewModel.baseurl + uri %>">Open Map</a>
-                    <br/>
-                  <% } %>
-                <% }); %>
-              </td>
-              <td>
-                <% viewModel._.forEach(game, (entity) => { %>
-                  <% if (entity.playerToken && entity.playerData) { %>
-                    <% const uri = '/ajax/entitiesGet?gameId=' + game._id + '&playerToken=' + entity.playerToken; %>
-                    <a href="<%= viewModel.baseurl + uri %>">/ajax/entitiesGet</a>
-                    <br/>
-                  <% } %>
-                <% }); %>
-              </td>
-              <td>
-                <form class="" action="/panel/deleteGamePost" method="post">
-                  <input name="gameId" type="hidden" value="<%= game._id %>">
-                  <button type="submit">Delete game</button>
-                </form>
-              </td>
-            </tr>
-          <% }); %>
-        </table>
+      <div>
+
+        <% viewModel.games.forEach((game) => { %>
+          <div class="inline-block">
+            <div>ID: <%= game._id %></div>
+            <div>MAP: <%= game[game._id].mapData.name %></div>
+            <% viewModel._.forEach(game, (entity) => { %>
+              <% if (entity.playerToken && entity.playerData) { %>
+                <div>
+                  <span>NAME: <%= entity.playerData.name %></span>
+                  <% const uri = '/game?gameId=' + game._id + '&playerToken=' + entity.playerToken; %>
+                  <span> | </span>
+                  <a href="<%= viewModel.baseurl + uri %>">Open Map</a>
+                  <span> | </span>
+                  <% const uriTest = '/ajax/entitiesGet?gameId=' + game._id + '&playerToken=' + entity.playerToken; %>
+                  <a href="<%= viewModel.baseurl + uriTest %>">/ajax/entitiesGet</a>
+                </div>
+              <% } %>
+            <% }); %>
+            <div class="seperator-10"></div>
+            <div>
+              <form class="" action="/panel/deleteGamePost" method="post">
+                <input name="gameId" type="hidden" value="<%= game._id %>">
+                <button type="submit">Delete game</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="seperator-10"></div>
+          <hr />
+          <div class="seperator-10"></div>
+        <% }); %>
+
       </div>
     </div>
 

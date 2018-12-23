@@ -9,8 +9,6 @@
 body {
   outline: 0;
   font-family: 'Press Start 2P', cursive;
-  font-size: 15px;
-  line-height: 26px;
   color: #fff;
   text-shadow: -3px -3px 0 #823c3d,  3px -3px 0 #823c3d, -3px 3px 0 #823c3d, 3px 3px 0 #823c3d;
   background-color: #000;
@@ -24,7 +22,8 @@ button {
   background: none;
 
   font-family: 'Press Start 2P', cursive;
-  font-size: 15px;
+  font-size: 12px;
+  line-height: 18px;
   color: #fff;
   text-shadow: -3px -3px 0 #376d03,  3px -3px 0 #376d03, -3px 3px 0 #376d03, 3px 3px 0 #376d03;
   padding: 0px 0px 5px 5px
