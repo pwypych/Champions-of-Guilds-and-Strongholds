@@ -153,43 +153,39 @@ function setupLibrariesAndRoutes(figureManagerTree) {
 
   app.get(
     '/game',
-    require('./library/middlewareTokenAuth.js')(db),
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
     require('./game/game.js')(environment, db, templateToHtml)
   );
 
   app.get(
     '/ajax/entitiesGet',
-    require('./library/middlewareTokenAuth.js')(db),
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
     require('./ajax/launchState/launchEntitiesGet.js')(),
     require('./ajax/worldState/worldEntitiesGet.js')()
   );
 
-  // launchState listeners
-  require('./ajax/launchState/listener/everyPlayerReadyChecker.js')(
-    walkie,
-    db
-  )();
-  require('./ajax/launchState/listener/preparePlayerResource.js')(walkie, db)();
-  require('./ajax/launchState/listener/prepareHeroFigure.js')(
-    walkie,
-    db,
-    figureManagerTree
-  )();
-  require('./ajax/launchState/listener/launchCountdown.js')(walkie, db)();
-
   // launchState endpoints
   app.post(
-    '/ajax/launchState/playerNamePost',
-    require('./library/middlewareTokenAuth.js')(db),
+    '/ajax/launchState/playerReadyPost',
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('launchState'),
-    require('./ajax/launchState/playerNamePost.js')(db)
+    require('./ajax/launchState/ready/playerReadyPost.js')(db),
+    require('./library/readEntities.js')(db),
+    require('./ajax/launchState/ready/everyPlayerReadyChecker.js')(),
+    require('./ajax/launchState/ready/preparePlayerResource.js')(db),
+    require('./ajax/launchState/ready/prepareHeroFigure.js')(db),
+    require('./ajax/launchState/ready/launchCountdown.js')(db)
   );
 
   app.post(
-    '/ajax/launchState/playerReadyPost',
-    require('./library/middlewareTokenAuth.js')(db),
+    '/ajax/launchState/playerNamePost',
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('launchState'),
-    require('./ajax/launchState/playerReadyPost.js')(db, walkie)
+    require('./ajax/launchState/name/playerNamePost.js')(db)
   );
 
   // worldState listeners
@@ -200,27 +196,31 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   // worldState endpoints
   app.get(
     '/ajax/worldState/load/spriteFilenameArray',
-    require('./library/middlewareTokenAuth.js')(db),
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
     require('./ajax/worldState/load/spriteFilenameArrayGet.js')(environment)
   );
 
   app.post(
     '/ajax/worldState/hero/heroJourneyPost',
-    require('./library/middlewareTokenAuth.js')(db),
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
     require('./ajax/worldState/hero/heroJourneyPost.js')(walkie)
   );
 
   app.post(
     '/ajax/worldState/hero/heroJourneyCancelPost',
-    require('./library/middlewareTokenAuth.js')(db),
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
     require('./ajax/worldState/hero/heroJourneyCancelPost.js')(db)
   );
 
   app.post(
     '/ajax/worldState/endTurnPost',
-    require('./library/middlewareTokenAuth.js')(db),
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
     require('./ajax/worldState/endTurnPost.js')(db, walkie)
   );

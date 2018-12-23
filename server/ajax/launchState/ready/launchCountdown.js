@@ -6,19 +6,14 @@ const debug = require('debug')('cogs:launchCountdown');
 
 // What does this module do?
 // Change game state to worldState
-module.exports = (walkie, db) => {
-  return () => {
+module.exports = (db) => {
+  return (req, res) => {
     (function init() {
-      debug('init');
-      onPrepareHeroHigure();
-    })();
+      const gameId = res.locals.entities._id;
 
-    function onPrepareHeroHigure() {
-      walkie.onEvent('prepareHeroFigure_', 'launchCountdown.js', (data) => {
-        debug('onPrepareHeroHigure');
-        fireCountdown(data.gameId);
-      });
-    }
+      debug('init');
+      fireCountdown(gameId);
+    })();
 
     function fireCountdown(gameId) {
       debug('fireCountdown');
@@ -42,9 +37,8 @@ module.exports = (walkie, db) => {
         (error) => {
           if (error) {
             debug('updateGameState: error:', error);
-            return;
           }
-          // End
+          debug('******************** middleware after ********************');
         }
       );
     }

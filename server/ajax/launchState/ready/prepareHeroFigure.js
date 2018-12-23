@@ -8,34 +8,14 @@ const shortId = require('shortid');
 
 // What does this module do?
 // Place every hero figure in front of a castle
-module.exports = (walkie, db) => {
-  return () => {
+module.exports = (db) => {
+  return (req, res, next) => {
     (function init() {
+      const entities = res.locals.entities;
+
       debug('init');
-      onPreparePlayerResources();
+      generateHeroArray(entities);
     })();
-
-    function onPreparePlayerResources() {
-      walkie.onEvent(
-        'preparePlayerResources_',
-        'prepareHeroFigure.js',
-        (data) => {
-          debug('onPreparePlayerResources');
-          findGameById(data.gameId);
-        }
-      );
-    }
-
-    function findGameById(gameId) {
-      const query = { _id: gameId };
-      const options = {};
-
-      db.collection('gameCollection').findOne(query, options, (error, game) => {
-        const entities = game;
-        debug('findGameById', entities._id, 'error:', error);
-        generateHeroArray(entities);
-      });
-    }
 
     function generateHeroArray(entities) {
       const playerArray = [];
@@ -78,27 +58,25 @@ module.exports = (walkie, db) => {
         heroArray.push(hero);
       });
 
-      const gameId = entities._id;
-
       debug('generateHeroArray: heroArray.length:', heroArray);
-      forEachHeroArray(heroArray, gameId);
+      forEachHeroArray(heroArray, entities);
     }
 
-    function forEachHeroArray(heroArray, gameId) {
+    function forEachHeroArray(heroArray, entities) {
       const done = _.after(heroArray.length, () => {
         debug('forEachHeroArray: done!');
-        triggerPrepareReady(gameId);
+        next();
       });
 
       debug('forEachHeroArray');
 
-      // We assume that playerIndex is based on position on mapLayer
       heroArray.forEach((hero) => {
-        updateGame(hero, gameId, done);
+        updateGame(hero, entities, done);
       });
     }
 
-    function updateGame(hero, gameId, done) {
+    function updateGame(hero, entities, done) {
+      const gameId = entities._id;
       const query = { _id: gameId };
 
       const mongoFieldToSet = 'hero__' + shortId.generate();
@@ -119,14 +97,6 @@ module.exports = (walkie, db) => {
           done();
         }
       );
-    }
-
-    function triggerPrepareReady(gameId) {
-      debug('triggerPrepareReady');
-
-      walkie.triggerEvent('prepareHeroFigure_', 'prepareHeroFigure.js', {
-        gameId: gameId
-      });
     }
   };
 };

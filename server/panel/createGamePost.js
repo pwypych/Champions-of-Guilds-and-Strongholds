@@ -109,7 +109,6 @@ module.exports = (environment, db, figureManagerTree) => {
         entities[id].playerData.name = 'Player ' + (index + 1);
         entities[id].playerData.race = 'human';
         entities[id].playerData.color = colorArray[index];
-        entities[id].playerData.readyForLaunch = 'no';
         debug('generatePlayerEntities: playerEntity:', entities[id]);
       });
 
