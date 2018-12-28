@@ -2,17 +2,24 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:processHeroStep');
+const debug = require('debug')('cogs:updateHeroStep');
 
 // What does this module do?
-// Change hero position
+// Library that works on callback. It update hero position and decrement heroStats.movement
 module.exports = (db) => {
   return (gameId, heroId, position, callback) => {
     (function init() {
       debug('init');
 
-      updateHeroPosition();
+      waitBefore();
     })();
+
+    function waitBefore() {
+      setTimeout(() => {
+        debug('waitBefore: Waiting 250ms!');
+        updateHeroPosition();
+      }, 250);
+    }
 
     function updateHeroPosition() {
       const query = { _id: gameId };
@@ -34,17 +41,15 @@ module.exports = (db) => {
         query,
         update,
         options,
-        (error, result) => {
+        (error) => {
           if (error) {
             debug('ERROR: insert mongo error:', error);
-            callback('ERROR: insert mongo error', null);
+            callback('ERROR: insert mongo error');
             return;
           }
-          setTimeout(() => {
-            debug('from timeout');
-            callback(null);
-          }, 250);
-          debug('updateHeroPosition', result.result);
+
+          debug('updateHeroPosition');
+          callback(null);
         }
       );
     }
