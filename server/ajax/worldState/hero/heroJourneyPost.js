@@ -7,8 +7,8 @@ const validator = require('validator');
 
 // What does this module do?
 // Endpoint, accepts wished hero journey for a hero, initial verifies, triggers wishedHeroJourney_
-module.exports = (walkie) => {
-  return (req, res) => {
+module.exports = () => {
+  return (req, res, next) => {
     (function init() {
       debug('init');
       checkRequestBodyHeroJourney();
@@ -50,12 +50,13 @@ module.exports = (walkie) => {
         debug('******************** error ********************');
         return;
       }
+      res.locals.heroJourney = heroJourney;
 
       debug('checkRequestBodyHeroJourney: req.body', req.body);
-      checkRequestBodyHeroId(heroJourney);
+      checkRequestBodyHeroId();
     }
 
-    function checkRequestBodyHeroId(heroJourney) {
+    function checkRequestBodyHeroId() {
       const heroId = req.body.heroId;
 
       if (typeof heroId === 'undefined') {
@@ -64,27 +65,10 @@ module.exports = (walkie) => {
         debug('******************** error ********************');
         return;
       }
+      res.locals.heroId = heroId;
 
       debug('checkRequestBodyHeroId: heroId', heroId);
-      triggerWishedHeroJourney(heroJourney, heroId);
-    }
-
-    function triggerWishedHeroJourney(heroJourney, heroId) {
-      const entities = res.locals.entities;
-      const playerId = res.locals.playerId;
-      res.send({ error: 0 });
-      debug('triggerWishedHeroJourney');
-      walkie.triggerEvent(
-        'wishedHeroJourney_',
-        'heroJourneyPost.js',
-        {
-          gameId: entities._id,
-          playerId: playerId,
-          heroJourney: heroJourney,
-          heroId: heroId
-        },
-        false
-      );
+      next();
     }
   };
 };

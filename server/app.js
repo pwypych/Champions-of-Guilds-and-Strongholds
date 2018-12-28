@@ -206,7 +206,10 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/worldState/hero/heroJourneyPost.js')(walkie)
+    require('./ajax/worldState/hero/heroJourneyPost.js')(),
+    require('./ajax/worldState/listener/wishedHeroJourney.js')(walkie, db)
+    // require('./ajax/worldState/listener/wishedHeroStep.js')(walkie, db),
+    // require('./ajax/worldState/listener/verifiedHeroStep.js')(walkie, db),
   );
 
   app.post(

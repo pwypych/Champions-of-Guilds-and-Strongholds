@@ -7,51 +7,19 @@ const async = require('async');
 
 // What does this module do?
 // Listens to wishedHeroJourney_ and emmits wishedHeroStep_ events by a defined timer
-module.exports = (walkie, db) => {
-  return () => {
+module.exports = (db) => {
+  return (res, req, next) => {
     (function init() {
-      debug('init');
-      onWishedHeroJourney();
+      const ctx = {};
+      ctx.entities = res.locals.entities;
+      ctx.playerId = res.locals.playerId;
+      ctx.heroJourney = res.locals.heroJourney;
+      ctx.heroId = res.locals.heroId;
+      ctx.hero = ctx.entities[ctx.heroId];
+
+      debug('init: ctx.hero:', ctx.hero);
+      checkIsBegingMoved(ctx);
     })();
-
-    function onWishedHeroJourney() {
-      walkie.onEvent(
-        'wishedHeroJourney_',
-        'wishedHeroJourney.js',
-        (data) => {
-          const ctx = {};
-          ctx.gameId = data.gameId;
-          ctx.playerId = data.playerId;
-          ctx.heroJourney = data.heroJourney;
-          ctx.heroId = data.heroId;
-          debug('onWishedHeroJourney: ctx.heroJourney:', ctx.heroJourney);
-          findHeroById(ctx);
-        },
-        false
-      );
-    }
-
-    function findHeroById(ctx) {
-      const gameId = ctx.gameId;
-      const heroId = ctx.heroId;
-
-      const query = { _id: gameId };
-      const options = {};
-      const projection = {};
-      projection[heroId] = 1;
-      options.projection = projection;
-
-      db.collection('gameCollection').findOne(
-        query,
-        options,
-        (error, entities) => {
-          debug('findHeroById: heroEntity:', entities, ' | error: ', error);
-          ctx.hero = entities[heroId];
-
-          checkIsBegingMoved(ctx);
-        }
-      );
-    }
 
     function checkIsBegingMoved(ctx) {
       const hero = ctx.hero;
@@ -117,31 +85,10 @@ module.exports = (walkie, db) => {
         options,
         (error) => {
           debug('updateSetIsBegingMoved: error: ', error);
-          triggerWishedHeroStep(ctx);
+          next();
+          waitBeforeChecking(ctx);
         }
       );
-    }
-
-    function triggerWishedHeroStep(ctx) {
-      const gameId = ctx.gameId;
-      const playerId = ctx.playerId;
-      const heroId = ctx.heroId;
-      const wishedHeroStep = ctx.wishedHeroStep;
-
-      debug('triggerWishedHeroStep: ctx.wishedHeroStep:', wishedHeroStep);
-      walkie.triggerEvent(
-        'wishedHeroStep_',
-        'wishedHeroJourney.js',
-        {
-          gameId: gameId,
-          playerId: playerId,
-          heroId: heroId,
-          wishedHeroStep: wishedHeroStep
-        },
-        false
-      );
-
-      waitBeforeChecking(ctx);
     }
 
     function waitBeforeChecking(ctx) {
