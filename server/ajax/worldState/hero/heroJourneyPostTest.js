@@ -66,22 +66,24 @@ module.exports = (updateHeroPosition) => {
       }
 
       res.locals.heroId = heroId;
+      res.send({ error: 0 });
+      moveHeroByOneStep(heroJourney, heroId);
+    }
+
+    function moveHeroByOneStep(heroJourney, heroId) {
       const gameId = res.locals.entities._id;
       const position = {};
       position.toX = heroJourney[0].toX;
       position.toY = heroJourney[0].toY;
 
-      updateHeroPosition(gameId, heroId, position, (error, result) => {
+      updateHeroPosition(gameId, heroId, position, (error) => {
         if (error) {
-          debug('checkRequestBodyHeroId:', error);
+          debug('checkRequestBodyHeroId: error:', error);
           return;
         }
 
-        if (result) {
-          debug('checkRequestBodyHeroId: Ok');
-        }
+        debug('checkRequestBodyHeroId: Ok!');
       });
-      res.send({ error: 0 });
     }
   };
 };
