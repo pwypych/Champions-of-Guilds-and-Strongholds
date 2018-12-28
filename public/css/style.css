@@ -1,5 +1,8 @@
 /* needed by pixi */
 body {
+  font-size: 12px;
+  line-height: 18px;
+
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -25,6 +28,16 @@ h1, h2, h3, h4, h5 {
   margin: none;
 }
 
+h1 {
+  font-size: 18px;
+  line-height: 28px;
+}
+
+h2 {
+  font-size: 14px;
+  line-height: 20px;
+}
+
 .seperator-10 {
   margin-top: 10px;
 }
@@ -39,4 +52,8 @@ h1, h2, h3, h4, h5 {
 
 .bold {
   font-weight: 700;
+}
+
+.inline-block {
+  display: inline-block;
 }
