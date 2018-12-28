@@ -162,8 +162,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     '/ajax/entitiesGet',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
-    require('./ajax/launchState/launchEntitiesGet.js')(),
-    require('./ajax/worldState/worldEntitiesGet.js')()
+    require('./ajax/launchState/entities/launchEntitiesGet.js')(),
+    require('./ajax/worldState/entities/worldEntitiesGet.js')()
   );
 
   // launchState endpoints
@@ -196,6 +196,12 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/worldState/load/spriteFilenameArrayGet.js')(environment)
   );
 
+  const updateHeroPosition = require('./ajax/worldState/journey/updateHeroPosition.js')(
+    db
+  );
+  const decideHeroStep = require('./ajax/worldState/journey/decideHeroStep.js')(
+    db
+  );
   app.post(
     '/ajax/worldState/journey/heroJourneyPost',
     require('./library/readEntities.js')(db),
@@ -207,26 +213,12 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     // require('./ajax/worldState/listener/verifiedHeroStep.js')(walkie, db),
   );
 
-  const updateHeroPosition = require('./ajax/worldState/journey/updateHeroPosition.js')(
-    db
-  );
-  const decideHeroStep = require('./ajax/worldState/journey/decideHeroStep.js')(
-    db
-  );
-  app.post(
-    '/ajax/worldState/hero/heroJourneyPostTest',
-    require('./library/readEntities.js')(db),
-    require('./library/middlewareTokenAuth.js')(),
-    require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/worldState/hero/heroJourneyPostTest.js')(updateHeroPosition)
-  );
-
   app.post(
     '/ajax/worldState/hero/heroJourneyCancelPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/worldState/hero/heroJourneyCancelPost.js')(db)
+    require('./ajax/worldState/journey/heroJourneyCancelPost.js')(db)
   );
 
   app.post(
@@ -234,7 +226,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/worldState/endTurnPost.js')(db, walkie)
+    require('./ajax/worldState/endTurn/endTurnPost.js')(db, walkie)
   );
 
   debug('setupLibrariesAndRoutes()');
