@@ -7,7 +7,7 @@ const validator = require('validator');
 
 // What does this module do?
 // Endpoint, accepts wished hero journey for a hero, initial verifies, triggers wishedHeroJourney_
-module.exports = () => {
+module.exports = (updateHeroPosition) => {
   return (req, res, next) => {
     (function init() {
       debug('init');
@@ -52,11 +52,10 @@ module.exports = () => {
       }
       res.locals.heroJourney = heroJourney;
 
-      debug('checkRequestBodyHeroJourney: req.body', req.body);
-      checkRequestBodyHeroId();
+      checkRequestBodyHeroId(heroJourney);
     }
 
-    function checkRequestBodyHeroId() {
+    function checkRequestBodyHeroId(heroJourney) {
       const heroId = req.body.heroId;
 
       if (typeof heroId === 'undefined') {
@@ -65,10 +64,26 @@ module.exports = () => {
         debug('******************** error ********************');
         return;
       }
-      res.locals.heroId = heroId;
 
-      debug('checkRequestBodyHeroId: heroId', heroId);
-      next();
+      res.locals.heroId = heroId;
+      res.send({ error: 0 });
+      moveHeroByOneStep(heroJourney, heroId);
+    }
+
+    function moveHeroByOneStep(heroJourney, heroId) {
+      const gameId = res.locals.entities._id;
+      const position = {};
+      position.toX = heroJourney[0].toX;
+      position.toY = heroJourney[0].toY;
+
+      updateHeroPosition(gameId, heroId, position, (error) => {
+        if (error) {
+          debug('checkRequestBodyHeroId: error:', error);
+          return;
+        }
+
+        debug('checkRequestBodyHeroId: Ok!');
+      });
     }
   };
 };
