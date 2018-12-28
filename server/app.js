@@ -188,11 +188,6 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/launchState/name/playerNamePost.js')(db)
   );
 
-  // worldState listeners
-  require('./ajax/worldState/listener/wishedHeroJourney.js')(walkie, db)();
-  require('./ajax/worldState/listener/wishedHeroStep.js')(walkie, db)();
-  require('./ajax/worldState/listener/verifiedHeroStep.js')(walkie, db)();
-
   // worldState endpoints
   app.get(
     '/ajax/worldState/load/spriteFilenameArray',
@@ -202,12 +197,12 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   app.post(
-    '/ajax/worldState/hero/heroJourneyPost',
+    '/ajax/worldState/journey/heroJourneyPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/worldState/hero/heroJourneyPost.js')(),
-    require('./ajax/worldState/listener/wishedHeroJourney.js')(walkie, db)
+    require('./ajax/worldState/journey/heroJourneyPost.js')(),
+    require('./ajax/worldState/journey/processHeroJourney.js')(db)
     // require('./ajax/worldState/listener/wishedHeroStep.js')(walkie, db),
     // require('./ajax/worldState/listener/verifiedHeroStep.js')(walkie, db),
   );
