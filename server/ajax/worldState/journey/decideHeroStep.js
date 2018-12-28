@@ -3,34 +3,20 @@
 'use strict';
 
 const debug = require('debug')('cogs:decideHeroStep');
+const _ = require('lodash');
 
 // What does this module do?
 // Verify wishedHeroStep_ and decide what to do
-module.exports = (db) => {
-  return (gameId, heroId, position, callback) => {
+// Library that works on callback. It decides what to do with wished hero step. Was journey canselled? Is step possible? Decide what will happen!
+module.exports = (db, updateHeroPosition) => {
+  return (gameId, heroId, wishedHeroStep, callback) => {
     (function init() {
       debug('init');
-      onWishedHeroStep();
+      findGameById();
     })();
 
-    function onWishedHeroStep() {
-      walkie.onEvent('wishedHeroStep_', 'wishedHeroStep.js', (data) => {
-        const ctx = {};
-        ctx.gameId = data.gameId;
-        ctx.wishedHeroStep = data.wishedHeroStep;
-        ctx.heroId = data.heroId;
-
-        debug('onWishedHeroStep: wishedHeroStep:', ctx.wishedHeroStep);
-        debug('onWishedHeroStep: gameId:', ctx.gameId);
-        debug('onWishedHeroStep: heroId:', ctx.heroId);
-        findGameById(ctx);
-      });
-    }
-
-    function findGameById(ctx) {
-      const gameId = ctx.gameId;
-      const heroId = ctx.heroId;
-
+    // cannot use entities injected above, because hero position changes in db for each step
+    function findGameById() {
       const query = { _id: gameId };
       const options = {};
 
@@ -38,22 +24,20 @@ module.exports = (db) => {
         query,
         options,
         (error, entities) => {
-          debug('findGameById: gameId:', entities._id, ' | error: ', error);
-          ctx.entities = entities;
-          ctx.hero = entities[heroId];
-
+          debug('findGameById: error: ', error);
           debug('findGameById', entities._id);
-          debug('findGameById:ctx.hero:', ctx.hero);
-          checkHeroMovementPoints(ctx);
+          checkHeroMovementPoints(entities);
         }
       );
     }
 
-    function checkHeroMovementPoints(ctx) {
-      const hero = ctx.hero;
+    function checkHeroMovementPoints(entities) {
+      const hero = entities[heroId];
 
       if (hero.heroStats.movement < 1) {
-        debug('checkHeroMovementPoints: No movements points left');
+        const message = 'No movement points left';
+        debug('checkHeroMovementPoints: ', message);
+        callback(message);
         return;
       }
 
@@ -61,13 +45,11 @@ module.exports = (db) => {
         'checkHeroMovementPoints: hero.heroStats.movement:',
         hero.heroStats.movement
       );
-      checkIsHeroWishedPositionPossible(ctx);
+      checkIsHeroWishedPositionPossible(entities);
     }
 
-    function checkIsHeroWishedPositionPossible(ctx) {
-      const gameId = ctx.gameId;
-      const gameEntity = ctx.entities[gameId];
-      const wishedHeroStep = ctx.wishedHeroStep;
+    function checkIsHeroWishedPositionPossible(entities) {
+      const gameEntity = entities[gameId];
       const mapWidth = gameEntity.mapData.width - 1;
       const mapHeight = gameEntity.mapData.height - 1;
 
@@ -83,11 +65,12 @@ module.exports = (db) => {
         wishedHeroStep.toX < 0 ||
         wishedHeroStep.toX > mapWidth
       ) {
-        debug(
-          'checkIsHeroWishedPositionPossible: map position not found: toY, toX:',
-          wishedHeroStep.toY,
-          wishedHeroStep.toX
-        );
+        let message = 'Map position not found: toY, toX: ';
+        message += wishedHeroStep.toY;
+        message += ' ';
+        message += wishedHeroStep.toX;
+        debug('checkIsHeroWishedPositionPossible: ', message);
+        callback(message);
         return;
       }
 
@@ -95,12 +78,11 @@ module.exports = (db) => {
         'checkIsHeroWishedPositionPossible: wishedHeroStep:',
         wishedHeroStep
       );
-      checkIsHeroOneStepFromWishedPosition(ctx);
+      checkIsHeroOneStepFromWishedPosition(entities);
     }
 
-    function checkIsHeroOneStepFromWishedPosition(ctx) {
-      const hero = ctx.hero;
-      const wishedHeroStep = ctx.wishedHeroStep;
+    function checkIsHeroOneStepFromWishedPosition(entities) {
+      const hero = entities[heroId];
 
       debug(
         'checkIsHeroOneStepFromWishedPosition: hero.position.x:',
@@ -112,20 +94,24 @@ module.exports = (db) => {
       const distanceY = Math.abs(hero.position.y - wishedHeroStep.toY);
 
       if (distanceX !== 0 && distanceX !== 1) {
+        const message = 'Cannot move more than one step';
         debug(
-          'checkIsHeroOneStepFromWishedPosition: cannot move more than one step:',
-          wishedHeroStep.toY,
-          wishedHeroStep.toX
+          'checkIsHeroOneStepFromWishedPosition: ',
+          message,
+          wishedHeroStep
         );
+        callback(message);
         return;
       }
 
       if (distanceY !== 0 && distanceY !== 1) {
+        const message = 'Cannot move more than one step';
         debug(
-          'checkIsHeroOneStepFromWishedPosition: cannot move more than one step:',
-          wishedHeroStep.toY,
-          wishedHeroStep.toX
+          'checkIsHeroOneStepFromWishedPosition: ',
+          message,
+          wishedHeroStep
         );
+        callback(message);
         return;
       }
 
@@ -135,12 +121,10 @@ module.exports = (db) => {
         'distanceY',
         distanceY
       );
-      checkIsWishedPositionCollidable(ctx);
+      checkIsWishedPositionCollidable(entities);
     }
 
-    function checkIsWishedPositionCollidable(ctx) {
-      const entities = ctx.entities;
-      const wishedHeroStep = ctx.wishedHeroStep;
+    function checkIsWishedPositionCollidable(entities) {
       let isWishedPositionCollidable = false;
 
       _.forEach(entities, (entitiy) => {
@@ -160,27 +144,34 @@ module.exports = (db) => {
         'checkIsWishedPositionCollidable: isWishedPositionCollidable:',
         isWishedPositionCollidable
       );
+
       if (isWishedPositionCollidable) {
-        debug(
-          'checkIsWishedPositionCollidable: cannot move because collision on: moveToY, moveToX:',
-          wishedHeroStep.toY,
-          wishedHeroStep.toX
-        );
+        let message = 'Cannot move because collision on wished step: ';
+        message += wishedHeroStep.toY;
+        message += ' ';
+        message += wishedHeroStep.toX;
+
+        debug('checkIsWishedPositionCollidable', message);
+        callback(message);
         return;
       }
-      triggerWishedHeroStep(ctx);
+
+      processHeroPosition();
     }
 
-    function triggerWishedHeroStep(ctx) {
-      debug('triggerWishedHeroStep');
-      const gameId = ctx.gameId;
-      const heroId = ctx.heroId;
-      const wishedHeroStep = ctx.wishedHeroStep;
+    function processHeroPosition() {
+      const position = {};
+      position.x = wishedHeroStep.toX;
+      position.y = wishedHeroStep.toY;
 
-      walkie.triggerEvent('verifiedHeroStep_', 'wishedHeroStep.js', {
-        gameId: gameId,
-        heroId: heroId,
-        verifiedHeroStep: wishedHeroStep
+      updateHeroPosition(gameId, heroId, position, (error) => {
+        debug('processHeroPosition');
+        if (error) {
+          callback(error);
+          return;
+        }
+
+        callback(null);
       });
     }
   };

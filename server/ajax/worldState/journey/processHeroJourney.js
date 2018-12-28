@@ -11,21 +11,21 @@ module.exports = (db, decideHeroStep) => {
   return (req, res, next) => {
     (function init() {
       const ctx = {};
-      ctx.entities = res.locals.entities;
+      ctx.gameId = res.locals.gameId;
       ctx.playerId = res.locals.playerId;
       ctx.heroJourney = res.locals.heroJourney;
       ctx.heroId = res.locals.heroId;
-      ctx.hero = ctx.entities[ctx.heroId];
+      ctx.hero = res.locals.entities[ctx.heroId];
 
       debug('init: ctx.hero:', ctx.hero);
-      checkIsBegingMoved(ctx);
+      checkIsProcessingJourney(ctx);
     })();
 
-    function checkIsBegingMoved(ctx) {
+    function checkIsProcessingJourney(ctx) {
       const hero = ctx.hero;
 
-      if (hero.isBegingMoved) {
-        debug('checkIsBegingMoved: Yes');
+      if (hero.processingJourneyUntilTimestamp > Date.now()) {
+        debug('checkIsProcessingJourney: Yes');
         return;
       }
 
@@ -54,29 +54,30 @@ module.exports = (db, decideHeroStep) => {
       const heroJourney = ctx.heroJourney;
       async.eachSeries(
         heroJourney,
-        (heroStep, done) => {
+        (wishedHeroStep, done) => {
           debug('forEachWishedHeroJourney: Start one iteration!');
           ctx.done = done;
-          ctx.heroStep = heroStep;
-          updateSetIsBegingMoved(ctx);
+          ctx.wishedHeroStep = wishedHeroStep;
+          setProcessingJourneyUntilTimestamp(ctx);
         },
         (error) => {
           debug('forEachWishedHeroJourney: error:', error);
           debug('forEachWishedHeroJourney: Done!');
-          updateUnsetIsBegingMoved(ctx);
           debug('******************** async job done ********************');
+          unsetProcessingJourneyUntilTimestamp(ctx);
         }
       );
     }
 
-    function updateSetIsBegingMoved(ctx) {
+    function setProcessingJourneyUntilTimestamp(ctx) {
       const gameId = ctx.gameId;
       const heroId = ctx.heroId;
 
       const query = { _id: gameId };
-      const string = heroId + '.isBegingMoved';
+      const string = heroId + '.processingJourneyUntilTimestamp';
       const $set = {};
-      $set[string] = true;
+      // 250 ms hero move speed + 100ms security margin for processing
+      $set[string] = Date.now() + 250 + 100;
       const update = { $set: $set };
       const options = {};
 
@@ -85,7 +86,7 @@ module.exports = (db, decideHeroStep) => {
         update,
         options,
         (error) => {
-          debug('updateSetIsBegingMoved: error: ', error);
+          debug('setProcessingJourneyUntilTimestamp: error: ', error);
           next();
           runDecideHeroStep(ctx);
         }
@@ -95,10 +96,10 @@ module.exports = (db, decideHeroStep) => {
     function runDecideHeroStep(ctx) {
       const gameId = ctx.gameId;
       const heroId = ctx.heroId;
-      const heroStep = ctx.heroStep;
+      const wishedHeroStep = ctx.wishedHeroStep;
       const done = ctx.done;
 
-      decideHeroStep(gameId, heroId, heroStep, (error) => {
+      decideHeroStep(gameId, heroId, wishedHeroStep, (error) => {
         if (error) {
           debug('runDecideHeroStep: error: ', error);
           done(error);
@@ -110,12 +111,12 @@ module.exports = (db, decideHeroStep) => {
       });
     }
 
-    function updateUnsetIsBegingMoved(ctx) {
+    function unsetProcessingJourneyUntilTimestamp(ctx) {
       const gameId = ctx.gameId;
       const heroId = ctx.heroId;
 
       const query = { _id: gameId };
-      const string = heroId + '.isBegingMoved';
+      const string = heroId + '.processingJourneyUntilTimestamp';
       const $unset = {};
       $unset[string] = true;
       const update = { $unset: $unset };
@@ -126,7 +127,7 @@ module.exports = (db, decideHeroStep) => {
         update,
         options,
         (error) => {
-          debug('updateUnsetIsBegingMoved: Done! | error: ', error);
+          debug('unsetProcessingJourneyUntilTimestamp: Done! | error: ', error);
         }
       );
     }

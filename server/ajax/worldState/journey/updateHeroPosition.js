@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:updateHeroStep');
+const debug = require('debug')('cogs:updateHeroPosition');
 
 // What does this module do?
 // Library that works on callback. It update hero position and decrement heroStats.movement
@@ -27,8 +27,8 @@ module.exports = (db) => {
       const mongoFieldToSetHeroX = heroId + '.position.x';
       const mongoFieldToSetHeroY = heroId + '.position.y';
       const $set = {};
-      $set[mongoFieldToSetHeroX] = position.toX;
-      $set[mongoFieldToSetHeroY] = position.toY;
+      $set[mongoFieldToSetHeroX] = position.x;
+      $set[mongoFieldToSetHeroY] = position.y;
 
       const mongoFieldToSetMovement = heroId + '.heroStats.movement';
       const $inc = {};

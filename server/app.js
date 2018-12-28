@@ -200,7 +200,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     db
   );
   const decideHeroStep = require('./ajax/worldState/journey/decideHeroStep.js')(
-    db
+    db,
+    updateHeroPosition
   );
   app.post(
     '/ajax/worldState/journey/heroJourneyPost',
@@ -208,9 +209,10 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
     require('./ajax/worldState/journey/heroJourneyPost.js')(),
-    require('./ajax/worldState/journey/processHeroJourney.js')(db)
-    // require('./ajax/worldState/listener/wishedHeroStep.js')(walkie, db),
-    // require('./ajax/worldState/listener/verifiedHeroStep.js')(walkie, db),
+    require('./ajax/worldState/journey/processHeroJourney.js')(
+      db,
+      decideHeroStep
+    )
   );
 
   app.post(
