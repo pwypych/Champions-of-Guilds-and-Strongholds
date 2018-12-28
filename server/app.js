@@ -189,9 +189,9 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   // worldState listeners
-  require('./ajax/worldState/listener/wishedHeroJourney.js')(walkie, db)();
-  require('./ajax/worldState/listener/wishedHeroStep.js')(walkie, db)();
-  require('./ajax/worldState/listener/verifiedHeroStep.js')(walkie, db)();
+  // require('./ajax/worldState/listener/wishedHeroJourney.js')(walkie, db)();
+  // require('./ajax/worldState/listener/wishedHeroStep.js')(walkie, db)();
+  // require('./ajax/worldState/listener/verifiedHeroStep.js')(walkie, db)();
 
   // worldState endpoints
   app.get(
@@ -201,18 +201,20 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/worldState/load/spriteFilenameArrayGet.js')(environment)
   );
 
-  app.post(
-    '/ajax/worldState/hero/heroJourneyPost',
-    require('./library/readEntities.js')(db),
-    require('./library/middlewareTokenAuth.js')(),
-    require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/worldState/hero/heroJourneyPost.js')(),
-    require('./ajax/worldState/listener/wishedHeroJourney.js')(walkie, db)
-    // require('./ajax/worldState/listener/wishedHeroStep.js')(walkie, db),
-    // require('./ajax/worldState/listener/verifiedHeroStep.js')(walkie, db),
-  );
+  // app.post(
+  //   '/ajax/worldState/hero/heroJourneyPost',
+  //   require('./library/readEntities.js')(db),
+  //   require('./library/middlewareTokenAuth.js')(),
+  //   require('./library/middlewareAjaxStateAuth.js')('worldState'),
+  //   require('./ajax/worldState/hero/heroJourneyPost.js')(),
+  //   require('./ajax/worldState/listener/wishedHeroJourney.js')(walkie, db)
+  //   // require('./ajax/worldState/listener/wishedHeroStep.js')(walkie, db),
+  //   // require('./ajax/worldState/listener/verifiedHeroStep.js')(walkie, db),
+  // );
 
-  const updateHeroPosition = require('./ajax/worldState/journey/updateHeroPosition.js')();
+  const updateHeroPosition = require('./ajax/worldState/journey/updateHeroPosition.js')(
+    db
+  );
   app.post(
     '/ajax/worldState/hero/heroJourneyPostTest',
     require('./library/readEntities.js')(db),

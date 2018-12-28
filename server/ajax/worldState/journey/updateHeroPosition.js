@@ -2,16 +2,19 @@
 
 'use strict';
 
-const debug = require('debug')('nope:cogs:processHeroStep');
+const debug = require('debug')('cogs:processHeroStep');
 
+// What does this module do?
+// Change hero position
 module.exports = (db) => {
   return (gameId, heroId, position, callback) => {
     (function init() {
       debug('init');
+
       updateHeroPosition();
     })();
 
-    function updateHeroPosition(ctx) {
+    function updateHeroPosition() {
       const query = { _id: gameId };
 
       const mongoFieldToSetHeroX = heroId + '.position.x';
@@ -33,10 +36,14 @@ module.exports = (db) => {
         options,
         (error, result) => {
           if (error) {
-            debug(': ERROR: insert mongo error:', error);
+            debug('ERROR: insert mongo error:', error);
+            callback('ERROR: insert mongo error', null);
             return;
           }
-
+          setTimeout(() => {
+            debug('from timeout');
+            callback(null);
+          }, 250);
           debug('updateHeroPosition', result.result);
         }
       );
