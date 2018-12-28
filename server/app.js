@@ -212,6 +212,15 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     // require('./ajax/worldState/listener/verifiedHeroStep.js')(walkie, db),
   );
 
+  const updateHeroPosition = require('./ajax/worldState/journey/updateHeroPosition.js')();
+  app.post(
+    '/ajax/worldState/hero/heroJourneyPostTest',
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
+    require('./library/middlewareAjaxStateAuth.js')('worldState'),
+    require('./ajax/worldState/hero/heroJourneyPostTest.js')(updateHeroPosition)
+  );
+
   app.post(
     '/ajax/worldState/hero/heroJourneyCancelPost',
     require('./library/readEntities.js')(db),
