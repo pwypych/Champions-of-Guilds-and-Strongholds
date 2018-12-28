@@ -177,6 +177,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/launchState/ready/everyPlayerReadyChecker.js')(),
     require('./ajax/launchState/ready/preparePlayerResource.js')(db),
     require('./ajax/launchState/ready/prepareHeroFigure.js')(db),
+    require('./ajax/launchState/ready/unsetReadyForLaunch.js')(db),
     require('./ajax/launchState/ready/launchCountdown.js')(db)
   );
 
@@ -216,7 +217,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     db
   );
   const decideHeroStep = require('./ajax/worldState/journey/decideHeroStep.js')(
-    db
+    updateHeroPosition
   );
   app.post(
     '/ajax/worldState/hero/heroJourneyPostTest',
