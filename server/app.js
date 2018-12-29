@@ -225,7 +225,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/world/endTurn/endTurnPost.js')(db)
+    require('./ajax/world/endTurn/endTurnPost.js')(db),
+    require('./ajax/world/endTurn/zeroPlayerMovementPoints.js')(db)
   );
 
   debug('setupLibrariesAndRoutes()');
