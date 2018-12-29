@@ -6,14 +6,12 @@ const debug = require('debug')('cogs:unsetReadyForLaunch');
 const _ = require('lodash');
 
 // What does this module do?
-// Middleware that unset readyForLaunch
+// Middleware that unset readyForLaunch flag from player entitie
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
-      const gameId = res.locals.entities._id;
-
       debug('init');
-      generatePlayerEntityArray(gameId);
+      generatePlayerEntityArray();
     })();
 
     function generatePlayerEntityArray() {
@@ -25,15 +23,22 @@ module.exports = (db) => {
         }
       });
 
-      unsetPlayerReadyForLaunch();
+      debug('generatePlayerEntityArray: playerEntityArray:', playerEntityArray);
+      unsetPlayerReadyForLaunch(playerEntityArray);
     }
 
-    function unsetPlayerReadyForLaunch(gameId) {
+    function unsetPlayerReadyForLaunch(playerEntityArray) {
+      const gameId = res.locals.entities._id;
       const query = { _id: gameId };
-      const mongoFieldToSet = gameId + '.state';
-      const $set = {};
-      $set[mongoFieldToSet] = 'worldState';
-      const update = { $set: $set };
+      const $unset = {};
+
+      playerEntityArray.forEach((entity) => {
+        const string = entity + '.playerData.readyForLaunch';
+        debug('unsetPlayerReadyForLaunch: string:', string);
+        $unset[string] = true;
+      });
+
+      const update = { $unset: $unset };
       const options = {};
 
       db.collection('gameCollection').updateOne(
@@ -44,6 +49,8 @@ module.exports = (db) => {
           if (error) {
             debug('unsetPlayerReadyForLaunch: error:', error);
           }
+
+          next();
           debug('******************** middleware after ********************');
         }
       );
