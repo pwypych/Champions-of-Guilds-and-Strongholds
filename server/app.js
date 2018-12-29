@@ -129,9 +129,8 @@ function setupFigureManagerTree() {
 function setupLibrariesAndRoutes(figureManagerTree) {
   // libraries
   const templateToHtml = require('./library/templateToHtml.js')();
-  const walkie = require('./library/walkie.js')();
 
-  // noState endpoints
+  // general endpoints
   app.get('/', (req, res) => {
     res.redirect('/panel');
   });
@@ -162,13 +161,13 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     '/ajax/entitiesGet',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
-    require('./ajax/launchState/launchEntitiesGet.js')(),
-    require('./ajax/worldState/worldEntitiesGet.js')()
+    require('./ajax/launchState/entities/launchEntitiesGet.js')(),
+    require('./ajax/worldState/entities/worldEntitiesGet.js')()
   );
 
   // launchState endpoints
   app.post(
-    '/ajax/launchState/playerReadyPost',
+    '/ajax/launchState/ready/playerReadyPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('launchState'),
@@ -182,17 +181,12 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   app.post(
-    '/ajax/launchState/playerNamePost',
+    '/ajax/launchState/name/playerNamePost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('launchState'),
     require('./ajax/launchState/name/playerNamePost.js')(db)
   );
-
-  // worldState listeners
-  // require('./ajax/worldState/listener/wishedHeroJourney.js')(walkie, db)();
-  // require('./ajax/worldState/listener/wishedHeroStep.js')(walkie, db)();
-  // require('./ajax/worldState/listener/verifiedHeroStep.js')(walkie, db)();
 
   // worldState endpoints
   app.get(
@@ -202,45 +196,39 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/worldState/load/spriteFilenameArrayGet.js')(environment)
   );
 
-  // app.post(
-  //   '/ajax/worldState/hero/heroJourneyPost',
-  //   require('./library/readEntities.js')(db),
-  //   require('./library/middlewareTokenAuth.js')(),
-  //   require('./library/middlewareAjaxStateAuth.js')('worldState'),
-  //   require('./ajax/worldState/hero/heroJourneyPost.js')(),
-  //   require('./ajax/worldState/listener/wishedHeroJourney.js')(walkie, db)
-  //   // require('./ajax/worldState/listener/wishedHeroStep.js')(walkie, db),
-  //   // require('./ajax/worldState/listener/verifiedHeroStep.js')(walkie, db),
-  // );
-
   const updateHeroPosition = require('./ajax/worldState/journey/updateHeroPosition.js')(
     db
   );
   const decideHeroStep = require('./ajax/worldState/journey/decideHeroStep.js')(
+    db,
     updateHeroPosition
   );
   app.post(
-    '/ajax/worldState/hero/heroJourneyPostTest',
+    '/ajax/worldState/journey/heroJourneyPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/worldState/hero/heroJourneyPostTest.js')(updateHeroPosition)
+    require('./ajax/worldState/journey/heroJourneyPost.js')(),
+    require('./ajax/worldState/journey/processHeroJourney.js')(
+      db,
+      decideHeroStep
+    )
   );
 
   app.post(
-    '/ajax/worldState/hero/heroJourneyCancelPost',
+    '/ajax/worldState/journey/heroJourneyCancelPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/worldState/hero/heroJourneyCancelPost.js')(db)
+    require('./ajax/worldState/journey/heroJourneyCancelPost.js')(db)
   );
 
   app.post(
-    '/ajax/worldState/endTurnPost',
+    '/ajax/worldState/endTurn/endTurnPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/worldState/endTurnPost.js')(db, walkie)
+    require('./ajax/worldState/endTurn/endTurnPost.js')(db)
   );
 
   debug('setupLibrariesAndRoutes()');

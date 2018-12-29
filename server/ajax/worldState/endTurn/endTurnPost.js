@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:endTurnPost.js');
 
 // What does this module do?
 // Endpoint, set endTurn flag to true on player entitty, trigger playerEndTurn_
-module.exports = (db, walkie) => {
+module.exports = (db) => {
   return (req, res) => {
     (function init() {
       debug('init');
@@ -47,16 +47,6 @@ module.exports = (db, walkie) => {
     function triggerPlayerEndTurn(gameId, playerId) {
       res.send({ error: 0 });
       debug('triggerPlayerEndTurn');
-
-      walkie.triggerEvent(
-        'playerEndTurn_',
-        'endTurnPost.js',
-        {
-          gameId: gameId,
-          playerId: playerId
-        },
-        false
-      );
     }
   };
 };

@@ -59,11 +59,12 @@ g.world.worldJourney = (walkie, auth) => {
   }
 
   function sendRequest(journey, heroId) {
+    journeyQueuedToSend = undefined;
+    heroIdQueuedToSend = undefined;
+
     const data = { heroJourney: journey, heroId: heroId };
-    $.post('/ajax/worldState/hero/heroJourneyPostTest' + auth.uri, data, () => {
-      console.log('worldJourney.js: POST heroJourneyPostTest');
-      journeyQueuedToSend = undefined;
-      heroIdQueuedToSend = undefined;
+    $.post('/ajax/worldState/journey/heroJourneyPost' + auth.uri, data, () => {
+      console.log('worldJourney.js: POST heroJourneyPost');
 
       setTimeout(() => {
         $('body').css('cursor', 'default');

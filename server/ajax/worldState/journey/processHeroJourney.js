@@ -2,30 +2,30 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:wishedHeroJourney');
+const debug = require('debug')('cogs:processHeroJourney');
 const async = require('async');
 
 // What does this module do?
-// Listens to wishedHeroJourney_ and emmits wishedHeroStep_ events by a defined timer
-module.exports = (db) => {
-  return (res, req, next) => {
+// Middleware, expects heroId and heroJourney in res.locals, flags heroBegingMoved and processes each step
+module.exports = (db, decideHeroStep) => {
+  return (req, res, next) => {
     (function init() {
       const ctx = {};
-      ctx.entities = res.locals.entities;
+      ctx.gameId = res.locals.gameId;
       ctx.playerId = res.locals.playerId;
       ctx.heroJourney = res.locals.heroJourney;
       ctx.heroId = res.locals.heroId;
-      ctx.hero = ctx.entities[ctx.heroId];
+      ctx.hero = res.locals.entities[ctx.heroId];
 
       debug('init: ctx.hero:', ctx.hero);
-      checkIsBegingMoved(ctx);
+      checkIsProcessingJourney(ctx);
     })();
 
-    function checkIsBegingMoved(ctx) {
+    function checkIsProcessingJourney(ctx) {
       const hero = ctx.hero;
 
-      if (hero.isBegingMoved) {
-        debug('checkIsBegingMoved: Yes');
+      if (hero.processingJourneyUntilTimestamp > Date.now()) {
+        debug('checkIsProcessingJourney: Yes');
         return;
       }
 
@@ -58,24 +58,26 @@ module.exports = (db) => {
           debug('forEachWishedHeroJourney: Start one iteration!');
           ctx.done = done;
           ctx.wishedHeroStep = wishedHeroStep;
-          updateSetIsBegingMoved(ctx);
+          setProcessingJourneyUntilTimestamp(ctx);
         },
         (error) => {
           debug('forEachWishedHeroJourney: error:', error);
           debug('forEachWishedHeroJourney: Done!');
           debug('******************** async job done ********************');
+          unsetProcessingJourneyUntilTimestamp(ctx);
         }
       );
     }
 
-    function updateSetIsBegingMoved(ctx) {
+    function setProcessingJourneyUntilTimestamp(ctx) {
       const gameId = ctx.gameId;
       const heroId = ctx.heroId;
 
       const query = { _id: gameId };
-      const string = heroId + '.isBegingMoved';
+      const string = heroId + '.processingJourneyUntilTimestamp';
       const $set = {};
-      $set[string] = true;
+      // 250 ms hero move speed + 100ms security margin for processing
+      $set[string] = Date.now() + 250 + 100;
       const update = { $set: $set };
       const options = {};
 
@@ -84,65 +86,37 @@ module.exports = (db) => {
         update,
         options,
         (error) => {
-          debug('updateSetIsBegingMoved: error: ', error);
+          debug('setProcessingJourneyUntilTimestamp: error: ', error);
           next();
-          waitBeforeChecking(ctx);
+          runDecideHeroStep(ctx);
         }
       );
     }
 
-    function waitBeforeChecking(ctx) {
-      setTimeout(() => {
-        debug('waitBeforeChecking: After waiting 500ms!');
-        findCurrentHeroPosition(ctx);
-      }, 250);
-    }
-
-    function findCurrentHeroPosition(ctx) {
+    function runDecideHeroStep(ctx) {
       const gameId = ctx.gameId;
       const heroId = ctx.heroId;
-
-      const query = { _id: gameId };
-      const options = {};
-      const projection = {};
-      projection[heroId] = 1;
-      options.projection = projection;
-
-      db.collection('gameCollection').findOne(
-        query,
-        options,
-        (error, entities) => {
-          debug('findCurrentHeroPosition: error:', error);
-          ctx.heroNew = entities[heroId];
-
-          checkWasHeroMoved(ctx);
-        }
-      );
-    }
-
-    function checkWasHeroMoved(ctx) {
-      const heroNew = ctx.heroNew;
       const wishedHeroStep = ctx.wishedHeroStep;
+      const done = ctx.done;
 
-      let wasHeroMoved = false;
-
-      if (heroNew.position.x === wishedHeroStep.toX) {
-        if (heroNew.position.y === wishedHeroStep.toY) {
-          debug('checkWasHeroMoved: Yes!');
-          wasHeroMoved = true;
+      decideHeroStep(gameId, heroId, wishedHeroStep, (error) => {
+        if (error) {
+          debug('runDecideHeroStep: error: ', error);
+          done(error);
+          return;
         }
-      }
 
-      debug('checkWasHeroMoved: wasHeroMoved:', wasHeroMoved);
-      updateUnsetIsBegingMoved(ctx, wasHeroMoved);
+        debug('runDecideHeroStep: Done!');
+        done();
+      });
     }
 
-    function updateUnsetIsBegingMoved(ctx, wasHeroMoved) {
+    function unsetProcessingJourneyUntilTimestamp(ctx) {
       const gameId = ctx.gameId;
       const heroId = ctx.heroId;
 
       const query = { _id: gameId };
-      const string = heroId + '.isBegingMoved';
+      const string = heroId + '.processingJourneyUntilTimestamp';
       const $unset = {};
       $unset[string] = true;
       const update = { $unset: $unset };
@@ -153,12 +127,7 @@ module.exports = (db) => {
         update,
         options,
         (error) => {
-          debug('updateUnsetIsBegingMoved: Done! | error: ', error);
-          if (wasHeroMoved) {
-            ctx.done();
-          } else {
-            ctx.done('Hero was not moved correctly last step');
-          }
+          debug('unsetProcessingJourneyUntilTimestamp: Done! | error: ', error);
         }
       );
     }

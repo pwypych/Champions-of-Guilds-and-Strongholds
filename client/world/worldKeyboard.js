@@ -102,7 +102,7 @@ g.world.worldKeyboard = (walkie, auth, freshEntities) => {
       const data = { heroJourney: journey, heroId: heroId };
       console.log('journey', journey);
       $.post(
-        '/ajax/worldState/hero/heroJourneyPost' + auth.uri,
+        '/ajax/worldState/journey/heroJourneyPost' + auth.uri,
         data,
         () => {}
       );
@@ -111,7 +111,7 @@ g.world.worldKeyboard = (walkie, auth, freshEntities) => {
     function postHeroJourneyCancel() {
       const data = { heroJourneyCancel: 'true' };
       $.post(
-        '/ajax/worldState/hero/heroJourneyCancelPost' + auth.uri,
+        '/ajax/worldState/journey/heroJourneyCancelPost' + auth.uri,
         data,
         () => {}
       );
