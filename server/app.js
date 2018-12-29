@@ -161,31 +161,31 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     '/ajax/entitiesGet',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
-    require('./ajax/launchState/entities/launchEntitiesGet.js')(),
+    require('./ajax/launch/entities/launchEntitiesGet.js')(),
     require('./ajax/worldState/entities/worldEntitiesGet.js')()
   );
 
   // launchState endpoints
   app.post(
-    '/ajax/launchState/ready/playerReadyPost',
+    '/ajax/launch/ready/playerReadyPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('launchState'),
-    require('./ajax/launchState/ready/playerReadyPost.js')(db),
+    require('./ajax/launch/ready/playerReadyPost.js')(db),
     require('./library/readEntities.js')(db),
-    require('./ajax/launchState/ready/everyPlayerReadyChecker.js')(),
-    require('./ajax/launchState/ready/preparePlayerResource.js')(db),
-    require('./ajax/launchState/ready/prepareHeroFigure.js')(db),
-    require('./ajax/launchState/ready/unsetReadyForLaunch.js')(db),
-    require('./ajax/launchState/ready/launchCountdown.js')(db)
+    require('./ajax/launch/ready/everyPlayerReadyChecker.js')(),
+    require('./ajax/launch/ready/preparePlayerResource.js')(db),
+    require('./ajax/launch/ready/prepareHeroFigure.js')(db),
+    // require('./ajax/launch/ready/unsetReadyForLaunch.js')(db),
+    require('./ajax/launch/ready/launchCountdown.js')(db)
   );
 
   app.post(
-    '/ajax/launchState/name/playerNamePost',
+    '/ajax/launch/name/playerNamePost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('launchState'),
-    require('./ajax/launchState/name/playerNamePost.js')(db)
+    require('./ajax/launch/name/playerNamePost.js')(db)
   );
 
   // worldState endpoints
