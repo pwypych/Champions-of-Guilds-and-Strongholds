@@ -55,5 +55,6 @@ g.main = function main() {
     g.world.worldSingleClick(walkie, auth, viewport, freshEntities);
     g.world.worldPath(walkie, auth, viewport);
     g.world.worldJourney(walkie, auth);
+    g.world.endTurnButton($body, auth);
   }
 };

@@ -28,7 +28,7 @@ module.exports = (db) => {
         query,
         update,
         options,
-        (error, result) => {
+        (error) => {
           if (error) {
             res.status(400);
             res.send({
@@ -38,13 +38,13 @@ module.exports = (db) => {
             return;
           }
 
-          debug('updatePlayerEntityEndTurn: result', result);
-          triggerPlayerEndTurn(gameId, playerId);
+          debug('updatePlayerEntityEndTurn');
+          triggerPlayerEndTurn();
         }
       );
     }
 
-    function triggerPlayerEndTurn(gameId, playerId) {
+    function triggerPlayerEndTurn() {
       res.send({ error: 0 });
       debug('triggerPlayerEndTurn');
     }
