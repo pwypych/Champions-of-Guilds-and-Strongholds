@@ -20,9 +20,9 @@ g.world.endTurnButton = ($body, auth) => {
   function sendPost() {
     const data = {};
 
-    $.post('/ajax/worldState/endTurn/endTurnPost' + auth.uri, data, () => {
+    $.post('/ajax/world/endTurn/endTurnPost' + auth.uri, data, () => {
       console.log(
-        'endTurnButton: POST -> /ajax/worldState/endTurn/endTurnPost',
+        'endTurnButton: POST -> /ajax/world/endTurn/endTurnPost',
         data
       );
     });

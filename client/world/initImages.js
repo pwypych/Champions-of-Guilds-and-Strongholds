@@ -16,7 +16,7 @@ g.world.initImages = (auth, callback) => {
 
   function getSpriteFilenameArray() {
     $.get(
-      '/ajax/worldState/load/spriteFilenameArray' + auth.uri,
+      '/ajax/world/load/spriteFilenameArray' + auth.uri,
       (spriteFilenameArray) => {
         forEachSpriteFilename(spriteFilenameArray);
       }
