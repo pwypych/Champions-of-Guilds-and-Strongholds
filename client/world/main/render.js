@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.world.worldRender = (walkie, auth, viewport, freshEntities, spriteBucket) => {
+g.world.render = (walkie, auth, viewport, freshEntities, spriteBucket) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
@@ -96,6 +96,6 @@ g.world.worldRender = (walkie, auth, viewport, freshEntities, spriteBucket) => {
   }
 
   function triggerWorldRenderDone() {
-    walkie.triggerEvent('worldRenderDone_', 'worldRender.js', {}, false);
+    walkie.triggerEvent('renderDone_', 'render.js', {}, false);
   }
 };

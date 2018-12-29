@@ -40,7 +40,7 @@ g.world.worldPath = (walkie, auth, viewport) => {
 
   function onWorldRenderDone() {
     walkie.onEvent(
-      'worldRenderDone_',
+      'renderDone_',
       'worldPath.js',
       () => {
         if (!_.isEmpty(pathArray)) {
