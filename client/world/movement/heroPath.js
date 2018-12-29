@@ -4,7 +4,7 @@
 
 // What does this module do?
 // It listens to path events, and renders path accordingly
-g.world.worldPath = (walkie, auth, viewport) => {
+g.world.heroPath = (walkie, auth, viewport) => {
   let pathArray;
   let gPathArray = [];
 
@@ -19,7 +19,7 @@ g.world.worldPath = (walkie, auth, viewport) => {
   })();
 
   function onPathCalculated() {
-    walkie.onEvent('pathCalculated_', 'worldPath.js', (data) => {
+    walkie.onEvent('pathCalculated_', 'heroPath.js', (data) => {
       toolRemoveOldPath();
       pathArray = data.pathArray;
       forEachPosition();
@@ -27,13 +27,13 @@ g.world.worldPath = (walkie, auth, viewport) => {
   }
 
   function onPathImpossible() {
-    walkie.onEvent('pathImpossible_', 'worldPath.js', () => {
+    walkie.onEvent('pathImpossible_', 'heroPath.js', () => {
       toolRemoveOldPath();
     });
   }
 
   function onPathAccepted() {
-    walkie.onEvent('pathAccepted_', 'worldPath.js', () => {
+    walkie.onEvent('pathAccepted_', 'heroPath.js', () => {
       toolRemoveOldPath();
     });
   }
@@ -41,7 +41,7 @@ g.world.worldPath = (walkie, auth, viewport) => {
   function onWorldRenderDone() {
     walkie.onEvent(
       'renderDone_',
-      'worldPath.js',
+      'heroPath.js',
       () => {
         if (!_.isEmpty(pathArray)) {
           forEachPosition();

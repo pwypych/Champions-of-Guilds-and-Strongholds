@@ -51,10 +51,10 @@ g.main = function main() {
       freshEntities,
       spriteBucket
     );
-    g.world.worldKeyboard(walkie, auth, freshEntities);
-    g.world.worldSingleClick(walkie, auth, viewport, freshEntities);
-    g.world.worldPath(walkie, auth, viewport);
-    g.world.worldJourney(walkie, auth);
+    g.world.keyboard(walkie, auth, freshEntities);
+    g.world.mouseClick(walkie, auth, viewport, freshEntities);
+    g.world.heroPath(walkie, auth, viewport);
+    g.world.heroJourney(walkie, auth);
     g.world.endTurnButton($body, auth);
   }
 };

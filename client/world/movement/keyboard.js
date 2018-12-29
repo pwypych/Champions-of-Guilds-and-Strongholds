@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.world.worldKeyboard = (walkie, auth, freshEntities) => {
+g.world.keyboard = (walkie, auth, freshEntities) => {
   (function init() {
     addListener();
   })();

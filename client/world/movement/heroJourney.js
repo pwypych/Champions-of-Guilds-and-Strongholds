@@ -4,7 +4,7 @@
 
 // What does this module do
 // It listens to pathAccepted_ events, converts to journey and posts it to server
-g.world.worldJourney = (walkie, auth) => {
+g.world.heroJourney = (walkie, auth) => {
   let journeyQueuedToSend;
   let heroIdQueuedToSend;
 
@@ -14,7 +14,7 @@ g.world.worldJourney = (walkie, auth) => {
   })();
 
   function onPathAccepted() {
-    walkie.onEvent('pathAccepted_', 'worldJourney.js', (data) => {
+    walkie.onEvent('pathAccepted_', 'heroJourney.js', (data) => {
       const pathArray = data.pathArray;
       const heroId = data.heroId;
 
@@ -64,7 +64,7 @@ g.world.worldJourney = (walkie, auth) => {
 
     const data = { heroJourney: journey, heroId: heroId };
     $.post('/ajax/worldState/journey/heroJourneyPost' + auth.uri, data, () => {
-      console.log('worldJourney.js: POST heroJourneyPost');
+      console.log('heroJourney.js: POST heroJourneyPost');
 
       setTimeout(() => {
         $('body').css('cursor', 'default');

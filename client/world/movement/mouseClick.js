@@ -4,7 +4,7 @@
 
 // What does this module do?
 // It listens to mouse click events, generates path through library and sends path events
-g.world.worldSingleClick = (walkie, auth, viewport, freshEntities) => {
+g.world.mouseClick = (walkie, auth, viewport, freshEntities) => {
   let lastPathPositionX;
   let lastPathPositionY;
 
@@ -109,7 +109,7 @@ g.world.worldSingleClick = (walkie, auth, viewport, freshEntities) => {
       if (lastPathPositionX === click.x && lastPathPositionY === click.y) {
         lastPathPositionX = undefined;
         lastPathPositionY = undefined;
-        walkie.triggerEvent('pathAccepted_', 'worldSingleClick.js', {
+        walkie.triggerEvent('pathAccepted_', 'mouseClick.js', {
           heroId: heroId,
           pathArray: pathArray
         });
@@ -126,12 +126,12 @@ g.world.worldSingleClick = (walkie, auth, viewport, freshEntities) => {
     }
 
     if (!_.isEmpty(pathArray) && pathArray.length > 1) {
-      walkie.triggerEvent('pathCalculated_', 'worldSingleClick.js', {
+      walkie.triggerEvent('pathCalculated_', 'mouseClick.js', {
         heroId: heroId,
         pathArray: pathArray
       });
     } else {
-      walkie.triggerEvent('pathImpossible_', 'worldSingleClick.js');
+      walkie.triggerEvent('pathImpossible_', 'mouseClick.js');
     }
   }
 };
