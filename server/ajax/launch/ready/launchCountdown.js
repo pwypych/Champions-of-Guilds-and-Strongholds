@@ -7,7 +7,7 @@ const debug = require('debug')('cogs:launchCountdown');
 // What does this module do?
 // Change game state to worldState
 module.exports = (db) => {
-  return (req, res) => {
+  return (req, res, next) => {
     (function init() {
       const gameId = res.locals.entities._id;
 
@@ -35,10 +35,8 @@ module.exports = (db) => {
         update,
         options,
         (error) => {
-          if (error) {
-            debug('updateGameState: error:', error);
-          }
-          debug('******************** middleware after ********************');
+          debug('updateGameState: error:', error);
+          next();
         }
       );
     }
