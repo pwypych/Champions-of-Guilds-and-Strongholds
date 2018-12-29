@@ -8,7 +8,7 @@ const async = require('async');
 // What does this module do?
 // Middleware, expects heroId and heroJourney in res.locals, flags heroBegingMoved and processes each step
 module.exports = (db, decideHeroStep) => {
-  return (req, res, next) => {
+  return (req, res) => {
     (function init() {
       const ctx = {};
       const entities = res.locals.entities;
@@ -88,7 +88,6 @@ module.exports = (db, decideHeroStep) => {
         options,
         (error) => {
           debug('setProcessingJourneyUntilTimestamp: error: ', error);
-          next();
           runDecideHeroStep(ctx);
         }
       );

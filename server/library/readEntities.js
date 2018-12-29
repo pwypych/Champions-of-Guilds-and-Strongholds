@@ -5,7 +5,7 @@
 const debug = require('debug')('nope:cogs:readEntities');
 
 // What does this module do?
-// Middleware that refreshes req.locals.entities
+// Middleware that refreshes res.locals.entities
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {

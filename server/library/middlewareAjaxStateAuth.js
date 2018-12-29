@@ -5,7 +5,7 @@
 const debug = require('debug')('nope:cogs:middlewareAjaxStateAuth');
 
 // What does this module do?
-// Ensure that endpoint can be accessed only for game in neededState
+// Middleware that checks if game is in given state and stops if not
 module.exports = (neededState) => {
   return (req, res, next) => {
     (function init() {
