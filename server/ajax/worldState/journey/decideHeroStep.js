@@ -6,8 +6,8 @@ const debug = require('debug')('cogs:decideHeroStep');
 const _ = require('lodash');
 
 // What does this module do?
-// Verify wishedHeroStep_ and decide what to do
-// Library that works on callback. It decides what to do with wished hero step. Was journey canselled? Is step possible? Decide what will happen!
+// Library that works on callback. It decides what to do with wished hero step.
+// Was journey canselled? Is step possible? Decide what will happen!
 module.exports = (db, updateHeroPosition) => {
   return (gameId, heroId, wishedHeroStep, callback) => {
     (function init() {
@@ -50,8 +50,8 @@ module.exports = (db, updateHeroPosition) => {
 
     function checkIsHeroWishedPositionPossible(entities) {
       const gameEntity = entities[gameId];
-      const mapWidth = gameEntity.mapData.width - 1;
-      const mapHeight = gameEntity.mapData.height - 1;
+      const mapWidth = gameEntity.mapData.width;
+      const mapHeight = gameEntity.mapData.height;
 
       debug(
         'checkIsHeroWishedPositionPossible: wishedHeroStep.toY',
@@ -61,9 +61,9 @@ module.exports = (db, updateHeroPosition) => {
       );
       if (
         wishedHeroStep.toY < 0 ||
-        wishedHeroStep.toY > mapHeight ||
+        wishedHeroStep.toY > mapHeight - 1 ||
         wishedHeroStep.toX < 0 ||
-        wishedHeroStep.toX > mapWidth
+        wishedHeroStep.toX > mapWidth - 1
       ) {
         let message = 'Map position not found: toY, toX: ';
         message += wishedHeroStep.toY;
@@ -156,21 +156,22 @@ module.exports = (db, updateHeroPosition) => {
         return;
       }
 
-      processHeroPosition();
+      moveHeroToNewPosition();
     }
 
-    function processHeroPosition() {
+    function moveHeroToNewPosition() {
       const position = {};
       position.x = wishedHeroStep.toX;
       position.y = wishedHeroStep.toY;
 
       updateHeroPosition(gameId, heroId, position, (error) => {
-        debug('processHeroPosition');
         if (error) {
+          debug('moveHeroToNewPosition: error:', error);
           callback(error);
           return;
         }
 
+        debug('moveHeroToNewPosition');
         callback(null);
       });
     }

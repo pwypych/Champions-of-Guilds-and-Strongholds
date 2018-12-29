@@ -3,7 +3,7 @@
 'use strict';
 
 // What does this module do?
-// Validates player token and gameId, checks if player belong to this game
+// Middleware that validates player token and gameId, adds res.locals.playerId
 const debug = require('debug')('nope:cogs:middlewareTokenAuth');
 const shortid = require('shortid');
 const _ = require('lodash');
