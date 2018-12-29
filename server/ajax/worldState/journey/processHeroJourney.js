@@ -11,11 +11,12 @@ module.exports = (db, decideHeroStep) => {
   return (req, res, next) => {
     (function init() {
       const ctx = {};
-      ctx.gameId = res.locals.gameId;
+      const entities = res.locals.entities;
+      ctx.gameId = entities._id;
       ctx.playerId = res.locals.playerId;
       ctx.heroJourney = res.locals.heroJourney;
       ctx.heroId = res.locals.heroId;
-      ctx.hero = res.locals.entities[ctx.heroId];
+      ctx.hero = entities[ctx.heroId];
 
       debug('init: ctx.hero:', ctx.hero);
       checkIsProcessingJourney(ctx);

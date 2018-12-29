@@ -34,7 +34,6 @@ module.exports = (db) => {
           }
 
           res.locals.entities = entities;
-          res.locals.gameId = entities._id;
           debug('findGameById', entities._id);
           next();
         }
