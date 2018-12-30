@@ -22,7 +22,7 @@ module.exports = (db) => {
       _.forEach(entities, (entity, id) => {
         if (entity.heroStats) {
           const component = id + '.heroStats.movement';
-          $set[component] = entity.movementMax;
+          $set[component] = entity.heroStats.movementMax;
         }
       });
       const update = { $set: $set };
