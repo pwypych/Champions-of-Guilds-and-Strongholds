@@ -33,7 +33,7 @@ module.exports = (db) => {
       const $unset = {};
 
       playerIdArray.forEach((entity) => {
-        const string = entity + '.playerData.readyForLaunch';
+        const string = entity + '.readyForLaunch';
         debug('unsetPlayerReadyForLaunch: string:', string);
         $unset[string] = true;
       });

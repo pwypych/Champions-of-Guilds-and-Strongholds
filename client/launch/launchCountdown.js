@@ -29,7 +29,7 @@ g.launch.launchCountdown = ($body, walkie) => {
 
     _.forEach(entities, (entity) => {
       if (entity.playerData) {
-        if (!entity.playerData.readyForLaunch) {
+        if (!entity.readyForLaunch) {
           isEveryPlayerReady = false;
         }
       }

@@ -27,7 +27,7 @@ g.launch.launchDisableUi = ($body, walkie) => {
   function disableUi(entities) {
     const player = _.find(entities, 'playerCurrent');
 
-    if (player.playerData.readyForLaunch) {
+    if (player.readyForLaunch) {
       $button.attr('disabled', 'disabled');
       $inputName.attr('disabled', 'disabled');
     }

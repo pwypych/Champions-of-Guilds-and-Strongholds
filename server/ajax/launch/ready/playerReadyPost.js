@@ -23,7 +23,7 @@ module.exports = (db) => {
       const query = { _id: entities._id };
 
       // We need to update an object inside mongo array, must use its index in $set query
-      const mongoFieldToSet = playerId + '.playerData.readyForLaunch';
+      const mongoFieldToSet = playerId + '.readyForLaunch';
       const $set = {};
       $set[mongoFieldToSet] = true;
       const update = { $set: $set };
