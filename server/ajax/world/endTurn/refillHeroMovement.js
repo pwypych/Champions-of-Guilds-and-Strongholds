@@ -4,6 +4,7 @@
 
 const debug = require('debug')('cogs:refillHeroMovement.js');
 const _ = require('lodash');
+
 // What does this module do?
 // Middleware, set hero.movement to hero.movementMax
 module.exports = (db) => {

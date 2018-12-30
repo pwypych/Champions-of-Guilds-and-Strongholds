@@ -228,7 +228,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/world/endTurn/endTurnPost.js')(db),
     require('./ajax/world/endTurn/zeroPlayerMovementPoints.js')(db),
     require('./ajax/world/endTurn/endTurnCountdown.js')(db),
-    require('./ajax/world/endTurn/refillHeroMovement.js')(db)
+    require('./ajax/world/endTurn/refillHeroMovement.js')(db),
+    require('./ajax/world/endTurn/unsetEndTurnFlags.js')(db)
   );
 
   debug('setupLibrariesAndRoutes()');
