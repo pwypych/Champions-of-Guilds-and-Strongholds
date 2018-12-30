@@ -45,7 +45,8 @@ module.exports = () => {
         // Player entities
         if (entity.playerToken && entity.playerData) {
           launchEntities[id] = {
-            playerData: entity.playerData
+            playerData: entity.playerData,
+            readyForLaunch: entity.readyForLaunch
           };
 
           // Player current

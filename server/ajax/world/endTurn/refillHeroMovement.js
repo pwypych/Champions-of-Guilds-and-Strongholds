@@ -38,6 +38,7 @@ module.exports = (db) => {
             return;
           }
 
+          debug('updateSetHeroMovementToMax');
           next();
         }
       );

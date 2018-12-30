@@ -21,7 +21,7 @@ module.exports = () => {
 
       _.forEach(entities, (entity) => {
         if (entity.playerData && entity.playerToken) {
-          if (!entity.playerData.readyForLaunch) {
+          if (!entity.readyForLaunch) {
             isEveryPlayerReady = false;
           }
         }
