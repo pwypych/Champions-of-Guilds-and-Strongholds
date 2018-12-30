@@ -11,28 +11,28 @@ module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
       debug('init');
-      generatePlayerEntityArray();
+      generatePlayerIdArray();
     })();
 
-    function generatePlayerEntityArray() {
-      const playerEntityArray = [];
+    function generatePlayerIdArray() {
+      const playerIdArray = [];
       const entities = res.locals.entities;
       _.forEach(entities, (entity, id) => {
         if (entity.playerData) {
-          playerEntityArray.push(id);
+          playerIdArray.push(id);
         }
       });
 
-      debug('generatePlayerEntityArray: playerEntityArray:', playerEntityArray);
-      unsetPlayerReadyForLaunch(playerEntityArray);
+      debug('generatePlayerIdArray: playerIdArray:', playerIdArray);
+      unsetPlayerReadyForLaunch(playerIdArray);
     }
 
-    function unsetPlayerReadyForLaunch(playerEntityArray) {
+    function unsetPlayerReadyForLaunch(playerIdArray) {
       const gameId = res.locals.entities._id;
       const query = { _id: gameId };
       const $unset = {};
 
-      playerEntityArray.forEach((entity) => {
+      playerIdArray.forEach((entity) => {
         const string = entity + '.playerData.readyForLaunch';
         debug('unsetPlayerReadyForLaunch: string:', string);
         $unset[string] = true;
