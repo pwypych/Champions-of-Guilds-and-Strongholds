@@ -5,20 +5,21 @@
 const debug = require('debug')('cogs:endTurnPost.js');
 
 // What does this module do?
-// Endpoint, set endTurn flag to true on player entitty, trigger playerEndTurn_
+// Endpoint, set endTurn flag to true on player entitty and send early response
 module.exports = (db) => {
-  return (req, res) => {
+  return (req, res, next) => {
     (function init() {
       debug('init');
-      updatePlayerEntityEndTurn();
+      const entities = res.locals.entities;
+      const playerId = res.locals.playerId;
+      updatePlayerEntityEndTurn(entities, playerId);
     })();
 
-    function updatePlayerEntityEndTurn() {
-      const gameId = res.locals.entities._id;
-      const playerId = res.locals.playerId;
+    function updatePlayerEntityEndTurn(entities, playerId) {
+      const gameId = entities._id;
 
       const query = { _id: gameId };
-      const mongoFieldToSetEndTurn = playerId + '.playerData.endTurn';
+      const mongoFieldToSetEndTurn = playerId + '.endTurn';
       const $set = {};
       $set[mongoFieldToSetEndTurn] = true;
       const update = { $set: $set };
@@ -39,14 +40,10 @@ module.exports = (db) => {
           }
 
           debug('updatePlayerEntityEndTurn');
-          triggerPlayerEndTurn();
+          res.send({ error: 0 });
+          next();
         }
       );
-    }
-
-    function triggerPlayerEndTurn() {
-      res.send({ error: 0 });
-      debug('triggerPlayerEndTurn');
     }
   };
 };

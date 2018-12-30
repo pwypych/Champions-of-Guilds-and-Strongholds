@@ -18,9 +18,9 @@ g.launch.launchButtonReady = ($body, auth) => {
   function sendPost() {
     const data = {};
 
-    $.post('/ajax/launchState/ready/playerReadyPost' + auth.uri, data, () => {
+    $.post('/ajax/launch/ready/playerReadyPost' + auth.uri, data, () => {
       console.log(
-        'launchButtonReady: POST -> /ajax/launchState/playerReadyPost',
+        'launchButtonReady: POST -> /ajax/launch/playerReadyPost',
         data
       );
     });

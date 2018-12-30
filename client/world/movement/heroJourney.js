@@ -70,8 +70,8 @@ g.world.heroJourney = (walkie, auth) => {
     );
 
     const data = { heroJourney: journey, heroId: heroId };
-    $.post('/ajax/worldState/journey/heroJourneyPost' + auth.uri, data, () => {
-      console.log('heroJourney.js: POST heroJourneyPost');
+    $.post('/ajax/world/journey/heroJourneyPost' + auth.uri, data, () => {
+      console.log('worldJourney.js: POST heroJourneyPost');
 
       setTimeout(() => {
         $('body').css('cursor', 'default');

@@ -161,74 +161,75 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     '/ajax/entitiesGet',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
-    require('./ajax/launchState/entities/launchEntitiesGet.js')(),
-    require('./ajax/worldState/entities/worldEntitiesGet.js')()
+    require('./ajax/launch/entities/launchEntitiesGet.js')(),
+    require('./ajax/world/entities/worldEntitiesGet.js')()
   );
 
   // launchState endpoints
   app.post(
-    '/ajax/launchState/ready/playerReadyPost',
+    '/ajax/launch/ready/playerReadyPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('launchState'),
-    require('./ajax/launchState/ready/playerReadyPost.js')(db),
+    require('./ajax/launch/ready/playerReadyPost.js')(db),
     require('./library/readEntities.js')(db),
-    require('./ajax/launchState/ready/everyPlayerReadyChecker.js')(),
-    require('./ajax/launchState/ready/preparePlayerResource.js')(db),
-    require('./ajax/launchState/ready/prepareHeroFigure.js')(db),
-    require('./ajax/launchState/ready/launchCountdown.js')(db),
-    require('./ajax/launchState/ready/unsetReadyForLaunch.js')(db)
+    require('./ajax/launch/ready/everyPlayerReadyChecker.js')(),
+    require('./ajax/launch/ready/preparePlayerResource.js')(db),
+    require('./ajax/launch/ready/prepareHeroFigure.js')(db),
+    // require('./ajax/launch/ready/unsetReadyForLaunch.js')(db),
+    require('./ajax/launch/ready/launchCountdown.js')(db)
   );
 
   app.post(
-    '/ajax/launchState/name/playerNamePost',
+    '/ajax/launch/name/playerNamePost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('launchState'),
-    require('./ajax/launchState/name/playerNamePost.js')(db)
+    require('./ajax/launch/name/playerNamePost.js')(db)
   );
 
   // worldState endpoints
   app.get(
-    '/ajax/worldState/load/spriteFilenameArray',
+    '/ajax/world/load/spriteFilenameArray',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
-    require('./ajax/worldState/load/spriteFilenameArrayGet.js')(environment)
+    require('./ajax/world/load/spriteFilenameArrayGet.js')(environment)
   );
 
-  const updateHeroPosition = require('./ajax/worldState/journey/updateHeroPosition.js')(
+  const updateHeroPosition = require('./ajax/world/journey/updateHeroPosition.js')(
     db
   );
-  const decideHeroStep = require('./ajax/worldState/journey/decideHeroStep.js')(
+  const decideHeroStep = require('./ajax/world/journey/decideHeroStep.js')(
     db,
     updateHeroPosition
   );
   app.post(
-    '/ajax/worldState/journey/heroJourneyPost',
+    '/ajax/world/journey/heroJourneyPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/worldState/journey/heroJourneyPost.js')(),
-    require('./ajax/worldState/journey/processHeroJourney.js')(
-      db,
-      decideHeroStep
-    )
+    require('./ajax/world/journey/heroJourneyPost.js')(),
+    require('./ajax/world/journey/processHeroJourney.js')(db, decideHeroStep)
   );
 
   app.post(
-    '/ajax/worldState/journey/heroJourneyCancelPost',
+    '/ajax/world/journey/heroJourneyCancelPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/worldState/journey/heroJourneyCancelPost.js')(db)
+    require('./ajax/world/journey/heroJourneyCancelPost.js')(db)
   );
 
   app.post(
-    '/ajax/worldState/endTurn/endTurnPost',
+    '/ajax/world/endTurn/endTurnPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/worldState/endTurn/endTurnPost.js')(db)
+    require('./ajax/world/endTurn/endTurnPost.js')(db),
+    require('./ajax/world/endTurn/zeroPlayerMovementPoints.js')(db),
+    require('./ajax/world/endTurn/endTurnCountdown.js')(db),
+    require('./ajax/world/endTurn/refillHeroMovement.js')(db),
+    require('./ajax/world/endTurn/unsetEndTurnFlags.js')(db)
   );
 
   debug('setupLibrariesAndRoutes()');
