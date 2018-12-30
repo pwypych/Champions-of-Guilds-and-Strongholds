@@ -53,7 +53,7 @@ module.exports = (db) => {
     function waitBeforEndTurn() {
       setTimeout(() => {
         next();
-      }, 1000);
+      }, 10000);
     }
   };
 };

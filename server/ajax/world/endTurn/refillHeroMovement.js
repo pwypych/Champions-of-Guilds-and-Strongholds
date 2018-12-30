@@ -12,33 +12,18 @@ module.exports = (db) => {
     (function init() {
       debug('init');
       const entities = res.locals.entities;
-      generateHeroArray(entities);
+      updateSetHeroMovementToMax(entities);
     })();
 
-    function generateHeroArray(entities) {
-      const heroArray = [];
-
-      _.forEach(entities, (entity, id) => {
-        if (entity.heroStats) {
-          const hero = {};
-          hero.id = id;
-          hero.movementMax = entity.heroStats.movementMax;
-
-          heroArray.push(hero);
-        }
-      });
-
-      debug('generateHeroArray: heroArray:', heroArray);
-      updateSetHeroMovementToMax(entities, heroArray);
-    }
-
-    function updateSetHeroMovementToMax(entities, heroArray) {
+    function updateSetHeroMovementToMax(entities) {
       const gameId = entities._id;
       const query = { _id: gameId };
       const $set = {};
-      heroArray.forEach((hero) => {
-        const component = hero.id + '.heroStats.movement';
-        $set[component] = hero.movementMax;
+      _.forEach(entities, (entity, id) => {
+        if (entity.heroStats) {
+          const component = id + '.heroStats.movement';
+          $set[component] = entity.movementMax;
+        }
       });
       const update = { $set: $set };
       const options = {};

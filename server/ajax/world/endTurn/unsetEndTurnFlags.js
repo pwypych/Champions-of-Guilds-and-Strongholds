@@ -8,34 +8,24 @@ const _ = require('lodash');
 // What does this module do?
 // Middleware, unset endTurnCountdownRunning and players endTurn flags
 module.exports = (db) => {
-  return (req, res, next) => {
+  return (req, res) => {
     (function init() {
       debug('init');
       const entities = res.locals.entities;
-      generatePlayerIdArray(entities);
+      updateUnsetEndTurnFlags(entities);
     })();
 
-    function generatePlayerIdArray(entities) {
-      const playerIdArray = [];
-
-      _.forEach(entities, (entity, id) => {
-        if (entity.playerData) {
-          playerIdArray.push(id);
-        }
-      });
-
-      debug('generatePlayerIdArray: playerIdArray:', playerIdArray);
-      updateUnsetEndTurnFlags(entities, playerIdArray);
-    }
-
-    function updateUnsetEndTurnFlags(entities, playerIdArray) {
+    function updateUnsetEndTurnFlags(entities) {
       const gameId = entities._id;
       const query = { _id: gameId };
       const $unset = {};
-      playerIdArray.forEach((id) => {
-        const component = id + '.endTurn';
-        $unset[component] = true;
+      _.forEach(entities, (entity, id) => {
+        if (entity.playerData) {
+          const component = id + '.endTurn';
+          $unset[component] = true;
+        }
       });
+
       const component = gameId + '.endTurnCountdownRunning';
       $unset[component] = true;
 
@@ -49,10 +39,7 @@ module.exports = (db) => {
         (error) => {
           if (error) {
             debug('updateUnsetEndTurnFlags: error:', error);
-            return;
           }
-
-          next();
         }
       );
     }
