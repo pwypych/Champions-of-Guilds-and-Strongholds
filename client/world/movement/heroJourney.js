@@ -48,7 +48,7 @@ g.world.heroJourney = (walkie, auth) => {
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
-      'worldToggle.js',
+      'heroJourney.js',
       () => {
         if (journeyQueuedToSend && heroIdQueuedToSend) {
           sendRequest(journeyQueuedToSend, heroIdQueuedToSend);
@@ -61,6 +61,13 @@ g.world.heroJourney = (walkie, auth) => {
   function sendRequest(journey, heroId) {
     journeyQueuedToSend = undefined;
     heroIdQueuedToSend = undefined;
+
+    walkie.triggerEvent(
+      'chatMessage_',
+      'heroJourney',
+      { message: 'Will move hero now!' },
+      false
+    );
 
     const data = { heroJourney: journey, heroId: heroId };
     $.post('/ajax/worldState/journey/heroJourneyPost' + auth.uri, data, () => {

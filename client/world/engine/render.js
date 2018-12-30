@@ -13,7 +13,7 @@ g.world.render = (walkie, auth, viewport, freshEntities, spriteBucket) => {
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
-      'worldToggle.js',
+      'render.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
 

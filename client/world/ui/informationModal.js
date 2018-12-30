@@ -17,7 +17,7 @@ g.world.informationModal = ($body, walkie, freshEntities) => {
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
-      'worldToggle.js',
+      'informationModal.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
 

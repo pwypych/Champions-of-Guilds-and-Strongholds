@@ -31,6 +31,15 @@ module.exports = (environment, db, templateToHtml) => {
       templateToHtml(path, viewModel, (error, html) => {
         viewModel.htmlWorldInterface = html;
         debug('generateWorldInterface: html.length:', html.length);
+        generateWorldChat();
+      });
+    }
+
+    function generateWorldChat() {
+      const path = environment.basepath + '/server/game/worldChat.ejs';
+      templateToHtml(path, viewModel, (error, html) => {
+        viewModel.htmlWorldChat = html;
+        debug('generateWorldChat: html.length:', html.length);
         generateLaunch();
       });
     }

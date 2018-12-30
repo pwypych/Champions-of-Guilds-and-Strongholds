@@ -12,7 +12,7 @@ g.world.entityChanges = (walkie, freshEntities) => {
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
-      'worldToggle.js',
+      'entityChanges.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
         if (gameEntity.state !== 'worldState') {
