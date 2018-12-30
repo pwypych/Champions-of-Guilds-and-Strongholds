@@ -25,10 +25,10 @@ module.exports = (db) => {
         return;
       }
 
-      updateSetEndTurnCountdownFlag();
+      updateSetEndTurnCountdownRunning();
     }
 
-    function updateSetEndTurnCountdownFlag() {
+    function updateSetEndTurnCountdownRunning() {
       const gameId = res.locals.entities._id;
       const query = { _id: gameId };
       const component = gameId + '.endTurnCountdownRunning';
@@ -43,7 +43,7 @@ module.exports = (db) => {
         options,
         (error) => {
           if (error) {
-            debug('updateSetEndTurnCountdownFlag: error:', error);
+            debug('updateSetEndTurnCountdownRunning: error:', error);
             return;
           }
 
