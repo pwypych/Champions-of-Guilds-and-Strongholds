@@ -6,26 +6,26 @@ const debug = require('debug')('cogs:zeroPlayerMovementPoints.js');
 const _ = require('lodash');
 
 // What does this module do?
-// Middleware that update hero.movementStats.movement to 0
+// Middleware that update hero.heroStats.movement to 0
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
       debug('init');
-      getHeroEntity();
+      findHeroEntity();
     })();
 
-    function getHeroEntity() {
+    function findHeroEntity() {
       const entities = res.locals.entities;
       const playerId = res.locals.playerId;
       let heroId;
 
       _.forEach(entities, (entity, id) => {
-        if (entity.owner === playerId) {
+        if (entity.heroStats && entity.owner === playerId) {
           heroId = id;
         }
       });
 
-      debug('getHeroEntity: heroId:', heroId);
+      debug('findHeroEntity: heroId:', heroId);
       updatePlayerMovementPoints(heroId);
     }
 

@@ -5,7 +5,7 @@
 const debug = require('debug')('cogs:endTurnCountdown.js');
 
 // What does this module do?
-// Middleware, check is endTurnCountdownRunning flag, if no countdown 10s
+// Middleware, check is endTurnCountdownRunning flag, if no begin countdown
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
