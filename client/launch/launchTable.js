@@ -41,7 +41,13 @@ g.launch.launchTable = ($body, walkie) => {
       $tr.append('<td>' + (entity.playerData.name || 'Player') + '</td>');
       $tr.append('<td>' + (entity.playerData.color || 'Default') + '</td>');
       $tr.append('<td>' + (entity.playerData.race || 'Random') + '</td>');
-      $tr.append('<td>' + (entity.readyForLaunch || 'No') + '</td>');
+
+      if (entity.readyForLaunch) {
+        $tr.append('<td>Yes</td>');
+      } else {
+        $tr.append('<td>No</td>');
+      }
+
       $table.append($tr);
     });
   }
