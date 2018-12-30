@@ -30,7 +30,6 @@ module.exports = (db) => {
     }
 
     function updatePlayerMovementPoints(entities, playerId, heroId) {
-      debug('updatePlayerMovementPoints: playerId:', playerId);
       const gameId = entities._id;
 
       const query = { _id: gameId };
@@ -50,6 +49,7 @@ module.exports = (db) => {
             return;
           }
 
+          debug('updatePlayerMovementPoints: playerId:', playerId);
           next();
         }
       );

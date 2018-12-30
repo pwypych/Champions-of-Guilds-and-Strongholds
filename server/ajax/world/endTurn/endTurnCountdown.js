@@ -24,6 +24,7 @@ module.exports = (db) => {
         return;
       }
 
+      debug('checkEndTurnCountdownFlag');
       updateSetEndTurnCountdownRunning(gameId);
     }
 
@@ -45,6 +46,7 @@ module.exports = (db) => {
             return;
           }
 
+          debug('updateSetEndTurnCountdownRunning');
           waitBeforEndTurn();
         }
       );
@@ -52,6 +54,7 @@ module.exports = (db) => {
 
     function waitBeforEndTurn() {
       setTimeout(() => {
+        debug('waitBeforEndTurn');
         next();
       }, 10000);
     }
