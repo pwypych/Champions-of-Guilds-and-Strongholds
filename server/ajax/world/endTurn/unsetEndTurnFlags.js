@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:unsetEndTurnFlags.js');
 const _ = require('lodash');
 
 // What does this module do?
-// Middleware, unset endTurnCountdownRunning and players endTurn flags
+// Middleware, unset endTurnCountdownStartedTimestamp and players endTurn flags
 module.exports = (db) => {
   return (req, res) => {
     (function init() {
@@ -26,7 +26,7 @@ module.exports = (db) => {
         }
       });
 
-      const component = gameId + '.endTurnCountdownRunning';
+      const component = gameId + '.endTurnCountdownStartedTimestamp';
       $unset[component] = true;
 
       const update = { $unset: $unset };

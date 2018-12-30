@@ -6,34 +6,38 @@ const debug = require('debug')('cogs:endTurnCountdown.js');
 const _ = require('lodash');
 
 // What does this module do?
-// Middleware, check is endTurnCountdownRunning flag, if no begin countdown
+// Middleware, check is endTurnCountdownStartedTimestamp flag, if no begin countdown
 module.exports = (db) => {
   return (req, res, next) => {
+    const timeBeforeTurnEnds = 30 * 1000; // ms
+
     (function init() {
       debug('init');
       const gameId = res.locals.entities._id;
       const game = res.locals.entities[gameId];
-      checkEndTurnCountdownFlag(game, gameId);
+      checkIsCountdownRunning(game, gameId);
     })();
 
-    function checkEndTurnCountdownFlag(game, gameId) {
-      if (game.endTurnCountdownRunning) {
+    function checkIsCountdownRunning(game, gameId) {
+      const timeWhenTurnShouldEnd =
+        game.endTurnCountdownStartedTimestamp + timeBeforeTurnEnds;
+
+      if (Date.now() < timeWhenTurnShouldEnd) {
         debug(
-          'checkEndTurnCountdownFlag: game.endTurnCountdownRunning:',
-          game.endTurnCountdownRunning
+          'checkIsCountdownRunning: game.endTurnCountdownStartedTimestamp: Countdown is running'
         );
         return;
       }
 
-      debug('checkEndTurnCountdownFlag');
+      debug('checkIsCountdownRunning');
       updateSetEndTurnCountdownRunning(gameId);
     }
 
     function updateSetEndTurnCountdownRunning(gameId) {
       const query = { _id: gameId };
-      const component = gameId + '.endTurnCountdownRunning';
+      const component = gameId + '.endTurnCountdownStartedTimestamp';
       const $set = {};
-      $set[component] = true;
+      $set[component] = Date.now();
       const update = { $set: $set };
       const options = {};
 
@@ -62,7 +66,7 @@ module.exports = (db) => {
         clearInterval(interval);
         debug('waitBeforeEndTurn: Timeout has runned');
         next();
-      }, 60000);
+      }, timeBeforeTurnEnds);
 
       interval = setInterval(() => {
         readFreshEntities(timeout, interval, gameId);
