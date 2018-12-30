@@ -5,12 +5,57 @@
 const debug = require('debug')('cogs:endTurnCountdown.js');
 
 // What does this module do?
-// Middleware, check endTurnCountdownRunning flag, countdown 10s and end each player turn
+// Middleware, check is endTurnCountdownRunning flag, if no countdown 10s
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
       debug('init');
-      updatePlayerEntityEndTurn();
+      checkEndTurnCountdownFlag();
     })();
+
+    function checkEndTurnCountdownFlag() {
+      const gameId = res.locals.entities._id;
+      const game = res.locals.entities[gameId];
+
+      if (game.endTurnCountdownRunning) {
+        debug(
+          'checkEndTurnCountdownFlag: game.endTurnCountdownRunning:',
+          game.endTurnCountdownRunning
+        );
+        return;
+      }
+
+      setEndTurnCountdownFlag();
+    }
+
+    function setEndTurnCountdownFlag() {
+      const gameId = res.locals.entities._id;
+      const query = { _id: gameId };
+      const component = gameId + '.endTurnCountdownRunning';
+      const $set = {};
+      $set[component] = true;
+      const update = { $set: $set };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('setEndTurnCountdownFlag: error:', error);
+            return;
+          }
+
+          waitBeforEndTurn();
+        }
+      );
+    }
+
+    function waitBeforEndTurn() {
+      setTimeout(() => {
+        next();
+      }, 10000);
+    }
   };
 };
