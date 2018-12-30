@@ -8,6 +8,7 @@ g.world.informationModal = ($body, walkie, freshEntities) => {
   const $wood = $modal.find('.js-information-modal-wood');
   const $stone = $modal.find('.js-information-modal-stone');
   const $crystal = $modal.find('.js-information-modal-crystal');
+  const $movement = $modal.find('.js-information-modal-movement');
 
   (function init() {
     onEntitiesGet();
@@ -24,17 +25,46 @@ g.world.informationModal = ($body, walkie, freshEntities) => {
           return;
         }
 
-        displayResources();
+        findPlayerId();
       },
       false
     );
   }
 
-  function displayResources() {
-    const player = _.find(freshEntities(), 'playerCurrent');
+  function findPlayerId() {
+    let playerId;
+    _.forEach(freshEntities(), (entity, id) => {
+      if (entity.playerCurrent) {
+        playerId = id;
+      }
+    });
+
+    displayResources(playerId);
+  }
+
+  function displayResources(playerId) {
+    const player = freshEntities()[playerId];
     $gold.text(player.playerResources.gold);
     $wood.text(player.playerResources.wood);
     $stone.text(player.playerResources.stone);
     $crystal.text(player.playerResources.crystal);
+
+    displayMovement(playerId);
+  }
+
+  function displayMovement(playerId) {
+    let hero;
+    _.forEach(freshEntities(), (entity) => {
+      if (entity.heroStats && entity.owner === playerId) {
+        hero = entity;
+      }
+    });
+
+    const movement = hero.heroStats.movement;
+    const movementMax = hero.heroStats.movementMax;
+
+    const percent = Math.ceil((movement * 100) / movementMax);
+
+    $movement.css('width', percent);
   }
 };

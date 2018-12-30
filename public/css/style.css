@@ -70,6 +70,22 @@ h2 {
   vertical-align: middle;
 }
 
+.margin-left {
+  margin-left: 15px;
+}
+
 .margin-right {
   margin-right: 15px;
+}
+
+.margin-top {
+  margin-top: 15px;
+}
+
+.margin-bottom {
+  margin-bottom: 15px;
+}
+
+.background-green {
+  background-color: #6ab417; /* same as green button */
 }
