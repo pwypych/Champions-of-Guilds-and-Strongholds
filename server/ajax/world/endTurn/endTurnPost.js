@@ -5,7 +5,7 @@
 const debug = require('debug')('cogs:endTurnPost.js');
 
 // What does this module do?
-// Endpoint, set endTurn flag to true on player entitty
+// Endpoint, set endTurn flag to true on player entitty and send early response
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
@@ -18,7 +18,7 @@ module.exports = (db) => {
       const playerId = res.locals.playerId;
 
       const query = { _id: gameId };
-      const mongoFieldToSetEndTurn = playerId + '.playerData.endTurn';
+      const mongoFieldToSetEndTurn = playerId + '.endTurn';
       const $set = {};
       $set[mongoFieldToSetEndTurn] = true;
       const update = { $set: $set };
