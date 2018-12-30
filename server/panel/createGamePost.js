@@ -69,7 +69,9 @@ module.exports = (environment, db, figureManagerTree) => {
       entities[id].mapData.name = mapObject._id;
       entities[id].mapData.width = mapObject.mapLayerWithStrings[0].length;
       entities[id].mapData.height = mapObject.mapLayerWithStrings.length;
+
       entities[id].state = 'launchState';
+      entities[id].day = 1;
 
       debug('generateGameEntity', entities[id]);
       calculatePlayerCount(mapObject, entities);
