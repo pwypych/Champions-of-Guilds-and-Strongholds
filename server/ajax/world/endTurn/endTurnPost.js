@@ -10,12 +10,13 @@ module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
       debug('init');
-      updatePlayerEntityEndTurn();
+      const entities = res.locals.entities;
+      const playerId = res.locals.playerId;
+      updatePlayerEntityEndTurn(entities, playerId);
     })();
 
-    function updatePlayerEntityEndTurn() {
-      const gameId = res.locals.entities._id;
-      const playerId = res.locals.playerId;
+    function updatePlayerEntityEndTurn(entities, playerId) {
+      const gameId = entities._id;
 
       const query = { _id: gameId };
       const mongoFieldToSetEndTurn = playerId + '.endTurn';

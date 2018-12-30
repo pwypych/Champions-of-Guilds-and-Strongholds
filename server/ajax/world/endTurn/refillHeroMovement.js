@@ -11,12 +11,12 @@ module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
       debug('init');
-      generateHeroArray();
+      const entities = res.locals.entities;
+      generateHeroArray(entities);
     })();
 
-    function generateHeroArray() {
+    function generateHeroArray(entities) {
       const heroArray = [];
-      const entities = res.locals.entities;
 
       _.forEach(entities, (entity, id) => {
         if (entity.heroStats) {
@@ -29,11 +29,11 @@ module.exports = (db) => {
       });
 
       debug('generateHeroArray: heroArray:', heroArray);
-      updateSetHeroMovementToMax(heroArray);
+      updateSetHeroMovementToMax(entities, heroArray);
     }
 
-    function updateSetHeroMovementToMax(heroArray) {
-      const gameId = res.locals.entities._id;
+    function updateSetHeroMovementToMax(entities, heroArray) {
+      const gameId = entities._id;
       const query = { _id: gameId };
       const $set = {};
       heroArray.forEach((hero) => {

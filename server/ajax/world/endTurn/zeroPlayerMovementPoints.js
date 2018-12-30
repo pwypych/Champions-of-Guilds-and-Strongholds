@@ -11,12 +11,12 @@ module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
       debug('init');
-      findHeroEntity();
-    })();
-
-    function findHeroEntity() {
       const entities = res.locals.entities;
       const playerId = res.locals.playerId;
+      findHeroEntity(entities, playerId);
+    })();
+
+    function findHeroEntity(entities, playerId) {
       let heroId;
 
       _.forEach(entities, (entity, id) => {
@@ -26,15 +26,12 @@ module.exports = (db) => {
       });
 
       debug('findHeroEntity: heroId:', heroId);
-      updatePlayerMovementPoints(heroId);
+      updatePlayerMovementPoints(entities, playerId, heroId);
     }
 
-    function updatePlayerMovementPoints(heroId) {
-      debug(
-        'updatePlayerMovementPoints: res.locals.playerId:',
-        res.locals.playerId
-      );
-      const gameId = res.locals.entities._id;
+    function updatePlayerMovementPoints(entities, playerId, heroId) {
+      debug('updatePlayerMovementPoints: playerId:', playerId);
+      const gameId = entities._id;
 
       const query = { _id: gameId };
       const string = heroId + '.heroStats.movement';

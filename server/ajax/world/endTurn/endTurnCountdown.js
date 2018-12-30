@@ -10,13 +10,12 @@ module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
       debug('init');
-      checkEndTurnCountdownFlag();
-    })();
-
-    function checkEndTurnCountdownFlag() {
       const gameId = res.locals.entities._id;
       const game = res.locals.entities[gameId];
+      checkEndTurnCountdownFlag(game, gameId);
+    })();
 
+    function checkEndTurnCountdownFlag(game, gameId) {
       if (game.endTurnCountdownRunning) {
         debug(
           'checkEndTurnCountdownFlag: game.endTurnCountdownRunning:',
@@ -25,11 +24,10 @@ module.exports = (db) => {
         return;
       }
 
-      updateSetEndTurnCountdownRunning();
+      updateSetEndTurnCountdownRunning(gameId);
     }
 
-    function updateSetEndTurnCountdownRunning() {
-      const gameId = res.locals.entities._id;
+    function updateSetEndTurnCountdownRunning(gameId) {
       const query = { _id: gameId };
       const component = gameId + '.endTurnCountdownRunning';
       const $set = {};

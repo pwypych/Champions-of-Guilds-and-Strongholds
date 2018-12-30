@@ -11,12 +11,12 @@ module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
       debug('init');
-      generatePlayerIdArray();
+      const entities = res.locals.entities;
+      generatePlayerIdArray(entities);
     })();
 
-    function generatePlayerIdArray() {
+    function generatePlayerIdArray(entities) {
       const playerIdArray = [];
-      const entities = res.locals.entities;
 
       _.forEach(entities, (entity, id) => {
         if (entity.playerData) {
@@ -25,11 +25,11 @@ module.exports = (db) => {
       });
 
       debug('generatePlayerIdArray: playerIdArray:', playerIdArray);
-      updateUnsetEndTurnFlags(playerIdArray);
+      updateUnsetEndTurnFlags(entities, playerIdArray);
     }
 
-    function updateUnsetEndTurnFlags(playerIdArray) {
-      const gameId = res.locals.entities._id;
+    function updateUnsetEndTurnFlags(entities, playerIdArray) {
+      const gameId = entities._id;
       const query = { _id: gameId };
       const $unset = {};
       playerIdArray.forEach((id) => {
