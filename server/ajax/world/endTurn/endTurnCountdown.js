@@ -25,10 +25,10 @@ module.exports = (db) => {
         return;
       }
 
-      setEndTurnCountdownFlag();
+      updateSetEndTurnCountdownFlag();
     }
 
-    function setEndTurnCountdownFlag() {
+    function updateSetEndTurnCountdownFlag() {
       const gameId = res.locals.entities._id;
       const query = { _id: gameId };
       const component = gameId + '.endTurnCountdownRunning';
@@ -43,7 +43,7 @@ module.exports = (db) => {
         options,
         (error) => {
           if (error) {
-            debug('setEndTurnCountdownFlag: error:', error);
+            debug('updateSetEndTurnCountdownFlag: error:', error);
             return;
           }
 
@@ -55,7 +55,7 @@ module.exports = (db) => {
     function waitBeforEndTurn() {
       setTimeout(() => {
         next();
-      }, 10000);
+      }, 1000);
     }
   };
 };
