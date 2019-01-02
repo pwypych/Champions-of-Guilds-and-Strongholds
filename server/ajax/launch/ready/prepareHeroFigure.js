@@ -79,9 +79,9 @@ module.exports = (db) => {
       const gameId = entities._id;
       const query = { _id: gameId };
 
-      const mongoFieldToSet = 'hero__' + shortId.generate();
+      const field = 'hero__' + shortId.generate();
       const $set = {};
-      $set[mongoFieldToSet] = hero;
+      $set[field] = hero;
       const update = { $set: $set };
       const options = {};
 

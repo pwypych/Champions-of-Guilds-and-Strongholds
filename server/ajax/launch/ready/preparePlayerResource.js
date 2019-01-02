@@ -53,9 +53,9 @@ module.exports = (db) => {
     function updatePlayerResources(gameId, playerId, playerRace, done) {
       const query = { _id: gameId };
 
-      const mongoFieldToSet = playerId + '.playerResources';
+      const field = playerId + '.playerResources';
       const $set = {};
-      $set[mongoFieldToSet] = raceResourceMap[playerRace];
+      $set[field] = raceResourceMap[playerRace];
       const update = { $set: $set };
       const options = {};
 

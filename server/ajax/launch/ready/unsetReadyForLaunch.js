@@ -33,9 +33,9 @@ module.exports = (db) => {
       const $unset = {};
 
       playerIdArray.forEach((entity) => {
-        const string = entity + '.readyForLaunch';
-        debug('unsetPlayerReadyForLaunch: string:', string);
-        $unset[string] = true;
+        const field = entity + '.readyForLaunch';
+        debug('unsetPlayerReadyForLaunch: string:', field);
+        $unset[field] = true;
       });
 
       const update = { $unset: $unset };
