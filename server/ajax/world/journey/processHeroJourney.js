@@ -30,24 +30,6 @@ module.exports = (db, decideHeroStep) => {
         return;
       }
 
-      checkHeroOwnerComponent(ctx);
-    }
-
-    function checkHeroOwnerComponent(ctx) {
-      const hero = ctx.hero;
-      const playerId = ctx.playerId;
-
-      if (hero.owner !== playerId) {
-        debug(
-          'checkHeroOwnerComponent: owner and playerId are different, hero.owner:',
-          hero.owner,
-          'playerId',
-          playerId
-        );
-        return;
-      }
-
-      debug('checkHeroOwnerComponent: hero.owner:', hero.owner);
       forEachWishedHeroJourney(ctx);
     }
 
