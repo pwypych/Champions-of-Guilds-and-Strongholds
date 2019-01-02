@@ -3,32 +3,47 @@
 'use strict';
 
 const debug = require('debug')('cogs:heroJourneyCancelPost');
+const _ = require('lodash');
 
 // What does this module do?
 // Cancel actual heroJourney
 module.exports = (db) => {
   return (req, res) => {
-    const game = res.locals.game;
-    const playerIndex = res.locals.playerIndex;
-
     (function init() {
+      const entities = res.locals.entities;
+      const playerId = res.locals.playerId;
+
       debug('init');
-      checkIsHeroJourneyCancel();
+      checkIsHeroJourneyCancel(entities, playerId);
     })();
 
-    function checkIsHeroJourneyCancel() {
-      if (game.playerArray[playerIndex].hero.isHeroJourneyCancel) {
-        debug('checkIsHeroJourneyCancel: heroJourney already canceled');
+    function checkIsHeroJourneyCancel(entities, playerId) {
+      let heroId;
+      let isCanceled = false;
+
+      _.forEach(entities, (entity, id) => {
+        if (entity.owner === playerId) {
+          heroId = id;
+          if (entity.isHeroJourneyCancel) {
+            debug('checkIsHeroJourneyCancel: heroJourney already canceled');
+            isCanceled = true;
+          }
+        }
+      });
+
+      if (isCanceled) {
         res.send({ error: 0 });
+        debug('******************** ajax ********************');
         return;
       }
 
-      updateSetIsHeroJourneyCancel();
+      updateSetIsHeroJourneyCancel(entities, heroId);
     }
 
-    function updateSetIsHeroJourneyCancel() {
-      const query = { _id: game._id };
-      const field = 'playerArray.' + playerIndex + '.hero.isHeroJourneyCancel';
+    function updateSetIsHeroJourneyCancel(entities, heroId) {
+      const gameId = entities._id;
+      const query = { _id: gameId };
+      const field = heroId + '.isHeroJourneyCancel';
       const $set = {};
       $set[field] = true;
       const update = { $set: $set };
@@ -41,21 +56,22 @@ module.exports = (db) => {
         (error) => {
           debug('updateSetIsHeroJourneyCancel: error: ', error);
 
-          waitBeforCancelFlag();
+          waitBeforCancelFlag(entities, heroId);
         }
       );
     }
 
-    function waitBeforCancelFlag() {
+    function waitBeforCancelFlag(entities, heroId) {
       setTimeout(() => {
         debug('******************** after timeout ********************');
-        unsetIsHeroJourneyCancel();
+        unsetIsHeroJourneyCancel(entities, heroId);
       }, 3000);
     }
 
-    function unsetIsHeroJourneyCancel() {
-      const query = { _id: game._id };
-      const field = 'playerArray.' + playerIndex + '.hero.isHeroJourneyCancel';
+    function unsetIsHeroJourneyCancel(entities, heroId) {
+      const gameId = entities._id;
+      const query = { _id: gameId };
+      const field = heroId + '.isHeroJourneyCancel';
       const $unset = {};
       $unset[field] = true;
       const update = { $unset: $unset };
@@ -67,14 +83,10 @@ module.exports = (db) => {
         options,
         (error) => {
           debug('unsetIsHeroJourneyCancel: Done! | error: ', error);
-          sendResponce();
+          res.send({ error: 0 });
+          debug('******************** ajax ********************');
         }
       );
-    }
-
-    function sendResponce() {
-      res.send({ error: 0 });
-      debug('******************** ajax ********************');
     }
   };
 };
