@@ -78,6 +78,15 @@ g.world.endTurnCountdown = (walkie, freshEntities) => {
         );
       }
 
+      if (time === 25) {
+        walkie.triggerEvent(
+          'chatMessage_',
+          'endTurnCountdown',
+          { message: 'Turn will end in 30s...' },
+          false
+        );
+      }
+
       if (time === 20) {
         walkie.triggerEvent(
           'chatMessage_',
@@ -87,11 +96,29 @@ g.world.endTurnCountdown = (walkie, freshEntities) => {
         );
       }
 
+      if (time === 15) {
+        walkie.triggerEvent(
+          'chatMessage_',
+          'endTurnCountdown',
+          { message: 'Turn will end in 10s...' },
+          false
+        );
+      }
+
       if (time === 10) {
         walkie.triggerEvent(
           'chatMessage_',
           'endTurnCountdown',
           { message: 'Turn will end in 10s...' },
+          false
+        );
+      }
+
+      if (time === 5) {
+        walkie.triggerEvent(
+          'chatMessage_',
+          'endTurnCountdown',
+          { message: 'Turn will end in 3s...' },
           false
         );
       }
