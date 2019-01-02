@@ -8,13 +8,13 @@
  "margin":0,
  "name":"1x1",
  "spacing":0,
- "tilecount":3,
+ "tilecount":7,
  "tiledversion":"2018.09.12",
  "tileheight":43,
  "tiles":[
         {
          "id":0,
-         "image":"..\/server\/figure\/tree\/tree.png",
+         "image":"..\/public\/sprite\/tree.png",
          "imageheight":43,
          "imagewidth":32,
          "properties":[
@@ -26,7 +26,7 @@
         }, 
         {
          "id":1,
-         "image":"..\/server\/figure\/rock\/rock.png",
+         "image":"..\/public\/sprite\/rock.png",
          "imageheight":37,
          "imagewidth":32,
          "properties":[
@@ -38,7 +38,7 @@
         }, 
         {
          "id":2,
-         "image":"..\/server\/figure\/dirt\/dirt.png",
+         "image":"..\/public\/sprite\/dirt.png",
          "imageheight":32,
          "imagewidth":32,
          "properties":[
@@ -46,6 +46,54 @@
                  "name":"name",
                  "type":"string",
                  "value":"dirt"
+                }]
+        }, 
+        {
+         "id":4,
+         "image":"..\/public\/sprite\/gold.png",
+         "imageheight":32,
+         "imagewidth":32,
+         "properties":[
+                {
+                 "name":"name",
+                 "type":"string",
+                 "value":"gold"
+                }]
+        }, 
+        {
+         "id":5,
+         "image":"..\/public\/sprite\/wood.png",
+         "imageheight":32,
+         "imagewidth":32,
+         "properties":[
+                {
+                 "name":"name",
+                 "type":"string",
+                 "value":"wood"
+                }]
+        }, 
+        {
+         "id":6,
+         "image":"..\/public\/sprite\/stone.png",
+         "imageheight":32,
+         "imagewidth":32,
+         "properties":[
+                {
+                 "name":"name",
+                 "type":"string",
+                 "value":"stone"
+                }]
+        }, 
+        {
+         "id":7,
+         "image":"..\/public\/sprite\/crystal.png",
+         "imageheight":32,
+         "imagewidth":32,
+         "properties":[
+                {
+                 "name":"name",
+                 "type":"string",
+                 "value":"crystal"
                 }]
         }],
  "tilewidth":32,

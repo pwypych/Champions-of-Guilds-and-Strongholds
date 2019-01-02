@@ -19,7 +19,7 @@
  "tiles":[
         {
          "id":0,
-         "image":"..\/server\/figure\/castleRandom\/castleRandom.png",
+         "image":"..\/public\/sprite\/castleRandom.png",
          "imageheight":96,
          "imagewidth":96,
          "properties":[

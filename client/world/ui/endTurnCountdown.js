@@ -6,7 +6,7 @@
 // It listens to event, checks changes in player endTurn, runs countdown, uses chat for messages
 g.world.endTurnCountdown = (walkie, freshEntities) => {
   let interval;
-  let newDayMessageWasSend = false;
+  let newDayMessageWasSend = true;
 
   (function init() {
     onEntitiesGet();

@@ -1,0 +1,11 @@
+// @format
+
+'use strict';
+
+module.exports = () => {
+  return {
+    produce: () => {
+      return { figure: 'stone', collect: { stone: 5 } };
+    }
+  };
+};
