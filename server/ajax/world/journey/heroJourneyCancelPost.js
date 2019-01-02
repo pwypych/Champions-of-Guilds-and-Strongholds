@@ -28,9 +28,9 @@ module.exports = (db) => {
 
     function updateSetIsHeroJourneyCancel() {
       const query = { _id: game._id };
-      const string = 'playerArray.' + playerIndex + '.hero.isHeroJourneyCancel';
+      const field = 'playerArray.' + playerIndex + '.hero.isHeroJourneyCancel';
       const $set = {};
-      $set[string] = true;
+      $set[field] = true;
       const update = { $set: $set };
       const options = {};
 
@@ -55,9 +55,9 @@ module.exports = (db) => {
 
     function unsetIsHeroJourneyCancel() {
       const query = { _id: game._id };
-      const string = 'playerArray.' + playerIndex + '.hero.isHeroJourneyCancel';
+      const field = 'playerArray.' + playerIndex + '.hero.isHeroJourneyCancel';
       const $unset = {};
-      $unset[string] = true;
+      $unset[field] = true;
       const update = { $unset: $unset };
       const options = {};
 

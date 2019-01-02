@@ -49,9 +49,9 @@ module.exports = (db) => {
       const playerId = res.locals.playerId;
 
       const query = { _id: entities._id };
-      const name = playerId + '.playerData.name';
+      const field = playerId + '.playerData.name';
       const $set = {};
-      $set[name] = playerName;
+      $set[field] = playerName;
       const update = { $set: $set };
       const options = {};
 

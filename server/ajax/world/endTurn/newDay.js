@@ -16,9 +16,9 @@ module.exports = (db) => {
 
     function updateIncrementGameDay(gameId) {
       const query = { _id: gameId };
-      const component = gameId + '.day';
+      const field = gameId + '.day';
       const $inc = {};
-      $inc[component] = 1;
+      $inc[field] = 1;
       const update = { $inc: $inc };
       const options = {};
 

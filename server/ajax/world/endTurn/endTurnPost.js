@@ -19,9 +19,9 @@ module.exports = (db) => {
       const gameId = entities._id;
 
       const query = { _id: gameId };
-      const mongoFieldToSetEndTurn = playerId + '.endTurn';
+      const field = playerId + '.endTurn';
       const $set = {};
-      $set[mongoFieldToSetEndTurn] = true;
+      $set[field] = true;
       const update = { $set: $set };
       const options = {};
 

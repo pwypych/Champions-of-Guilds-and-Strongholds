@@ -35,9 +35,9 @@ module.exports = (db) => {
 
     function updateSetEndTurnCountdownRunning(gameId) {
       const query = { _id: gameId };
-      const component = gameId + '.endTurnCountdownStartedTimestamp';
+      const field = gameId + '.endTurnCountdownStartedTimestamp';
       const $set = {};
-      $set[component] = Date.now();
+      $set[field] = Date.now();
       const update = { $set: $set };
       const options = {};
 

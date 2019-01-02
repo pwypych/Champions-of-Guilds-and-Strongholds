@@ -21,8 +21,8 @@ module.exports = (db) => {
       const $set = {};
       _.forEach(entities, (entity, id) => {
         if (entity.heroStats) {
-          const component = id + '.heroStats.movement';
-          $set[component] = entity.heroStats.movementMax;
+          const field = id + '.heroStats.movement';
+          $set[field] = entity.heroStats.movementMax;
         }
       });
       const update = { $set: $set };

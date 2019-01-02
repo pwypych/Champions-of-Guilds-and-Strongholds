@@ -24,15 +24,15 @@ module.exports = (db) => {
     function updateHeroPosition() {
       const query = { _id: gameId };
 
-      const mongoFieldToSetHeroX = heroId + '.position.x';
-      const mongoFieldToSetHeroY = heroId + '.position.y';
+      const fieldHeroX = heroId + '.position.x';
+      const fieldHeroY = heroId + '.position.y';
       const $set = {};
-      $set[mongoFieldToSetHeroX] = position.x;
-      $set[mongoFieldToSetHeroY] = position.y;
+      $set[fieldHeroX] = position.x;
+      $set[fieldHeroY] = position.y;
 
-      const mongoFieldToSetMovement = heroId + '.heroStats.movement';
+      const fieldMovement = heroId + '.heroStats.movement';
       const $inc = {};
-      $inc[mongoFieldToSetMovement] = -1;
+      $inc[fieldMovement] = -1;
 
       const update = { $set: $set, $inc: $inc };
       const options = {};
