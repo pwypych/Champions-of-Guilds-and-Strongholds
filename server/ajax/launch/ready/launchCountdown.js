@@ -24,9 +24,9 @@ module.exports = (db) => {
 
     function updateGameState(gameId) {
       const query = { _id: gameId };
-      const mongoFieldToSet = gameId + '.state';
+      const field = gameId + '.state';
       const $set = {};
-      $set[mongoFieldToSet] = 'worldState';
+      $set[field] = 'worldState';
       const update = { $set: $set };
       const options = {};
 

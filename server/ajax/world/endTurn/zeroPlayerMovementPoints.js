@@ -33,9 +33,9 @@ module.exports = (db) => {
       const gameId = entities._id;
 
       const query = { _id: gameId };
-      const string = heroId + '.heroStats.movement';
+      const field = heroId + '.heroStats.movement';
       const $set = {};
-      $set[string] = 0;
+      $set[field] = 0;
       const update = { $set: $set };
       const options = {};
 

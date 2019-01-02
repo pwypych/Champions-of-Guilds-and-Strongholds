@@ -30,24 +30,6 @@ module.exports = (db, decideHeroStep) => {
         return;
       }
 
-      checkHeroOwnerComponent(ctx);
-    }
-
-    function checkHeroOwnerComponent(ctx) {
-      const hero = ctx.hero;
-      const playerId = ctx.playerId;
-
-      if (hero.owner !== playerId) {
-        debug(
-          'checkHeroOwnerComponent: owner and playerId are different, hero.owner:',
-          hero.owner,
-          'playerId',
-          playerId
-        );
-        return;
-      }
-
-      debug('checkHeroOwnerComponent: hero.owner:', hero.owner);
       forEachWishedHeroJourney(ctx);
     }
 
@@ -75,10 +57,10 @@ module.exports = (db, decideHeroStep) => {
       const heroId = ctx.heroId;
 
       const query = { _id: gameId };
-      const string = heroId + '.processingJourneyUntilTimestamp';
+      const field = heroId + '.processingJourneyUntilTimestamp';
       const $set = {};
       // 250 ms hero move speed + 100ms security margin for processing
-      $set[string] = Date.now() + 250 + 100;
+      $set[field] = Date.now() + 250 + 100;
       const update = { $set: $set };
       const options = {};
 
@@ -116,9 +98,9 @@ module.exports = (db, decideHeroStep) => {
       const heroId = ctx.heroId;
 
       const query = { _id: gameId };
-      const string = heroId + '.processingJourneyUntilTimestamp';
+      const field = heroId + '.processingJourneyUntilTimestamp';
       const $unset = {};
-      $unset[string] = true;
+      $unset[field] = true;
       const update = { $unset: $unset };
       const options = {};
 

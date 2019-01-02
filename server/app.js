@@ -176,8 +176,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/launch/ready/everyPlayerReadyChecker.js')(),
     require('./ajax/launch/ready/preparePlayerResource.js')(db),
     require('./ajax/launch/ready/prepareHeroFigure.js')(db),
-    // require('./ajax/launch/ready/unsetReadyForLaunch.js')(db),
-    require('./ajax/launch/ready/launchCountdown.js')(db)
+    require('./ajax/launch/ready/launchCountdown.js')(db),
+    require('./ajax/launch/ready/unsetReadyForLaunch.js')(db)
   );
 
   app.post(
@@ -209,6 +209,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
     require('./ajax/world/journey/heroJourneyPost.js')(),
+    require('./ajax/world/journey/checkHeroOwnerComponent.js')(),
     require('./ajax/world/journey/processHeroJourney.js')(db, decideHeroStep)
   );
 

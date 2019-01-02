@@ -21,13 +21,13 @@ module.exports = (db) => {
       const $unset = {};
       _.forEach(entities, (entity, id) => {
         if (entity.playerData) {
-          const component = id + '.endTurn';
-          $unset[component] = true;
+          const field = id + '.endTurn';
+          $unset[field] = true;
         }
       });
 
-      const component = gameId + '.endTurnCountdownStartedTimestamp';
-      $unset[component] = true;
+      const field = gameId + '.endTurnCountdownStartedTimestamp';
+      $unset[field] = true;
 
       const update = { $unset: $unset };
       const options = {};
