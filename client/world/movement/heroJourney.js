@@ -62,13 +62,6 @@ g.world.heroJourney = (walkie, auth) => {
     journeyQueuedToSend = undefined;
     heroIdQueuedToSend = undefined;
 
-    walkie.triggerEvent(
-      'chatMessage_',
-      'heroJourney',
-      { message: 'Will move hero now!' },
-      false
-    );
-
     const data = { heroJourney: journey, heroId: heroId };
     $.post('/ajax/world/journey/heroJourneyPost' + auth.uri, data, () => {
       console.log('worldJourney.js: POST heroJourneyPost');
