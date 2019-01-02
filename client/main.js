@@ -57,7 +57,7 @@ g.main = function main() {
     g.world.mouseClick(walkie, auth, viewport, freshEntities);
     g.world.heroPath(walkie, auth, viewport);
     g.world.heroJourney(walkie, auth);
-    g.world.endTurnButton($body, auth);
+    g.world.endTurnButton($body, auth, walkie, freshEntities);
     g.world.endTurnCountdown(walkie, freshEntities);
   }
 };

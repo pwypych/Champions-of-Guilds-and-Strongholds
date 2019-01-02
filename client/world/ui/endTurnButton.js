@@ -4,11 +4,12 @@
 
 // What does this module do?
 // It listens to clicks on endTurn button and sends POST
-g.world.endTurnButton = ($body, auth) => {
+g.world.endTurnButton = ($body, auth, walkie, freshEntities) => {
   const $button = $body.find('#js-end-turn-button');
 
   (function init() {
     onClick();
+    onEntitiesGet();
   })();
 
   function onClick() {
@@ -26,5 +27,36 @@ g.world.endTurnButton = ($body, auth) => {
         data
       );
     });
+  }
+
+  function onEntitiesGet() {
+    walkie.onEvent(
+      'entitiesGet_',
+      'endTurnButton.js',
+      () => {
+        const gameEntity = freshEntities()[freshEntities()._id];
+        if (gameEntity.state !== 'worldState') {
+          return;
+        }
+
+        checkIfCurrentPlayerEndedTurn();
+      },
+      false
+    );
+  }
+
+  function checkIfCurrentPlayerEndedTurn() {
+    let ownerEndedTurn = false;
+    _.forEach(freshEntities(), (entity) => {
+      if (entity.playerCurrent && entity.endTurn) {
+        ownerEndedTurn = true;
+      }
+    });
+
+    if (ownerEndedTurn) {
+      $button.attr('disabled', 'disabled');
+    } else {
+      $button.removeAttr('disabled');
+    }
   }
 };
