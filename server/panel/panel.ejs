@@ -3,6 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
 
     <title>Champions of Guilds &amp; Strongholds</title>
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
@@ -46,15 +47,10 @@
             <div>MAP: <%= game[game._id].mapData.name %></div>
             <% viewModel._.forEach(game, (entity) => { %>
               <% if (entity.playerToken && entity.playerData) { %>
-                <div>
-                  <span>NAME: <%= entity.playerData.name %></span>
-                  <% const uri = '/game?gameId=' + game._id + '&playerToken=' + entity.playerToken; %>
-                  <span> | </span>
-                  <a href="<%= viewModel.baseurl + uri %>">Open Map</a>
-                  <span> | </span>
-                  <% const uriTest = '/ajax/entitiesGet?gameId=' + game._id + '&playerToken=' + entity.playerToken; %>
-                  <a href="<%= viewModel.baseurl + uriTest %>">/ajax/entitiesGet</a>
-                </div>
+                <div class="seperator-10"></div>
+                <div><span>NAME: <%= entity.playerData.name %></span></div>
+                <% const uri = '/game?gameId=' + game._id + '&playerToken=' + entity.playerToken; %>
+                <div><a href="<%= viewModel.baseurl + uri %>">Open Map</a></div>
               <% } %>
             <% }); %>
             <div class="seperator-10"></div>

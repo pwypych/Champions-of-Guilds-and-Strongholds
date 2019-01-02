@@ -15,7 +15,7 @@ g.world.endTurnCountdown = (walkie, freshEntities) => {
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
-      'positionChanges.js',
+      'endTurnCountdown.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
         if (gameEntity.state !== 'worldState') {
@@ -166,7 +166,7 @@ g.world.endTurnCountdown = (walkie, freshEntities) => {
 
       walkie.triggerEvent(
         'chatMessage_',
-        'endTurnCountdown',
+        'endTurnCountdown.js',
         { message: 'New day has arrived. You can move now!' },
         false
       );
