@@ -8,7 +8,7 @@ const _ = require('lodash');
 // What does this module do?
 // Middleware that unset readyForLaunch flag from player entitie
 module.exports = (db) => {
-  return (req, res, next) => {
+  return (req, res) => {
     (function init() {
       debug('init');
       generatePlayerIdArray();
@@ -50,7 +50,6 @@ module.exports = (db) => {
             debug('unsetPlayerReadyForLaunch: error:', error);
           }
 
-          next();
           debug('******************** middleware after ********************');
         }
       );
