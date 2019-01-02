@@ -45,7 +45,8 @@ module.exports = () => {
         // Player entities
         if (entity.playerToken && entity.playerData) {
           worldEntities[id] = {
-            playerData: entity.playerData
+            playerData: entity.playerData,
+            endTurn: entity.endTurn
           };
 
           // Player current

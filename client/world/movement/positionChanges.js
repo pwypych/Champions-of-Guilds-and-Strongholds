@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.world.entityChanges = (walkie, freshEntities) => {
+g.world.positionChanges = (walkie, freshEntities) => {
   let oldEntities;
 
   (function init() {
@@ -12,7 +12,7 @@ g.world.entityChanges = (walkie, freshEntities) => {
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
-      'entityChanges.js',
+      'positionChanges.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
         if (gameEntity.state !== 'worldState') {
@@ -55,7 +55,7 @@ g.world.entityChanges = (walkie, freshEntities) => {
   function triggerFigurePositionChanged(data) {
     walkie.triggerEvent(
       'figurePositionChanged_',
-      'entityChanges.js',
+      'positionChanges.js',
       data,
       true
     );

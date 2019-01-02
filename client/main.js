@@ -46,7 +46,7 @@ g.main = function main() {
     g.world.informationModal($body, walkie, freshEntities);
     g.world.chat($body, walkie);
     g.world.render(walkie, auth, viewport, freshEntities, spriteBucket);
-    g.world.entityChanges(walkie, freshEntities);
+    g.world.positionChanges(walkie, freshEntities);
     g.world.figurePositionChanged(
       walkie,
       viewport,
@@ -58,5 +58,6 @@ g.main = function main() {
     g.world.heroPath(walkie, auth, viewport);
     g.world.heroJourney(walkie, auth);
     g.world.endTurnButton($body, auth);
+    g.world.endTurnCountdown(walkie, freshEntities);
   }
 };
