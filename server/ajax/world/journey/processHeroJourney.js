@@ -77,11 +77,12 @@ module.exports = (db, decideHeroStep) => {
 
     function runDecideHeroStep(ctx) {
       const gameId = ctx.gameId;
+      const playerId = ctx.playerId;
       const heroId = ctx.heroId;
       const wishedHeroStep = ctx.wishedHeroStep;
       const done = ctx.done;
 
-      decideHeroStep(gameId, heroId, wishedHeroStep, (error) => {
+      decideHeroStep(gameId, playerId, heroId, wishedHeroStep, (error) => {
         if (error) {
           debug('runDecideHeroStep: error: ', error);
           done(error);

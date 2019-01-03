@@ -5,7 +5,7 @@
 const debug = require('debug')('cogs:collectResource');
 
 // What does this module do?
-// Library that works on callback. It update playerResources
+// Library that works on callback. It update playerResources and unset resource entity
 module.exports = (db) => {
   return (gameId, playerId, resource, callback) => {
     (function init() {
@@ -17,7 +17,7 @@ module.exports = (db) => {
     function updateIncrementPlayerResources() {
       const query = { _id: gameId };
 
-      const field = playerId + '.playerResources.' + resource.resource;
+      const field = playerId + '.playerResources.' + resource.name;
       const $inc = {};
       $inc[field] = resource.value;
 
@@ -36,6 +36,33 @@ module.exports = (db) => {
           }
 
           debug('updateIncrementPlayerResources');
+          removeResourceEntity();
+        }
+      );
+    }
+
+    function removeResourceEntity() {
+      const query = { _id: gameId };
+
+      const field = resource.id;
+      const $unset = {};
+      $unset[field] = true;
+
+      const update = { $unset: $unset };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('ERROR: update mongo error:', error);
+            callback('ERROR: update mongo error');
+            return;
+          }
+
+          debug('removeResourceEntity');
           callback(null);
         }
       );
