@@ -8,8 +8,8 @@ const _ = require('lodash');
 // What does this module do?
 // Library that works on callback. It decides what to do with wished hero step.
 // Was journey canselled? Is step possible? Decide what will happen!
-module.exports = (db, updateHeroPosition) => {
-  return (gameId, heroId, wishedHeroStep, callback) => {
+module.exports = (db, updateHeroPosition, collectResource) => {
+  return (gameId, playerId, heroId, wishedHeroStep, callback) => {
     (function init() {
       debug('init');
       findGameById();
@@ -121,6 +121,38 @@ module.exports = (db, updateHeroPosition) => {
         'distanceY',
         distanceY
       );
+      checkIsWishedPositionCollectable(entities);
+    }
+
+    function checkIsWishedPositionCollectable(entities) {
+      const resourceToCollect = {};
+
+      _.forEach(entities, (entitiy, id) => {
+        if (entitiy.figure) {
+          if (
+            entitiy.position.x === wishedHeroStep.toX &&
+            entitiy.position.y === wishedHeroStep.toY
+          ) {
+            if (entitiy.collect) {
+              debug('checkIsWishedPositionCollectable: collectable:', id);
+              resourceToCollect.name = entitiy.collect.resource;
+              resourceToCollect.value = entitiy.collect.amount;
+              resourceToCollect.id = id;
+            }
+          }
+        }
+      });
+
+      if (resourceToCollect.name) {
+        debug(
+          'checkIsWishedPositionCollectable: resourceToCollect.name:',
+          resourceToCollect.name
+        );
+        updatePlayerResource(entities, resourceToCollect);
+        return;
+      }
+
+      debug('checkIsWishedPositionCollectable: No');
       checkIsWishedPositionCollidable(entities);
     }
 
@@ -173,6 +205,20 @@ module.exports = (db, updateHeroPosition) => {
 
         debug('moveHeroToNewPosition');
         callback(null);
+      });
+    }
+
+    function updatePlayerResource(entities, resourceToCollect) {
+      debug('updatePlayerResource: resourceToCollect:', resourceToCollect);
+      collectResource(gameId, playerId, resourceToCollect, (error) => {
+        if (error) {
+          debug('updatePlayerResource: error:', error);
+          callback(error);
+          return;
+        }
+
+        debug('updatePlayerResource');
+        moveHeroToNewPosition();
       });
     }
   };

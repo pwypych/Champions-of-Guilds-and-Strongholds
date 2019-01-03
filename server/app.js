@@ -199,9 +199,13 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   const updateHeroPosition = require('./ajax/world/journey/updateHeroPosition.js')(
     db
   );
+  const collectResource = require('./ajax/world/journey/collectResource.js')(
+    db
+  );
   const decideHeroStep = require('./ajax/world/journey/decideHeroStep.js')(
     db,
-    updateHeroPosition
+    updateHeroPosition,
+    collectResource
   );
   app.post(
     '/ajax/world/journey/heroJourneyPost',
