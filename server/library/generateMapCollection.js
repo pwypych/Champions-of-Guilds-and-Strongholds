@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('nope:cogs:generateMapCollection');
+const debug = require('debug')('cogs:generateMapCollection');
 const fs = require('fs');
 const _ = require('lodash');
 
@@ -157,14 +157,26 @@ module.exports = (environment, db) => {
         convertFromTiled(mapObject, tiledMapObject, tiledTilesetArray, done);
       });
 
-      filePathArray.forEach((filepath, index) => {
+      filePathArray.forEach((filepath) => {
         fs.readFile(filepath, 'utf8', (error, tiledTilesetString) => {
           const tiledTilesetObject = JSON.parse(tiledTilesetString);
 
           // all tilesets .json files in tiled starts at 0, but on tilemap the numbers starts from 1 up
           // the tileset firstgid property in tilemap file tells what is the offset between tile id in tileset
           // and tile id in tilemap layer
-          const tiledFirstGid = tiledMapObject.tilesets[index].firstgid;
+
+          // find firstgid
+          const tilesetName = tiledTilesetObject.name; // ex. 3x3
+          let tiledFirstGid;
+          tiledMapObject.tilesets.forEach((tilesetInfo) => {
+            if (tilesetInfo.source.includes(tilesetName)) {
+              tiledFirstGid = tilesetInfo.firstgid;
+            }
+          });
+
+          debug('readTilesetFiles: name:', tiledTilesetObject.name);
+          debug('readTilesetFiles: filepath:', filepath);
+          debug('readTilesetFiles: firstgid:', tiledFirstGid);
 
           const tiledTiles = toolConvertTilesetTileIndexes(
             tiledTilesetObject.tiles,
