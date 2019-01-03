@@ -124,6 +124,37 @@ module.exports = (db, updateHeroPosition) => {
       checkIsWishedPositionCollidable(entities);
     }
 
+    function checkIsWishedPositionCollectable(entities) {
+      let isWishedPositionCollectable = false;
+      let resource;
+
+      _.forEach(entities, (entitiy) => {
+        if (entitiy.figure) {
+          if (
+            entitiy.position.x === wishedHeroStep.toX &&
+            entitiy.position.y === wishedHeroStep.toY
+          ) {
+            if (entitiy.collect) {
+              isWishedPositionCollectable = true;
+              resource = entity;
+            }
+          }
+        }
+      });
+
+      debug(
+        'checkIsWishedPositionCollidable: isWishedPositionCollidable:',
+        isWishedPositionCollectable
+      );
+
+      if (isWishedPositionCollectable) {
+        collectResource(entities, resource);
+        return;
+      }
+
+      checkIsWishedPositionCollidable(entities);
+    }
+
     function checkIsWishedPositionCollidable(entities) {
       let isWishedPositionCollidable = false;
 
