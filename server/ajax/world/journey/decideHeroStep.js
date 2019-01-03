@@ -125,7 +125,6 @@ module.exports = (db, updateHeroPosition, collectResource) => {
     }
 
     function checkIsWishedPositionCollectable(entities) {
-      let isWishedPositionCollectable = false;
       const resourceToCollect = {};
 
       _.forEach(entities, (entitiy, id) => {
@@ -136,7 +135,6 @@ module.exports = (db, updateHeroPosition, collectResource) => {
           ) {
             if (entitiy.collect) {
               debug('checkIsWishedPositionCollectable: collectable:', id);
-              isWishedPositionCollectable = true;
               resourceToCollect.name = entitiy.collect.resource;
               resourceToCollect.value = entitiy.collect.amount;
               resourceToCollect.id = id;
@@ -145,16 +143,16 @@ module.exports = (db, updateHeroPosition, collectResource) => {
         }
       });
 
-      debug(
-        'checkIsWishedPositionCollidable: isWishedPositionCollidable:',
-        isWishedPositionCollectable
-      );
-
-      if (isWishedPositionCollectable) {
+      if (resourceToCollect.name) {
+        debug(
+          'checkIsWishedPositionCollectable: resourceToCollect.name:',
+          resourceToCollect.name
+        );
         updatePlayerResource(entities, resourceToCollect);
         return;
       }
 
+      debug('checkIsWishedPositionCollectable: No');
       checkIsWishedPositionCollidable(entities);
     }
 
