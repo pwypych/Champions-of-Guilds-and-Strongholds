@@ -5,9 +5,9 @@
 const debug = require('debug')('cogs:collectResource');
 
 // What does this module do?
-// Library that works on callback. It update playerResources and unset resource entity
+// Library that works on callback. It updates playerResources and unset resource entity
 module.exports = (db) => {
-  return (gameId, playerId, resource, callback) => {
+  return (gameId, playerId, resourceId, resourceEntity, callback) => {
     (function init() {
       debug('init');
       updateIncrementPlayerResources();
@@ -15,9 +15,10 @@ module.exports = (db) => {
 
     function updateIncrementPlayerResources() {
       const query = { _id: gameId };
-      const field = playerId + '.playerResources.' + resource.name;
+      const field =
+        playerId + '.playerResources.' + resourceEntity.collect.resource;
       const $inc = {};
-      $inc[field] = resource.value;
+      $inc[field] = resourceEntity.collect.amount;
       const update = { $inc: $inc };
       const options = {};
 
@@ -32,7 +33,10 @@ module.exports = (db) => {
             return;
           }
 
-          debug('updateIncrementPlayerResources:', resource.name);
+          debug(
+            'updateIncrementPlayerResources:',
+            resourceEntity.collect.resource
+          );
           updateUnsetResourceEntitiy();
         }
       );
@@ -40,7 +44,7 @@ module.exports = (db) => {
 
     function updateUnsetResourceEntitiy() {
       const query = { _id: gameId };
-      const field = resource.id;
+      const field = resourceId;
       const $unset = {};
       $unset[field] = true;
       const update = { $unset: $unset };

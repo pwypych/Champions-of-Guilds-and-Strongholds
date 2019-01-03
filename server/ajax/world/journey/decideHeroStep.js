@@ -125,30 +125,30 @@ module.exports = (db, updateHeroPosition, collectResource) => {
     }
 
     function checkIsWishedPositionCollectable(entities) {
-      const resourceToCollect = {};
+      let resourceId;
+      let resourceEntity;
 
-      _.forEach(entities, (entitiy, id) => {
-        if (entitiy.figure) {
+      _.forEach(entities, (entity, id) => {
+        if (entity.figure) {
           if (
-            entitiy.position.x === wishedHeroStep.toX &&
-            entitiy.position.y === wishedHeroStep.toY
+            entity.position.x === wishedHeroStep.toX &&
+            entity.position.y === wishedHeroStep.toY
           ) {
-            if (entitiy.collect) {
+            if (entity.collect) {
               debug('checkIsWishedPositionCollectable: collectable:', id);
-              resourceToCollect.name = entitiy.collect.resource;
-              resourceToCollect.value = entitiy.collect.amount;
-              resourceToCollect.id = id;
+              resourceId = id;
+              resourceEntity = entity;
             }
           }
         }
       });
 
-      if (resourceToCollect.name) {
+      if (resourceId && resourceEntity) {
         debug(
-          'checkIsWishedPositionCollectable: resourceToCollect.name:',
-          resourceToCollect.name
+          'checkIsWishedPositionCollectable: resourceEntity:',
+          resourceEntity
         );
-        updatePlayerResource(entities, resourceToCollect);
+        updatePlayerResource(entities, resourceId, resourceEntity);
         return;
       }
 
@@ -159,13 +159,13 @@ module.exports = (db, updateHeroPosition, collectResource) => {
     function checkIsWishedPositionCollidable(entities) {
       let isWishedPositionCollidable = false;
 
-      _.forEach(entities, (entitiy) => {
-        if (entitiy.figure) {
+      _.forEach(entities, (entity) => {
+        if (entity.figure) {
           if (
-            entitiy.position.x === wishedHeroStep.toX &&
-            entitiy.position.y === wishedHeroStep.toY
+            entity.position.x === wishedHeroStep.toX &&
+            entity.position.y === wishedHeroStep.toY
           ) {
-            if (entitiy.collision === true) {
+            if (entity.collision === true) {
               isWishedPositionCollidable = true;
             }
           }
@@ -208,9 +208,9 @@ module.exports = (db, updateHeroPosition, collectResource) => {
       });
     }
 
-    function updatePlayerResource(entities, resourceToCollect) {
-      debug('updatePlayerResource: resourceToCollect:', resourceToCollect);
-      collectResource(gameId, playerId, resourceToCollect, (error) => {
+    function updatePlayerResource(entities, resourceId, resourceEntity) {
+      debug('updatePlayerResource: resourceId:', resourceId);
+      collectResource(gameId, playerId, resourceId, resourceEntity, (error) => {
         if (error) {
           debug('updatePlayerResource: error:', error);
           callback(error);
