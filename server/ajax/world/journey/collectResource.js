@@ -10,17 +10,14 @@ module.exports = (db) => {
   return (gameId, playerId, resource, callback) => {
     (function init() {
       debug('init');
-
       updateIncrementPlayerResources();
     })();
 
     function updateIncrementPlayerResources() {
       const query = { _id: gameId };
-
       const field = playerId + '.playerResources.' + resource.name;
       const $inc = {};
       $inc[field] = resource.value;
-
       const update = { $inc: $inc };
       const options = {};
 
@@ -30,24 +27,22 @@ module.exports = (db) => {
         options,
         (error) => {
           if (error) {
-            debug('ERROR: insert mongo error:', error);
-            callback('ERROR: insert mongo error');
+            debug('ERROR: update mongo error:', error);
+            callback('ERROR: update mongo error');
             return;
           }
 
-          debug('updateIncrementPlayerResources');
-          removeResourceEntity();
+          debug('updateIncrementPlayerResources:', resource.name);
+          updateUnsetResourceEntitiy();
         }
       );
     }
 
-    function removeResourceEntity() {
+    function updateUnsetResourceEntitiy() {
       const query = { _id: gameId };
-
       const field = resource.id;
       const $unset = {};
       $unset[field] = true;
-
       const update = { $unset: $unset };
       const options = {};
 
@@ -62,7 +57,7 @@ module.exports = (db) => {
             return;
           }
 
-          debug('removeResourceEntity');
+          debug('updateUnsetResourceEntitiy');
           callback(null);
         }
       );
