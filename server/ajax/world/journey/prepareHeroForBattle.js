@@ -8,7 +8,7 @@ const shortid = require('shortid');
 // What does this module do?
 // Library that works on callback. It adds battle entity and zero hero movement points
 module.exports = (db) => {
-  return (gameId, battle, callback) => {
+  return (gameId, heroId, battle, callback) => {
     (function init() {
       debug('init');
 
@@ -18,7 +18,7 @@ module.exports = (db) => {
     function insertBattleEntityAndZeroHeroMovement() {
       const query = { _id: gameId };
       const battleField = 'battle__' + shortid.generate();
-      const movementField = battle.attackerId + '.heroStats.movement';
+      const movementField = heroId + '.heroStats.movement';
       const $set = {};
       $set[battleField] = battle;
       $set[movementField] = 0;
