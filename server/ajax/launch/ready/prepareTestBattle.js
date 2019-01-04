@@ -7,17 +7,17 @@ const _ = require('lodash');
 const shortId = require('shortid');
 
 // What does this module do?
-// Creates a mock of wishedBattle entity, used to run game in battleState
+// Creates a mock of battle entity with pending battleStatus used to run game in battleState
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
       const entities = res.locals.entities;
 
       debug('init');
-      generateWishedBattle(entities);
+      generatePendingBattle(entities);
     })();
 
-    function generateWishedBattle(entities) {
+    function generatePendingBattle(entities) {
       const heroIdArray = [];
 
       _.forEach(entities, (entity, id) => {
@@ -34,22 +34,23 @@ module.exports = (db) => {
         }
       });
 
-      const wishedBattle = {
+      const battle = {
         left: _.sample(heroIdArray),
-        right: _.sample(enemyFigureIdArray)
+        right: _.sample(enemyFigureIdArray),
+        battleStatus: 'pending'
       };
 
-      debug('generateWishedBattle: wishedBattle', wishedBattle);
-      updateGame(entities, wishedBattle);
+      debug('generatePendingBattle: battle', battle);
+      updateGame(entities, battle);
     }
 
-    function updateGame(entities, wishedBattle) {
+    function updateGame(entities, battle) {
       const gameId = entities._id;
       const query = { _id: gameId };
 
-      const field = 'wishedBattle__' + shortId.generate();
+      const field = 'battle__' + shortId.generate();
       const $set = {};
-      $set[field] = wishedBattle;
+      $set[field] = battle;
       const update = { $set: $set };
       const options = {};
 
