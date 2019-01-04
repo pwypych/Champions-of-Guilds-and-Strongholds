@@ -7,12 +7,12 @@ const _ = require('lodash');
 
 // What does this module do?
 // Library that works on callback. It decides what to do with wished hero step.
-// Was journey canselled? Is step possible? Decide what will happen!
+// Is step possible? Decide what will happen!
 module.exports = (
   db,
   updateHeroPosition,
   collectResource,
-  generateBattleEntity
+  prepareHeroForBattle
 ) => {
   return (gameId, playerId, heroId, wishedHeroStep, callback) => {
     (function init() {
@@ -218,19 +218,20 @@ module.exports = (
       const battleArray = [];
 
       _.forEach(entities, (entity, id) => {
-        if (entity.battle) {
-          [1, 0, -1].forEach((x) => {
-            [1, 0, -1].forEach((y) => {
+        if (entity.units && !entity.heroStats) {
+          [1, 0, -1].forEach((offsetX) => {
+            [1, 0, -1].forEach((offsetY) => {
               if (
-                entity.position.x === wishedHeroStep.toX + x &&
-                entity.position.y === wishedHeroStep.toY + y
+                entity.position.x === wishedHeroStep.toX + offsetX &&
+                entity.position.y === wishedHeroStep.toY + offsetY
               ) {
                 debug(
                   'checkIsWishedPositionBattle: Battle On x:',
-                  wishedHeroStep.toX + x,
+                  wishedHeroStep.toX + offsetX,
                   'y:',
-                  wishedHeroStep.toY + y
+                  wishedHeroStep.toY + offsetY
                 );
+
                 const battle = {};
                 battle.attackerId = heroId;
                 battle.defenderId = id;
@@ -242,32 +243,39 @@ module.exports = (
         }
       });
 
-      if (battleArray.length > 0) {
+      if (!_.isEmpty(battleArray)) {
         debug('checkIsWishedPositionBattle: run battle library:');
-        prepareHeroForBattle(battleArray);
+        generateBattleEntites(battleArray);
         return;
       }
 
-      debug(
-        'checkIsWishedPositionBattle: battleArray.length:',
-        battleArray.length
-      );
-      debug('checkIsWishedPositionBattle: battleArray:', battleArray);
+      debug('checkIsWishedPositionBattle: No battle found!');
       callback(null);
     }
 
-    // Functions that uses libraries
+    // Helper functions
 
-    function prepareHeroForBattle(battleArray) {
-      generateBattleEntity(gameId, battleArray, (error) => {
+    function generateBattleEntites(battleArray) {
+      let error;
+      const done = _.after(battleArray.length, () => {
+        debug('generateBattleEntites');
         if (error) {
-          debug('moveHeroToNewPosition: error:', error);
           callback(error);
           return;
         }
 
-        debug('moveHeroToNewPosition');
         callback(null);
+      });
+
+      battleArray.forEach((battle) => {
+        prepareHeroForBattle(gameId, battle, (errorGenerate) => {
+          if (errorGenerate) {
+            debug('moveHeroToNewPosition: error:', errorGenerate);
+            error = errorGenerate;
+          }
+
+          done();
+        });
       });
     }
 

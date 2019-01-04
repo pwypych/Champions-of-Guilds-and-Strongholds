@@ -2,34 +2,20 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:generateBattleEntity');
-const _ = require('lodash');
+const debug = require('debug')('cogs:prepareHeroForBattle');
 const shortid = require('shortid');
 
 // What does this module do?
-// Library that works on callback. It adds wishedBattle entity and zero hero movement points
+// Library that works on callback. It adds battle entity and zero hero movement points
 module.exports = (db) => {
-  return (gameId, battleArray, callback) => {
+  return (gameId, battle, callback) => {
     (function init() {
       debug('init');
 
-      forEachWishedBattleArray();
+      insertBattleEntityAndZeroHeroMovement();
     })();
 
-    function forEachWishedBattleArray() {
-      const done = _.after(battleArray.length, () => {
-        debug('forEachWishedBattleArray: done!');
-        callback(null);
-      });
-
-      debug('forEachWishedBattleArray');
-
-      battleArray.forEach((battle) => {
-        insertBattleEntity(battle, done);
-      });
-    }
-
-    function insertBattleEntity(battle, done) {
+    function insertBattleEntityAndZeroHeroMovement() {
       const query = { _id: gameId };
       const battleField = 'battle__' + shortid.generate();
       const movementField = battle.attackerId + '.heroStats.movement';
@@ -46,9 +32,10 @@ module.exports = (db) => {
         (error) => {
           if (error) {
             debug(gameId, ': ERROR: update mongo error:', error);
+            callback('Update mongo error');
           }
 
-          done();
+          callback(null);
         }
       );
     }
