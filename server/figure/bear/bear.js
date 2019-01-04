@@ -7,7 +7,7 @@ module.exports = () => {
     produce: () => {
       return {
         figure: 'bear',
-        battleEnemies: {
+        units: {
           bear: 5
         }
       };

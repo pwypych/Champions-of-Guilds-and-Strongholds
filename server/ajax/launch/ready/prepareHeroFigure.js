@@ -55,6 +55,15 @@ module.exports = (db) => {
         hero.heroStats = {};
         hero.heroStats.movement = 15;
         hero.heroStats.movementMax = 15;
+
+        hero.units = {
+          spearbarer: 10,
+          archer: 20,
+          goblin: 5,
+          bear: 5,
+          alchemist: 1
+        };
+
         heroArray.push(hero);
       });
 

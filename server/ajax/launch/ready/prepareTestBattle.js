@@ -29,14 +29,14 @@ module.exports = (db) => {
       const enemyFigureIdArray = [];
 
       _.forEach(entities, (entity, id) => {
-        if (entity.battleEnemies) {
+        if (entity.figure && entity.units) {
           enemyFigureIdArray.push(id);
         }
       });
 
       const battle = {
-        left: _.sample(heroIdArray),
-        right: _.sample(enemyFigureIdArray),
+        attackerId: _.sample(heroIdArray),
+        defenderId: _.sample(enemyFigureIdArray),
         battleStatus: 'pending'
       };
 

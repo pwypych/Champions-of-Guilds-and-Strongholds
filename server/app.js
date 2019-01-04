@@ -129,6 +129,7 @@ function setupFigureManagerTree() {
 function setupLibrariesAndRoutes(figureManagerTree) {
   // libraries
   const templateToHtml = require('./library/templateToHtml.js')();
+  const unitStats = require('./ajax/battle/create/unitStats.js');
 
   // general endpoints
   app.get('/', (req, res) => {
@@ -180,7 +181,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/readEntities.js')(db), // need fresh hero figures in prepareTestBattle
     require('./ajax/launch/ready/prepareTestBattle.js')(db),
     require('./library/readEntities.js')(db), // need fresh entities for createBattle
-    require('./ajax/battle/create/createBattle.js')(db),
+    require('./ajax/battle/create/createBattle.js')(db, unitStats),
     require('./ajax/launch/ready/unsetReadyForLaunch.js')(db)
   );
 
