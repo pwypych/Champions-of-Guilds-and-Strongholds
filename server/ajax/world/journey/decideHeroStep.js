@@ -188,10 +188,10 @@ module.exports = (db, updateHeroPosition, collectResource) => {
         return;
       }
 
-      moveHeroToNewPosition();
+      moveHeroToNewPosition(entities);
     }
 
-    function moveHeroToNewPosition() {
+    function moveHeroToNewPosition(entities) {
       const position = {};
       position.x = wishedHeroStep.toX;
       position.y = wishedHeroStep.toY;
@@ -204,8 +204,41 @@ module.exports = (db, updateHeroPosition, collectResource) => {
         }
 
         debug('moveHeroToNewPosition');
-        callback(null);
+        checkIsWishedPositionBattle(entities);
       });
+    }
+
+    function checkIsWishedPositionBattle(entities) {
+      debug('checkIsWishedPositionBattle');
+      const wishedBattleArray = [];
+
+      _.forEach(entities, (entity, id) => {
+        if (entity.battle) {
+          [1, 0, -1].forEach((x) => {
+            [1, 0, -1].forEach((y) => {
+              if (
+                entity.position.x === wishedHeroStep.toX + x &&
+                entity.position.y === wishedHeroStep.toY + y
+              ) {
+                debug(
+                  'checkIsWishedPositionBattle: Battle On x:',
+                  wishedHeroStep.toX + x,
+                  'y:',
+                  wishedHeroStep.toY + y
+                );
+                const wishedBattle = {};
+                wishedBattle.left = heroId;
+                wishedBattle.right = id;
+                wishedBattleArray.push(wishedBattle);
+              }
+            });
+          });
+        }
+      });
+
+      debug('wishedBattleArray.length:', wishedBattleArray.length);
+      debug('wishedBattleArray:', wishedBattleArray);
+      callback(null);
     }
 
     function updatePlayerResource(entities, resourceId, resourceEntity) {
@@ -218,7 +251,7 @@ module.exports = (db, updateHeroPosition, collectResource) => {
         }
 
         debug('updatePlayerResource');
-        moveHeroToNewPosition();
+        moveHeroToNewPosition(entities);
       });
     }
   };
