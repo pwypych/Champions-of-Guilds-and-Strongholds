@@ -8,7 +8,12 @@ const _ = require('lodash');
 // What does this module do?
 // Library that works on callback. It decides what to do with wished hero step.
 // Was journey canselled? Is step possible? Decide what will happen!
-module.exports = (db, updateHeroPosition, collectResource) => {
+module.exports = (
+  db,
+  updateHeroPosition,
+  collectResource,
+  generateBattleEntity
+) => {
   return (gameId, playerId, heroId, wishedHeroStep, callback) => {
     (function init() {
       debug('init');
@@ -210,7 +215,7 @@ module.exports = (db, updateHeroPosition, collectResource) => {
 
     function checkIsWishedPositionBattle(entities) {
       debug('checkIsWishedPositionBattle');
-      const wishedBattleArray = [];
+      const battleArray = [];
 
       _.forEach(entities, (entity, id) => {
         if (entity.battle) {
@@ -226,19 +231,42 @@ module.exports = (db, updateHeroPosition, collectResource) => {
                   'y:',
                   wishedHeroStep.toY + y
                 );
-                const wishedBattle = {};
-                wishedBattle.left = heroId;
-                wishedBattle.right = id;
-                wishedBattleArray.push(wishedBattle);
+                const battle = {};
+                battle.left = heroId;
+                battle.right = id;
+                battle.battleStatus = 'pending';
+                battleArray.push(battle);
               }
             });
           });
         }
       });
 
-      debug('wishedBattleArray.length:', wishedBattleArray.length);
-      debug('wishedBattleArray:', wishedBattleArray);
+      if (battleArray.length > 0) {
+        debug('checkIsWishedPositionBattle: run battle library:');
+        prepareHeroForBattle(battleArray);
+        return;
+      }
+
+      debug(
+        'checkIsWishedPositionBattle: battleArray.length:',
+        battleArray.length
+      );
+      debug('checkIsWishedPositionBattle: battleArray:', battleArray);
       callback(null);
+    }
+
+    function prepareHeroForBattle(battleArray) {
+      generateBattleEntity(gameId, battleArray, (error) => {
+        if (error) {
+          debug('moveHeroToNewPosition: error:', error);
+          callback(error);
+          return;
+        }
+
+        debug('moveHeroToNewPosition');
+        callback(null);
+      });
     }
 
     function updatePlayerResource(entities, resourceId, resourceEntity) {

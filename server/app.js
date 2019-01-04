@@ -202,10 +202,14 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   const collectResource = require('./ajax/world/journey/collectResource.js')(
     db
   );
+  const generateBattleEntity = require('./ajax/world/journey/generateBattleEntity.js')(
+    db
+  );
   const decideHeroStep = require('./ajax/world/journey/decideHeroStep.js')(
     db,
     updateHeroPosition,
-    collectResource
+    collectResource,
+    generateBattleEntity
   );
   app.post(
     '/ajax/world/journey/heroJourneyPost',
