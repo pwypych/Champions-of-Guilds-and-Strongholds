@@ -7,8 +7,13 @@ const _ = require('lodash');
 
 // What does this module do?
 // Library that works on callback. It decides what to do with wished hero step.
-// Was journey canselled? Is step possible? Decide what will happen!
-module.exports = (db, updateHeroPosition, collectResource) => {
+// Is step possible? Decide what will happen!
+module.exports = (
+  db,
+  updateHeroPosition,
+  collectResource,
+  prepareHeroForBattle
+) => {
   return (gameId, playerId, heroId, wishedHeroStep, callback) => {
     (function init() {
       debug('init');
@@ -188,10 +193,10 @@ module.exports = (db, updateHeroPosition, collectResource) => {
         return;
       }
 
-      moveHeroToNewPosition();
+      moveHeroToNewPosition(entities);
     }
 
-    function moveHeroToNewPosition() {
+    function moveHeroToNewPosition(entities) {
       const position = {};
       position.x = wishedHeroStep.toX;
       position.y = wishedHeroStep.toY;
@@ -204,7 +209,73 @@ module.exports = (db, updateHeroPosition, collectResource) => {
         }
 
         debug('moveHeroToNewPosition');
+        checkIsWishedPositionBattle(entities);
+      });
+    }
+
+    function checkIsWishedPositionBattle(entities) {
+      debug('checkIsWishedPositionBattle');
+      const battleArray = [];
+
+      _.forEach(entities, (entity, id) => {
+        if (entity.units && !entity.heroStats) {
+          [1, 0, -1].forEach((offsetX) => {
+            [1, 0, -1].forEach((offsetY) => {
+              if (
+                entity.position.x === wishedHeroStep.toX + offsetX &&
+                entity.position.y === wishedHeroStep.toY + offsetY
+              ) {
+                debug(
+                  'checkIsWishedPositionBattle: Battle On x:',
+                  wishedHeroStep.toX + offsetX,
+                  'y:',
+                  wishedHeroStep.toY + offsetY
+                );
+
+                const battle = {};
+                battle.attackerId = heroId;
+                battle.defenderId = id;
+                battle.battleStatus = 'pending';
+                battleArray.push(battle);
+              }
+            });
+          });
+        }
+      });
+
+      if (!_.isEmpty(battleArray)) {
+        debug('checkIsWishedPositionBattle: run battle library:');
+        generateBattleEntites(battleArray);
+        return;
+      }
+
+      debug('checkIsWishedPositionBattle: No battle found!');
+      callback(null);
+    }
+
+    // Helper functions
+
+    function generateBattleEntites(battleArray) {
+      let error;
+      const done = _.after(battleArray.length, () => {
+        debug('generateBattleEntites');
+        if (error) {
+          callback(error);
+          return;
+        }
+
         callback(null);
+      });
+
+      battleArray.forEach((battle) => {
+        prepareHeroForBattle(gameId, battle, (errorGenerate) => {
+          if (errorGenerate) {
+            debug('moveHeroToNewPosition: error:', errorGenerate);
+            error = errorGenerate;
+          }
+
+          done();
+        });
       });
     }
 
@@ -218,7 +289,7 @@ module.exports = (db, updateHeroPosition, collectResource) => {
         }
 
         debug('updatePlayerResource');
-        moveHeroToNewPosition();
+        moveHeroToNewPosition(entities);
       });
     }
   };
