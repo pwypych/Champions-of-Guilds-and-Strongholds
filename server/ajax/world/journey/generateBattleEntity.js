@@ -32,7 +32,7 @@ module.exports = (db) => {
     function insertBattleEntity(battle, done) {
       const query = { _id: gameId };
       const battleField = 'battle__' + shortid.generate();
-      const movementField = battle.left + '.heroStats.movement';
+      const movementField = battle.attackerId + '.heroStats.movement';
       const $set = {};
       $set[battleField] = battle;
       $set[movementField] = 0;

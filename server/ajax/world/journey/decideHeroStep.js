@@ -232,8 +232,8 @@ module.exports = (
                   wishedHeroStep.toY + y
                 );
                 const battle = {};
-                battle.left = heroId;
-                battle.right = id;
+                battle.attackerId = heroId;
+                battle.defenderId = id;
                 battle.battleStatus = 'pending';
                 battleArray.push(battle);
               }
@@ -255,6 +255,8 @@ module.exports = (
       debug('checkIsWishedPositionBattle: battleArray:', battleArray);
       callback(null);
     }
+
+    // Functions that uses libraries
 
     function prepareHeroForBattle(battleArray) {
       generateBattleEntity(gameId, battleArray, (error) => {
