@@ -245,7 +245,7 @@ module.exports = (
 
       if (!_.isEmpty(battleArray)) {
         debug('checkIsWishedPositionBattle: run battle library:');
-        generateBattleEntites(battleArray);
+        insertBattleEntities(battleArray);
         return;
       }
 
@@ -255,10 +255,10 @@ module.exports = (
 
     // Helper functions
 
-    function generateBattleEntites(battleArray) {
+    function insertBattleEntities(battleArray) {
       let error;
       const done = _.after(battleArray.length, () => {
-        debug('generateBattleEntites');
+        debug('insertBattleEntities');
         if (error) {
           callback(error);
           return;
@@ -268,7 +268,7 @@ module.exports = (
       });
 
       battleArray.forEach((battle) => {
-        prepareHeroForBattle(gameId, battle, (errorGenerate) => {
+        prepareHeroForBattle(gameId, heroId, battle, (errorGenerate) => {
           if (errorGenerate) {
             debug('moveHeroToNewPosition: error:', errorGenerate);
             error = errorGenerate;
