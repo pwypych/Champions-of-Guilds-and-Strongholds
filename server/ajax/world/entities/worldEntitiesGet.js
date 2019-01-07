@@ -6,7 +6,7 @@ const debug = require('debug')('nope:cogs:worldEntitiesGet');
 const _ = require('lodash');
 
 // What does this module do?
-// Send info about player and opponents
+// Send filtered info about player and opponents
 module.exports = () => {
   return (req, res, next) => {
     (function init() {

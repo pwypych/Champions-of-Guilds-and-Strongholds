@@ -6,7 +6,7 @@ const debug = require('debug')('nope:cogs:launchEntitiesGet');
 const _ = require('lodash');
 
 // What does this module do?
-// Send info about players setup
+// Send filtered info about players setup
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
