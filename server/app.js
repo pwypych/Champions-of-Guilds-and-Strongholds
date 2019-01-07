@@ -244,6 +244,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/world/endTurn/endTurnCountdown.js')(db),
     require('./ajax/world/endTurn/newDay.js')(db),
     require('./ajax/world/endTurn/refillHeroMovement.js')(db),
+    require('./ajax/world/endTurn/battleChecker.js')(db),
     require('./ajax/world/endTurn/unsetEndTurnFlags.js')(db)
   );
 
