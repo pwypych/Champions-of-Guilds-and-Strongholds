@@ -51,10 +51,10 @@ module.exports = (db, unitStats) => {
 
       // map is 15 x 20
       const attackerPositions = [
-        { x: 1, y: 3 },
-        { x: 1, y: 5 },
         { x: 1, y: 8 },
+        { x: 1, y: 5 },
         { x: 1, y: 11 },
+        { x: 1, y: 3 },
         { x: 1, y: 14 }
       ];
 
@@ -82,10 +82,10 @@ module.exports = (db, unitStats) => {
 
       // map is 15 x 20
       const defenderPositions = [
-        { x: 19, y: 3 },
-        { x: 19, y: 5 },
         { x: 19, y: 8 },
+        { x: 19, y: 5 },
         { x: 19, y: 11 },
+        { x: 19, y: 3 },
         { x: 19, y: 14 }
       ];
 
@@ -112,10 +112,16 @@ module.exports = (db, unitStats) => {
       });
 
       debug('generateUnits: units:', _.size(units));
-      changeOwnerToPlayer(entities, units, attackerId, defenderId);
+      changeOwnerToPlayer(entities, units, attackerId, defenderId, battleId);
     }
 
-    function changeOwnerToPlayer(entities, units, attackerId, defenderId) {
+    function changeOwnerToPlayer(
+      entities,
+      units,
+      attackerId,
+      defenderId,
+      battleId
+    ) {
       // change attacker owner from hero to player
       _.forEach(units, (unit, id) => {
         if (unit.owner === attackerId) {
@@ -130,7 +136,7 @@ module.exports = (db, unitStats) => {
             units[id].owner = entities[defenderId].owner;
           }
         });
-        next();
+        updateSetUnitEntities(entities, units);
         return;
       }
 
@@ -151,11 +157,57 @@ module.exports = (db, unitStats) => {
       debug('changeOwnerToPlayer: otherPlayerIdArray:', otherPlayerIdArray);
       debug('changeOwnerToPlayer: units:', units);
 
-      next();
+      updateSetUnitEntities(entities, units, battleId);
     }
 
-    // updateSetUnitsEntities
+    function updateSetUnitEntities(entities, units, battleId) {
+      const gameId = entities._id;
+      const query = { _id: gameId };
+      const $set = {};
 
-    // changeStatusToActive
+      _.forEach(units, (unit, id) => {
+        $set[id] = unit;
+      });
+
+      const update = { $set: $set };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('updateSetUnitEntities: error:', error);
+          }
+          debug('updateSetUnitEntities');
+          updateSetBattleStatusToActive(entities, battleId);
+        }
+      );
+    }
+
+    function updateSetBattleStatusToActive(entities, battleId) {
+      const gameId = entities._id;
+      const query = { _id: gameId };
+      const $set = {};
+
+      const field = battleId + '.battleStatus';
+      $set[field] = 'active';
+
+      const update = { $set: $set };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('updateSetBattleStatusToActive: error:', error);
+          }
+          debug('updateSetBattleStatusToActive');
+        }
+      );
+    }
   };
 };
