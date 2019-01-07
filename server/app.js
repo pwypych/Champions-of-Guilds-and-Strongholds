@@ -179,10 +179,6 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/launch/ready/preparePlayerResource.js')(db),
     require('./ajax/launch/ready/prepareHeroFigure.js')(db),
     require('./ajax/launch/ready/launchCountdown.js')(db),
-    // require('./library/readEntities.js')(db), // need fresh hero figures in prepareTestBattle
-    // require('./ajax/launch/ready/prepareTestBattle.js')(db),
-    // require('./library/readEntities.js')(db), // need fresh entities for createBattle
-    // require('./ajax/battle/create/createBattle.js')(db, unitStats),
     require('./ajax/launch/ready/unsetReadyForLaunch.js')(db)
   );
 
