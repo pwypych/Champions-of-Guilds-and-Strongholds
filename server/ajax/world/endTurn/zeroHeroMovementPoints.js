@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:zeroPlayerMovementPoints.js');
+const debug = require('debug')('cogs:zeroHeroMovementPoints.js');
 const _ = require('lodash');
 
 // What does this module do?
@@ -26,10 +26,10 @@ module.exports = (db) => {
       });
 
       debug('findHeroId: heroId:', heroId);
-      updatePlayerMovementPoints(entities, playerId, heroId);
+      updateHeroMovementPoints(entities, playerId, heroId);
     }
 
-    function updatePlayerMovementPoints(entities, playerId, heroId) {
+    function updateHeroMovementPoints(entities, playerId, heroId) {
       const gameId = entities._id;
 
       const query = { _id: gameId };
@@ -45,11 +45,11 @@ module.exports = (db) => {
         options,
         (error) => {
           if (error) {
-            debug('updatePlayerMovementPoints: error:', error);
+            debug('updateHeroMovementPoints: error:', error);
             return;
           }
 
-          debug('updatePlayerMovementPoints: playerId:', playerId);
+          debug('updateHeroMovementPoints: playerId:', playerId);
           next();
         }
       );
