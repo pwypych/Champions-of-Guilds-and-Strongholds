@@ -218,7 +218,7 @@ module.exports = (
       const battleArray = [];
 
       _.forEach(entities, (entity, id) => {
-        if (entity.units && !entity.heroStats) {
+        if (entity.unitCounts && !entity.heroStats) {
           [1, 0, -1].forEach((offsetX) => {
             [1, 0, -1].forEach((offsetY) => {
               if (

@@ -56,7 +56,7 @@ module.exports = (db) => {
         hero.heroStats.movement = 15;
         hero.heroStats.movementMax = 15;
 
-        hero.units = {
+        hero.unitCounts = {
           spearbarer: 10,
           archer: 20,
           goblin: 5,

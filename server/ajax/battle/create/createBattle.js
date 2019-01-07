@@ -7,7 +7,7 @@ const _ = require('lodash');
 const shortId = require('shortid');
 
 // What does this module do?
-// Checks if battle with battleStatus "pending" exists. Spawns units and obsticles. Changes battleStatus to "active".
+// Checks if battle with battleStatus "pending" exists. Spawns units and obsticles. Attacker is always a player. Changes battleStatus to "active".
 module.exports = (db, unitStats) => {
   return (req, res, next) => {
     (function init() {
@@ -41,25 +41,120 @@ module.exports = (db, unitStats) => {
       const attackerId = battle.attackerId;
       const defenderId = battle.defenderId;
 
-      const attackerUnits = entities[attackerId].units;
-      const defenderUnits = entities[defenderId].units;
+      const attackerUnitCounts = entities[attackerId].unitCounts;
+      const defenderUnitCounts = entities[defenderId].unitCounts;
 
-      debug('generateUnits:attackerUnits:', attackerUnits);
-      debug('generateUnits:defenderUnits:', defenderUnits);
+      debug('generateUnits:attackerUnitCounts:', attackerUnitCounts);
+      debug('generateUnits:defenderUnitCounts:', defenderUnitCounts);
 
-      // prepare attackerUnits
-      // prepare defenderUnits
+      const units = {};
 
-      // bear_unit__xxx3023: {
-      //   unit: 'bear',
-      //   owner: 'hero_xceetnrs',
-      //   unitStats: {
-      //     movment...
-      //   }
-      // }
+      // map is 15 x 20
+      const attackerPositions = [
+        { x: 1, y: 3 },
+        { x: 1, y: 5 },
+        { x: 1, y: 8 },
+        { x: 1, y: 11 },
+        { x: 1, y: 14 }
+      ];
+
+      let counter = 0;
+      _.forEach(attackerUnitCounts, (amount, unitName) => {
+        if (counter > 5) {
+          return;
+        }
+
+        const id = unitName + '_unit__' + shortId.generate();
+
+        const unit = {};
+        unit.unitName = unitName;
+        unit.owner = attackerId;
+        unit.amount = amount;
+        unit.unitStats = {
+          current: JSON.parse(JSON.stringify(unitStats[unitName])),
+          base: JSON.parse(JSON.stringify(unitStats[unitName]))
+        };
+        unit.position = attackerPositions[counter];
+
+        units[id] = unit;
+        counter += 1;
+      });
+
+      // map is 15 x 20
+      const defenderPositions = [
+        { x: 19, y: 3 },
+        { x: 19, y: 5 },
+        { x: 19, y: 8 },
+        { x: 19, y: 11 },
+        { x: 19, y: 14 }
+      ];
+
+      counter = 0;
+      _.forEach(defenderUnitCounts, (amount, unitName) => {
+        if (counter > 5) {
+          return;
+        }
+
+        const id = unitName + '_unit__' + shortId.generate();
+
+        const unit = {};
+        unit.unitName = unitName;
+        unit.owner = defenderId;
+        unit.amount = amount;
+        unit.unitStats = {
+          current: JSON.parse(JSON.stringify(unitStats[unitName])),
+          base: JSON.parse(JSON.stringify(unitStats[unitName]))
+        };
+        unit.position = defenderPositions[counter];
+
+        units[id] = unit;
+        counter += 1;
+      });
+
+      debug('generateUnits: units:', _.size(units));
+      changeOwnerToPlayer(entities, units, attackerId, defenderId);
+    }
+
+    function changeOwnerToPlayer(entities, units, attackerId, defenderId) {
+      // change attacker owner from hero to player
+      _.forEach(units, (unit, id) => {
+        if (unit.owner === attackerId) {
+          units[id].owner = entities[attackerId].owner;
+        }
+      });
+
+      if (entities[defenderId].heroStats) {
+        // defender is a player change owner from hero to player
+        _.forEach(units, (unit, id) => {
+          if (unit.owner === defenderId) {
+            units[id].owner = entities[defenderId].owner;
+          }
+        });
+        next();
+        return;
+      }
+
+      const otherPlayerIdArray = [];
+      _.forEach(entities, (entity, id) => {
+        if (entity.heroStats && id !== attackerId) {
+          otherPlayerIdArray.push(id);
+        }
+      });
+
+      _.forEach(units, (unit, id) => {
+        if (unit.owner === defenderId) {
+          const randomHeroId = _.sample(otherPlayerIdArray);
+          units[id].owner = entities[randomHeroId].owner;
+        }
+      });
+
+      debug('changeOwnerToPlayer: otherPlayerIdArray:', otherPlayerIdArray);
+      debug('changeOwnerToPlayer: units:', units);
 
       next();
     }
+
+    // updateSetUnitsEntities
 
     // changeStatusToActive
   };

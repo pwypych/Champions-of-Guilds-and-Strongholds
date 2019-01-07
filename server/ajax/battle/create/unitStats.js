@@ -6,56 +6,50 @@
 // Returns object with all unit stats
 module.exports = {
   alchemist: {
-    movement: 2,
-    attack: 4,
-    defence: 1,
-    range: 5,
-    liveMax: 3,
-    live: 3
+    range: 7,
+    damageMin: 2,
+    damageMax: 4,
+    life: 6,
+    movement: 5
   },
 
   archer: {
-    movement: 3,
-    attack: 3,
-    defence: 1,
-    range: 5,
-    liveMax: 3,
-    live: 3
+    range: 15,
+    damageMin: 2,
+    damageMax: 5,
+    life: 4,
+    movement: 5
   },
 
   bear: {
-    movement: 4,
-    attack: 3,
-    defence: 3,
     range: 1,
-    liveMax: 7,
-    live: 7
+    damageMin: 10,
+    damageMax: 20,
+    life: 6,
+    movement: 5
   },
 
   goblin: {
-    movement: 3,
-    attack: 2,
-    defence: 2,
-    range: 1,
-    liveMax: 4,
-    live: 4
+    range: 5,
+    damageMin: 2,
+    damageMax: 4,
+    life: 6,
+    movement: 5
   },
 
   rogue: {
-    movement: 5,
-    attack: 2,
-    defence: 1,
-    range: 1,
-    liveMax: 3,
-    live: 3
+    range: 5,
+    damageMin: 2,
+    damageMax: 4,
+    life: 6,
+    movement: 5
   },
 
   spearbarer: {
-    movement: 3,
-    attack: 1,
-    defence: 1,
-    range: 2,
-    liveMax: 5,
-    live: 5
+    range: 5,
+    damageMin: 2,
+    damageMax: 4,
+    life: 6,
+    movement: 5
   }
 };

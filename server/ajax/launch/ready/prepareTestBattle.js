@@ -29,7 +29,7 @@ module.exports = (db) => {
       const enemyFigureIdArray = [];
 
       _.forEach(entities, (entity, id) => {
-        if (entity.figure && entity.units) {
+        if (entity.figure && entity.unitCounts) {
           enemyFigureIdArray.push(id);
         }
       });
