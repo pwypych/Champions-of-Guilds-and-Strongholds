@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.tool.walkie = () => {
+g.setup.setupWalkie = () => {
   const walkie = $('body');
 
   walkie.triggerEvent = (eventName, moduleName, data, isConsoleLog) => {

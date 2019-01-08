@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.world.render = (walkie, auth, viewport, freshEntities, spriteBucket) => {
+g.world.worldRender = (walkie, auth, viewport, freshEntities, spriteBucket) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
@@ -13,7 +13,7 @@ g.world.render = (walkie, auth, viewport, freshEntities, spriteBucket) => {
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
-      'render.js',
+      'worldRender.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
 

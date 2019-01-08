@@ -14,25 +14,25 @@ g.main = function main() {
   }
 
   function setupPixi($body) {
-    const app = g.world.initPixi($body);
-    const viewport = g.world.initViewport(app);
-    g.world.initTween(app);
+    const app = g.setup.setupPixi($body);
+    const viewport = g.setup.setupViewport(app);
+    g.setup.setupTween(app);
 
-    const auth = g.tool.auth();
+    const auth = g.setup.setupAuth();
 
-    g.world.initImages(auth, () => {
+    g.setup.setupImages(auth, () => {
       setupLibraries($body, app, viewport, auth);
     });
   }
 
   function setupLibraries($body, app, viewport, auth) {
-    const walkie = g.tool.walkie();
+    const walkie = g.setup.setupWalkie();
 
-    g.engine.stateChange(walkie, auth);
-    g.engine.entitiesInterval(walkie, auth);
+    g.common.stateChange(walkie, auth);
+    g.common.entitiesInterval(walkie, auth);
 
-    const freshEntities = g.engine.freshEntities(walkie);
-    const spriteBucket = g.engine.spriteBucket();
+    const freshEntities = g.common.freshEntities(walkie);
+    const spriteBucket = g.common.spriteBucket();
 
     g.launch.launchToggle($body, walkie);
     g.launch.launchInputName($body, auth);
@@ -45,7 +45,7 @@ g.main = function main() {
     g.world.informationButton($body);
     g.world.informationModal($body, walkie, freshEntities);
     g.world.chat($body, walkie);
-    g.world.render(walkie, auth, viewport, freshEntities, spriteBucket);
+    g.world.worldRender(walkie, auth, viewport, freshEntities, spriteBucket);
     g.world.positionChanges(walkie, freshEntities);
     g.world.figurePositionChanged(
       walkie,
@@ -59,5 +59,7 @@ g.main = function main() {
     g.world.heroJourney(walkie, auth);
     g.world.endTurnButton($body, auth, walkie, freshEntities);
     g.world.endTurnCountdown(walkie, freshEntities);
+
+    g.battle.battleToggle($body, walkie);
   }
 };

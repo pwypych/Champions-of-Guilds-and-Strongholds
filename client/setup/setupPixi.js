@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.world.initPixi = ($body) => {
+g.setup.setupPixi = ($body) => {
   const $canvas = $('<canvas id="pixi-canvas"></canvas>');
   const eCanvas = $canvas.get(0);
 

@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.engine.stateChange = (walkie) => {
+g.common.stateChange = (walkie) => {
   let currentState;
 
   (function init() {

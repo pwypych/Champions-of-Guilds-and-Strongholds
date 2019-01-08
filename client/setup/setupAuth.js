@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.tool.auth = () => {
+g.setup.setupAuth = () => {
   const auth = {};
   auth.gameId = $.url('?gameId');
   auth.playerToken = $.url('?playerToken');

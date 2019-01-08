@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.world.initImages = (auth, callback) => {
+g.setup.setupImages = (auth, callback) => {
   (function init() {
     getSpriteFilenameArray();
   })();
@@ -24,12 +24,15 @@ g.world.initImages = (auth, callback) => {
   }
 
   function forEachSpriteFilename(spriteFilenameArray) {
+    let message = '';
     spriteFilenameArray.forEach((spriteFilename) => {
       const uri = '/sprite/' + spriteFilename;
       const name = spriteFilename.substr(0, spriteFilename.length - 4);
-      console.log('initImages.js:', name, uri);
       PIXI.loader.add(name, uri);
+      message += name + ' ';
     });
+
+    console.log('setupImages.js:', message);
 
     loadSprites();
   }

@@ -1,7 +1,8 @@
 'use strict';
 
 const g = {};
-g.tool = {};
-g.engine = {};
+g.setup = {};
+g.common = {};
 g.launch = {};
 g.world = {};
+g.battle = {};

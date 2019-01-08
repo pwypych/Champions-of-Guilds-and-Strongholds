@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.world.initViewport = (app) => {
+g.setup.setupViewport = (app) => {
   const options = {};
   options.screenWidth = window.innerWidth;
   options.screenHeight = window.innerHeight;
