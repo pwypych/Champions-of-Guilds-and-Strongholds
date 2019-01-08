@@ -236,6 +236,8 @@ module.exports = (
                 battle.attackerId = heroId;
                 battle.defenderId = id;
                 battle.battleStatus = 'pending';
+                battle.battleHeight = 15;
+                battle.battleWidth = 20;
                 battleArray.push(battle);
               }
             });

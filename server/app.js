@@ -246,6 +246,24 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/world/endTurn/unsetEndTurnFlags.js')(db)
   );
 
+  // battleState endpoints
+  const updateUnitPosition = require('./ajax/battle/journey/updateUnitPosition.js')(
+    db
+  );
+  const decideUnitStep = require('./ajax/battle/journey/decideUnitStep.js')(
+    db,
+    updateUnitPosition
+  );
+  app.post(
+    '/ajax/battle/journey/unitJourneyPost',
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
+    require('./library/middlewareAjaxStateAuth.js')('battleState'),
+    require('./ajax/battle/journey/unitJourneyPost.js')(),
+    require('./ajax/battle/journey/checkUnitOwnerComponent.js')(),
+    require('./ajax/battle/journey/processUnitJourney.js')(db, decideUnitStep)
+  );
+
   debug('setupLibrariesAndRoutes()');
   setupExpress();
 }

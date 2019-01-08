@@ -75,6 +75,7 @@ module.exports = (db, unitStats) => {
           base: JSON.parse(JSON.stringify(unitStats[unitName]))
         };
         unit.position = attackerPositions[counter];
+        unit.collision = true;
 
         units[id] = unit;
         counter += 1;
@@ -106,6 +107,7 @@ module.exports = (db, unitStats) => {
           base: JSON.parse(JSON.stringify(unitStats[unitName]))
         };
         unit.position = defenderPositions[counter];
+        unit.collision = true;
 
         units[id] = unit;
         counter += 1;
