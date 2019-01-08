@@ -4,7 +4,7 @@
 
 // What does this module do?
 // It listens to mouse click events, generates path through library and sends path events
-g.world.mouseClick = (walkie, auth, viewport, freshEntities) => {
+g.world.battleClick = (walkie, auth, viewport, freshEntities) => {
   let lastPathPositionX;
   let lastPathPositionY;
 
@@ -15,7 +15,7 @@ g.world.mouseClick = (walkie, auth, viewport, freshEntities) => {
   function addListener() {
     viewport.on('clicked', (event) => {
       const gameEntity = freshEntities()[freshEntities()._id];
-      if (gameEntity.state !== 'worldState') {
+      if (gameEntity.state !== 'battleState') {
         return;
       }
 
@@ -41,10 +41,11 @@ g.world.mouseClick = (walkie, auth, viewport, freshEntities) => {
       }
     });
 
-    findHeroPosition(click, playerId);
+    findUnitPosition(click, playerId);
   }
 
-  function findHeroPosition(click, playerId) {
+  // must have current unit selected in battle entity
+  function findUnitPosition(click, playerId) {
     const entities = freshEntities();
 
     let hero;
@@ -109,7 +110,7 @@ g.world.mouseClick = (walkie, auth, viewport, freshEntities) => {
       if (lastPathPositionX === click.x && lastPathPositionY === click.y) {
         lastPathPositionX = undefined;
         lastPathPositionY = undefined;
-        walkie.triggerEvent('pathAccepted_', 'mouseClick.js', {
+        walkie.triggerEvent('pathAccepted_', 'battleClick.js', {
           heroId: heroId,
           pathArray: pathArray
         });
@@ -126,12 +127,12 @@ g.world.mouseClick = (walkie, auth, viewport, freshEntities) => {
     }
 
     if (!_.isEmpty(pathArray) && pathArray.length > 1) {
-      walkie.triggerEvent('pathCalculated_', 'mouseClick.js', {
+      walkie.triggerEvent('pathCalculated_', 'battleClick.js', {
         heroId: heroId,
         pathArray: pathArray
       });
     } else {
-      walkie.triggerEvent('pathImpossible_', 'mouseClick.js');
+      walkie.triggerEvent('pathImpossible_', 'battleClick.js');
     }
   }
 };

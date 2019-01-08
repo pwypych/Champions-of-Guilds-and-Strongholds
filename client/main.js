@@ -56,7 +56,7 @@ g.main = function main() {
       spriteBucket
     );
     g.world.keyboard(walkie, auth, freshEntities);
-    g.world.mouseClick(walkie, auth, viewport, freshEntities);
+    g.world.worldClick(walkie, auth, viewport, freshEntities);
     g.world.heroPath(walkie, auth, viewport);
     g.world.heroJourney(walkie, auth);
     g.world.endTurnButton($body, auth, walkie, freshEntities);
