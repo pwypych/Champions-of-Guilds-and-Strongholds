@@ -6,7 +6,7 @@ g.setup.setupPixi = ($body) => {
   const $canvas = $('<canvas id="pixi-canvas"></canvas>');
   const eCanvas = $canvas.get(0);
 
-  $body.find('#js-world').append($canvas);
+  $body.find('#js-canvas-wrapper').append($canvas);
 
   PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 

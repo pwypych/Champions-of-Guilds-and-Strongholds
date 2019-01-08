@@ -74,7 +74,7 @@ g.world.worldRender = (walkie, auth, viewport, freshEntities, spriteBucket) => {
       }
     });
 
-    triggerWorldRenderDone();
+    triggerRenderDone();
   }
 
   function instantiateSprites(entity, id) {
@@ -95,7 +95,7 @@ g.world.worldRender = (walkie, auth, viewport, freshEntities, spriteBucket) => {
     spriteBucket[id] = sprite;
   }
 
-  function triggerWorldRenderDone() {
+  function triggerRenderDone() {
     walkie.triggerEvent('renderDone_', 'render.js', {}, false);
   }
 };

@@ -18,9 +18,9 @@ module.exports = (environment, db, templateToHtml) => {
     })();
 
     function generateWorld() {
-      const path = environment.basepath + '/server/game/world.ejs';
+      const path = environment.basepath + '/server/game/canvasWrapper.ejs';
       templateToHtml(path, viewModel, (error, html) => {
-        viewModel.htmlWorld = html;
+        viewModel.htmlCanvasWrapper = html;
         debug('generateWorld: html.length:', html.length);
         generateWorldInterface();
       });
@@ -31,15 +31,15 @@ module.exports = (environment, db, templateToHtml) => {
       templateToHtml(path, viewModel, (error, html) => {
         viewModel.htmlWorldInterface = html;
         debug('generateWorldInterface: html.length:', html.length);
-        generateWorldChat();
+        generateChat();
       });
     }
 
-    function generateWorldChat() {
-      const path = environment.basepath + '/server/game/worldChat.ejs';
+    function generateChat() {
+      const path = environment.basepath + '/server/game/chat.ejs';
       templateToHtml(path, viewModel, (error, html) => {
-        viewModel.htmlWorldChat = html;
-        debug('generateWorldChat: html.length:', html.length);
+        viewModel.htmlChat = html;
+        debug('generateChat: html.length:', html.length);
         generateLaunch();
       });
     }

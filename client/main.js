@@ -41,7 +41,9 @@ g.main = function main() {
     g.launch.launchCountdown($body, walkie);
     g.launch.launchDisableUi($body, walkie);
 
-    g.world.worldToggle($body, walkie);
+    g.common.canvasWrapperToggle($body, walkie);
+
+    g.world.worldInterfaceToggle($body, walkie);
     g.world.informationButton($body);
     g.world.informationModal($body, walkie, freshEntities);
     g.world.chat($body, walkie);
@@ -60,6 +62,6 @@ g.main = function main() {
     g.world.endTurnButton($body, auth, walkie, freshEntities);
     g.world.endTurnCountdown(walkie, freshEntities);
 
-    g.battle.battleToggle($body, walkie);
+    g.battle.battleRender(walkie, auth, viewport, freshEntities, spriteBucket);
   }
 };

@@ -49,13 +49,13 @@ module.exports = (db, unitStats) => {
 
       const units = {};
 
-      // map is 15 x 20
+      // battle map is 15 x 20
       const attackerPositions = [
-        { x: 1, y: 8 },
-        { x: 1, y: 5 },
-        { x: 1, y: 11 },
-        { x: 1, y: 3 },
-        { x: 1, y: 14 }
+        { x: 1, y: 7 },
+        { x: 1, y: 4 },
+        { x: 1, y: 10 },
+        { x: 1, y: 1 },
+        { x: 1, y: 13 }
       ];
 
       let counter = 0;
@@ -80,13 +80,13 @@ module.exports = (db, unitStats) => {
         counter += 1;
       });
 
-      // map is 15 x 20
+      // battle map is 15 x 20
       const defenderPositions = [
-        { x: 19, y: 8 },
-        { x: 19, y: 5 },
-        { x: 19, y: 11 },
-        { x: 19, y: 3 },
-        { x: 19, y: 14 }
+        { x: 18, y: 7 },
+        { x: 18, y: 4 },
+        { x: 18, y: 10 },
+        { x: 18, y: 1 },
+        { x: 18, y: 13 }
       ];
 
       counter = 0;
