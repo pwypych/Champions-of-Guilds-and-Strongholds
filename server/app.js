@@ -247,8 +247,13 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   // battleState endpoints
-
-  const decideUnitStep = require('./ajax/battle/journey/decideUnitStep.js')(db);
+  const updateUnitPosition = require('./ajax/battle/journey/updateUnitPosition.js')(
+    db
+  );
+  const decideUnitStep = require('./ajax/battle/journey/decideUnitStep.js')(
+    db,
+    updateUnitPosition
+  );
   app.post(
     '/ajax/battle/journey/unitJourneyPost',
     require('./library/readEntities.js')(db),
