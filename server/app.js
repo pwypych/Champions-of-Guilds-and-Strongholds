@@ -246,6 +246,15 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/world/endTurn/unsetEndTurnFlags.js')(db)
   );
 
+  // battleState endpoints
+  app.post(
+    '/ajax/battle/journey/unitJourneyPost',
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
+    require('./library/middlewareAjaxStateAuth.js')('battleState'),
+    require('./ajax/battle/journey/unitJourneyPost.js')()
+  );
+
   debug('setupLibrariesAndRoutes()');
   setupExpress();
 }
