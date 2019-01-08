@@ -7,7 +7,7 @@ const async = require('async');
 
 // What does this module do?
 // Middleware, expects unitId and unitJourney in res.locals, flags unitBegingMoved and processes each step
-module.exports = (db) => {
+module.exports = (db, decideUnitStep) => {
   return (req, res) => {
     (function init() {
       const ctx = {};

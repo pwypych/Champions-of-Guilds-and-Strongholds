@@ -247,6 +247,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   // battleState endpoints
+
+  const decideUnitStep = require('./ajax/battle/journey/decideUnitStep.js')(db);
   app.post(
     '/ajax/battle/journey/unitJourneyPost',
     require('./library/readEntities.js')(db),
@@ -254,7 +256,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     require('./ajax/battle/journey/unitJourneyPost.js')(),
     require('./ajax/battle/journey/checkUnitOwnerComponent.js')(),
-    require('./ajax/battle/journey/processUnitJourney.js')(db)
+    require('./ajax/battle/journey/processUnitJourney.js')(db, decideUnitStep)
   );
 
   debug('setupLibrariesAndRoutes()');
