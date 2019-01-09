@@ -261,7 +261,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     require('./ajax/battle/journey/unitJourneyPost.js')(),
     require('./ajax/battle/journey/checkUnitOwnerComponent.js')(),
-    require('./ajax/battle/journey/checkUnitActiveComponent.js')(),
+    require('./ajax/battle/journey/checkUnitActive.js')(),
     require('./ajax/battle/journey/checkUnitActions.js')(),
     require('./ajax/battle/journey/processUnitJourney.js')(db, decideUnitStep)
   );

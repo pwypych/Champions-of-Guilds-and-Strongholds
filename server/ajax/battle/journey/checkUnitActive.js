@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:checkUnitActiveComponent');
+const debug = require('debug')('cogs:checkUnitActive');
 
 // What does this module do?
 // Middleware, check is current unit active component true
