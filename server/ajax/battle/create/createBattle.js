@@ -70,12 +70,18 @@ module.exports = (db, unitStats) => {
         unit.unitName = unitName;
         unit.owner = attackerId;
         unit.amount = amount;
+        unit.active = false;
+        unit.collision = true;
+        unit.position = attackerPositions[counter];
         unit.unitStats = {
           current: JSON.parse(JSON.stringify(unitStats[unitName])),
           base: JSON.parse(JSON.stringify(unitStats[unitName]))
         };
-        unit.position = attackerPositions[counter];
-        unit.collision = true;
+
+        // @temp only for testing first unit is active
+        if (counter === 0) {
+          unit.active = true;
+        }
 
         units[id] = unit;
         counter += 1;
