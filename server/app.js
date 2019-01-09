@@ -219,7 +219,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
     require('./ajax/world/journey/heroJourneyPost.js')(),
-    require('./ajax/world/journey/checkHeroOwnerComponent.js')(),
+    require('./ajax/world/journey/checkHeroOwner.js')(),
     require('./ajax/world/journey/processHeroJourney.js')(db, decideHeroStep)
   );
 

@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:checkHeroOwnerComponent');
+const debug = require('debug')('cogs:checkHeroOwner');
 
 // What does this module do?
 // Middleware, compare hero owner component with playerId
@@ -15,13 +15,13 @@ module.exports = () => {
 
       debug('init: playerId:', playerId);
       debug('init: hero:', hero);
-      checkHeroOwnerComponent(hero, playerId);
+      checkHeroOwner(hero, playerId);
     })();
 
-    function checkHeroOwnerComponent(hero, playerId) {
+    function checkHeroOwner(hero, playerId) {
       if (hero.owner !== playerId) {
         debug(
-          'checkHeroOwnerComponent: owner and playerId are different, hero.owner:',
+          'checkHeroOwner: owner and playerId are different, hero.owner:',
           hero.owner,
           'playerId',
           playerId
@@ -29,7 +29,7 @@ module.exports = () => {
         return;
       }
 
-      debug('checkHeroOwnerComponent: hero.owner:', hero.owner);
+      debug('checkHeroOwner: hero.owner:', hero.owner);
       next();
     }
   };
