@@ -12,7 +12,7 @@ module.exports = {
     life: 6,
     initiative: 50,
     movement: 4,
-    actions: 2
+    maneuver: 2
   },
 
   archer: {
@@ -22,7 +22,7 @@ module.exports = {
     life: 4,
     initiative: 60,
     movement: 5,
-    actions: 2
+    maneuver: 2
   },
 
   bear: {
@@ -32,7 +32,7 @@ module.exports = {
     life: 6,
     initiative: 30,
     movement: 3,
-    actions: 2
+    maneuver: 2
   },
 
   goblin: {
@@ -42,7 +42,7 @@ module.exports = {
     life: 6,
     initiative: 35,
     movement: 6,
-    actions: 2
+    maneuver: 2
   },
 
   rogue: {
@@ -52,7 +52,7 @@ module.exports = {
     life: 6,
     initiative: 62,
     movement: 6,
-    actions: 2
+    maneuver: 2
   },
 
   spearbarer: {
@@ -62,6 +62,6 @@ module.exports = {
     life: 6,
     initiative: 42,
     movement: 3,
-    actions: 2
+    maneuver: 2
   }
 };
