@@ -102,12 +102,13 @@ module.exports = (db, unitStats) => {
         unit.unitName = unitName;
         unit.owner = defenderId;
         unit.amount = amount;
+        unit.active = false;
+        unit.collision = true;
+        unit.position = defenderPositions[counter];
         unit.unitStats = {
           current: JSON.parse(JSON.stringify(unitStats[unitName])),
           base: JSON.parse(JSON.stringify(unitStats[unitName]))
         };
-        unit.position = defenderPositions[counter];
-        unit.collision = true;
 
         units[id] = unit;
         counter += 1;

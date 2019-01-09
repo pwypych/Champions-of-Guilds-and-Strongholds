@@ -10,7 +10,8 @@ module.exports = {
     damageMin: 2,
     damageMax: 4,
     life: 6,
-    movement: 5
+    movement: 5,
+    actions: 2
   },
 
   archer: {
@@ -18,7 +19,8 @@ module.exports = {
     damageMin: 2,
     damageMax: 5,
     life: 4,
-    movement: 5
+    movement: 5,
+    actions: 2
   },
 
   bear: {
@@ -26,7 +28,8 @@ module.exports = {
     damageMin: 10,
     damageMax: 20,
     life: 6,
-    movement: 5
+    movement: 5,
+    actions: 2
   },
 
   goblin: {
@@ -34,7 +37,8 @@ module.exports = {
     damageMin: 2,
     damageMax: 4,
     life: 6,
-    movement: 5
+    movement: 5,
+    actions: 2
   },
 
   rogue: {
@@ -42,7 +46,8 @@ module.exports = {
     damageMin: 2,
     damageMax: 4,
     life: 6,
-    movement: 5
+    movement: 5,
+    actions: 2
   },
 
   spearbarer: {
@@ -50,6 +55,7 @@ module.exports = {
     damageMin: 2,
     damageMax: 4,
     life: 6,
-    movement: 5
+    movement: 5,
+    actions: 2
   }
 };
