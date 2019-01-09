@@ -10,7 +10,8 @@ module.exports = {
     damageMin: 2,
     damageMax: 4,
     life: 6,
-    movement: 5,
+    initiative: 50,
+    movement: 4,
     actions: 2
   },
 
@@ -19,6 +20,7 @@ module.exports = {
     damageMin: 2,
     damageMax: 5,
     life: 4,
+    initiative: 60,
     movement: 5,
     actions: 2
   },
@@ -28,7 +30,8 @@ module.exports = {
     damageMin: 10,
     damageMax: 20,
     life: 6,
-    movement: 5,
+    initiative: 30,
+    movement: 3,
     actions: 2
   },
 
@@ -37,7 +40,8 @@ module.exports = {
     damageMin: 2,
     damageMax: 4,
     life: 6,
-    movement: 5,
+    initiative: 35,
+    movement: 6,
     actions: 2
   },
 
@@ -46,7 +50,8 @@ module.exports = {
     damageMin: 2,
     damageMax: 4,
     life: 6,
-    movement: 5,
+    initiative: 62,
+    movement: 6,
     actions: 2
   },
 
@@ -55,7 +60,8 @@ module.exports = {
     damageMin: 2,
     damageMax: 4,
     life: 6,
-    movement: 5,
+    initiative: 42,
+    movement: 3,
     actions: 2
   }
 };
