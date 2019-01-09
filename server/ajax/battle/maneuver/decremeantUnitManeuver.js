@@ -5,7 +5,7 @@
 const debug = require('debug')('cogs:decremeantUnitManeuver');
 
 // What does this module do?
-// Middleware, decremeant unti actions by 1
+// Middleware, decremeant unti maneuver by 1
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
@@ -20,7 +20,7 @@ module.exports = (db) => {
     function updateUnitManeuver(gameId, unitId) {
       const query = { _id: gameId };
 
-      const field = unitId + '.unitStats.current.actions';
+      const field = unitId + '.unitStats.current.maneuver';
       const $inc = {};
       $inc[field] = -1;
 
