@@ -8,7 +8,7 @@ const async = require('async');
 // What does this module do?
 // Middleware, expects unitId and unitJourney in res.locals, flags unitBegingMoved and processes each step
 module.exports = (db, decideUnitStep) => {
-  return (req, res) => {
+  return (req, res, next) => {
     (function init() {
       const ctx = {};
       const entities = res.locals.entities;
@@ -18,7 +18,7 @@ module.exports = (db, decideUnitStep) => {
       ctx.unitId = res.locals.unitId;
       ctx.unit = entities[ctx.unitId];
 
-      debug('init: ctx.unit:', ctx.unit);
+      debug('init: ctx.unit.unitName:', ctx.unit.unitName);
       checkIsProcessingUnitJourney(ctx);
     })();
 
@@ -111,6 +111,7 @@ module.exports = (db, decideUnitStep) => {
         options,
         (error) => {
           debug('unsetProcessingJourneyUntilTimestamp: Done! | error: ', error);
+          next();
         }
       );
     }

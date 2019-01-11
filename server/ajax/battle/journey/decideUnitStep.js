@@ -127,13 +127,14 @@ module.exports = (db, updateUnitPosition) => {
       let isWishedPositionCollidable = false;
 
       _.forEach(entities, (entity) => {
-        if (entity.figure) {
+        if (entity.figure && entity.unitName) {
           if (
             entity.position.x === wishedUnitStep.toX &&
             entity.position.y === wishedUnitStep.toY
           ) {
             if (entity.collision === true) {
               isWishedPositionCollidable = true;
+              debug('checkIsWishedPositionCollidable: ', entity);
             }
           }
         }

@@ -14,7 +14,7 @@ module.exports = () => {
       const unit = entities[res.locals.unitId];
 
       debug('init: playerId:', playerId);
-      debug('init: unit:', unit);
+      debug('init: unit.unitName:', unit.unitName);
       checkUnitOwner(unit, playerId);
     })();
 
