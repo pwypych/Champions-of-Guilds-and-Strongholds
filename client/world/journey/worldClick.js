@@ -109,7 +109,7 @@ g.world.worldClick = (walkie, auth, viewport, freshEntities) => {
       if (lastPathPositionX === click.x && lastPathPositionY === click.y) {
         lastPathPositionX = undefined;
         lastPathPositionY = undefined;
-        walkie.triggerEvent('pathAccepted_', 'worldClick.js', {
+        walkie.triggerEvent('heroPathAccepted_', 'worldClick.js', {
           heroId: heroId,
           pathArray: pathArray
         });
@@ -126,12 +126,12 @@ g.world.worldClick = (walkie, auth, viewport, freshEntities) => {
     }
 
     if (!_.isEmpty(pathArray) && pathArray.length > 1) {
-      walkie.triggerEvent('pathCalculated_', 'worldClick.js', {
+      walkie.triggerEvent('heroPathCalculated_', 'worldClick.js', {
         heroId: heroId,
         pathArray: pathArray
       });
     } else {
-      walkie.triggerEvent('pathImpossible_', 'worldClick.js');
+      walkie.triggerEvent('heroPathImpossible_', 'worldClick.js');
     }
   }
 };

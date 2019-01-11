@@ -19,7 +19,7 @@ g.world.heroPath = (walkie, auth, viewport) => {
   })();
 
   function onPathCalculated() {
-    walkie.onEvent('pathCalculated_', 'heroPath.js', (data) => {
+    walkie.onEvent('heroPathCalculated_', 'heroPath.js', (data) => {
       toolRemoveOldPath();
       pathArray = data.pathArray;
       forEachPosition();
@@ -27,13 +27,13 @@ g.world.heroPath = (walkie, auth, viewport) => {
   }
 
   function onPathImpossible() {
-    walkie.onEvent('pathImpossible_', 'heroPath.js', () => {
+    walkie.onEvent('heroPathImpossible_', 'heroPath.js', () => {
       toolRemoveOldPath();
     });
   }
 
   function onPathAccepted() {
-    walkie.onEvent('pathAccepted_', 'heroPath.js', () => {
+    walkie.onEvent('heroPathAccepted_', 'heroPath.js', () => {
       toolRemoveOldPath();
     });
   }
