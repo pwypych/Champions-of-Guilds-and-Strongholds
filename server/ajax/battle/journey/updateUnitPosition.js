@@ -30,11 +30,13 @@ module.exports = (db) => {
       $set[fieldUnitX] = position.x;
       $set[fieldUnitY] = position.y;
 
-      const fieldMovement = unitId + '.unitStats.current.movement';
-      const $inc = {};
-      $inc[fieldMovement] = -1;
+      // @temp disable so units can move freely
+      // const fieldMovement = unitId + '.unitStats.current.movement';
+      // const $inc = {};
+      // $inc[fieldMovement] = -1;
 
-      const update = { $set: $set, $inc: $inc };
+      // const update = { $set: $set, $inc: $inc };
+      const update = { $set: $set };
       const options = {};
 
       db.collection('gameCollection').updateOne(
