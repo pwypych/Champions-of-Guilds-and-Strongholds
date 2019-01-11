@@ -98,8 +98,8 @@ g.battle.battleRender = (
     }
 
     if (entity.active) {
-      const shadow = toolInstantiateShadow(sprite.x, sprite.y);
-      container.addChild(shadow);
+      const activeUnitMarker = toolActiveUnitMarker(sprite.x, sprite.y);
+      container.addChild(activeUnitMarker);
     }
 
     container.addChild(sprite);
@@ -107,14 +107,14 @@ g.battle.battleRender = (
     spriteBucket[id] = container;
   }
 
-  function toolInstantiateShadow(x, y) {
-    const shadow = new PIXI.Graphics();
+  function toolActiveUnitMarker(x, y) {
+    const activeUnitMarker = new PIXI.Graphics();
     const color = 0x7f996a;
-    shadow.beginFill(color);
+    activeUnitMarker.beginFill(color);
     const width = 32;
     const height = 32;
-    shadow.drawRect(x, y - 32, width, height); // - 32 because of sprite anchor
-    return shadow;
+    activeUnitMarker.drawRect(x, y - 32, width, height); // - 32 because of sprite anchor
+    return activeUnitMarker;
   }
 
   function triggerRenderDone() {
