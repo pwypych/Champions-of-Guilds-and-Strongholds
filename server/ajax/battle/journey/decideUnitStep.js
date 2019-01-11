@@ -50,7 +50,7 @@ module.exports = (db, updateUnitPosition) => {
 
     function checkIsUnitWishedPositionPossible(entities) {
       const mapWidth = 20;
-      const mapHeight = 1;
+      const mapHeight = 15;
 
       debug(
         'checkIsUnitWishedPositionPossible: wishedUnitStep.toY',
