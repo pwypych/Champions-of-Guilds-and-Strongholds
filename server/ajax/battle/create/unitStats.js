@@ -11,7 +11,7 @@ module.exports = {
     damageMax: 4,
     life: 6,
     initiative: 50,
-    movement: 19,
+    movement: 4,
     maneuver: 2
   },
 
@@ -21,7 +21,7 @@ module.exports = {
     damageMax: 5,
     life: 4,
     initiative: 60,
-    movement: 20,
+    movement: 5,
     maneuver: 2
   },
 
@@ -31,7 +31,7 @@ module.exports = {
     damageMax: 20,
     life: 6,
     initiative: 30,
-    movement: 18,
+    movement: 3,
     maneuver: 2
   },
 
@@ -41,7 +41,7 @@ module.exports = {
     damageMax: 4,
     life: 6,
     initiative: 35,
-    movement: 21,
+    movement: 6,
     maneuver: 2
   },
 
@@ -51,7 +51,7 @@ module.exports = {
     damageMax: 4,
     life: 6,
     initiative: 62,
-    movement: 21,
+    movement: 6,
     maneuver: 2
   },
 
@@ -61,7 +61,7 @@ module.exports = {
     damageMax: 4,
     life: 6,
     initiative: 42,
-    movement: 18,
+    movement: 3,
     maneuver: 2
   }
 };
