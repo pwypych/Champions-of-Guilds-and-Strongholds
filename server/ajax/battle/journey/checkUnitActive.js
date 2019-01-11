@@ -12,7 +12,7 @@ module.exports = () => {
       const entities = res.locals.entities;
       const unit = entities[res.locals.unitId];
 
-      debug('init: unit:', unit);
+      debug('init: unit.unitName:', unit.unitName);
       isUnitActive(unit);
     })();
 
