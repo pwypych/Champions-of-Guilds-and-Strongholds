@@ -109,8 +109,9 @@ g.battle.battleRender = (
 
   function toolActiveUnitMarker(x, y) {
     const activeUnitMarker = new PIXI.Graphics();
-    const color = 0x7f996a;
-    activeUnitMarker.beginFill(color);
+    const color = 0x60b450;
+    const alpha = 0.5;
+    activeUnitMarker.beginFill(color, alpha);
     const width = 32;
     const height = 32;
     activeUnitMarker.drawRect(x, y - 32, width, height); // - 32 because of sprite anchor

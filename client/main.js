@@ -63,5 +63,6 @@ g.main = function main() {
     g.world.endTurnCountdown(walkie, freshEntities);
 
     g.battle.battleRender(walkie, auth, viewport, freshEntities, spriteBucket);
+    g.battle.battleClick(walkie, auth, viewport, freshEntities);
   }
 };

@@ -4,7 +4,7 @@
 
 // What does this module do?
 // It listens to mouse click events, generates path through library and sends path events
-g.world.battleClick = (walkie, auth, viewport, freshEntities) => {
+g.battle.battleClick = (walkie, auth, viewport, freshEntities) => {
   let lastPathPositionX;
   let lastPathPositionY;
 
@@ -44,34 +44,44 @@ g.world.battleClick = (walkie, auth, viewport, freshEntities) => {
     findUnitPosition(click, playerId);
   }
 
-  // must have current unit selected in battle entity
   function findUnitPosition(click, playerId) {
     const entities = freshEntities();
 
-    let hero;
-    let heroId;
+    let unit;
+    let unitId;
     _.forEach(entities, (entity, id) => {
       if (
-        entity.figure === 'heroHuman' &&
+        entity.unitName &&
         entity.owner === playerId &&
-        entity.position
+        entity.position &&
+        entity.active
       ) {
-        hero = entity;
-        heroId = id;
+        unit = entity;
+        unitId = id;
       }
     });
 
-    const heroPositon = {};
-    heroPositon.x = parseInt(hero.position.x, 10);
-    heroPositon.y = parseInt(hero.position.y, 10);
+    if (!unit) {
+      console.log('Error: Current player not controlling the active unit');
+      return;
+    }
 
-    generatePathArray(click, heroPositon, heroId);
+    const unitPositon = {};
+    unitPositon.x = parseInt(unit.position.x, 10);
+    unitPositon.y = parseInt(unit.position.y, 10);
+
+    generatePathArray(click, unitPositon, unitId);
   }
 
-  function generatePathArray(click, heroPositon, heroId) {
-    const gameEntity = freshEntities()[freshEntities()._id];
-    const width = gameEntity.mapData.width;
-    const height = gameEntity.mapData.height;
+  function generatePathArray(click, unitPositon, unitId) {
+    let battleEntity;
+    _.forEach(freshEntities(), (entity) => {
+      if (entity.battleStatus === 'active') {
+        battleEntity = entity;
+      }
+    });
+    const width = battleEntity.battleWidth;
+    const height = battleEntity.battleHeight;
 
     const grid = new PF.Grid(width, height);
 
@@ -84,8 +94,8 @@ g.world.battleClick = (walkie, auth, viewport, freshEntities) => {
     const finder = new PF.AStarFinder({ allowDiagonal: true });
 
     const pathArrayOfArrays = finder.findPath(
-      heroPositon.x,
-      heroPositon.y,
+      unitPositon.x,
+      unitPositon.y,
       click.x,
       click.y,
       grid
@@ -95,10 +105,10 @@ g.world.battleClick = (walkie, auth, viewport, freshEntities) => {
       return { x: path[0], y: path[1] };
     });
 
-    triggerEvents(pathArray, click, heroId);
+    triggerEvents(pathArray, click, unitId);
   }
 
-  function triggerEvents(pathArray, click, heroId) {
+  function triggerEvents(pathArray, click, unitId) {
     console.log('lastPathPositionX', lastPathPositionX);
     console.log('lastPathPositionY', lastPathPositionY);
     console.log('click', click);
@@ -110,8 +120,8 @@ g.world.battleClick = (walkie, auth, viewport, freshEntities) => {
       if (lastPathPositionX === click.x && lastPathPositionY === click.y) {
         lastPathPositionX = undefined;
         lastPathPositionY = undefined;
-        walkie.triggerEvent('pathAccepted_', 'battleClick.js', {
-          heroId: heroId,
+        walkie.triggerEvent('unitPathAccepted_', 'battleClick.js', {
+          unitId: unitId,
           pathArray: pathArray
         });
         return;
@@ -127,12 +137,12 @@ g.world.battleClick = (walkie, auth, viewport, freshEntities) => {
     }
 
     if (!_.isEmpty(pathArray) && pathArray.length > 1) {
-      walkie.triggerEvent('pathCalculated_', 'battleClick.js', {
-        heroId: heroId,
+      walkie.triggerEvent('unitPathCalculated_', 'battleClick.js', {
+        unitId: unitId,
         pathArray: pathArray
       });
     } else {
-      walkie.triggerEvent('pathImpossible_', 'battleClick.js');
+      walkie.triggerEvent('unitPathImpossible_', 'battleClick.js');
     }
   }
 };
