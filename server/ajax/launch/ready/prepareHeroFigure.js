@@ -42,7 +42,6 @@ module.exports = (db) => {
         const hero = {};
         hero.owner = player.id;
         hero.figure = 'heroHuman';
-        hero.existsInState = 'worldState';
 
         hero.position = {};
         hero.position.x = castleRandomArray[index].position.x;

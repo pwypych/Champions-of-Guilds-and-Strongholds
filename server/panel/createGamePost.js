@@ -146,7 +146,6 @@ module.exports = (environment, db, figureManagerTree) => {
           // Add unique id to each figure instance
           const id = figureName + '_figure__' + shortid.generate();
           entity.position = { x: x, y: y };
-          entity.existsInState = 'worldState';
 
           entities[id] = entity;
         });
