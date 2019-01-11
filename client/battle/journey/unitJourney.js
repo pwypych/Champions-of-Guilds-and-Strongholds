@@ -3,10 +3,10 @@
 'use strict';
 
 // What does this module do
-// It listens to heroPathAccepted_ events, converts to journey and posts it to server
-g.world.heroJourney = (walkie, auth) => {
+// It listens to unitPathAccepted_ events, converts to journey and posts it to server
+g.battle.unitJourney = (walkie, auth) => {
   let journeyQueuedToSend;
-  let heroIdQueuedToSend;
+  let unitIdQueuedToSend;
 
   (function init() {
     onPathAccepted();
@@ -14,17 +14,17 @@ g.world.heroJourney = (walkie, auth) => {
   })();
 
   function onPathAccepted() {
-    walkie.onEvent('heroPathAccepted_', 'heroJourney.js', (data) => {
+    walkie.onEvent('unitPathAccepted_', 'unitJourney.js', (data) => {
       const pathArray = data.pathArray;
-      const heroId = data.heroId;
+      const unitId = data.unitId;
 
       $('body').css('cursor', 'wait');
 
-      convertPathToJourney(pathArray, heroId);
+      convertPathToJourney(pathArray, unitId);
     });
   }
 
-  function convertPathToJourney(pathArray, heroId) {
+  function convertPathToJourney(pathArray, unitId) {
     const journey = [];
     pathArray.forEach((pointFrom, index) => {
       if (index === pathArray.length - 1) {
@@ -42,29 +42,29 @@ g.world.heroJourney = (walkie, auth) => {
     });
 
     journeyQueuedToSend = journey;
-    heroIdQueuedToSend = heroId;
+    unitIdQueuedToSend = unitId;
   }
 
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
-      'heroJourney.js',
+      'unitJourney.js',
       () => {
-        if (journeyQueuedToSend && heroIdQueuedToSend) {
-          sendRequest(journeyQueuedToSend, heroIdQueuedToSend);
+        if (journeyQueuedToSend && unitIdQueuedToSend) {
+          sendRequest(journeyQueuedToSend, unitIdQueuedToSend);
         }
       },
       false
     );
   }
 
-  function sendRequest(journey, heroId) {
+  function sendRequest(journey, unitId) {
     journeyQueuedToSend = undefined;
-    heroIdQueuedToSend = undefined;
+    unitIdQueuedToSend = undefined;
 
-    const data = { heroJourney: journey, heroId: heroId };
-    $.post('/ajax/world/journey/heroJourneyPost' + auth.uri, data, () => {
-      console.log('heroJourney.js: POST heroJourneyPost');
+    const data = { unitJourney: journey, unitId: unitId };
+    $.post('/ajax/battle/journey/unitJourneyPost' + auth.uri, data, () => {
+      console.log('unitJourney.js: POST unitJourneyPost');
 
       setTimeout(() => {
         $('body').css('cursor', 'default');

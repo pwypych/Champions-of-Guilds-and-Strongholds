@@ -64,5 +64,7 @@ g.main = function main() {
 
     g.battle.battleRender(walkie, auth, viewport, freshEntities, spriteBucket);
     g.battle.battleClick(walkie, auth, viewport, freshEntities);
+    g.battle.unitPath(walkie, auth, viewport);
+    g.battle.unitJourney(walkie, auth);
   }
 };
