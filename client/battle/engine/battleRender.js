@@ -85,6 +85,7 @@ g.battle.battleRender = (
   function instantiateSprites(entity, id) {
     const texture = PIXI.loader.resources[entity.unitName].texture;
     const sprite = new PIXI.Sprite(texture);
+    const container = new PIXI.Container();
 
     sprite.anchor = { x: 0, y: 1 };
 
@@ -96,8 +97,24 @@ g.battle.battleRender = (
       sprite.y += entity.spriteOffset.y;
     }
 
-    viewport.addChild(sprite);
-    spriteBucket[id] = sprite;
+    if (entity.active) {
+      const shadow = toolInstantiateShadow(sprite.x, sprite.y);
+      container.addChild(shadow);
+    }
+
+    container.addChild(sprite);
+    viewport.addChild(container);
+    spriteBucket[id] = container;
+  }
+
+  function toolInstantiateShadow(x, y) {
+    const shadow = new PIXI.Graphics();
+    const color = 0x7f996a;
+    shadow.beginFill(color);
+    const width = 32;
+    const height = 32;
+    shadow.drawRect(x, y - 32, width, height); // - 32 because of sprite anchor
+    return shadow;
   }
 
   function triggerRenderDone() {
