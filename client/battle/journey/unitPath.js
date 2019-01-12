@@ -4,9 +4,10 @@
 
 // What does this module do?
 // It listens to path events, and renders path accordingly
-g.battle.unitPath = (walkie, auth, viewport) => {
+g.battle.unitPath = (walkie, auth, viewport, freshEntities) => {
   let pathArray;
   let gPathArray = [];
+  let unitId;
 
   const blockWidthPx = 32;
   const blockHeightPx = 32;
@@ -22,7 +23,8 @@ g.battle.unitPath = (walkie, auth, viewport) => {
     walkie.onEvent('unitPathCalculated_', 'unitPath.js', (data) => {
       toolRemoveOldPath();
       pathArray = data.pathArray;
-      forEachPosition();
+      unitId = data.unitId;
+      findUnitMovement();
     });
   }
 
@@ -44,7 +46,7 @@ g.battle.unitPath = (walkie, auth, viewport) => {
       'unitPath.js',
       () => {
         if (!_.isEmpty(pathArray)) {
-          forEachPosition();
+          findUnitMovement();
         }
       },
       false
@@ -58,36 +60,89 @@ g.battle.unitPath = (walkie, auth, viewport) => {
 
     pathArray = [];
     gPathArray = [];
+    unitId = undefined;
   }
 
-  function forEachPosition() {
+  function findUnitMovement() {
+    const unitEntity = freshEntities()[unitId];
+    const movement = unitEntity.unitStats.current.movement;
+
+    forEachPosition(movement);
+  }
+
+  function forEachPosition(movement) {
     pathArray.forEach((fromPosition, index) => {
       if (pathArray.length === index + 1) {
         return;
       }
 
+      let isFirst = false;
+      if (index === 0) {
+        isFirst = true;
+      }
+
+      let isInRange = true;
+      if (index + 1 > movement) {
+        isInRange = false;
+      }
+
+      let isLast = false;
+      // path always one longer than step count
+      if (index === pathArray.length - 2) {
+        isLast = true;
+      }
+
       const toPosition = pathArray[index + 1];
 
-      // console.log('fromPosition', fromPosition);
-      // console.log('toPosition', toPosition);
-
-      drawPath(fromPosition, toPosition);
+      drawPath(fromPosition, toPosition, isFirst, isInRange, isLast);
     });
   }
 
-  function drawPath(fromPosition, toPosition) {
-    const fromX = fromPosition.x * blockWidthPx + 16;
-    const fromY = fromPosition.y * blockHeightPx + 16;
+  function drawPath(fromPosition, toPosition, isFirst, isInRange, isLast) {
+    let fromX = fromPosition.x * blockWidthPx + 16;
+    let fromY = fromPosition.y * blockHeightPx + 16;
     const toX = toPosition.x * blockWidthPx + 16;
     const toY = toPosition.y * blockHeightPx + 16;
+
+    if (isFirst) {
+      // begin line from side of the unit not from center
+      fromX -= Math.floor((fromX - toX) / 2);
+      fromY -= Math.floor((fromY - toY) / 2);
+    }
 
     const path = new PIXI.tween.TweenPath();
     path.moveTo(fromX, fromY).lineTo(toX, toY);
 
     const gPath = new PIXI.Graphics();
-    gPath.lineStyle(4, 0x60b450, 0.5);
+
+    if (isInRange) {
+      gPath.lineStyle(4, 0x93bd8b, 1); // green
+    } else {
+      gPath.lineStyle(4, 0xa7a7a7, 1); // gray
+    }
+
     gPath.drawPath(path);
     gPathArray.push(gPath);
     viewport.addChild(gPath);
+
+    if (isLast) {
+      drawArrowHead(toX, toY, isInRange);
+    }
+  }
+
+  function drawArrowHead(x, y, isInRange) {
+    const gCircle = new PIXI.Graphics();
+    gCircle.lineStyle(0);
+
+    if (isInRange) {
+      gCircle.beginFill(0x93bd8b, 1); // green
+    } else {
+      gCircle.beginFill(0xa7a7a7, 1); // gray
+    }
+
+    gCircle.drawCircle(x, y, 7);
+    gCircle.endFill();
+    gPathArray.push(gCircle);
+    viewport.addChild(gCircle);
   }
 };
