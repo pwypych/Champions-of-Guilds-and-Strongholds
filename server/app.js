@@ -254,6 +254,9 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     db,
     updateUnitPosition
   );
+  const decrementUnitManeuver = require('./ajax/battle/maneuver/libraries/decremeantUnitManeuver.js')(
+    db
+  );
   app.post(
     '/ajax/battle/journey/unitJourneyPost',
     require('./library/readEntities.js')(db),
@@ -262,9 +265,12 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/battle/journey/unitJourneyPost.js')(),
     require('./ajax/battle/maneuver/checkers/checkUnitOwner.js')(),
     require('./ajax/battle/maneuver/checkers/checkUnitActive.js')(),
-    require('./ajax/battle/maneuver/checkers/checkUnitManeuver.js')(),
+    require('./ajax/battle/maneuver/checkers/checkUnitManeuverGreatherThenZero.js')(),
     require('./ajax/battle/journey/processUnitJourney.js')(db, decideUnitStep),
-    require('./ajax/battle/maneuver/decremeantUnitManeuver.js')(db)
+    require('./ajax/battle/maneuver/digestFinishedManeuver.js')(
+      db,
+      decrementUnitManeuver
+    )
   );
 
   debug('setupLibrariesAndRoutes()');
