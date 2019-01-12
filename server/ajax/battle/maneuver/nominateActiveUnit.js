@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:nominateActiveUnit');
 const _ = require('lodash');
 
 // What does this module do?
-// Middleware, nominate unit that will start next battle round
+// Middleware, that marks unit as active, it marks unit with highest initiative that has some maneuvers left
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
