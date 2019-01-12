@@ -129,7 +129,6 @@ function setupFigureManagerTree() {
 function setupLibrariesAndRoutes(figureManagerTree) {
   // libraries
   const templateToHtml = require('./library/templateToHtml.js')();
-  const unitStats = require('./ajax/battle/create/unitStats.js');
 
   // general endpoints
   app.get('/', (req, res) => {
@@ -231,6 +230,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/world/journey/heroJourneyCancelPost.js')(db)
   );
 
+  const unitStats = require('./ajax/world/endTurn/unitStats.js');
   app.post(
     '/ajax/world/endTurn/endTurnPost',
     require('./library/readEntities.js')(db),
@@ -240,7 +240,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/world/endTurn/zeroHeroMovementPoints.js')(db),
     require('./ajax/world/endTurn/endTurnCountdown.js')(db),
     require('./ajax/world/endTurn/battleChecker.js')(db),
-    require('./ajax/battle/create/createBattle.js')(db, unitStats),
+    require('./ajax/world/endTurn/createBattle.js')(db, unitStats),
     require('./ajax/world/endTurn/newDay.js')(db),
     require('./ajax/world/endTurn/refillHeroMovement.js')(db),
     require('./ajax/world/endTurn/unsetEndTurnFlags.js')(db)
@@ -260,9 +260,9 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     require('./ajax/battle/journey/unitJourneyPost.js')(),
-    require('./ajax/battle/journey/checkUnitOwner.js')(),
-    require('./ajax/battle/journey/checkUnitActive.js')(),
-    require('./ajax/battle/journey/checkUnitManeuver.js')(),
+    require('./ajax/battle/maneuver/checkUnitOwner.js')(),
+    require('./ajax/battle/maneuver/checkUnitActive.js')(),
+    require('./ajax/battle/maneuver/checkUnitManeuver.js')(),
     require('./ajax/battle/journey/processUnitJourney.js')(db, decideUnitStep),
     require('./ajax/battle/maneuver/decremeantUnitManeuver.js')(db)
   );
