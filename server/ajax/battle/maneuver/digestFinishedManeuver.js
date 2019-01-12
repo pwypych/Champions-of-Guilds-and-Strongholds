@@ -6,18 +6,22 @@ const debug = require('debug')('cogs:digestFinishedManeuver.js');
 
 // What does this module do?
 // Middleware, expects unitId and unitJourney in res.locals, flags unitBegingMoved and processes each step
-module.exports = (db, decrementUnitManeuver, checkUnitManeuverIsZero) => {
-  return (req, res, next) => {
+module.exports = (
+  db,
+  decrementUnitManeuver,
+  checkUnitManeuverIsZero,
+  checkEveryUnitManeuverIsZero,
+  refillEveryUnitManeuver,
+  nominateNewActiveUnit
+) => {
+  return (req, res) => {
     (function init() {
       const ctx = {};
       const entities = res.locals.entities;
       ctx.gameId = entities._id;
-      ctx.playerId = res.locals.playerId;
-      ctx.unitJourney = res.locals.unitJourney;
       ctx.unitId = res.locals.unitId;
-      ctx.unit = entities[ctx.unitId];
 
-      debug('init: ctx.unit.unitName:', ctx.unit.unitName);
+      debug('init: ctx.gameId:', ctx.gameId);
       runDecrementUnitManuver(ctx);
     })();
 
@@ -29,7 +33,6 @@ module.exports = (db, decrementUnitManeuver, checkUnitManeuverIsZero) => {
           debug('runDecrementUnitManuver: error:', error);
         }
 
-        // go to checkUnitManeuverZero lib
         runCheckUnitManeuverIsZero(ctx);
       });
     }
@@ -37,13 +40,61 @@ module.exports = (db, decrementUnitManeuver, checkUnitManeuverIsZero) => {
     function runCheckUnitManeuverIsZero(ctx) {
       const gameId = ctx.gameId;
       const unitId = ctx.unitId;
-      checkUnitManeuverIsZero(gameId, unitId, (error) => {
+
+      checkUnitManeuverIsZero(gameId, unitId, (error, isZero) => {
         if (error) {
           debug('runCheckUnitManeuverIsZero: error:', error);
         }
 
-        // go to checkUnitManeuverZero lib
-        runCheckUnitManeuverIsZero(ctx);
+        if (!isZero) {
+          debug('checkUnitManeuverIsZero: isZero:', isZero);
+          return;
+        }
+
+        debug('checkUnitManeuverIsZero: isZero:', isZero);
+        runCheckEveryUnitManeuverIsZero(ctx);
+      });
+    }
+
+    function runCheckEveryUnitManeuverIsZero(ctx) {
+      const gameId = ctx.gameId;
+
+      checkEveryUnitManeuverIsZero(gameId, (error, isZero) => {
+        if (error) {
+          debug('runCheckEveryUnitManeuverIsZero: error:', error);
+        }
+
+        if (isZero) {
+          debug('runCheckEveryUnitManeuverIsZero: isZero:', isZero);
+          runRefillEveryUnitManeuver(ctx);
+          return;
+        }
+
+        debug('runCheckEveryUnitManeuverIsZero: isZero:', isZero);
+        runNominateNewActiveUnit(ctx);
+      });
+    }
+
+    function runRefillEveryUnitManeuver(ctx) {
+      const gameId = ctx.gameId;
+
+      refillEveryUnitManeuver(gameId, (error) => {
+        if (error) {
+          debug('runCheckEveryUnitManeuverIsZero: error:', error);
+        }
+
+        runNominateNewActiveUnit(ctx);
+      });
+    }
+
+    function runNominateNewActiveUnit(ctx) {
+      const gameId = ctx.gameId;
+      const unitId = ctx.unitId;
+
+      nominateNewActiveUnit(gameId, unitId, (error) => {
+        if (error) {
+          debug('runCheckEveryUnitManeuverIsZero: error:', error);
+        }
       });
     }
   };

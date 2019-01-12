@@ -38,15 +38,24 @@ module.exports = (db) => {
         }
       });
 
+      debug('findUnitEntity: unit.unitName', unit.unitName);
       isUnitManeuverZero(unit);
     }
 
     function isUnitManeuverZero(unit) {
       if (unit.unitStats.current.maneuver < 1) {
+        debug(
+          'isUnitManeuverZero: unit.unitStats.current.maneuver',
+          unit.unitStats.current.maneuver
+        );
         callback(null, true);
         return;
       }
 
+      debug(
+        'isUnitManeuverZero: unit.unitStats.current.maneuver',
+        unit.unitStats.current.maneuver
+      );
       callback(null, false);
     }
   };
