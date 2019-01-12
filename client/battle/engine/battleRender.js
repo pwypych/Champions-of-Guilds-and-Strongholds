@@ -27,16 +27,25 @@ g.battle.battleRender = (
           return;
         }
 
-        setViewportDimentions();
+        findBattleEntity();
       },
       false
     );
   }
 
-  // battle map is 15 x 20
-  function setViewportDimentions() {
-    viewport.worldWidth = 20 * blockWidthPx;
-    viewport.worldHeight = 15 * blockHeightPx;
+  function findBattleEntity() {
+    let battleEntity;
+    _.forEach(freshEntities(), (entity) => {
+      if (entity.battleStatus === 'active') {
+        battleEntity = entity;
+      }
+    });
+
+    setViewportDimentions(battleEntity);
+  }
+  function setViewportDimentions(battleEntity) {
+    viewport.worldWidth = battleEntity.battleWidth * blockWidthPx;
+    viewport.worldHeight = battleEntity.battleHeight * blockHeightPx;
 
     removeViewportChildren();
   }
@@ -68,6 +77,45 @@ g.battle.battleRender = (
     background.drawRect(x, y, width, height);
 
     viewport.addChild(background);
+
+    drawGrid();
+  }
+
+  function drawGrid() {
+    const width = viewport.worldWidth / blockWidthPx;
+    const height = viewport.worldHeight / blockHeightPx;
+
+    _.times(width, (index) => {
+      if (index === 0) {
+        return;
+      }
+
+      const fromX = index * blockWidthPx;
+      const fromY = 0;
+      const toX = index * blockWidthPx;
+      const toY = viewport.worldHeight;
+
+      const line = new PIXI.Graphics();
+      line.lineStyle(1, 0x777777, 0.5);
+      line.moveTo(fromX, fromY).lineTo(toX, toY);
+      viewport.addChild(line);
+    });
+
+    _.times(height, (index) => {
+      if (index === 0) {
+        return;
+      }
+
+      const fromX = 0;
+      const fromY = index * blockHeightPx;
+      const toX = viewport.worldWidth;
+      const toY = index * blockHeightPx;
+
+      const line = new PIXI.Graphics();
+      line.lineStyle(1, 0x777777, 0.5);
+      line.moveTo(fromX, fromY).lineTo(toX, toY);
+      viewport.addChild(line);
+    });
 
     forEachFigure();
   }
