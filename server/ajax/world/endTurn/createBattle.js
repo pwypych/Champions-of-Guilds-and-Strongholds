@@ -121,6 +121,27 @@ module.exports = (db, unitStats) => {
       });
 
       debug('generateUnits: units:', _.size(units));
+      generateObsticles(entities, units, attackerId, defenderId, battleId);
+    }
+
+    function generateObsticles(
+      entities,
+      units,
+      attackerId,
+      defenderId,
+      battleId
+    ) {
+      const obsticle = [{ x: 2, y: 7 }, { x: 2, y: 8 }];
+
+      _.forEach(obsticle, (position) => {
+        const unit = {};
+        const id = 'workbench_unit__' + shortId.generate();
+        unit.unitName = 'workbench';
+        unit.collision = true;
+        unit.position = position;
+        units[id] = unit;
+      });
+
       changeOwnerToPlayer(entities, units, attackerId, defenderId, battleId);
     }
 

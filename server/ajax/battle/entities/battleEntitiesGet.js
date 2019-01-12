@@ -47,7 +47,7 @@ module.exports = () => {
         }
 
         // Unit entities
-        if (entity.unitStats) {
+        if (entity.unitName) {
           battleEntities[id] = entity;
         }
 
