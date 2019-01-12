@@ -254,17 +254,39 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     db,
     updateUnitPosition
   );
+  const decrementUnitManeuver = require('./ajax/battle/maneuver/libraries/decrementUnitManeuver.js')(
+    db
+  );
+  const checkUnitManeuverIsZero = require('./ajax/battle/maneuver/libraries/checkUnitManeuverIsZero.js')(
+    db
+  );
+  const checkEveryUnitManeuverIsZero = require('./ajax/battle/maneuver/libraries/checkEveryUnitManeuverIsZero.js')(
+    db
+  );
+  const refillEveryUnitManeuver = require('./ajax/battle/maneuver/libraries/refillEveryUnitManeuver.js')(
+    db
+  );
+  const nominateNewActiveUnit = require('./ajax/battle/maneuver/libraries/nominateNewActiveUnit.js')(
+    db
+  );
   app.post(
     '/ajax/battle/journey/unitJourneyPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     require('./ajax/battle/journey/unitJourneyPost.js')(),
-    require('./ajax/battle/maneuver/checkUnitOwner.js')(),
-    require('./ajax/battle/maneuver/checkUnitActive.js')(),
-    require('./ajax/battle/maneuver/checkUnitManeuver.js')(),
+    require('./ajax/battle/maneuver/checkers/checkUnitOwner.js')(),
+    require('./ajax/battle/maneuver/checkers/checkUnitActive.js')(),
+    require('./ajax/battle/maneuver/checkers/checkUnitManeuverGreatherThenZero.js')(),
     require('./ajax/battle/journey/processUnitJourney.js')(db, decideUnitStep),
-    require('./ajax/battle/maneuver/decremeantUnitManeuver.js')(db)
+    require('./ajax/battle/maneuver/digestFinishedManeuver.js')(
+      db,
+      decrementUnitManeuver,
+      checkUnitManeuverIsZero,
+      checkEveryUnitManeuverIsZero,
+      refillEveryUnitManeuver,
+      nominateNewActiveUnit
+    )
   );
 
   debug('setupLibrariesAndRoutes()');

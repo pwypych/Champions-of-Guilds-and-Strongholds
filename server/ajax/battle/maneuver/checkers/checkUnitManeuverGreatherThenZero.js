@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:checkUnitManeuver');
+const debug = require('debug')('cogs:checkUnitManeuverGreatherThenZero');
 
 // What does this module do?
 // Middleware, check whether unit have any maneuvers left

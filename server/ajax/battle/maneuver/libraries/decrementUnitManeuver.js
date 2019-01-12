@@ -2,22 +2,19 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:decremeantUnitManeuver');
+const debug = require('debug')('cogs:decrementUnitManeuver');
 
 // What does this module do?
-// Middleware, decremeant unti maneuver by 1
+// Library that works on callback, decremeant unti maneuver by 1
 module.exports = (db) => {
-  return (req, res, next) => {
+  return (gameId, unitId, callback) => {
     (function init() {
-      const gameId = res.locals.gameId;
-      const unitId = res.locals.unitId;
-
       debug('init: gameId:', gameId);
       debug('init: unitId:', unitId);
-      updateUnitManeuver(gameId, unitId);
+      updateUnitManeuver();
     })();
 
-    function updateUnitManeuver(gameId, unitId) {
+    function updateUnitManeuver() {
       const query = { _id: gameId };
 
       const field = unitId + '.unitStats.current.maneuver';
@@ -34,11 +31,12 @@ module.exports = (db) => {
         (error) => {
           if (error) {
             debug('updateUnitManeuver: error: ', error);
+            callback(error);
             return;
           }
 
-          debug('updateUnitManeuver');
-          next();
+          debug('updateUnitManeuver: Success!');
+          callback(null);
         }
       );
     }
