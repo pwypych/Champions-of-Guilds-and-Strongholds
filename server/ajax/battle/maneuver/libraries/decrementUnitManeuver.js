@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:decremeantUnitManeuver');
+const debug = require('debug')('cogs:decrementUnitManeuver');
 
 // What does this module do?
 // Library that works on callback, decremeant unti maneuver by 1

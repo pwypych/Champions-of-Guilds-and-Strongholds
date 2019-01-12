@@ -254,6 +254,9 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     db,
     updateUnitPosition
   );
+  const decrementUnitManeuver = require('./ajax/battle/maneuver/libraries/decrementUnitManeuver.js')(
+    db
+  );
   const decrementUnitManeuver = require('./ajax/battle/maneuver/libraries/decremeantUnitManeuver.js')(
     db
   );

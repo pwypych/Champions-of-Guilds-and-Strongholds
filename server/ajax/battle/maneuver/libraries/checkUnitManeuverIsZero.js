@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:checkUnitManeuverIsZero');
 const _ = require('lodash');
 
 // What does this module do?
-// Library that works on callback, decremeant unti maneuver by 1
+// Library that works on callback, it check is unit.unitStats.current.maneuver is zero
 module.exports = (db) => {
   return (gameId, unitId, callback) => {
     (function init() {
