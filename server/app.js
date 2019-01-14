@@ -190,6 +190,9 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   // worldState endpoints
+  //
+  const findEntitiesByGameId = require('./library/findEntitiesByGameId.js')(db);
+  //
   app.get(
     '/ajax/world/load/spriteFilenameArray',
     require('./library/readEntities.js')(db),
@@ -261,7 +264,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     db
   );
   const checkEveryUnitManeuverIsZero = require('./ajax/battle/maneuver/libraries/checkEveryUnitManeuverIsZero.js')(
-    db
+    db,
+    findEntitiesByGameId
   );
   const refillEveryUnitManeuver = require('./ajax/battle/maneuver/libraries/refillEveryUnitManeuver.js')(
     db
