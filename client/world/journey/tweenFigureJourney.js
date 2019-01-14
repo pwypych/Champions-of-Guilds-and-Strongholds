@@ -123,11 +123,6 @@ g.world.tweenFigureJourney = (
   }
 
   function tweenFigureToNewPosition(tweenPath, sprite, journeyLength) {
-    const gPath = new PIXI.Graphics();
-    gPath.lineStyle(1, 0xffffff, 1);
-    gPath.drawPath(tweenPath);
-    // viewport.addChild(gPath);
-
     const tween = PIXI.tweenManager.createTween(sprite);
     tween.path = tweenPath;
     tween.time = 250 * 60 * journeyLength;
