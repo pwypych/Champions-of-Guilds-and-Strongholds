@@ -7,26 +7,18 @@ const _ = require('lodash');
 
 // What does this module do?
 // Library that works on callback, check every unit in battle maneuver is equal zero
-module.exports = (db) => {
+module.exports = (db, findEntitiesByGameId) => {
   return (gameId, callback) => {
     (function init() {
       debug('init: gameId:', gameId);
-      findGameById();
+      runFindEntitiesByGameId();
     })();
 
-    function findGameById() {
-      const query = { _id: gameId };
-      const options = {};
-
-      db.collection('gameCollection').findOne(
-        query,
-        options,
-        (error, entities) => {
-          debug('findGameById: error: ', error);
-          debug('findGameById', entities._id);
-          checkEveryUnitManeuverComponent(entities);
-        }
-      );
+    function runFindEntitiesByGameId() {
+      findEntitiesByGameId(gameId, (error, entities) => {
+        debug('runFindEntitiesByGameId: entities._id:', entities._id);
+        checkEveryUnitManeuverComponent(entities);
+      });
     }
 
     function checkEveryUnitManeuverComponent(entities) {
