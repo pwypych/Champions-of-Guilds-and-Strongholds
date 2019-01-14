@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:processUnitJourney');
+const debug = require('debug')('cogs:processUnitJourneyEveryStep');
 const async = require('async');
 
 // What does this module do?
