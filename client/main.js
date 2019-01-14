@@ -48,13 +48,8 @@ g.main = function main() {
     g.world.informationModal($body, walkie, freshEntities);
     g.world.chat($body, walkie);
     g.world.worldRender(walkie, auth, viewport, freshEntities, spriteBucket);
-    g.world.positionChanges(walkie, freshEntities);
-    g.world.figurePositionChanged(
-      walkie,
-      viewport,
-      freshEntities,
-      spriteBucket
-    );
+    g.world.figurePositionChange(walkie, freshEntities);
+    g.world.tweenFigureJourney(walkie, viewport, freshEntities, spriteBucket);
     g.world.keyboard(walkie, auth, freshEntities);
     g.world.worldClick(walkie, auth, viewport, freshEntities);
     g.world.heroPath(walkie, auth, viewport);

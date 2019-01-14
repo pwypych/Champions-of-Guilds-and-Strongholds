@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.world.figurePositionChanged = (
+g.world.tweenFigureJourney = (
   walkie,
   viewport,
   freshEntities,
@@ -18,7 +18,7 @@ g.world.figurePositionChanged = (
   function onFigurePositionChanged() {
     walkie.onEvent(
       'figurePositionChanged_',
-      'figurePositionChanged.js',
+      'tweenFigureJourney.js',
       (data) => {
         const figureId = data.figureId;
         const fromPosition = data.fromPosition;
@@ -83,7 +83,7 @@ g.world.figurePositionChanged = (
   function findSpriteAndSpriteOffset(journey, figureId) {
     const sprite = spriteBucket[figureId];
     if (!sprite) {
-      console.log('figurePositionChanged: ERROR, cannot find sprite');
+      console.log('tweenFigureJourney: ERROR, cannot find sprite');
       return;
     }
 
