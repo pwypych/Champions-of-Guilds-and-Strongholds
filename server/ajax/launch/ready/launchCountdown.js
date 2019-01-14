@@ -19,7 +19,7 @@ module.exports = (db) => {
       debug('fireCountdown');
       setTimeout(() => {
         updateGameState(gameId);
-      }, 5000);
+      }, 1000); // @temp should be 5s
     }
 
     function updateGameState(gameId) {
