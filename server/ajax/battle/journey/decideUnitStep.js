@@ -49,8 +49,15 @@ module.exports = (db, updateUnitPosition) => {
     }
 
     function checkIsUnitWishedPositionPossible(entities) {
-      const mapWidth = 20;
-      const mapHeight = 15;
+      let mapWidth;
+      let mapHeight;
+
+      _.forEach(entities, (entity) => {
+        if (entity.battleStatus === 'active') {
+          mapWidth = entity.battleWidth;
+          mapHeight = entity.battleHeight;
+        }
+      });
 
       debug(
         'checkIsUnitWishedPositionPossible: wishedUnitStep.toY',
