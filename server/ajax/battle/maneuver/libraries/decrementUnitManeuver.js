@@ -31,8 +31,6 @@ module.exports = (db) => {
         (error) => {
           if (error) {
             debug('updateUnitManeuver: error: ', error);
-            callback(error);
-            return;
           }
 
           debug('updateUnitManeuver: Success!');
