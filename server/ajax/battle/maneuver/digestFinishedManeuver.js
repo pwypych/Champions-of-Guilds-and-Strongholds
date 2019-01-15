@@ -5,7 +5,7 @@
 const debug = require('debug')('cogs:digestFinishedManeuver.js');
 
 // What does this module do?
-// Middleware, expects unitId and unitJourney in res.locals, flags unitBegingMoved and processes each step
+// Middleware that runs after unit makes sucessfull maneuver. Some processing need to be done: f. ex. decrementing maneuver, refilling it, nominating new active unit
 module.exports = (
   db,
   decrementUnitManeuver,

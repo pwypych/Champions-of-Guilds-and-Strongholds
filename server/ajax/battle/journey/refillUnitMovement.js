@@ -5,7 +5,7 @@
 const debug = require('debug')('cogs:refillUnitMovement');
 
 // What does this module do?
-// Middleware, set unit current movement to bese value
+// Middleware, set unit current movement to its base value
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
@@ -39,7 +39,7 @@ module.exports = (db) => {
             return;
           }
 
-          debug('updateSetUnitCurrentMovemenToBase: Success');
+          debug('updateSetUnitCurrentMovemenToBase: Success!');
           next();
         }
       );
