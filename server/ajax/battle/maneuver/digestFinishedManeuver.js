@@ -21,11 +21,13 @@ module.exports = (
       const unitId = res.locals.unitId;
 
       debug('init: gameId:', gameId);
+      debug('init: unitId:', unitId);
       runDecrementUnitManuver(gameId, unitId);
     })();
 
     function runDecrementUnitManuver(gameId, unitId) {
       decrementUnitManeuver(gameId, unitId, () => {
+        debug('runDecrementUnitManuver: Success!');
         runCheckUnitManeuverIsZero(gameId, unitId);
       });
     }
@@ -33,11 +35,11 @@ module.exports = (
     function runCheckUnitManeuverIsZero(gameId, unitId) {
       checkUnitManeuverIsZero(gameId, unitId, (error, isZero) => {
         if (!isZero) {
-          debug('checkUnitManeuverIsZero: isZero:', isZero);
+          debug('runCheckUnitManeuverIsZero: isZero:', isZero);
           return;
         }
 
-        debug('checkUnitManeuverIsZero: isZero:', isZero);
+        debug('runCheckUnitManeuverIsZero: isZero:', isZero);
         runCheckEveryUnitManeuverIsZero(gameId, unitId);
       });
     }
@@ -57,12 +59,15 @@ module.exports = (
 
     function runRefillEveryUnitManeuver(gameId, unitId) {
       refillEveryUnitManeuver(gameId, () => {
+        debug('runRefillEveryUnitManeuver: Success!');
         runNominateNewActiveUnit(gameId, unitId);
       });
     }
 
     function runNominateNewActiveUnit(gameId, unitId) {
-      nominateNewActiveUnit(gameId, unitId, () => {});
+      nominateNewActiveUnit(gameId, unitId, () => {
+        debug('runNominateNewActiveUnit: Success!');
+      });
     }
   };
 };
