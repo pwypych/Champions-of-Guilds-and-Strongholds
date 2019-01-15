@@ -211,6 +211,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
   const decideHeroStep = require('./ajax/world/journey/decideHeroStep.js')(
     db,
+    findEntitiesByGameId,
     updateHeroPosition,
     collectResource,
     prepareHeroForBattle
@@ -255,7 +256,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
   const decideUnitStep = require('./ajax/battle/journey/decideUnitStep.js')(
     db,
-    updateUnitPosition
+    updateUnitPosition,
+    findEntitiesByGameId
   );
   const decrementUnitManeuver = require('./ajax/battle/maneuver/libraries/decrementUnitManeuver.js')(
     db

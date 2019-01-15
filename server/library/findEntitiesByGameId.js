@@ -5,7 +5,7 @@
 const debug = require('debug')('cogs:findEntitiesByGameId');
 
 // What does this module do?
-// Library that works on callback, it returns all entities for wished gameId
+// Library that works on callback, it returns all entities for given gameId
 module.exports = (db) => {
   return (gameId, callback) => {
     (function init() {

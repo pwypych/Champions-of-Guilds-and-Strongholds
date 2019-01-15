@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:unitJourneyPost');
 const validator = require('validator');
 
 // What does this module do?
-// Endpoint, accepts wished unit journey for a unit, initial verifies, sends responce and passes to next
+// Endpoint, accepts wished unit journey for a unit, initial verifies, sends response and passes to next
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
@@ -52,7 +52,7 @@ module.exports = () => {
       }
       res.locals.unitJourney = unitJourney;
 
-      debug('checkRequestBodyUnitJourney: req.body', req.body);
+      debug('checkRequestBodyUnitJourney: unitJourney', unitJourney);
       checkRequestBodyUnitId();
     }
 

@@ -18,7 +18,7 @@ module.exports = (db, decideUnitStep) => {
       ctx.unitId = res.locals.unitId;
       ctx.unit = entities[ctx.unitId];
 
-      debug('init: ctx.unit.unitName:', ctx.unit.unitName);
+      debug('init: ctx.unitId:', ctx.unitId);
       checkIsProcessingUnitJourney(ctx);
     })();
 
@@ -26,26 +26,26 @@ module.exports = (db, decideUnitStep) => {
       const unit = ctx.unit;
 
       if (unit.processingJourneyUntilTimestamp > Date.now()) {
-        debug('checkIsProcessingUnitJourney: Yes');
+        debug('checkIsProcessingUnitJourney: Yes!');
         return;
       }
 
-      forEachWishedUnitJourney(ctx);
+      forEachUnitJourney(ctx);
     }
 
-    function forEachWishedUnitJourney(ctx) {
+    function forEachUnitJourney(ctx) {
       const unitJourney = ctx.unitJourney;
       async.eachSeries(
         unitJourney,
         (wishedUnitStep, done) => {
-          debug('forEachWishedUnitJourney: Start one iteration!');
+          debug('forEachUnitJourney: Start one iteration!');
           ctx.done = done;
           ctx.wishedUnitStep = wishedUnitStep;
           setProcessingJourneyUntilTimestamp(ctx);
         },
         (error) => {
-          debug('forEachWishedUnitJourney: error:', error);
-          debug('forEachWishedUnitJourney: Done!');
+          debug('forEachUnitJourney: error:', error);
+          debug('forEachUnitJourney: Done!');
           debug('******************** async job done ********************');
           unsetProcessingJourneyUntilTimestamp(ctx);
         }
@@ -59,8 +59,9 @@ module.exports = (db, decideUnitStep) => {
       const query = { _id: gameId };
       const field = unitId + '.processingJourneyUntilTimestamp';
       const $set = {};
-      // 250 ms unit move speed + 100ms security margin for processing
-      $set[field] = Date.now() + 250 + 100;
+      const unitMoveSpeed = 250; // ms
+      const securityMargin = 100; // ms
+      $set[field] = Date.now() + unitMoveSpeed + securityMargin;
       const update = { $set: $set };
       const options = {};
 

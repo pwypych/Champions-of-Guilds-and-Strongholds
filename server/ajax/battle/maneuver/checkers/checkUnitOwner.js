@@ -5,7 +5,7 @@
 const debug = require('debug')('cogs:checkUnitOwner');
 
 // What does this module do?
-// Middleware, compare unit owner component with playerId
+// Middleware, check if player sending request is owner of unit
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
@@ -14,7 +14,7 @@ module.exports = () => {
       const unit = entities[res.locals.unitId];
 
       debug('init: playerId:', playerId);
-      debug('init: unit.unitName:', unit.unitName);
+      debug('init: unitId:', res.locals.unitId);
       checkUnitOwner(unit, playerId);
     })();
 
@@ -29,7 +29,7 @@ module.exports = () => {
         return;
       }
 
-      debug('checkUnitOwner: unit.owner:', unit.owner);
+      debug('checkUnitOwner: Yes!');
       next();
     }
   };

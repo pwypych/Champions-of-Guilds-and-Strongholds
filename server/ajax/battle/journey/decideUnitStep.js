@@ -8,27 +8,19 @@ const _ = require('lodash');
 // What does this module do?
 // Library that works on callback. It decides what to do with wished unit step.
 // Is step possible? Decide what will happen!
-module.exports = (db, updateUnitPosition) => {
+module.exports = (db, updateUnitPosition, findEntitiesByGameId) => {
   return (gameId, playerId, unitId, wishedUnitStep, callback) => {
     (function init() {
       debug('init');
-      findGameById();
+      runFindEntitiesByGameId();
     })();
 
-    // cannot use entities injected above, because unit position changes in db for each step
-    function findGameById() {
-      const query = { _id: gameId };
-      const options = {};
-
-      db.collection('gameCollection').findOne(
-        query,
-        options,
-        (error, entities) => {
-          debug('findGameById: error: ', error);
-          debug('findGameById', entities._id);
-          checkUnitMovementPoints(entities);
-        }
-      );
+    // cannot use entities used in middleware, because unit position changes in db for each step
+    function runFindEntitiesByGameId() {
+      findEntitiesByGameId(gameId, (error, entities) => {
+        debug('runFindEntitiesByGameId: entities._id:', entities._id);
+        checkUnitMovementPoints(entities);
+      });
     }
 
     function checkUnitMovementPoints(entities) {
@@ -49,13 +41,13 @@ module.exports = (db, updateUnitPosition) => {
     }
 
     function checkIsUnitWishedPositionPossible(entities) {
-      let mapWidth;
-      let mapHeight;
+      let battleWidth;
+      let battleHeight;
 
       _.forEach(entities, (entity) => {
         if (entity.battleStatus === 'active') {
-          mapWidth = entity.battleWidth;
-          mapHeight = entity.battleHeight;
+          battleWidth = entity.battleWidth;
+          battleHeight = entity.battleHeight;
         }
       });
 
@@ -67,9 +59,9 @@ module.exports = (db, updateUnitPosition) => {
       );
       if (
         wishedUnitStep.toY < 0 ||
-        wishedUnitStep.toY > mapHeight - 1 ||
+        wishedUnitStep.toY > battleHeight - 1 ||
         wishedUnitStep.toX < 0 ||
-        wishedUnitStep.toX > mapWidth - 1
+        wishedUnitStep.toX > battleWidth - 1
       ) {
         let message = 'Map position not found: toY, toX: ';
         message += wishedUnitStep.toY;
@@ -134,7 +126,7 @@ module.exports = (db, updateUnitPosition) => {
       let isWishedPositionCollidable = false;
 
       _.forEach(entities, (entity) => {
-        if (entity.figure && entity.unitName) {
+        if (entity.unitName) {
           if (
             entity.position.x === wishedUnitStep.toX &&
             entity.position.y === wishedUnitStep.toY

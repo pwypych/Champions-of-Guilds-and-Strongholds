@@ -5,12 +5,11 @@
 const debug = require('debug')('cogs:updateUnitPosition');
 
 // What does this module do?
-// Library that works on callback. It update unit position and decrement unitStats.current.movement
+// Library that works on callback. It updates unit position and decrements unit movement
 module.exports = (db) => {
   return (gameId, unitId, position, callback) => {
     (function init() {
       debug('init');
-
       waitBefore();
     })();
 

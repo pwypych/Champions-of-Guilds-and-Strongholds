@@ -10,6 +10,7 @@ const _ = require('lodash');
 // Is step possible? Decide what will happen!
 module.exports = (
   db,
+  findEntitiesByGameId,
   updateHeroPosition,
   collectResource,
   prepareHeroForBattle
@@ -17,23 +18,15 @@ module.exports = (
   return (gameId, playerId, heroId, wishedHeroStep, callback) => {
     (function init() {
       debug('init');
-      findGameById();
+      runFindEntitiesByGameId();
     })();
 
     // cannot use entities injected above, because hero position changes in db for each step
-    function findGameById() {
-      const query = { _id: gameId };
-      const options = {};
-
-      db.collection('gameCollection').findOne(
-        query,
-        options,
-        (error, entities) => {
-          debug('findGameById: error: ', error);
-          debug('findGameById', entities._id);
-          checkHeroMovementPoints(entities);
-        }
-      );
+    function runFindEntitiesByGameId() {
+      findEntitiesByGameId(gameId, (error, entities) => {
+        debug('runFindEntitiesByGameId: entities._id:', entities._id);
+        checkHeroMovementPoints(entities);
+      });
     }
 
     function checkHeroMovementPoints(entities) {
