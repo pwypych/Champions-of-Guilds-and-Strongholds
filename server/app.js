@@ -279,11 +279,11 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     findEntitiesByGameId
   );
   app.post(
-    '/ajax/battle/journey/unitJourneyPost',
+    '/ajax/battle/journey/maneuverJourneyPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
-    require('./ajax/battle/journey/unitJourneyPost.js')(),
+    require('./ajax/battle/journey/maneuverJourneyPost.js')(),
     require('./ajax/battle/maneuver/checkers/checkUnitOwner.js')(),
     require('./ajax/battle/maneuver/checkers/checkUnitActive.js')(),
     require('./ajax/battle/maneuver/checkers/checkUnitManeuverGreatherThenZero.js')(),

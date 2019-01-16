@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:unitJourneyPost');
+const debug = require('debug')('cogs:maneuverJourneyPost');
 const validator = require('validator');
 
 // What does this module do?
