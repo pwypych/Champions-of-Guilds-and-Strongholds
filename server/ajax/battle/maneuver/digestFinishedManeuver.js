@@ -9,8 +9,8 @@ const debug = require('debug')('cogs:digestFinishedManeuver.js');
 module.exports = (
   db,
   decrementUnitManeuver,
-  checkUnitManeuverIsZero,
-  checkEveryUnitManeuverIsZero,
+  checkIsUnitManeuverZero,
+  checkIsEveryUnitManeuverZero,
   refillEveryUnitManeuver,
   nominateNewActiveUnit
 ) => {
@@ -28,36 +28,34 @@ module.exports = (
     function runDecrementUnitManuver(gameId, unitId) {
       decrementUnitManeuver(gameId, unitId, () => {
         debug('runDecrementUnitManuver: Success!');
-        runCheckUnitManeuverIsZero(gameId, unitId);
+        runCheckIsUnitManeuverZero(gameId, unitId);
       });
     }
 
-    // checkIsUnitManeuverZero
-    function runCheckUnitManeuverIsZero(gameId, unitId) {
-      checkUnitManeuverIsZero(gameId, unitId, (error, isUnitManeuverZero) => {
+    function runCheckIsUnitManeuverZero(gameId, unitId) {
+      checkIsUnitManeuverZero(gameId, unitId, (error, isUnitManeuverZero) => {
         if (isUnitManeuverZero) {
           debug(
-            'runCheckUnitManeuverIsZero: isUnitManeuverZero:',
+            'runCheckIsUnitManeuverZero: isUnitManeuverZero:',
             isUnitManeuverZero
           );
-          runCheckEveryUnitManeuverIsZero(gameId, unitId);
+          runCheckIsEveryUnitManeuverZero(gameId, unitId);
           return;
         }
 
         debug(
-          'runCheckUnitManeuverIsZero: isUnitManeuverZero:',
+          'runCheckIsUnitManeuverZero: isUnitManeuverZero:',
           isUnitManeuverZero
         );
         // finish digest here unit has still some maneuvers left
       });
     }
 
-    // checkIsEveryUnitManeuverZero
-    function runCheckEveryUnitManeuverIsZero(gameId, unitId) {
-      checkEveryUnitManeuverIsZero(gameId, (error, isEveryUnitManeuverZero) => {
+    function runCheckIsEveryUnitManeuverZero(gameId, unitId) {
+      checkIsEveryUnitManeuverZero(gameId, (error, isEveryUnitManeuverZero) => {
         if (isEveryUnitManeuverZero) {
           debug(
-            'runCheckEveryUnitManeuverIsZero: isEveryUnitManeuverZero:',
+            'runCheckIsEveryUnitManeuverZero: isEveryUnitManeuverZero:',
             isEveryUnitManeuverZero
           );
           runRefillEveryUnitManeuver(gameId, unitId);
@@ -65,7 +63,7 @@ module.exports = (
         }
 
         debug(
-          'runCheckEveryUnitManeuverIsZero: isEveryUnitManeuverZero:',
+          'runCheckIsEveryUnitManeuverZero: isEveryUnitManeuverZero:',
           isEveryUnitManeuverZero
         );
         runNominateNewActiveUnit(gameId, unitId);

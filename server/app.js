@@ -262,38 +262,38 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   const decrementUnitManeuver = require('./ajax/battle/maneuver/libraries/decrementUnitManeuver.js')(
     db
   );
-  const checkUnitManeuverIsZero = require('./ajax/battle/maneuver/libraries/checkUnitManeuverIsZero.js')(
-    db
+  const checkIsUnitManeuverZero = require('./ajax/battle/maneuver/libraries/checkIsUnitManeuverZero.js')(
+    db,
+    findEntitiesByGameId
   );
-  const checkEveryUnitManeuverIsZero = require('./ajax/battle/maneuver/libraries/checkEveryUnitManeuverIsZero.js')(
+  const checkIsEveryUnitManeuverZero = require('./ajax/battle/maneuver/libraries/checkIsEveryUnitManeuverZero.js')(
     db,
     findEntitiesByGameId
   );
   const refillEveryUnitManeuver = require('./ajax/battle/maneuver/libraries/refillEveryUnitManeuver.js')(
-    db
+    db,
+    findEntitiesByGameId
   );
   const nominateNewActiveUnit = require('./ajax/battle/maneuver/libraries/nominateNewActiveUnit.js')(
-    db
+    db,
+    findEntitiesByGameId
   );
   app.post(
-    '/ajax/battle/journey/unitJourneyPost',
+    '/ajax/battle/journey/maneuverJourneyPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
-    require('./ajax/battle/journey/unitJourneyPost.js')(),
+    require('./ajax/battle/journey/maneuverJourneyPost.js')(),
     require('./ajax/battle/maneuver/checkers/checkUnitOwner.js')(),
     require('./ajax/battle/maneuver/checkers/checkUnitActive.js')(),
     require('./ajax/battle/maneuver/checkers/checkUnitManeuverGreatherThenZero.js')(),
-    require('./ajax/battle/journey/processUnitJourneyEveryStep.js')(
-      db,
-      decideUnitStep
-    ),
+    require('./ajax/battle/journey/maneuverJourney.js')(db, decideUnitStep),
     require('./ajax/battle/journey/refillUnitMovement.js')(db),
     require('./ajax/battle/maneuver/digestFinishedManeuver.js')(
       db,
       decrementUnitManeuver,
-      checkUnitManeuverIsZero,
-      checkEveryUnitManeuverIsZero,
+      checkIsUnitManeuverZero,
+      checkIsEveryUnitManeuverZero,
       refillEveryUnitManeuver,
       nominateNewActiveUnit
     )

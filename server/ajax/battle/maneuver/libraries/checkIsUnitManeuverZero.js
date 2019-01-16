@@ -2,32 +2,24 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:checkUnitManeuverIsZero');
+const debug = require('debug')('cogs:checkIsUnitManeuverZero');
 const _ = require('lodash');
 
 // What does this module do?
 // If unit has no maneuvers left it returns true, if unit does have maneuvers it returns false
-module.exports = (db) => {
+module.exports = (db, findEntitiesByGameId) => {
   return (gameId, unitId, callback) => {
     (function init() {
       debug('init: gameId:', gameId);
       debug('init: unitId:', unitId);
-      findGameById();
+      runFindEntitiesByGameId();
     })();
 
-    function findGameById() {
-      const query = { _id: gameId };
-      const options = {};
-
-      db.collection('gameCollection').findOne(
-        query,
-        options,
-        (error, entities) => {
-          debug('findGameById: error: ', error);
-          debug('findGameById', entities._id);
-          findUnitEntity(entities);
-        }
-      );
+    function runFindEntitiesByGameId() {
+      findEntitiesByGameId(gameId, (error, entities) => {
+        debug('runFindEntitiesByGameId: entities._id:', entities._id);
+        findUnitEntity(entities);
+      });
     }
 
     function findUnitEntity(entities) {
