@@ -5,7 +5,7 @@
 const debug = require('debug')('cogs:decrementUnitManeuver');
 
 // What does this module do?
-// Library that works on callback, decremeant unti maneuver by 1
+// Decrements maneuver in unitStats by 1
 module.exports = (db) => {
   return (gameId, unitId, callback) => {
     (function init() {
@@ -29,10 +29,7 @@ module.exports = (db) => {
         update,
         options,
         (error) => {
-          if (error) {
-            debug('updateUnitManeuver: error: ', error);
-          }
-
+          debug('updateUnitManeuver: error: ', error);
           debug('updateUnitManeuver: Success!');
           callback(null);
         }

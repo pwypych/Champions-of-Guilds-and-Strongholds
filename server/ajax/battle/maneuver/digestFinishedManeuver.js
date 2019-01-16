@@ -32,27 +32,42 @@ module.exports = (
       });
     }
 
+    // checkIsUnitManeuverZero
     function runCheckUnitManeuverIsZero(gameId, unitId) {
-      checkUnitManeuverIsZero(gameId, unitId, (error, isZero) => {
-        if (!isZero) {
-          debug('runCheckUnitManeuverIsZero: isZero:', isZero);
+      checkUnitManeuverIsZero(gameId, unitId, (error, isUnitManeuverZero) => {
+        if (isUnitManeuverZero) {
+          debug(
+            'runCheckUnitManeuverIsZero: isUnitManeuverZero:',
+            isUnitManeuverZero
+          );
+          runCheckEveryUnitManeuverIsZero(gameId, unitId);
           return;
         }
 
-        debug('runCheckUnitManeuverIsZero: isZero:', isZero);
-        runCheckEveryUnitManeuverIsZero(gameId, unitId);
+        debug(
+          'runCheckUnitManeuverIsZero: isUnitManeuverZero:',
+          isUnitManeuverZero
+        );
+        // finish digest here unit has still some maneuvers left
       });
     }
 
+    // checkIsEveryUnitManeuverZero
     function runCheckEveryUnitManeuverIsZero(gameId, unitId) {
-      checkEveryUnitManeuverIsZero(gameId, (error, isZero) => {
-        if (isZero) {
-          debug('runCheckEveryUnitManeuverIsZero: isZero:', isZero);
+      checkEveryUnitManeuverIsZero(gameId, (error, isEveryUnitManeuverZero) => {
+        if (isEveryUnitManeuverZero) {
+          debug(
+            'runCheckEveryUnitManeuverIsZero: isEveryUnitManeuverZero:',
+            isEveryUnitManeuverZero
+          );
           runRefillEveryUnitManeuver(gameId, unitId);
           return;
         }
 
-        debug('runCheckEveryUnitManeuverIsZero: isZero:', isZero);
+        debug(
+          'runCheckEveryUnitManeuverIsZero: isEveryUnitManeuverZero:',
+          isEveryUnitManeuverZero
+        );
         runNominateNewActiveUnit(gameId, unitId);
       });
     }

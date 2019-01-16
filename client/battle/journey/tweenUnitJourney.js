@@ -125,19 +125,15 @@ g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, spriteBucket) => {
         fromYPixel
       );
 
-      console.log('spriteContainer', spriteContainer);
-      console.log('spriteBucket', spriteBucket);
-
       tweenPath.moveTo(fromXPixel, fromYPixel).lineTo(toXPixel, toYPixel);
     });
-
-    console.log('tweenPath', tweenPath);
 
     tweenUnitToNewPosition(tweenPath, spriteContainer, journeyLength);
   }
 
   function tweenUnitToNewPosition(tweenPath, spriteContainer, journeyLength) {
     _.forEach(spriteContainer.children, (sprite) => {
+      console.log('sprite', sprite);
       const tween = PIXI.tweenManager.createTween(sprite);
       tween.path = tweenPath;
       tween.time = 250 * 60 * journeyLength;

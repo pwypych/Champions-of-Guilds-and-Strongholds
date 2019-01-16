@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:checkEveryUnitManeuverIsZero');
 const _ = require('lodash');
 
 // What does this module do?
-// Library that works on callback, check every unit in battle maneuver is equal zero
+// If every unit in battle has no maneuvers left it returns true, if any unit does have maneuvers it returns false
 module.exports = (db, findEntitiesByGameId) => {
   return (gameId, callback) => {
     (function init() {
