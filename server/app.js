@@ -263,17 +263,20 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     db
   );
   const checkIsUnitManeuverZero = require('./ajax/battle/maneuver/libraries/checkIsUnitManeuverZero.js')(
-    db
+    db,
+    findEntitiesByGameId
   );
   const checkIsEveryUnitManeuverZero = require('./ajax/battle/maneuver/libraries/checkIsEveryUnitManeuverZero.js')(
     db,
     findEntitiesByGameId
   );
   const refillEveryUnitManeuver = require('./ajax/battle/maneuver/libraries/refillEveryUnitManeuver.js')(
-    db
+    db,
+    findEntitiesByGameId
   );
   const nominateNewActiveUnit = require('./ajax/battle/maneuver/libraries/nominateNewActiveUnit.js')(
-    db
+    db,
+    findEntitiesByGameId
   );
   app.post(
     '/ajax/battle/journey/unitJourneyPost',

@@ -7,7 +7,7 @@ const _ = require('lodash');
 
 // What does this module do?
 // Library that works on callback, it marks unit with highest initiative that has some maneuvers left
-module.exports = (db) => {
+module.exports = (db, findEntitiesByGameId) => {
   return (gameId, unitId, callback) => {
     (function init() {
       debug('init: gameId:', gameId);
@@ -34,24 +34,16 @@ module.exports = (db) => {
           }
 
           debug('updateUnitActivFalse: Success');
-          findGameById();
+          runFindEntitiesByGameId();
         }
       );
     }
 
-    function findGameById() {
-      const query = { _id: gameId };
-      const options = {};
-
-      db.collection('gameCollection').findOne(
-        query,
-        options,
-        (error, entities) => {
-          debug('findGameById: error: ', error);
-          debug('findGameById', entities._id);
-          findUnitWithHighestInitiative(entities);
-        }
-      );
+    function runFindEntitiesByGameId() {
+      findEntitiesByGameId(gameId, (error, entities) => {
+        debug('runFindEntitiesByGameId: entities._id:', entities._id);
+        findUnitWithHighestInitiative(entities);
+      });
     }
 
     function findUnitWithHighestInitiative(entities) {

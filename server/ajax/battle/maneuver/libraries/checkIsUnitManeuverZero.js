@@ -7,27 +7,19 @@ const _ = require('lodash');
 
 // What does this module do?
 // Library that works on callback, it check is unit.unitStats.current.maneuver is zero
-module.exports = (db) => {
+module.exports = (db, findEntitiesByGameId) => {
   return (gameId, unitId, callback) => {
     (function init() {
       debug('init: gameId:', gameId);
       debug('init: unitId:', unitId);
-      findGameById();
+      runFindEntitiesByGameId();
     })();
 
-    function findGameById() {
-      const query = { _id: gameId };
-      const options = {};
-
-      db.collection('gameCollection').findOne(
-        query,
-        options,
-        (error, entities) => {
-          debug('findGameById: error: ', error);
-          debug('findGameById', entities._id);
-          findUnitEntity(entities);
-        }
-      );
+    function runFindEntitiesByGameId() {
+      findEntitiesByGameId(gameId, (error, entities) => {
+        debug('runFindEntitiesByGameId: entities._id:', entities._id);
+        findUnitEntity(entities);
+      });
     }
 
     function findUnitEntity(entities) {
