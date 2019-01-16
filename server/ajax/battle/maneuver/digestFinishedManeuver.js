@@ -10,7 +10,7 @@ module.exports = (
   db,
   decrementUnitManeuver,
   checkIsUnitManeuverZero,
-  checkEveryUnitManeuverIsZero,
+  checkIsEveryUnitManeuverZero,
   refillEveryUnitManeuver,
   nominateNewActiveUnit
 ) => {
@@ -40,19 +40,19 @@ module.exports = (
         }
 
         debug('runCheckIsUnitManeuverZero: isZero:', isZero);
-        runCheckEveryUnitManeuverIsZero(gameId, unitId);
+        runCheckIsEveryUnitManeuverZero(gameId, unitId);
       });
     }
 
-    function runCheckEveryUnitManeuverIsZero(gameId, unitId) {
-      checkEveryUnitManeuverIsZero(gameId, (error, isZero) => {
+    function runCheckIsEveryUnitManeuverZero(gameId, unitId) {
+      checkIsEveryUnitManeuverZero(gameId, (error, isZero) => {
         if (isZero) {
-          debug('runCheckEveryUnitManeuverIsZero: isZero:', isZero);
+          debug('runCheckIsEveryUnitManeuverZero: isZero:', isZero);
           runRefillEveryUnitManeuver(gameId, unitId);
           return;
         }
 
-        debug('runCheckEveryUnitManeuverIsZero: isZero:', isZero);
+        debug('runCheckIsEveryUnitManeuverZero: isZero:', isZero);
         runNominateNewActiveUnit(gameId, unitId);
       });
     }

@@ -265,7 +265,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   const checkIsUnitManeuverZero = require('./ajax/battle/maneuver/libraries/checkIsUnitManeuverZero.js')(
     db
   );
-  const checkEveryUnitManeuverIsZero = require('./ajax/battle/maneuver/libraries/checkEveryUnitManeuverIsZero.js')(
+  const checkIsEveryUnitManeuverZero = require('./ajax/battle/maneuver/libraries/checkIsEveryUnitManeuverZero.js')(
     db,
     findEntitiesByGameId
   );
@@ -293,7 +293,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
       db,
       decrementUnitManeuver,
       checkIsUnitManeuverZero,
-      checkEveryUnitManeuverIsZero,
+      checkIsEveryUnitManeuverZero,
       refillEveryUnitManeuver,
       nominateNewActiveUnit
     )
