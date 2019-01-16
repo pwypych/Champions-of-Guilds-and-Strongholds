@@ -33,26 +33,38 @@ module.exports = (
     }
 
     function runCheckIsUnitManeuverZero(gameId, unitId) {
-      checkIsUnitManeuverZero(gameId, unitId, (error, isZero) => {
-        if (!isZero) {
-          debug('runCheckIsUnitManeuverZero: isZero:', isZero);
+      checkIsUnitManeuverZero(gameId, unitId, (error, isUnitManeuverZero) => {
+        if (isUnitManeuverZero) {
+          debug(
+            'runCheckIsUnitManeuverZero: isUnitManeuverZero:',
+            isUnitManeuverZero
+          );
+          runCheckIsEveryUnitManeuverZero(gameId, unitId);
           return;
         }
 
-        debug('runCheckIsUnitManeuverZero: isZero:', isZero);
-        runCheckIsEveryUnitManeuverZero(gameId, unitId);
+        debug(
+          'runCheckIsUnitManeuverZero: isUnitManeuverZero:',
+          isUnitManeuverZero
+        );
       });
     }
 
     function runCheckIsEveryUnitManeuverZero(gameId, unitId) {
-      checkIsEveryUnitManeuverZero(gameId, (error, isZero) => {
-        if (isZero) {
-          debug('runCheckIsEveryUnitManeuverZero: isZero:', isZero);
+      checkIsEveryUnitManeuverZero(gameId, (error, isEveryUnitManeuverZero) => {
+        if (isEveryUnitManeuverZero) {
+          debug(
+            'runCheckIsEveryUnitManeuverZero: isEveryUnitManeuverZero:',
+            isEveryUnitManeuverZero
+          );
           runRefillEveryUnitManeuver(gameId, unitId);
           return;
         }
 
-        debug('runCheckIsEveryUnitManeuverZero: isZero:', isZero);
+        debug(
+          'runCheckIsEveryUnitManeuverZero: isEveryUnitManeuverZero:',
+          isEveryUnitManeuverZero
+        );
         runNominateNewActiveUnit(gameId, unitId);
       });
     }
