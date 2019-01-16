@@ -287,10 +287,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/battle/maneuver/checkers/checkUnitOwner.js')(),
     require('./ajax/battle/maneuver/checkers/checkUnitActive.js')(),
     require('./ajax/battle/maneuver/checkers/checkUnitManeuverGreatherThenZero.js')(),
-    require('./ajax/battle/journey/processUnitJourneyEveryStep.js')(
-      db,
-      decideUnitStep
-    ),
+    require('./ajax/battle/journey/maneuverJourney.js')(db, decideUnitStep),
     require('./ajax/battle/journey/refillUnitMovement.js')(db),
     require('./ajax/battle/maneuver/digestFinishedManeuver.js')(
       db,
