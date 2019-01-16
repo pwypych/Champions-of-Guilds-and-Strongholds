@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:refillEveryUnitManeuver');
 const _ = require('lodash');
 
 // What does this module do?
-// Library that works on callback, check every unit in battle maneuver is equal zero
+// Refills every unit maneuver that is in current active battle. Used to run after every unit maneuver is zero to refill.
 module.exports = (db, findEntitiesByGameId) => {
   return (gameId, callback) => {
     (function init() {
@@ -17,11 +17,11 @@ module.exports = (db, findEntitiesByGameId) => {
     function runFindEntitiesByGameId() {
       findEntitiesByGameId(gameId, (error, entities) => {
         debug('runFindEntitiesByGameId: entities._id:', entities._id);
-        updateSetCurrentUnitManeuverToBase(entities);
+        updateSetEveryUnitCurrentManeuverToBase(entities);
       });
     }
 
-    function updateSetCurrentUnitManeuverToBase(entities) {
+    function updateSetEveryUnitCurrentManeuverToBase(entities) {
       const query = { _id: gameId };
       const $set = {};
       _.forEach(entities, (entity, id) => {
@@ -38,11 +38,8 @@ module.exports = (db, findEntitiesByGameId) => {
         update,
         options,
         (error) => {
-          if (error) {
-            debug('updateSetCurrentUnitManeuverToBase: error:', error);
-          }
-
-          debug('updateSetCurrentUnitManeuverToBase: Finished');
+          debug('updateSetEveryUnitCurrentManeuverToBase: error:', error);
+          debug('updateSetEveryUnitCurrentManeuverToBase: Finished');
           callback(null);
         }
       );

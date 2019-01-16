@@ -6,15 +6,15 @@ const debug = require('debug')('cogs:nominateNewActiveUnit.js');
 const _ = require('lodash');
 
 // What does this module do?
-// Library that works on callback, it marks unit with highest initiative that has some maneuvers left
+// It marks unit that just did maneuver as not active, finds unit with highest initiative that has some maneuvers left, and marks it with active component
 module.exports = (db, findEntitiesByGameId) => {
   return (gameId, unitId, callback) => {
     (function init() {
       debug('init: gameId:', gameId);
-      updateUnitActivFalse();
+      updateSetUnitActiveToFalse();
     })();
 
-    function updateUnitActivFalse() {
+    function updateSetUnitActiveToFalse() {
       const query = { _id: gameId };
       const $set = {};
 
@@ -29,11 +29,8 @@ module.exports = (db, findEntitiesByGameId) => {
         update,
         options,
         (error) => {
-          if (error) {
-            debug('updateUnitActivFalse: error:', error);
-          }
-
-          debug('updateUnitActivFalse: Success');
+          debug('updateSetUnitActiveToFalse: error:', error);
+          debug('updateSetUnitActiveToFalse: Success');
           runFindEntitiesByGameId();
         }
       );
@@ -55,18 +52,6 @@ module.exports = (db, findEntitiesByGameId) => {
           if (entity.unitStats.current.initiative > highestInitiative) {
             highestInitiative = entity.unitStats.current.initiative;
             nominatedUnitId = id;
-            debug(
-              'findUnitWithHighestInitiative: entity.unitName',
-              entity.unitName
-            );
-            debug(
-              'findUnitWithHighestInitiative: entity.unitStats.current.initiative',
-              entity.unitStats.current.initiative
-            );
-            debug(
-              'findUnitWithHighestInitiative: highestInitiative:',
-              highestInitiative
-            );
           }
         }
       });
@@ -76,10 +61,10 @@ module.exports = (db, findEntitiesByGameId) => {
         'findUnitWithHighestInitiative: highestInitiative:',
         highestInitiative
       );
-      updateUnitActive(nominatedUnitId);
+      updateSetUnitActiveToTrue(nominatedUnitId);
     }
 
-    function updateUnitActive(nominatedUnitId) {
+    function updateSetUnitActiveToTrue(nominatedUnitId) {
       const query = { _id: gameId };
       const $set = {};
       const field = nominatedUnitId + '.active';
@@ -92,12 +77,8 @@ module.exports = (db, findEntitiesByGameId) => {
         update,
         options,
         (error) => {
-          if (error) {
-            debug('updateUnitActive: error:', error);
-            return;
-          }
-
-          debug('updateUnitActive: nominatedUnitId:', nominatedUnitId);
+          debug('updateSetUnitActiveToTrue: error:', error);
+          debug('updateSetUnitActiveToTrue: nominatedUnitId:', nominatedUnitId);
           callback(null);
         }
       );
