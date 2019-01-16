@@ -9,7 +9,7 @@ const debug = require('debug')('cogs:digestFinishedManeuver.js');
 module.exports = (
   db,
   decrementUnitManeuver,
-  checkUnitManeuverIsZero,
+  checkIsUnitManeuverZero,
   checkEveryUnitManeuverIsZero,
   refillEveryUnitManeuver,
   nominateNewActiveUnit
@@ -28,18 +28,18 @@ module.exports = (
     function runDecrementUnitManuver(gameId, unitId) {
       decrementUnitManeuver(gameId, unitId, () => {
         debug('runDecrementUnitManuver: Success!');
-        runCheckUnitManeuverIsZero(gameId, unitId);
+        runCheckIsUnitManeuverZero(gameId, unitId);
       });
     }
 
-    function runCheckUnitManeuverIsZero(gameId, unitId) {
-      checkUnitManeuverIsZero(gameId, unitId, (error, isZero) => {
+    function runCheckIsUnitManeuverZero(gameId, unitId) {
+      checkIsUnitManeuverZero(gameId, unitId, (error, isZero) => {
         if (!isZero) {
-          debug('runCheckUnitManeuverIsZero: isZero:', isZero);
+          debug('runCheckIsUnitManeuverZero: isZero:', isZero);
           return;
         }
 
-        debug('runCheckUnitManeuverIsZero: isZero:', isZero);
+        debug('runCheckIsUnitManeuverZero: isZero:', isZero);
         runCheckEveryUnitManeuverIsZero(gameId, unitId);
       });
     }

@@ -262,7 +262,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   const decrementUnitManeuver = require('./ajax/battle/maneuver/libraries/decrementUnitManeuver.js')(
     db
   );
-  const checkUnitManeuverIsZero = require('./ajax/battle/maneuver/libraries/checkUnitManeuverIsZero.js')(
+  const checkIsUnitManeuverZero = require('./ajax/battle/maneuver/libraries/checkIsUnitManeuverZero.js')(
     db
   );
   const checkEveryUnitManeuverIsZero = require('./ajax/battle/maneuver/libraries/checkEveryUnitManeuverIsZero.js')(
@@ -292,7 +292,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/battle/maneuver/digestFinishedManeuver.js')(
       db,
       decrementUnitManeuver,
-      checkUnitManeuverIsZero,
+      checkIsUnitManeuverZero,
       checkEveryUnitManeuverIsZero,
       refillEveryUnitManeuver,
       nominateNewActiveUnit

@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:checkUnitManeuverIsZero');
+const debug = require('debug')('cogs:checkIsUnitManeuverZero');
 const _ = require('lodash');
 
 // What does this module do?
