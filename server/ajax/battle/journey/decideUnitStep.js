@@ -8,7 +8,12 @@ const _ = require('lodash');
 // What does this module do?
 // Library that works on callback. It decides what to do with wished unit step.
 // Is step possible? Decide what will happen!
-module.exports = (db, updateUnitPosition, findEntitiesByGameId) => {
+module.exports = (
+  db,
+  updateUnitPosition,
+  decrementUnitMovement,
+  findEntitiesByGameId
+) => {
   return (gameId, playerId, unitId, wishedUnitStep, callback) => {
     (function init() {
       debug('init');
@@ -155,7 +160,14 @@ module.exports = (db, updateUnitPosition, findEntitiesByGameId) => {
         return;
       }
 
-      moveUnitToNewPosition();
+      runDecrementUnitMovement();
+    }
+
+    function runDecrementUnitMovement() {
+      decrementUnitMovement(gameId, unitId, () => {
+        debug('runDecrementUnitMovement: Success!');
+        moveUnitToNewPosition();
+      });
     }
 
     function moveUnitToNewPosition() {
@@ -163,14 +175,8 @@ module.exports = (db, updateUnitPosition, findEntitiesByGameId) => {
       position.x = wishedUnitStep.toX;
       position.y = wishedUnitStep.toY;
 
-      updateUnitPosition(gameId, unitId, position, (error) => {
-        if (error) {
-          debug('moveUnitToNewPosition: error:', error);
-          callback(error);
-          return;
-        }
-
-        debug('moveUnitToNewPosition');
+      updateUnitPosition(gameId, unitId, position, () => {
+        debug('moveUnitToNewPosition: Success!');
         callback(null);
       });
     }

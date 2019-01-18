@@ -266,9 +266,13 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   const updateUnitPosition = require('./ajax/battle/journey/updateUnitPosition.js')(
     db
   );
+  const decrementUnitMovement = require('./ajax/battle/journey/decrementUnitMovement.js')(
+    db
+  );
   const decideUnitStep = require('./ajax/battle/journey/decideUnitStep.js')(
     db,
     updateUnitPosition,
+    decrementUnitMovement,
     findEntitiesByGameId
   );
   const refillUnitMovement = require('./ajax/battle/journey/refillUnitMovement.js')(
