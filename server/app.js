@@ -254,12 +254,25 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   // battleState endpoints
+  const checkUnitActive = require('./ajax/battle/maneuver/verify/checkUnitActive.js')(
+    findEntitiesByGameId
+  );
+  const checkUnitOwner = require('./ajax/battle/maneuver/verify/checkUnitOwner.js')(
+    findEntitiesByGameId
+  );
+  const checkUnitManeuverGreatherThenZero = require('./ajax/battle/maneuver/verify/checkUnitManeuverGreatherThenZero.js')(
+    findEntitiesByGameId
+  );
   const updateUnitPosition = require('./ajax/battle/journey/updateUnitPosition.js')(
     db
   );
   const decideUnitStep = require('./ajax/battle/journey/decideUnitStep.js')(
     db,
     updateUnitPosition,
+    findEntitiesByGameId
+  );
+  const refillUnitMovement = require('./ajax/battle/journey/refillUnitMovement.js')(
+    db,
     findEntitiesByGameId
   );
   const decrementUnitManeuver = require('./ajax/battle/maneuver/digest/decrementUnitManeuver.js')(
@@ -281,19 +294,17 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     db,
     findEntitiesByGameId
   );
-  const refillUnitMovement = require('./ajax/battle/journey/refillUnitMovement.js')(
-    db,
-    findEntitiesByGameId
-  );
   app.post(
     '/ajax/battle/journey/maneuverJourneyPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     require('./ajax/battle/journey/maneuverJourneyPost.js')(),
-    require('./ajax/battle/maneuver/verify/checkUnitOwner.js')(),
-    require('./ajax/battle/maneuver/verify/checkUnitActive.js')(),
-    require('./ajax/battle/maneuver/verify/checkUnitManeuverGreatherThenZero.js')(),
+    require('./ajax/battle/maneuver/verify/verifyManeuver.js')(
+      checkUnitOwner,
+      checkUnitActive,
+      checkUnitManeuverGreatherThenZero
+    ),
     require('./ajax/battle/journey/maneuverJourney.js')(
       db,
       decideUnitStep,

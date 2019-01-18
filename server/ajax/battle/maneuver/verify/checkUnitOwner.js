@@ -5,20 +5,25 @@
 const debug = require('debug')('cogs:checkUnitOwner');
 
 // What does this module do?
-// Middleware, check if player sending request is owner of unit
-module.exports = () => {
-  return (req, res, next) => {
+// Check if player sending request is owner of unit
+module.exports = (findEntitiesByGameId) => {
+  return (gameId, unitId, playerId, callback) => {
     (function init() {
-      const entities = res.locals.entities;
-      const playerId = res.locals.playerId;
-      const unit = entities[res.locals.unitId];
-
+      debug('init: gameId:', gameId);
+      debug('init: unitId:', unitId);
       debug('init: playerId:', playerId);
-      debug('init: unitId:', res.locals.unitId);
-      checkUnitOwner(unit, playerId);
+      runFindEntitiesByGameId();
     })();
 
-    function checkUnitOwner(unit, playerId) {
+    function runFindEntitiesByGameId() {
+      findEntitiesByGameId(gameId, (error, entities) => {
+        debug('runFindEntitiesByGameId: entities._id:', entities._id);
+        checkUnitOwner(entities);
+      });
+    }
+
+    function checkUnitOwner(entities) {
+      const unit = entities[unitId];
       if (unit.owner !== playerId) {
         debug(
           'checkUnitOwner: owner and playerId are different, unit.owner:',
@@ -26,11 +31,12 @@ module.exports = () => {
           'playerId',
           playerId
         );
+        callback(null, false);
         return;
       }
 
       debug('checkUnitOwner: Yes!');
-      next();
+      callback(null, true);
     }
   };
 };

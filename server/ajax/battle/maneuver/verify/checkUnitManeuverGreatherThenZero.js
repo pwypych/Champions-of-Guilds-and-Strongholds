@@ -6,22 +6,28 @@ const debug = require('debug')('cogs:checkUnitManeuverGreatherThenZero');
 
 // What does this module do?
 // Middleware, checks if unit have any maneuvers left
-module.exports = () => {
-  return (req, res, next) => {
+module.exports = (findEntitiesByGameId) => {
+  return (gameId, unitId, callback) => {
     (function init() {
-      const entities = res.locals.entities;
-      const unit = entities[res.locals.unitId];
-
-      debug('init: unitId:', res.locals.unitId);
-      checkUnitManeuverLeft(unit);
+      debug('init: unitId:', unitId);
+      runFindEntitiesByGameId();
     })();
 
-    function checkUnitManeuverLeft(unit) {
+    function runFindEntitiesByGameId() {
+      findEntitiesByGameId(gameId, (error, entities) => {
+        debug('runFindEntitiesByGameId: entities._id:', entities._id);
+        checkUnitManeuverLeft(entities);
+      });
+    }
+
+    function checkUnitManeuverLeft(entities) {
+      const unit = entities[unitId];
       if (unit.unitStats.current.maneuver < 1) {
         debug(
           'checkUnitManeuverLeft: No maneuver! - unit.unitStats.current.maneuver:',
           unit.unitStats.current.maneuver
         );
+        callback(null, false);
         return;
       }
 
@@ -29,7 +35,7 @@ module.exports = () => {
         'checkUnitManeuverLeft: unit.unitStats.current.maneuver:',
         unit.unitStats.current.maneuver
       );
-      next();
+      callback(null, true);
     }
   };
 };
