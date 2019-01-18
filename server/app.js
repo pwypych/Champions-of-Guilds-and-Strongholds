@@ -242,7 +242,10 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
     require('./ajax/world/endTurn/endTurnPost.js')(db),
     require('./ajax/world/endTurn/zeroHeroMovementPoints.js')(db),
-    require('./ajax/world/endTurn/endTurnCountdown.js')(db),
+    require('./ajax/world/endTurn/endTurnCountdown.js')(
+      db,
+      findEntitiesByGameId
+    ),
     require('./ajax/world/endTurn/battleChecker.js')(db),
     require('./ajax/world/endTurn/createBattle.js')(db, unitStats),
     require('./ajax/world/endTurn/newDay.js')(db),
