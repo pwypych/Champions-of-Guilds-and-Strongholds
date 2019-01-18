@@ -151,6 +151,34 @@ g.battle.battleRender = (
     }
 
     container.addChild(sprite);
+
+    renderAmount(entity, id, container);
+  }
+
+  function renderAmount(entity, id, container) {
+    const style = new PIXI.TextStyle({
+      fontFamily: 'Courier New',
+      fontSize: 12,
+      fontWeight: 'bolder',
+      fill: 'white',
+      strokeThickness: 2
+    });
+
+    const text = new PIXI.Text(entity.amount, style);
+    const paddingRight = 2;
+    const paddingTop = 3;
+    text.x =
+      entity.position.x * blockWidthPx +
+      blockWidthPx -
+      text.width +
+      paddingRight;
+    text.y =
+      entity.position.y * blockHeightPx +
+      blockHeightPx -
+      text.height +
+      paddingTop;
+
+    container.addChild(text);
     viewport.addChild(container);
     spriteBucket[id] = container;
   }
