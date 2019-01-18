@@ -110,9 +110,6 @@ g.battle.unitPath = (walkie, auth, viewport, freshEntities) => {
       fromY -= Math.floor((fromY - toY) / 2);
     }
 
-    const path = new PIXI.tween.TweenPath();
-    path.moveTo(fromX, fromY).lineTo(toX, toY);
-
     const gPath = new PIXI.Graphics();
 
     if (isInRange) {
@@ -121,7 +118,10 @@ g.battle.unitPath = (walkie, auth, viewport, freshEntities) => {
       gPath.lineStyle(4, 0xa7a7a7, 1); // gray
     }
 
-    gPath.drawPath(path);
+    gPath.moveTo(fromX, fromY);
+    gPath.lineTo(toX, toY);
+    gPath.endFill();
+
     gPathArray.push(gPath);
     viewport.addChild(gPath);
 

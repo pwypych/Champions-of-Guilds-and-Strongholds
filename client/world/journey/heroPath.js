@@ -4,7 +4,8 @@
 
 // What does this module do?
 // It listens to path events, and renders path accordingly
-g.world.heroPath = (walkie, auth, viewport) => {
+g.world.heroPath = (walkie, auth, viewport, freshEntities) => {
+  let heroId;
   let pathArray;
   let gPathArray = [];
 
@@ -22,7 +23,8 @@ g.world.heroPath = (walkie, auth, viewport) => {
     walkie.onEvent('heroPathCalculated_', 'heroPath.js', (data) => {
       toolRemoveOldPath();
       pathArray = data.pathArray;
-      forEachPosition();
+      heroId = data.heroId;
+      findHeroMovement();
     });
   }
 
@@ -44,7 +46,7 @@ g.world.heroPath = (walkie, auth, viewport) => {
       'heroPath.js',
       () => {
         if (!_.isEmpty(pathArray)) {
-          forEachPosition();
+          findHeroMovement();
         }
       },
       false
@@ -60,7 +62,12 @@ g.world.heroPath = (walkie, auth, viewport) => {
     gPathArray = [];
   }
 
-  function forEachPosition() {
+  function findHeroMovement() {
+    const movement = freshEntities()[heroId].heroStats.movement;
+    forEachPosition(movement);
+  }
+
+  function forEachPosition(movement) {
     pathArray.forEach((fromPosition, index) => {
       if (pathArray.length === index + 1) {
         return;
@@ -68,26 +75,74 @@ g.world.heroPath = (walkie, auth, viewport) => {
 
       const toPosition = pathArray[index + 1];
 
+      let isFirst = false;
+      if (index === 0) {
+        isFirst = true;
+      }
+
+      let isInRange = true;
+      if (index + 1 > movement) {
+        isInRange = false;
+      }
+
+      let isLast = false;
+      // path always one longer than step count
+      if (index === pathArray.length - 2) {
+        isLast = true;
+      }
+
       // console.log('fromPosition', fromPosition);
       // console.log('toPosition', toPosition);
 
-      drawPath(fromPosition, toPosition);
+      drawPath(fromPosition, toPosition, isFirst, isInRange, isLast);
     });
   }
 
-  function drawPath(fromPosition, toPosition) {
-    const fromX = fromPosition.x * blockWidthPx + 16;
-    const fromY = fromPosition.y * blockHeightPx + 16;
+  function drawPath(fromPosition, toPosition, isFirst, isInRange, isLast) {
+    let fromX = fromPosition.x * blockWidthPx + 16;
+    let fromY = fromPosition.y * blockHeightPx + 16;
     const toX = toPosition.x * blockWidthPx + 16;
     const toY = toPosition.y * blockHeightPx + 16;
 
-    const path = new PIXI.tween.TweenPath();
-    path.moveTo(fromX, fromY).lineTo(toX, toY);
+    if (isFirst) {
+      // begin line from side of the unit not from center
+      fromX -= Math.floor((fromX - toX) / 2);
+      fromY -= Math.floor((fromY - toY) / 2);
+    }
 
     const gPath = new PIXI.Graphics();
-    gPath.lineStyle(4, 0x60b450, 0.5);
-    gPath.drawPath(path);
+
+    if (isInRange) {
+      gPath.lineStyle(4, 0x93bd8b, 1); // green
+    } else {
+      gPath.lineStyle(4, 0xa7a7a7, 1); // gray
+    }
+
+    gPath.moveTo(fromX, fromY);
+    gPath.lineTo(toX, toY);
+    gPath.endFill();
+
     gPathArray.push(gPath);
     viewport.addChild(gPath);
+
+    if (isLast) {
+      drawArrowHead(toX, toY, isInRange);
+    }
+  }
+
+  function drawArrowHead(x, y, isInRange) {
+    const gCircle = new PIXI.Graphics();
+    gCircle.lineStyle(0);
+
+    if (isInRange) {
+      gCircle.beginFill(0x93bd8b, 1); // green
+    } else {
+      gCircle.beginFill(0xa7a7a7, 1); // gray
+    }
+
+    gCircle.drawCircle(x, y, 7);
+    gCircle.endFill();
+    gPathArray.push(gCircle);
+    viewport.addChild(gCircle);
   }
 };

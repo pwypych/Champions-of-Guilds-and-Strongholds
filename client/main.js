@@ -16,7 +16,7 @@ g.main = function main() {
   function setupPixi($body) {
     const app = g.setup.setupPixi($body);
     const viewport = g.setup.setupViewport(app);
-    g.setup.setupTween(app);
+    // g.setup.setupTween(app);
 
     const auth = g.setup.setupAuth();
 
@@ -52,7 +52,7 @@ g.main = function main() {
     g.world.tweenFigureJourney(walkie, viewport, freshEntities, spriteBucket);
     g.world.keyboard(walkie, auth, freshEntities);
     g.world.worldClick(walkie, auth, viewport, freshEntities);
-    g.world.heroPath(walkie, auth, viewport);
+    g.world.heroPath(walkie, auth, viewport, freshEntities);
     g.world.heroJourney(walkie, auth);
     g.world.endTurnButton($body, auth, walkie, freshEntities);
     g.world.endTurnCountdown(walkie, freshEntities);
