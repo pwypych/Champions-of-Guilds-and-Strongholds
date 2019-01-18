@@ -5,7 +5,7 @@
 const debug = require('debug')('cogs:updateUnitPosition');
 
 // What does this module do?
-// Library that works on callback. It updates unit position and decrements unit movement
+// Updates given unit position to new
 module.exports = (db) => {
   return (gameId, unitId, position, callback) => {
     (function init() {
@@ -29,11 +29,7 @@ module.exports = (db) => {
       $set[fieldUnitX] = position.x;
       $set[fieldUnitY] = position.y;
 
-      const fieldMovement = unitId + '.unitStats.current.movement';
-      const $inc = {};
-      $inc[fieldMovement] = -1;
-
-      const update = { $set: $set, $inc: $inc };
+      const update = { $set: $set };
       const options = {};
 
       db.collection('gameCollection').updateOne(
@@ -41,13 +37,8 @@ module.exports = (db) => {
         update,
         options,
         (error) => {
-          if (error) {
-            debug('ERROR: insert mongo error:', error);
-            callback('ERROR: insert mongo error');
-            return;
-          }
-
-          debug('updateUnitPosition');
+          debug('ERROR: insert mongo error:', error);
+          debug('updateUnitPosition: Success!');
           callback(null);
         }
       );

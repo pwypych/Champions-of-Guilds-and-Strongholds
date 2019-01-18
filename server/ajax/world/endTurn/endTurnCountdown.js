@@ -7,7 +7,7 @@ const _ = require('lodash');
 
 // What does this module do?
 // Middleware, check is endTurnCountdownStartedTimestamp flag, if no begin countdown
-module.exports = (db) => {
+module.exports = (db, findEntitiesByGameId) => {
   return (req, res, next) => {
     const timeBeforeTurnEnds = 30 * 1000; // ms
 
@@ -69,22 +69,15 @@ module.exports = (db) => {
       }, timeBeforeTurnEnds);
 
       interval = setInterval(() => {
-        readFreshEntities(timeout, interval, gameId);
+        runFindEntitiesByGameId(timeout, interval, gameId);
       }, 1000);
     }
 
-    function readFreshEntities(timeout, interval, gameId) {
-      const query = { _id: gameId };
-      const options = {};
-
-      db.collection('gameCollection').findOne(
-        query,
-        options,
-        (error, entities) => {
-          debug('readFreshEntities', entities._id);
-          checkEveryPlayerEndTurn(timeout, interval, entities);
-        }
-      );
+    function runFindEntitiesByGameId(timeout, interval, gameId) {
+      findEntitiesByGameId(gameId, (error, entities) => {
+        debug('runFindEntitiesByGameId: entities._id:', entities._id);
+        checkEveryPlayerEndTurn(timeout, interval, entities);
+      });
     }
 
     function checkEveryPlayerEndTurn(timeout, interval, entities) {
