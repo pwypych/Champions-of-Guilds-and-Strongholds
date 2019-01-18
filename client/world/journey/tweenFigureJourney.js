@@ -96,8 +96,7 @@ g.world.tweenFigureJourney = (
   }
 
   function generateTweenPath(journey, sprite, spriteOffset) {
-    const tweenPath = new PIXI.tween.TweenPath();
-    const journeyLength = journey.length;
+    const timeline = new TimelineMax();
 
     journey.forEach((step) => {
       const fromXPixel = step.fromX * blockWidthPx + spriteOffset.x;
@@ -107,26 +106,28 @@ g.world.tweenFigureJourney = (
       const toYPixel =
         step.toY * blockHeightPx + blockHeightPx + spriteOffset.y;
 
-      // console.log(
-      //   'end slide on pixel:',
-      //   toXPixel,
-      //   toYPixel,
-      //   ' currently on pixel:',
-      //   fromXPixel,
-      //   fromYPixel
-      // );
+      console.log(
+        'end slide on pixel:',
+        toXPixel,
+        toYPixel,
+        ' currently on pixel:',
+        fromXPixel,
+        fromYPixel,
+        ' sprite x, y:',
+        sprite.x,
+        sprite.y
+      );
 
-      tweenPath.moveTo(fromXPixel, fromYPixel).lineTo(toXPixel, toYPixel);
+      timeline.add(
+        TweenMax.fromTo(
+          sprite,
+          0.25,
+          { x: fromXPixel, y: fromYPixel },
+          { x: toXPixel, y: toYPixel }
+        )
+      );
     });
 
-    tweenFigureToNewPosition(tweenPath, sprite, journeyLength);
-  }
-
-  function tweenFigureToNewPosition(tweenPath, sprite, journeyLength) {
-    const tween = PIXI.tweenManager.createTween(sprite);
-    tween.path = tweenPath;
-    tween.time = 250 * 60 * journeyLength;
-    tween.loop = false;
-    tween.start();
+    timeline.play();
   }
 };
