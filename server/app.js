@@ -281,6 +281,10 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     db,
     findEntitiesByGameId
   );
+  const refillUnitMovement = require('./ajax/battle/journey/refillUnitMovement.js')(
+    db,
+    findEntitiesByGameId
+  );
   app.post(
     '/ajax/battle/journey/maneuverJourneyPost',
     require('./library/readEntities.js')(db),
@@ -290,8 +294,11 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/battle/maneuver/verify/checkUnitOwner.js')(),
     require('./ajax/battle/maneuver/verify/checkUnitActive.js')(),
     require('./ajax/battle/maneuver/verify/checkUnitManeuverGreatherThenZero.js')(),
-    require('./ajax/battle/journey/maneuverJourney.js')(db, decideUnitStep),
-    require('./ajax/battle/journey/refillUnitMovement.js')(db),
+    require('./ajax/battle/journey/maneuverJourney.js')(
+      db,
+      decideUnitStep,
+      refillUnitMovement
+    ),
     require('./ajax/battle/maneuver/digest/digestFinishedManeuver.js')(
       db,
       decrementUnitManeuver,

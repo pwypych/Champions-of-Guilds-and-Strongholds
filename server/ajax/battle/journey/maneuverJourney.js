@@ -7,7 +7,7 @@ const async = require('async');
 
 // What does this module do?
 // Middleware, expects unitId and unitJourney in res.locals, flags unitBegingMoved and processes each step
-module.exports = (db, decideUnitStep) => {
+module.exports = (db, decideUnitStep, refillUnitMovement) => {
   return (req, res, next) => {
     (function init() {
       const ctx = {};
@@ -112,9 +112,16 @@ module.exports = (db, decideUnitStep) => {
         options,
         (error) => {
           debug('unsetProcessingJourneyUntilTimestamp: Done! | error: ', error);
-          next();
+          runRefillUnitMovement(gameId, unitId);
         }
       );
+    }
+
+    function runRefillUnitMovement(gameId, unitId) {
+      refillUnitMovement(gameId, unitId, () => {
+        debug('runRefillUnitMovement: Success!');
+        next();
+      });
     }
   };
 };

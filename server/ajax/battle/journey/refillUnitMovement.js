@@ -6,20 +6,23 @@ const debug = require('debug')('cogs:refillUnitMovement');
 
 // What does this module do?
 // Middleware, set unit current movement to its base value
-module.exports = (db) => {
-  return (req, res, next) => {
+module.exports = (db, findEntitiesByGameId) => {
+  return (gameId, unitId, callback) => {
     (function init() {
-      const unitId = res.locals.unitId;
-      const gameId = res.locals.entities._id;
-      const entities = res.locals.entities;
-      const unit = entities[res.locals.unitId];
-
       debug('init: unitId:', unitId);
       debug('init: gameId:', gameId);
-      updateSetUnitCurrentMovemenToBase(gameId, unitId, unit);
+      runFindEntitiesByGameId();
     })();
 
-    function updateSetUnitCurrentMovemenToBase(gameId, unitId, unit) {
+    function runFindEntitiesByGameId() {
+      findEntitiesByGameId(gameId, (error, entities) => {
+        debug('runFindEntitiesByGameId: entities._id:', entities._id);
+        updateSetUnitCurrentMovemenToBase(entities);
+      });
+    }
+
+    function updateSetUnitCurrentMovemenToBase(entities) {
+      const unit = entities[unitId];
       const query = { _id: gameId };
 
       const field = unitId + '.unitStats.current.movement';
@@ -34,13 +37,9 @@ module.exports = (db) => {
         update,
         options,
         (error) => {
-          if (error) {
-            debug('ERROR: insert mongo error:', error);
-            return;
-          }
-
+          debug('ERROR: insert mongo error:', error);
           debug('updateSetUnitCurrentMovemenToBase: Success!');
-          next();
+          callback(null);
         }
       );
     }
