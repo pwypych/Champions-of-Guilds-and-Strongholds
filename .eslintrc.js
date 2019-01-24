@@ -15,8 +15,8 @@ module.exports = {
     $: false,
     PIXI: false,
     g: false,
-    Charm: false,
-    PF: false
+    TweenMax: false,
+    PF: false // pathfinding
   },
   rules: {
     'no-use-before-define': ['error', { functions: false }], // Can use hoisting of functions

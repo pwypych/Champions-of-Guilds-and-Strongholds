@@ -96,9 +96,7 @@ g.world.tweenFigureJourney = (
   }
 
   function generateTweenPath(journey, sprite, spriteOffset) {
-    const timeline = new TimelineMax();
-
-    journey.forEach((step) => {
+    journey.forEach((step, index) => {
       const fromXPixel = step.fromX * blockWidthPx + spriteOffset.x;
       const fromYPixel =
         step.fromY * blockHeightPx + blockHeightPx + spriteOffset.y;
@@ -118,16 +116,12 @@ g.world.tweenFigureJourney = (
         sprite.y
       );
 
-      timeline.add(
-        TweenMax.fromTo(
-          sprite,
-          0.25,
-          { x: fromXPixel, y: fromYPixel },
-          { x: toXPixel, y: toYPixel }
-        )
+      TweenMax.fromTo(
+        sprite,
+        0.25,
+        { x: fromXPixel, y: fromYPixel },
+        { x: toXPixel, y: toYPixel, delay: index * 0.25 }
       );
     });
-
-    timeline.play();
   }
 };
