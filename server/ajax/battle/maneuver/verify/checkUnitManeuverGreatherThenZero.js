@@ -16,15 +16,15 @@ module.exports = (findEntitiesByGameId) => {
     function runFindEntitiesByGameId() {
       findEntitiesByGameId(gameId, (error, entities) => {
         debug('runFindEntitiesByGameId: entities._id:', entities._id);
-        checkUnitManeuverLeft(entities);
+        checkUnitManeuver(entities);
       });
     }
 
-    function checkUnitManeuverLeft(entities) {
+    function checkUnitManeuver(entities) {
       const unit = entities[unitId];
       if (unit.unitStats.current.maneuver < 1) {
         debug(
-          'checkUnitManeuverLeft: No maneuver! - unit.unitStats.current.maneuver:',
+          'checkUnitManeuver: No maneuver! - unit.unitStats.current.maneuver:',
           unit.unitStats.current.maneuver
         );
         callback(null, false);
@@ -32,7 +32,7 @@ module.exports = (findEntitiesByGameId) => {
       }
 
       debug(
-        'checkUnitManeuverLeft: unit.unitStats.current.maneuver:',
+        'checkUnitManeuver: unit.unitStats.current.maneuver:',
         unit.unitStats.current.maneuver
       );
       callback(null, true);

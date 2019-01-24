@@ -6,8 +6,7 @@ const debug = require('debug')('cogs:decideUnitStep');
 const _ = require('lodash');
 
 // What does this module do?
-// Library that works on callback. It decides what to do with wished unit step.
-// Is step possible? Decide what will happen!
+// Decides what to do with wished unit step. Is step possible? Decide what will happen!
 module.exports = (
   db,
   updateUnitPosition,
