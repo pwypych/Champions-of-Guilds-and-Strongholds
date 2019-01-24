@@ -133,7 +133,7 @@ g.battle.battleRender = (
   function instantiateSprites(entity, id) {
     const texture = PIXI.loader.resources[entity.unitName].texture;
     const sprite = new PIXI.Sprite(texture);
-    const container = new PIXI.Container();
+    // const container = new PIXI.Container();
 
     sprite.anchor = { x: 0, y: 1 };
 
@@ -147,15 +147,17 @@ g.battle.battleRender = (
 
     if (entity.active) {
       const activeUnitMarker = toolActiveUnitMarker(sprite.x, sprite.y);
-      container.addChild(activeUnitMarker);
+      viewport.addChild(activeUnitMarker);
+      spriteBucket[id + '_activeUnitMarker'] = activeUnitMarker;
     }
 
-    container.addChild(sprite);
+    viewport.addChild(sprite);
+    spriteBucket[id] = sprite;
 
-    renderAmount(entity, id, container);
+    renderAmount(entity, id);
   }
 
-  function renderAmount(entity, id, container) {
+  function renderAmount(entity, id) {
     const style = new PIXI.TextStyle({
       fontFamily: 'Courier New',
       fontSize: 12,
@@ -178,9 +180,8 @@ g.battle.battleRender = (
       text.height +
       paddingTop;
 
-    container.addChild(text);
-    viewport.addChild(container);
-    spriteBucket[id] = container;
+    viewport.addChild(text);
+    spriteBucket[id + '_amountText'] = text;
   }
 
   function toolActiveUnitMarker(x, y) {

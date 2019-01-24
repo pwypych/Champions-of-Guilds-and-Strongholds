@@ -90,9 +90,9 @@ g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, spriteBucket) => {
   }
 
   function findSpriteAndSpriteOffset(journey, unitId) {
-    const spriteContainer = spriteBucket[unitId];
-    if (!spriteContainer) {
-      console.log('tweenUnitJourney: ERROR, cannot find spriteContainer');
+    const sprite = spriteBucket[unitId];
+    if (!sprite) {
+      console.log('tweenUnitJourney: ERROR, cannot find sprite');
       return;
     }
 
@@ -101,14 +101,11 @@ g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, spriteBucket) => {
       spriteOffset = { x: 0, y: 0 };
     }
 
-    generateTweenPath(journey, spriteContainer, spriteOffset);
+    generateTweenPath(journey, sprite, spriteOffset);
   }
 
-  function generateTweenPath(journey, spriteContainer, spriteOffset) {
-    const tweenPath = new PIXI.tween.TweenPath();
-    const journeyLength = journey.length;
-
-    journey.forEach((step) => {
+  function generateTweenPath(journey, sprite, spriteOffset) {
+    journey.forEach((step, index) => {
       const fromXPixel = step.fromX * blockWidthPx + spriteOffset.x;
       const fromYPixel =
         step.fromY * blockHeightPx + blockHeightPx + spriteOffset.y;
@@ -125,20 +122,12 @@ g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, spriteBucket) => {
         fromYPixel
       );
 
-      tweenPath.moveTo(fromXPixel, fromYPixel).lineTo(toXPixel, toYPixel);
-    });
-
-    tweenUnitToNewPosition(tweenPath, spriteContainer, journeyLength);
-  }
-
-  function tweenUnitToNewPosition(tweenPath, spriteContainer, journeyLength) {
-    _.forEach(spriteContainer.children, (sprite) => {
-      console.log('sprite', sprite);
-      const tween = PIXI.tweenManager.createTween(sprite);
-      tween.path = tweenPath;
-      tween.time = 250 * 60 * journeyLength;
-      tween.loop = false;
-      tween.start();
+      TweenMax.fromTo(
+        sprite,
+        0.25,
+        { x: fromXPixel, y: fromYPixel },
+        { x: toXPixel, y: toYPixel, delay: index * 0.25 }
+      );
     });
   }
 };
