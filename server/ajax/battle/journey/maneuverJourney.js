@@ -3,6 +3,7 @@
 'use strict';
 
 const debug = require('debug')('cogs:maneuverJourney');
+const validator = require('validator');
 const async = require('async');
 
 // What does this module do?
@@ -14,13 +15,49 @@ module.exports = (db, decideUnitStep, refillUnitMovement) => {
       const entities = res.locals.entities;
       ctx.gameId = entities._id;
       ctx.playerId = res.locals.playerId;
-      ctx.unitJourney = res.locals.unitJourney;
       ctx.unitId = res.locals.unitId;
       ctx.unit = entities[ctx.unitId];
 
       debug('init: ctx.unitId:', ctx.unitId);
-      checkIsProcessingUnitJourney(ctx);
+      checkRequestBodyUnitJourney(ctx);
     })();
+
+    function checkRequestBodyUnitJourney(ctx) {
+      const unitJourney = [];
+      let isError = false;
+
+      req.body.unitJourney.forEach((step) => {
+        if (
+          typeof step.fromX === 'undefined' ||
+          typeof step.fromY === 'undefined' ||
+          typeof step.toX === 'undefined' ||
+          typeof step.toY === 'undefined' ||
+          !validator.isNumeric(step.fromX) ||
+          !validator.isNumeric(step.fromY) ||
+          !validator.isNumeric(step.toX) ||
+          !validator.isNumeric(step.toY)
+        ) {
+          debug('POST parameter unitJourney not valid');
+          isError = true;
+          return;
+        }
+
+        const parsedStep = {};
+        parsedStep.fromX = parseInt(step.fromX, 10);
+        parsedStep.fromY = parseInt(step.fromY, 10);
+        parsedStep.toX = parseInt(step.toX, 10);
+        parsedStep.toY = parseInt(step.toY, 10);
+        unitJourney.push(parsedStep);
+      });
+
+      if (isError) {
+        return;
+      }
+      ctx.unitJourney = unitJourney;
+
+      debug('checkRequestBodyUnitJourney: unitJourney', unitJourney);
+      checkIsProcessingUnitJourney(ctx);
+    }
 
     function checkIsProcessingUnitJourney(ctx) {
       const unit = ctx.unit;

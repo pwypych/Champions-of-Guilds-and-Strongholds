@@ -129,6 +129,7 @@ function setupFigureManagerTree() {
 function setupLibrariesAndRoutes(figureManagerTree) {
   // libraries
   const templateToHtml = require('./library/templateToHtml.js')();
+  const findEntitiesByGameId = require('./library/findEntitiesByGameId.js')(db);
 
   // general endpoints
   app.get('/', (req, res) => {
@@ -189,10 +190,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/launch/name/playerNamePost.js')(db)
   );
 
-  // worldState endpoints
-  //
-  const findEntitiesByGameId = require('./library/findEntitiesByGameId.js')(db);
-  //
+  // worldState
   app.get(
     '/ajax/world/load/spriteFilenameArray',
     require('./library/readEntities.js')(db),
@@ -253,7 +251,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/world/endTurn/unsetEndTurnFlags.js')(db)
   );
 
-  // battleState endpoints
+  // battleState
   const checkUnitActive = require('./ajax/battle/maneuver/verify/checkUnitActive.js')(
     findEntitiesByGameId
   );
@@ -263,22 +261,12 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   const checkUnitManeuverGreatherThenZero = require('./ajax/battle/maneuver/verify/checkUnitManeuverGreatherThenZero.js')(
     findEntitiesByGameId
   );
-  const updateUnitPosition = require('./ajax/battle/journey/updateUnitPosition.js')(
-    db
+  const verifyManeuverMiddleware = require('./ajax/battle/maneuver/verify/verifyManeuver.js')(
+    checkUnitOwner,
+    checkUnitActive,
+    checkUnitManeuverGreatherThenZero
   );
-  const decrementUnitMovement = require('./ajax/battle/journey/decrementUnitMovement.js')(
-    db
-  );
-  const decideUnitStep = require('./ajax/battle/journey/decideUnitStep.js')(
-    db,
-    updateUnitPosition,
-    decrementUnitMovement,
-    findEntitiesByGameId
-  );
-  const refillUnitMovement = require('./ajax/battle/journey/refillUnitMovement.js')(
-    db,
-    findEntitiesByGameId
-  );
+
   const decrementUnitManeuver = require('./ajax/battle/maneuver/digest/decrementUnitManeuver.js')(
     db
   );
@@ -298,30 +286,44 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     db,
     findEntitiesByGameId
   );
+  const digestFinishedManeuverMiddleware = require('./ajax/battle/maneuver/digest/digestFinishedManeuver.js')(
+    db,
+    decrementUnitManeuver,
+    checkIsUnitManeuverZero,
+    checkIsEveryUnitManeuverZero,
+    refillEveryUnitManeuver,
+    nominateNewActiveUnit
+  );
+
+  const updateUnitPosition = require('./ajax/battle/journey/updateUnitPosition.js')(
+    db
+  );
+  const decrementUnitMovement = require('./ajax/battle/journey/decrementUnitMovement.js')(
+    db
+  );
+  const decideUnitStep = require('./ajax/battle/journey/decideUnitStep.js')(
+    db,
+    updateUnitPosition,
+    decrementUnitMovement,
+    findEntitiesByGameId
+  );
+  const refillUnitMovement = require('./ajax/battle/journey/refillUnitMovement.js')(
+    db,
+    findEntitiesByGameId
+  );
   app.post(
     '/ajax/battle/journey/maneuverJourneyPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
-    require('./ajax/battle/journey/maneuverJourneyPost.js')(),
-    require('./ajax/battle/maneuver/verify/verifyManeuver.js')(
-      checkUnitOwner,
-      checkUnitActive,
-      checkUnitManeuverGreatherThenZero
-    ),
+    require('./ajax/battle/maneuver/maneuverPost.js')(),
+    verifyManeuverMiddleware,
     require('./ajax/battle/journey/maneuverJourney.js')(
       db,
       decideUnitStep,
       refillUnitMovement
     ),
-    require('./ajax/battle/maneuver/digest/digestFinishedManeuver.js')(
-      db,
-      decrementUnitManeuver,
-      checkIsUnitManeuverZero,
-      checkIsEveryUnitManeuverZero,
-      refillEveryUnitManeuver,
-      nominateNewActiveUnit
-    )
+    digestFinishedManeuverMiddleware
   );
 
   debug('setupLibrariesAndRoutes()');
