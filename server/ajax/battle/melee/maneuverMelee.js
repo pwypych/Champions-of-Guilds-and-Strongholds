@@ -16,17 +16,17 @@ module.exports = (db) => {
       ctx.playerId = res.locals.playerId;
       ctx.unit = entities[ctx.unitId];
       ctx.unitId = res.locals.unitId;
-      ctx.meleePosition = req.body.position;
+      ctx.meleeOnPosition = req.body.meleeOnPosition;
 
       debug('init: ctx.unitId:', ctx.unitId);
       checkIsPositionInRange(ctx);
     })();
 
     function checkIsPositionInRange(ctx) {
-      const meleePosition = ctx.meleePosition;
+      const meleeOnPosition = ctx.meleeOnPosition;
       const unit = ctx.unit;
-      const distanceX = Math.abs(unit.position.x - meleePosition.X);
-      const distanceY = Math.abs(unit.position.y - meleePosition.Y);
+      const distanceX = Math.abs(unit.position.x - meleeOnPosition.X);
+      const distanceY = Math.abs(unit.position.y - meleeOnPosition.Y);
 
       if (distanceX !== 0 && distanceX !== 1) {
         const message = 'Cannot melee more than one step';
@@ -40,8 +40,25 @@ module.exports = (db) => {
         return;
       }
 
-      debug('checkIsPositionInRange: meleePosition:', meleePosition);
+      debug('checkIsPositionInRange: meleeOnPosition:', meleeOnPosition);
       checkIsThereEnemyOnMeleePosition();
+    }
+
+    function checkIsThereEnemyOnMeleePosition() {
+      const entities = res.locals.entities;
+      const meleeOnPosition = ctx.meleeOnPosition;
+      let enemyId;
+
+      _.forEach(entities, (entity, id) => {
+        if (entity.unitName) {
+          if (
+            entity.position.x === meleeOnPosition.x &&
+            entity.position.y === meleeOnPosition.y
+          ) {
+            enemyId = id;
+          }
+        }
+      });
     }
   };
 };
