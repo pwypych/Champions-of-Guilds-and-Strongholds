@@ -326,6 +326,18 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     digestFinishedManeuverMiddleware
   );
 
+  app.post(
+    'ajax/battle/melee/maneuverMeleePost',
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
+    require('./library/middlewareAjaxStateAuth.js')('battleState'),
+    require('./ajax/battle/maneuver/maneuverPost.js')(),
+    verifyManeuverMiddleware,
+    // tu ma być melee middleware
+    require('./ajax/battle/melee/maneuverMelee.js')(db),
+    digestFinishedManeuverMiddleware
+  );
+
   debug('setupLibrariesAndRoutes()');
   setupExpress();
 }
