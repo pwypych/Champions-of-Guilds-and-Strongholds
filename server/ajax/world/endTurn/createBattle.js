@@ -68,7 +68,7 @@ module.exports = (db, unitStats) => {
 
         const unit = {};
         unit.unitName = unitName;
-        unit.owner = attackerId;
+        unit.boss = attackerId;
         unit.amount = amount;
         unit.active = false;
         unit.collision = true;
@@ -106,7 +106,7 @@ module.exports = (db, unitStats) => {
 
         const unit = {};
         unit.unitName = unitName;
-        unit.owner = defenderId;
+        unit.boss = defenderId;
         unit.amount = amount;
         unit.active = false;
         unit.collision = true;
@@ -121,6 +121,51 @@ module.exports = (db, unitStats) => {
       });
 
       debug('generateUnits: units:', _.size(units));
+      generateUnitOwner(entities, units, attackerId, defenderId, battleId);
+    }
+
+    function generateUnitOwner(
+      entities,
+      units,
+      attackerId,
+      defenderId,
+      battleId
+    ) {
+      // update owner of all attacker
+      _.forEach(units, (unit, id) => {
+        if (unit.boss === attackerId) {
+          units[id].owner = entities[attackerId].owner;
+        }
+      });
+
+      if (entities[defenderId].heroStats) {
+        // if defender is player, update owner of all defender units as only this player
+        _.forEach(units, (unit, id) => {
+          if (unit.boss === defenderId) {
+            units[id].owner = entities[defenderId].owner;
+          }
+        });
+        updateSetUnitEntities(entities, units);
+        return;
+      }
+
+      // if defender is npc, update owner of all defender units as other players randomly
+      const otherPlayerIdArray = [];
+      _.forEach(entities, (entity, id) => {
+        if (entity.heroStats && id !== attackerId) {
+          otherPlayerIdArray.push(id);
+        }
+      });
+      _.forEach(units, (unit, id) => {
+        if (unit.boss === defenderId) {
+          const randomHeroId = _.sample(otherPlayerIdArray);
+          units[id].owner = entities[randomHeroId].owner;
+        }
+      });
+
+      debug('generateUnitOwner: otherPlayerIdArray:', otherPlayerIdArray);
+      debug('generateUnitOwner: units:', units);
+
       generateObsticles(entities, units, attackerId, defenderId, battleId);
     }
 
@@ -141,51 +186,6 @@ module.exports = (db, unitStats) => {
         unit.position = position;
         units[id] = unit;
       });
-
-      changeOwnerToPlayer(entities, units, attackerId, defenderId, battleId);
-    }
-
-    function changeOwnerToPlayer(
-      entities,
-      units,
-      attackerId,
-      defenderId,
-      battleId
-    ) {
-      // change attacker owner from hero to player
-      _.forEach(units, (unit, id) => {
-        if (unit.owner === attackerId) {
-          units[id].owner = entities[attackerId].owner;
-        }
-      });
-
-      if (entities[defenderId].heroStats) {
-        // defender is a player change owner from hero to player
-        _.forEach(units, (unit, id) => {
-          if (unit.owner === defenderId) {
-            units[id].owner = entities[defenderId].owner;
-          }
-        });
-        updateSetUnitEntities(entities, units);
-        return;
-      }
-
-      const otherPlayerIdArray = [];
-      _.forEach(entities, (entity, id) => {
-        if (entity.heroStats && id !== attackerId) {
-          otherPlayerIdArray.push(id);
-        }
-      });
-
-      _.forEach(units, (unit, id) => {
-        if (unit.owner === defenderId) {
-          const randomHeroId = _.sample(otherPlayerIdArray);
-          units[id].owner = entities[randomHeroId].owner;
-        }
-      });
-
-      debug('changeOwnerToPlayer: otherPlayerIdArray:', otherPlayerIdArray);
-      debug('changeOwnerToPlayer: units:', units);
 
       updateSetUnitEntities(entities, units, battleId);
     }
