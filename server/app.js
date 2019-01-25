@@ -327,7 +327,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   app.post(
-    'ajax/battle/melee/maneuverMeleePost',
+    '/ajax/battle/melee/maneuverMeleePost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
