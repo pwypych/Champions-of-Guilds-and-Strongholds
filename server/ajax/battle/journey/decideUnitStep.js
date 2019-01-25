@@ -95,34 +95,28 @@ module.exports = (
       const distanceX = Math.abs(unit.position.x - wishedUnitStep.toX);
       const distanceY = Math.abs(unit.position.y - wishedUnitStep.toY);
 
-      if (distanceX !== 0 && distanceX !== 1) {
-        const message = 'Cannot move more than one step';
-        debug(
-          'checkIsUnitOneStepFromWishedPosition: ',
-          message,
-          wishedUnitStep
-        );
-        callback(message);
-        return;
-      }
-
-      if (distanceY !== 0 && distanceY !== 1) {
-        const message = 'Cannot move more than one step';
-        debug(
-          'checkIsUnitOneStepFromWishedPosition: ',
-          message,
-          wishedUnitStep
-        );
-        callback(message);
-        return;
-      }
-
       debug(
         'checkIsUnitOneStepFromWishedPosition: distanceX',
         distanceX,
         'distanceY',
         distanceY
       );
+
+      // allow only up, down, left, right, no diagonals
+      if (
+        (distanceX !== 1 || distanceY !== 0) &&
+        (distanceY !== 1 || distanceX !== 0)
+      ) {
+        const message = 'Cannot move more than one step';
+        debug(
+          'checkIsUnitOneStepFromWishedPosition: ',
+          message,
+          wishedUnitStep
+        );
+        callback(message);
+        return;
+      }
+
       checkIsWishedPositionCollidable(entities);
     }
 

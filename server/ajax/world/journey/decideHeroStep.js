@@ -91,34 +91,28 @@ module.exports = (
       const distanceX = Math.abs(hero.position.x - wishedHeroStep.toX);
       const distanceY = Math.abs(hero.position.y - wishedHeroStep.toY);
 
-      if (distanceX !== 0 && distanceX !== 1) {
-        const message = 'Cannot move more than one step';
-        debug(
-          'checkIsHeroOneStepFromWishedPosition: ',
-          message,
-          wishedHeroStep
-        );
-        callback(message);
-        return;
-      }
-
-      if (distanceY !== 0 && distanceY !== 1) {
-        const message = 'Cannot move more than one step';
-        debug(
-          'checkIsHeroOneStepFromWishedPosition: ',
-          message,
-          wishedHeroStep
-        );
-        callback(message);
-        return;
-      }
-
       debug(
-        'checkIsHeroOneStepFromWishedPosition: distanceX',
+        'checkIsHeroOneStepFromWishedPosition: distanceX:',
         distanceX,
-        'distanceY',
+        'distanceY:',
         distanceY
       );
+
+      // allow only up, down, left, right, no diagonals
+      if (
+        (distanceX !== 1 || distanceY !== 0) &&
+        (distanceY !== 1 || distanceX !== 0)
+      ) {
+        const message = 'Cannot move more than one step';
+        debug(
+          'checkIsHeroOneStepFromWishedPosition: ',
+          message,
+          wishedHeroStep
+        );
+        callback(message);
+        return;
+      }
+
       checkIsWishedPositionCollectable(entities);
     }
 
