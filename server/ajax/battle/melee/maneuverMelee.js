@@ -91,34 +91,76 @@ module.exports = (db) => {
       }
 
       ctx.targetId = targetId;
+      scanObsticlesAroundTarget(ctx);
+    }
+
+    function scanObsticlesAroundTarget(ctx) {
+      const entities = res.locals.entities;
+      const target = entities[ctx.targetId];
+      debug('scanObsticlesAroundTarget: target.unitName:', target.unitName);
+      debug('scanObsticlesAroundTarget: target.position:', target.position);
+      const obsticlesAroundTarget = [];
+
+      _.forEach(entities, (entity, id) => {
+        if (entity.unitName) {
+          [
+            { x: 0, y: -1 },
+            { x: 1, y: 0 },
+            { x: 0, y: 1 },
+            { x: -1, y: 0 }
+          ].forEach((offset) => {
+            if (
+              entity.position.x === target.position.x + offset.x &&
+              entity.position.y === target.position.y + offset.y
+            ) {
+              obsticlesAroundTarget.push(id);
+              debug(
+                'scanObsticlesAroundTarget: Battle object On x:',
+                target.position.x + offset.x,
+                'y:',
+                target.position.y + offset.y
+              );
+            }
+          });
+        }
+      });
+
+      debug(
+        'scanObsticlesAroundTarget: obsticlesAroundTarget:',
+        obsticlesAroundTarget
+      );
+      ctx.obsticlesAroundTarget = obsticlesAroundTarget;
       countDamageModificator(ctx);
     }
 
     function countDamageModificator(ctx) {
+      let damageModificator = 100;
+      const obsticlesAroundTarget = ctx.obsticlesAroundTarget;
+      const unitId = ctx.unitId;
+      const unit = ctx.unit;
       const entities = res.locals.entities;
-      const target = entities[ctx.targetId];
-      debug('countDamageModificator: target.unitName:', target.unitName);
-      debug('countDamageModificator: target.position:', target.position);
 
-      _.forEach(entities, (entity) => {
-        if (entity.unitName) {
-          [1, -1].forEach((offsetX) => {
-            [1, -1].forEach((offsetY) => {
-              if (
-                entity.position.x === target.position.x + offsetX &&
-                entity.position.y === target.position.y + offsetY
-              ) {
-                debug(
-                  'countDamageModificator: Battle object On x:',
-                  target.position.x + offsetX,
-                  'y:',
-                  target.position.y + offsetY
-                );
-              }
-            });
-          });
+      obsticlesAroundTarget.forEach((obsticleId) => {
+        const obsticle = entities[obsticleId];
+        if (!obsticle.unitStats) {
+          damageModificator += 20;
+          debug(
+            'countDamageModificator - neutral obsticle: damageModificator:',
+            damageModificator
+          );
+        }
+
+        if (obsticle.boss === unit.boss && obsticleId !== unitId) {
+          damageModificator += 40;
+          debug(
+            'countDamageModificator - attacker obsticle: damageModificator:',
+            damageModificator
+          );
         }
       });
+
+      ctx.damageModificator = damageModificator;
+      debug('countDamageModificator: damageModificator:', damageModificator);
     }
   };
 };
