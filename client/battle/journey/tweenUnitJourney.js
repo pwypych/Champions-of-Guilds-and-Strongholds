@@ -44,7 +44,7 @@ g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, spriteBucket) => {
       }
     });
 
-    const finder = new PF.AStarFinder({ allowDiagonal: true });
+    const finder = new PF.BiAStarFinder();
 
     console.log('fromPosition', fromPosition);
     console.log('toPosition', toPosition);

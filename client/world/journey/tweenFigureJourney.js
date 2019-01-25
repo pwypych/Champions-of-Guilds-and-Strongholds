@@ -43,7 +43,7 @@ g.world.tweenFigureJourney = (
       }
     });
 
-    const finder = new PF.AStarFinder({ allowDiagonal: true });
+    const finder = new PF.BiAStarFinder();
 
     const pathArrayOfArrays = finder.findPath(
       fromPosition.x,

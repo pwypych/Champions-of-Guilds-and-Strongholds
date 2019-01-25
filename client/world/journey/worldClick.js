@@ -80,7 +80,7 @@ g.world.worldClick = (walkie, auth, viewport, freshEntities) => {
       }
     });
 
-    const finder = new PF.AStarFinder({ allowDiagonal: true });
+    const finder = new PF.BiAStarFinder();
 
     const pathArrayOfArrays = finder.findPath(
       heroPositon.x,
