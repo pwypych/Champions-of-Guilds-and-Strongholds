@@ -212,28 +212,31 @@ module.exports = (
 
       _.forEach(entities, (entity, id) => {
         if (entity.unitCounts && !entity.heroStats) {
-          [1, 0, -1].forEach((offsetX) => {
-            [1, 0, -1].forEach((offsetY) => {
-              if (
-                entity.position.x === wishedHeroStep.toX + offsetX &&
-                entity.position.y === wishedHeroStep.toY + offsetY
-              ) {
-                debug(
-                  'checkIsWishedPositionBattle: Battle On x:',
-                  wishedHeroStep.toX + offsetX,
-                  'y:',
-                  wishedHeroStep.toY + offsetY
-                );
+          [
+            { x: 0, y: -1 },
+            { x: 1, y: 0 },
+            { x: 0, y: 1 },
+            { x: -1, y: 0 }
+          ].forEach((offset) => {
+            if (
+              entity.position.x === wishedHeroStep.toX + offset.x &&
+              entity.position.y === wishedHeroStep.toY + offset.y
+            ) {
+              debug(
+                'checkIsWishedPositionBattle: Battle On x:',
+                wishedHeroStep.toX + offset.x,
+                'y:',
+                wishedHeroStep.toY + offset.y
+              );
 
-                const battle = {};
-                battle.attackerId = heroId;
-                battle.defenderId = id;
-                battle.battleStatus = 'pending';
-                battle.battleHeight = 15;
-                battle.battleWidth = 20;
-                battleArray.push(battle);
-              }
-            });
+              const battle = {};
+              battle.attackerId = heroId;
+              battle.defenderId = id;
+              battle.battleStatus = 'pending';
+              battle.battleHeight = 15;
+              battle.battleWidth = 20;
+              battleArray.push(battle);
+            }
           });
         }
       });
