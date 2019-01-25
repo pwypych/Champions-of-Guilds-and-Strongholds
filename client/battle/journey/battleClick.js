@@ -91,7 +91,7 @@ g.battle.battleClick = (walkie, auth, viewport, freshEntities) => {
       }
     });
 
-    const finder = new PF.BiAStarFinder();
+    const finder = new PF.AStarFinder({ allowDiagonal: false, weight: 2 });
 
     const pathArrayOfArrays = finder.findPath(
       unitPositon.x,
