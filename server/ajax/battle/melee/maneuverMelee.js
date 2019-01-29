@@ -194,6 +194,7 @@ module.exports = (db) => {
     }
 
     function countTargetLoss(ctx) {
+      // Count also unit current life
       const target = ctx.target;
       debug('countTargetLoss: target.unitName', target.unitName);
       const targetLife = target.unitStats.base.life;
@@ -206,6 +207,35 @@ module.exports = (db) => {
 
       ctx.targetUnitsKilled = targetUnitsKilled;
       ctx.healthLeft = healthLeft;
+      updateTargetuUnitAmount(ctx);
+    }
+
+    function updateTargetuUnitAmount(ctx) {
+      debug('updateTargetuUnitAmount: ctx:', ctx);
+      const gameId = ctx.gameId;
+      const target = ctx.target;
+      const targetId = ctx.targetId;
+      const healthLeft = ctx.healthLeft;
+      const targetUnitsKilled = ctx.targetUnitsKilled;
+
+      const query = { _id: gameId };
+      const fieldLife = targetId + '.unitStats.current.life';
+      const fieldAmount = targetId + '.amount';
+      const $set = {};
+      $set[fieldLife] = healthLeft;
+      $set[fieldAmount] = target.amount - targetUnitsKilled;
+      const update = { $set: $set };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          debug('setProcessingJourneyUntilTimestamp: error: ', error);
+          // runDecideUnitStep(ctx);
+        }
+      );
     }
   };
 };
