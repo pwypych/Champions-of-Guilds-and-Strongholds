@@ -97,6 +97,7 @@ module.exports = (db) => {
     function scanObsticlesAroundTarget(ctx) {
       const entities = res.locals.entities;
       const target = entities[ctx.targetId];
+      ctx.target = target;
       debug('scanObsticlesAroundTarget: target.unitName:', target.unitName);
       debug('scanObsticlesAroundTarget: target.position:', target.position);
       const obsticlesAroundTarget = [];
@@ -189,6 +190,22 @@ module.exports = (db) => {
       const totalDamage = randomDamage * unitAmount * damageModificator;
       debug('countUnitTotalDamage: totalDamage:', totalDamage);
       ctx.totalDamage = totalDamage;
+      countTargetLoss(ctx);
+    }
+
+    function countTargetLoss(ctx) {
+      const target = ctx.target;
+      debug('countTargetLoss: target.unitName', target.unitName);
+      const targetLife = target.unitStats.base.life;
+      debug('countTargetLoss: targetLife', targetLife);
+      const totalDamage = ctx.totalDamage;
+      const targetUnitsKilled = _.floor(totalDamage / targetLife);
+      debug('countTargetLoss: targetUnitsKilled', targetUnitsKilled);
+      const healthLeft = totalDamage % targetLife;
+      debug('countTargetLoss: healthLeft', healthLeft);
+
+      ctx.targetUnitsKilled = targetUnitsKilled;
+      ctx.healthLeft = healthLeft;
     }
   };
 };
