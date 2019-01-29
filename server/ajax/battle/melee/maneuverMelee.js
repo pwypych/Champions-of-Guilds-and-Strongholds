@@ -161,6 +161,34 @@ module.exports = (db) => {
 
       ctx.damageModificator = damageModificator;
       debug('countDamageModificator: damageModificator:', damageModificator);
+      countUnitTotalDamage(ctx);
+    }
+
+    function countUnitTotalDamage(ctx) {
+      const unit = ctx.unit;
+      const damageMax = unit.unitStats.current.damageMax;
+      const damageMin = unit.unitStats.current.damageMin;
+      const unitAmount = unit.amount;
+      debug('countUnitTotalDamage: unitAmount:', unitAmount);
+      const damageModificator = ctx.damageModificator / 100;
+      debug('countUnitTotalDamage: damageModificator:', damageModificator);
+
+      debug('countUnitTotalDamage: damageMax:', damageMax);
+      debug('countUnitTotalDamage: damageMin:', damageMin);
+
+      const randomDamage = _.random(damageMin, damageMax);
+      debug('countUnitTotalDamage: randomDamage:', randomDamage);
+      debug(
+        'countUnitTotalDamage: totalDamage = ',
+        randomDamage,
+        ' * ',
+        unitAmount,
+        ' * ',
+        damageModificator
+      );
+      const totalDamage = randomDamage * unitAmount * damageModificator;
+      debug('countUnitTotalDamage: totalDamage:', totalDamage);
+      ctx.totalDamage = totalDamage;
     }
   };
 };
