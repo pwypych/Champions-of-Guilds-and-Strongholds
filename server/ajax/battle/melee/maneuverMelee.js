@@ -91,13 +91,27 @@ module.exports = (db) => {
       }
 
       ctx.targetId = targetId;
+      const target = entities[ctx.targetId];
+      ctx.target = target;
+      checkIsTragetFriendly(ctx);
+    }
+
+    function checkIsTragetFriendly(ctx) {
+      const unit = ctx.unit;
+      debug('checkIsTragetFriendly: unit.boss:', unit.boss);
+      const target = ctx.target;
+      debug('checkIsTragetFriendly: target.boss:', target.boss);
+      if (target.boss === unit.boss) {
+        debug('checkIsTragetFriendly: Cannot attack friendly unit');
+        return;
+      }
+
       scanObsticlesAroundTarget(ctx);
     }
 
     function scanObsticlesAroundTarget(ctx) {
       const entities = res.locals.entities;
-      const target = entities[ctx.targetId];
-      ctx.target = target;
+      const target = ctx.target;
       debug('scanObsticlesAroundTarget: target.unitName:', target.unitName);
       debug('scanObsticlesAroundTarget: target.position:', target.position);
       const obsticlesAroundTarget = [];
@@ -170,12 +184,8 @@ module.exports = (db) => {
       const damageMax = unit.unitStats.current.damageMax;
       const damageMin = unit.unitStats.current.damageMin;
       const unitAmount = unit.amount;
-      debug('countUnitTotalDamage: unitAmount:', unitAmount);
       const damageModificator = ctx.damageModificator / 100;
       debug('countUnitTotalDamage: damageModificator:', damageModificator);
-
-      debug('countUnitTotalDamage: damageMax:', damageMax);
-      debug('countUnitTotalDamage: damageMin:', damageMin);
 
       const randomDamage = _.random(damageMin, damageMax);
       debug('countUnitTotalDamage: randomDamage:', randomDamage);
@@ -190,40 +200,61 @@ module.exports = (db) => {
       const totalDamage = randomDamage * unitAmount * damageModificator;
       debug('countUnitTotalDamage: totalDamage:', totalDamage);
       ctx.totalDamage = totalDamage;
+      countTargetTotalLife(ctx);
+    }
+
+    function countTargetTotalLife(ctx) {
+      const target = ctx.target;
+      const targetUnits = target.amount;
+      const targetCurrentLife = target.unitStats.current.life;
+      const targetBaseLife = target.unitStats.base.life;
+      const targetTotalLife =
+        (targetUnits - 1) * targetBaseLife + targetCurrentLife;
+      debug('countTargetTotalLife: targetTotalLife:', targetTotalLife);
+
+      ctx.targetTotalLife = targetTotalLife;
       countTargetLoss(ctx);
     }
 
     function countTargetLoss(ctx) {
       // Count also unit current life
       const target = ctx.target;
-      debug('countTargetLoss: target.unitName', target.unitName);
-      const targetLife = target.unitStats.base.life;
-      debug('countTargetLoss: targetLife', targetLife);
       const totalDamage = ctx.totalDamage;
-      const targetUnitsKilled = _.floor(totalDamage / targetLife);
-      debug('countTargetLoss: targetUnitsKilled', targetUnitsKilled);
-      const healthLeft = totalDamage % targetLife;
+      const targetTotalLife = ctx.targetTotalLife;
+      const targetBaseLife = target.unitStats.base.life;
+      const targetTotalLifeLeft = targetTotalLife - totalDamage;
+      debug('countTargetLoss: targetTotalLifeLeft', targetTotalLifeLeft);
+
+      if (targetTotalLifeLeft < 0) {
+        debug('countTargetLoss: Unit should DIE!');
+        updateUnsetUnitEntitiy(ctx);
+        return;
+      }
+
+      const targetUnitsLeft = _.floor(targetTotalLifeLeft / targetBaseLife);
+      debug('countTargetLoss: targetUnitsLeft', targetUnitsLeft);
+      const healthLeft = targetTotalLifeLeft % targetBaseLife;
       debug('countTargetLoss: healthLeft', healthLeft);
 
-      ctx.targetUnitsKilled = targetUnitsKilled;
+      ctx.targetUnitsLeft = targetUnitsLeft;
       ctx.healthLeft = healthLeft;
+
       updateTargetuUnitAmount(ctx);
     }
 
     function updateTargetuUnitAmount(ctx) {
       debug('updateTargetuUnitAmount: ctx:', ctx);
       const gameId = ctx.gameId;
-      const target = ctx.target;
       const targetId = ctx.targetId;
       const healthLeft = ctx.healthLeft;
-      const targetUnitsKilled = ctx.targetUnitsKilled;
+      const targetUnitsLeft = ctx.targetUnitsLeft;
 
       const query = { _id: gameId };
       const fieldLife = targetId + '.unitStats.current.life';
       const fieldAmount = targetId + '.amount';
       const $set = {};
       $set[fieldLife] = healthLeft;
-      $set[fieldAmount] = target.amount - targetUnitsKilled;
+      $set[fieldAmount] = targetUnitsLeft;
       const update = { $set: $set };
       const options = {};
 
@@ -233,7 +264,33 @@ module.exports = (db) => {
         options,
         (error) => {
           debug('setProcessingJourneyUntilTimestamp: error: ', error);
-          // runDecideUnitStep(ctx);
+          next();
+        }
+      );
+    }
+
+    function updateUnsetUnitEntitiy(ctx) {
+      const gameId = ctx.gameId;
+      const targetId = ctx.targetId;
+
+      const query = { _id: gameId };
+      const field = targetId;
+      const $unset = {};
+      $unset[field] = true;
+      const update = { $unset: $unset };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('ERROR: update mongo error:', error);
+          }
+
+          debug('updateUnsetUnitEntitiy: Target was killed');
+          next();
         }
       );
     }
