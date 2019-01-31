@@ -7,7 +7,7 @@ const _ = require('lodash');
 const validator = require('validator');
 
 // What does this module do?
-// Middleware, expects unitId and unitJourney in res.locals, flags unitBegingMoved and processes each step
+// Exept
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
@@ -233,14 +233,14 @@ module.exports = (db) => {
         targetLifeSumRemaining
       );
 
-      if (targetLifeSumRemaining < 0) {
+      if (targetLifeSumRemaining < 1) {
         debug('countTargetUnitsRemaining: Unit should DIE!');
         updateUnsetUnitEntitiy(ctx);
         return;
       }
 
       const targetBaseLife = target.unitStats.base.life;
-      const targetUnitsRemaining = _.floor(
+      const targetUnitsRemaining = _.ceil(
         targetLifeSumRemaining / targetBaseLife
       );
       debug(
