@@ -17,11 +17,11 @@ module.exports = (db, findEntitiesByGameId) => {
     function runFindEntitiesByGameId() {
       findEntitiesByGameId(gameId, (error, entities) => {
         debug('runFindEntitiesByGameId: entities._id:', entities._id);
-        updateSetUnitCurrentMovemenToBase(entities);
+        updateSetUnitCurrentMovementToBase(entities);
       });
     }
 
-    function updateSetUnitCurrentMovemenToBase(entities) {
+    function updateSetUnitCurrentMovementToBase(entities) {
       const unit = entities[unitId];
       const query = { _id: gameId };
 
@@ -38,7 +38,7 @@ module.exports = (db, findEntitiesByGameId) => {
         options,
         (error) => {
           debug('ERROR: insert mongo error:', error);
-          debug('updateSetUnitCurrentMovemenToBase: Success!');
+          debug('updateSetUnitCurrentMovementToBase: Success!');
           callback(null);
         }
       );
