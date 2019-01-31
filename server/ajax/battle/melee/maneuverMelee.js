@@ -49,6 +49,7 @@ module.exports = (db) => {
 
       const distanceX = Math.abs(unit.position.x - meleeOnPosition.x);
       const distanceY = Math.abs(unit.position.y - meleeOnPosition.y);
+
       if (distanceX !== 0 && distanceX !== 1) {
         const message = 'Cannot melee more than one step';
         debug('checkIsMeleePositionInRange: ', message);
@@ -62,21 +63,21 @@ module.exports = (db) => {
       }
 
       debug('checkIsMeleePositionInRange: meleeOnPosition:', meleeOnPosition);
-      checkIsEnemyOnMeleePosition(ctx);
+      checkIsUnitOnMeleePosition(ctx);
     }
 
-    function checkIsEnemyOnMeleePosition(ctx) {
+    function checkIsUnitOnMeleePosition(ctx) {
       const entities = res.locals.entities;
       const meleeOnPosition = ctx.meleeOnPosition;
-      let targetId;
 
+      let targetId;
       _.forEach(entities, (entity, id) => {
         if (entity.unitName) {
           if (
             entity.position.x === meleeOnPosition.x &&
             entity.position.y === meleeOnPosition.y
           ) {
-            debug('checkIsEnemyOnMeleePosition: target found:', id);
+            debug('checkIsUnitOnMeleePosition: target found:', id);
             targetId = id;
           }
         }
@@ -84,7 +85,7 @@ module.exports = (db) => {
 
       if (!targetId) {
         debug(
-          'checkIsEnemyOnMeleePosition - No target on: meleeOnPosition:',
+          'checkIsUnitOnMeleePosition - No target on: meleeOnPosition:',
           meleeOnPosition
         );
         return;
@@ -165,10 +166,10 @@ module.exports = (db) => {
           );
         }
 
-        if (obsticle.boss === unit.boss && obsticleId !== unitId) {
+        if (unit.boss === obsticle.boss && obsticleId !== unitId) {
           damageModificator += 40;
           debug(
-            'countDamageModificator - attacker obsticle: damageModificator:',
+            'countDamageModificator - ally obsticle: damageModificator:',
             damageModificator
           );
         }
@@ -176,85 +177,99 @@ module.exports = (db) => {
 
       ctx.damageModificator = damageModificator;
       debug('countDamageModificator: damageModificator:', damageModificator);
-      countUnitTotalDamage(ctx);
+      countUnitDamageSum(ctx);
     }
 
-    function countUnitTotalDamage(ctx) {
+    function countUnitDamageSum(ctx) {
       const unit = ctx.unit;
       const damageMax = unit.unitStats.current.damageMax;
       const damageMin = unit.unitStats.current.damageMin;
       const unitAmount = unit.amount;
       const damageModificator = ctx.damageModificator / 100;
-      debug('countUnitTotalDamage: damageModificator:', damageModificator);
+      debug('countUnitDamageSum: damageModificator:', damageModificator);
 
       const randomDamage = _.random(damageMin, damageMax);
-      debug('countUnitTotalDamage: randomDamage:', randomDamage);
+      debug('countUnitDamageSum: randomDamage:', randomDamage);
       debug(
-        'countUnitTotalDamage: totalDamage = ',
+        'countUnitDamageSum: damageSum = ',
         randomDamage,
         ' * ',
         unitAmount,
         ' * ',
         damageModificator
       );
-      const totalDamage = randomDamage * unitAmount * damageModificator;
-      debug('countUnitTotalDamage: totalDamage:', totalDamage);
-      ctx.totalDamage = totalDamage;
-      countTargetTotalLife(ctx);
+      const damageSum = Math.floor(
+        randomDamage * unitAmount * damageModificator
+      );
+      debug('countUnitDamage: damageSum:', damageSum);
+      ctx.damageSum = damageSum;
+      countTargetLifeSum(ctx);
     }
 
-    function countTargetTotalLife(ctx) {
+    function countTargetLifeSum(ctx) {
       const target = ctx.target;
-      const targetUnits = target.amount;
+
+      const targetAmount = target.amount;
       const targetCurrentLife = target.unitStats.current.life;
       const targetBaseLife = target.unitStats.base.life;
-      const targetTotalLife =
-        (targetUnits - 1) * targetBaseLife + targetCurrentLife;
-      debug('countTargetTotalLife: targetTotalLife:', targetTotalLife);
 
-      ctx.targetTotalLife = targetTotalLife;
-      countTargetLoss(ctx);
+      const targetLifeSum =
+        (targetAmount - 1) * targetBaseLife + targetCurrentLife;
+
+      debug('countTargetLifeSum: targetLifeSum:', targetLifeSum);
+
+      ctx.targetLifeSum = targetLifeSum;
+      countTargetUnitsRemaining(ctx);
     }
 
-    function countTargetLoss(ctx) {
-      // Count also unit current life
+    function countTargetUnitsRemaining(ctx) {
       const target = ctx.target;
-      const totalDamage = ctx.totalDamage;
-      const targetTotalLife = ctx.targetTotalLife;
-      const targetBaseLife = target.unitStats.base.life;
-      const targetTotalLifeLeft = targetTotalLife - totalDamage;
-      debug('countTargetLoss: targetTotalLifeLeft', targetTotalLifeLeft);
+      const damageSum = ctx.damageSum;
+      const targetLifeSum = ctx.targetLifeSum;
 
-      if (targetTotalLifeLeft < 0) {
-        debug('countTargetLoss: Unit should DIE!');
+      const targetLifeSumRemaining = targetLifeSum - damageSum;
+      debug(
+        'countTargetUnitsRemaining: targetLifeSumRemaining',
+        targetLifeSumRemaining
+      );
+
+      if (targetLifeSumRemaining < 0) {
+        debug('countTargetUnitsRemaining: Unit should DIE!');
         updateUnsetUnitEntitiy(ctx);
         return;
       }
 
-      const targetUnitsLeft = _.floor(targetTotalLifeLeft / targetBaseLife);
-      debug('countTargetLoss: targetUnitsLeft', targetUnitsLeft);
-      const healthLeft = targetTotalLifeLeft % targetBaseLife;
-      debug('countTargetLoss: healthLeft', healthLeft);
+      const targetBaseLife = target.unitStats.base.life;
+      const targetUnitsRemaining = _.floor(
+        targetLifeSumRemaining / targetBaseLife
+      );
+      debug(
+        'countTargetUnitsRemaining: targetUnitsRemaining',
+        targetUnitsRemaining
+      );
 
-      ctx.targetUnitsLeft = targetUnitsLeft;
-      ctx.healthLeft = healthLeft;
+      const lifeRemaining = targetLifeSumRemaining % targetBaseLife;
+      debug('countTargetUnitsRemaining: lifeRemaining', lifeRemaining);
 
-      updateTargetuUnitAmount(ctx);
+      ctx.targetUnitsRemaining = targetUnitsRemaining;
+      ctx.lifeRemaining = lifeRemaining;
+
+      updateTargetAmount(ctx);
     }
 
-    function updateTargetuUnitAmount(ctx) {
-      debug('updateTargetuUnitAmount: ctx:', ctx);
+    function updateTargetAmount(ctx) {
+      debug('updateTargetAmount: ctx:', ctx);
       const gameId = ctx.gameId;
       const targetId = ctx.targetId;
-      const healthLeft = ctx.healthLeft;
-      const targetUnitsLeft = ctx.targetUnitsLeft;
+      const lifeRemaining = ctx.lifeRemaining;
+      const targetUnitsRemaining = ctx.targetUnitsRemaining;
 
       const query = { _id: gameId };
       const fieldLife = targetId + '.unitStats.current.life';
       const fieldAmount = targetId + '.amount';
       const $set = {};
-      $set[fieldLife] = healthLeft;
-      $set[fieldAmount] = targetUnitsLeft;
+      $set[fieldLife] = lifeRemaining;
+      $set[fieldAmount] = targetUnitsRemaining;
       const update = { $set: $set };
       const options = {};
 
