@@ -12,14 +12,15 @@ g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, spriteBucket) => {
 
   function onUnitPositionChanged() {
     walkie.onEvent(
-      'unitPositionChanged_',
+      'recentManeuverChanged_',
       'tweenUnitJourney.js',
       (data) => {
-        const unitId = data.unitId;
-        const fromPosition = data.fromPosition;
-        const toPosition = data.toPosition;
-
-        generatePathArray(unitId, fromPosition, toPosition);
+        if (data.entity.recentManeuver.name === 'journey') {
+          const unitId = data.unitId;
+          const fromPosition = data.entityOld.position;
+          const toPosition = data.entity.position;
+          generatePathArray(unitId, fromPosition, toPosition);
+        }
       },
       true
     );
