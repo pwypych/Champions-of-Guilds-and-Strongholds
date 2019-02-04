@@ -159,8 +159,17 @@ module.exports = (
     function runDecrementUnitMovement() {
       decrementUnitMovement(gameId, unitId, () => {
         debug('runDecrementUnitMovement: Success!');
-        moveUnitToNewPosition();
+        waitBeforeMove();
       });
+    }
+
+    function waitBeforeMove() {
+      const unitMoveSpeed = 250; // ms
+
+      setTimeout(() => {
+        debug('waitBeforeMove: Waiting 250ms!');
+        moveUnitToNewPosition();
+      }, unitMoveSpeed);
     }
 
     function moveUnitToNewPosition() {

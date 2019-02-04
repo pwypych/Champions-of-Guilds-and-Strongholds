@@ -10,15 +10,8 @@ module.exports = (db) => {
   return (gameId, unitId, position, callback) => {
     (function init() {
       debug('init');
-      waitBefore();
+      updateUnitPosition();
     })();
-
-    function waitBefore() {
-      setTimeout(() => {
-        debug('waitBefore: Waiting 250ms!');
-        updateUnitPosition();
-      }, 250);
-    }
 
     function updateUnitPosition() {
       const query = { _id: gameId };
