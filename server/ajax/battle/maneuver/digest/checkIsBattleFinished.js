@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:checkIsBattleFinished');
 const _ = require('lodash');
 
 // What does this module do?
-// Check are units on battle belong to different boss.
+// Check if all units in battle belong to the same boss.
 module.exports = (findEntitiesByGameId) => {
   return (gameId, unitId, callback) => {
     (function init() {
@@ -16,27 +16,32 @@ module.exports = (findEntitiesByGameId) => {
     function runFindEntitiesByGameId() {
       findEntitiesByGameId(gameId, (error, entities) => {
         debug('runFindEntitiesByGameId: entities._id:', entities._id);
-        findWhoIsUnitBoss(entities);
+        checkIsOnlyOneTypeOfBossInBattle(entities);
       });
     }
 
-    function findWhoIsUnitBoss(entities) {
-      const unit = entities[unitId];
-      const unitBoss = unit.boss;
-
-      checkAreUnitsInBattleBelongToDifferentBoss(entities, unitBoss);
-    }
-
-    function checkAreUnitsInBattleBelongToDifferentBoss(entities, unitBoss) {
-      let allUnitsBelongToOneBoss = true;
+    function checkIsOnlyOneTypeOfBossInBattle(entities) {
+      const bossNameInBattleArray = [];
 
       _.forEach(entities, (entity) => {
-        if (entity.boss !== unitBoss) {
-          allUnitsBelongToOneBoss = false;
+        if (entity.unitStats && entity.boss) {
+          if (!_.includes(bossNameInBattleArray, entity.boss)) {
+            bossNameInBattleArray.push(entity.boss);
+          }
         }
       });
 
-      callback(allUnitsBelongToOneBoss);
+      debug(
+        'checkIsOnlyOneTypeOfBossInBattle: bossNameInBattleArray.length:',
+        bossNameInBattleArray.length
+      );
+
+      if (bossNameInBattleArray.length < 2) {
+        callback(true);
+        return;
+      }
+
+      callback(false);
     }
   };
 };
