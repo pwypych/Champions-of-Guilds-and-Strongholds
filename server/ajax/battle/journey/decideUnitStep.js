@@ -9,9 +9,10 @@ const _ = require('lodash');
 // Decides what to do with wished unit step. Is step possible? Decide what will happen!
 module.exports = (
   db,
-  updateUnitPosition,
+  findEntitiesByGameId,
   decrementUnitMovement,
-  findEntitiesByGameId
+  updateUnitPosition,
+  updateUnitRecentManeuver
 ) => {
   return (gameId, playerId, unitId, wishedUnitStep, callback) => {
     (function init() {
@@ -179,6 +180,22 @@ module.exports = (
 
       updateUnitPosition(gameId, unitId, position, () => {
         debug('moveUnitToNewPosition: Success!');
+        runUpdateUnitRecentManeuver();
+      });
+    }
+
+    function runUpdateUnitRecentManeuver() {
+      const toPosition = {};
+      toPosition.x = wishedUnitStep.toX;
+      toPosition.y = wishedUnitStep.toY;
+
+      const recentManeuver = {};
+      recentManeuver.name = 'journey';
+      recentManeuver.toPosition = toPosition;
+      recentManeuver.timestamp = Date.now();
+
+      updateUnitRecentManeuver(gameId, unitId, recentManeuver, () => {
+        debug('runUpdateUnitRecentManeuver: Success!');
         callback(null);
       });
     }
