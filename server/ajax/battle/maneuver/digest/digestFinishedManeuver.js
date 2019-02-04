@@ -12,7 +12,8 @@ module.exports = (
   checkIsUnitManeuverZero,
   checkIsEveryUnitManeuverZero,
   refillEveryUnitManeuver,
-  nominateNewActiveUnit
+  nominateNewActiveUnit,
+  checkIsBattleFinished
 ) => {
   return (req, res) => {
     (function init() {
@@ -28,6 +29,14 @@ module.exports = (
     function runDecrementUnitManuver(gameId, unitId) {
       decrementUnitManeuver(gameId, unitId, () => {
         debug('runDecrementUnitManuver: Success!');
+        runCheckIsBattleFinished(gameId, unitId);
+      });
+    }
+
+    function runCheckIsBattleFinished(gameId, unitId) {
+      checkIsBattleFinished(gameId, unitId, (onlyOneBossLeft) => {
+        debug('runCheckIsBattleFinished: onlyOneBossLeft:', onlyOneBossLeft);
+        debug('runCheckIsBattleFinished: Success!');
         runCheckIsUnitManeuverZero(gameId, unitId);
       });
     }
