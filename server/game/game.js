@@ -22,15 +22,15 @@ module.exports = (environment, db, templateToHtml) => {
       templateToHtml(path, viewModel, (error, html) => {
         viewModel.htmlCanvasWrapper = html;
         debug('generateWorld: html.length:', html.length);
-        generateWorldInterface();
+        generateInterfaceWorld();
       });
     }
 
-    function generateWorldInterface() {
-      const path = environment.basepath + '/server/game/worldInterface.ejs';
+    function generateInterfaceWorld() {
+      const path = environment.basepath + '/server/game/interfaceWorld.ejs';
       templateToHtml(path, viewModel, (error, html) => {
-        viewModel.htmlWorldInterface = html;
-        debug('generateWorldInterface: html.length:', html.length);
+        viewModel.htmlInterfaceWorld = html;
+        debug('generateInterfaceWorld: html.length:', html.length);
         generateChat();
       });
     }
