@@ -42,7 +42,10 @@ module.exports = () => {
         }
 
         // Battle entity
-        if (entity.battleStatus === 'active') {
+        if (
+          entity.battleStatus === 'active' ||
+          entity.battleStatus === 'finished'
+        ) {
           battleEntities[id] = entity;
         }
 
