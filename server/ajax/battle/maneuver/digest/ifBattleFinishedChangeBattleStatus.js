@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:ifBattleFinishedChangeBattleStatus');
 const _ = require('lodash');
 
 // What does this module do?
-// Check if all units in battle belong to the same boss.
+// Check if all units in battle belong to the same boss. If true changes battleStatus to finished.
 module.exports = (findEntitiesByGameId, db) => {
   return (gameId, unitId, callback) => {
     (function init() {
@@ -16,11 +16,11 @@ module.exports = (findEntitiesByGameId, db) => {
     function runFindEntitiesByGameId() {
       findEntitiesByGameId(gameId, (error, entities) => {
         debug('runFindEntitiesByGameId: entities._id:', entities._id);
-        checkIsOnlyOneTypeOfBossInBattle(entities);
+        checkEveryUnitInBattleHasSameBoss(entities);
       });
     }
 
-    function checkIsOnlyOneTypeOfBossInBattle(entities) {
+    function checkEveryUnitInBattleHasSameBoss(entities) {
       const bossNameInBattleArray = [];
 
       _.forEach(entities, (entity) => {
@@ -32,7 +32,7 @@ module.exports = (findEntitiesByGameId, db) => {
       });
 
       debug(
-        'checkIsOnlyOneTypeOfBossInBattle: bossNameInBattleArray.length:',
+        'checkEveryUnitInBattleHasSameBoss: bossNameInBattleArray.length:',
         bossNameInBattleArray.length
       );
 
