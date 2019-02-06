@@ -36,12 +36,18 @@ module.exports = (findEntitiesByGameId, db) => {
         bossNameInBattleArray.length
       );
 
-      if (bossNameInBattleArray.length < 2) {
-        findBattleId(entities);
+      if (bossNameInBattleArray.length > 1) {
+        callback(false);
         return;
       }
 
-      callback(false);
+      waitBeforeUpdateBattleStatus(entities);
+    }
+
+    function waitBeforeUpdateBattleStatus(entities) {
+      setTimeout(() => {
+        findBattleId(entities);
+      }, 2000);
     }
 
     function findBattleId(entities) {
