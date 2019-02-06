@@ -41,6 +41,10 @@ g.battle.battleRender = (
       }
     });
 
+    if (!battleEntity) {
+      return;
+    }
+
     setViewportDimentions(battleEntity);
   }
   function setViewportDimentions(battleEntity) {
