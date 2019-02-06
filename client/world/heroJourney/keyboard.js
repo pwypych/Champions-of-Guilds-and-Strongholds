@@ -101,13 +101,17 @@ g.world.keyboard = (walkie, auth, freshEntities) => {
     function postHeroJourney(journey, heroId) {
       const data = { heroJourney: journey, heroId: heroId };
       console.log('journey', journey);
-      $.post('/ajax/world/journey/heroJourneyPost' + auth.uri, data, () => {});
+      $.post(
+        '/ajax/world/heroJourney/heroJourneyPost' + auth.uri,
+        data,
+        () => {}
+      );
     }
 
     function postHeroJourneyCancel() {
       const data = { heroJourneyCancel: 'true' };
       $.post(
-        '/ajax/world/journey/heroJourneyCancelPost' + auth.uri,
+        '/ajax/world/heroJourney/heroJourneyCancelPost' + auth.uri,
         data,
         () => {}
       );

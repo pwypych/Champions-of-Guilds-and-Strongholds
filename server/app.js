@@ -198,16 +198,16 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/world/load/spriteFilenameArrayGet.js')(environment)
   );
 
-  const updateHeroPosition = require('./ajax/world/journey/updateHeroPosition.js')(
+  const updateHeroPosition = require('./ajax/world/heroJourney/updateHeroPosition.js')(
     db
   );
-  const collectResource = require('./ajax/world/journey/collectResource.js')(
+  const collectResource = require('./ajax/world/heroJourney/collectResource.js')(
     db
   );
-  const prepareHeroForBattle = require('./ajax/world/journey/prepareHeroForBattle.js')(
+  const prepareHeroForBattle = require('./ajax/world/heroJourney/prepareHeroForBattle.js')(
     db
   );
-  const decideHeroStep = require('./ajax/world/journey/decideHeroStep.js')(
+  const decideHeroStep = require('./ajax/world/heroJourney/decideHeroStep.js')(
     db,
     findEntitiesByGameId,
     updateHeroPosition,
@@ -215,21 +215,24 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     prepareHeroForBattle
   );
   app.post(
-    '/ajax/world/journey/heroJourneyPost',
+    '/ajax/world/heroJourney/heroJourneyPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/world/journey/heroJourneyPost.js')(),
-    require('./ajax/world/journey/checkHeroOwner.js')(),
-    require('./ajax/world/journey/processHeroJourney.js')(db, decideHeroStep)
+    require('./ajax/world/heroJourney/heroJourneyPost.js')(),
+    require('./ajax/world/heroJourney/checkHeroOwner.js')(),
+    require('./ajax/world/heroJourney/processHeroJourney.js')(
+      db,
+      decideHeroStep
+    )
   );
 
   app.post(
-    '/ajax/world/journey/heroJourneyCancelPost',
+    '/ajax/world/heroJourney/heroJourneyCancelPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/world/journey/heroJourneyCancelPost.js')(db)
+    require('./ajax/world/heroJourney/heroJourneyCancelPost.js')(db)
   );
 
   const unitStats = require('./ajax/world/endTurn/unitStats.js');
