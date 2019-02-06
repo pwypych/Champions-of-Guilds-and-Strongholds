@@ -6,7 +6,6 @@ g.battle.finishedModal = ($body, walkie, auth, freshEntities) => {
   const $finishedModal = $body.find('#js-battle-finished-modal');
 
   (function init() {
-    $finishedModal.show();
     onEntitiesGet();
   })();
 
