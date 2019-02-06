@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:checkIsBattleFinished');
+const debug = require('debug')('cogs:ifBattleFinishedChangeBattlestate');
 const _ = require('lodash');
 
 // What does this module do?
