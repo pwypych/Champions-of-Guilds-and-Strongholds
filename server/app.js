@@ -198,16 +198,16 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/world/load/spriteFilenameArrayGet.js')(environment)
   );
 
-  const updateHeroPosition = require('./ajax/world/journey/updateHeroPosition.js')(
+  const updateHeroPosition = require('./ajax/world/heroJourney/updateHeroPosition.js')(
     db
   );
-  const collectResource = require('./ajax/world/journey/collectResource.js')(
+  const collectResource = require('./ajax/world/heroJourney/collectResource.js')(
     db
   );
-  const prepareHeroForBattle = require('./ajax/world/journey/prepareHeroForBattle.js')(
+  const prepareHeroForBattle = require('./ajax/world/heroJourney/prepareHeroForBattle.js')(
     db
   );
-  const decideHeroStep = require('./ajax/world/journey/decideHeroStep.js')(
+  const decideHeroStep = require('./ajax/world/heroJourney/decideHeroStep.js')(
     db,
     findEntitiesByGameId,
     updateHeroPosition,
@@ -215,21 +215,24 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     prepareHeroForBattle
   );
   app.post(
-    '/ajax/world/journey/heroJourneyPost',
+    '/ajax/world/heroJourney/heroJourneyPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/world/journey/heroJourneyPost.js')(),
-    require('./ajax/world/journey/checkHeroOwner.js')(),
-    require('./ajax/world/journey/processHeroJourney.js')(db, decideHeroStep)
+    require('./ajax/world/heroJourney/heroJourneyPost.js')(),
+    require('./ajax/world/heroJourney/checkHeroOwner.js')(),
+    require('./ajax/world/heroJourney/processHeroJourney.js')(
+      db,
+      decideHeroStep
+    )
   );
 
   app.post(
-    '/ajax/world/journey/heroJourneyCancelPost',
+    '/ajax/world/heroJourney/heroJourneyCancelPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/world/journey/heroJourneyCancelPost.js')(db)
+    require('./ajax/world/heroJourney/heroJourneyCancelPost.js')(db)
   );
 
   const unitStats = require('./ajax/world/endTurn/unitStats.js');
@@ -286,8 +289,9 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     db,
     findEntitiesByGameId
   );
-  const checkIsBattleFinished = require('./ajax/battle/maneuver/digest/checkIsBattleFinished.js')(
-    findEntitiesByGameId
+  const ifBattleFinishedChangeBattleStatus = require('./ajax/battle/maneuver/digest/ifBattleFinishedChangeBattleStatus.js')(
+    findEntitiesByGameId,
+    db
   );
   const digestFinishedManeuverMiddleware = require('./ajax/battle/maneuver/digest/digestFinishedManeuver.js')(
     db,
@@ -296,37 +300,37 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     checkIsEveryUnitManeuverZero,
     refillEveryUnitManeuver,
     nominateNewActiveUnit,
-    checkIsBattleFinished
+    ifBattleFinishedChangeBattleStatus
   );
 
-  const updateUnitPosition = require('./ajax/battle/journey/updateUnitPosition.js')(
+  const updateUnitPosition = require('./ajax/battle/unitJourney/updateUnitPosition.js')(
     db
   );
   const updateUnitRecentManeuver = require('./ajax/battle/maneuver/updateUnitRecentManeuver.js')(
     db
   );
-  const decrementUnitMovement = require('./ajax/battle/journey/decrementUnitMovement.js')(
+  const decrementUnitMovement = require('./ajax/battle/unitJourney/decrementUnitMovement.js')(
     db
   );
-  const decideUnitStep = require('./ajax/battle/journey/decideUnitStep.js')(
+  const decideUnitStep = require('./ajax/battle/unitJourney/decideUnitStep.js')(
     db,
     findEntitiesByGameId,
     decrementUnitMovement,
     updateUnitPosition,
     updateUnitRecentManeuver
   );
-  const refillUnitMovement = require('./ajax/battle/journey/refillUnitMovement.js')(
+  const refillUnitMovement = require('./ajax/battle/unitJourney/refillUnitMovement.js')(
     db,
     findEntitiesByGameId
   );
   app.post(
-    '/ajax/battle/journey/maneuverJourneyPost',
+    '/ajax/battle/unitJourney/maneuverJourneyPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     require('./ajax/battle/maneuver/maneuverPost.js')(),
     verifyManeuverMiddleware,
-    require('./ajax/battle/journey/maneuverJourney.js')(
+    require('./ajax/battle/unitJourney/maneuverJourney.js')(
       db,
       decideUnitStep,
       refillUnitMovement
