@@ -190,7 +190,7 @@ module.exports = (
       toPosition.y = wishedUnitStep.toY;
 
       const recentManeuver = {};
-      recentManeuver.name = 'journey';
+      recentManeuver.name = 'unitJourney';
       recentManeuver.toPosition = toPosition;
       recentManeuver.timestamp = Date.now();
 

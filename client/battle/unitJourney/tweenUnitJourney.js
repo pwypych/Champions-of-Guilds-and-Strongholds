@@ -15,7 +15,7 @@ g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, spriteBucket) => {
       'recentManeuverChanged_',
       'tweenUnitJourney.js',
       (data) => {
-        if (data.entity.recentManeuver.name === 'journey') {
+        if (data.entity.recentManeuver.name === 'unitJourney') {
           const unitId = data.unitId;
           const fromPosition = data.entityOld.position;
           const toPosition = data.entity.position;
