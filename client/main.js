@@ -65,5 +65,6 @@ g.main = function main() {
     g.battle.tweenUnitJourney(walkie, viewport, freshEntities, spriteBucket);
     g.battle.keyboardMelee(walkie, auth, freshEntities);
     g.battle.finishedModal($body, walkie, auth, freshEntities);
+    g.battle.finishedConfirm($body, auth);
   }
 };

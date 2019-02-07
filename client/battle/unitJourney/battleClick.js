@@ -80,6 +80,11 @@ g.battle.battleClick = (walkie, auth, viewport, freshEntities) => {
         battleEntity = entity;
       }
     });
+
+    if (!battleEntity) {
+      return;
+    }
+
     const width = battleEntity.battleWidth;
     const height = battleEntity.battleHeight;
 
