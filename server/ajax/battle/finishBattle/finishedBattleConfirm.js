@@ -91,7 +91,6 @@ module.exports = (db) => {
     function updateUnsetBattleEntities(ctx) {
       const entities = res.locals.entities;
       const gameId = ctx.gameId;
-      const loserFigureId = ctx.loserFigureId;
       const query = { _id: gameId };
       const $unset = {};
 
@@ -100,7 +99,6 @@ module.exports = (db) => {
           $unset[id] = true;
         }
       });
-      $unset[loserFigureId] = true;
 
       const update = { $unset: $unset };
       const options = {};
