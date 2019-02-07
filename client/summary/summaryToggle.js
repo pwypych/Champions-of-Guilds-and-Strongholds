@@ -2,10 +2,10 @@
 
 'use strict';
 
-g.battle.finishedModal = ($body, walkie, auth, freshEntities) => {
-  const $finishedModal = $body.find('.js-battle-finished-modal');
-  const $button = $finishedModal.find('.js-battle-finished-button');
-  const $text = $finishedModal.find('.js-battle-finished-text');
+g.battle.summaryToggle = ($body, walkie, auth, freshEntities) => {
+  const $summaryModal = $body.find('.js-battle-summary-modal');
+  const $button = $summaryModal.find('.js-battle-summary-button');
+  const $text = $summaryModal.find('.js-battle-summary-text');
 
   (function init() {
     onEntitiesGet();
@@ -14,7 +14,7 @@ g.battle.finishedModal = ($body, walkie, auth, freshEntities) => {
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
-      'finishedModal.js',
+      'summaryToggle.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
 
@@ -37,11 +37,11 @@ g.battle.finishedModal = ($body, walkie, auth, freshEntities) => {
     });
 
     if (!battleEntity) {
-      $finishedModal.hide();
+      $summaryModal.hide();
       return;
     }
 
-    $finishedModal.show();
+    $summaryModal.show();
 
     findPlayerId();
   }

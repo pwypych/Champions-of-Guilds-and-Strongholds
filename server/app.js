@@ -351,11 +351,11 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   app.post(
-    '/ajax/battle/finishedBattleConfirmPost',
+    '/ajax/summary/summaryConfirmPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
-    require('./ajax/battle/finishBattle/finishedBattleConfirm.js')(db)
+    require('./ajax/summary/summaryConfirm.js')(db)
   );
 
   debug('setupLibrariesAndRoutes()');

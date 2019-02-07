@@ -31,15 +31,15 @@ module.exports = (environment, db, templateToHtml) => {
       templateToHtml(path, viewModel, (error, html) => {
         viewModel.htmlInterfaceWorld = html;
         debug('generateInterfaceWorld: html.length:', html.length);
-        generateInterfaceBattle();
+        generateSummary();
       });
     }
 
-    function generateInterfaceBattle() {
-      const path = environment.basepath + '/server/game/interfaceBattle.ejs';
+    function generateSummary() {
+      const path = environment.basepath + '/server/game/summary.ejs';
       templateToHtml(path, viewModel, (error, html) => {
-        viewModel.htmlInterfaceBattle = html;
-        debug('generateInterfaceBattle: html.length:', html.length);
+        viewModel.htmlSummary = html;
+        debug('generateSummary: html.length:', html.length);
         generateChat();
       });
     }
