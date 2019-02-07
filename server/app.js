@@ -350,6 +350,14 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     digestFinishedManeuverMiddleware
   );
 
+  app.post(
+    '/ajax/battle/finishedBattleConfirmPost',
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
+    require('./library/middlewareAjaxStateAuth.js')('battleState'),
+    require('./ajax/battle/finishBattle/finishedBattleConfirm.js')(db)
+  );
+
   debug('setupLibrariesAndRoutes()');
   setupExpress();
 }
