@@ -21,9 +21,6 @@ module.exports = (
       const gameId = entities._id;
       const unitId = res.locals.unitId;
 
-      debug('init: gameId:', gameId);
-      debug('init: unitId:', unitId);
-      debug('init: res.locals:', res.locals);
       runDecrementUnitManuver(gameId, unitId);
     })();
 
@@ -35,9 +32,12 @@ module.exports = (
     }
 
     function runCheckIsBattleFinished(gameId, unitId) {
-      ifBattleFinishedChangeState(gameId, unitId, (onlyOneBossLeft) => {
-        debug('runCheckIsBattleFinished: onlyOneBossLeft:', onlyOneBossLeft);
-        debug('runCheckIsBattleFinished: Success!');
+      ifBattleFinishedChangeState(gameId, unitId, (isBattleFinished) => {
+        debug('runCheckIsBattleFinished: isBattleFinished:', isBattleFinished);
+        if (isBattleFinished) {
+          return;
+        }
+
         runCheckIsUnitManeuverZero(gameId, unitId);
       });
     }
@@ -57,7 +57,7 @@ module.exports = (
           'runCheckIsUnitManeuverZero: isUnitManeuverZero:',
           isUnitManeuverZero
         );
-        // finish digest here unit has still some maneuvers left
+        // finish digest here unit has still some maneuvers remaining
       });
     }
 

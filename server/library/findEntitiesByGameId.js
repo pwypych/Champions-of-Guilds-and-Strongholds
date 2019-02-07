@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:findEntitiesByGameId');
+const debug = require('debug')('nope:cogs:findEntitiesByGameId');
 
 // What does this module do?
 // Library that works on callback, it returns all entities for given gameId

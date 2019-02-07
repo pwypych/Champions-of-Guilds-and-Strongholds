@@ -2,11 +2,11 @@
 
 'use strict';
 
-const debug = require('debug')('nope:cogs:battleEntitiesGet');
+const debug = require('debug')('nope:cogs:summaryEntitiesGet');
 const _ = require('lodash');
 
 // What does this module do?
-// Send filtered info about actual battle
+// Send filtered info about actual summary
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
@@ -21,56 +21,56 @@ module.exports = () => {
       const gameId = entities._id;
       const gameEntity = entities[gameId];
 
-      if (gameEntity.state !== 'battleState') {
-        debug('compareState: not battleState!');
+      if (gameEntity.state !== 'summaryState') {
+        debug('compareState: not summaryState!');
         next();
         return;
       }
 
       debug('compareState: state ok!', gameEntity.state);
-      generateBattleEntities(entities, playerId);
+      generateSummaryEntities(entities, playerId);
     }
 
-    function generateBattleEntities(entities, playerId) {
-      const battleEntities = {};
-      battleEntities._id = entities._id;
+    function generateSummaryEntities(entities, playerId) {
+      const summaryEntities = {};
+      summaryEntities._id = entities._id;
 
       _.forEach(entities, (entity, id) => {
         // Game entity
         if (entity.mapData && entity.state) {
-          battleEntities[id] = entity;
+          summaryEntities[id] = entity;
         }
 
         // Battle entity
         if (entity.battleStatus === 'active') {
-          battleEntities[id] = entity;
+          summaryEntities[id] = entity;
         }
 
         // Unit entities
         if (entity.unitName) {
-          battleEntities[id] = entity;
+          summaryEntities[id] = entity;
         }
 
         // Player entities
         if (entity.playerToken && entity.playerData) {
-          battleEntities[id] = {
+          summaryEntities[id] = {
             playerData: entity.playerData
           };
 
           // Player current
           if (id === playerId) {
-            battleEntities[id].playerCurrent = true;
+            summaryEntities[id].playerCurrent = true;
           }
         }
       });
 
-      debug('generateData: battleEntities', battleEntities);
-      sendBattleEntities(battleEntities);
+      debug('generateData: summaryEntities', summaryEntities);
+      sendSummaryEntities(summaryEntities);
     }
 
-    function sendBattleEntities(battleEntities) {
-      debug('sendBattleEntities');
-      res.send(battleEntities);
+    function sendSummaryEntities(summaryEntities) {
+      debug('sendSummaryEntities');
+      res.send(summaryEntities);
       debug('******************** ajax ********************');
     }
   };

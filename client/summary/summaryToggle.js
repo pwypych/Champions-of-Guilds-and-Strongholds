@@ -3,9 +3,9 @@
 'use strict';
 
 g.battle.summaryToggle = ($body, walkie, auth, freshEntities) => {
-  const $summaryModal = $body.find('.js-battle-summary-modal');
-  const $button = $summaryModal.find('.js-battle-summary-button');
-  const $text = $summaryModal.find('.js-battle-summary-text');
+  const $summary = $body.find('.js-summary');
+  const $button = $summary.find('.js-summary-button');
+  const $text = $summary.find('.js-summary-text');
 
   (function init() {
     onEntitiesGet();
@@ -18,32 +18,16 @@ g.battle.summaryToggle = ($body, walkie, auth, freshEntities) => {
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
 
-        if (gameEntity.state !== 'battleState') {
+        if (gameEntity.state !== 'summaryState') {
+          $summary.hide();
           return;
         }
 
-        findBattleEntity();
+        $summary.show();
+        findPlayerId();
       },
       false
     );
-  }
-
-  function findBattleEntity() {
-    let battleEntity;
-    _.forEach(freshEntities(), (entity) => {
-      if (entity.battleStatus === 'finished') {
-        battleEntity = entity;
-      }
-    });
-
-    if (!battleEntity) {
-      $summaryModal.hide();
-      return;
-    }
-
-    $summaryModal.show();
-
-    findPlayerId();
   }
 
   function findPlayerId() {
@@ -74,10 +58,12 @@ g.battle.summaryToggle = ($body, walkie, auth, freshEntities) => {
 
   function showWinnerText() {
     $button.show();
-    $text.html('You have won!');
+    $text.html('You have won! <br/><br/>');
   }
 
   function showLoserText() {}
   $button.hide();
-  $text.html('You have lost this battle...');
+  $text.html(
+    'You have lost this battle... <br/><br/> Waiting for winner to continue...'
+  );
 };

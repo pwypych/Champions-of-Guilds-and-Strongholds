@@ -3,9 +3,7 @@
 'use strict';
 
 g.battle.summaryConfirm = ($body, auth) => {
-  const $button = $body.find(
-    '.js-battle-summary-modal .js-battle-summary-button'
-  );
+  const $button = $body.find('.js-summary .js-summary-button');
 
   (function init() {
     buttonOnClick();

@@ -5,7 +5,7 @@
 const debug = require('debug')('cogs:launchCountdown');
 
 // What does this module do?
-// Change game state to worldState
+// Changes game state to worldState after counting down defined time
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {

@@ -164,7 +164,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareTokenAuth.js')(),
     require('./ajax/launch/entities/launchEntitiesGet.js')(),
     require('./ajax/world/entities/worldEntitiesGet.js')(),
-    require('./ajax/battle/entities/battleEntitiesGet.js')()
+    require('./ajax/battle/entities/battleEntitiesGet.js')(),
+    require('./ajax/summary/entities/summaryEntitiesGet.js')()
   );
 
   // launchState endpoints
@@ -345,7 +346,6 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     require('./ajax/battle/maneuver/maneuverPost.js')(),
     verifyManeuverMiddleware,
-    // tu ma być melee middleware
     require('./ajax/battle/melee/maneuverMelee.js')(db),
     digestFinishedManeuverMiddleware
   );
@@ -354,8 +354,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     '/ajax/summary/summaryConfirmPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
-    require('./library/middlewareAjaxStateAuth.js')('battleState'),
-    require('./ajax/summary/summaryConfirm.js')(db)
+    require('./library/middlewareAjaxStateAuth.js')('summaryState'),
+    require('./ajax/summary/confirm/summaryConfirm.js')(db)
   );
 
   debug('setupLibrariesAndRoutes()');

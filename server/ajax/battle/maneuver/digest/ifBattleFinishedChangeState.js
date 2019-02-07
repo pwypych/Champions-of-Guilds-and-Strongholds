@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:ifBattleFinishedChangeState');
 const _ = require('lodash');
 
 // What does this module do?
-// Check if all units in battle belong to the same boss. If true changes battleStatus to finished.
+// Check if all units in battle belong to the same boss. If true changes game state to summaryState.
 module.exports = (findEntitiesByGameId, db) => {
   return (gameId, unitId, callback) => {
     (function init() {
@@ -41,46 +41,30 @@ module.exports = (findEntitiesByGameId, db) => {
         return;
       }
 
-      waitBeforeUpdateBattleStatus(entities);
+      waitBeforeUpdateState();
     }
 
-    function waitBeforeUpdateBattleStatus(entities) {
+    function waitBeforeUpdateState() {
       setTimeout(() => {
-        findBattleId(entities);
+        updateGameState();
       }, 2000);
     }
 
-    function findBattleId(entities) {
-      let battleId;
-      _.forEach(entities, (entity, id) => {
-        if (entity.battleStatus === 'active') {
-          debug('findBattleId: entity.battleStatus', entity.battleStatus);
-          debug('findBattleId: id', id);
-          battleId = id;
-        }
-      });
-
-      updateBattlestate(battleId);
-    }
-
-    function updateBattlestate(battleId) {
+    function updateGameState() {
       const query = { _id: gameId };
-
-      const field = battleId + '.battleStatus';
+      const field = gameId + '.state';
       const $set = {};
-      $set[field] = 'finished';
-
+      $set[field] = 'summaryState';
       const update = { $set: $set };
       const options = {};
-      debug('findBattleId: update', update);
 
       db.collection('gameCollection').updateOne(
         query,
         update,
         options,
         (error) => {
-          debug('updateBattlestate: error: ', error);
-          debug('updateBattlestate: Success!');
+          debug('updateGameState: error: ', error);
+          debug('updateGameState: worldState');
           callback(true);
         }
       );

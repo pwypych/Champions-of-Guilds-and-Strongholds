@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:summaryConfirm');
 const _ = require('lodash');
 
 // What does this module do?
-// Exept
+//
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
@@ -26,7 +26,7 @@ module.exports = (db) => {
       let isWinnerPlayerConfirming = false;
       _.forEach(entities, (entity, id) => {
         if (entity.unitStats && entity.owner === playerId) {
-          debug('checkIsWinner: id:', id);
+          debug('checkIsWinner: first found entityId:', id);
           debug('checkIsWinner: playerId:', playerId);
           isWinnerPlayerConfirming = true;
           ctx.winnerFigureId = entity.boss;
@@ -59,7 +59,7 @@ module.exports = (db) => {
       const winnerFigureId = ctx.winnerFigureId;
 
       _.forEach(entities, (entity) => {
-        if (entity.battleStatus === 'finished') {
+        if (entity.battleStatus === 'active') {
           if (entity.attackerId === winnerFigureId) {
             ctx.loserFigureId = entity.defenderId;
           } else {

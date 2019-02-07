@@ -39,10 +39,6 @@ g.battle.battleRender = (
       if (entity.battleStatus === 'active') {
         battleEntity = entity;
       }
-
-      if (entity.battleStatus === 'finished') {
-        battleEntity = entity;
-      }
     });
 
     if (!battleEntity) {
