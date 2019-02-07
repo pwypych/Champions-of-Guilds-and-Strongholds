@@ -289,7 +289,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     db,
     findEntitiesByGameId
   );
-  const ifBattleFinishedChangeBattleStatus = require('./ajax/battle/maneuver/digest/ifBattleFinishedChangeBattleStatus.js')(
+  const ifBattleFinishedChangeState = require('./ajax/battle/maneuver/digest/ifBattleFinishedChangeState.js')(
     findEntitiesByGameId,
     db
   );
@@ -300,7 +300,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     checkIsEveryUnitManeuverZero,
     refillEveryUnitManeuver,
     nominateNewActiveUnit,
-    ifBattleFinishedChangeBattleStatus
+    ifBattleFinishedChangeState
   );
 
   const updateUnitPosition = require('./ajax/battle/unitJourney/updateUnitPosition.js')(
