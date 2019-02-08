@@ -24,7 +24,7 @@ module.exports = (db) => {
       const entities = res.locals.entities;
 
       let isPlayerWinnerConfirming = false;
-      _.forEach(entities, (entity, id) => {
+      _.forEach(entities, (entity) => {
         if (entity.unitStats && entity.owner === playerId) {
           isPlayerWinnerConfirming = true;
           ctx.winnerFigureId = entity.boss;

@@ -7,7 +7,7 @@ const _ = require('lodash');
 const validator = require('validator');
 
 // What does this module do?
-// Exept
+//
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
@@ -39,7 +39,10 @@ module.exports = (db) => {
       meleeOnPosition.y = parseInt(meleeOnPosition.y, 10);
 
       ctx.meleeOnPosition = meleeOnPosition;
-      debug('checkRequestBodyUnitJourney: meleeOnPosition', meleeOnPosition);
+      debug(
+        'checkRequestBodyMeleeOnPosition: meleeOnPosition',
+        meleeOnPosition
+      );
       checkIsMeleePositionInRange(ctx);
     }
 
@@ -62,7 +65,7 @@ module.exports = (db) => {
         return;
       }
 
-      debug('checkIsMeleePositionInRange: meleeOnPosition:', meleeOnPosition);
+      debug('checkIsMeleePositionInRange: Yes, melee attack in range!');
       checkIsUnitOnMeleePosition(ctx);
     }
 
@@ -77,7 +80,7 @@ module.exports = (db) => {
             entity.position.x === meleeOnPosition.x &&
             entity.position.y === meleeOnPosition.y
           ) {
-            debug('checkIsUnitOnMeleePosition: target found:', id);
+            debug('checkIsUnitOnMeleePosition: Yes, target found:', id);
             targetId = id;
           }
         }
@@ -85,7 +88,7 @@ module.exports = (db) => {
 
       if (!targetId) {
         debug(
-          'checkIsUnitOnMeleePosition - No target on: meleeOnPosition:',
+          'checkIsUnitOnMeleePosition - No target found on: meleeOnPosition:',
           meleeOnPosition
         );
         return;
