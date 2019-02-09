@@ -355,7 +355,14 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('summaryState'),
-    require('./ajax/summary/confirm/summaryConfirm.js')(db)
+    require('./ajax/summary/confirm/summaryConfirm.js')(db),
+    require('./library/readEntities.js')(db),
+    require('./ajax/summary/confirm/worldChecker.js')(db),
+    require('./ajax/world/endTurn/battleChecker.js')(db),
+    require('./ajax/world/endTurn/createBattle.js')(db, unitStats),
+    require('./ajax/world/endTurn/newDay.js')(db),
+    require('./ajax/world/endTurn/refillHeroMovement.js')(db),
+    require('./ajax/world/endTurn/unsetEndTurnFlags.js')(db)
   );
 
   debug('setupLibrariesAndRoutes()');
