@@ -27,8 +27,8 @@ module.exports = {
 
   bear: {
     range: 1,
-    damageMin: 10,
-    damageMax: 20,
+    damageMin: 5,
+    damageMax: 10,
     life: 6,
     initiative: 30,
     movement: 3,
@@ -41,7 +41,7 @@ module.exports = {
     damageMax: 4,
     life: 6,
     initiative: 35,
-    movement: 10,
+    movement: 4,
     maneuver: 2
   },
 

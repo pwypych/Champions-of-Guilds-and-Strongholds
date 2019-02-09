@@ -176,7 +176,19 @@ module.exports = (db, unitStats) => {
       defenderId,
       battleId
     ) {
-      const obsticle = [{ x: 2, y: 7 }, { x: 2, y: 8 }];
+      const obsticle = [
+        { x: 2, y: 7 },
+        { x: 2, y: 8 },
+        { x: 10, y: 4 },
+        { x: 11, y: 4 },
+        { x: 9, y: 7 },
+        { x: 9, y: 6 },
+        { x: 12, y: 3 },
+        { x: 13, y: 3 },
+        { x: 16, y: 5 },
+        { x: 16, y: 1 },
+        { x: 16, y: 2 }
+      ];
 
       _.forEach(obsticle, (position) => {
         const unit = {};
