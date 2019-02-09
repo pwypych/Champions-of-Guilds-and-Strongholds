@@ -31,21 +31,25 @@ module.exports = (findEntitiesByGameId, db) => {
         }
       });
 
-      debug(
-        'checkEveryUnitInBattleHasSameBoss: bossNameInBattleArray.length:',
-        bossNameInBattleArray.length
-      );
-
       if (bossNameInBattleArray.length > 1) {
+        debug(
+          'checkEveryUnitInBattleHasSameBoss: No - bossNameInBattleArray.length:',
+          bossNameInBattleArray.length
+        );
         callback(false);
         return;
       }
 
+      debug(
+        'checkEveryUnitInBattleHasSameBoss: Yes, only units of one boss!:',
+        bossNameInBattleArray
+      );
       waitBeforeUpdateState();
     }
 
     function waitBeforeUpdateState() {
       setTimeout(() => {
+        debug('waitBeforeUpdateState: Wait 2000Ms!');
         updateGameState();
       }, 2000);
     }
@@ -64,7 +68,7 @@ module.exports = (findEntitiesByGameId, db) => {
         options,
         (error) => {
           debug('updateGameState: error: ', error);
-          debug('updateGameState: worldState');
+          debug('updateGameState: summaryState');
           callback(true);
         }
       );

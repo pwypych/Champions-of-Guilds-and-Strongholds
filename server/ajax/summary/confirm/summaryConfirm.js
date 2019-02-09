@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:summaryConfirm');
 const _ = require('lodash');
 
 // What does this module do?
-//
+// Expect winner player to confirm, remove all battle entities and update hero unit amount
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
@@ -16,35 +16,33 @@ module.exports = (db) => {
       ctx.playerId = res.locals.playerId;
 
       debug('init: ctx.unitId:', ctx.unitId);
-      checkIsWinner(ctx);
+      checkIsPlayerWinnerConfirming(ctx);
     })();
 
-    function checkIsWinner(ctx) {
+    function checkIsPlayerWinnerConfirming(ctx) {
       const playerId = ctx.playerId;
       const entities = res.locals.entities;
 
-      let isWinnerPlayerConfirming = false;
-      _.forEach(entities, (entity, id) => {
+      let isPlayerWinnerConfirming = false;
+      _.forEach(entities, (entity) => {
         if (entity.unitStats && entity.owner === playerId) {
-          debug('checkIsWinner: first found entityId:', id);
-          debug('checkIsWinner: playerId:', playerId);
-          isWinnerPlayerConfirming = true;
+          isPlayerWinnerConfirming = true;
           ctx.winnerFigureId = entity.boss;
         }
       });
 
-      if (!isWinnerPlayerConfirming) {
+      if (!isPlayerWinnerConfirming) {
         debug(
-          'checkIsWinner: isWinnerPlayerConfirming:',
-          isWinnerPlayerConfirming
+          'checkIsPlayerWinnerConfirming: isPlayerWinnerConfirming:',
+          isPlayerWinnerConfirming
         );
         res.status(403).send('403 Forbbidden - Only winner can confirm');
         return;
       }
 
       debug(
-        'checkIsWinner: isWinnerPlayerConfirming:',
-        isWinnerPlayerConfirming
+        'checkIsPlayerWinnerConfirming: isPlayerWinnerConfirming:',
+        isPlayerWinnerConfirming
       );
       calculateExperience(ctx);
     }
@@ -57,40 +55,42 @@ module.exports = (db) => {
     function findBattleLoser(ctx) {
       const entities = res.locals.entities;
       const winnerFigureId = ctx.winnerFigureId;
+      let loserFigureId;
 
       _.forEach(entities, (entity) => {
         if (entity.battleStatus === 'active') {
           if (entity.attackerId === winnerFigureId) {
-            ctx.loserFigureId = entity.defenderId;
+            loserFigureId = entity.defenderId;
           } else {
-            ctx.loserFigureId = entity.attackerId;
+            loserFigureId = entity.attackerId;
           }
         }
       });
 
-      debug('checkIsWinner: ctx.loserFigureId:', ctx.loserFigureId);
-      debug('checkIsWinner: ctx.winnerFigureId:', ctx.winnerFigureId);
-      generateWinnerUnitsLeft(ctx);
+      debug('findBattleLoser: loserFigureId:', loserFigureId);
+      ctx.loserFigureId = loserFigureId;
+      generateWinnerUnitsRemaining(ctx);
     }
 
-    function generateWinnerUnitsLeft(ctx) {
+    function generateWinnerUnitsRemaining(ctx) {
       const entities = res.locals.entities;
-      const unitsLeft = {};
+      const unitsRemaining = {};
 
       _.forEach(entities, (entity) => {
         if (entity.unitStats) {
-          unitsLeft[entity.unitName] = entity.amount;
+          unitsRemaining[entity.unitName] = entity.amount;
         }
       });
 
-      ctx.unitsLeft = unitsLeft;
-      debug('generateWinnerUnitsLeft: unitsLeft:', unitsLeft);
-      updateUnsetBattleEntities(ctx);
+      ctx.unitsRemaining = unitsRemaining;
+      debug('generateWinnerUnitsRemaining: unitsRemaining:', unitsRemaining);
+      updateUnsetBattleUnits(ctx);
     }
 
-    function updateUnsetBattleEntities(ctx) {
+    function updateUnsetBattleUnits(ctx) {
       const entities = res.locals.entities;
       const gameId = ctx.gameId;
+
       const query = { _id: gameId };
       const $unset = {};
 
@@ -112,26 +112,114 @@ module.exports = (db) => {
             debug('ERROR: update mongo error:', error);
           }
 
-          debug('updateUnsetBattleEntities: Target was killed');
-          isPlayerWinner(ctx);
+          debug('updateUnsetBattleUnits: Battle units removed!');
+          updateUnsetBattleEntity(ctx);
         }
       );
     }
 
-    function isPlayerWinner(ctx) {
+    function updateUnsetBattleEntity(ctx) {
+      const entities = res.locals.entities;
+      const gameId = ctx.gameId;
+
+      const query = { _id: gameId };
+      const $unset = {};
+
+      _.forEach(entities, (entity, id) => {
+        if (entity.battleStatus === 'active') {
+          $unset[id] = true;
+        }
+      });
+
+      const update = { $unset: $unset };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('ERROR: update mongo error:', error);
+          }
+
+          debug('updateUnsetBattleEntity: Battle entity removed!');
+          updateUnsetLoserFigure(ctx);
+        }
+      );
+    }
+
+    function updateUnsetLoserFigure(ctx) {
+      const gameId = ctx.gameId;
+      const field = ctx.loserFigureId;
+
+      const query = { _id: gameId };
+
+      const $unset = {};
+      $unset[field] = true;
+
+      const update = { $unset: $unset };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('ERROR: update mongo error:', error);
+          }
+
+          debug('updateUnsetLoserFigure: Loser figure removed!');
+          checkIsHeroWinner(ctx);
+        }
+      );
+    }
+
+    function checkIsHeroWinner(ctx) {
       const entities = res.locals.entities;
       const winnerFigureId = ctx.winnerFigureId;
       const winnerEntity = entities[winnerFigureId];
 
       if (!winnerEntity.heroStats) {
-        debug('isPlayerWinner: NO');
+        debug('checkIsHeroWinner: No, winner is probably non hero figure!');
         next();
         return;
       }
 
-      updateWinnerFigure(ctx);
+      debug('checkIsHeroWinner: Yes, winner is hero figure!');
+      updateWinnerHeroUnitCounts(ctx);
     }
 
-    function updateWinnerFigure(ctx) {}
+    function updateWinnerHeroUnitCounts(ctx) {
+      const gameId = ctx.gameId;
+      const unitsRemaining = ctx.unitsRemaining;
+      const winnerFigureId = ctx.winnerFigureId;
+
+      const query = { _id: gameId };
+      const $set = {};
+      const field = winnerFigureId + '.unitCounts';
+
+      $set[field] = unitsRemaining;
+      const update = { $set: $set };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('ERROR: update mongo error:', error);
+          }
+
+          debug(
+            'updateWinnerHeroUnitCounts: Update winner hero unitCounts!',
+            ctx.unitsRemaining
+          );
+          next();
+        }
+      );
+    }
   };
 };

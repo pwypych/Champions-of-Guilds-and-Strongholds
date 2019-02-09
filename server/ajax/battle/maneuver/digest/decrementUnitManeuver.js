@@ -9,8 +9,7 @@ const debug = require('debug')('cogs:decrementUnitManeuver');
 module.exports = (db) => {
   return (gameId, unitId, callback) => {
     (function init() {
-      debug('init: gameId:', gameId);
-      debug('init: unitId:', unitId);
+      debug('init');
       updateUnitManeuver();
     })();
 

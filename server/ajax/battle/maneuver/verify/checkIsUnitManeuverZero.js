@@ -10,8 +10,7 @@ const _ = require('lodash');
 module.exports = (db, findEntitiesByGameId) => {
   return (gameId, unitId, callback) => {
     (function init() {
-      debug('init: gameId:', gameId);
-      debug('init: unitId:', unitId);
+      debug('init');
       runFindEntitiesByGameId();
     })();
 
