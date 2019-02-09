@@ -9,8 +9,7 @@ const debug = require('debug')('cogs:refillUnitMovement');
 module.exports = (db, findEntitiesByGameId) => {
   return (gameId, unitId, callback) => {
     (function init() {
-      debug('init: unitId:', unitId);
-      debug('init: gameId:', gameId);
+      debug('init');
       runFindEntitiesByGameId();
     })();
 
