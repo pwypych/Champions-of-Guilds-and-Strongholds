@@ -88,11 +88,6 @@ g.world.keyboard = (walkie, auth, freshEntities) => {
         });
       }
 
-      if (event.which === keyboardMap.SPACE) {
-        postHeroJourneyCancel(journey);
-        return;
-      }
-
       if (!_.isEmpty(journey)) {
         postHeroJourney(journey, heroId);
       }
@@ -103,15 +98,6 @@ g.world.keyboard = (walkie, auth, freshEntities) => {
       console.log('journey', journey);
       $.post(
         '/ajax/world/heroJourney/heroJourneyPost' + auth.uri,
-        data,
-        () => {}
-      );
-    }
-
-    function postHeroJourneyCancel() {
-      const data = { heroJourneyCancel: 'true' };
-      $.post(
-        '/ajax/world/heroJourney/heroJourneyCancelPost' + auth.uri,
         data,
         () => {}
       );

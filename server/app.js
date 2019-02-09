@@ -228,14 +228,6 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     )
   );
 
-  app.post(
-    '/ajax/world/heroJourney/heroJourneyCancelPost',
-    require('./library/readEntities.js')(db),
-    require('./library/middlewareTokenAuth.js')(),
-    require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/world/heroJourney/heroJourneyCancelPost.js')(db)
-  );
-
   const unitStats = require('./ajax/world/endTurn/unitStats.js');
   app.post(
     '/ajax/world/endTurn/endTurnPost',
