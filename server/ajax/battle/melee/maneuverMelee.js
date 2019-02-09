@@ -7,7 +7,7 @@ const _ = require('lodash');
 const validator = require('validator');
 
 // What does this module do?
-//
+// Check is melee attack possible, deal damage and update target unit
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {

@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:summaryConfirm');
 const _ = require('lodash');
 
 // What does this module do?
-//
+// Expect winner player to confirm, remove all battle entities and update hero unit amount
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
