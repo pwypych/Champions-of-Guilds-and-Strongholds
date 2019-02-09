@@ -63,10 +63,12 @@
                 <input name="gameId" type="hidden" value="<%= game._id %>">
                 <button type="submit">Save</button>
               </form>
-              <form class="inline-block" action="/panel/loadGamePost" method="post">
-                <input name="gameId" type="hidden" value="<%= game._id %>">
-                <button type="submit">Load</button>
-              </form>
+              <% if (viewModel._.find(viewModel.saves, {_id: game._id})) { %>
+                <form class="inline-block" action="/panel/loadGamePost" method="post">
+                  <input name="gameId" type="hidden" value="<%= game._id %>">
+                  <button type="submit">Load</button>
+                </form>
+              <% } %>
             </div>
           </div>
 

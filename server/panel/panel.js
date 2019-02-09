@@ -51,7 +51,6 @@ module.exports = (environment, db, templateToHtml) => {
     function findGames(viewModel) {
       const query = {};
       const options = {};
-      options.projection = { mapLayer: 0 };
 
       db.collection('gameCollection')
         .find(query, options)
@@ -69,6 +68,30 @@ module.exports = (environment, db, templateToHtml) => {
           viewModel.games = games;
 
           debug('findGames', games.length);
+          findSaves(viewModel);
+        });
+    }
+
+    function findSaves(viewModel) {
+      const query = {};
+      const options = {};
+
+      db.collection('saveCollection')
+        .find(query, options)
+        .toArray((error, saves) => {
+          if (error) {
+            debug('findSaves: error:', error);
+            res
+              .status(503)
+              .send(
+                '503 Service Unavailable: Mongo error, cannot run find on saveCollection'
+              );
+            return;
+          }
+
+          viewModel.saves = saves;
+
+          debug('findSaves', saves);
           sendResponce(viewModel);
         });
     }

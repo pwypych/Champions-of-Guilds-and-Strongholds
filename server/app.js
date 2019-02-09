@@ -156,6 +156,11 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./panel/saveGamePost.js')(environment, db)
   );
 
+  app.post(
+    '/panel/loadGamePost',
+    require('./panel/loadGamePost.js')(environment, db)
+  );
+
   app.get(
     '/game',
     require('./library/readEntities.js')(db),
