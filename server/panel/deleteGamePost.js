@@ -41,11 +41,12 @@ module.exports = (environment, db) => {
         if (error) {
           debug('deleteGamePost: error:', error);
           res.status(503).send('503 Error - Cannot delete game instance');
+          return;
         }
-      });
 
-      debug('deleteGamePost');
-      sendResponce();
+        debug('deleteGamePost');
+        sendResponce();
+      });
     }
 
     function sendResponce() {
