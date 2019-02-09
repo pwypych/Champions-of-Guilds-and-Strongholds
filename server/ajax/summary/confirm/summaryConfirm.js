@@ -69,21 +69,21 @@ module.exports = (db) => {
 
       debug('findBattleLoser: loserFigureId:', loserFigureId);
       ctx.loserFigureId = loserFigureId;
-      generateWinnerUnitsLeft(ctx);
+      generateWinnerUnitsRemaining(ctx);
     }
 
-    function generateWinnerUnitsLeft(ctx) {
+    function generateWinnerUnitsRemaining(ctx) {
       const entities = res.locals.entities;
-      const unitsLeft = {};
+      const unitsRemaining = {};
 
       _.forEach(entities, (entity) => {
         if (entity.unitStats) {
-          unitsLeft[entity.unitName] = entity.amount;
+          unitsRemaining[entity.unitName] = entity.amount;
         }
       });
 
-      ctx.unitsLeft = unitsLeft;
-      debug('generateWinnerUnitsLeft: unitsLeft:', unitsLeft);
+      ctx.unitsRemaining = unitsRemaining;
+      debug('generateWinnerUnitsRemaining: unitsRemaining:', unitsRemaining);
       updateUnsetBattleUnits(ctx);
     }
 
@@ -193,14 +193,14 @@ module.exports = (db) => {
 
     function updateWinnerHeroUnitCounts(ctx) {
       const gameId = ctx.gameId;
-      const unitsLeft = ctx.unitsLeft;
+      const unitsRemaining = ctx.unitsRemaining;
       const winnerFigureId = ctx.winnerFigureId;
 
       const query = { _id: gameId };
       const $set = {};
       const field = winnerFigureId + '.unitCounts';
 
-      $set[field] = unitsLeft;
+      $set[field] = unitsRemaining;
       const update = { $set: $set };
       const options = {};
 
@@ -215,7 +215,7 @@ module.exports = (db) => {
 
           debug(
             'updateWinnerHeroUnitCounts: Update winner hero unitCounts!',
-            ctx.unitsLeft
+            ctx.unitsRemaining
           );
           next();
         }
