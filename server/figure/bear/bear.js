@@ -8,8 +8,7 @@ module.exports = () => {
       return {
         figure: 'bear',
         unitCounts: {
-          bear: 10,
-          goblin: 5
+          bear: 10
         }
       };
     }

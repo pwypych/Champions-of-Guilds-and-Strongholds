@@ -31,7 +31,7 @@ module.exports = {
     damageMax: 10,
     life: 6,
     initiative: 30,
-    movement: 3,
+    movement: 30,
     maneuver: 2
   },
 
