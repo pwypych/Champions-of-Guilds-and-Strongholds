@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.battle.summaryToggle = ($body, walkie, auth, freshEntities) => {
+g.summary.summaryToggle = ($body, walkie, auth, freshEntities) => {
   const $summary = $body.find('.js-summary');
   const $button = $summary.find('.js-summary-button');
   const $text = $summary.find('.js-summary-text');

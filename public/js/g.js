@@ -6,3 +6,5 @@ g.common = {};
 g.launch = {};
 g.world = {};
 g.battle = {};
+g.cheat = {};
+g.summary = {};

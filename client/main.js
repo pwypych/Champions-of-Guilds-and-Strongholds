@@ -66,7 +66,9 @@ g.main = function main() {
     g.battle.tweenUnitJourney(walkie, viewport, freshEntities, spriteBucket);
     g.battle.keyboardMelee(walkie, auth, freshEntities);
 
-    g.battle.summaryToggle($body, walkie, auth, freshEntities);
-    g.battle.summaryConfirm($body, auth);
+    g.summary.summaryToggle($body, walkie, auth, freshEntities);
+    g.summary.summaryConfirm($body, auth);
+
+    g.cheat.playerChangeButtons($body, auth);
   }
 };
