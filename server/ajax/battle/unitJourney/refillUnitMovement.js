@@ -15,7 +15,7 @@ module.exports = (db, findEntitiesByGameId) => {
 
     function runFindEntitiesByGameId() {
       findEntitiesByGameId(gameId, (error, entities) => {
-        debug('runFindEntitiesByGameId: entities._id:', entities._id);
+        debug('runFindEntitiesByGameId');
         updateSetUnitCurrentMovementToBase(entities);
       });
     }

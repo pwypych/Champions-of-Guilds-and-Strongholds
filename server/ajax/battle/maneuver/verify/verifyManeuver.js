@@ -23,6 +23,7 @@ module.exports = (
     })();
 
     function runCheckUnitOwner(gameId, unitId, playerId) {
+      debug('runCheckUnitOwner: Starting...');
       checkUnitOwner(gameId, unitId, playerId, (error, isUnitOwner) => {
         if (!isUnitOwner) {
           debug('runCheckUnitOwner: isUnitOwner:', isUnitOwner);
@@ -35,6 +36,7 @@ module.exports = (
     }
 
     function runCheckUnitActive(gameId, unitId) {
+      debug('runCheckUnitActive: Starting...');
       checkUnitActive(gameId, unitId, (error, isUnitActive) => {
         if (!isUnitActive) {
           debug('runCheckUnitActive: isUnitActive:', isUnitActive);
@@ -47,6 +49,7 @@ module.exports = (
     }
 
     function runCheckUnitManeuverGreatherThenZero(gameId, unitId) {
+      debug('runCheckUnitManeuverGreatherThenZero: Starting...');
       checkUnitManeuverGreatherThenZero(
         gameId,
         unitId,

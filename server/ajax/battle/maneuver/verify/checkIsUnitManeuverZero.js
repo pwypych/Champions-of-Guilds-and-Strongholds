@@ -29,14 +29,14 @@ module.exports = (db, findEntitiesByGameId) => {
         }
       });
 
-      debug('findUnitEntity: unitId', unitId);
+      debug('findUnitEntity: Unit found:', unit.unitName);
       isUnitManeuverZero(unit);
     }
 
     function isUnitManeuverZero(unit) {
       if (unit.unitStats.current.maneuver < 1) {
         debug(
-          'isUnitManeuverZero: unit.unitStats.current.maneuver',
+          'isUnitManeuverZero: Yes, no maneuvers remaining:',
           unit.unitStats.current.maneuver
         );
         callback(null, true);
@@ -44,7 +44,7 @@ module.exports = (db, findEntitiesByGameId) => {
       }
 
       debug(
-        'isUnitManeuverZero: unit.unitStats.current.maneuver',
+        'isUnitManeuverZero: No, maneuvers remaining:',
         unit.unitStats.current.maneuver
       );
       callback(null, false);

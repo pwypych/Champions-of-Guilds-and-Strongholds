@@ -33,7 +33,7 @@ module.exports = (findEntitiesByGameId, db) => {
 
       if (bossNameInBattleArray.length > 1) {
         debug(
-          'checkEveryUnitInBattleHasSameBoss: No - bossNameInBattleArray.length:',
+          'checkEveryUnitInBattleHasSameBoss: No, bosses in battle:',
           bossNameInBattleArray.length
         );
         callback(false);

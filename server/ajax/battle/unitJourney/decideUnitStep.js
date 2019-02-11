@@ -23,7 +23,7 @@ module.exports = (
     // cannot use entities used in middleware, because unit position changes in db for each step
     function runFindEntitiesByGameId() {
       findEntitiesByGameId(gameId, (error, entities) => {
-        debug('runFindEntitiesByGameId: entities._id:', entities._id);
+        debug('runFindEntitiesByGameId');
         checkUnitMovementPoints(entities);
       });
     }
@@ -39,7 +39,7 @@ module.exports = (
       }
 
       debug(
-        'checkUnitMovementPoints: unit.unitStats.current.movement:',
+        'checkUnitMovementPoints: unit movement points remaining:',
         unit.unitStats.current.movement
       );
       checkIsUnitWishedPositionPossible(entities);
@@ -56,12 +56,6 @@ module.exports = (
         }
       });
 
-      debug(
-        'checkIsUnitWishedPositionPossible: wishedUnitStep.toY',
-        wishedUnitStep.toY,
-        'wishedUnitStep.toX:',
-        wishedUnitStep.toX
-      );
       if (
         wishedUnitStep.toY < 0 ||
         wishedUnitStep.toY > battleHeight - 1 ||
@@ -78,8 +72,10 @@ module.exports = (
       }
 
       debug(
-        'checkIsUnitWishedPositionPossible: wishedUnitStep:',
-        wishedUnitStep
+        'checkIsUnitWishedPositionPossible: Position possible - x:',
+        wishedUnitStep.toX,
+        'y:',
+        wishedUnitStep.toY
       );
       checkIsUnitOneStepFromWishedPosition(entities);
     }
@@ -87,21 +83,8 @@ module.exports = (
     function checkIsUnitOneStepFromWishedPosition(entities) {
       const unit = entities[unitId];
 
-      debug(
-        'checkIsUnitOneStepFromWishedPosition: unit.position.x:',
-        unit.position.x,
-        'unit.position.y:',
-        unit.position.y
-      );
       const distanceX = Math.abs(unit.position.x - wishedUnitStep.toX);
       const distanceY = Math.abs(unit.position.y - wishedUnitStep.toY);
-
-      debug(
-        'checkIsUnitOneStepFromWishedPosition: distanceX',
-        distanceX,
-        'distanceY',
-        distanceY
-      );
 
       // allow only up, down, left, right, no diagonals
       if (
@@ -118,6 +101,7 @@ module.exports = (
         return;
       }
 
+      debug('checkIsUnitOneStepFromWishedPosition: Yes!');
       checkIsWishedPositionCollidable(entities);
     }
 
@@ -132,16 +116,11 @@ module.exports = (
           ) {
             if (entity.collision === true) {
               isWishedPositionCollidable = true;
-              debug('checkIsWishedPositionCollidable: ', entity);
+              debug('checkIsWishedPositionCollidable: Yes!:', entity);
             }
           }
         }
       });
-
-      debug(
-        'checkIsWishedPositionCollidable: isWishedPositionCollidable:',
-        isWishedPositionCollidable
-      );
 
       if (isWishedPositionCollidable) {
         let message = 'Cannot move because collision on wished step: ';
@@ -154,10 +133,12 @@ module.exports = (
         return;
       }
 
+      debug('checkIsWishedPositionCollidable: No collision!');
       runDecrementUnitMovement();
     }
 
     function runDecrementUnitMovement() {
+      debug('runDecrementUnitMovement: Starting...');
       decrementUnitMovement(gameId, unitId, () => {
         debug('runDecrementUnitMovement: Success!');
         waitBeforeMove();
@@ -169,17 +150,18 @@ module.exports = (
 
       setTimeout(() => {
         debug('waitBeforeMove: Waiting 250ms!');
-        moveUnitToNewPosition();
+        runUpdateUnitPosition();
       }, unitMoveSpeed);
     }
 
-    function moveUnitToNewPosition() {
+    function runUpdateUnitPosition() {
       const position = {};
       position.x = wishedUnitStep.toX;
       position.y = wishedUnitStep.toY;
 
+      debug('runUpdateUnitPosition: Starting...');
       updateUnitPosition(gameId, unitId, position, () => {
-        debug('moveUnitToNewPosition: Success!');
+        debug('runUpdateUnitPosition: Success!');
         runUpdateUnitRecentManeuver();
       });
     }
@@ -194,6 +176,7 @@ module.exports = (
       recentManeuver.toPosition = toPosition;
       recentManeuver.timestamp = Date.now();
 
+      debug('runUpdateUnitRecentManeuver: Starting...');
       updateUnitRecentManeuver(gameId, unitId, recentManeuver, () => {
         debug('runUpdateUnitRecentManeuver: Success!');
         callback(null);
