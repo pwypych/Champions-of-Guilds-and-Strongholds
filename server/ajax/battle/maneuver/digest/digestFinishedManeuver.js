@@ -21,10 +21,12 @@ module.exports = (
       const gameId = entities._id;
       const unitId = res.locals.unitId;
 
+      debug('init');
       runDecrementUnitManuver(gameId, unitId);
     })();
 
     function runDecrementUnitManuver(gameId, unitId) {
+      debug('runDecrementUnitManuver: Starting...');
       decrementUnitManeuver(gameId, unitId, () => {
         debug('runDecrementUnitManuver: Success!');
         runCheckIsBattleFinished(gameId, unitId);
@@ -32,17 +34,20 @@ module.exports = (
     }
 
     function runCheckIsBattleFinished(gameId, unitId) {
+      debug('runCheckIsBattleFinished: Starting...');
       ifBattleFinishedChangeState(gameId, unitId, (isBattleFinished) => {
-        debug('runCheckIsBattleFinished: isBattleFinished:', isBattleFinished);
         if (isBattleFinished) {
+          debug('runCheckIsBattleFinished: Battle is finnished!');
           return;
         }
 
+        debug('runCheckIsBattleFinished: Battle still running!');
         runCheckIsUnitManeuverZero(gameId, unitId);
       });
     }
 
     function runCheckIsUnitManeuverZero(gameId, unitId) {
+      debug('runCheckIsUnitManeuverZero: Starting...');
       checkIsUnitManeuverZero(gameId, unitId, (error, isUnitManeuverZero) => {
         if (isUnitManeuverZero) {
           debug(
@@ -53,15 +58,13 @@ module.exports = (
           return;
         }
 
-        debug(
-          'runCheckIsUnitManeuverZero: isUnitManeuverZero:',
-          isUnitManeuverZero
-        );
+        debug('runCheckIsUnitManeuverZero: Unit Still have maneuvers!');
         // finish digest here unit has still some maneuvers remaining
       });
     }
 
     function runCheckIsEveryUnitManeuverZero(gameId, unitId) {
+      debug('runCheckIsEveryUnitManeuverZero: Starting...');
       checkIsEveryUnitManeuverZero(gameId, (error, isEveryUnitManeuverZero) => {
         if (isEveryUnitManeuverZero) {
           debug(
@@ -81,6 +84,7 @@ module.exports = (
     }
 
     function runRefillEveryUnitManeuver(gameId, unitId) {
+      debug('runRefillEveryUnitManeuver: Starting...');
       refillEveryUnitManeuver(gameId, () => {
         debug('runRefillEveryUnitManeuver: Success!');
         runNominateNewActiveUnit(gameId, unitId);
@@ -88,6 +92,7 @@ module.exports = (
     }
 
     function runNominateNewActiveUnit(gameId, unitId) {
+      debug('runNominateNewActiveUnit: Starting...');
       nominateNewActiveUnit(gameId, unitId, () => {
         debug('runNominateNewActiveUnit: Success!');
       });

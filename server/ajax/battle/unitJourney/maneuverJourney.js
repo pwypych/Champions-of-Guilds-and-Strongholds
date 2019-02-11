@@ -18,7 +18,7 @@ module.exports = (db, decideUnitStep, refillUnitMovement) => {
       ctx.unitId = res.locals.unitId;
       ctx.unit = entities[ctx.unitId];
 
-      debug('init: ctx.unitId:', ctx.unitId);
+      debug('init');
       checkRequestBodyUnitJourney(ctx);
     })();
 
@@ -37,7 +37,7 @@ module.exports = (db, decideUnitStep, refillUnitMovement) => {
           !validator.isNumeric(step.toX) ||
           !validator.isNumeric(step.toY)
         ) {
-          debug('POST parameter unitJourney not valid');
+          debug('POST parameter unitJourney not valid!');
           isError = true;
           return;
         }
@@ -108,12 +108,14 @@ module.exports = (db, decideUnitStep, refillUnitMovement) => {
         options,
         (error) => {
           debug('setProcessingJourneyUntilTimestamp: error: ', error);
+          debug('setProcessingJourneyUntilTimestamp: Timestamp set!');
           runDecideUnitStep(ctx);
         }
       );
     }
 
     function runDecideUnitStep(ctx) {
+      debug('runDecideUnitStep: Starting...');
       const gameId = ctx.gameId;
       const playerId = ctx.playerId;
       const unitId = ctx.unitId;
@@ -149,12 +151,14 @@ module.exports = (db, decideUnitStep, refillUnitMovement) => {
         options,
         (error) => {
           debug('unsetProcessingJourneyUntilTimestamp: Done! | error: ', error);
+          debug('unsetProcessingJourneyUntilTimestamp: Timestamp unset!');
           runRefillUnitMovement(gameId, unitId);
         }
       );
     }
 
     function runRefillUnitMovement(gameId, unitId) {
+      debug('runRefillUnitMovement: Starting...');
       refillUnitMovement(gameId, unitId, () => {
         debug('runRefillUnitMovement: Success!');
         next();
