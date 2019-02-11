@@ -42,6 +42,7 @@ g.main = function main() {
     g.launch.launchDisableUi($body, walkie);
 
     g.common.canvasWrapperToggle($body, walkie);
+    g.common.keyboardSaveLoad(walkie, auth);
 
     g.world.interfaceWorldToggle($body, walkie);
     g.world.informationButton($body);
