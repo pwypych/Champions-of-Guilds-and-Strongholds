@@ -15,7 +15,7 @@ module.exports = (findEntitiesByGameId, db) => {
 
     function runFindEntitiesByGameId() {
       findEntitiesByGameId(gameId, (error, entities) => {
-        debug('runFindEntitiesByGameId: entities._id:', entities._id);
+        debug('runFindEntitiesByGameId');
         checkEveryUnitInBattleHasSameBoss(entities);
       });
     }

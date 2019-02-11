@@ -9,14 +9,13 @@ const debug = require('debug')('cogs:checkUnitActive');
 module.exports = (findEntitiesByGameId) => {
   return (gameId, unitId, callback) => {
     (function init() {
-      debug('init: gameId:', gameId);
-      debug('init: unitId:', unitId);
+      debug('init');
       runFindEntitiesByGameId();
     })();
 
     function runFindEntitiesByGameId() {
       findEntitiesByGameId(gameId, (error, entities) => {
-        debug('runFindEntitiesByGameId: entities._id:', entities._id);
+        debug('runFindEntitiesByGameId');
         isUnitActive(entities);
       });
     }
@@ -29,7 +28,7 @@ module.exports = (findEntitiesByGameId) => {
         return;
       }
 
-      debug('isUnitActive: unit.active:', unit.active);
+      debug('isUnitActive: Yes!');
       callback(null, true);
     }
   };

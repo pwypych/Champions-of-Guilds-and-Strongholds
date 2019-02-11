@@ -9,13 +9,13 @@ const debug = require('debug')('cogs:checkUnitManeuverGreatherThenZero');
 module.exports = (findEntitiesByGameId) => {
   return (gameId, unitId, callback) => {
     (function init() {
-      debug('init: unitId:', unitId);
+      debug('init');
       runFindEntitiesByGameId();
     })();
 
     function runFindEntitiesByGameId() {
       findEntitiesByGameId(gameId, (error, entities) => {
-        debug('runFindEntitiesByGameId: entities._id:', entities._id);
+        debug('runFindEntitiesByGameId');
         checkUnitManeuver(entities);
       });
     }
@@ -24,7 +24,7 @@ module.exports = (findEntitiesByGameId) => {
       const unit = entities[unitId];
       if (unit.unitStats.current.maneuver < 1) {
         debug(
-          'checkUnitManeuver: No maneuver! - unit.unitStats.current.maneuver:',
+          'checkUnitManeuver: No maneuvers remaining! - unit.unitStats.current.maneuver:',
           unit.unitStats.current.maneuver
         );
         callback(null, false);
@@ -32,7 +32,7 @@ module.exports = (findEntitiesByGameId) => {
       }
 
       debug(
-        'checkUnitManeuver: unit.unitStats.current.maneuver:',
+        'checkUnitManeuver: Maneuvers remaining:',
         unit.unitStats.current.maneuver
       );
       callback(null, true);

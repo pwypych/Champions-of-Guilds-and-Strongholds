@@ -18,7 +18,7 @@ module.exports = (db) => {
       ctx.unitId = res.locals.unitId;
       ctx.unit = entities[ctx.unitId];
 
-      debug('init: ctx.unitId:', ctx.unitId);
+      debug('init');
       checkRequestBodyMeleeOnPosition(ctx);
     })();
 
@@ -102,22 +102,19 @@ module.exports = (db) => {
 
     function checkIsTragetFriendly(ctx) {
       const unit = ctx.unit;
-      debug('checkIsTragetFriendly: unit.boss:', unit.boss);
       const target = ctx.target;
-      debug('checkIsTragetFriendly: target.boss:', target.boss);
       if (target.boss === unit.boss) {
         debug('checkIsTragetFriendly: Cannot attack friendly unit');
         return;
       }
 
+      debug('checkIsTragetFriendly: Target unit is enemy!');
       scanObsticlesAroundTarget(ctx);
     }
 
     function scanObsticlesAroundTarget(ctx) {
       const entities = res.locals.entities;
       const target = ctx.target;
-      debug('scanObsticlesAroundTarget: target.unitName:', target.unitName);
-      debug('scanObsticlesAroundTarget: target.position:', target.position);
       const obsticlesAroundTarget = [];
 
       _.forEach(entities, (entity, id) => {
@@ -133,12 +130,6 @@ module.exports = (db) => {
               entity.position.y === target.position.y + offset.y
             ) {
               obsticlesAroundTarget.push(id);
-              debug(
-                'scanObsticlesAroundTarget: Battle object On x:',
-                target.position.x + offset.x,
-                'y:',
-                target.position.y + offset.y
-              );
             }
           });
         }
@@ -146,7 +137,7 @@ module.exports = (db) => {
 
       debug(
         'scanObsticlesAroundTarget: obsticlesAroundTarget:',
-        obsticlesAroundTarget
+        obsticlesAroundTarget.length
       );
       ctx.obsticlesAroundTarget = obsticlesAroundTarget;
       countDamageModificator(ctx);
@@ -163,18 +154,10 @@ module.exports = (db) => {
         const obsticle = entities[obsticleId];
         if (!obsticle.unitStats) {
           damageModificator += 20;
-          debug(
-            'countDamageModificator - neutral obsticle: damageModificator:',
-            damageModificator
-          );
         }
 
         if (unit.boss === obsticle.boss && obsticleId !== unitId) {
           damageModificator += 40;
-          debug(
-            'countDamageModificator - ally obsticle: damageModificator:',
-            damageModificator
-          );
         }
       });
 
@@ -189,10 +172,8 @@ module.exports = (db) => {
       const damageMin = unit.unitStats.current.damageMin;
       const unitAmount = unit.amount;
       const damageModificator = ctx.damageModificator / 100;
-      debug('countUnitDamageSum: damageModificator:', damageModificator);
 
       const randomDamage = _.random(damageMin, damageMax);
-      debug('countUnitDamageSum: randomDamage:', randomDamage);
       debug(
         'countUnitDamageSum: damageSum = ',
         randomDamage,
@@ -231,10 +212,6 @@ module.exports = (db) => {
       const targetLifeSum = ctx.targetLifeSum;
 
       const targetLifeSumRemaining = targetLifeSum - damageSum;
-      debug(
-        'countTargetUnitsRemaining: targetLifeSumRemaining',
-        targetLifeSumRemaining
-      );
 
       if (targetLifeSumRemaining < 1) {
         debug('countTargetUnitsRemaining: Unit should DIE!');
@@ -246,22 +223,17 @@ module.exports = (db) => {
       const targetUnitsRemaining = _.ceil(
         targetLifeSumRemaining / targetBaseLife
       );
-      debug(
-        'countTargetUnitsRemaining: targetUnitsRemaining',
-        targetUnitsRemaining
-      );
 
       const lifeRemaining = targetLifeSumRemaining % targetBaseLife;
-      debug('countTargetUnitsRemaining: lifeRemaining', lifeRemaining);
 
       ctx.targetUnitsRemaining = targetUnitsRemaining;
       ctx.lifeRemaining = lifeRemaining;
 
+      debug('countTargetUnitsRemaining: lifeRemaining', lifeRemaining);
       updateTargetAmount(ctx);
     }
 
     function updateTargetAmount(ctx) {
-      debug('updateTargetAmount: ctx:', ctx);
       const gameId = ctx.gameId;
       const targetId = ctx.targetId;
       const lifeRemaining = ctx.lifeRemaining;
@@ -281,7 +253,8 @@ module.exports = (db) => {
         update,
         options,
         (error) => {
-          debug('setProcessingJourneyUntilTimestamp: error: ', error);
+          debug('updateTargetAmount: error: ', error);
+          debug('updateTargetAmount: Target life and amount updated!');
           next();
         }
       );
@@ -303,10 +276,7 @@ module.exports = (db) => {
         update,
         options,
         (error) => {
-          if (error) {
-            debug('ERROR: update mongo error:', error);
-          }
-
+          debug('updateUnsetUnitEntitiy: error: ', error);
           debug('updateUnsetUnitEntitiy: Target was killed');
           next();
         }
