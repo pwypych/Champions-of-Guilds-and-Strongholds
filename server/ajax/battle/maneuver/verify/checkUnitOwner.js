@@ -9,15 +9,13 @@ const debug = require('debug')('cogs:checkUnitOwner');
 module.exports = (findEntitiesByGameId) => {
   return (gameId, unitId, playerId, callback) => {
     (function init() {
-      debug('init: gameId:', gameId);
-      debug('init: unitId:', unitId);
-      debug('init: playerId:', playerId);
+      debug('init');
       runFindEntitiesByGameId();
     })();
 
     function runFindEntitiesByGameId() {
       findEntitiesByGameId(gameId, (error, entities) => {
-        debug('runFindEntitiesByGameId: entities._id:', entities._id);
+        debug('runFindEntitiesByGameId');
         checkUnitOwner(entities);
       });
     }

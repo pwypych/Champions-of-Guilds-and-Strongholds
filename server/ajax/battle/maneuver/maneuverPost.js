@@ -24,12 +24,12 @@ module.exports = () => {
       }
       res.locals.unitId = unitId;
 
-      debug('checkRequestBodyUnitId: unitId', unitId);
+      debug('checkRequestBodyUnitId: unitId:', unitId);
       sendResponce();
     }
 
     function sendResponce() {
-      debug('sendResponce');
+      debug('sendResponce: No Errors!');
       res.send({ error: 0 });
       next();
     }

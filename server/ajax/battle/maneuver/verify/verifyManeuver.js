@@ -18,9 +18,7 @@ module.exports = (
       const unitId = res.locals.unitId;
       const playerId = res.locals.playerId;
 
-      debug('init: gameId:', gameId);
-      debug('init: unitId:', unitId);
-      debug('init: playerId:', playerId);
+      debug('init');
       runCheckUnitOwner(gameId, unitId, playerId);
     })();
 
