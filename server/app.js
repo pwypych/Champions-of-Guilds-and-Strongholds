@@ -178,6 +178,13 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/summary/entities/summaryEntitiesGet.js')()
   );
 
+  app.get(
+    '/ajax/cheat/entities/cheatEntitiesGet',
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
+    require('./ajax/cheat/entities/cheatEntitiesGet.js')()
+  );
+
   // launchState endpoints
   app.post(
     '/ajax/launch/ready/playerReadyPost',

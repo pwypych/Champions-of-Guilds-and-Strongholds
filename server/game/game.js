@@ -22,6 +22,15 @@ module.exports = (environment, db, templateToHtml) => {
       templateToHtml(path, viewModel, (error, html) => {
         viewModel.htmlCanvasWrapper = html;
         debug('generateWorld: html.length:', html.length);
+        generateCheat();
+      });
+    }
+
+    function generateCheat() {
+      const path = environment.basepath + '/server/game/cheat.ejs';
+      templateToHtml(path, viewModel, (error, html) => {
+        viewModel.htmlCheat = html;
+        debug('generateCheat: html.length:', html.length);
         generateInterfaceWorld();
       });
     }
