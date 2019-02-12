@@ -5,12 +5,13 @@
 const debug = require('debug')('cogs:refillEveryUnitManeuver');
 const _ = require('lodash');
 
-// What does this module do?
-// Refills every unit maneuver that is in current active battle. Used to run after every unit maneuver is zero to refill.
 module.exports = (db, findEntitiesByGameId) => {
   return (gameId, callback) => {
     (function init() {
-      debug('init: gameId:', gameId);
+      debug(
+        '// Refills every unit maneuver that is in current active battle. Used to run after every unit maneuver is zero to refill.'
+      );
+
       runFindEntitiesByGameId();
     })();
 

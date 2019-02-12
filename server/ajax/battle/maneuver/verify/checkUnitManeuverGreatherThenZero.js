@@ -4,12 +4,11 @@
 
 const debug = require('debug')('cogs:checkUnitManeuverGreatherThenZero');
 
-// What does this module do?
-// Checks if unit have any maneuvers left
 module.exports = (findEntitiesByGameId) => {
   return (gameId, unitId, callback) => {
     (function init() {
       debug('// Checks if unit have any maneuvers left');
+
       runFindEntitiesByGameId();
     })();
 

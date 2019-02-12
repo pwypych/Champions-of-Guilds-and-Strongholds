@@ -5,12 +5,13 @@
 const debug = require('debug')('cogs:nominateNewActiveUnit.js');
 const _ = require('lodash');
 
-// What does this module do?
-// It marks unit that just did maneuver as not active, finds unit with highest initiative that has some maneuvers left, and marks it with active component
 module.exports = (db, findEntitiesByGameId) => {
   return (gameId, unitId, callback) => {
     (function init() {
-      debug('init');
+      debug(
+        '// It marks unit that just did maneuver as not active, finds unit with highest initiative that has some maneuvers left, and marks it with active component'
+      );
+
       updateSetUnitActiveToFalse();
     })();
 

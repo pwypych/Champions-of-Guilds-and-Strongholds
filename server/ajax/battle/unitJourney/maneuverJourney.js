@@ -6,11 +6,13 @@ const debug = require('debug')('cogs:maneuverJourney');
 const validator = require('validator');
 const async = require('async');
 
-// What does this module do?
-// Middleware, expects unitId and unitJourney in res.locals, flags unitBegingMoved and processes each step
 module.exports = (db, decideUnitStep, refillUnitMovement) => {
   return (req, res, next) => {
     (function init() {
+      debug(
+        '// Middleware, expects unitId and unitJourney in res.locals, flags unitBegingMoved and processes each step'
+      );
+
       const ctx = {};
       const entities = res.locals.entities;
       ctx.gameId = entities._id;
@@ -18,7 +20,6 @@ module.exports = (db, decideUnitStep, refillUnitMovement) => {
       ctx.unitId = res.locals.unitId;
       ctx.unit = entities[ctx.unitId];
 
-      debug('init');
       checkRequestBodyUnitJourney(ctx);
     })();
 

@@ -5,12 +5,11 @@
 const debug = require('debug')('nope:cogs:battleEntitiesGet');
 const _ = require('lodash');
 
-// What does this module do?
-// Send filtered info about actual battle
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
-      debug('init');
+      debug('// Send filtered info about actual battle');
+
       const entities = res.locals.entities;
       const playerId = res.locals.playerId;
 

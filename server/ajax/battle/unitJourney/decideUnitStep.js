@@ -5,8 +5,6 @@
 const debug = require('debug')('cogs:decideUnitStep');
 const _ = require('lodash');
 
-// What does this module do?
-// Decides what to do with wished unit step. Is step possible? Decide what will happen!
 module.exports = (
   db,
   findEntitiesByGameId,
@@ -16,7 +14,10 @@ module.exports = (
 ) => {
   return (gameId, playerId, unitId, wishedUnitStep, callback) => {
     (function init() {
-      debug('init');
+      debug(
+        '// Decides what to do with wished unit step. Is step possible? Decide what will happen!'
+      );
+
       runFindEntitiesByGameId();
     })();
 

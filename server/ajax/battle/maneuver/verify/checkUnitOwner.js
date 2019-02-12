@@ -4,12 +4,11 @@
 
 const debug = require('debug')('cogs:checkUnitOwner');
 
-// What does this module do?
-// Check if player sending request is owner of unit
 module.exports = (findEntitiesByGameId) => {
   return (gameId, unitId, playerId, callback) => {
     (function init() {
       debug('// Check if player sending request is owner of unit');
+
       runFindEntitiesByGameId();
     })();
 

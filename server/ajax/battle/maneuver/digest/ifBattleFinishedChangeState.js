@@ -5,14 +5,13 @@
 const debug = require('debug')('cogs:ifBattleFinishedChangeState');
 const _ = require('lodash');
 
-// What does this module do?
-// Check if all units in battle belong to the same boss. If true changes game state to summaryState.
 module.exports = (findEntitiesByGameId, db) => {
   return (gameId, unitId, callback) => {
     (function init() {
       debug(
         '// Check if all units in battle belong to the same boss. If true changes game state to summaryState'
       );
+
       runFindEntitiesByGameId();
     })();
 

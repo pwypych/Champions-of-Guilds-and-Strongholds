@@ -4,12 +4,11 @@
 
 const debug = require('debug')('cogs:decrementUnitMovement');
 
-// What does this module do?
-// Decrements given unit movement by 1
 module.exports = (db) => {
   return (gameId, unitId, callback) => {
     (function init() {
-      debug('init');
+      debug('// Decrements given unit movement by 1');
+
       updateDecrementUnitMovementByOne();
     })();
 

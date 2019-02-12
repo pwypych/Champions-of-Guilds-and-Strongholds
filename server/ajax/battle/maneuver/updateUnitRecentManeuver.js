@@ -4,12 +4,11 @@
 
 const debug = require('debug')('cogs:updateUnitRecentManeuver');
 
-// What does this module do?
-// Updates given unit recentManeuver to new
 module.exports = (db) => {
   return (gameId, unitId, recentManeuver, callback) => {
     (function init() {
-      debug('init');
+      debug('// Updates given unit recentManeuver to new');
+
       updateUnitRecentManeuver();
     })();
 

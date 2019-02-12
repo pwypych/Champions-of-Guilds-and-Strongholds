@@ -6,11 +6,13 @@ const debug = require('debug')('cogs:maneuverMelee');
 const _ = require('lodash');
 const validator = require('validator');
 
-// What does this module do?
-// Check is melee attack possible, deal damage and update target unit
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
+      debug(
+        '// Check is melee attack possible, deal damage and update target unit'
+      );
+
       const ctx = {};
       const entities = res.locals.entities;
       ctx.gameId = entities._id;
@@ -18,9 +20,6 @@ module.exports = (db) => {
       ctx.unitId = res.locals.unitId;
       ctx.unit = entities[ctx.unitId];
 
-      debug(
-        '// Check is melee attack possible, deal damage and update target unit'
-      );
       checkRequestBodyMeleeOnPosition(ctx);
     })();
 

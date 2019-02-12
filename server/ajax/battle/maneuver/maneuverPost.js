@@ -4,14 +4,13 @@
 
 const debug = require('debug')('cogs:maneuverPost');
 
-// What does this module do?
-// Endpoint, accepts wished unit journey for a unit, initial verifies, sends response and passes to next
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
       debug(
         '// Endpoint, accepts wished unit journey for a unit, initial verifies, sends response and passes to next'
       );
+
       checkRequestBodyUnitId();
     })();
 

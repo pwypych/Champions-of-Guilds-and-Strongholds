@@ -4,12 +4,11 @@
 
 const debug = require('debug')('cogs:updateUnitPosition');
 
-// What does this module do?
-// Updates given unit position to new
 module.exports = (db) => {
   return (gameId, unitId, position, callback) => {
     (function init() {
-      debug('init');
+      debug('// Updates given unit position to new');
+
       updateUnitPosition();
     })();
 

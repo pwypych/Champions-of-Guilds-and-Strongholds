@@ -4,12 +4,11 @@
 
 const debug = require('debug')('cogs:checkUnitActive');
 
-// What does this module do?
-// Check is unit active (it's "active" component is set to true)
 module.exports = (findEntitiesByGameId) => {
   return (gameId, unitId, callback) => {
     (function init() {
       debug('// Check is unit active (its "active" component is set to true)');
+
       runFindEntitiesByGameId();
     })();
 
