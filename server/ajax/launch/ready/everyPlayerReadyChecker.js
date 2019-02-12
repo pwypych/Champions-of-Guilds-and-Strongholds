@@ -5,14 +5,12 @@
 const debug = require('debug')('cogs:everyPlayerReadyChecker');
 const _ = require('lodash');
 
-// What does this module do?
-// Check is every player ready
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
+      debug('// Check is every player ready');
       const entities = res.locals.entities;
 
-      debug('init');
       checkEveryPlayerReady(entities);
     })();
 

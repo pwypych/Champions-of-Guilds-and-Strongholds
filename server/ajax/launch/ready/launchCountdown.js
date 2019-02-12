@@ -4,14 +4,14 @@
 
 const debug = require('debug')('cogs:launchCountdown');
 
-// What does this module do?
-// Changes game state to worldState after counting down defined time
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
+      debug(
+        '// Changes game state to worldState after counting down defined time'
+      );
       const gameId = res.locals.entities._id;
 
-      debug('init');
       fireCountdown(gameId);
     })();
 

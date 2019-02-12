@@ -4,15 +4,12 @@
 
 const debug = require('debug')('cogs:playerReadyPost');
 
-// What does this module do?
-// Set player ready to true in db
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
+      debug('// Set player ready to true in db');
       const entities = res.locals.entities;
       const playerId = res.locals.playerId;
-
-      debug('init');
 
       // no paramaters passed to this middleware, no need to validate
 

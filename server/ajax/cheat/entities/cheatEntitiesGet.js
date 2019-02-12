@@ -5,15 +5,14 @@
 const debug = require('debug')('cogs:cheatEntitiesGet');
 const _ = require('lodash');
 
-// What does this module do?
-// Sends all entities to a player without filtering
 module.exports = () => {
   return (req, res) => {
     (function init() {
+      debug('// Sends all entities to a player without filtering');
+
       const entities = res.locals.entities;
       const playerId = res.locals.playerId;
 
-      debug('init');
       findCheatEntities(entities, playerId);
     })();
 

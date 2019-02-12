@@ -6,14 +6,12 @@ const debug = require('debug')('cogs:prepareHeroFigure');
 const _ = require('lodash');
 const shortId = require('shortid');
 
-// What does this module do?
-// Place every hero figure in front of a castle
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
+      debug('// Place every hero figure in front of a castle');
       const entities = res.locals.entities;
 
-      debug('init');
       generateHeroArray(entities);
     })();
 

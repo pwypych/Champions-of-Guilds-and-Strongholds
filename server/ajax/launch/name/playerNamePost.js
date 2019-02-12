@@ -5,12 +5,11 @@
 const debug = require('debug')('cogs:playerNamePost');
 const validator = require('validator');
 
-// What does this module do?
-// Endpoint that updates player name for game in db
 module.exports = (db) => {
   return (req, res) => {
     (function init() {
-      debug('init');
+      debug('// Endpoint that updates player name for game in db');
+
       checkRequestBody();
     })();
 

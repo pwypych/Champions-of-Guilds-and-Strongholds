@@ -5,17 +5,17 @@
 const debug = require('debug')('cogs:summaryConfirm');
 const _ = require('lodash');
 
-// What does this module do?
-// Expect winner player to confirm, remove all battle entities and update hero unit amount
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
+      debug(
+        '// Expect winner player to confirm, remove all battle entities and update hero unit amount'
+      );
       const ctx = {};
       const entities = res.locals.entities;
       ctx.gameId = entities._id;
       ctx.playerId = res.locals.playerId;
 
-      debug('init: ctx.unitId:', ctx.unitId);
       checkIsPlayerWinnerConfirming(ctx);
     })();
 

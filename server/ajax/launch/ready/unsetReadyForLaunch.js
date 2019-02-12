@@ -5,12 +5,11 @@
 const debug = require('debug')('cogs:unsetReadyForLaunch');
 const _ = require('lodash');
 
-// What does this module do?
-// Middleware that unset readyForLaunch flag from player entitie
 module.exports = (db) => {
   return (req, res) => {
     (function init() {
-      debug('init');
+      debug('// Middleware that unset readyForLaunch flag from player entitie');
+
       generatePlayerIdArray();
     })();
 

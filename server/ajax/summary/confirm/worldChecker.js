@@ -4,14 +4,17 @@
 
 const debug = require('debug')('cogs:worldChecker');
 const _ = require('lodash');
-// What does this module do?
-// Middleware, change game state to worldState if there are no battle entities
+
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
+      debug(
+        '// Middleware, change game state to worldState if there are no battle entities'
+      );
+
       const gameId = res.locals.entities._id;
       const entities = res.locals.entities;
-      debug('init');
+
       checkBattleExists(gameId, entities);
     })();
 
