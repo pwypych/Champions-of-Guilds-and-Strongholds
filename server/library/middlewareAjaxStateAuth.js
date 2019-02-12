@@ -4,12 +4,13 @@
 
 const debug = require('debug')('nope:cogs:middlewareAjaxStateAuth');
 
-// What does this module do?
-// Middleware that checks if game is in given state and stops if not
 module.exports = (neededState) => {
   return (req, res, next) => {
     (function init() {
-      debug('init');
+      debug(
+        '// Middleware that checks if game is in given state and stops if not'
+      );
+
       compareStates();
     })();
 

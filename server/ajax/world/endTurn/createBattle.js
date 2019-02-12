@@ -6,14 +6,15 @@ const debug = require('debug')('cogs:createBattle');
 const _ = require('lodash');
 const shortId = require('shortid');
 
-// What does this module do?
-// Checks if battle with battleStatus "pending" exists. Spawns units and obsticles. Attacker is always a player. Changes battleStatus to "active".
 module.exports = (db, unitStats) => {
   return (req, res, next) => {
     (function init() {
+      debug(
+        '// Checks if battle with battleStatus "pending" exists. Spawns units and obsticles. Attacker is always a player. Changes battleStatus to "active".'
+      );
+
       const entities = res.locals.entities;
 
-      debug('init');
       checkIfPendingBattleExists(entities);
     })();
 

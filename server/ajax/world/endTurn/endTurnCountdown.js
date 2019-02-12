@@ -5,14 +5,15 @@
 const debug = require('debug')('cogs:endTurnCountdown.js');
 const _ = require('lodash');
 
-// What does this module do?
-// Middleware, check is endTurnCountdownStartedTimestamp flag, if no begin countdown
 module.exports = (db, findEntitiesByGameId) => {
   return (req, res, next) => {
     const timeBeforeTurnEnds = 30 * 1000; // ms
 
     (function init() {
-      debug('init');
+      debug(
+        '// Middleware, check is endTurnCountdownStartedTimestamp flag, if no begin countdown'
+      );
+
       const gameId = res.locals.entities._id;
       const game = res.locals.entities[gameId];
       checkIsCountdownRunning(game, gameId);

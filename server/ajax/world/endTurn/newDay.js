@@ -4,13 +4,13 @@
 
 const debug = require('debug')('cogs:newDay.js');
 
-// What does this module do?
-// Middleware, increment day component on game
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
-      debug('init');
+      debug('// Middleware, increment day component on game');
+
       const gameId = res.locals.entities._id;
+
       updateIncrementGameDay(gameId);
     })();
 

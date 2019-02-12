@@ -4,17 +4,15 @@
 
 const debug = require('debug')('cogs:checkHeroOwner');
 
-// What does this module do?
-// Middleware, compare hero owner component with playerId
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
+      debug('// Middleware, compare hero owner component with playerId');
+
       const entities = res.locals.entities;
       const playerId = res.locals.playerId;
       const hero = entities[res.locals.heroId];
 
-      debug('init: playerId:', playerId);
-      debug('init: hero:', hero);
       checkHeroOwner(hero, playerId);
     })();
 

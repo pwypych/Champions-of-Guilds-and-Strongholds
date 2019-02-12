@@ -5,9 +5,6 @@
 const debug = require('debug')('cogs:decideHeroStep');
 const _ = require('lodash');
 
-// What does this module do?
-// Library that works on callback. It decides what to do with wished hero step.
-// Is step possible? Decide what will happen!
 module.exports = (
   db,
   findEntitiesByGameId,
@@ -17,7 +14,10 @@ module.exports = (
 ) => {
   return (gameId, playerId, heroId, wishedHeroStep, callback) => {
     (function init() {
-      debug('init');
+      debug(
+        '// Library that works on callback. It decides what to do with wished hero step. Is step possible? Decide what will happen!'
+      );
+
       runFindEntitiesByGameId();
     })();
 

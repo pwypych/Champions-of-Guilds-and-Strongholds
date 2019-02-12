@@ -5,13 +5,15 @@
 const debug = require('debug')('cogs:unsetEndTurnFlags.js');
 const _ = require('lodash');
 
-// What does this module do?
-// Middleware, unset endTurnCountdownStartedTimestamp and players endTurn flags
 module.exports = (db) => {
   return (req, res) => {
     (function init() {
-      debug('init');
+      debug(
+        '// Middleware, unset endTurnCountdownStartedTimestamp and players endTurn flags'
+      );
+
       const entities = res.locals.entities;
+
       updateUnsetEndTurnFlags(entities);
     })();
 

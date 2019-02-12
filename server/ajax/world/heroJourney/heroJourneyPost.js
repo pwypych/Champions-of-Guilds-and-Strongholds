@@ -5,12 +5,13 @@
 const debug = require('debug')('cogs:heroJourneyPost');
 const validator = require('validator');
 
-// What does this module do?
-// Endpoint, accepts wished hero journey for a hero, initial verifies, sends responce and passes to next
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
-      debug('init');
+      debug(
+        '// Endpoint, accepts wished hero journey for a hero, initial verifies, sends responce and passes to next'
+      );
+
       checkRequestBodyHeroJourney();
     })();
 

@@ -5,11 +5,13 @@
 const debug = require('debug')('cogs:processHeroJourney');
 const async = require('async');
 
-// What does this module do?
-// Middleware, expects heroId and heroJourney in res.locals, flags heroBegingMoved and processes each step
 module.exports = (db, decideHeroStep) => {
   return (req, res) => {
     (function init() {
+      debug(
+        '// Middleware, expects heroId and heroJourney in res.locals, flags heroBegingMoved and processes each step'
+      );
+
       const ctx = {};
       const entities = res.locals.entities;
       ctx.gameId = entities._id;
@@ -18,7 +20,6 @@ module.exports = (db, decideHeroStep) => {
       ctx.heroId = res.locals.heroId;
       ctx.hero = entities[ctx.heroId];
 
-      debug('init: ctx.hero:', ctx.hero);
       checkIsProcessingJourney(ctx);
     })();
 

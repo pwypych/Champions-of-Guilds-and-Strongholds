@@ -5,12 +5,11 @@
 const debug = require('debug')('cogs:deleteGamePost');
 const shortid = require('shortid');
 
-// What does this module do?
-// Delete game instance on player button click
 module.exports = (environment, db) => {
   return (req, res) => {
     (function init() {
-      debug('init');
+      debug('// Delete game instance on player button click');
+
       checkRequestBody();
     })();
 

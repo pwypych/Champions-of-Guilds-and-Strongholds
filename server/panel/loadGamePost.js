@@ -6,12 +6,11 @@ const debug = require('debug')('cogs:loadGamePost');
 const shortid = require('shortid');
 const _ = require('lodash');
 
-// What does this module do?
-// Copyies game instance from saveCollection to gameCollection
 module.exports = (environment, db) => {
   return (req, res) => {
     (function init() {
-      debug('init');
+      debug('// Copyies game instance from saveCollection to gameCollection');
+
       checkRequestBody();
     })();
 

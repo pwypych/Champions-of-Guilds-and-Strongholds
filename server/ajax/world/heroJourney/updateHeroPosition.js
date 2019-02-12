@@ -4,12 +4,12 @@
 
 const debug = require('debug')('cogs:updateHeroPosition');
 
-// What does this module do?
-// Library that works on callback. It update hero position and decrement heroStats.movement
 module.exports = (db) => {
   return (gameId, heroId, position, callback) => {
     (function init() {
-      debug('init');
+      debug(
+        '// Library that works on callback. It update hero position and decrement heroStats.movement'
+      );
 
       waitBefore();
     })();

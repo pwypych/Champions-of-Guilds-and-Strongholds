@@ -5,17 +5,18 @@
 const debug = require('debug')('cogs:panel');
 const _ = require('lodash');
 
-// What does this module do?
-// Finds availiable maps and created games and generates html from it
 module.exports = (environment, db, templateToHtml) => {
   return (req, res) => {
     (function init() {
+      debug(
+        '// Finds availiable maps and created games and generates html from it'
+      );
+
       const viewModel = {};
       viewModel.baseurl = environment.baseurl;
       viewModel.timestamp = Date.now();
       viewModel._ = _;
 
-      debug('init');
       findMapNames(viewModel);
     })();
 

@@ -4,14 +4,13 @@
 
 const debug = require('debug')('nope:cogs:readEntities');
 
-// What does this module do?
-// Middleware that refreshes res.locals.entities
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
+      debug('// Middleware that refreshes res.locals.entities');
+
       const gameId = req.query.gameId;
 
-      debug('init');
       findGameById(gameId);
     })();
 

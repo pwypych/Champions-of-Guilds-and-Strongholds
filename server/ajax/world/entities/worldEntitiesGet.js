@@ -5,12 +5,11 @@
 const debug = require('debug')('nope:cogs:worldEntitiesGet');
 const _ = require('lodash');
 
-// What does this module do?
-// Send filtered info about player and opponents
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
-      debug('init');
+      debug('// Send filtered info about player and opponents');
+
       const entities = res.locals.entities;
 
       compareState(entities);

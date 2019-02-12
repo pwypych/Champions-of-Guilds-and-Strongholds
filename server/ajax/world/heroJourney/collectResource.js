@@ -4,12 +4,13 @@
 
 const debug = require('debug')('cogs:collectResource');
 
-// What does this module do?
-// Library that works on callback. It updates playerResources and unset resource entity
 module.exports = (db) => {
   return (gameId, playerId, resourceId, resourceEntity, callback) => {
     (function init() {
-      debug('init');
+      debug(
+        '// Library that works on callback. It updates playerResources and unset resource entity'
+      );
+
       updateIncrementPlayerResources();
     })();
 

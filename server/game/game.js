@@ -4,8 +4,6 @@
 
 const debug = require('debug')('cogs:game');
 
-// What does this module do?
-//
 module.exports = (environment, db, templateToHtml) => {
   return (req, res) => {
     const viewModel = {};
@@ -13,7 +11,8 @@ module.exports = (environment, db, templateToHtml) => {
     viewModel.timestamp = Date.now();
 
     (function init() {
-      debug('init');
+      debug('// Generates html from .ejs files for game');
+
       generateWorld();
     })();
 

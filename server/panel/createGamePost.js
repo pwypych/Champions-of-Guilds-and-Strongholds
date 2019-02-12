@@ -7,12 +7,13 @@ const shortid = require('shortid');
 const validator = require('validator');
 const _ = require('lodash');
 
-// What does this module do?
-// Creates game in db based on map choosen by a player, sets starting properties
 module.exports = (environment, db, figureManagerTree) => {
   return (req, res) => {
     (function init() {
-      debug('init');
+      debug(
+        '// Creates game in db based on map choosen by a player, sets starting properties'
+      );
+
       checkRequestBody();
     })();
 

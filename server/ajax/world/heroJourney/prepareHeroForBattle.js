@@ -5,12 +5,12 @@
 const debug = require('debug')('cogs:prepareHeroForBattle');
 const shortid = require('shortid');
 
-// What does this module do?
-// Library that works on callback. It adds battle entity and zero hero movement points
 module.exports = (db) => {
   return (gameId, heroId, battle, callback) => {
     (function init() {
-      debug('init');
+      debug(
+        '// Library that works on callback. It adds battle entity and zero hero movement points'
+      );
 
       insertBattleEntityAndZeroHeroMovement();
     })();

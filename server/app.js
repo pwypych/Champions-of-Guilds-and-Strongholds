@@ -20,7 +20,7 @@ let db;
   debug('');
   debug('');
   debug('');
-  debug('init()');
+  debug('// Main file, starts everything else');
   setupEnvironment();
 })();
 

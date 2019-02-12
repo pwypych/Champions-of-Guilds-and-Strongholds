@@ -2,8 +2,6 @@
 
 'use strict';
 
-// What does this module do?
-// Middleware that validates player token and gameId, adds res.locals.playerId
 const debug = require('debug')('nope:cogs:middlewareTokenAuth');
 const shortid = require('shortid');
 const _ = require('lodash');
@@ -11,9 +9,12 @@ const _ = require('lodash');
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
+      debug(
+        '// Middleware that validates player token and gameId, adds res.locals.playerId'
+      );
+
       const entities = res.locals.entities;
 
-      debug('init');
       checkRequestQuery(entities);
     })();
 

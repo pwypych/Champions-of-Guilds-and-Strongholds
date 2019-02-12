@@ -4,10 +4,8 @@
 
 const dot = require('dot');
 const fs = require('fs');
-const debug = require('debug')('cogs:templateToHtml');
+const debug = require('debug')('nope:cogs:templateToHtml');
 
-// What does this module do?
-// Creates game in db based on map choosen by a player, sets starting properties
 /* eslint-disable no-useless-escape */
 dot.templateSettings = {
   evaluate: /\<\%([\s\S]+?)\%\>/g,
@@ -24,7 +22,6 @@ dot.templateSettings = {
 };
 /* eslint-enable no-useless-escape */
 
-// What does this module do?
 // Generates html based on .ejs and viewModel
 module.exports = () => {
   return (filename, viewModel, callback) => {
@@ -32,7 +29,7 @@ module.exports = () => {
     let html;
 
     (function init() {
-      // debug('init()', filename);
+      debug('// Converts .ejs to html with dot library');
       loadFile();
     })();
 
