@@ -27,18 +27,14 @@ module.exports = (db, findEntitiesByGameId) => {
         if (entity.unitStats) {
           if (entity.unitStats.current.maneuver > 0) {
             isEveryUnitManeuverZero = false;
-            debug(
-              'checkEveryUnitManeuverComponent: entity.unitName:',
-              entity.unitName
-            );
-            debug(
-              'checkEveryUnitManeuverComponent: entity.unitStats.current.maneuver:',
-              entity.unitStats.current.maneuver
-            );
           }
         }
       });
 
+      debug(
+        'checkEveryUnitManeuverComponent: isEveryUnitManeuverZero:',
+        isEveryUnitManeuverZero
+      );
       callback(null, isEveryUnitManeuverZero);
     }
   };

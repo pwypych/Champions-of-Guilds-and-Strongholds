@@ -9,7 +9,7 @@ const debug = require('debug')('cogs:checkUnitActive');
 module.exports = (findEntitiesByGameId) => {
   return (gameId, unitId, callback) => {
     (function init() {
-      debug('init');
+      debug('// Check is unit active (its "active" component is set to true)');
       runFindEntitiesByGameId();
     })();
 

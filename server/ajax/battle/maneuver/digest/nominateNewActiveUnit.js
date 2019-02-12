@@ -10,7 +10,7 @@ const _ = require('lodash');
 module.exports = (db, findEntitiesByGameId) => {
   return (gameId, unitId, callback) => {
     (function init() {
-      debug('init: gameId:', gameId);
+      debug('init');
       updateSetUnitActiveToFalse();
     })();
 
@@ -56,7 +56,6 @@ module.exports = (db, findEntitiesByGameId) => {
         }
       });
 
-      debug('findUnitWithHighestInitiative: nominatedUnitId:', nominatedUnitId);
       debug(
         'findUnitWithHighestInitiative: highestInitiative:',
         highestInitiative

@@ -10,6 +10,9 @@ const _ = require('lodash');
 module.exports = (findEntitiesByGameId, db) => {
   return (gameId, unitId, callback) => {
     (function init() {
+      debug(
+        '// Check if all units in battle belong to the same boss. If true changes game state to summaryState'
+      );
       runFindEntitiesByGameId();
     })();
 
@@ -32,10 +35,7 @@ module.exports = (findEntitiesByGameId, db) => {
       });
 
       if (bossNameInBattleArray.length > 1) {
-        debug(
-          'checkEveryUnitInBattleHasSameBoss: No, bosses in battle:',
-          bossNameInBattleArray.length
-        );
+        debug('checkEveryUnitInBattleHasSameBoss: No!');
         callback(false);
         return;
       }

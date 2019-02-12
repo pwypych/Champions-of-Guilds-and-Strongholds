@@ -9,7 +9,7 @@ const debug = require('debug')('cogs:decrementUnitManeuver');
 module.exports = (db) => {
   return (gameId, unitId, callback) => {
     (function init() {
-      debug('init');
+      debug('// Decrements maneuver in unitStats by 1');
       updateUnitManeuver();
     })();
 

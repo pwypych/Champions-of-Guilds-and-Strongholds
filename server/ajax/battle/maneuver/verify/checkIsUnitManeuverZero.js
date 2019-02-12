@@ -10,7 +10,9 @@ const _ = require('lodash');
 module.exports = (db, findEntitiesByGameId) => {
   return (gameId, unitId, callback) => {
     (function init() {
-      debug('init');
+      debug(
+        '// If unit has no maneuvers left it returns true, if unit does have maneuvers it returns false'
+      );
       runFindEntitiesByGameId();
     })();
 
