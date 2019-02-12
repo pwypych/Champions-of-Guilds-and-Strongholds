@@ -5,11 +5,11 @@
 const debug = require('debug')('cogs:checkUnitManeuverGreatherThenZero');
 
 // What does this module do?
-// Middleware, checks if unit have any maneuvers left
+// Checks if unit have any maneuvers left
 module.exports = (findEntitiesByGameId) => {
   return (gameId, unitId, callback) => {
     (function init() {
-      debug('init');
+      debug('// Checks if unit have any maneuvers left');
       runFindEntitiesByGameId();
     })();
 

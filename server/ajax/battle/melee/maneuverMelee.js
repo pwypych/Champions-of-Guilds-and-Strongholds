@@ -18,7 +18,9 @@ module.exports = (db) => {
       ctx.unitId = res.locals.unitId;
       ctx.unit = entities[ctx.unitId];
 
-      debug('init');
+      debug(
+        '// Check is melee attack possible, deal damage and update target unit'
+      );
       checkRequestBodyMeleeOnPosition(ctx);
     })();
 

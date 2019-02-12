@@ -9,7 +9,9 @@ const debug = require('debug')('cogs:maneuverPost');
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
-      debug('init');
+      debug(
+        '// Endpoint, accepts wished unit journey for a unit, initial verifies, sends response and passes to next'
+      );
       checkRequestBodyUnitId();
     })();
 

@@ -18,7 +18,9 @@ module.exports = (
       const unitId = res.locals.unitId;
       const playerId = res.locals.playerId;
 
-      debug('init');
+      debug(
+        '// Middleware that runs before unit makes  maneuver. It makes some verifications regarding to unit'
+      );
       runCheckUnitOwner(gameId, unitId, playerId);
     })();
 

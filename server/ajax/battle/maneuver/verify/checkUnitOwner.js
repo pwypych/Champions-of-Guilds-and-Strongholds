@@ -9,7 +9,7 @@ const debug = require('debug')('cogs:checkUnitOwner');
 module.exports = (findEntitiesByGameId) => {
   return (gameId, unitId, playerId, callback) => {
     (function init() {
-      debug('init');
+      debug('// Check if player sending request is owner of unit');
       runFindEntitiesByGameId();
     })();
 
