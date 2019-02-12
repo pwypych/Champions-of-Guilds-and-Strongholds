@@ -4,8 +4,6 @@
 
 const debug = require('debug')('cogs:verifyManeuver.js');
 
-// What does this module do?
-// Middleware that runs before unit makes  maneuver. It makes some verifications regarding to unit
 module.exports = (
   checkUnitOwner,
   checkUnitActive,
@@ -13,14 +11,15 @@ module.exports = (
 ) => {
   return (req, res, next) => {
     (function init() {
+      debug(
+        '// Middleware that runs before unit makes  maneuver. It makes some verifications regarding to unit'
+      );
+
       const entities = res.locals.entities;
       const gameId = entities._id;
       const unitId = res.locals.unitId;
       const playerId = res.locals.playerId;
 
-      debug(
-        '// Middleware that runs before unit makes  maneuver. It makes some verifications regarding to unit'
-      );
       runCheckUnitOwner(gameId, unitId, playerId);
     })();
 

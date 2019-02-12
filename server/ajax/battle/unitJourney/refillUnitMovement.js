@@ -4,12 +4,11 @@
 
 const debug = require('debug')('cogs:refillUnitMovement');
 
-// What does this module do?
-// Middleware, set unit current movement to its base value
 module.exports = (db, findEntitiesByGameId) => {
   return (gameId, unitId, callback) => {
     (function init() {
-      debug('init');
+      debug('// Middleware, set unit current movement to its base value');
+
       runFindEntitiesByGameId();
     })();
 
