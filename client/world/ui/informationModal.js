@@ -9,6 +9,7 @@ g.world.informationModal = ($body, walkie, freshEntities) => {
   const $stone = $modal.find('.js-information-modal-stone');
   const $crystal = $modal.find('.js-information-modal-crystal');
   const $movement = $modal.find('.js-information-modal-movement');
+  const $units = $modal.find('.js-information-modal-units');
 
   (function init() {
     onEntitiesGet();
@@ -66,5 +67,13 @@ g.world.informationModal = ($body, walkie, freshEntities) => {
     const percent = Math.ceil((movement * 100) / movementMax);
 
     $movement.css('width', percent);
+
+    displayUnits(hero);
+  }
+
+  function displayUnits(hero) {
+    _.forEach(hero.unitCounts, (unitCount, figureName) => {
+      // const $img = $('<img>');
+    });
   }
 };

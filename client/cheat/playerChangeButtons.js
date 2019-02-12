@@ -32,7 +32,6 @@ g.cheat.playerChangeButtons = ($body, auth) => {
       }
     });
 
-    console.log('generateLinks', links);
     renderLinks(links);
   }
 
