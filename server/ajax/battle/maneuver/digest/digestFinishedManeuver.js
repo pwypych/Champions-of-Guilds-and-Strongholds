@@ -41,7 +41,7 @@ module.exports = (
           return;
         }
 
-        debug('runCheckIsBattleFinished: Battle still running!');
+        debug('runCheckIsBattleFinished: No, still running!');
         runCheckIsUnitManeuverZero(gameId, unitId);
       });
     }

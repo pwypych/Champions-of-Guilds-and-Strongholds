@@ -39,7 +39,7 @@ module.exports = (
       }
 
       debug(
-        'checkUnitMovementPoints: unit movement points remaining:',
+        'checkUnitMovementPoints: Points remaining:',
         unit.unitStats.current.movement
       );
       checkIsUnitWishedPositionPossible(entities);
@@ -72,7 +72,7 @@ module.exports = (
       }
 
       debug(
-        'checkIsUnitWishedPositionPossible: Position possible - x:',
+        'checkIsUnitWishedPositionPossible: Yes: x:',
         wishedUnitStep.toX,
         'y:',
         wishedUnitStep.toY
