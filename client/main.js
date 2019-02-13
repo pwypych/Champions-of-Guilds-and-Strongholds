@@ -47,6 +47,7 @@ g.main = function main() {
     g.world.interfaceWorldToggle($body, walkie);
     g.world.informationButton($body);
     g.world.informationModal($body, walkie, freshEntities);
+    g.world.recruitUnit($body, auth);
     g.world.chat($body, walkie);
     g.world.worldRender(walkie, auth, viewport, freshEntities, spriteBucket);
     g.world.figurePositionChange(walkie, freshEntities);
