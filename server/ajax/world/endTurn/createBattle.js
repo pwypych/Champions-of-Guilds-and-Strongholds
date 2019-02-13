@@ -169,23 +169,30 @@ module.exports = (db, unitStats) => {
       defenderId,
       battleId
     ) {
-      const obsticle = [
-        { x: 2, y: 7 },
-        { x: 2, y: 8 },
-        { x: 10, y: 4 },
-        { x: 11, y: 4 },
-        { x: 9, y: 7 },
-        { x: 9, y: 6 },
-        { x: 12, y: 3 },
-        { x: 13, y: 3 },
-        { x: 12, y: 9 },
-        { x: 13, y: 10 },
-        { x: 16, y: 5 },
-        { x: 16, y: 1 },
-        { x: 16, y: 2 }
-      ];
+      const obsticles = [];
 
-      _.forEach(obsticle, (position) => {
+      _.forEach(_.range(3, 17), (x) => {
+        _.times(15, (y) => {
+          const density = _.random(1, 3);
+          if (density === 1) {
+            if (_.random(1, 8) === 3) {
+              obsticles.push({ x, y });
+            }
+          }
+          if (density === 2) {
+            if (_.random(1, 6) === 3) {
+              obsticles.push({ x, y });
+            }
+          }
+          if (density === 3) {
+            if (_.random(1, 4) === 3) {
+              obsticles.push({ x, y });
+            }
+          }
+        });
+      });
+
+      _.forEach(obsticles, (position) => {
         const unit = {};
         const id = 'workbench_unit__' + shortId.generate();
         unit.unitName = 'workbench';
