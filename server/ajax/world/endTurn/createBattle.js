@@ -10,7 +10,7 @@ module.exports = (db, unitStats) => {
   return (req, res, next) => {
     (function init() {
       debug(
-        '// Checks if battle with battleStatus "pending" exists. Spawns units and obsticles. Attacker is always a player. Changes battleStatus to "active".'
+        '// Checks if battle with battleStatus "pending" exists. Spawns units and obsticles. Attacker is player, defender is npc. Changes battleStatus to "active".'
       );
 
       const entities = res.locals.entities;
@@ -97,12 +97,16 @@ module.exports = (db, unitStats) => {
         { x: 18, y: 13 }
       ];
 
-      counter = 0;
-      _.forEach(defenderUnitCounts, (amount, unitName) => {
-        if (counter > 5) {
-          return;
-        }
+      let amount = 0;
+      let unitName;
 
+      // npc defenders always have just one unit
+      _.forEach(defenderUnitCounts, (value, key) => {
+        amount = value;
+        unitName = key;
+      });
+
+      _.times(5, (index) => {
         const id = unitName + '_unit__' + shortId.generate();
 
         const unit = {};
@@ -111,14 +115,13 @@ module.exports = (db, unitStats) => {
         unit.amount = amount;
         unit.active = false;
         unit.collision = true;
-        unit.position = defenderPositions[counter];
+        unit.position = defenderPositions[index];
         unit.unitStats = {
           current: JSON.parse(JSON.stringify(unitStats[unitName])),
           base: JSON.parse(JSON.stringify(unitStats[unitName]))
         };
 
         units[id] = unit;
-        counter += 1;
       });
 
       debug('generateUnits: units:', _.size(units));
@@ -139,18 +142,7 @@ module.exports = (db, unitStats) => {
         }
       });
 
-      if (entities[defenderId].heroStats) {
-        // if defender is player, update owner of all defender units as only this player
-        _.forEach(units, (unit, id) => {
-          if (unit.boss === defenderId) {
-            units[id].owner = entities[defenderId].owner;
-          }
-        });
-        updateSetUnitEntities(entities, units);
-        return;
-      }
-
-      // if defender is npc, update owner of all defender units as other players randomly
+      // defender is npc, update owner of all defender units as other players randomly
       const otherPlayerIdArray = [];
       _.forEach(entities, (entity, id) => {
         if (entity.heroStats && id !== attackerId) {
