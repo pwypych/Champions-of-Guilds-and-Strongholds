@@ -54,11 +54,11 @@ module.exports = (db) => {
         hero.heroStats.movementMax = 15;
 
         hero.unitCounts = {
-          // spearbarer: 10,
-          // archer: 15,
-          // goblin: 15,
-          bear: 50
-          // alchemist: 5
+          spearbarer: 20,
+          archer: 20,
+          goblin: 20,
+          bear: 20,
+          alchemist: 20
         };
 
         heroArray.push(hero);
