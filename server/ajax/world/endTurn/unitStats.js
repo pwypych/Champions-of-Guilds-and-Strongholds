@@ -5,75 +5,69 @@
 // What does this module do?
 // Returns object with all unit stats
 module.exports = {
-  alchemist: {
-    tier: 3,
-    range: 7,
-    damageMin: 2,
-    damageMax: 4,
-    life: 6,
-    initiative: 50,
-    movement: 4,
-    maneuver: 2,
-    recruitCost: 300
-  },
-
-  archer: {
-    tier: 2,
-    range: 15,
-    damageMin: 2,
-    damageMax: 5,
-    life: 4,
-    initiative: 60,
-    movement: 5,
-    maneuver: 2,
-    recruitCost: 200
-  },
-
-  bear: {
-    tier: 3,
-    range: 1,
-    damageMin: 5,
-    damageMax: 10,
-    life: 6,
-    initiative: 30,
-    movement: 30,
-    maneuver: 2,
-    recruitCost: 300
-  },
-
   goblin: {
     tier: 1,
-    range: 5,
-    damageMin: 2,
+    damageMin: 4,
     damageMax: 4,
-    life: 6,
+    life: 10,
     initiative: 35,
-    movement: 4,
+    movement: 6,
+    maneuver: 2,
+    recruitCost: 100
+  },
+
+  spearbarer: {
+    tier: 1,
+    damageMin: 5,
+    damageMax: 5,
+    life: 10,
+    initiative: 42,
+    movement: 5,
     maneuver: 2,
     recruitCost: 100
   },
 
   rogue: {
     tier: 2,
-    range: 5,
-    damageMin: 2,
-    damageMax: 4,
-    life: 6,
+    damageMin: 7,
+    damageMax: 7,
+    life: 20,
     initiative: 62,
-    movement: 6,
+    movement: 8,
     maneuver: 2,
     recruitCost: 200
   },
 
-  spearbarer: {
-    tier: 1,
-    range: 5,
-    damageMin: 2,
-    damageMax: 4,
-    life: 6,
-    initiative: 42,
-    movement: 3,
+  archer: {
+    tier: 2,
+    damageMin: 8,
+    damageMax: 8,
+    life: 20,
+    initiative: 55,
+    movement: 7,
     maneuver: 2,
-    recruitCost: 100
+    recruitCost: 200
+  },
+
+  alchemist: {
+    tier: 3,
+    damageMin: 15,
+    damageMax: 15,
+    life: 25,
+    initiative: 50,
+    movement: 6,
+    maneuver: 2,
+    recruitCost: 300
+  },
+
+  bear: {
+    tier: 3,
+    damageMin: 10,
+    damageMax: 10,
+    life: 30,
+    initiative: 30,
+    movement: 5,
+    maneuver: 2,
+    recruitCost: 300
   }
 };
