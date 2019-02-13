@@ -147,10 +147,10 @@ module.exports = (
     }
 
     function waitBeforeMove() {
-      const unitMoveSpeed = 250; // ms
+      const unitMoveSpeed = 150; // ms
 
       setTimeout(() => {
-        debug('waitBeforeMove: Waiting 250ms!');
+        debug('waitBeforeMove: Waiting 150ms!');
         runUpdateUnitPosition();
       }, unitMoveSpeed);
     }

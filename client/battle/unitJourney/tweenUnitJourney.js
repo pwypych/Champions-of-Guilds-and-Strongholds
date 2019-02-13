@@ -125,9 +125,9 @@ g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, spriteBucket) => {
 
       TweenMax.fromTo(
         sprite,
-        0.25,
+        0.15,
         { x: fromXPixel, y: fromYPixel },
-        { x: toXPixel, y: toYPixel, delay: index * 0.25 }
+        { x: toXPixel, y: toYPixel, delay: index * 0.15 }
       );
     });
   }

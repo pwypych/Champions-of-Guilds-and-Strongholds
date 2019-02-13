@@ -16,9 +16,9 @@ module.exports = (db) => {
 
     function waitBefore() {
       setTimeout(() => {
-        debug('waitBefore: Waiting 250ms!');
+        debug('waitBefore: Waiting 150ms!');
         updateHeroPosition();
-      }, 250);
+      }, 150);
     }
 
     function updateHeroPosition() {

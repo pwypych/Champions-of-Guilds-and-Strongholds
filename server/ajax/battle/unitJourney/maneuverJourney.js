@@ -97,7 +97,7 @@ module.exports = (db, decideUnitStep, refillUnitMovement) => {
       const query = { _id: gameId };
       const field = unitId + '.processingJourneyUntilTimestamp';
       const $set = {};
-      const unitMoveSpeed = 250; // ms
+      const unitMoveSpeed = 150; // ms
       const securityMargin = 100; // ms
       $set[field] = Date.now() + unitMoveSpeed + securityMargin;
       const update = { $set: $set };

@@ -60,8 +60,8 @@ module.exports = (db, decideHeroStep) => {
       const query = { _id: gameId };
       const field = heroId + '.processingJourneyUntilTimestamp';
       const $set = {};
-      // 250 ms hero move speed + 100ms security margin for processing
-      $set[field] = Date.now() + 250 + 100;
+      // 150 ms hero move speed + 100ms security margin for processing
+      $set[field] = Date.now() + 150 + 100;
       const update = { $set: $set };
       const options = {};
 
