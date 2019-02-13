@@ -9,16 +9,16 @@ module.exports = (db) => {
   return (req, res, next) => {
     const raceResourceMap = {
       human: {
-        wood: 2,
-        stone: 5,
-        gold: 2000,
-        crystal: 10
+        wood: 0,
+        stone: 0,
+        gold: 1000,
+        crystal: 0
       },
       orc: {
-        wood: 5,
-        stone: 15,
-        gold: 4000,
-        crystal: 2
+        wood: 0,
+        stone: 0,
+        gold: 2000,
+        crystal: 0
       }
     };
 
