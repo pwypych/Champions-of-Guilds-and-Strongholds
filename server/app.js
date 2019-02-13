@@ -208,7 +208,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/launch/name/playerNamePost.js')(db)
   );
 
-  // worldState
+  // worldState endpoints
   app.get(
     '/ajax/world/load/spriteFilenameArray',
     require('./library/readEntities.js')(db),
@@ -264,7 +264,14 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/world/endTurn/unsetEndTurnFlags.js')(db)
   );
 
-  // battleState
+  app.post(
+    '/ajax/world/recruit/recruitUnitPost',
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
+    require('./library/middlewareAjaxStateAuth.js')('worldState'),
+    require('./ajax/world/recruit/recruitUnitPost.js')(db, unitStats)
+  );
+  // battleState endpoints
   const checkUnitActive = require('./ajax/battle/maneuver/verify/checkUnitActive.js')(
     findEntitiesByGameId
   );
@@ -359,6 +366,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     digestFinishedManeuverMiddleware
   );
 
+  // summaryState endpoints
   app.post(
     '/ajax/summary/summaryConfirmPost',
     require('./library/readEntities.js')(db),
