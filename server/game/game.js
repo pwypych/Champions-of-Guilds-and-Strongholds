@@ -35,7 +35,7 @@ module.exports = (environment, db, templateToHtml) => {
     }
 
     function generateInterfaceWorld() {
-      const path = environment.basepath + '/server/game/interfaceWorld.ejs';
+      const path = environment.basepath + '/server/game/worldInterface.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         viewModel.htmlInterfaceWorld = html;
         debug('generateInterfaceWorld: html.length:', html.length);

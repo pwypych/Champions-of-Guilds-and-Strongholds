@@ -1,11 +1,11 @@
 <style>
-  .interface-world-buttons {
+  .world-interface-buttons {
     position: absolute;
     top: 10px;
     right: 20px;
   }
 
-  .interface-world-modal {
+  .world-interface-modal {
     position: absolute;
     top: 0px;
     right: 0px;
@@ -13,12 +13,12 @@
   }
 </style>
 
-<div class="interface-world-buttons" id="js-interface-world" style="display: none;">
+<div class="world-interface-buttons" id="js-world-interface" style="display: none;">
   <button id="js-end-turn-button">End Turn</span></button>
   <button id="js-information-button">Infos</button>
 </div>
 
-<div class="card-brown interface-world-modal" id="js-information-modal" style="display: none;">
+<div class="card-brown world-interface-modal" id="js-information-modal" style="display: none;">
 
   <div class="inline-block">
     <img class="vertical-align" src="<%= viewModel.baseurl %>/image/ui/gold.png" width="24" height="24">

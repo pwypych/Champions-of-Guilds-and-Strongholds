@@ -44,7 +44,7 @@ g.main = function main() {
     g.common.canvasWrapperToggle($body, walkie);
     g.common.keyboardSaveLoad(walkie, auth);
 
-    g.world.interfaceWorldToggle($body, walkie);
+    g.world.worldInterfaceToggle($body, walkie);
     g.world.informationButton($body);
     g.world.informationModal($body, walkie, freshEntities);
     g.world.recruitUnit($body, auth);
