@@ -366,6 +366,17 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     digestFinishedManeuverMiddleware
   );
 
+  app.post(
+    '/ajax/battle/ranged/maneuverRangedPost',
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
+    require('./library/middlewareAjaxStateAuth.js')('battleState'),
+    require('./ajax/battle/maneuver/maneuverPost.js')(),
+    verifyManeuverMiddleware,
+    require('./ajax/battle/ranged/maneuverRanged.js')(db),
+    digestFinishedManeuverMiddleware
+  );
+
   // summaryState endpoints
   app.post(
     '/ajax/summary/summaryConfirmPost',
