@@ -58,7 +58,7 @@ module.exports = (db, unitStats) => {
 
       const playerGoldRemaining = playerGold - recruitCost;
 
-      if (playerGoldRemaining < 1) {
+      if (playerGoldRemaining < 0) {
         message =
           'Cannot afford ' + unitName + ' it cost: ' + recruitCost + ' gold.';
         debug('checkCanPlayerRecruitUnit:', message);
