@@ -59,6 +59,7 @@ g.main = function main() {
     g.world.endTurnButton($body, auth, walkie, freshEntities);
     g.world.endTurnCountdown(walkie, freshEntities);
 
+    g.battle.battleInterfaceToggle($body, walkie);
     g.battle.battleRender(walkie, auth, viewport, freshEntities, spriteBucket);
     g.battle.unitRecentManeuverChange(walkie, freshEntities);
     g.battle.battleClick(walkie, auth, viewport, freshEntities);

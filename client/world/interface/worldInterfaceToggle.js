@@ -15,10 +15,10 @@ g.world.worldInterfaceToggle = ($body, walkie) => {
       'worldInterfaceToggle.js',
       (state) => {
         if (state === 'worldState') {
-          console.log('canvasWrapperToggle.js: show $buttons');
+          console.log('worldInterfaceToggle.js: show $buttons');
           $buttons.show();
         } else {
-          console.log('canvasWrapperToggle.js: hide $buttons');
+          console.log('worldInterfaceToggle.js: hide $buttons');
           $buttons.hide();
         }
       },

@@ -39,6 +39,15 @@ module.exports = (environment, db, templateToHtml) => {
       templateToHtml(path, viewModel, (error, html) => {
         viewModel.htmlInterfaceWorld = html;
         debug('generateInterfaceWorld: html.length:', html.length);
+        generateInterfaceBattle();
+      });
+    }
+
+    function generateInterfaceBattle() {
+      const path = environment.basepath + '/server/game/battleInterface.ejs';
+      templateToHtml(path, viewModel, (error, html) => {
+        viewModel.htmlInterfaceBattle = html;
+        debug('generateInterfaceBattle: html.length:', html.length);
         generateSummary();
       });
     }
