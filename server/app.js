@@ -257,6 +257,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
       db,
       findEntitiesByGameId
     ),
+    require('./library/readEntities.js')(db),
     require('./ajax/world/endTurn/battleChecker.js')(db),
     require('./ajax/world/endTurn/createBattle.js')(db, unitStats),
     require('./ajax/world/endTurn/newDay.js')(db),
