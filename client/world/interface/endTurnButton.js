@@ -5,7 +5,7 @@
 // What does this module do?
 // It listens to clicks on endTurn button and sends POST
 g.world.endTurnButton = ($body, auth, walkie, freshEntities) => {
-  const $button = $body.find('#js-end-turn-button');
+  const $button = $body.find('.js-world-interface-end-turn-button');
 
   (function init() {
     onClick();

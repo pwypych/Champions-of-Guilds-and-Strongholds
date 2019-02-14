@@ -3,13 +3,13 @@
 'use strict';
 
 g.world.informationModal = ($body, walkie, freshEntities) => {
-  const $modal = $body.find('#js-information-modal');
-  const $gold = $modal.find('.js-information-modal-gold');
-  const $wood = $modal.find('.js-information-modal-wood');
-  const $stone = $modal.find('.js-information-modal-stone');
-  const $crystal = $modal.find('.js-information-modal-crystal');
-  const $movement = $modal.find('.js-information-modal-movement');
-  const $recruitUnit = $modal.find('.js-information-modal-recruit-unit');
+  const $modal = $body.find('.js-world-interface-information-modal');
+  const $gold = $modal.find('.js-gold');
+  const $wood = $modal.find('.js-wood');
+  const $stone = $modal.find('.js-stone');
+  const $crystal = $modal.find('.js-crystal');
+  const $movement = $modal.find('.js-movement');
+  const $recruitUnit = $modal.find('.js-recruit-unit');
 
   (function init() {
     onEntitiesGet();

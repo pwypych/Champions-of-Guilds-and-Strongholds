@@ -3,8 +3,8 @@
 'use strict';
 
 g.world.informationButton = ($body) => {
-  const $button = $body.find('#js-information-button');
-  const $modal = $body.find('#js-information-modal');
+  const $button = $body.find('.js-world-interface-information-button');
+  const $modal = $body.find('.js-world-interface-information-modal');
 
   (function init() {
     onClick();

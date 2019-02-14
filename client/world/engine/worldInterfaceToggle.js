@@ -3,7 +3,7 @@
 'use strict';
 
 g.world.worldInterfaceToggle = ($body, walkie) => {
-  const $worldInterface = $body.find('#js-world-interface');
+  const $buttons = $body.find('.js-world-interface-buttons');
 
   (function init() {
     onStateChange();
@@ -15,11 +15,11 @@ g.world.worldInterfaceToggle = ($body, walkie) => {
       'worldInterfaceToggle.js',
       (state) => {
         if (state === 'worldState') {
-          console.log('canvasWrapperToggle.js: show $worldInterface');
-          $worldInterface.show();
+          console.log('canvasWrapperToggle.js: show $buttons');
+          $buttons.show();
         } else {
-          console.log('canvasWrapperToggle.js: hide $worldInterface');
-          $worldInterface.hide();
+          console.log('canvasWrapperToggle.js: hide $buttons');
+          $buttons.hide();
         }
       },
       false

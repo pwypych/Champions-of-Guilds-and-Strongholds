@@ -3,7 +3,7 @@
 'use strict';
 
 g.world.recruitUnit = ($body, auth) => {
-  const $recruitUnit = $body.find('.js-information-modal-recruit-unit');
+  const $recruitUnit = $body.find('.js-recruit-unit');
 
   (function init() {
     console.log('recruitUnit', $recruitUnit);
