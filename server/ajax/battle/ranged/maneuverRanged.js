@@ -20,68 +20,52 @@ module.exports = (db) => {
       ctx.unitId = res.locals.unitId;
       ctx.unit = entities[ctx.unitId];
 
-      checkRequestBodyMeleeOnPosition(ctx);
+      checkRequestBodyRangedPath(ctx);
     })();
 
-    function checkRequestBodyMeleeOnPosition(ctx) {
-      const meleeOnPosition = req.body.meleeOnPosition;
+    function checkRequestBodyRangedPath(ctx) {
+      const rangedPath = [];
+      let isError = false;
 
-      if (
-        typeof meleeOnPosition.x === 'undefined' ||
-        typeof meleeOnPosition.y === 'undefined' ||
-        !validator.isNumeric(meleeOnPosition.x) ||
-        !validator.isNumeric(meleeOnPosition.y)
-      ) {
-        debug('POST parameter meleeOnPosition not valid');
+      req.body.rangedPath.forEach((position) => {
+        if (
+          typeof position.x === 'undefined' ||
+          typeof position.y === 'undefined' ||
+          !validator.isNumeric(position.x) ||
+          !validator.isNumeric(position.y)
+        ) {
+          debug('POST parameter rangedPath not valid!');
+          isError = true;
+          return;
+        }
+
+        const parsedTile = {};
+        parsedTile.x = parseInt(position.x, 10);
+        parsedTile.y = parseInt(position.y, 10);
+        rangedPath.push(parsedTile);
+      });
+
+      if (isError) {
         return;
       }
+      ctx.rangedPath = rangedPath;
 
-      meleeOnPosition.x = parseInt(meleeOnPosition.x, 10);
-      meleeOnPosition.y = parseInt(meleeOnPosition.y, 10);
-
-      ctx.meleeOnPosition = meleeOnPosition;
-      debug(
-        'checkRequestBodyMeleeOnPosition: meleeOnPosition',
-        meleeOnPosition
-      );
-      checkIsMeleePositionInRange(ctx);
+      debug('checkRequestBodyUnitJourney: rangedPath', rangedPath);
+      checkIsUnitOnShootPosition(ctx);
     }
 
-    function checkIsMeleePositionInRange(ctx) {
-      const meleeOnPosition = ctx.meleeOnPosition;
-      const unit = ctx.unit;
-
-      const distanceX = Math.abs(unit.position.x - meleeOnPosition.x);
-      const distanceY = Math.abs(unit.position.y - meleeOnPosition.y);
-
-      if (distanceX !== 0 && distanceX !== 1) {
-        const message = 'Cannot melee more than one step';
-        debug('checkIsMeleePositionInRange: ', message);
-        return;
-      }
-
-      if (distanceY !== 0 && distanceY !== 1) {
-        const message = 'Cannot melee more than one step';
-        debug('checkIsMeleePositionInRange: ', message);
-        return;
-      }
-
-      debug('checkIsMeleePositionInRange: Yes, melee attack in range!');
-      checkIsUnitOnMeleePosition(ctx);
-    }
-
-    function checkIsUnitOnMeleePosition(ctx) {
+    function checkIsUnitOnShootPosition(ctx) {
       const entities = res.locals.entities;
-      const meleeOnPosition = ctx.meleeOnPosition;
+      const shootPosition = ctx.rangedPath[ctx.rangedPath.length - 1];
 
       let targetId;
       _.forEach(entities, (entity, id) => {
         if (entity.unitName) {
           if (
-            entity.position.x === meleeOnPosition.x &&
-            entity.position.y === meleeOnPosition.y
+            entity.position.x === shootPosition.x &&
+            entity.position.y === shootPosition.y
           ) {
-            debug('checkIsUnitOnMeleePosition: Yes, target found:', id);
+            debug('checkIsUnitOnShootPosition: Yes, target found:', id);
             targetId = id;
           }
         }
@@ -89,8 +73,8 @@ module.exports = (db) => {
 
       if (!targetId) {
         debug(
-          'checkIsUnitOnMeleePosition - No target found on: meleeOnPosition:',
-          meleeOnPosition
+          'checkIsUnitOnShootPosition - No target found on:',
+          shootPosition
         );
         return;
       }
@@ -110,57 +94,71 @@ module.exports = (db) => {
       }
 
       debug('checkIsTragetFriendly: Target unit is enemy!');
-      scanObsticlesAroundTarget(ctx);
+      findObsticlesOnRangedPath(ctx);
     }
 
-    function scanObsticlesAroundTarget(ctx) {
+    function findObsticlesOnRangedPath(ctx) {
       const entities = res.locals.entities;
-      const target = ctx.target;
-      const obsticlesAroundTarget = [];
+      const rangedPath = ctx.rangedPath;
+      const obsticlesOnRangedPath = [];
 
       _.forEach(entities, (entity, id) => {
         if (entity.unitName) {
-          [
-            { x: 0, y: -1 },
-            { x: 1, y: 0 },
-            { x: 0, y: 1 },
-            { x: -1, y: 0 }
-          ].forEach((offset) => {
+          rangedPath.forEach((position) => {
             if (
-              entity.position.x === target.position.x + offset.x &&
-              entity.position.y === target.position.y + offset.y
+              entity.position.x === position.x &&
+              entity.position.y === position.y
             ) {
-              obsticlesAroundTarget.push(id);
+              obsticlesOnRangedPath.push(id);
             }
           });
         }
       });
 
       debug(
-        'scanObsticlesAroundTarget: obsticlesAroundTarget:',
-        obsticlesAroundTarget.length
+        'findObsticlesOnRangedPath: obsticlesOnRangedPath:',
+        obsticlesOnRangedPath.length
       );
-      ctx.obsticlesAroundTarget = obsticlesAroundTarget;
+      ctx.obsticlesOnRangedPath = obsticlesOnRangedPath;
+      sieveNegativeObsticlesOnRangedPath(ctx);
+    }
+
+    function sieveNegativeObsticlesOnRangedPath(ctx) {
+      const entities = res.locals.entities;
+      const obsticlesOnRangedPath = ctx.obsticlesOnRangedPath;
+      const unit = ctx.unit;
+      let negativeObsticles = 0;
+
+      _.forEach(obsticlesOnRangedPath, (obsticleId) => {
+        const obsticle = entities[obsticleId];
+        if (!obsticle.boss || obsticle.boss !== unit.boss) {
+          negativeObsticles += 1;
+        }
+      });
+
+      ctx.negativeObsticles = negativeObsticles;
+      debug(
+        'sieveNegativeObsticlesOnRangedPath: negativeObsticles:',
+        negativeObsticles
+      );
       countDamageModificator(ctx);
     }
 
     function countDamageModificator(ctx) {
-      let damageModificator = 100;
-      const obsticlesAroundTarget = ctx.obsticlesAroundTarget;
-      const unitId = ctx.unitId;
-      const unit = ctx.unit;
-      const entities = res.locals.entities;
+      const negativeObsticles = ctx.negativeObsticles;
+      let damageModificator = 1;
 
-      obsticlesAroundTarget.forEach((obsticleId) => {
-        const obsticle = entities[obsticleId];
-        if (!obsticle.unitStats) {
-          damageModificator += 20;
-        }
+      if (negativeObsticles === 1) {
+        damageModificator = 0.5;
+      }
 
-        if (unit.boss === obsticle.boss && obsticleId !== unitId) {
-          damageModificator += 40;
-        }
-      });
+      if (negativeObsticles === 2) {
+        damageModificator = 0.3;
+      }
+
+      if (negativeObsticles > 2) {
+        damageModificator = 0.1;
+      }
 
       ctx.damageModificator = damageModificator;
       debug('countDamageModificator: damageModificator:', damageModificator);
@@ -172,7 +170,7 @@ module.exports = (db) => {
       const damageMax = unit.unitStats.current.damageMax;
       const damageMin = unit.unitStats.current.damageMin;
       const unitAmount = unit.amount;
-      const damageModificator = ctx.damageModificator / 100;
+      const damageModificator = ctx.damageModificator;
 
       const randomDamage = _.random(damageMin, damageMax);
       debug(
@@ -231,6 +229,10 @@ module.exports = (db) => {
       ctx.lifeRemaining = lifeRemaining;
 
       debug('countTargetUnitsRemaining: lifeRemaining', lifeRemaining);
+      debug(
+        'countTargetUnitsRemaining: targetUnitsRemaining',
+        targetUnitsRemaining
+      );
       updateTargetAmount(ctx);
     }
 
