@@ -64,6 +64,7 @@ g.battle.battleRender = (
   function cleanSpriteBucket() {
     // to prevent memory leak
     Object.keys(spriteBucket).forEach((key) => {
+      spriteBucket[key].destroy();
       delete spriteBucket[key];
     });
 
@@ -72,6 +73,13 @@ g.battle.battleRender = (
 
   function drawBackground() {
     const background = new PIXI.Graphics();
+    const uuid =
+      'pixi_graphics_' +
+      Math.random()
+        .toString()
+        .substr(2);
+    spriteBucket[uuid] = background;
+
     const color = 0xc7c7c7;
     background.beginFill(color);
     const x = 0;
@@ -100,6 +108,14 @@ g.battle.battleRender = (
       const toY = viewport.worldHeight;
 
       const line = new PIXI.Graphics();
+      const uuid =
+        'pixi_graphics_' +
+        Math.random()
+          .toString()
+          .substr(2);
+
+      spriteBucket[uuid] = line;
+
       line.lineStyle(1, 0x777777, 0.5);
       line.moveTo(fromX, fromY).lineTo(toX, toY);
       viewport.addChild(line);
