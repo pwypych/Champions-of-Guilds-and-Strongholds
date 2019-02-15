@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.world.worldRender = (walkie, auth, viewport, freshEntities, spriteBucket) => {
+g.world.worldRender = (walkie, auth, viewport, freshEntities, pixiFactory) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
@@ -33,28 +33,18 @@ g.world.worldRender = (walkie, auth, viewport, freshEntities, spriteBucket) => {
     viewport.worldWidth = gameEntity.mapData.width * blockWidthPx;
     viewport.worldHeight = gameEntity.mapData.height * blockHeightPx;
 
-    removeViewportChildren();
+    preventMemoryLeak();
   }
 
-  function removeViewportChildren() {
-    // to prevent memory leak
+  function preventMemoryLeak() {
     viewport.removeChildren();
-
-    cleanSpriteBucket();
-  }
-
-  function cleanSpriteBucket() {
-    // to prevent memory leak
-    Object.keys(spriteBucket).forEach((key) => {
-      spriteBucket[key].destroy();
-      delete spriteBucket[key];
-    });
+    pixiFactory.destroyAll();
 
     drawBackground();
   }
 
   function drawBackground() {
-    const background = new PIXI.Graphics();
+    const background = pixiFactory.newGraphics();
     const color = 0xc7c7c7;
     background.beginFill(color);
     const x = 0;
@@ -69,18 +59,18 @@ g.world.worldRender = (walkie, auth, viewport, freshEntities, spriteBucket) => {
   }
 
   function forEachFigure() {
-    _.forEach(freshEntities(), (entity, id) => {
+    _.forEach(freshEntities(), (entity) => {
       if (entity.figure && entity.position) {
-        instantiateSprites(entity, id);
+        instantiateSprites(entity);
       }
     });
 
     triggerRenderDone();
   }
 
-  function instantiateSprites(entity, id) {
+  function instantiateSprites(entity) {
     const texture = PIXI.loader.resources[entity.figure].texture;
-    const sprite = new PIXI.Sprite(texture);
+    const sprite = pixiFactory.newSprite(texture);
 
     sprite.anchor = { x: 0, y: 1 };
 
@@ -93,7 +83,6 @@ g.world.worldRender = (walkie, auth, viewport, freshEntities, spriteBucket) => {
     }
 
     viewport.addChild(sprite);
-    spriteBucket[id] = sprite;
   }
 
   function triggerRenderDone() {

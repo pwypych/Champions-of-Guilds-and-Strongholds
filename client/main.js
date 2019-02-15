@@ -50,7 +50,7 @@ g.main = function main() {
     g.world.informationModal($body, walkie, freshEntities);
     g.world.recruitUnit($body, auth);
     g.world.chat($body, walkie);
-    g.world.worldRender(walkie, auth, viewport, freshEntities, spriteBucket);
+    g.world.worldRender(walkie, auth, viewport, freshEntities, pixiFactory);
     g.world.figurePositionChange(walkie, freshEntities);
     g.world.tweenFigureJourney(walkie, viewport, freshEntities, spriteBucket);
     g.world.keyboard(walkie, auth, freshEntities);
