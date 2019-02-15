@@ -20,13 +20,41 @@ g.battle.waitMock = ($body, auth, freshEntities) => {
 
   function doSomethingOnFreshEntities() {
     const entities = freshEntities();
-    console.log('doSomethingOnFreshEntities', entities);
+    const activeUnitPosition = {};
+    let unitId;
 
-    sendPost();
+    console.log('doSomethingOnFreshEntities', entities);
+    _.forEach(entities, (entity, id) => {
+      if (entity.unitStats && entity.active === true) {
+        console.log('id:', id);
+        unitId = id;
+        activeUnitPosition.x = entity.position.x;
+        activeUnitPosition.y = entity.position.y;
+      }
+    });
+
+    console.log('activeUnitPosition:', activeUnitPosition);
+    generateShootPath(activeUnitPosition, unitId);
   }
 
-  function sendPost() {
+  function generateShootPath(activeUnitPosition, unitId) {
+    const shootPath = [];
+    for (let i = 1; i < 4; i += 1) {
+      const position = {};
+      position.x = activeUnitPosition.x + i;
+      position.y = activeUnitPosition.y;
+      shootPath.push(position);
+    }
+
+    console.log('shootPath.length:', shootPath.length);
+    sendPost(shootPath, unitId);
+  }
+
+  function sendPost(shootPath, unitId) {
     const data = {};
+    data.unitId = unitId;
+    data.shootPath = shootPath;
+
     console.log('data', data);
 
     $.post('/ajax/battle/shoot/maneuverShootPost' + auth.uri, data, () => {
