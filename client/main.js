@@ -32,7 +32,6 @@ g.main = function main() {
     g.common.entitiesInterval(walkie, auth);
 
     const freshEntities = g.common.freshEntities(walkie);
-    const spriteBucket = g.common.spriteBucket();
     const pixiFactory = g.common.pixiFactory();
 
     g.launch.launchToggle($body, walkie);
@@ -52,7 +51,7 @@ g.main = function main() {
     g.world.chat($body, walkie);
     g.world.worldRender(walkie, auth, viewport, freshEntities, pixiFactory);
     g.world.figurePositionChange(walkie, freshEntities);
-    g.world.tweenFigureJourney(walkie, viewport, freshEntities, spriteBucket);
+    g.world.tweenFigureJourney(walkie, viewport, freshEntities);
     g.world.keyboard(walkie, auth, freshEntities);
     g.world.worldClick(walkie, auth, viewport, freshEntities);
     g.world.heroPath(walkie, auth, viewport, freshEntities);
@@ -67,7 +66,7 @@ g.main = function main() {
     g.battle.battleClick(walkie, auth, viewport, freshEntities);
     g.battle.unitPath(walkie, auth, viewport, freshEntities);
     g.battle.unitJourney(walkie, auth);
-    g.battle.tweenUnitJourney(walkie, viewport, freshEntities, spriteBucket);
+    g.battle.tweenUnitJourney(walkie, viewport, freshEntities, pixiFactory);
     g.battle.keyboardMelee(walkie, auth, freshEntities);
 
     g.summary.summaryToggle($body, walkie, auth, freshEntities);

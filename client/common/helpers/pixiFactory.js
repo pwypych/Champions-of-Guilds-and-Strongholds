@@ -3,39 +3,52 @@
 'use strict';
 
 g.common.pixiFactory = () => {
-  let pixiObjectsArray = [];
+  let graphicsArray = [];
+  let spriteList = {};
 
   function destroyAll() {
-    pixiObjectsArray.forEach((pixiObject, index) => {
+    graphicsArray.forEach((pixiObject, index) => {
       pixiObject.destroy();
-      delete pixiObjectsArray[index];
+      delete graphicsArray[index];
     });
 
-    pixiObjectsArray = [];
+    graphicsArray = [];
+
+    _.forEach(spriteList, (sprite, name) => {
+      sprite.destroy();
+      delete spriteList[name];
+    });
+
+    spriteList = {};
   }
 
   function newGraphics() {
     const graphics = new PIXI.Graphics();
-    pixiObjectsArray.push(graphics);
+    graphicsArray.push(graphics);
     return graphics;
-  }
-
-  function newSprite(texture) {
-    const sprite = new PIXI.Sprite(texture);
-    pixiObjectsArray.push(sprite);
-    return sprite;
   }
 
   function newText(string, textStyle) {
     const text = new PIXI.Text(string, textStyle);
-    pixiObjectsArray.push(text);
+    graphicsArray.push(text);
     return text;
+  }
+
+  function newSprite(name, texture) {
+    const sprite = new PIXI.Sprite(texture);
+    spriteList[name] = sprite;
+    return sprite;
+  }
+
+  function getSpriteList() {
+    return spriteList;
   }
 
   return {
     destroyAll: destroyAll,
     newGraphics: newGraphics,
+    newText: newText,
     newSprite: newSprite,
-    newText: newText
+    getSpriteList: getSpriteList
   };
 };

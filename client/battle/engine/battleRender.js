@@ -127,18 +127,18 @@ g.battle.battleRender = (
   }
 
   function forEachFigure() {
-    _.forEach(freshEntities(), (entity) => {
+    _.forEach(freshEntities(), (entity, id) => {
       if (entity.unitName && entity.position) {
-        instantiateSprites(entity);
+        instantiateSprites(entity, id);
       }
     });
 
     triggerRenderDone();
   }
 
-  function instantiateSprites(entity) {
+  function instantiateSprites(entity, id) {
     const texture = PIXI.loader.resources[entity.unitName].texture;
-    const sprite = pixiFactory.newSprite(texture);
+    const sprite = pixiFactory.newSprite(id, texture);
 
     sprite.anchor = { x: 0, y: 1 };
 

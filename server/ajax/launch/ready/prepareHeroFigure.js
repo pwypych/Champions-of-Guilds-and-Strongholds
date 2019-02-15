@@ -56,7 +56,7 @@ module.exports = (db) => {
         hero.unitCounts = {
           spearbarer: 10,
           archer: 10,
-          goblin: 10,
+          rogue: 10,
           bear: 10,
           alchemist: 10
         };

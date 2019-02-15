@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, spriteBucket) => {
+g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, pixiFactory) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
@@ -19,6 +19,9 @@ g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, spriteBucket) => {
           const unitId = data.unitId;
           const fromPosition = data.entityOld.position;
           const toPosition = data.entity.position;
+
+          pixiFactory.getSpriteList()[unitId].visible = false;
+
           generatePathArray(unitId, fromPosition, toPosition);
         }
       },
@@ -49,7 +52,7 @@ g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, spriteBucket) => {
 
     console.log('fromPosition', fromPosition);
     console.log('toPosition', toPosition);
-    console.log('grid', grid);
+    // console.log('grid', grid);
 
     const pathArrayOfArrays = finder.findPath(
       fromPosition.x,
@@ -59,7 +62,7 @@ g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, spriteBucket) => {
       grid
     );
 
-    console.log('pathArrayOfArrays', pathArrayOfArrays);
+    // console.log('pathArrayOfArrays', pathArrayOfArrays);
 
     const pathArray = pathArrayOfArrays.map((path) => {
       return { x: path[0], y: path[1] };
@@ -91,21 +94,31 @@ g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, spriteBucket) => {
   }
 
   function findSpriteAndSpriteOffset(journey, unitId) {
-    const sprite = spriteBucket[unitId];
-    if (!sprite) {
-      console.log('tweenUnitJourney: ERROR, cannot find sprite');
-      return;
-    }
+    const entity = freshEntities()[unitId];
+    const texture = PIXI.loader.resources[entity.unitName].texture;
+    const sprite = new PIXI.Sprite(texture);
 
-    let spriteOffset = freshEntities()[unitId].spriteOffset;
+    sprite.anchor = { x: 0, y: 1 };
+
+    sprite.x = entity.position.x * blockWidthPx;
+    sprite.y = entity.position.y * blockHeightPx + blockHeightPx;
+
+    let spriteOffset = entity.spriteOffset;
+
     if (!spriteOffset) {
       spriteOffset = { x: 0, y: 0 };
     }
+
+    viewport.addChild(sprite);
 
     generateTweenPath(journey, sprite, spriteOffset);
   }
 
   function generateTweenPath(journey, sprite, spriteOffset) {
+    const done = _.after(journey.length, () => {
+      destroySprite(sprite);
+    });
+
     journey.forEach((step, index) => {
       const fromXPixel = step.fromX * blockWidthPx + spriteOffset.x;
       const fromYPixel =
@@ -125,10 +138,25 @@ g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, spriteBucket) => {
 
       TweenMax.fromTo(
         sprite,
-        0.15,
+        0.13,
         { x: fromXPixel, y: fromYPixel },
-        { x: toXPixel, y: toYPixel, delay: index * 0.15 }
+        {
+          x: toXPixel,
+          y: toYPixel,
+          delay: index * 0.13,
+          oncomplete: () => {
+            done();
+          }
+        }
       );
     });
+  }
+
+  function destroySprite(sprite) {
+    setTimeout(() => {
+      console.log('destroySprite');
+      viewport.removeChild(sprite);
+      sprite.destroy();
+    }, 5000); // destroy sprite after some time to prevent memory leak
   }
 };
