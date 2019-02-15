@@ -39,10 +39,10 @@ module.exports = (db) => {
           return;
         }
 
-        const parsedTile = {};
-        parsedTile.x = parseInt(position.x, 10);
-        parsedTile.y = parseInt(position.y, 10);
-        shootPath.push(parsedTile);
+        const parsedPosition = {};
+        parsedPosition.x = parseInt(position.x, 10);
+        parsedPosition.y = parseInt(position.y, 10);
+        shootPath.push(parsedPosition);
       });
 
       if (isError) {
@@ -51,10 +51,10 @@ module.exports = (db) => {
       ctx.shootPath = shootPath;
 
       debug('checkRequestBodyShootPath: shootPath', shootPath);
-      checkIsUnitOnShootPosition(ctx);
+      checkIsTargetOnShootPosition(ctx);
     }
 
-    function checkIsUnitOnShootPosition(ctx) {
+    function checkIsTargetOnShootPosition(ctx) {
       const entities = res.locals.entities;
       const shootPosition = ctx.shootPath[ctx.shootPath.length - 1];
 
@@ -65,7 +65,7 @@ module.exports = (db) => {
             entity.position.x === shootPosition.x &&
             entity.position.y === shootPosition.y
           ) {
-            debug('checkIsUnitOnShootPosition: Yes, target found:', id);
+            debug('checkIsTargetOnShootPosition: Yes, target found:', id);
             targetId = id;
           }
         }
@@ -73,7 +73,7 @@ module.exports = (db) => {
 
       if (!targetId) {
         debug(
-          'checkIsUnitOnShootPosition - No target found on:',
+          'checkIsTargetOnShootPosition - No target found on:',
           shootPosition
         );
         return;
@@ -100,11 +100,13 @@ module.exports = (db) => {
     function findObsticlesOnRangedPath(ctx) {
       const entities = res.locals.entities;
       const shootPath = ctx.shootPath;
+      const shootPathWithoutTarget = shootPath;
+      shootPathWithoutTarget.pop();
       const obsticlesOnRangedPath = [];
 
       _.forEach(entities, (entity, id) => {
         if (entity.unitName) {
-          shootPath.forEach((position) => {
+          shootPathWithoutTarget.forEach((position) => {
             if (
               entity.position.x === position.x &&
               entity.position.y === position.y
@@ -141,10 +143,10 @@ module.exports = (db) => {
         'sieveNegativeObsticlesOnRangedPath: negativeObsticles:',
         negativeObsticles
       );
-      countDamageModificator(ctx);
+      calculateDamageModificator(ctx);
     }
 
-    function countDamageModificator(ctx) {
+    function calculateDamageModificator(ctx) {
       const negativeObsticles = ctx.negativeObsticles;
       let damageModificator = 1;
 
@@ -161,11 +163,14 @@ module.exports = (db) => {
       }
 
       ctx.damageModificator = damageModificator;
-      debug('countDamageModificator: damageModificator:', damageModificator);
-      countUnitDamageSum(ctx);
+      debug(
+        'calculateDamageModificator: damageModificator:',
+        damageModificator
+      );
+      calculateUnitDamageSum(ctx);
     }
 
-    function countUnitDamageSum(ctx) {
+    function calculateUnitDamageSum(ctx) {
       const unit = ctx.unit;
       const damageMax = unit.unitStats.current.damageMax;
       const damageMin = unit.unitStats.current.damageMin;
@@ -174,7 +179,7 @@ module.exports = (db) => {
 
       const randomDamage = _.random(damageMin, damageMax);
       debug(
-        'countUnitDamageSum: damageSum = ',
+        'calculateUnitDamageSum: damageSum = ',
         randomDamage,
         ' * ',
         unitAmount,
@@ -184,12 +189,13 @@ module.exports = (db) => {
       const damageSum = Math.floor(
         randomDamage * unitAmount * damageModificator
       );
+
       debug('countUnitDamage: damageSum:', damageSum);
       ctx.damageSum = damageSum;
-      countTargetLifeSum(ctx);
+      calculateTargetLifeSum(ctx);
     }
 
-    function countTargetLifeSum(ctx) {
+    function calculateTargetLifeSum(ctx) {
       const target = ctx.target;
 
       const targetAmount = target.amount;
@@ -199,13 +205,13 @@ module.exports = (db) => {
       const targetLifeSum =
         (targetAmount - 1) * targetBaseLife + targetCurrentLife;
 
-      debug('countTargetLifeSum: targetLifeSum:', targetLifeSum);
+      debug('calculateTargetLifeSum: targetLifeSum:', targetLifeSum);
 
       ctx.targetLifeSum = targetLifeSum;
-      countTargetUnitsRemaining(ctx);
+      calculateTargetUnitsRemaining(ctx);
     }
 
-    function countTargetUnitsRemaining(ctx) {
+    function calculateTargetUnitsRemaining(ctx) {
       const target = ctx.target;
       const damageSum = ctx.damageSum;
       const targetLifeSum = ctx.targetLifeSum;
@@ -213,7 +219,7 @@ module.exports = (db) => {
       const targetLifeSumRemaining = targetLifeSum - damageSum;
 
       if (targetLifeSumRemaining < 1) {
-        debug('countTargetUnitsRemaining: Unit should DIE!');
+        debug('calculateTargetUnitsRemaining: Unit should DIE!');
         updateUnsetUnitEntitiy(ctx);
         return;
       }
@@ -228,15 +234,15 @@ module.exports = (db) => {
       ctx.targetUnitsRemaining = targetUnitsRemaining;
       ctx.lifeRemaining = lifeRemaining;
 
-      debug('countTargetUnitsRemaining: lifeRemaining', lifeRemaining);
+      debug('calculateTargetUnitsRemaining: lifeRemaining', lifeRemaining);
       debug(
-        'countTargetUnitsRemaining: targetUnitsRemaining',
+        'calculateTargetUnitsRemaining: targetUnitsRemaining',
         targetUnitsRemaining
       );
-      updateTargetAmount(ctx);
+      updateSetTargetAmount(ctx);
     }
 
-    function updateTargetAmount(ctx) {
+    function updateSetTargetAmount(ctx) {
       const gameId = ctx.gameId;
       const targetId = ctx.targetId;
       const lifeRemaining = ctx.lifeRemaining;
@@ -256,8 +262,8 @@ module.exports = (db) => {
         update,
         options,
         (error) => {
-          debug('updateTargetAmount: error: ', error);
-          debug('updateTargetAmount: Target life and amount updated!');
+          debug('updateSetTargetAmount: error: ', error);
+          debug('updateSetTargetAmount: Target life and amount updated!');
           next();
         }
       );
