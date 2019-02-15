@@ -141,10 +141,10 @@ module.exports = (db) => {
         obsticlesAroundTarget.length
       );
       ctx.obsticlesAroundTarget = obsticlesAroundTarget;
-      countDamageModificator(ctx);
+      calculateDamageModificator(ctx);
     }
 
-    function countDamageModificator(ctx) {
+    function calculateDamageModificator(ctx) {
       let damageModificator = 100;
       const obsticlesAroundTarget = ctx.obsticlesAroundTarget;
       const unitId = ctx.unitId;
@@ -163,11 +163,14 @@ module.exports = (db) => {
       });
 
       ctx.damageModificator = damageModificator;
-      debug('countDamageModificator: damageModificator:', damageModificator);
-      countUnitDamageSum(ctx);
+      debug(
+        'calculateDamageModificator: damageModificator:',
+        damageModificator
+      );
+      calculateUnitDamageSum(ctx);
     }
 
-    function countUnitDamageSum(ctx) {
+    function calculateUnitDamageSum(ctx) {
       const unit = ctx.unit;
       const damageMax = unit.unitStats.current.damageMax;
       const damageMin = unit.unitStats.current.damageMin;
@@ -176,7 +179,7 @@ module.exports = (db) => {
 
       const randomDamage = _.random(damageMin, damageMax);
       debug(
-        'countUnitDamageSum: damageSum = ',
+        'calculateUnitDamageSum: damageSum = ',
         randomDamage,
         ' * ',
         unitAmount,
@@ -188,10 +191,10 @@ module.exports = (db) => {
       );
       debug('countUnitDamage: damageSum:', damageSum);
       ctx.damageSum = damageSum;
-      countTargetLifeSum(ctx);
+      calculateTargetLifeSum(ctx);
     }
 
-    function countTargetLifeSum(ctx) {
+    function calculateTargetLifeSum(ctx) {
       const target = ctx.target;
 
       const targetAmount = target.amount;
@@ -201,13 +204,13 @@ module.exports = (db) => {
       const targetLifeSum =
         (targetAmount - 1) * targetBaseLife + targetCurrentLife;
 
-      debug('countTargetLifeSum: targetLifeSum:', targetLifeSum);
+      debug('calculateTargetLifeSum: targetLifeSum:', targetLifeSum);
 
       ctx.targetLifeSum = targetLifeSum;
-      countTargetUnitsRemaining(ctx);
+      calculateTargetUnitsRemaining(ctx);
     }
 
-    function countTargetUnitsRemaining(ctx) {
+    function calculateTargetUnitsRemaining(ctx) {
       const target = ctx.target;
       const damageSum = ctx.damageSum;
       const targetLifeSum = ctx.targetLifeSum;
@@ -215,7 +218,7 @@ module.exports = (db) => {
       const targetLifeSumRemaining = targetLifeSum - damageSum;
 
       if (targetLifeSumRemaining < 1) {
-        debug('countTargetUnitsRemaining: Unit should DIE!');
+        debug('calculateTargetUnitsRemaining: Unit should DIE!');
         updateUnsetUnitEntitiy(ctx);
         return;
       }
@@ -230,11 +233,11 @@ module.exports = (db) => {
       ctx.targetUnitsRemaining = targetUnitsRemaining;
       ctx.lifeRemaining = lifeRemaining;
 
-      debug('countTargetUnitsRemaining: lifeRemaining', lifeRemaining);
-      updateTargetAmount(ctx);
+      debug('calculateTargetUnitsRemaining: lifeRemaining', lifeRemaining);
+      updateSetTargetAmount(ctx);
     }
 
-    function updateTargetAmount(ctx) {
+    function updateSetTargetAmount(ctx) {
       const gameId = ctx.gameId;
       const targetId = ctx.targetId;
       const lifeRemaining = ctx.lifeRemaining;
@@ -254,8 +257,8 @@ module.exports = (db) => {
         update,
         options,
         (error) => {
-          debug('updateTargetAmount: error: ', error);
-          debug('updateTargetAmount: Target life and amount updated!');
+          debug('updateSetTargetAmount: error: ', error);
+          debug('updateSetTargetAmount: Target life and amount updated!');
           next();
         }
       );
