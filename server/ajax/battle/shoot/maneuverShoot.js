@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:maneuverMelee');
+const debug = require('debug')('cogs:maneuverShoot');
 const _ = require('lodash');
 const validator = require('validator');
 
@@ -10,7 +10,7 @@ module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
       debug(
-        '// Check is ranged attack possible, deal damage and update target unit'
+        '// Check is shoot attack possible, deal damage and update target unit'
       );
 
       const ctx = {};
@@ -20,21 +20,21 @@ module.exports = (db) => {
       ctx.unitId = res.locals.unitId;
       ctx.unit = entities[ctx.unitId];
 
-      checkRequestBodyRangedPath(ctx);
+      checkRequestBodyShootPath(ctx);
     })();
 
-    function checkRequestBodyRangedPath(ctx) {
-      const rangedPath = [];
+    function checkRequestBodyShootPath(ctx) {
+      const shootPath = [];
       let isError = false;
 
-      req.body.rangedPath.forEach((position) => {
+      req.body.shootPath.forEach((position) => {
         if (
           typeof position.x === 'undefined' ||
           typeof position.y === 'undefined' ||
           !validator.isNumeric(position.x) ||
           !validator.isNumeric(position.y)
         ) {
-          debug('POST parameter rangedPath not valid!');
+          debug('POST parameter shootPath not valid!');
           isError = true;
           return;
         }
@@ -42,21 +42,21 @@ module.exports = (db) => {
         const parsedTile = {};
         parsedTile.x = parseInt(position.x, 10);
         parsedTile.y = parseInt(position.y, 10);
-        rangedPath.push(parsedTile);
+        shootPath.push(parsedTile);
       });
 
       if (isError) {
         return;
       }
-      ctx.rangedPath = rangedPath;
+      ctx.shootPath = shootPath;
 
-      debug('checkRequestBodyUnitJourney: rangedPath', rangedPath);
+      debug('checkRequestBodyShootPath: shootPath', shootPath);
       checkIsUnitOnShootPosition(ctx);
     }
 
     function checkIsUnitOnShootPosition(ctx) {
       const entities = res.locals.entities;
-      const shootPosition = ctx.rangedPath[ctx.rangedPath.length - 1];
+      const shootPosition = ctx.shootPath[ctx.shootPath.length - 1];
 
       let targetId;
       _.forEach(entities, (entity, id) => {
@@ -99,12 +99,12 @@ module.exports = (db) => {
 
     function findObsticlesOnRangedPath(ctx) {
       const entities = res.locals.entities;
-      const rangedPath = ctx.rangedPath;
+      const shootPath = ctx.shootPath;
       const obsticlesOnRangedPath = [];
 
       _.forEach(entities, (entity, id) => {
         if (entity.unitName) {
-          rangedPath.forEach((position) => {
+          shootPath.forEach((position) => {
             if (
               entity.position.x === position.x &&
               entity.position.y === position.y

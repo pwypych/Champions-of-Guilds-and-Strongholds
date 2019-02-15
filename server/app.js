@@ -368,13 +368,13 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   app.post(
-    '/ajax/battle/ranged/maneuverRangedPost',
+    '/ajax/battle/shoot/maneuverShootPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     require('./ajax/battle/maneuver/maneuverPost.js')(),
     verifyManeuverMiddleware,
-    require('./ajax/battle/ranged/maneuverRanged.js')(db),
+    require('./ajax/battle/shoot/maneuverShoot.js')(db),
     digestFinishedManeuverMiddleware
   );
 
