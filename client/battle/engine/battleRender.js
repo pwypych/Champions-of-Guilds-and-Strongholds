@@ -7,10 +7,18 @@ g.battle.battleRender = (
   auth,
   viewport,
   freshEntities,
-  spriteBucket
+  pixiFactory
 ) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
+
+  const textStyle = new PIXI.TextStyle({
+    fontFamily: 'Courier New',
+    fontSize: 12,
+    fontWeight: 'bolder',
+    fill: 'white',
+    strokeThickness: 2
+  });
 
   (function init() {
     onEntitiesGet();
@@ -51,34 +59,18 @@ g.battle.battleRender = (
     viewport.worldWidth = battleEntity.battleWidth * blockWidthPx;
     viewport.worldHeight = battleEntity.battleHeight * blockHeightPx;
 
-    removeViewportChildren();
+    preventMemoryLeak();
   }
 
-  function removeViewportChildren() {
-    // to prevent memory leak
+  function preventMemoryLeak() {
     viewport.removeChildren();
-
-    cleanSpriteBucket();
-  }
-
-  function cleanSpriteBucket() {
-    // to prevent memory leak
-    Object.keys(spriteBucket).forEach((key) => {
-      spriteBucket[key].destroy();
-      delete spriteBucket[key];
-    });
+    pixiFactory.destroyAll();
 
     drawBackground();
   }
 
   function drawBackground() {
-    const background = new PIXI.Graphics();
-    const uuid =
-      'pixi_graphics_' +
-      Math.random()
-        .toString()
-        .substr(2);
-    spriteBucket[uuid] = background;
+    const background = pixiFactory.newGraphics();
 
     const color = 0xc7c7c7;
     background.beginFill(color);
@@ -107,14 +99,7 @@ g.battle.battleRender = (
       const toX = index * blockWidthPx;
       const toY = viewport.worldHeight;
 
-      const line = new PIXI.Graphics();
-      const uuid =
-        'pixi_graphics_' +
-        Math.random()
-          .toString()
-          .substr(2);
-
-      spriteBucket[uuid] = line;
+      const line = pixiFactory.newGraphics();
 
       line.lineStyle(1, 0x777777, 0.5);
       line.moveTo(fromX, fromY).lineTo(toX, toY);
@@ -131,7 +116,8 @@ g.battle.battleRender = (
       const toX = viewport.worldWidth;
       const toY = index * blockHeightPx;
 
-      const line = new PIXI.Graphics();
+      const line = pixiFactory.newGraphics();
+
       line.lineStyle(1, 0x777777, 0.5);
       line.moveTo(fromX, fromY).lineTo(toX, toY);
       viewport.addChild(line);
@@ -141,19 +127,18 @@ g.battle.battleRender = (
   }
 
   function forEachFigure() {
-    _.forEach(freshEntities(), (entity, id) => {
+    _.forEach(freshEntities(), (entity) => {
       if (entity.unitName && entity.position) {
-        instantiateSprites(entity, id);
+        instantiateSprites(entity);
       }
     });
 
     triggerRenderDone();
   }
 
-  function instantiateSprites(entity, id) {
+  function instantiateSprites(entity) {
     const texture = PIXI.loader.resources[entity.unitName].texture;
-    const sprite = new PIXI.Sprite(texture);
-    // const container = new PIXI.Container();
+    const sprite = pixiFactory.newSprite(texture);
 
     sprite.anchor = { x: 0, y: 1 };
 
@@ -168,25 +153,15 @@ g.battle.battleRender = (
     if (entity.active) {
       const activeUnitMarker = toolActiveUnitMarker(sprite.x, sprite.y);
       viewport.addChild(activeUnitMarker);
-      spriteBucket[id + '_activeUnitMarker'] = activeUnitMarker;
     }
 
     viewport.addChild(sprite);
-    spriteBucket[id] = sprite;
 
-    renderAmount(entity, id);
+    renderAmount(entity);
   }
 
-  function renderAmount(entity, id) {
-    const style = new PIXI.TextStyle({
-      fontFamily: 'Courier New',
-      fontSize: 12,
-      fontWeight: 'bolder',
-      fill: 'white',
-      strokeThickness: 2
-    });
-
-    const text = new PIXI.Text(entity.amount, style);
+  function renderAmount(entity) {
+    const text = pixiFactory.newText(entity.amount, textStyle);
     const paddingRight = 2;
     const paddingTop = 3;
     text.x =
@@ -201,11 +176,10 @@ g.battle.battleRender = (
       paddingTop;
 
     viewport.addChild(text);
-    spriteBucket[id + '_amountText'] = text;
   }
 
   function toolActiveUnitMarker(x, y) {
-    const activeUnitMarker = new PIXI.Graphics();
+    const activeUnitMarker = pixiFactory.newGraphics();
     const color = 0x60b450;
     const alpha = 0.5;
     activeUnitMarker.beginFill(color, alpha);

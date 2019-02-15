@@ -33,6 +33,7 @@ g.main = function main() {
 
     const freshEntities = g.common.freshEntities(walkie);
     const spriteBucket = g.common.spriteBucket();
+    const pixiFactory = g.common.pixiFactory();
 
     g.launch.launchToggle($body, walkie);
     g.launch.launchInputName($body, auth);
@@ -61,7 +62,7 @@ g.main = function main() {
 
     g.battle.battleInterfaceToggle($body, walkie);
     g.battle.waitMock($body, auth, freshEntities);
-    g.battle.battleRender(walkie, auth, viewport, freshEntities, spriteBucket);
+    g.battle.battleRender(walkie, auth, viewport, freshEntities, pixiFactory);
     g.battle.unitRecentManeuverChange(walkie, freshEntities);
     g.battle.battleClick(walkie, auth, viewport, freshEntities);
     g.battle.unitPath(walkie, auth, viewport, freshEntities);
