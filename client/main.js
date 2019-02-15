@@ -60,6 +60,7 @@ g.main = function main() {
     g.world.endTurnCountdown(walkie, freshEntities);
 
     g.battle.battleInterfaceToggle($body, walkie);
+    g.battle.waitMock($body, auth, freshEntities);
     g.battle.battleRender(walkie, auth, viewport, freshEntities, spriteBucket);
     g.battle.unitRecentManeuverChange(walkie, freshEntities);
     g.battle.battleClick(walkie, auth, viewport, freshEntities);
