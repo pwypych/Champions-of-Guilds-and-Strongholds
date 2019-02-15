@@ -45,8 +45,9 @@ g.world.worldRender = (walkie, auth, viewport, freshEntities, spriteBucket) => {
 
   function cleanSpriteBucket() {
     // to prevent memory leak
-    Object.keys(spriteBucket).forEach((id) => {
-      delete spriteBucket[id];
+    Object.keys(spriteBucket).forEach((key) => {
+      spriteBucket[key].destroy();
+      delete spriteBucket[key];
     });
 
     drawBackground();
