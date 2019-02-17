@@ -6,7 +6,12 @@ const debug = require('debug')('cogs:maneuverJourney');
 const validator = require('validator');
 const async = require('async');
 
-module.exports = (db, decideUnitStep, refillUnitMovement) => {
+module.exports = (
+  db,
+  decideUnitStep,
+  refillUnitMovement,
+  updateUnitRecentManeuver
+) => {
   return (req, res, next) => {
     (function init() {
       debug(
@@ -68,7 +73,24 @@ module.exports = (db, decideUnitStep, refillUnitMovement) => {
         return;
       }
 
-      forEachUnitJourney(ctx);
+      runUpdateUnitRecentManeuver(ctx);
+    }
+
+    function runUpdateUnitRecentManeuver(ctx) {
+      const gameId = ctx.gameId;
+      const unitId = ctx.unitId;
+      const unitJourney = ctx.unitJourney;
+
+      const recentManeuver = {};
+      recentManeuver.name = 'onJourney';
+      recentManeuver.unitJourney = unitJourney;
+      recentManeuver.timestamp = Date.now();
+
+      debug('runUpdateUnitRecentManeuver: Starting...');
+      updateUnitRecentManeuver(gameId, unitId, recentManeuver, () => {
+        debug('runUpdateUnitRecentManeuver: Success!');
+        forEachUnitJourney(ctx);
+      });
     }
 
     function forEachUnitJourney(ctx) {

@@ -351,7 +351,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/battle/unitJourney/maneuverJourney.js')(
       db,
       decideUnitStep,
-      refillUnitMovement
+      refillUnitMovement,
+      updateUnitRecentManeuver
     ),
     digestFinishedManeuverMiddleware
   );

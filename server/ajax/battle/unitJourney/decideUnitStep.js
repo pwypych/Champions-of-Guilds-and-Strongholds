@@ -9,8 +9,7 @@ module.exports = (
   db,
   findEntitiesByGameId,
   decrementUnitMovement,
-  updateUnitPosition,
-  updateUnitRecentManeuver
+  updateUnitPosition
 ) => {
   return (gameId, playerId, unitId, wishedUnitStep, callback) => {
     (function init() {
@@ -163,23 +162,6 @@ module.exports = (
       debug('runUpdateUnitPosition: Starting...');
       updateUnitPosition(gameId, unitId, position, () => {
         debug('runUpdateUnitPosition: Success!');
-        runUpdateUnitRecentManeuver();
-      });
-    }
-
-    function runUpdateUnitRecentManeuver() {
-      const toPosition = {};
-      toPosition.x = wishedUnitStep.toX;
-      toPosition.y = wishedUnitStep.toY;
-
-      const recentManeuver = {};
-      recentManeuver.name = 'unitJourney';
-      recentManeuver.toPosition = toPosition;
-      recentManeuver.timestamp = Date.now();
-
-      debug('runUpdateUnitRecentManeuver: Starting...');
-      updateUnitRecentManeuver(gameId, unitId, recentManeuver, () => {
-        debug('runUpdateUnitRecentManeuver: Success!');
         callback(null);
       });
     }
