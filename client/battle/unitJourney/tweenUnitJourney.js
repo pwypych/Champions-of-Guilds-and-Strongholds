@@ -2,9 +2,11 @@
 
 'use strict';
 
-g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, pixiFactory) => {
+g.battle.tweenUnitJourney = (walkie, viewport, freshEntities) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
+
+  const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
     onUnitPositionChanged();
@@ -12,7 +14,7 @@ g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, pixiFactory) => {
 
   function onUnitPositionChanged() {
     walkie.onEvent(
-      'recentManeuverChanged_',
+      'recentManeuverDifferanceFound_',
       'tweenUnitJourney.js',
       (data) => {
         if (data.entity.recentManeuver.name === 'unitJourney') {
@@ -20,7 +22,7 @@ g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, pixiFactory) => {
           const fromPosition = data.entityOld.position;
           const toPosition = data.entity.position;
 
-          pixiFactory.getSpriteList()[unitId].visible = false;
+          // pixiFactory.getSpriteList()[unitId].visible = false;
 
           generatePathArray(unitId, fromPosition, toPosition);
         }
@@ -90,42 +92,48 @@ g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, pixiFactory) => {
       });
     });
 
-    findSpriteAndSpriteOffset(journey, unitId);
+    createTweenSprite(journey, unitId);
   }
 
-  function findSpriteAndSpriteOffset(journey, unitId) {
+  function createTweenSprite(journey, unitId) {
     const entity = freshEntities()[unitId];
+
     const texture = PIXI.loader.resources[entity.unitName].texture;
-    const sprite = new PIXI.Sprite(texture);
+    const tweenSprite = new PIXI.Sprite(texture);
 
-    sprite.anchor = { x: 0, y: 1 };
+    tweenSprite.anchor = { x: 0, y: 1 };
 
-    sprite.x = entity.position.x * blockWidthPx;
-    sprite.y = entity.position.y * blockHeightPx + blockHeightPx;
+    const fromXPixel = journey[0].fromX * blockWidthPx;
+    const fromYPixel = journey[0].fromY * blockHeightPx + blockHeightPx;
 
-    let spriteOffset = entity.spriteOffset;
+    tweenSprite.x = fromXPixel;
+    tweenSprite.y = fromYPixel;
 
-    if (!spriteOffset) {
-      spriteOffset = { x: 0, y: 0 };
-    }
+    const zIndex = 100 + fromYPixel;
 
-    viewport.addChild(sprite);
+    battleContainer.addChildZ(tweenSprite, zIndex);
 
-    generateTweenPath(journey, sprite, spriteOffset);
+    const sprite = battleContainer.getChildByName(unitId);
+    // sprite.isTweening = true;
+    // sprite.visible = false;
+
+    generateTweenTimeline(journey, tweenSprite, sprite);
   }
 
-  function generateTweenPath(journey, sprite, spriteOffset) {
-    const done = _.after(journey.length, () => {
-      destroySprite(sprite);
-    });
+  // instantiate new tweenSprite
+  // hide real sprite
+  // use timelinemax to animate
+  // show real sprite
+  // delete tweenSprite
 
-    journey.forEach((step, index) => {
-      const fromXPixel = step.fromX * blockWidthPx + spriteOffset.x;
-      const fromYPixel =
-        step.fromY * blockHeightPx + blockHeightPx + spriteOffset.y;
-      const toXPixel = step.toX * blockWidthPx + spriteOffset.x;
-      const toYPixel =
-        step.toY * blockHeightPx + blockHeightPx + spriteOffset.y;
+  function generateTweenTimeline(journey, tweenSprite, sprite) {
+    const timeline = new TimelineMax();
+
+    journey.forEach((step) => {
+      const fromXPixel = step.fromX * blockWidthPx;
+      const fromYPixel = step.fromY * blockHeightPx + blockHeightPx;
+      const toXPixel = step.toX * blockWidthPx;
+      const toYPixel = step.toY * blockHeightPx + blockHeightPx;
 
       console.log(
         'end slide on pixel:',
@@ -136,27 +144,89 @@ g.battle.tweenUnitJourney = (walkie, viewport, freshEntities, pixiFactory) => {
         fromYPixel
       );
 
-      TweenMax.fromTo(
-        sprite,
-        0.13,
-        { x: fromXPixel, y: fromYPixel },
-        {
-          x: toXPixel,
-          y: toYPixel,
-          delay: index * 0.13,
-          oncomplete: () => {
-            done();
-          }
-        }
+      timeline.add(
+        TweenMax.fromTo(
+          tweenSprite,
+          0.3,
+          { x: fromXPixel, y: fromYPixel },
+          { x: toXPixel, y: toYPixel }
+          // { x: 0, y: 0 },
+          // { x: 200, y: 200 }
+        )
       );
     });
+
+    timeline.addCallback(() => {
+      // tweenSprite.visible = false;
+      // sprite.visible = true;
+      // sprite.isTweening = false;
+    });
+
+    timeline.pause();
+    timeline.play();
+
+    console.log('timeline', timeline);
   }
 
-  function destroySprite(sprite) {
-    setTimeout(() => {
-      console.log('destroySprite');
-      viewport.removeChild(sprite);
-      sprite.destroy();
-    }, 5000); // destroy sprite after some time to prevent memory leak
-  }
+  // function generateTweenPath(journey, unitId) {
+  //   // const done = _.after(1, () => {
+  //   //   console.log('done steps', sprite);
+  //   //   // sprite.visible = false;
+  //   //   // battleContainer.removeChild(sprite);
+  //   //   // sprite.destroy();
+  //   // });
+
+  //   journey.forEach((step, index) => {
+  //     const fromXPixel = step.fromX * blockWidthPx;
+  //     const fromYPixel = step.fromY * blockHeightPx + blockHeightPx;
+  //     const toXPixel = step.toX * blockWidthPx;
+  //     const toYPixel = step.toY * blockHeightPx + blockHeightPx;
+
+  //     const sprite = createSprite(fromXPixel, fromYPixel, unitId);
+
+  //     console.log(
+  //       'end slide on pixel:',
+  //       toXPixel,
+  //       toYPixel,
+  //       ' currently on pixel:',
+  //       fromXPixel,
+  //       fromYPixel
+  //     );
+
+  //     TweenMax.fromTo(
+  //       sprite,
+  //       0.2,
+  //       { x: fromXPixel, y: fromYPixel },
+  //       {
+  //         x: toXPixel,
+  //         y: toYPixel
+  //       }
+  //     );
+
+  //     setTimeout(() => {
+  //       sprite.visible = false;
+  //     }, 200);
+
+  //     setTimeout(() => {
+  //       // sprite.destroy();
+  //       // battleContainer.removeChild(sprite);
+  //     }, 300);
+  //   });
+  // }
+
+  // function createSprite(fromXPixel, fromYPixel, unitId) {
+  //   const entity = freshEntities()[unitId];
+  //   const texture = PIXI.loader.resources[entity.unitName].texture;
+  //   const sprite = new PIXI.Sprite(texture);
+
+  //   sprite.anchor = { x: 0, y: 1 };
+
+  //   sprite.x = fromXPixel;
+  //   sprite.y = fromYPixel;
+
+  //   const zIndex = 100 + fromYPixel;
+  //   battleContainer.addChildZ(sprite, zIndex);
+
+  //   return sprite;
+  // }
 };

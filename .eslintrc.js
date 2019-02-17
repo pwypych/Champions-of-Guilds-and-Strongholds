@@ -16,6 +16,7 @@ module.exports = {
     PIXI: false,
     g: false,
     TweenMax: false,
+    TimelineMax: false,
     PF: false // pathfinding
   },
   rules: {

@@ -61,7 +61,8 @@ g.main = function main() {
     g.battle.battleInterfaceToggle($body, walkie);
     g.battle.waitMock($body, auth, freshEntities);
     g.battle.battleRender(walkie, auth, viewport, freshEntities);
-    g.battle.unitRecentManeuverChange(walkie, freshEntities);
+    g.battle.drawUnits(walkie, auth, viewport, freshEntities);
+    g.battle.recentManeuverDifferance(walkie, freshEntities);
     g.battle.battleClick(walkie, auth, viewport, freshEntities);
     g.battle.unitPath(walkie, auth, viewport, freshEntities);
     g.battle.unitJourney(walkie, auth);

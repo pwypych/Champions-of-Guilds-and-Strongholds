@@ -83,7 +83,7 @@ g.battle.battleRender = (walkie, auth, viewport, freshEntities) => {
     }
 
     if (!battleContainer.getChildByName(name)) {
-      console.log('drawBackground', name);
+      // console.log('drawBackground', name);
       background = new PIXI.Graphics();
       background.name = name;
       const color = 0xc7c7c7;
@@ -93,7 +93,7 @@ g.battle.battleRender = (walkie, auth, viewport, freshEntities) => {
       const width = viewport.worldWidth;
       const height = viewport.worldHeight;
       background.drawRect(x, y, width, height);
-      battleContainer.addChild(background);
+      battleContainer.addChildZ(background, 1);
     }
 
     drawGrid();
@@ -116,7 +116,7 @@ g.battle.battleRender = (walkie, auth, viewport, freshEntities) => {
       }
 
       if (!battleContainer.getChildByName(name)) {
-        console.log('drawGrid:horizontal_line', name);
+        // console.log('drawGrid:horizontal_line', name);
         line = new PIXI.Graphics();
         line.name = name;
         line.lineStyle(1, 0x777777, 0.5);
@@ -125,7 +125,7 @@ g.battle.battleRender = (walkie, auth, viewport, freshEntities) => {
         const toX = index * blockWidthPx;
         const toY = viewport.worldHeight;
         line.moveTo(fromX, fromY).lineTo(toX, toY);
-        battleContainer.addChild(line);
+        battleContainer.addChildZ(line, 2);
       }
     });
 
@@ -142,7 +142,7 @@ g.battle.battleRender = (walkie, auth, viewport, freshEntities) => {
       }
 
       if (!battleContainer.getChildByName(name)) {
-        console.log('drawGrid:vertical_line', name);
+        // console.log('drawGrid:vertical_line', name);
         line = new PIXI.Graphics();
         line.name = name;
         line.lineStyle(1, 0x777777, 0.5);
@@ -151,7 +151,7 @@ g.battle.battleRender = (walkie, auth, viewport, freshEntities) => {
         const toX = viewport.worldWidth;
         const toY = index * blockHeightPx;
         line.moveTo(fromX, fromY).lineTo(toX, toY);
-        battleContainer.addChild(line);
+        battleContainer.addChildZ(line, 2);
       }
     });
 
@@ -169,33 +169,33 @@ g.battle.battleRender = (walkie, auth, viewport, freshEntities) => {
   }
 
   function drawUnits(entity, id) {
-    const name = id;
-    let unitSprite;
+    // const name = id;
+    // let unitSprite;
 
-    if (battleContainer.getChildByName(name)) {
-      unitSprite = battleContainer.getChildByName(name);
-    }
+    // if (battleContainer.getChildByName(name)) {
+    //   unitSprite = battleContainer.getChildByName(name);
+    // }
 
-    if (!battleContainer.getChildByName(name)) {
-      console.log('drawUnit', name);
-      const texture = PIXI.loader.resources[entity.unitName].texture;
-      unitSprite = new PIXI.Sprite(texture);
-      unitSprite.name = name;
-      battleContainer.addChild(unitSprite);
-    }
+    // if (!battleContainer.getChildByName(name)) {
+    //   console.log('drawUnit', name);
+    //   const texture = PIXI.loader.resources[entity.unitName].texture;
+    //   unitSprite = new PIXI.Sprite(texture);
+    //   unitSprite.name = name;
+    //   battleContainer.addChild(unitSprite);
+    // }
 
-    unitSprite.anchor = { x: 0, y: 1 };
-    unitSprite.x = entity.position.x * blockWidthPx;
-    unitSprite.y = entity.position.y * blockHeightPx + blockHeightPx;
+    // unitSprite.anchor = { x: 0, y: 1 };
+    // unitSprite.x = entity.position.x * blockWidthPx;
+    // unitSprite.y = entity.position.y * blockHeightPx + blockHeightPx;
 
-    if (entity.spriteOffset) {
-      unitSprite.x += entity.spriteOffset.x;
-      unitSprite.y += entity.spriteOffset.y;
-    }
+    // if (entity.spriteOffset) {
+    //   unitSprite.x += entity.spriteOffset.x;
+    //   unitSprite.y += entity.spriteOffset.y;
+    // }
 
-    if (entity.active) {
-      toolActiveUnitMarker(id, unitSprite.x, unitSprite.y);
-    }
+    // if (entity.active) {
+    // toolActiveUnitMarker(id, unitSprite.x, unitSprite.y);
+    // }
 
     drawAmount(entity, id);
   }
@@ -209,10 +209,10 @@ g.battle.battleRender = (walkie, auth, viewport, freshEntities) => {
     }
 
     if (!battleContainer.getChildByName(name)) {
-      console.log('drawAmount', name);
+      // console.log('drawAmount', name);
       textAmount = new PIXI.Text(entity.amount, textStyle);
       textAmount.name = name;
-      battleContainer.addChild(textAmount);
+      battleContainer.addChildZ(textAmount, 1000);
     }
 
     const paddingRight = 2;

@@ -27,13 +27,20 @@ g.setup.setupViewport = (app) => {
   // );
 
   // add containers for different scenes
-  const worldContainer = new PIXI.Container();
+  const worldContainer = new PIXI.ContainerZ();
   worldContainer.name = 'worldContainer';
   viewport.addChild(worldContainer);
 
-  const battleContainer = new PIXI.Container();
+  const battleContainer = new PIXI.ContainerZ();
   battleContainer.name = 'battleContainer';
   viewport.addChild(battleContainer);
+
+  // sortChildrend and ContainerZ comes from pixi-simple-insertion-sort.js library
+  // we should sortChildren() on every tick as it checks for changes first
+  app.ticker.add(() => {
+    battleContainer.sortChildren();
+    worldContainer.sortChildren();
+  });
 
   return viewport;
 };
