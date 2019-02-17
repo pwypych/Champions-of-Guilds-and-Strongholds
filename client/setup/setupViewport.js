@@ -26,5 +26,14 @@ g.setup.setupViewport = (app) => {
   //   console.log('clicked (' + e.world.x + ',' + e.world.y + ')')
   // );
 
+  // add containers for different scenes
+  const worldContainer = new PIXI.Container();
+  worldContainer.name = 'worldContainer';
+  viewport.addChild(worldContainer);
+
+  const battleContainer = new PIXI.Container();
+  battleContainer.name = 'battleContainer';
+  viewport.addChild(battleContainer);
+
   return viewport;
 };

@@ -2,13 +2,7 @@
 
 'use strict';
 
-g.battle.battleRender = (
-  walkie,
-  auth,
-  viewport,
-  freshEntities,
-  pixiFactory
-) => {
+g.battle.battleRender = (walkie, auth, viewport, freshEntities) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
@@ -19,6 +13,9 @@ g.battle.battleRender = (
     fill: 'white',
     strokeThickness: 2
   });
+
+  const battleContainer = viewport.getChildByName('battleContainer');
+  const worldContainer = viewport.getChildByName('worldContainer');
 
   (function init() {
     onEntitiesGet();
@@ -35,10 +32,17 @@ g.battle.battleRender = (
           return;
         }
 
-        findBattleEntity();
+        showBattleContainer();
       },
       false
     );
+  }
+
+  function showBattleContainer() {
+    battleContainer.visible = true;
+    worldContainer.visible = false;
+
+    findBattleEntity();
   }
 
   function findBattleEntity() {
@@ -55,6 +59,7 @@ g.battle.battleRender = (
 
     setViewportDimentions(battleEntity);
   }
+
   function setViewportDimentions(battleEntity) {
     viewport.worldWidth = battleEntity.battleWidth * blockWidthPx;
     viewport.worldHeight = battleEntity.battleHeight * blockHeightPx;
@@ -63,24 +68,33 @@ g.battle.battleRender = (
   }
 
   function preventMemoryLeak() {
-    viewport.removeChildren();
-    pixiFactory.destroyAll();
+    // viewport.removeChildren();
+    // graphicsManager.destroyAll();
 
     drawBackground();
   }
 
   function drawBackground() {
-    const background = pixiFactory.newGraphics();
+    const name = 'battle_background';
+    let background;
 
-    const color = 0xc7c7c7;
-    background.beginFill(color);
-    const x = 0;
-    const y = 0;
-    const width = viewport.worldWidth;
-    const height = viewport.worldHeight;
-    background.drawRect(x, y, width, height);
+    if (battleContainer.getChildByName(name)) {
+      background = battleContainer.getChildByName(name);
+    }
 
-    viewport.addChild(background);
+    if (!battleContainer.getChildByName(name)) {
+      console.log('drawBackground', name);
+      background = new PIXI.Graphics();
+      background.name = name;
+      const color = 0xc7c7c7;
+      background.beginFill(color);
+      const x = 0;
+      const y = 0;
+      const width = viewport.worldWidth;
+      const height = viewport.worldHeight;
+      background.drawRect(x, y, width, height);
+      battleContainer.addChild(background);
+    }
 
     drawGrid();
   }
@@ -94,16 +108,25 @@ g.battle.battleRender = (
         return;
       }
 
-      const fromX = index * blockWidthPx;
-      const fromY = 0;
-      const toX = index * blockWidthPx;
-      const toY = viewport.worldHeight;
+      const name = 'battle_grid_line_horizontal_' + index;
+      let line;
 
-      const line = pixiFactory.newGraphics();
+      if (battleContainer.getChildByName(name)) {
+        line = battleContainer.getChildByName(name);
+      }
 
-      line.lineStyle(1, 0x777777, 0.5);
-      line.moveTo(fromX, fromY).lineTo(toX, toY);
-      viewport.addChild(line);
+      if (!battleContainer.getChildByName(name)) {
+        console.log('drawGrid:horizontal_line', name);
+        line = new PIXI.Graphics();
+        line.name = name;
+        line.lineStyle(1, 0x777777, 0.5);
+        const fromX = index * blockWidthPx;
+        const fromY = 0;
+        const toX = index * blockWidthPx;
+        const toY = viewport.worldHeight;
+        line.moveTo(fromX, fromY).lineTo(toX, toY);
+        battleContainer.addChild(line);
+      }
     });
 
     _.times(height, (index) => {
@@ -111,16 +134,25 @@ g.battle.battleRender = (
         return;
       }
 
-      const fromX = 0;
-      const fromY = index * blockHeightPx;
-      const toX = viewport.worldWidth;
-      const toY = index * blockHeightPx;
+      const name = 'battle_grid_line_vertical_' + index;
+      let line;
 
-      const line = pixiFactory.newGraphics();
+      if (battleContainer.getChildByName(name)) {
+        line = battleContainer.getChildByName(name);
+      }
 
-      line.lineStyle(1, 0x777777, 0.5);
-      line.moveTo(fromX, fromY).lineTo(toX, toY);
-      viewport.addChild(line);
+      if (!battleContainer.getChildByName(name)) {
+        console.log('drawGrid:vertical_line', name);
+        line = new PIXI.Graphics();
+        line.name = name;
+        line.lineStyle(1, 0x777777, 0.5);
+        const fromX = 0;
+        const fromY = index * blockHeightPx;
+        const toX = viewport.worldWidth;
+        const toY = index * blockHeightPx;
+        line.moveTo(fromX, fromY).lineTo(toX, toY);
+        battleContainer.addChild(line);
+      }
     });
 
     forEachFigure();
@@ -129,64 +161,94 @@ g.battle.battleRender = (
   function forEachFigure() {
     _.forEach(freshEntities(), (entity, id) => {
       if (entity.unitName && entity.position) {
-        instantiateSprites(entity, id);
+        drawUnits(entity, id);
       }
     });
 
     triggerRenderDone();
   }
 
-  function instantiateSprites(entity, id) {
-    const texture = PIXI.loader.resources[entity.unitName].texture;
-    const sprite = pixiFactory.newSprite(id, texture);
+  function drawUnits(entity, id) {
+    const name = id;
+    let unitSprite;
 
-    sprite.anchor = { x: 0, y: 1 };
+    if (battleContainer.getChildByName(name)) {
+      unitSprite = battleContainer.getChildByName(name);
+    }
 
-    sprite.x = entity.position.x * blockWidthPx;
-    sprite.y = entity.position.y * blockHeightPx + blockHeightPx;
+    if (!battleContainer.getChildByName(name)) {
+      console.log('drawUnit', name);
+      const texture = PIXI.loader.resources[entity.unitName].texture;
+      unitSprite = new PIXI.Sprite(texture);
+      unitSprite.name = name;
+      battleContainer.addChild(unitSprite);
+    }
+
+    unitSprite.anchor = { x: 0, y: 1 };
+    unitSprite.x = entity.position.x * blockWidthPx;
+    unitSprite.y = entity.position.y * blockHeightPx + blockHeightPx;
 
     if (entity.spriteOffset) {
-      sprite.x += entity.spriteOffset.x;
-      sprite.y += entity.spriteOffset.y;
+      unitSprite.x += entity.spriteOffset.x;
+      unitSprite.y += entity.spriteOffset.y;
     }
 
     if (entity.active) {
-      const activeUnitMarker = toolActiveUnitMarker(sprite.x, sprite.y);
-      viewport.addChild(activeUnitMarker);
+      toolActiveUnitMarker(id, unitSprite.x, unitSprite.y);
     }
 
-    viewport.addChild(sprite);
-
-    renderAmount(entity);
+    drawAmount(entity, id);
   }
 
-  function renderAmount(entity) {
-    const text = pixiFactory.newText(entity.amount, textStyle);
+  function drawAmount(entity, unitId) {
+    const name = 'amount_' + unitId;
+    let textAmount;
+
+    if (battleContainer.getChildByName(name)) {
+      textAmount = battleContainer.getChildByName(name);
+    }
+
+    if (!battleContainer.getChildByName(name)) {
+      console.log('drawAmount', name);
+      textAmount = new PIXI.Text(entity.amount, textStyle);
+      textAmount.name = name;
+      battleContainer.addChild(textAmount);
+    }
+
     const paddingRight = 2;
     const paddingTop = 3;
-    text.x =
+    textAmount.x =
       entity.position.x * blockWidthPx +
       blockWidthPx -
-      text.width +
+      textAmount.width +
       paddingRight;
-    text.y =
+    textAmount.y =
       entity.position.y * blockHeightPx +
       blockHeightPx -
-      text.height +
+      textAmount.height +
       paddingTop;
-
-    viewport.addChild(text);
   }
 
-  function toolActiveUnitMarker(x, y) {
-    const activeUnitMarker = pixiFactory.newGraphics();
-    const color = 0x60b450;
-    const alpha = 0.5;
-    activeUnitMarker.beginFill(color, alpha);
-    const width = 32;
-    const height = 32;
-    activeUnitMarker.drawRect(x, y - 32, width, height); // - 32 because of sprite anchor
-    return activeUnitMarker;
+  function toolActiveUnitMarker(unitId, x, y) {
+    const name = 'active_unit_marker_' + unitId;
+    let marker;
+
+    if (battleContainer.getChildByName(name)) {
+      marker = battleContainer.getChildByName(name);
+    }
+
+    if (!battleContainer.getChildByName(name)) {
+      console.log('drawActiveUnitMarker', name);
+      const textureName = 'activeUnitMarker';
+      const texture = PIXI.loader.resources[textureName].texture;
+      marker = new PIXI.Sprite(texture);
+      marker.name = name;
+      battleContainer.addChild(marker);
+    }
+
+    const offsetY = 2;
+    marker.x = x;
+    marker.y = y - blockHeightPx + offsetY;
   }
 
   function triggerRenderDone() {
