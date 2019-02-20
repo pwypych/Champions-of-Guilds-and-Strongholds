@@ -65,8 +65,8 @@ g.main = function main() {
     g.battle.recentManeuverDifferance(walkie, freshEntities);
     g.battle.battleClick(walkie, auth, viewport, freshEntities);
     g.battle.unitPath(walkie, auth, viewport, freshEntities);
-    g.battle.unitJourney(walkie, auth);
-    g.battle.tweenUnitJourney(walkie, viewport, freshEntities);
+    g.battle.unitAcceptedPathPost(walkie, auth);
+    g.battle.tweenUnitPath(walkie, viewport, freshEntities);
     g.battle.keyboardMelee(walkie, auth, freshEntities);
 
     g.summary.summaryToggle($body, walkie, auth, freshEntities);
