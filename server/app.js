@@ -282,7 +282,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   const checkUnitManeuverGreatherThenZero = require('./ajax/battle/maneuver/verify/checkUnitManeuverGreatherThenZero.js')(
     findEntitiesByGameId
   );
-  const verifyManeuverMiddleware = require('./ajax/battle/maneuver/verify/verifyManeuver.js')(
+  const verifyManeuver = require('./ajax/battle/maneuver/verify/verifyManeuver.js')(
     checkUnitOwner,
     checkUnitActive,
     checkUnitManeuverGreatherThenZero
@@ -347,7 +347,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     require('./ajax/battle/maneuver/maneuverPost.js')(),
-    verifyManeuverMiddleware,
+    verifyManeuver,
     require('./ajax/battle/unitJourney/maneuverJourney.js')(
       db,
       decideUnitStep,
@@ -358,12 +358,23 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   app.post(
+    '/ajax/battle/unitJourneyExtended/maneuverJourneyPost',
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
+    require('./library/middlewareAjaxStateAuth.js')('battleState'),
+    require('./ajax/battle/unitJourneyExtended/verifyUnitJourney.js')(),
+    verifyManeuver,
+    require('./ajax/battle/unitJourneyExtended/responseUnitJourney.js')(),
+    digestFinishedManeuverMiddleware
+  );
+
+  app.post(
     '/ajax/battle/melee/maneuverMeleePost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     require('./ajax/battle/maneuver/maneuverPost.js')(),
-    verifyManeuverMiddleware,
+    verifyManeuver,
     require('./ajax/battle/melee/maneuverMelee.js')(db),
     digestFinishedManeuverMiddleware
   );
@@ -374,7 +385,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     require('./ajax/battle/maneuver/maneuverPost.js')(),
-    verifyManeuverMiddleware,
+    verifyManeuver,
     require('./ajax/battle/shoot/maneuverShoot.js')(db),
     digestFinishedManeuverMiddleware
   );

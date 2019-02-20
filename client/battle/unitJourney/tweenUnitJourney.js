@@ -17,107 +17,44 @@ g.battle.tweenUnitJourney = (walkie, viewport, freshEntities) => {
       'recentManeuverDifferanceFound_',
       'tweenUnitJourney.js',
       (data) => {
-        if (data.entity.recentManeuver.name === 'unitJourney') {
+        if (data.entity.recentManeuver.name === 'onJourney') {
           const unitId = data.unitId;
-          const fromPosition = data.entityOld.position;
-          const toPosition = data.entity.position;
+          const journey = data.entity.recentManeuver.unitJourney;
 
-          // pixiFactory.getSpriteList()[unitId].visible = false;
-
-          generatePathArray(unitId, fromPosition, toPosition);
+          console.log('!!!', unitId, journey);
+          createTweenSprite(unitId, journey);
         }
       },
       true
     );
   }
 
-  function generatePathArray(unitId, fromPosition, toPosition) {
-    let battleEntity;
-    _.forEach(freshEntities(), (entity) => {
-      if (entity.battleStatus === 'active') {
-        battleEntity = entity;
-      }
-    });
-    const width = battleEntity.battleWidth;
-    const height = battleEntity.battleHeight;
+  function createTweenSprite(unitId, journey) {
+    // const entity = freshEntities()[unitId];
 
-    const grid = new PF.Grid(width, height);
+    // const texture = PIXI.loader.resources[entity.unitName].texture;
+    // const tweenSprite = new PIXI.Sprite(texture);
 
-    _.forEach(freshEntities(), (entity, id) => {
-      if (entity.collision && id !== unitId) {
-        // unit that is moved cannot have collision on grid
-        grid.setWalkableAt(entity.position.x, entity.position.y, false);
-      }
-    });
+    // tweenSprite.anchor = { x: 0, y: 1 };
 
-    const finder = new PF.AStarFinder({ allowDiagonal: false, weight: 2 });
+    // const fromXPixel = journey[0].fromX * blockWidthPx;
+    // const fromYPixel = journey[0].fromY * blockHeightPx + blockHeightPx;
 
-    console.log('fromPosition', fromPosition);
-    console.log('toPosition', toPosition);
-    // console.log('grid', grid);
+    // tweenSprite.x = fromXPixel;
+    // tweenSprite.y = fromYPixel;
 
-    const pathArrayOfArrays = finder.findPath(
-      fromPosition.x,
-      fromPosition.y,
-      toPosition.x,
-      toPosition.y,
-      grid
-    );
+    // const zIndex = 100 + fromYPixel;
 
-    // console.log('pathArrayOfArrays', pathArrayOfArrays);
-
-    const pathArray = pathArrayOfArrays.map((path) => {
-      return { x: path[0], y: path[1] };
-    });
-
-    console.log('pathArray', pathArray);
-
-    convertPathToJourney(pathArray, unitId);
-  }
-
-  function convertPathToJourney(pathArray, unitId) {
-    const journey = [];
-    pathArray.forEach((pointFrom, index) => {
-      if (index === pathArray.length - 1) {
-        return;
-      }
-
-      const pointTo = pathArray[index + 1];
-
-      journey.push({
-        fromX: pointFrom.x,
-        fromY: pointFrom.y,
-        toX: pointTo.x,
-        toY: pointTo.y
-      });
-    });
-
-    createTweenSprite(journey, unitId);
-  }
-
-  function createTweenSprite(journey, unitId) {
-    const entity = freshEntities()[unitId];
-
-    const texture = PIXI.loader.resources[entity.unitName].texture;
-    const tweenSprite = new PIXI.Sprite(texture);
-
-    tweenSprite.anchor = { x: 0, y: 1 };
-
-    const fromXPixel = journey[0].fromX * blockWidthPx;
-    const fromYPixel = journey[0].fromY * blockHeightPx + blockHeightPx;
-
-    tweenSprite.x = fromXPixel;
-    tweenSprite.y = fromYPixel;
-
-    const zIndex = 100 + fromYPixel;
-
-    battleContainer.addChildZ(tweenSprite, zIndex);
+    // battleContainer.addChildZ(tweenSprite, zIndex);
 
     const sprite = battleContainer.getChildByName(unitId);
-    // sprite.isTweening = true;
-    // sprite.visible = false;
+    sprite.isTweening = true;
 
-    generateTweenTimeline(journey, tweenSprite, sprite);
+    setTimeout(() => {
+      sprite.isTweening = false;
+    }, 0.2 * journey.length + 1);
+
+    generateTweenTimeline(journey, sprite);
   }
 
   // instantiate new tweenSprite
@@ -144,28 +81,17 @@ g.battle.tweenUnitJourney = (walkie, viewport, freshEntities) => {
         fromYPixel
       );
 
-      timeline.add(
-        TweenMax.fromTo(
-          tweenSprite,
-          0.3,
-          { x: fromXPixel, y: fromYPixel },
-          { x: toXPixel, y: toYPixel }
-          // { x: 0, y: 0 },
-          // { x: 200, y: 200 }
-        )
+      timeline.to(
+        tweenSprite,
+        0.2,
+        { x: toXPixel, y: toYPixel }
+        // { x: 0, y: 0 },
+        // { x: 200, y: 200 }
       );
-    });
-
-    timeline.addCallback(() => {
-      // tweenSprite.visible = false;
-      // sprite.visible = true;
-      // sprite.isTweening = false;
     });
 
     timeline.pause();
     timeline.play();
-
-    console.log('timeline', timeline);
   }
 
   // function generateTweenPath(journey, unitId) {

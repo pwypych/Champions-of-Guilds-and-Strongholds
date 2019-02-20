@@ -169,34 +169,6 @@ g.battle.battleRender = (walkie, auth, viewport, freshEntities) => {
   }
 
   function drawUnits(entity, id) {
-    // const name = id;
-    // let unitSprite;
-
-    // if (battleContainer.getChildByName(name)) {
-    //   unitSprite = battleContainer.getChildByName(name);
-    // }
-
-    // if (!battleContainer.getChildByName(name)) {
-    //   console.log('drawUnit', name);
-    //   const texture = PIXI.loader.resources[entity.unitName].texture;
-    //   unitSprite = new PIXI.Sprite(texture);
-    //   unitSprite.name = name;
-    //   battleContainer.addChild(unitSprite);
-    // }
-
-    // unitSprite.anchor = { x: 0, y: 1 };
-    // unitSprite.x = entity.position.x * blockWidthPx;
-    // unitSprite.y = entity.position.y * blockHeightPx + blockHeightPx;
-
-    // if (entity.spriteOffset) {
-    //   unitSprite.x += entity.spriteOffset.x;
-    //   unitSprite.y += entity.spriteOffset.y;
-    // }
-
-    // if (entity.active) {
-    // toolActiveUnitMarker(id, unitSprite.x, unitSprite.y);
-    // }
-
     drawAmount(entity, id);
   }
 

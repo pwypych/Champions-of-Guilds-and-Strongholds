@@ -51,16 +51,11 @@ g.battle.drawUnits = (walkie, auth, viewport, freshEntities) => {
       sprite.name = id;
       const zIndex = 100 + entity.position.y;
       battleContainer.addChildZ(sprite, zIndex);
+      updatePosition(entity, sprite);
     }
-
-    updatePosition(sprite, entity);
   }
 
-  function updatePosition(sprite, entity) {
-    if (sprite.isTweening) {
-      return;
-    }
-
+  function updatePosition(entity, sprite) {
     sprite.anchor = { x: 0, y: 1 };
     sprite.x = entity.position.x * blockWidthPx;
     sprite.y = entity.position.y * blockHeightPx + blockHeightPx;

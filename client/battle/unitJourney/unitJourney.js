@@ -64,7 +64,7 @@ g.battle.unitJourney = (walkie, auth) => {
 
     const data = { unitJourney: journey, unitId: unitId };
     $.post(
-      '/ajax/battle/unitJourney/maneuverJourneyPost' + auth.uri,
+      '/ajax/battle/unitJourneyExtended/maneuverJourneyPost' + auth.uri,
       data,
       () => {
         console.log('unitJourney.js: POST maneuverJourneyPost');
