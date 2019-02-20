@@ -10,13 +10,14 @@ module.exports = () => {
       debug(
         '// Sends response for journey result, waits some time (for animation on front), and passes to next, for processing of path result'
       );
+      const unitPath = res.locals.unitPath;
 
-      sendResponce();
+      sendResponce(unitPath);
     })();
 
-    function sendResponce() {
+    function sendResponce(unitPath) {
       debug('sendResponce: No Errors!');
-      res.send({ error: 0 });
+      res.send({ error: 0, unitPath: unitPath });
       next();
     }
   };

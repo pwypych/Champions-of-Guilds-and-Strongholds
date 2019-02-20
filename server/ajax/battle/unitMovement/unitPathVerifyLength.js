@@ -19,28 +19,22 @@ module.exports = () => {
       const unitPath = [];
       let isError = false;
 
-      req.body.unitPath.forEach((step) => {
+      req.body.unitPath.forEach((position) => {
         if (
-          typeof step.fromX === 'undefined' ||
-          typeof step.fromY === 'undefined' ||
-          typeof step.toX === 'undefined' ||
-          typeof step.toY === 'undefined' ||
-          !validator.isNumeric(step.fromX) ||
-          !validator.isNumeric(step.fromY) ||
-          !validator.isNumeric(step.toX) ||
-          !validator.isNumeric(step.toY)
+          typeof position.x === 'undefined' ||
+          typeof position.y === 'undefined' ||
+          !validator.isNumeric(position.x) ||
+          !validator.isNumeric(position.y)
         ) {
-          debug('POST parameter unitPath not valid!', unitPath);
+          debug('POST parameter unitPath not valid!', req.body.unitPath);
           isError = true;
           return;
         }
 
-        const parsedStep = {};
-        parsedStep.fromX = parseInt(step.fromX, 10);
-        parsedStep.fromY = parseInt(step.fromY, 10);
-        parsedStep.toX = parseInt(step.toX, 10);
-        parsedStep.toY = parseInt(step.toY, 10);
-        unitPath.push(parsedStep);
+        const parsedPosition = {};
+        parsedPosition.x = parseInt(position.x, 10);
+        parsedPosition.y = parseInt(position.y, 10);
+        unitPath.push(parsedPosition);
       });
 
       if (isError) {
@@ -54,7 +48,7 @@ module.exports = () => {
 
       res.locals.unitPath = unitPath;
 
-      debug('checkRequestBodyUnitJourney: unitPath', unitPath);
+      debug('checkRequestBodyUnitJourney: unitPath.length', unitPath.length);
       next();
     }
   };
