@@ -17,11 +17,25 @@ module.exports = (
 
       const entities = res.locals.entities;
       const gameId = entities._id;
-      const unitId = res.locals.unitId;
       const playerId = res.locals.playerId;
 
-      runCheckUnitOwner(gameId, unitId, playerId);
+      checkRequestBodyUnitId(gameId, playerId);
     })();
+
+    function checkRequestBodyUnitId(gameId, playerId) {
+      const unitId = req.body.unitId;
+
+      if (typeof unitId === 'undefined') {
+        res.status(400);
+        res.send({ error: 'POST parameter error, unitId parameter not valid' });
+        debug('******************** error ********************');
+        return;
+      }
+      res.locals.unitId = unitId;
+
+      debug('checkRequestBodyUnitId: unitId:', unitId);
+      runCheckUnitOwner(gameId, unitId, playerId);
+    }
 
     function runCheckUnitOwner(gameId, unitId, playerId) {
       debug('runCheckUnitOwner: Starting...');

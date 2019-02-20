@@ -2,22 +2,24 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:verifyUnitJourney');
+const debug = require('debug')('cogs:unitPathVerifyLength');
 const validator = require('validator');
 
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
-      debug('// Initially verifies unitJourney');
+      debug(
+        '// Initially verifies unitPath, checks unit movement points, and verifies if path is not too long'
+      );
 
       checkRequestBodyUnitJourney();
     })();
 
     function checkRequestBodyUnitJourney() {
-      const unitJourney = [];
+      const unitPath = [];
       let isError = false;
 
-      req.body.unitJourney.forEach((step) => {
+      req.body.unitPath.forEach((step) => {
         if (
           typeof step.fromX === 'undefined' ||
           typeof step.fromY === 'undefined' ||
@@ -28,7 +30,7 @@ module.exports = () => {
           !validator.isNumeric(step.toX) ||
           !validator.isNumeric(step.toY)
         ) {
-          debug('POST parameter unitJourney not valid!');
+          debug('POST parameter unitPath not valid!', unitPath);
           isError = true;
           return;
         }
@@ -38,31 +40,21 @@ module.exports = () => {
         parsedStep.fromY = parseInt(step.fromY, 10);
         parsedStep.toX = parseInt(step.toX, 10);
         parsedStep.toY = parseInt(step.toY, 10);
-        unitJourney.push(parsedStep);
+        unitPath.push(parsedStep);
       });
 
       if (isError) {
-        return;
-      }
-
-      res.locals.unitJourney = unitJourney;
-
-      debug('checkRequestBodyUnitJourney: unitJourney', unitJourney);
-      checkRequestBodyUnitId();
-    }
-
-    function checkRequestBodyUnitId() {
-      const unitId = req.body.unitId;
-
-      if (typeof unitId === 'undefined') {
         res.status(400);
-        res.send({ error: 'POST parameter error, unitId parameter not valid' });
+        res.send({
+          error: 'POST parameter error, unitPath parameter not valid'
+        });
         debug('******************** error ********************');
         return;
       }
-      res.locals.unitId = unitId;
 
-      debug('checkRequestBodyUnitId: unitId:', unitId);
+      res.locals.unitPath = unitPath;
+
+      debug('checkRequestBodyUnitJourney: unitPath', unitPath);
       next();
     }
   };

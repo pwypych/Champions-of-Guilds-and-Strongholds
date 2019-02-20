@@ -346,7 +346,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
-    require('./ajax/battle/maneuver/maneuverPost.js')(),
+    require('./ajax/battle/maneuver/maneuverSendResponse.js')(),
     verifyManeuver,
     require('./ajax/battle/unitJourney/maneuverJourney.js')(
       db,
@@ -358,13 +358,14 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   app.post(
-    '/ajax/battle/unitJourneyExtended/maneuverJourneyPost',
+    '/ajax/battle/unitMovement/unitPathPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
-    require('./ajax/battle/unitJourneyExtended/verifyUnitJourney.js')(),
     verifyManeuver,
-    require('./ajax/battle/unitJourneyExtended/responseUnitJourney.js')(),
+    require('./ajax/battle/unitMovement/unitPathVerifyLength.js')(),
+    require('./ajax/battle/unitMovement/unitPathSendResponse.js')(),
+    require('./ajax/battle/unitMovement/movementTimeout.js')(),
     digestFinishedManeuverMiddleware
   );
 
@@ -373,7 +374,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
-    require('./ajax/battle/maneuver/maneuverPost.js')(),
+    require('./ajax/battle/maneuver/maneuverSendResponse.js')(),
     verifyManeuver,
     require('./ajax/battle/melee/maneuverMelee.js')(db),
     digestFinishedManeuverMiddleware
@@ -384,7 +385,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
-    require('./ajax/battle/maneuver/maneuverPost.js')(),
+    require('./ajax/battle/maneuver/maneuverSendResponse.js')(),
     verifyManeuver,
     require('./ajax/battle/shoot/maneuverShoot.js')(db),
     digestFinishedManeuverMiddleware
