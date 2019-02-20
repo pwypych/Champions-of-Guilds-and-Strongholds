@@ -8,11 +8,14 @@ g.battle.tweenUnitPath = (walkie, viewport) => {
 
   const battleContainer = viewport.getChildByName('battleContainer');
 
+  let tweeningUnitIdByPathVerifiedByServer;
+
   (function init() {
-    onUnitPositionChanged();
+    onUnitPathVerifiedByServer();
+    onRecentManeuverDifferance();
   })();
 
-  function onUnitPositionChanged() {
+  function onUnitPathVerifiedByServer() {
     walkie.onEvent(
       'unitPathVerifiedByServer_',
       'tweenUnitPath.js',
@@ -20,7 +23,29 @@ g.battle.tweenUnitPath = (walkie, viewport) => {
         const unitId = data.unitId;
         const unitPath = data.unitPath;
 
+        tweeningUnitIdByPathVerifiedByServer = unitId;
+
         findSprite(unitId, unitPath);
+      },
+      true
+    );
+  }
+
+  function onRecentManeuverDifferance() {
+    walkie.onEvent(
+      'recentManeuverDifferanceFound_',
+      'tweenUnitPath.js',
+      (data) => {
+        if (data.unitId === tweeningUnitIdByPathVerifiedByServer) {
+          console.log('No double tweening');
+          return;
+        }
+
+        if (data.entity.recentManeuver.name === 'onMovement') {
+          const unitId = data.unitId;
+          const unitPath = data.entity.recentManeuver.unitPath;
+          findSprite(unitId, unitPath);
+        }
       },
       true
     );
@@ -45,7 +70,11 @@ g.battle.tweenUnitPath = (walkie, viewport) => {
 
       console.log('generateTweenTimeline', xPixel, yPixel);
 
-      timeline.to(sprite, 0.2, { x: xPixel, y: yPixel });
+      timeline.to(sprite, 0.15, { x: xPixel, y: yPixel });
+    });
+
+    timeline.addCallback(() => {
+      tweeningUnitIdByPathVerifiedByServer = undefined;
     });
 
     timeline.pause();

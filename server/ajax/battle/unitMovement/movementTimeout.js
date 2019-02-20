@@ -14,7 +14,7 @@ module.exports = () => {
     })();
 
     function calculateWaitTime(unitPath) {
-      const waitTime = (unitPath.length - 1) * 200;
+      const waitTime = (unitPath.length - 1) * 150;
 
       debug('calculateWaitTime: waitTime:', waitTime);
       waitSomeTime(waitTime);
