@@ -21,7 +21,7 @@ module.exports = (db) => {
     function calculatePosition(gameId, unitId, unitPath) {
       const position = unitPath[unitPath.length - 1];
 
-      debug('calculatePosition', unitPath, position);
+      debug('calculatePosition: position', position);
       updateUnitPosition(gameId, unitId, position);
     }
 

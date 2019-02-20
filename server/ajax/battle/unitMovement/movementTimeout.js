@@ -8,13 +8,24 @@ module.exports = () => {
   return (req, res, next) => {
     (function init() {
       debug('// Waits some time (for animation on front), and passes to next');
+      const unitPath = res.locals.unitPath;
 
-      waitSomeTime();
+      calculateWaitTime(unitPath);
     })();
 
-    function waitSomeTime() {
-      debug('waitSomeTime');
-      next();
+    function calculateWaitTime(unitPath) {
+      const waitTime = (unitPath.length - 1) * 200;
+
+      debug('calculateWaitTime: waitTime:', waitTime);
+      waitSomeTime(waitTime);
+    }
+
+    function waitSomeTime(waitTime) {
+      debug('waitSomeTime: Start!');
+      setTimeout(() => {
+        debug('waitSomeTime: Finish!');
+        next();
+      }, waitTime);
     }
   };
 };
