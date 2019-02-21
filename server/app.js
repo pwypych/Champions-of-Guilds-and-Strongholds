@@ -366,11 +366,11 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/battle/unitMovement/flagIsProcessingInspect.js')(),
     require('./ajax/battle/unitMovement/unitPathVerify.js')(),
     require('./ajax/battle/unitMovement/flagIsProcessingCreate.js')(db),
-    require('./ajax/battle/unitMovement/unitPathSendResponse.js')(
-      updateUnitRecentManeuver
-    ),
+    require('./ajax/battle/unitMovement/recentManeuverOnMovement.js')(db),
+    require('./ajax/battle/unitMovement/unitPathSendResponse.js')(),
     require('./ajax/battle/unitMovement/movementTimeout.js')(),
-    require('./ajax/battle/unitMovement/unitPositionUpdate.js')(db)
+    require('./ajax/battle/unitMovement/unitPositionUpdate.js')(db),
+    require('./ajax/battle/unitMovement/recentManeuverJustMoved.js')(db)
     // digestFinishedManeuverMiddleware
   );
 
