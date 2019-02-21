@@ -11,11 +11,13 @@ module.exports = () => {
       debug(
         '// Initially verifies unitPath, checks unit movement points, and verifies if path is not too long'
       );
+      const entities = res.locals.entities;
+      const unitId = res.locals.unitId;
 
-      checkRequestBodyUnitJourney();
+      checkRequestBodyUnitJourney(entities, unitId);
     })();
 
-    function checkRequestBodyUnitJourney() {
+    function checkRequestBodyUnitJourney(entities, unitId) {
       const unitPath = [];
       let isError = false;
 
@@ -49,6 +51,20 @@ module.exports = () => {
       res.locals.unitPath = unitPath;
 
       debug('checkRequestBodyUnitJourney: unitPath.length', unitPath.length);
+      limitUnitPathByMovementPoints(entities, unitId, unitPath);
+    }
+
+    function limitUnitPathByMovementPoints(entities, unitId, unitPath) {
+      const unit = entities[unitId];
+      const stepAmount = unitPath.length - 1;
+      const unitMovement = unit.unitStats.current.movement;
+
+      if (unitMovement < stepAmount) {
+        const unitPathLimited = unitPath.slice(0, unitMovement + 1);
+        res.locals.unitPath = unitPathLimited;
+      }
+
+      debug('limitUnitPathByMovementPoints', unitMovement, stepAmount);
       next();
     }
   };
