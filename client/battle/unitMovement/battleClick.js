@@ -110,6 +110,8 @@ g.battle.battleClick = (walkie, auth, viewport, freshEntities) => {
       return { x: path[0], y: path[1] };
     });
 
+    // pathArray.unshift({ x: 0, y: 0 });
+
     triggerEvents(pathArray, click, unitId);
   }
 

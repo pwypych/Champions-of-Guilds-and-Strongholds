@@ -70,12 +70,75 @@ module.exports = () => {
       }
 
       debug('limitUnitPathByMovementPoints', unitMovement, stepAmount);
+      verifyUnitPathInsideMapBoundaries(entities, unitId, unitPath);
+    }
+
+    function verifyUnitPathInsideMapBoundaries(entities, unitId, unitPath) {
+      let battleWidth;
+      let battleHeight;
+
+      _.forEach(entities, (entity) => {
+        if (entity.battleStatus === 'active') {
+          battleWidth = entity.battleWidth;
+          battleHeight = entity.battleHeight;
+        }
+      });
+
+      let isOutsideMapBoundaries = false;
+
+      _.forEach(unitPath, (position) => {
+        if (
+          position.y < 0 ||
+          position.y > battleHeight - 1 ||
+          position.x < 0 ||
+          position.x > battleWidth - 1
+        ) {
+          isOutsideMapBoundaries = true;
+        }
+      });
+
+      if (isOutsideMapBoundaries) {
+        debug(
+          'verifyUnitPathInsideMapBoundaries: A position is outside of boundaries!'
+        );
+        res.send({
+          error: 1,
+          message: 'Path position outside of map'
+        });
+        return;
+      }
+
+      debug('verifyUnitPathInsideMapBoundaries: Okey!');
+      verifyUnitPathStartPosition(entities, unitId, unitPath);
+    }
+
+    function verifyUnitPathStartPosition(entities, unitId, unitPath) {
+      const position = unitPath[0];
+      const entity = entities[unitId];
+
+      if (
+        position.x !== entity.position.x ||
+        position.y !== entity.position.y
+      ) {
+        debug('verifyUnitPathStartPosition: Not equal unit position!');
+        res.send({
+          error: 1,
+          message: 'Path start position not equal unit position'
+        });
+        return;
+      }
+
+      verifyUnitPathConsistency(entities, unitId, unitPath);
+    }
+
+    function verifyUnitPathConsistency(entities, unitId, unitPath) {
+      debug('verifyUnitPathConsistency');
       verifyUnitPathCollision(entities, unitId, unitPath);
     }
 
-    function verifyUnitPathCollision(entities, unitId, unitPathOriginal) {
+    function verifyUnitPathCollision(entities, unitId, unitPath) {
       let isCollision = false;
-      _.forEach(unitPathOriginal, (position, index) => {
+      _.forEach(unitPath, (position, index) => {
         if (index === 0) {
           return;
         }

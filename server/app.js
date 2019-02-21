@@ -370,8 +370,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/battle/unitMovement/recentManeuverOnMovement.js')(db),
     require('./ajax/battle/unitMovement/unitPathSendResponse.js')(),
     require('./ajax/battle/unitMovement/movementTimeout.js')(),
-    require('./ajax/battle/unitMovement/unitPositionUpdate.js')(db),
-    digestFinishedManeuverMiddleware
+    require('./ajax/battle/unitMovement/unitPositionUpdate.js')(db)
+    // digestFinishedManeuverMiddleware
   );
 
   app.post(
