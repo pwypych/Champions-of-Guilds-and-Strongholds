@@ -9,10 +9,10 @@ g.battle.drawUnits = (walkie, auth, viewport, freshEntities) => {
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
-    onEntitiesGet();
+    onRecentManeuverDifferanceDone();
   })();
 
-  function onEntitiesGet() {
+  function onRecentManeuverDifferanceDone() {
     walkie.onEvent(
       'recentManeuverDifferanceDone_',
       'drawUnits.js',

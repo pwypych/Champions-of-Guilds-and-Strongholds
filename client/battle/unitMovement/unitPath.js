@@ -16,7 +16,6 @@ g.battle.unitPath = (walkie, auth, viewport, freshEntities) => {
     onPathCalculated();
     onPathImpossible();
     onPathAccepted();
-    onWorldRenderDone();
   })();
 
   function onPathCalculated() {
@@ -38,19 +37,6 @@ g.battle.unitPath = (walkie, auth, viewport, freshEntities) => {
     walkie.onEvent('unitPathAccepted_', 'unitPath.js', () => {
       toolRemoveOldPath();
     });
-  }
-
-  function onWorldRenderDone() {
-    walkie.onEvent(
-      'renderDone_',
-      'unitPath.js',
-      () => {
-        if (!_.isEmpty(pathArray)) {
-          findUnitMovement();
-        }
-      },
-      false
-    );
   }
 
   function toolRemoveOldPath() {

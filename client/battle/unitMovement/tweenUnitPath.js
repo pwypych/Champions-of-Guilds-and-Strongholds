@@ -37,7 +37,7 @@ g.battle.tweenUnitPath = (walkie, viewport) => {
       'tweenUnitPath.js',
       (data) => {
         if (data.unitId === tweeningUnitIdByPathVerifiedByServer) {
-          console.log('No double tweening');
+          console.log('tweenUnitPath: Preventing double tweening!');
           return;
         }
 
