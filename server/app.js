@@ -239,6 +239,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
     require('./ajax/world/heroJourney/heroJourneyPost.js')(),
     require('./ajax/world/heroJourney/checkHeroOwner.js')(),
+    require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db),
     require('./ajax/world/heroJourney/processHeroJourney.js')(
       db,
       decideHeroStep
