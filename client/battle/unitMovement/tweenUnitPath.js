@@ -77,7 +77,6 @@ g.battle.tweenUnitPath = (walkie, viewport) => {
       tweeningUnitIdByPathVerifiedByServer = undefined;
     });
 
-    timeline.pause();
     timeline.play();
   }
 };
