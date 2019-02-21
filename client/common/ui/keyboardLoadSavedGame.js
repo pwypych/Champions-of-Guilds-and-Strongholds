@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.common.keyboardSaveLoad = (walkie, auth) => {
+g.common.keyboardLoadSavedGame = (walkie, auth) => {
   (function init() {
     addListener();
   })();
@@ -22,37 +22,39 @@ g.common.keyboardSaveLoad = (walkie, auth) => {
 
   function scanKeys(keyPressed) {
     if (keyPressed === 'one') {
-      loadGamePost();
+      loadPreviousSavedGamePost();
     } else if (keyPressed === 'zero') {
-      saveGamePost();
+      loadNextSavedGamePost();
     }
   }
 
-  function loadGamePost() {
-    const data = { gameId: auth.gameId };
-    console.log('loadGamePost');
+  function loadPreviousSavedGamePost() {
+    const data = { gameId: auth.gameId, direction: 'previous' };
+    console.log('loadPreviousSavedGamePost');
     $.post('/panel/loadGamePost' + auth.uri, data, (response) => {
-      console.log('loadGamePost():response.length:', response);
+      console.log('loadPreviousSavedGamePost():response.length:', response);
       walkie.triggerEvent(
         'chatMessage_',
-        'keyboardSaveLoad',
+        'keyboardLoadSavedGame',
         { message: 'Game loaded.' },
         false
       );
+      window.location.reload(true);
     });
   }
 
-  function saveGamePost() {
-    const data = { gameId: auth.gameId };
-    console.log('saveGamePost()');
-    $.post('/panel/saveGamePost' + auth.uri, data, (response) => {
-      console.log('saveGamePost():response.length:', response);
+  function loadNextSavedGamePost() {
+    const data = { gameId: auth.gameId, direction: 'next' };
+    console.log('loadNextSavedGamePost()');
+    $.post('/panel/loadGamePost' + auth.uri, data, (response) => {
+      console.log('loadNextSavedGamePost():response.length:', response);
       walkie.triggerEvent(
         'chatMessage_',
-        'keyboardSaveLoad',
+        'keyboardLoadSavedGame',
         { message: 'Game saved.' },
         false
       );
+      window.location.reload(true);
     });
   }
 };
