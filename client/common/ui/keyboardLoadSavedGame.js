@@ -39,6 +39,7 @@ g.common.keyboardLoadSavedGame = (walkie, auth) => {
         { message: 'Game loaded.' },
         false
       );
+      window.location.reload(true);
     });
   }
 
@@ -53,6 +54,7 @@ g.common.keyboardLoadSavedGame = (walkie, auth) => {
         { message: 'Game saved.' },
         false
       );
+      window.location.reload(true);
     });
   }
 };
