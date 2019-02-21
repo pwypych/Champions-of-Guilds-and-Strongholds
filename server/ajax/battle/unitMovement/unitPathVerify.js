@@ -15,10 +15,10 @@ module.exports = () => {
       const entities = res.locals.entities;
       const unitId = res.locals.unitId;
 
-      checkRequestBodyUnitJourney(entities, unitId);
+      verifyRequestBody(entities, unitId);
     })();
 
-    function checkRequestBodyUnitJourney(entities, unitId) {
+    function verifyRequestBody(entities, unitId) {
       const unitPath = [];
       let isError = false;
 
@@ -51,11 +51,11 @@ module.exports = () => {
 
       res.locals.unitPath = unitPath;
 
-      debug('checkRequestBodyUnitJourney: unitPath.length', unitPath.length);
-      limitUnitPathByMovementPoints(entities, unitId, unitPath);
+      debug('verifyRequestBody: unitPath.length', unitPath.length);
+      limitByMovementPoints(entities, unitId, unitPath);
     }
 
-    function limitUnitPathByMovementPoints(entities, unitId, unitPathOriginal) {
+    function limitByMovementPoints(entities, unitId, unitPathOriginal) {
       const unit = entities[unitId];
       const stepAmount = unitPathOriginal.length - 1;
       const unitMovement = unit.unitStats.current.movement;
@@ -69,11 +69,11 @@ module.exports = () => {
         unitPath = unitPathOriginal;
       }
 
-      debug('limitUnitPathByMovementPoints', unitMovement, stepAmount);
-      verifyUnitPathInsideMapBoundaries(entities, unitId, unitPath);
+      debug('limitByMovementPoints', unitMovement, stepAmount);
+      verifyInsideMapBoundaries(entities, unitId, unitPath);
     }
 
-    function verifyUnitPathInsideMapBoundaries(entities, unitId, unitPath) {
+    function verifyInsideMapBoundaries(entities, unitId, unitPath) {
       let battleWidth;
       let battleHeight;
 
@@ -99,7 +99,7 @@ module.exports = () => {
 
       if (isOutsideMapBoundaries) {
         debug(
-          'verifyUnitPathInsideMapBoundaries: A position is outside of boundaries!'
+          'verifyInsideMapBoundaries: A position is outside of boundaries!'
         );
         res.send({
           error: 1,
@@ -108,11 +108,11 @@ module.exports = () => {
         return;
       }
 
-      debug('verifyUnitPathInsideMapBoundaries: Inside map boundaries!');
-      verifyUnitPathStartPosition(entities, unitId, unitPath);
+      debug('verifyInsideMapBoundaries: Inside map boundaries!');
+      verifyStartPosition(entities, unitId, unitPath);
     }
 
-    function verifyUnitPathStartPosition(entities, unitId, unitPath) {
+    function verifyStartPosition(entities, unitId, unitPath) {
       const position = unitPath[0];
       const entity = entities[unitId];
 
@@ -120,7 +120,7 @@ module.exports = () => {
         position.x !== entity.position.x ||
         position.y !== entity.position.y
       ) {
-        debug('verifyUnitPathStartPosition: Not equal unit position!');
+        debug('verifyStartPosition: Not equal unit position!');
         res.send({
           error: 1,
           message: 'Path start position not equal unit position'
@@ -128,10 +128,10 @@ module.exports = () => {
         return;
       }
 
-      verifyUnitPathConsistency(entities, unitId, unitPath);
+      verifyConsistency(entities, unitId, unitPath);
     }
 
-    function verifyUnitPathConsistency(entities, unitId, unitPath) {
+    function verifyConsistency(entities, unitId, unitPath) {
       let isNotConsistent = false;
 
       _.forEach(unitPath, (position, index) => {
@@ -150,7 +150,7 @@ module.exports = () => {
           (distanceY !== 1 || distanceX !== 0)
         ) {
           debug(
-            'verifyUnitPathConsistency: Positions are not one step from each other!',
+            'verifyConsistency: Positions are not one step from each other!',
             prevPosition,
             position
           );
@@ -166,11 +166,11 @@ module.exports = () => {
         return;
       }
 
-      debug('verifyUnitPathConsistency: Consistent!');
-      verifyUnitPathCollision(entities, unitId, unitPath);
+      debug('verifyConsistency: Consistent!');
+      verifyCollision(entities, unitId, unitPath);
     }
 
-    function verifyUnitPathCollision(entities, unitId, unitPath) {
+    function verifyCollision(entities, unitId, unitPath) {
       let isCollision = false;
       _.forEach(unitPath, (position, index) => {
         if (index === 0) {
@@ -190,13 +190,13 @@ module.exports = () => {
       });
 
       if (isCollision) {
-        debug('verifyUnitPathCollision: Collistion on path!');
+        debug('verifyCollision: Collistion on path!');
         res.send({ error: 1, message: 'Collistion on chosen path' });
         return;
       }
 
       if (!isCollision) {
-        debug('verifyUnitPathCollision: No collistions!');
+        debug('verifyCollision: No collistions!');
       }
 
       next();
