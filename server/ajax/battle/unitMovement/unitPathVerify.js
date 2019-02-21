@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:unitPathVerifyLength');
+const debug = require('debug')('cogs:unitPathVerify');
 const validator = require('validator');
 
 module.exports = () => {

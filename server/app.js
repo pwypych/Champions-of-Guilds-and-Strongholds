@@ -363,12 +363,14 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     verifyManeuver,
-    require('./ajax/battle/unitMovement/unitPathVerifyLength.js')(),
+    require('./ajax/battle/unitMovement/flagIsProcessingInspect.js')(),
+    require('./ajax/battle/unitMovement/unitPathVerify.js')(),
+    require('./ajax/battle/unitMovement/flagIsProcessingCreate.js')(db),
     require('./ajax/battle/unitMovement/unitPathSendResponse.js')(
       updateUnitRecentManeuver
     ),
     require('./ajax/battle/unitMovement/movementTimeout.js')(),
-    require('./ajax/battle/unitMovement/updateUnitPosition.js')(db)
+    require('./ajax/battle/unitMovement/unitPositionUpdate.js')(db)
     // digestFinishedManeuverMiddleware
   );
 

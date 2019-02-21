@@ -7,7 +7,7 @@ const debug = require('debug')('cogs:updateUnitRecentManeuver');
 module.exports = (db) => {
   return (gameId, unitId, recentManeuver, callback) => {
     (function init() {
-      debug('// Updates given unit recentManeuver to new');
+      debug('// Updates given unit recentManeuver with new data');
 
       updateUnitRecentManeuver();
     })();
@@ -27,7 +27,9 @@ module.exports = (db) => {
         update,
         options,
         (error) => {
-          debug('ERROR: insert mongo error:', error);
+          if (error) {
+            debug('updateUnitRecentManeuver: ERROR:', error);
+          }
           debug('updateUnitRecentManeuver: Success!');
           callback(null);
         }

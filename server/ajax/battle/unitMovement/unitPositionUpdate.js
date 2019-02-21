@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:updateUnitPosition');
+const debug = require('debug')('cogs:unitPositionUpdate');
 
 module.exports = (db) => {
   return (req, res, next) => {
@@ -22,10 +22,10 @@ module.exports = (db) => {
       const position = unitPath[unitPath.length - 1];
 
       debug('calculatePosition: position', position);
-      updateUnitPosition(gameId, unitId, position);
+      unitPositionUpdate(gameId, unitId, position);
     }
 
-    function updateUnitPosition(gameId, unitId, position) {
+    function unitPositionUpdate(gameId, unitId, position) {
       const query = { _id: gameId };
 
       const fieldUnitX = unitId + '.position.x';
@@ -45,7 +45,7 @@ module.exports = (db) => {
           if (error) {
             debug('ERROR: insert mongo error:', error);
           }
-          debug('updateUnitPosition: Success!');
+          debug('unitPositionUpdate: Success!');
           next();
         }
       );
