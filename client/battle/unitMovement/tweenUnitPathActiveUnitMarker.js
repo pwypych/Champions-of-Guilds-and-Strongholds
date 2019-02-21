@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.battle.tweenUnitPathAmount = (walkie, viewport) => {
+g.battle.tweenUnitPathActiveUnitMarker = (walkie, viewport) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
@@ -18,7 +18,7 @@ g.battle.tweenUnitPathAmount = (walkie, viewport) => {
   function onUnitPathVerifiedByServer() {
     walkie.onEvent(
       'unitPathVerifiedByServer_',
-      'tweenUnitPathAmount.js',
+      'tweenUnitPathActiveUnitMarker.js',
       (data) => {
         const unitId = data.unitId;
         const unitPath = data.unitPath;
@@ -34,10 +34,12 @@ g.battle.tweenUnitPathAmount = (walkie, viewport) => {
   function onRecentManeuverDifferance() {
     walkie.onEvent(
       'recentManeuverDifferanceFound_',
-      'tweenUnitPathAmount.js',
+      'tweenUnitPathActiveUnitMarker.js',
       (data) => {
         if (data.unitId === tweeningUnitIdByPathVerifiedByServer) {
-          console.log('tweenUnitPathAmount: Preventing double tweening!');
+          console.log(
+            'tweenUnitPathActiveUnitMarker: Preventing double tweening!'
+          );
           return;
         }
 
@@ -52,7 +54,7 @@ g.battle.tweenUnitPathAmount = (walkie, viewport) => {
   }
 
   function findSprite(unitId, unitPath) {
-    const sprite = battleContainer.getChildByName('amount_' + unitId);
+    const sprite = battleContainer.getChildByName('activeUnitMarker_' + unitId);
 
     generateTweenTimeline(sprite, unitPath);
   }
@@ -66,12 +68,9 @@ g.battle.tweenUnitPathAmount = (walkie, viewport) => {
         return;
       }
 
-      const paddingRight = 2;
-      const paddingTop = 3;
-      const xPixel =
-        position.x * blockWidthPx + blockWidthPx - sprite.width + paddingRight;
-      const yPixel =
-        position.y * blockHeightPx + blockHeightPx - sprite.height + paddingTop;
+      const offsetY = 2;
+      const xPixel = position.x * blockWidthPx;
+      const yPixel = position.y * blockHeightPx + blockHeightPx + offsetY;
 
       console.log('generateTweenTimeline', xPixel, yPixel);
 

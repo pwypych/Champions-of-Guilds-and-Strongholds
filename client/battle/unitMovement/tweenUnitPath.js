@@ -74,7 +74,9 @@ g.battle.tweenUnitPath = (walkie, viewport) => {
     });
 
     timeline.addCallback(() => {
-      tweeningUnitIdByPathVerifiedByServer = undefined;
+      setTimeout(() => {
+        tweeningUnitIdByPathVerifiedByServer = undefined;
+      }, 500); // wait with removing flag until new tick
     });
 
     timeline.play();

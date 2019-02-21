@@ -30,15 +30,15 @@ g.battle.drawActiveUnitMarker = (walkie, viewport, freshEntities) => {
   }
 
   function forEachFigure() {
-    _.forEach(freshEntities(), (entity) => {
-      if (entity.unitName && entity.position && entity.active) {
-        drawActiveUnitMarker(entity);
+    _.forEach(freshEntities(), (entity, id) => {
+      if (entity.unitName && entity.unitStats && entity.position) {
+        drawActiveUnitMarker(entity, id);
       }
     });
   }
 
-  function drawActiveUnitMarker(entity) {
-    const name = 'activeUnitMarker';
+  function drawActiveUnitMarker(entity, unitId) {
+    const name = 'activeUnitMarker_' + unitId;
     let marker;
 
     if (battleContainer.getChildByName(name)) {
@@ -53,10 +53,16 @@ g.battle.drawActiveUnitMarker = (walkie, viewport, freshEntities) => {
       marker.name = name;
       marker.anchor = { x: 0, y: 1 };
       battleContainer.addChildZ(marker, 50);
+
+      const offsetY = 2;
+      marker.x = entity.position.x * blockWidthPx;
+      marker.y = entity.position.y * blockHeightPx + blockHeightPx + offsetY;
     }
 
-    const offsetY = 2;
-    marker.x = entity.position.x * blockWidthPx;
-    marker.y = entity.position.y * blockHeightPx + blockHeightPx + offsetY;
+    if (entity.active) {
+      marker.visible = true;
+    } else {
+      marker.visible = false;
+    }
   }
 };
