@@ -10,7 +10,7 @@ module.exports = () => {
   return (req, res, next) => {
     (function init() {
       debug(
-        '// Initially verifies unitPath, checks unit movement points, and verifies if path is not too long'
+        '// Verifies: request.body, movement points, map boundaries, start position, consistency, collisions'
       );
       const entities = res.locals.entities;
       const unitId = res.locals.unitId;
@@ -108,7 +108,7 @@ module.exports = () => {
         return;
       }
 
-      debug('verifyUnitPathInsideMapBoundaries: Okey!');
+      debug('verifyUnitPathInsideMapBoundaries: Inside map boundaries!');
       verifyUnitPathStartPosition(entities, unitId, unitPath);
     }
 
@@ -132,7 +132,41 @@ module.exports = () => {
     }
 
     function verifyUnitPathConsistency(entities, unitId, unitPath) {
-      debug('verifyUnitPathConsistency');
+      let isNotConsistent = false;
+
+      _.forEach(unitPath, (position, index) => {
+        if (index === 0) {
+          return;
+        }
+
+        const prevPosition = unitPath[index - 1];
+
+        const distanceX = Math.abs(prevPosition.x - position.x);
+        const distanceY = Math.abs(prevPosition.y - position.y);
+
+        // allow only up, down, left, right, no diagonals
+        if (
+          (distanceX !== 1 || distanceY !== 0) &&
+          (distanceY !== 1 || distanceX !== 0)
+        ) {
+          debug(
+            'verifyUnitPathConsistency: Positions are not one step from each other!',
+            prevPosition,
+            position
+          );
+          isNotConsistent = true;
+        }
+      });
+
+      if (isNotConsistent) {
+        res.send({
+          error: 1,
+          message: 'Path positions not consistent'
+        });
+        return;
+      }
+
+      debug('verifyUnitPathConsistency: Consistent!');
       verifyUnitPathCollision(entities, unitId, unitPath);
     }
 
