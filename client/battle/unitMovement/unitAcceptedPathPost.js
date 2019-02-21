@@ -27,16 +27,17 @@ g.battle.unitAcceptedPathPost = (walkie, auth) => {
         console.log('unitAcceptedPathPost.js: POST unitPathPost', response);
 
         if (response && response.unitPath) {
-          triggerUnitPathVerifiedByServer(unitId, unitPath);
+          const responseUnitPath = response.unitPath;
+          triggerUnitPathVerifiedByServer(unitId, responseUnitPath);
         }
       }
     );
   }
 
-  function triggerUnitPathVerifiedByServer(unitId, unitPath) {
+  function triggerUnitPathVerifiedByServer(unitId, responseUnitPath) {
     walkie.triggerEvent('unitPathVerifiedByServer_', 'battleClick.js', {
       unitId: unitId,
-      unitPath: unitPath
+      unitPath: responseUnitPath
     });
   }
 };
