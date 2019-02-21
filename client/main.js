@@ -70,6 +70,7 @@ g.main = function main() {
     g.battle.unitPath(walkie, auth, viewport, freshEntities);
     g.battle.unitAcceptedPathPost(walkie, auth);
     g.battle.tweenUnitPath(walkie, viewport, freshEntities);
+    g.battle.tweenUnitPathAmount(walkie, viewport, freshEntities);
     g.battle.keyboardMelee(walkie, auth, freshEntities);
 
     g.summary.summaryToggle($body, walkie, auth, freshEntities);

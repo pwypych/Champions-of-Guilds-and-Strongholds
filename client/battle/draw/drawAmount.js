@@ -47,30 +47,30 @@ g.battle.drawAmount = (walkie, viewport, freshEntities) => {
 
   function drawAmount(entity, unitId) {
     const name = 'amount_' + unitId;
-    let textAmount;
+    let pixiText;
 
     if (battleContainer.getChildByName(name)) {
-      textAmount = battleContainer.getChildByName(name);
+      pixiText = battleContainer.getChildByName(name);
     }
 
     if (!battleContainer.getChildByName(name)) {
       // console.log('drawAmount', name);
-      textAmount = new PIXI.Text(entity.amount, textStyle);
-      textAmount.name = name;
-      battleContainer.addChildZ(textAmount, 1000);
-    }
+      pixiText = new PIXI.Text(entity.amount, textStyle);
+      pixiText.name = name;
+      battleContainer.addChildZ(pixiText, 1000);
 
-    const paddingRight = 2;
-    const paddingTop = 3;
-    textAmount.x =
-      entity.position.x * blockWidthPx +
-      blockWidthPx -
-      textAmount.width +
-      paddingRight;
-    textAmount.y =
-      entity.position.y * blockHeightPx +
-      blockHeightPx -
-      textAmount.height +
-      paddingTop;
+      const paddingRight = 2;
+      const paddingTop = 3;
+      pixiText.x =
+        entity.position.x * blockWidthPx +
+        blockWidthPx -
+        pixiText.width +
+        paddingRight;
+      pixiText.y =
+        entity.position.y * blockHeightPx +
+        blockHeightPx -
+        pixiText.height +
+        paddingTop;
+    }
   }
 };
