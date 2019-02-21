@@ -350,6 +350,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
       refillUnitMovement,
       updateUnitRecentManeuver
     ),
+    require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db),
     digestFinishedManeuverMiddleware
   );
 
@@ -366,6 +367,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/battle/unitMovement/unitPathSendResponse.js')(),
     require('./ajax/battle/unitMovement/movementTimeout.js')(),
     require('./ajax/battle/unitMovement/unitPositionUpdate.js')(db),
+    require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db),
     digestFinishedManeuverMiddleware
   );
 
@@ -377,6 +379,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/battle/maneuver/maneuverSendResponse.js')(),
     verifyManeuver,
     require('./ajax/battle/melee/maneuverMelee.js')(db),
+    require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db),
     digestFinishedManeuverMiddleware
   );
 

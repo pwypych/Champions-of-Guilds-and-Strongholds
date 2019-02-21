@@ -9,7 +9,7 @@ const _ = require('lodash');
 module.exports = (environment, db) => {
   return (req, res) => {
     (function init() {
-      debug('// Copyies game instance from saveCollection to gameCollection');
+      debug('// Replace game from gameCollection to game from saveCollection');
 
       checkRequestBody();
     })();
@@ -20,6 +20,7 @@ module.exports = (environment, db) => {
         res.status(503).send('503 Error - Wrong POST parameter');
         return;
       }
+
       debug('checkRequestBody');
       validateRequestBody();
     }
