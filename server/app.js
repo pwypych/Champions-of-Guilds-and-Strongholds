@@ -360,6 +360,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     verifyManeuver,
+    require('./ajax/movement/entityIdVerify.js')(),
     require('./ajax/movement/flagIsProcessingInspect.js')(),
     require('./ajax/movement/pathVerify.js')(),
     require('./ajax/movement/flagIsProcessingCreate.js')(db),

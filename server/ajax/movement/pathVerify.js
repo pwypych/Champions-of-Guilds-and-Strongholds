@@ -13,12 +13,12 @@ module.exports = () => {
         '// Verifies: request.body, movement points, map boundaries, start position, consistency, collisions'
       );
       const entities = res.locals.entities;
-      const unitId = res.locals.unitId;
+      const entityId = res.locals.entityId;
 
-      verifyRequestBody(entities, unitId);
+      verifyRequestBody(entities, entityId);
     })();
 
-    function verifyRequestBody(entities, unitId) {
+    function verifyRequestBody(entities, entityId) {
       const path = [];
       let isError = false;
 
@@ -52,11 +52,11 @@ module.exports = () => {
       res.locals.path = path;
 
       debug('verifyRequestBody: path.length', path.length);
-      limitByMovementPoints(entities, unitId, path);
+      limitByMovementPoints(entities, entityId, path);
     }
 
-    function limitByMovementPoints(entities, unitId, pathOriginal) {
-      const unit = entities[unitId];
+    function limitByMovementPoints(entities, entityId, pathOriginal) {
+      const unit = entities[entityId];
       const stepAmount = pathOriginal.length - 1;
       const unitMovement = unit.unitStats.current.movement;
 
@@ -70,10 +70,10 @@ module.exports = () => {
       }
 
       debug('limitByMovementPoints', unitMovement, stepAmount);
-      verifyInsideMapBoundaries(entities, unitId, path);
+      verifyInsideMapBoundaries(entities, entityId, path);
     }
 
-    function verifyInsideMapBoundaries(entities, unitId, path) {
+    function verifyInsideMapBoundaries(entities, entityId, path) {
       let battleWidth;
       let battleHeight;
 
@@ -109,12 +109,12 @@ module.exports = () => {
       }
 
       debug('verifyInsideMapBoundaries: Inside map boundaries!');
-      verifyStartPosition(entities, unitId, path);
+      verifyStartPosition(entities, entityId, path);
     }
 
-    function verifyStartPosition(entities, unitId, path) {
+    function verifyStartPosition(entities, entityId, path) {
       const position = path[0];
-      const entity = entities[unitId];
+      const entity = entities[entityId];
 
       if (
         position.x !== entity.position.x ||
@@ -128,10 +128,10 @@ module.exports = () => {
         return;
       }
 
-      verifyConsistency(entities, unitId, path);
+      verifyConsistency(entities, entityId, path);
     }
 
-    function verifyConsistency(entities, unitId, path) {
+    function verifyConsistency(entities, entityId, path) {
       let isNotConsistent = false;
 
       _.forEach(path, (position, index) => {
@@ -167,10 +167,10 @@ module.exports = () => {
       }
 
       debug('verifyConsistency: Consistent!');
-      verifyCollision(entities, unitId, path);
+      verifyCollision(entities, entityId, path);
     }
 
-    function verifyCollision(entities, unitId, path) {
+    function verifyCollision(entities, entityId, path) {
       let isCollision = false;
       _.forEach(path, (position, index) => {
         if (index === 0) {

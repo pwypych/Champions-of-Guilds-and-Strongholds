@@ -12,24 +12,24 @@ module.exports = (db) => {
       );
       const entities = res.locals.entities;
       const gameId = entities._id;
-      const unitId = res.locals.unitId;
+      const entityId = res.locals.entityId;
       const path = res.locals.path;
 
-      calculatePosition(gameId, unitId, path);
+      calculatePosition(gameId, entityId, path);
     })();
 
-    function calculatePosition(gameId, unitId, path) {
+    function calculatePosition(gameId, entityId, path) {
       const position = path[path.length - 1];
 
       debug('calculatePosition: position', position);
-      positionUpdate(gameId, unitId, position);
+      positionUpdate(gameId, entityId, position);
     }
 
-    function positionUpdate(gameId, unitId, position) {
+    function positionUpdate(gameId, entityId, position) {
       const query = { _id: gameId };
 
-      const fieldUnitX = unitId + '.position.x';
-      const fieldUnitY = unitId + '.position.y';
+      const fieldUnitX = entityId + '.position.x';
+      const fieldUnitY = entityId + '.position.y';
       const $set = {};
       $set[fieldUnitX] = position.x;
       $set[fieldUnitY] = position.y;

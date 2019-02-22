@@ -10,10 +10,10 @@ module.exports = () => {
       debug(
         '// Prevents route from doing new unitMovement if unit is allready moving'
       );
-      const unitId = res.locals.unitId;
+      const entityId = res.locals.entityId;
       const entities = res.locals.entities;
 
-      const unit = entities[unitId];
+      const unit = entities[entityId];
 
       flagInspect(unit);
     })();

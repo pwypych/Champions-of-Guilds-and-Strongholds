@@ -10,25 +10,25 @@ module.exports = (db) => {
       debug('// Updates recentActivity to onMovement');
       const entities = res.locals.entities;
       const gameId = entities._id;
-      const unitId = res.locals.unitId;
+      const entityId = res.locals.entityId;
       const path = res.locals.path;
 
-      generateRecentActivity(gameId, unitId, path);
+      generateRecentActivity(gameId, entityId, path);
     })();
 
-    function generateRecentActivity(gameId, unitId, path) {
+    function generateRecentActivity(gameId, entityId, path) {
       const recentActivity = {};
       recentActivity.name = 'onMovement';
       recentActivity.path = path;
       recentActivity.timestamp = Date.now();
 
-      updateRecentActivity(gameId, unitId, recentActivity);
+      updateRecentActivity(gameId, entityId, recentActivity);
     }
 
-    function updateRecentActivity(gameId, unitId, recentActivity) {
+    function updateRecentActivity(gameId, entityId, recentActivity) {
       const query = { _id: gameId };
 
-      const field = unitId + '.recentActivity';
+      const field = entityId + '.recentActivity';
       const $set = {};
       $set[field] = recentActivity;
 
