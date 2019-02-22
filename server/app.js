@@ -234,11 +234,11 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
     require('./ajax/world/heroJourney/heroJourneyPost.js')(),
     require('./ajax/world/heroJourney/checkHeroOwner.js')(),
-    require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db),
     require('./ajax/world/heroJourney/processHeroJourney.js')(
       db,
       decideHeroStep
-    )
+    ),
+    require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db)
   );
 
   const unitStats = require('./ajax/world/endTurn/unitStats.js');
@@ -350,8 +350,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
       refillUnitMovement,
       updateUnitRecentManeuver
     ),
-    require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db),
-    digestFinishedManeuverMiddleware
+    digestFinishedManeuverMiddleware,
+    require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db)
   );
 
   app.post(
@@ -367,8 +367,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/battle/unitMovement/unitPathSendResponse.js')(),
     require('./ajax/battle/unitMovement/movementTimeout.js')(),
     require('./ajax/battle/unitMovement/unitPositionUpdate.js')(db),
-    require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db),
-    digestFinishedManeuverMiddleware
+    digestFinishedManeuverMiddleware,
+    require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db)
   );
 
   app.post(
@@ -379,8 +379,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/battle/maneuver/maneuverSendResponse.js')(),
     verifyManeuver,
     require('./ajax/battle/melee/maneuverMelee.js')(db),
-    require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db),
-    digestFinishedManeuverMiddleware
+    digestFinishedManeuverMiddleware,
+    require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db)
   );
 
   app.post(

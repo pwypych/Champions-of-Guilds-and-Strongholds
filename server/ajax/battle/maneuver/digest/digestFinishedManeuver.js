@@ -13,7 +13,7 @@ module.exports = (
   nominateNewActiveUnit,
   ifBattleFinishedChangeState
 ) => {
-  return (req, res) => {
+  return (req, res, next) => {
     (function init() {
       debug(
         '// Middleware that runs after unit makes sucessfull maneuver. Some processing need to be done: f. ex. decrementing maneuver, refilling it, nominating new active unit'
@@ -39,6 +39,7 @@ module.exports = (
       ifBattleFinishedChangeState(gameId, unitId, (isBattleFinished) => {
         if (isBattleFinished) {
           debug('runCheckIsBattleFinished: Battle is finnished!');
+          next();
           return;
         }
 
@@ -96,6 +97,7 @@ module.exports = (
       debug('runNominateNewActiveUnit: Starting...');
       nominateNewActiveUnit(gameId, unitId, () => {
         debug('runNominateNewActiveUnit: Success!');
+        next();
       });
     }
   };
