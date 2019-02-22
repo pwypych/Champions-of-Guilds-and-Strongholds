@@ -69,9 +69,9 @@ g.main = function main() {
     g.battle.battleClick(walkie, auth, viewport, freshEntities);
     g.battle.unitPath(walkie, auth, viewport, freshEntities);
     g.battle.unitAcceptedPathPost(walkie, auth);
-    g.battle.tweenUnitPath(walkie, viewport, freshEntities);
-    g.battle.tweenUnitPathAmount(walkie, viewport, freshEntities);
-    g.battle.tweenUnitPathActiveUnitMarker(walkie, viewport, freshEntities);
+    g.battle.tweenPathUnit(walkie, viewport, freshEntities);
+    g.battle.tweenPathAmount(walkie, viewport, freshEntities);
+    g.battle.tweenPathActiveUnitMarker(walkie, viewport, freshEntities);
     g.battle.keyboardMelee(walkie, auth, freshEntities);
 
     g.summary.summaryToggle($body, walkie, auth, freshEntities);
