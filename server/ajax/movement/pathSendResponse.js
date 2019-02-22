@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:unitPathSendResponce');
+const debug = require('debug')('cogs:pathSendResponse');
 
 module.exports = () => {
   return (req, res, next) => {
@@ -10,11 +10,11 @@ module.exports = () => {
       debug('// Sends response for journey result');
       const unitPath = res.locals.unitPath;
 
-      sendResponce(unitPath);
+      sendResponse(unitPath);
     })();
 
-    function sendResponce(unitPath) {
-      debug('sendResponce: No Errors!');
+    function sendResponse(unitPath) {
+      debug('sendResponse: No Errors!');
       res.send({ error: 0, unitPath: unitPath });
       next();
     }

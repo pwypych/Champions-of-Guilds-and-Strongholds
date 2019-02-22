@@ -52,10 +52,8 @@ g.battle.waitMock = ($body, auth, freshEntities) => {
 
   function sendPost(shootPath, unitId) {
     const data = {};
-    data.unitId = unitId;
+    data.entityId = unitId;
     data.shootPath = shootPath;
-
-    console.log('data', data);
 
     $.post('/ajax/battle/shoot/maneuverShootPost' + auth.uri, data, () => {
       console.log(

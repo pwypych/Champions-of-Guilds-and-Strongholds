@@ -95,7 +95,7 @@ g.battle.keyboardMelee = (walkie, auth, freshEntities) => {
     }
 
     function maneuverMeleePost(meleeOnPosition, unitId) {
-      const data = { meleeOnPosition: meleeOnPosition, unitId: unitId };
+      const data = { meleeOnPosition: meleeOnPosition, entityId: unitId };
       console.log('maneuverMeleePost: data:', data);
       $.post('/ajax/battle/melee/maneuverMeleePost' + auth.uri, data, () => {});
     }

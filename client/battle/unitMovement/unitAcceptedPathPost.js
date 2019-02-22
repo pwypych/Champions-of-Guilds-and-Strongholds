@@ -20,18 +20,14 @@ g.battle.unitAcceptedPathPost = (walkie, auth) => {
 
   function sendRequest(unitPath, unitId) {
     const data = { unitPath: unitPath, unitId: unitId };
-    $.post(
-      '/ajax/battle/unitMovement/unitPathPost' + auth.uri,
-      data,
-      (response) => {
-        console.log('unitAcceptedPathPost.js: POST unitPathPost', response);
+    $.post('/ajax/movement/pathPost' + auth.uri, data, (response) => {
+      console.log('unitAcceptedPathPost.js: POST pathPost', response);
 
-        if (response && response.unitPath) {
-          const responseUnitPath = response.unitPath;
-          triggerUnitPathVerifiedByServer(unitId, responseUnitPath);
-        }
+      if (response && response.unitPath) {
+        const responseUnitPath = response.unitPath;
+        triggerUnitPathVerifiedByServer(unitId, responseUnitPath);
       }
-    );
+    });
   }
 
   function triggerUnitPathVerifiedByServer(unitId, responseUnitPath) {

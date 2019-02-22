@@ -19,11 +19,11 @@ module.exports = (
       const gameId = entities._id;
       const playerId = res.locals.playerId;
 
-      checkRequestBodyUnitId(gameId, playerId);
+      checkRequestBodyEntityId(gameId, playerId);
     })();
 
-    function checkRequestBodyUnitId(gameId, playerId) {
-      const unitId = req.body.unitId;
+    function checkRequestBodyEntityId(gameId, playerId) {
+      const unitId = req.body.entityId;
 
       if (typeof unitId === 'undefined') {
         res.status(400);
@@ -33,7 +33,7 @@ module.exports = (
       }
       res.locals.unitId = unitId;
 
-      debug('checkRequestBodyUnitId: unitId:', unitId);
+      debug('checkRequestBodyEntityId: unitId:', unitId);
       runCheckUnitOwner(gameId, unitId, playerId);
     }
 

@@ -355,18 +355,18 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   );
 
   app.post(
-    '/ajax/battle/unitMovement/unitPathPost',
+    '/ajax/movement/pathPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     verifyManeuver,
-    require('./ajax/battle/unitMovement/flagIsProcessingInspect.js')(),
-    require('./ajax/battle/unitMovement/unitPathVerify.js')(),
-    require('./ajax/battle/unitMovement/flagIsProcessingCreate.js')(db),
-    require('./ajax/battle/unitMovement/recentActivityOnMovement.js')(db),
-    require('./ajax/battle/unitMovement/unitPathSendResponse.js')(),
-    require('./ajax/battle/unitMovement/movementTimeout.js')(),
-    require('./ajax/battle/unitMovement/unitPositionUpdate.js')(db),
+    require('./ajax/movement/flagIsProcessingInspect.js')(),
+    require('./ajax/movement/pathVerify.js')(),
+    require('./ajax/movement/flagIsProcessingCreate.js')(db),
+    require('./ajax/movement/recentActivityOnMovement.js')(db),
+    require('./ajax/movement/pathSendResponse.js')(),
+    require('./ajax/movement/movementTimeout.js')(),
+    require('./ajax/movement/positionUpdate.js')(db),
     require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db),
     digestFinishedManeuverMiddleware
   );

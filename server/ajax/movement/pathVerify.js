@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:unitPathVerify');
+const debug = require('debug')('cogs:pathVerify');
 const validator = require('validator');
 const _ = require('lodash');
 
