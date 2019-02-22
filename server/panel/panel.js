@@ -93,13 +93,13 @@ module.exports = (environment, db, templateToHtml) => {
           viewModel.saves = saves;
 
           debug('findSaves', saves);
-          sendResponce(viewModel);
+          sendResponse(viewModel);
         });
     }
 
-    function sendResponce(viewModel) {
+    function sendResponse(viewModel) {
       templateToHtml(__filename, viewModel, (error, html) => {
-        debug('sendResponce():html', html.length);
+        debug('sendResponse():html', html.length);
         debug('******************** send ********************');
         res.send(html);
       });

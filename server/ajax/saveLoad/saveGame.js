@@ -96,7 +96,6 @@ module.exports = (findEntitiesByGameId, db) => {
       const query = { _id: gameId };
       const $set = {};
       const field = 'save.' + turnCount;
-      debug('updateSetNewSave: field:', field);
       $set[field] = entities;
       const update = { $set: $set };
       const options = {};
@@ -110,7 +109,7 @@ module.exports = (findEntitiesByGameId, db) => {
             debug('updateSetNewSave: error:', error);
           }
 
-          debug('updateSetNewSave: Finished');
+          debug('updateSetNewSave: Saved!:', field);
           next();
         }
       );

@@ -67,12 +67,12 @@ module.exports = (db) => {
             return;
           }
 
-          sendResponce();
+          sendResponse();
         }
       );
     }
 
-    function sendResponce() {
+    function sendResponse() {
       res.send({ error: 0 });
     }
   };

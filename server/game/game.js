@@ -92,12 +92,12 @@ module.exports = (environment, db, templateToHtml) => {
       const path = environment.basepath + '/server/game/game.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         debug('generateTemplate html.length:', html.length);
-        sendResponce(html);
+        sendResponse(html);
       });
     }
 
-    function sendResponce(html) {
-      debug('sendResponce():html.length:', html.length);
+    function sendResponse(html) {
+      debug('sendResponse():html.length:', html.length);
       debug('******************** send ********************');
       res.send(html);
     }

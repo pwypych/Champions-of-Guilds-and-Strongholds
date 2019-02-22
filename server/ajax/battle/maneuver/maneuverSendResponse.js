@@ -9,11 +9,11 @@ module.exports = () => {
     (function init() {
       debug('// Endpoint, sends response for maneuver');
 
-      sendResponce();
+      sendResponse();
     })();
 
-    function sendResponce() {
-      debug('sendResponce: No Errors!');
+    function sendResponse() {
+      debug('sendResponse: No Errors!');
       res.send({ error: 0 });
       next();
     }

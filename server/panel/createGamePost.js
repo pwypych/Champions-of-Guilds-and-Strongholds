@@ -174,12 +174,12 @@ module.exports = (environment, db, figureManagerTree) => {
         }
 
         debug('insertGame: _.size(entities):', _.size(entities));
-        sendResponce();
+        sendResponse();
       });
     }
 
-    function sendResponce() {
-      debug('sendResponce()');
+    function sendResponse() {
+      debug('sendResponse()');
       debug('******************** should redirect ********************');
       res.redirect(environment.baseurl + '/panel');
     }

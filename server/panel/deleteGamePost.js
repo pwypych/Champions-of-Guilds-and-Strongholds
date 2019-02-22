@@ -44,12 +44,25 @@ module.exports = (environment, db) => {
         }
 
         debug('deleteGamePost');
-        sendResponce();
+        deleteSaveGame(gameId);
       });
     }
 
-    function sendResponce() {
-      debug('sendResponce()');
+    function deleteSaveGame(gameId) {
+      db.collection('saveCollection').deleteOne({ _id: gameId }, (error) => {
+        if (error) {
+          debug('deleteSaveGamePost: error:', error);
+          res.status(503).send('503 Error - Cannot delete save game instance');
+          return;
+        }
+
+        debug('deleteSaveGamePost');
+        sendResponse();
+      });
+    }
+
+    function sendResponse() {
+      debug('sendResponse()');
       debug('******************** should redirect ********************');
       res.redirect(environment.baseurl + '/panel');
     }

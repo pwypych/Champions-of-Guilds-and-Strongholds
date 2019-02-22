@@ -167,12 +167,12 @@ module.exports = (environment, db) => {
         }
 
         debug('insertGame: _.size(entities):', _.size(entities));
-        sendResponce();
+        sendResponse();
       });
     }
 
-    function sendResponce() {
-      debug('sendResponce()');
+    function sendResponse() {
+      debug('sendResponse()');
       if (req.body.redirect) {
         debug('******************** redirect ********************');
         res.redirect(environment.baseurl + '/panel');

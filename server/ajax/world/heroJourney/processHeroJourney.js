@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:processHeroJourney');
 const async = require('async');
 
 module.exports = (db, decideHeroStep) => {
-  return (req, res) => {
+  return (req, res, next) => {
     (function init() {
       debug(
         '// Middleware, expects heroId and heroJourney in res.locals, flags heroBegingMoved and processes each step'
@@ -112,6 +112,7 @@ module.exports = (db, decideHeroStep) => {
         options,
         (error) => {
           debug('unsetProcessingJourneyUntilTimestamp: Done! | error: ', error);
+          next();
         }
       );
     }
