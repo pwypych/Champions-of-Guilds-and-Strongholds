@@ -6,7 +6,7 @@ module.exports = () => {
   return {
     produce: () => {
       return {
-        figure: 'archer',
+        figureName: 'archer',
         unitCounts: {
           archer: 5
         }

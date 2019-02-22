@@ -5,7 +5,7 @@
 module.exports = () => {
   return {
     produce: () => {
-      return { figure: 'tree', collision: true };
+      return { figureName: 'tree', collision: true };
     }
   };
 };

@@ -56,7 +56,7 @@ module.exports = () => {
         }
 
         // Figure entities
-        if (entity.figure) {
+        if (entity.figureName) {
           worldEntities[id] = entity;
         }
       });
