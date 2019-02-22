@@ -11,15 +11,15 @@ module.exports = (db) => {
       const entities = res.locals.entities;
       const gameId = entities._id;
       const unitId = res.locals.unitId;
-      const unitPath = res.locals.unitPath;
+      const path = res.locals.path;
 
-      generateRecentActivity(gameId, unitId, unitPath);
+      generateRecentActivity(gameId, unitId, path);
     })();
 
-    function generateRecentActivity(gameId, unitId, unitPath) {
+    function generateRecentActivity(gameId, unitId, path) {
       const recentActivity = {};
       recentActivity.name = 'onMovement';
-      recentActivity.unitPath = unitPath;
+      recentActivity.path = path;
       recentActivity.timestamp = Date.now();
 
       updateRecentActivity(gameId, unitId, recentActivity);

@@ -11,17 +11,17 @@ module.exports = (db) => {
       const entities = res.locals.entities;
       const gameId = entities._id;
       const unitId = res.locals.unitId;
-      const unitPath = res.locals.unitPath;
-      const unitPathLength = unitPath.length;
+      const path = res.locals.path;
+      const pathLength = path.length;
 
-      flagCreate(gameId, unitId, unitPathLength);
+      flagCreate(gameId, unitId, pathLength);
     })();
 
-    function flagCreate(gameId, unitId, unitPathLength) {
+    function flagCreate(gameId, unitId, pathLength) {
       const query = { _id: gameId };
       const field = unitId + '.isProcessingMovementUntilTimestamp';
       const $set = {};
-      const unitMoveTime = 150 * (unitPathLength - 1); // ms
+      const unitMoveTime = 150 * (pathLength - 1); // ms
       const securityMargin = 100; // ms
       $set[field] = Date.now() + unitMoveTime + securityMargin;
       const update = { $set: $set };

@@ -19,17 +19,17 @@ module.exports = () => {
     })();
 
     function verifyRequestBody(entities, unitId) {
-      const unitPath = [];
+      const path = [];
       let isError = false;
 
-      req.body.unitPath.forEach((position) => {
+      req.body.path.forEach((position) => {
         if (
           typeof position.x === 'undefined' ||
           typeof position.y === 'undefined' ||
           !validator.isNumeric(position.x) ||
           !validator.isNumeric(position.y)
         ) {
-          debug('POST parameter unitPath not valid!', req.body.unitPath);
+          debug('POST parameter path not valid!', req.body.path);
           isError = true;
           return;
         }
@@ -37,43 +37,43 @@ module.exports = () => {
         const parsedPosition = {};
         parsedPosition.x = parseInt(position.x, 10);
         parsedPosition.y = parseInt(position.y, 10);
-        unitPath.push(parsedPosition);
+        path.push(parsedPosition);
       });
 
       if (isError) {
         res.status(400);
         res.send({
-          error: 'POST parameter error, unitPath parameter not valid'
+          error: 'POST parameter error, path parameter not valid'
         });
         debug('******************** error ********************');
         return;
       }
 
-      res.locals.unitPath = unitPath;
+      res.locals.path = path;
 
-      debug('verifyRequestBody: unitPath.length', unitPath.length);
-      limitByMovementPoints(entities, unitId, unitPath);
+      debug('verifyRequestBody: path.length', path.length);
+      limitByMovementPoints(entities, unitId, path);
     }
 
-    function limitByMovementPoints(entities, unitId, unitPathOriginal) {
+    function limitByMovementPoints(entities, unitId, pathOriginal) {
       const unit = entities[unitId];
-      const stepAmount = unitPathOriginal.length - 1;
+      const stepAmount = pathOriginal.length - 1;
       const unitMovement = unit.unitStats.current.movement;
 
-      let unitPath;
+      let path;
 
       if (unitMovement < stepAmount) {
-        unitPath = unitPathOriginal.slice(0, unitMovement + 1);
-        res.locals.unitPath = unitPath;
+        path = pathOriginal.slice(0, unitMovement + 1);
+        res.locals.path = path;
       } else {
-        unitPath = unitPathOriginal;
+        path = pathOriginal;
       }
 
       debug('limitByMovementPoints', unitMovement, stepAmount);
-      verifyInsideMapBoundaries(entities, unitId, unitPath);
+      verifyInsideMapBoundaries(entities, unitId, path);
     }
 
-    function verifyInsideMapBoundaries(entities, unitId, unitPath) {
+    function verifyInsideMapBoundaries(entities, unitId, path) {
       let battleWidth;
       let battleHeight;
 
@@ -86,7 +86,7 @@ module.exports = () => {
 
       let isOutsideMapBoundaries = false;
 
-      _.forEach(unitPath, (position) => {
+      _.forEach(path, (position) => {
         if (
           position.y < 0 ||
           position.y > battleHeight - 1 ||
@@ -109,11 +109,11 @@ module.exports = () => {
       }
 
       debug('verifyInsideMapBoundaries: Inside map boundaries!');
-      verifyStartPosition(entities, unitId, unitPath);
+      verifyStartPosition(entities, unitId, path);
     }
 
-    function verifyStartPosition(entities, unitId, unitPath) {
-      const position = unitPath[0];
+    function verifyStartPosition(entities, unitId, path) {
+      const position = path[0];
       const entity = entities[unitId];
 
       if (
@@ -128,18 +128,18 @@ module.exports = () => {
         return;
       }
 
-      verifyConsistency(entities, unitId, unitPath);
+      verifyConsistency(entities, unitId, path);
     }
 
-    function verifyConsistency(entities, unitId, unitPath) {
+    function verifyConsistency(entities, unitId, path) {
       let isNotConsistent = false;
 
-      _.forEach(unitPath, (position, index) => {
+      _.forEach(path, (position, index) => {
         if (index === 0) {
           return;
         }
 
-        const prevPosition = unitPath[index - 1];
+        const prevPosition = path[index - 1];
 
         const distanceX = Math.abs(prevPosition.x - position.x);
         const distanceY = Math.abs(prevPosition.y - position.y);
@@ -167,12 +167,12 @@ module.exports = () => {
       }
 
       debug('verifyConsistency: Consistent!');
-      verifyCollision(entities, unitId, unitPath);
+      verifyCollision(entities, unitId, path);
     }
 
-    function verifyCollision(entities, unitId, unitPath) {
+    function verifyCollision(entities, unitId, path) {
       let isCollision = false;
-      _.forEach(unitPath, (position, index) => {
+      _.forEach(path, (position, index) => {
         if (index === 0) {
           return;
         }

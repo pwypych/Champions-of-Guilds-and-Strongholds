@@ -8,14 +8,14 @@ module.exports = () => {
   return (req, res, next) => {
     (function init() {
       debug('// Sends response for journey result');
-      const unitPath = res.locals.unitPath;
+      const path = res.locals.path;
 
-      sendResponse(unitPath);
+      sendResponse(path);
     })();
 
-    function sendResponse(unitPath) {
+    function sendResponse(path) {
       debug('sendResponse: No Errors!');
-      res.send({ error: 0, unitPath: unitPath });
+      res.send({ error: 0, path: path });
       next();
     }
   };

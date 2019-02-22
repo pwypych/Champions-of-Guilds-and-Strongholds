@@ -8,18 +8,18 @@ module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
       debug(
-        '// Updates unit position in database, based last position in unitPath'
+        '// Updates unit position in database, based last position in path'
       );
       const entities = res.locals.entities;
       const gameId = entities._id;
       const unitId = res.locals.unitId;
-      const unitPath = res.locals.unitPath;
+      const path = res.locals.path;
 
-      calculatePosition(gameId, unitId, unitPath);
+      calculatePosition(gameId, unitId, path);
     })();
 
-    function calculatePosition(gameId, unitId, unitPath) {
-      const position = unitPath[unitPath.length - 1];
+    function calculatePosition(gameId, unitId, path) {
+      const position = path[path.length - 1];
 
       debug('calculatePosition: position', position);
       positionUpdate(gameId, unitId, position);

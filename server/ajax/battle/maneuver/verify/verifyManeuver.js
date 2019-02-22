@@ -28,6 +28,7 @@ module.exports = (
       if (typeof unitId === 'undefined') {
         res.status(400);
         res.send({ error: 'POST parameter error, unitId parameter not valid' });
+        debug('POST parameter error, unitId parameter not valid');
         debug('******************** error ********************');
         return;
       }
