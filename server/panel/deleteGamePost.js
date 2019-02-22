@@ -44,6 +44,19 @@ module.exports = (environment, db) => {
         }
 
         debug('deleteGamePost');
+        deleteSaveGame(gameId);
+      });
+    }
+
+    function deleteSaveGame(gameId) {
+      db.collection('saveCollection').deleteOne({ _id: gameId }, (error) => {
+        if (error) {
+          debug('deleteSaveGamePost: error:', error);
+          res.status(503).send('503 Error - Cannot delete save game instance');
+          return;
+        }
+
+        debug('deleteSaveGamePost');
         sendResponce();
       });
     }
