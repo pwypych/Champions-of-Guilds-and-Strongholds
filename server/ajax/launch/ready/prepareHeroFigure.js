@@ -25,7 +25,7 @@ module.exports = (db) => {
           playerArray.push(entity);
         }
 
-        if (entity.figure === 'castleRandom') {
+        if (entity.figureName === 'castleRandom') {
           entity.id = id;
           castleRandomArray.push(entity);
         }
@@ -39,7 +39,7 @@ module.exports = (db) => {
       _.forEach(playerArray, (player, index) => {
         const hero = {};
         hero.owner = player.id;
-        hero.figure = 'heroHuman';
+        hero.figureName = 'heroHuman';
 
         hero.position = {};
         hero.position.x = castleRandomArray[index].position.x;

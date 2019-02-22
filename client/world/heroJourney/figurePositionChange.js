@@ -37,7 +37,7 @@ g.world.figurePositionChange = (walkie, freshEntities) => {
     const entities = freshEntities();
 
     _.forEach(entities, (entity, id) => {
-      if (entity.figure && entity.position) {
+      if (entity.figureName && entity.position) {
         if (!_.isEqual(entity.position, oldEntities[id].position)) {
           const data = {
             figureId: id,

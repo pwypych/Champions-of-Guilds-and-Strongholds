@@ -121,7 +121,7 @@ module.exports = (
       let resourceEntity;
 
       _.forEach(entities, (entity, id) => {
-        if (entity.figure) {
+        if (entity.figureName) {
           if (
             entity.position.x === wishedHeroStep.toX &&
             entity.position.y === wishedHeroStep.toY
@@ -152,7 +152,7 @@ module.exports = (
       let isWishedPositionCollidable = false;
 
       _.forEach(entities, (entity) => {
-        if (entity.figure) {
+        if (entity.figureName) {
           if (
             entity.position.x === wishedHeroStep.toX &&
             entity.position.y === wishedHeroStep.toY

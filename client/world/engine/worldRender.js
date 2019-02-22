@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.world.worldRender = (walkie, auth, viewport, freshEntities, pixiFactory) => {
+g.world.worldRender = (walkie, auth, viewport, freshEntities) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
@@ -73,7 +73,7 @@ g.world.worldRender = (walkie, auth, viewport, freshEntities, pixiFactory) => {
 
   function forEachFigure() {
     _.forEach(freshEntities(), (entity, id) => {
-      if (entity.figure && entity.position) {
+      if (entity.figureName && entity.position) {
         instantiateOrFindSprite(entity, id);
       }
     });
@@ -90,7 +90,7 @@ g.world.worldRender = (walkie, auth, viewport, freshEntities, pixiFactory) => {
 
     if (!worldContainer.getChildByName(id)) {
       // console.log('drawUnit', id);
-      const texture = PIXI.loader.resources[entity.figure].texture;
+      const texture = PIXI.loader.resources[entity.figureName].texture;
       sprite = new PIXI.Sprite(texture);
       sprite.name = id;
       const zIndex = 100 + entity.position.y;

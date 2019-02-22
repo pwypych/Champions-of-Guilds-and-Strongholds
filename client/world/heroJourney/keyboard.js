@@ -36,7 +36,7 @@ g.world.keyboard = (walkie, auth, freshEntities) => {
       let hero;
       let heroId;
       _.forEach(entities, (entity, id) => {
-        if (entity.figure === 'heroHuman' && entity.owner === playerId) {
+        if (entity.figureName === 'heroHuman' && entity.owner === playerId) {
           hero = entity;
           heroId = id;
         }
