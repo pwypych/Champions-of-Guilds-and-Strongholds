@@ -10,7 +10,7 @@ module.exports = () => {
   return (req, res, next) => {
     (function init() {
       debug(
-        '// Verifies: request.body, movement points, map boundaries, start position, consistency, collisions'
+        '// Verifies: request.body, map boundaries, start position, consistency'
       );
       const entities = res.locals.entities;
       const entityId = res.locals.entityId;
@@ -52,24 +52,6 @@ module.exports = () => {
       res.locals.path = path;
 
       debug('verifyRequestBody: path.length', path.length);
-      limitByMovementPoints(entities, entityId, path);
-    }
-
-    function limitByMovementPoints(entities, entityId, pathOriginal) {
-      const unit = entities[entityId];
-      const stepAmount = pathOriginal.length - 1;
-      const unitMovement = unit.unitStats.current.movement;
-
-      let path;
-
-      if (unitMovement < stepAmount) {
-        path = pathOriginal.slice(0, unitMovement + 1);
-        res.locals.path = path;
-      } else {
-        path = pathOriginal;
-      }
-
-      debug('limitByMovementPoints', unitMovement, stepAmount);
       verifyInsideMapBoundaries(entities, entityId, path);
     }
 
@@ -128,6 +110,7 @@ module.exports = () => {
         return;
       }
 
+      debug('verifyStartPosition: Entity present on start position!');
       verifyConsistency(entities, entityId, path);
     }
 
@@ -167,38 +150,6 @@ module.exports = () => {
       }
 
       debug('verifyConsistency: Consistent!');
-      verifyCollision(entities, entityId, path);
-    }
-
-    function verifyCollision(entities, entityId, path) {
-      let isCollision = false;
-      _.forEach(path, (position, index) => {
-        if (index === 0) {
-          return;
-        }
-
-        _.forEach(entities, (entity) => {
-          if (entity.unitName && entity.collision && entity.position) {
-            if (
-              entity.position.x === position.x &&
-              entity.position.y === position.y
-            ) {
-              isCollision = index;
-            }
-          }
-        });
-      });
-
-      if (isCollision) {
-        debug('verifyCollision: Collistion on path!');
-        res.send({ error: 1, message: 'Collistion on chosen path' });
-        return;
-      }
-
-      if (!isCollision) {
-        debug('verifyCollision: No collistions!');
-      }
-
       next();
     }
   };
