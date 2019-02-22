@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.battle.recentManeuverDifferance = (walkie, freshEntities) => {
+g.battle.recentActivityDifferance = (walkie, freshEntities) => {
   let oldEntities;
 
   (function init() {
@@ -12,7 +12,7 @@ g.battle.recentManeuverDifferance = (walkie, freshEntities) => {
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
-      'recentManeuverDifferance.js',
+      'recentActivityDifferance.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
         if (gameEntity.state !== 'battleState') {
@@ -37,22 +37,22 @@ g.battle.recentManeuverDifferance = (walkie, freshEntities) => {
     const entities = freshEntities();
 
     _.forEach(entities, (entity, id) => {
-      checkRecentManeuverDifferance(entity, id);
+      checkRecentActivityDifferance(entity, id);
     });
 
     oldEntities = freshEntities();
 
     walkie.triggerEvent(
-      'recentManeuverDifferanceDone_',
-      'recentManeuverDifferance.js',
+      'recentActivityDifferanceDone_',
+      'recentActivityDifferance.js',
       {},
       false
     );
   }
 
-  function checkRecentManeuverDifferance(entity, id) {
-    if (entity.recentManeuver) {
-      if (!_.isEqual(entity.recentManeuver, oldEntities[id].recentManeuver)) {
+  function checkRecentActivityDifferance(entity, id) {
+    if (entity.recentActivity) {
+      if (!_.isEqual(entity.recentActivity, oldEntities[id].recentActivity)) {
         const data = {
           unitId: id,
           entity: entity,
@@ -60,8 +60,8 @@ g.battle.recentManeuverDifferance = (walkie, freshEntities) => {
         };
 
         walkie.triggerEvent(
-          'recentManeuverDifferanceFound_',
-          'recentManeuverDifferance.js',
+          'recentActivityDifferanceFound_',
+          'recentActivityDifferance.js',
           data,
           true
         );

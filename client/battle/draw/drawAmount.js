@@ -17,12 +17,12 @@ g.battle.drawAmount = (walkie, viewport, freshEntities) => {
   });
 
   (function init() {
-    onRecentManeuverDifferanceDone();
+    onRecentActivityDifferanceDone();
   })();
 
-  function onRecentManeuverDifferanceDone() {
+  function onRecentActivityDifferanceDone() {
     walkie.onEvent(
-      'recentManeuverDifferanceDone_',
+      'recentActivityDifferanceDone_',
       'drawAmount.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];

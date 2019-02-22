@@ -73,22 +73,22 @@ module.exports = (
         return;
       }
 
-      runUpdateUnitRecentManeuver(ctx);
+      runUpdateUnitRecentActivity(ctx);
     }
 
-    function runUpdateUnitRecentManeuver(ctx) {
+    function runUpdateUnitRecentActivity(ctx) {
       const gameId = ctx.gameId;
       const unitId = ctx.unitId;
       const unitJourney = ctx.unitJourney;
 
-      const recentManeuver = {};
-      recentManeuver.name = 'onJourney';
-      recentManeuver.unitJourney = unitJourney;
-      recentManeuver.timestamp = Date.now();
+      const recentActivity = {};
+      recentActivity.name = 'onJourney';
+      recentActivity.unitJourney = unitJourney;
+      recentActivity.timestamp = Date.now();
 
-      debug('runUpdateUnitRecentManeuver: Starting...');
-      updateRecentActivity(gameId, unitId, recentManeuver, () => {
-        debug('runUpdateUnitRecentManeuver: Success!');
+      debug('runUpdateUnitRecentActivity: Starting...');
+      updateRecentActivity(gameId, unitId, recentActivity, () => {
+        debug('runUpdateUnitRecentActivity: Success!');
         forEachUnitJourney(ctx);
       });
     }

@@ -7,7 +7,7 @@ const debug = require('debug')('cogs:unitPathSendResponce');
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
-      debug('// Sends response for journey result, and updates recentManeuver');
+      debug('// Sends response for journey result');
       const unitPath = res.locals.unitPath;
 
       sendResponce(unitPath);

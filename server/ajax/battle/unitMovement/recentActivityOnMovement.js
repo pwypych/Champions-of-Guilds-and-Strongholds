@@ -2,35 +2,35 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:unitRecentManeuverOnMovement');
+const debug = require('debug')('cogs:recentActivityOnMovement');
 
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
-      debug('// Updates recentManeuver to onMovement');
+      debug('// Updates recentActivity to onMovement');
       const entities = res.locals.entities;
       const gameId = entities._id;
       const unitId = res.locals.unitId;
       const unitPath = res.locals.unitPath;
 
-      generateRecentManeuver(gameId, unitId, unitPath);
+      generateRecentActivity(gameId, unitId, unitPath);
     })();
 
-    function generateRecentManeuver(gameId, unitId, unitPath) {
-      const recentManeuver = {};
-      recentManeuver.name = 'onMovement';
-      recentManeuver.unitPath = unitPath;
-      recentManeuver.timestamp = Date.now();
+    function generateRecentActivity(gameId, unitId, unitPath) {
+      const recentActivity = {};
+      recentActivity.name = 'onMovement';
+      recentActivity.unitPath = unitPath;
+      recentActivity.timestamp = Date.now();
 
-      updateRecentActivity(gameId, unitId, recentManeuver);
+      updateRecentActivity(gameId, unitId, recentActivity);
     }
 
-    function updateRecentActivity(gameId, unitId, recentManeuver) {
+    function updateRecentActivity(gameId, unitId, recentActivity) {
       const query = { _id: gameId };
 
-      const field = unitId + '.recentManeuver';
+      const field = unitId + '.recentActivity';
       const $set = {};
-      $set[field] = recentManeuver;
+      $set[field] = recentActivity;
 
       const update = { $set: $set };
       const options = {};

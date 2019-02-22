@@ -65,7 +65,7 @@ g.main = function main() {
     g.battle.drawUnits(walkie, auth, viewport, freshEntities);
     g.battle.drawAmount(walkie, viewport, freshEntities);
     g.battle.drawActiveUnitMarker(walkie, viewport, freshEntities);
-    g.battle.recentManeuverDifferance(walkie, freshEntities);
+    g.battle.recentActivityDifferance(walkie, freshEntities);
     g.battle.battleClick(walkie, auth, viewport, freshEntities);
     g.battle.unitPath(walkie, auth, viewport, freshEntities);
     g.battle.unitAcceptedPathPost(walkie, auth);

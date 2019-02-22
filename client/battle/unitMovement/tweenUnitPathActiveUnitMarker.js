@@ -12,7 +12,7 @@ g.battle.tweenUnitPathActiveUnitMarker = (walkie, viewport) => {
 
   (function init() {
     onUnitPathVerifiedByServer();
-    onRecentManeuverDifferance();
+    onRecentActivityDifferance();
   })();
 
   function onUnitPathVerifiedByServer() {
@@ -31,9 +31,9 @@ g.battle.tweenUnitPathActiveUnitMarker = (walkie, viewport) => {
     );
   }
 
-  function onRecentManeuverDifferance() {
+  function onRecentActivityDifferance() {
     walkie.onEvent(
-      'recentManeuverDifferanceFound_',
+      'recentActivityDifferanceFound_',
       'tweenUnitPathActiveUnitMarker.js',
       (data) => {
         if (data.unitId === tweeningUnitIdByPathVerifiedByServer) {
@@ -43,9 +43,9 @@ g.battle.tweenUnitPathActiveUnitMarker = (walkie, viewport) => {
           return;
         }
 
-        if (data.entity.recentManeuver.name === 'onMovement') {
+        if (data.entity.recentActivity.name === 'onMovement') {
           const unitId = data.unitId;
-          const unitPath = data.entity.recentManeuver.unitPath;
+          const unitPath = data.entity.recentActivity.unitPath;
           findSprite(unitId, unitPath);
         }
       },

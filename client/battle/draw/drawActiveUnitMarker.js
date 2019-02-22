@@ -9,12 +9,12 @@ g.battle.drawActiveUnitMarker = (walkie, viewport, freshEntities) => {
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
-    onRecentManeuverDifferanceDone();
+    onRecentActivityDifferanceDone();
   })();
 
-  function onRecentManeuverDifferanceDone() {
+  function onRecentActivityDifferanceDone() {
     walkie.onEvent(
-      'recentManeuverDifferanceDone_',
+      'recentActivityDifferanceDone_',
       'drawActiveUnitMarker.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
