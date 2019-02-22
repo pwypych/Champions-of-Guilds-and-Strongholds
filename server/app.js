@@ -320,7 +320,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   const updateUnitPosition = require('./ajax/battle/unitJourney/updateUnitPosition.js')(
     db
   );
-  const updateUnitRecentManeuver = require('./ajax/battle/maneuver/updateUnitRecentManeuver.js')(
+  const updateRecentActivity = require('./ajax/battle/maneuver/updateRecentActivity.js')(
     db
   );
   const decrementUnitMovement = require('./ajax/battle/unitJourney/decrementUnitMovement.js')(
@@ -331,7 +331,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     findEntitiesByGameId,
     decrementUnitMovement,
     updateUnitPosition,
-    updateUnitRecentManeuver
+    updateRecentActivity
   );
   const refillUnitMovement = require('./ajax/battle/unitJourney/refillUnitMovement.js')(
     db,
@@ -348,7 +348,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
       db,
       decideUnitStep,
       refillUnitMovement,
-      updateUnitRecentManeuver
+      updateRecentActivity
     ),
     require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db),
     digestFinishedManeuverMiddleware
@@ -363,7 +363,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/battle/unitMovement/flagIsProcessingInspect.js')(),
     require('./ajax/battle/unitMovement/unitPathVerify.js')(),
     require('./ajax/battle/unitMovement/flagIsProcessingCreate.js')(db),
-    require('./ajax/battle/unitMovement/recentManeuverOnMovement.js')(db),
+    require('./ajax/battle/unitMovement/recentActivityOnMovement.js')(db),
     require('./ajax/battle/unitMovement/unitPathSendResponse.js')(),
     require('./ajax/battle/unitMovement/movementTimeout.js')(),
     require('./ajax/battle/unitMovement/unitPositionUpdate.js')(db),

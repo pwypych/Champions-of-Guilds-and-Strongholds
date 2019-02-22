@@ -10,7 +10,7 @@ module.exports = (
   db,
   decideUnitStep,
   refillUnitMovement,
-  updateUnitRecentManeuver
+  updateRecentActivity
 ) => {
   return (req, res, next) => {
     (function init() {
@@ -87,7 +87,7 @@ module.exports = (
       recentManeuver.timestamp = Date.now();
 
       debug('runUpdateUnitRecentManeuver: Starting...');
-      updateUnitRecentManeuver(gameId, unitId, recentManeuver, () => {
+      updateRecentActivity(gameId, unitId, recentManeuver, () => {
         debug('runUpdateUnitRecentManeuver: Success!');
         forEachUnitJourney(ctx);
       });

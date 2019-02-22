@@ -22,10 +22,10 @@ module.exports = (db) => {
       recentManeuver.unitPath = unitPath;
       recentManeuver.timestamp = Date.now();
 
-      updateUnitRecentManeuver(gameId, unitId, recentManeuver);
+      updateRecentActivity(gameId, unitId, recentManeuver);
     }
 
-    function updateUnitRecentManeuver(gameId, unitId, recentManeuver) {
+    function updateRecentActivity(gameId, unitId, recentManeuver) {
       const query = { _id: gameId };
 
       const field = unitId + '.recentManeuver';
@@ -41,9 +41,9 @@ module.exports = (db) => {
         options,
         (error) => {
           if (error) {
-            debug('updateUnitRecentManeuver: ERROR:', error);
+            debug('updateRecentActivity: ERROR:', error);
           }
-          debug('updateUnitRecentManeuver: Success!');
+          debug('updateRecentActivity: Success!');
           next();
         }
       );
