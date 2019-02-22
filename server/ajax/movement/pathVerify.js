@@ -120,10 +120,10 @@ module.exports = () => {
         position.x !== entity.position.x ||
         position.y !== entity.position.y
       ) {
-        debug('verifyStartPosition: Not equal unit position!');
+        debug('verifyStartPosition: Not equal entity position!');
         res.send({
           error: 1,
-          message: 'Path start position not equal unit position'
+          message: 'Path start position not equal entity position'
         });
         return;
       }

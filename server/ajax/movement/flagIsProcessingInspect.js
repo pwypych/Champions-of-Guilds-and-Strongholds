@@ -8,18 +8,18 @@ module.exports = () => {
   return (req, res, next) => {
     (function init() {
       debug(
-        '// Prevents route from doing new unitMovement if unit is allready moving'
+        '// Prevents route from doing new movement if entity is allready moving'
       );
       const entityId = res.locals.entityId;
       const entities = res.locals.entities;
 
-      const unit = entities[entityId];
+      const entity = entities[entityId];
 
-      flagInspect(unit);
+      flagInspect(entity);
     })();
 
-    function flagInspect(unit) {
-      if (unit.isProcessingMovementUntilTimestamp > Date.now()) {
+    function flagInspect(entity) {
+      if (entity.isProcessingMovementUntilTimestamp > Date.now()) {
         debug('flagInspect: Present, aborting!');
         return;
       }

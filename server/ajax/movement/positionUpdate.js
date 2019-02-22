@@ -8,7 +8,7 @@ module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
       debug(
-        '// Updates unit position in database, based last position in path'
+        '// Updates entity position in database, based last position in path'
       );
       const entities = res.locals.entities;
       const gameId = entities._id;
@@ -28,11 +28,11 @@ module.exports = (db) => {
     function positionUpdate(gameId, entityId, position) {
       const query = { _id: gameId };
 
-      const fieldUnitX = entityId + '.position.x';
-      const fieldUnitY = entityId + '.position.y';
+      const fieldEntityX = entityId + '.position.x';
+      const fieldEntityY = entityId + '.position.y';
       const $set = {};
-      $set[fieldUnitX] = position.x;
-      $set[fieldUnitY] = position.y;
+      $set[fieldEntityX] = position.x;
+      $set[fieldEntityY] = position.y;
 
       const update = { $set: $set };
       const options = {};

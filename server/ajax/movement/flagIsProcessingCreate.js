@@ -7,7 +7,7 @@ const debug = require('debug')('cogs:flagIsProcessingCreate');
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
-      debug('// Creates flag to mark that unit is moving right now');
+      debug('// Creates flag to mark that entity is moving right now');
       const entities = res.locals.entities;
       const gameId = entities._id;
       const entityId = res.locals.entityId;
@@ -21,9 +21,9 @@ module.exports = (db) => {
       const query = { _id: gameId };
       const field = entityId + '.isProcessingMovementUntilTimestamp';
       const $set = {};
-      const unitMoveTime = 150 * (pathLength - 1); // ms
+      const entityMoveTime = 150 * (pathLength - 1); // ms
       const securityMargin = 100; // ms
-      $set[field] = Date.now() + unitMoveTime + securityMargin;
+      $set[field] = Date.now() + entityMoveTime + securityMargin;
       const update = { $set: $set };
       const options = {};
 
