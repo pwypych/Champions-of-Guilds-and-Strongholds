@@ -106,14 +106,14 @@ g.battle.battleClick = (walkie, auth, viewport, freshEntities) => {
       grid
     );
 
-    const pathArray = pathArrayOfArrays.map((path) => {
-      return { x: path[0], y: path[1] };
+    const path = pathArrayOfArrays.map((pathArray) => {
+      return { x: pathArray[0], y: pathArray[1] };
     });
 
-    triggerEvents(pathArray, click, unitId);
+    triggerEvents(path, click, unitId);
   }
 
-  function triggerEvents(pathArray, click, unitId) {
+  function triggerEvents(path, click, unitId) {
     console.log('lastPathPositionX', lastPathPositionX);
     console.log('lastPathPositionY', lastPathPositionY);
     console.log('click', click);
@@ -125,29 +125,29 @@ g.battle.battleClick = (walkie, auth, viewport, freshEntities) => {
       if (lastPathPositionX === click.x && lastPathPositionY === click.y) {
         lastPathPositionX = undefined;
         lastPathPositionY = undefined;
-        walkie.triggerEvent('unitPathAccepted_', 'battleClick.js', {
+        walkie.triggerEvent('pathAccepted_', 'battleClick.js', {
           unitId: unitId,
-          pathArray: pathArray
+          path: path
         });
         return;
       }
     }
 
-    if (!_.isEmpty(pathArray) && pathArray.length > 1) {
-      lastPathPositionX = pathArray[pathArray.length - 1].x;
-      lastPathPositionY = pathArray[pathArray.length - 1].y;
+    if (!_.isEmpty(path) && path.length > 1) {
+      lastPathPositionX = path[path.length - 1].x;
+      lastPathPositionY = path[path.length - 1].y;
     } else {
       lastPathPositionX = undefined;
       lastPathPositionY = undefined;
     }
 
-    if (!_.isEmpty(pathArray) && pathArray.length > 1) {
-      walkie.triggerEvent('unitPathCalculated_', 'battleClick.js', {
+    if (!_.isEmpty(path) && path.length > 1) {
+      walkie.triggerEvent('pathCalculated_', 'battleClick.js', {
         unitId: unitId,
-        pathArray: pathArray
+        path: path
       });
     } else {
-      walkie.triggerEvent('unitPathImpossible_', 'battleClick.js');
+      walkie.triggerEvent('pathImpossible_', 'battleClick.js');
     }
   }
 };

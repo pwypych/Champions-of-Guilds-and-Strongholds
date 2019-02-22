@@ -5,7 +5,7 @@
 // What does this module do?
 // It listens to path events, and renders path accordingly
 g.battle.unitPath = (walkie, auth, viewport, freshEntities) => {
-  let pathArray;
+  let path;
   let gPathArray = [];
   let unitId;
 
@@ -19,22 +19,22 @@ g.battle.unitPath = (walkie, auth, viewport, freshEntities) => {
   })();
 
   function onPathCalculated() {
-    walkie.onEvent('unitPathCalculated_', 'unitPath.js', (data) => {
+    walkie.onEvent('pathCalculated_', 'unitPath.js', (data) => {
       toolRemoveOldPath();
-      pathArray = data.pathArray;
+      path = data.path;
       unitId = data.unitId;
       findUnitMovement();
     });
   }
 
   function onPathImpossible() {
-    walkie.onEvent('unitPathImpossible_', 'unitPath.js', () => {
+    walkie.onEvent('pathImpossible_', 'unitPath.js', () => {
       toolRemoveOldPath();
     });
   }
 
   function onPathAccepted() {
-    walkie.onEvent('unitPathAccepted_', 'unitPath.js', () => {
+    walkie.onEvent('pathAccepted_', 'unitPath.js', () => {
       toolRemoveOldPath();
     });
   }
@@ -44,7 +44,7 @@ g.battle.unitPath = (walkie, auth, viewport, freshEntities) => {
       viewport.removeChild(gPath);
     });
 
-    pathArray = [];
+    path = [];
     gPathArray = [];
     unitId = undefined;
   }
@@ -57,8 +57,8 @@ g.battle.unitPath = (walkie, auth, viewport, freshEntities) => {
   }
 
   function forEachPosition(movement) {
-    pathArray.forEach((fromPosition, index) => {
-      if (pathArray.length === index + 1) {
+    path.forEach((fromPosition, index) => {
+      if (path.length === index + 1) {
         return;
       }
 
@@ -74,11 +74,11 @@ g.battle.unitPath = (walkie, auth, viewport, freshEntities) => {
 
       let isLast = false;
       // path always one longer than step count
-      if (index === pathArray.length - 2) {
+      if (index === path.length - 2) {
         isLast = true;
       }
 
-      const toPosition = pathArray[index + 1];
+      const toPosition = path[index + 1];
 
       drawPath(fromPosition, toPosition, isFirst, isInRange, isLast);
     });

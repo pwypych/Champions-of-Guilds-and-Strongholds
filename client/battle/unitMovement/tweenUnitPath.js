@@ -17,15 +17,15 @@ g.battle.tweenUnitPath = (walkie, viewport) => {
 
   function onUnitPathVerifiedByServer() {
     walkie.onEvent(
-      'unitPathVerifiedByServer_',
+      'pathVerifiedByServer_',
       'tweenUnitPath.js',
       (data) => {
         const unitId = data.unitId;
-        const unitPath = data.unitPath;
+        const path = data.path;
 
         tweeningUnitIdByPathVerifiedByServer = unitId;
 
-        findSprite(unitId, unitPath);
+        findSprite(unitId, path);
       },
       true
     );
@@ -43,24 +43,24 @@ g.battle.tweenUnitPath = (walkie, viewport) => {
 
         if (data.entity.recentActivity.name === 'onMovement') {
           const unitId = data.unitId;
-          const unitPath = data.entity.recentActivity.unitPath;
-          findSprite(unitId, unitPath);
+          const path = data.entity.recentActivity.path;
+          findSprite(unitId, path);
         }
       },
       true
     );
   }
 
-  function findSprite(unitId, unitPath) {
+  function findSprite(unitId, path) {
     const sprite = battleContainer.getChildByName(unitId);
 
-    generateTweenTimeline(sprite, unitPath);
+    generateTweenTimeline(sprite, path);
   }
 
-  function generateTweenTimeline(sprite, unitPath) {
+  function generateTweenTimeline(sprite, path) {
     const timeline = new TimelineMax();
 
-    unitPath.forEach((position, index) => {
+    path.forEach((position, index) => {
       if (index === 0) {
         // first position in path is always current position
         return;
