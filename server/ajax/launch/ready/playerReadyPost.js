@@ -40,12 +40,12 @@ module.exports = (db) => {
           }
 
           debug('updateGameByPlayerReady: readyForLaunch: true');
-          sendResponce();
+          sendResponse();
         }
       );
     }
 
-    function sendResponce() {
+    function sendResponse() {
       res.send({ error: 0 });
       debug('******************** early ajax ********************');
       next();

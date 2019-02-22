@@ -57,12 +57,12 @@ module.exports = (environment, db) => {
         }
 
         debug('deleteSaveGamePost');
-        sendResponce();
+        sendResponse();
       });
     }
 
-    function sendResponce() {
-      debug('sendResponce()');
+    function sendResponse() {
+      debug('sendResponse()');
       debug('******************** should redirect ********************');
       res.redirect(environment.baseurl + '/panel');
     }

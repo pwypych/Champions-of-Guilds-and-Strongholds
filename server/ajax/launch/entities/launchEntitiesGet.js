@@ -56,11 +56,11 @@ module.exports = () => {
 
       debug('generateLaunchEntities: launchEntities', launchEntities);
 
-      sendResponce(launchEntities);
+      sendResponse(launchEntities);
     }
 
-    function sendResponce(launchEntities) {
-      debug('sendResponce');
+    function sendResponse(launchEntities) {
+      debug('sendResponse');
       res.send(launchEntities);
       debug('******************** ajax ********************');
     }

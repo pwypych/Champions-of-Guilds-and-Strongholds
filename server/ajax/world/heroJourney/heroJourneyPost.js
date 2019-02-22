@@ -9,7 +9,7 @@ module.exports = () => {
   return (req, res, next) => {
     (function init() {
       debug(
-        '// Endpoint, accepts wished hero journey for a hero, initial verifies, sends responce and passes to next'
+        '// Endpoint, accepts wished hero journey for a hero, initial verifies, sends response and passes to next'
       );
 
       checkRequestBodyHeroJourney();
@@ -69,11 +69,11 @@ module.exports = () => {
       res.locals.heroId = heroId;
 
       debug('checkRequestBodyHeroId: heroId', heroId);
-      sendResponce();
+      sendResponse();
     }
 
-    function sendResponce() {
-      debug('sendResponce');
+    function sendResponse() {
+      debug('sendResponse');
       res.send({ error: 0 });
       next();
     }
