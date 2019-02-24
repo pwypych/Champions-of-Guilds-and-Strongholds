@@ -25,7 +25,7 @@ g.battle.tweenPathUnit = (walkie, viewport) => {
 
         tweeningUnitIdByPathVerifiedByServer = unitId;
 
-        findSprite(unitId, path);
+        findUnitContainer(unitId, path);
       },
       true
     );
@@ -44,20 +44,20 @@ g.battle.tweenPathUnit = (walkie, viewport) => {
         if (data.entity.recentActivity.name === 'onMovement') {
           const unitId = data.unitId;
           const path = data.entity.recentActivity.path;
-          findSprite(unitId, path);
+          findUnitContainer(unitId, path);
         }
       },
       true
     );
   }
 
-  function findSprite(unitId, path) {
-    const sprite = battleContainer.getChildByName(unitId);
+  function findUnitContainer(unitId, path) {
+    const unitContainer = battleContainer.getChildByName(unitId);
 
-    generateTweenTimeline(sprite, path);
+    generateTweenTimeline(unitContainer, path);
   }
 
-  function generateTweenTimeline(sprite, path) {
+  function generateTweenTimeline(unitContainer, path) {
     const timeline = new TimelineMax();
 
     path.forEach((position, index) => {
@@ -66,11 +66,11 @@ g.battle.tweenPathUnit = (walkie, viewport) => {
         return;
       }
       const xPixel = position.x * blockWidthPx;
-      const yPixel = position.y * blockHeightPx + blockHeightPx;
+      const yPixel = position.y * blockHeightPx;
 
       console.log('generateTweenTimeline', xPixel, yPixel);
 
-      timeline.to(sprite, 0.15, { x: xPixel, y: yPixel });
+      timeline.to(unitContainer, 0.15, { x: xPixel, y: yPixel });
     });
 
     timeline.addCallback(() => {

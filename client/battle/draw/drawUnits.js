@@ -32,37 +32,97 @@ g.battle.drawUnits = (walkie, auth, viewport, freshEntities) => {
   function forEachFigure() {
     _.forEach(freshEntities(), (entity, id) => {
       if (entity.unitName && entity.position) {
-        instantiateOrFindSprite(entity, id);
+        instantiateUnitContainer(entity, id);
       }
     });
   }
 
-  function instantiateOrFindSprite(entity, id) {
-    let sprite;
+  function instantiateUnitContainer(entity, unitId) {
+    let unitContainer = battleContainer.getChildByName(unitId);
 
-    if (battleContainer.getChildByName(id)) {
-      sprite = battleContainer.getChildByName(id);
-    }
-
-    if (!battleContainer.getChildByName(id)) {
-      // console.log('drawUnit', id);
-      const texture = PIXI.loader.resources[entity.unitName].texture;
-      sprite = new PIXI.Sprite(texture);
-      sprite.name = id;
+    if (!unitContainer) {
+      // console.log('drawUnits: unit container', id);
+      unitContainer = new PIXI.Container();
+      unitContainer.name = unitId;
       const zIndex = 100 + entity.position.y;
-      battleContainer.addChildZ(sprite, zIndex);
-      updatePosition(entity, sprite);
+      battleContainer.addChildZ(unitContainer, zIndex);
+
+      unitContainer.x = entity.position.x * blockWidthPx;
+      unitContainer.y = entity.position.y * blockHeightPx;
     }
+
+    instantiateMarker(entity, unitId, unitContainer);
   }
 
-  function updatePosition(entity, sprite) {
-    sprite.anchor = { x: 0, y: 1 };
-    sprite.x = entity.position.x * blockWidthPx;
-    sprite.y = entity.position.y * blockHeightPx + blockHeightPx;
+  function instantiateMarker(entity, unitId, unitContainer) {
+    let marker = unitContainer.getChildByName('marker');
 
-    if (entity.spriteOffset) {
-      sprite.x += entity.spriteOffset.x;
-      sprite.y += entity.spriteOffset.y;
+    if (!marker) {
+      // Should happen only once
+      // console.log('drawActiveUnitMarker', unitId, 'marker');
+      const textureName = 'activeUnitMarker';
+      const texture = PIXI.loader.resources[textureName].texture;
+      marker = new PIXI.Sprite(texture);
+      marker.name = 'marker';
+      unitContainer.addChild(marker);
+
+      const offsetY = 2;
+      marker.x = 0;
+      marker.y = offsetY;
+    }
+
+    if (entity.active) {
+      marker.visible = true;
+    } else {
+      marker.visible = false;
+    }
+
+    instantiateSprite(entity, unitId, unitContainer);
+  }
+
+  function instantiateSprite(entity, unitId, unitContainer) {
+    let sprite = unitContainer.getChildByName('sprite');
+
+    if (!sprite) {
+      // Should happen only once
+      // console.log('drawUnits: unit sprite', unitId, 'sprite');
+      const texture = PIXI.loader.resources[entity.unitName].texture;
+      sprite = new PIXI.Sprite(texture);
+      sprite.name = 'sprite';
+
+      if (entity.spriteOffset) {
+        sprite.x += entity.spriteOffset.x;
+        sprite.y += entity.spriteOffset.y;
+      }
+
+      unitContainer.addChild(sprite);
+    }
+
+    instantiateAmount(entity, unitId, unitContainer);
+  }
+
+  function instantiateAmount(entity, unitId, unitContainer) {
+    let amount = unitContainer.getChildByName('amount');
+
+    if (!amount) {
+      // Should happen only once
+      // console.log('drawAmount', unitId, 'amount');
+      const amountTextStyle = new PIXI.TextStyle({
+        fontFamily: 'Courier New',
+        fontSize: 12,
+        fontWeight: 'bolder',
+        fill: 'white',
+        strokeThickness: 2
+      });
+
+      amount = new PIXI.Text(entity.amount, amountTextStyle);
+      amount.name = 'amount';
+      unitContainer.addChild(amount);
+
+      const paddingRight = 2;
+      const paddingTop = 3;
+      amount.x = blockWidthPx - amount.width + paddingRight;
+      amount.y = blockHeightPx - amount.height + paddingTop;
     }
   }
 };
