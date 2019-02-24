@@ -41,6 +41,7 @@ g.world.drawFigures = (walkie, auth, viewport, freshEntities) => {
     let figureContainer = worldContainer.getChildByName(figureId);
 
     if (!figureContainer) {
+      // Should happen only once
       // console.log('drawFigures: figure container', id);
       figureContainer = new PIXI.Container();
       figureContainer.name = figureId;
@@ -59,7 +60,7 @@ g.world.drawFigures = (walkie, auth, viewport, freshEntities) => {
 
     if (!sprite) {
       // Should happen only once
-      console.log('instantiateSprite:', entity);
+      // console.log('instantiateSprite:', entity);
       const texture = PIXI.loader.resources[entity.figureName].texture;
       sprite = new PIXI.Sprite(texture);
       sprite.name = 'sprite';

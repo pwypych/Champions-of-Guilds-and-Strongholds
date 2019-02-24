@@ -4,7 +4,7 @@
 
 // What does this module do?
 // It listens to mouse click events, generates path through library and sends path events
-g.world.worldClick = (walkie, auth, viewport, freshEntities) => {
+g.world.old_worldClick = (walkie, auth, viewport, freshEntities) => {
   let lastPathPositionX;
   let lastPathPositionY;
 

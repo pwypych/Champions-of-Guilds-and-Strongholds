@@ -4,7 +4,7 @@
 
 // What does this module do?
 // It listens to mouse click events, generates path through library and sends path events
-g.battle.battleClick = (walkie, auth, viewport, freshEntities) => {
+g.world.worldClick = (walkie, auth, viewport, freshEntities) => {
   let lastPathPositionX;
   let lastPathPositionY;
 
@@ -15,7 +15,7 @@ g.battle.battleClick = (walkie, auth, viewport, freshEntities) => {
   function addListener() {
     viewport.on('clicked', (event) => {
       const gameEntity = freshEntities()[freshEntities()._id];
-      if (gameEntity.state !== 'battleState') {
+      if (gameEntity.state !== 'worldState') {
         return;
       }
 
@@ -41,57 +41,41 @@ g.battle.battleClick = (walkie, auth, viewport, freshEntities) => {
       }
     });
 
-    findUnitPosition(click, playerId);
+    findHeroPosition(click, playerId);
   }
 
-  function findUnitPosition(click, playerId) {
+  function findHeroPosition(click, playerId) {
     const entities = freshEntities();
 
-    let unit;
-    let unitId;
+    let hero;
+    let heroId;
     _.forEach(entities, (entity, id) => {
       if (
-        entity.unitName &&
+        entity.figureName === 'heroHuman' &&
         entity.owner === playerId &&
-        entity.position &&
-        entity.active
+        entity.position
       ) {
-        unit = entity;
-        unitId = id;
+        hero = entity;
+        heroId = id;
       }
     });
 
-    if (!unit) {
-      console.log('Error: Current player not controlling the active unit');
-      return;
-    }
+    const heroPositon = {};
+    heroPositon.x = parseInt(hero.position.x, 10);
+    heroPositon.y = parseInt(hero.position.y, 10);
 
-    const unitPositon = {};
-    unitPositon.x = parseInt(unit.position.x, 10);
-    unitPositon.y = parseInt(unit.position.y, 10);
-
-    generatePathArray(click, unitPositon, unitId);
+    generatePathArray(click, heroPositon, heroId);
   }
 
-  function generatePathArray(click, unitPositon, unitId) {
-    let battleEntity;
-    _.forEach(freshEntities(), (entity) => {
-      if (entity.battleStatus === 'active') {
-        battleEntity = entity;
-      }
-    });
-
-    if (!battleEntity) {
-      return;
-    }
-
-    const width = battleEntity.battleWidth;
-    const height = battleEntity.battleHeight;
+  function generatePathArray(click, heroPositon, heroId) {
+    const gameEntity = freshEntities()[freshEntities()._id];
+    const width = gameEntity.mapData.width;
+    const height = gameEntity.mapData.height;
 
     const grid = new PF.Grid(width, height);
 
     _.forEach(freshEntities(), (entity) => {
-      if (entity.collision) {
+      if (entity.figureName && entity.collision) {
         grid.setWalkableAt(entity.position.x, entity.position.y, false);
       }
     });
@@ -99,8 +83,8 @@ g.battle.battleClick = (walkie, auth, viewport, freshEntities) => {
     const finder = new PF.AStarFinder({ allowDiagonal: false, weight: 2 });
 
     const pathArrayOfArrays = finder.findPath(
-      unitPositon.x,
-      unitPositon.y,
+      heroPositon.x,
+      heroPositon.y,
       click.x,
       click.y,
       grid
@@ -110,10 +94,10 @@ g.battle.battleClick = (walkie, auth, viewport, freshEntities) => {
       return { x: pathArray[0], y: pathArray[1] };
     });
 
-    triggerEvents(path, click, unitId);
+    triggerEvents(path, click, heroId);
   }
 
-  function triggerEvents(path, click, unitId) {
+  function triggerEvents(path, click, heroId) {
     console.log('lastPathPositionX', lastPathPositionX);
     console.log('lastPathPositionY', lastPathPositionY);
     console.log('click', click);
@@ -125,8 +109,8 @@ g.battle.battleClick = (walkie, auth, viewport, freshEntities) => {
       if (lastPathPositionX === click.x && lastPathPositionY === click.y) {
         lastPathPositionX = undefined;
         lastPathPositionY = undefined;
-        walkie.triggerEvent('unitPathAccepted_', 'battleClick.js', {
-          unitId: unitId,
+        walkie.triggerEvent('heroPathAccepted_', 'worldClick.js', {
+          heroId: heroId,
           path: path
         });
         return;
@@ -142,12 +126,12 @@ g.battle.battleClick = (walkie, auth, viewport, freshEntities) => {
     }
 
     if (!_.isEmpty(path) && path.length > 1) {
-      walkie.triggerEvent('unitPathCalculated_', 'battleClick.js', {
-        unitId: unitId,
+      walkie.triggerEvent('heroPathCalculated_', 'worldClick.js', {
+        heroId: heroId,
         path: path
       });
     } else {
-      walkie.triggerEvent('unitPathImpossible_', 'battleClick.js');
+      walkie.triggerEvent('heroPathImpossible_', 'worldClick.js');
     }
   }
 };

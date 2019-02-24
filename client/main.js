@@ -50,17 +50,21 @@ g.main = function main() {
     g.world.worldToggle(walkie, viewport, freshEntities);
     g.world.drawBackground(walkie, viewport, freshEntities);
     g.world.drawFigures(walkie, auth, viewport, freshEntities);
+    g.world.worldClick(walkie, auth, viewport, freshEntities);
+    g.world.heroPath(walkie, auth, viewport, freshEntities);
+    g.world.heroPathAcceptedPost(walkie, auth);
+
     // g.world.worldRender(walkie, auth, viewport, freshEntities);
     g.world.informationButton($body);
     g.world.informationModal($body, walkie, freshEntities);
     g.world.recruitUnit($body, auth);
     g.world.chat($body, walkie);
-    g.world.figurePositionChange(walkie, freshEntities);
-    g.world.tweenFigureJourney(walkie, viewport, freshEntities);
+    // g.world.figurePositionChange(walkie, freshEntities);
+    // g.world.tweenFigureJourney(walkie, viewport, freshEntities);
     g.world.keyboard(walkie, auth, freshEntities);
-    g.world.worldClick(walkie, auth, viewport, freshEntities);
-    g.world.heroPath(walkie, auth, viewport, freshEntities);
-    g.world.heroJourney(walkie, auth);
+    // g.world.worldClick(walkie, auth, viewport, freshEntities);
+    // g.world.heroPath(walkie, auth, viewport, freshEntities);
+    // g.world.heroJourney(walkie, auth);
     g.world.endTurnButton($body, auth, walkie, freshEntities);
     g.world.endTurnCountdown(walkie, freshEntities);
 
@@ -71,7 +75,7 @@ g.main = function main() {
     g.battle.drawUnits(walkie, auth, viewport, freshEntities);
     g.battle.battleClick(walkie, auth, viewport, freshEntities);
     g.battle.unitPath(walkie, auth, viewport, freshEntities);
-    g.battle.unitAcceptedPathPost(walkie, auth);
+    g.battle.unitPathAcceptedPost(walkie, auth);
     g.battle.keyboardMelee(walkie, auth, freshEntities);
 
     g.summary.summaryToggle($body, walkie, auth, freshEntities);
