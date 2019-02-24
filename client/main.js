@@ -43,6 +43,9 @@ g.main = function main() {
     g.common.canvasWrapperToggle($body, walkie);
     g.common.keyboardLoadSavedGame(walkie, auth);
 
+    g.common.recentActivityDifferance(walkie, freshEntities);
+    g.common.tweenMovementPath(walkie, viewport, freshEntities);
+
     g.world.worldInterfaceToggle($body, walkie);
     g.world.informationButton($body);
     g.world.informationModal($body, walkie, freshEntities);
@@ -63,11 +66,9 @@ g.main = function main() {
     g.battle.battleToggle(walkie, viewport, freshEntities);
     g.battle.drawBackground(walkie, viewport, freshEntities);
     g.battle.drawUnits(walkie, auth, viewport, freshEntities);
-    g.battle.recentActivityDifferance(walkie, freshEntities);
     g.battle.battleClick(walkie, auth, viewport, freshEntities);
     g.battle.unitPath(walkie, auth, viewport, freshEntities);
     g.battle.unitAcceptedPathPost(walkie, auth);
-    g.battle.tweenPathUnit(walkie, viewport, freshEntities);
     g.battle.keyboardMelee(walkie, auth, freshEntities);
 
     g.summary.summaryToggle($body, walkie, auth, freshEntities);

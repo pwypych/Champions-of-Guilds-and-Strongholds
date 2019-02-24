@@ -2,30 +2,30 @@
 
 'use strict';
 
-g.battle.tweenPathUnit = (walkie, viewport) => {
+g.common.tweenMovementPath = (walkie, viewport) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
   const battleContainer = viewport.getChildByName('battleContainer');
 
-  let tweeningUnitIdByPathVerifiedByServer;
+  let tweeningEntityIdByPathVerifiedByServer;
 
   (function init() {
-    onUnitPathVerifiedByServer();
+    onEntityPathVerifiedByServer();
     onRecentActivityDifferance();
   })();
 
-  function onUnitPathVerifiedByServer() {
+  function onEntityPathVerifiedByServer() {
     walkie.onEvent(
-      'pathVerifiedByServer_',
-      'tweenPathUnit.js',
+      'movementPathVerifiedByServer_',
+      'tweenMovementPath.js',
       (data) => {
-        const unitId = data.unitId;
+        const entityId = data.entityId;
         const path = data.path;
 
-        tweeningUnitIdByPathVerifiedByServer = unitId;
+        tweeningEntityIdByPathVerifiedByServer = entityId;
 
-        findUnitContainer(unitId, path);
+        findEntityContainer(entityId, path);
       },
       true
     );
@@ -34,30 +34,30 @@ g.battle.tweenPathUnit = (walkie, viewport) => {
   function onRecentActivityDifferance() {
     walkie.onEvent(
       'recentActivityDifferanceFound_',
-      'tweenPathUnit.js',
+      'tweenMovementPath.js',
       (data) => {
-        if (data.unitId === tweeningUnitIdByPathVerifiedByServer) {
-          console.log('tweenPathUnit: Preventing double tweening!');
+        if (data.entityId === tweeningEntityIdByPathVerifiedByServer) {
+          console.log('tweenMovementPath: Preventing double tweening!');
           return;
         }
 
         if (data.entity.recentActivity.name === 'onMovement') {
-          const unitId = data.unitId;
+          const entityId = data.entityId;
           const path = data.entity.recentActivity.path;
-          findUnitContainer(unitId, path);
+          findEntityContainer(entityId, path);
         }
       },
       true
     );
   }
 
-  function findUnitContainer(unitId, path) {
-    const unitContainer = battleContainer.getChildByName(unitId);
+  function findEntityContainer(entityId, path) {
+    const entityContainer = battleContainer.getChildByName(entityId);
 
-    generateTweenTimeline(unitContainer, path);
+    generateTweenTimeline(entityContainer, path);
   }
 
-  function generateTweenTimeline(unitContainer, path) {
+  function generateTweenTimeline(entityContainer, path) {
     const timeline = new TimelineMax();
 
     path.forEach((position, index) => {
@@ -70,12 +70,12 @@ g.battle.tweenPathUnit = (walkie, viewport) => {
 
       console.log('generateTweenTimeline', xPixel, yPixel);
 
-      timeline.to(unitContainer, 0.15, { x: xPixel, y: yPixel });
+      timeline.to(entityContainer, 0.15, { x: xPixel, y: yPixel });
     });
 
     timeline.addCallback(() => {
       setTimeout(() => {
-        tweeningUnitIdByPathVerifiedByServer = undefined;
+        tweeningEntityIdByPathVerifiedByServer = undefined;
       }, 500); // wait with removing flag until new tick
     });
 

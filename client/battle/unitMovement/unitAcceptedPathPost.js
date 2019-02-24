@@ -31,8 +31,8 @@ g.battle.unitAcceptedPathPost = (walkie, auth) => {
   }
 
   function triggerUnitPathVerifiedByServer(unitId, responseUnitPath) {
-    walkie.triggerEvent('pathVerifiedByServer_', 'battleClick.js', {
-      unitId: unitId,
+    walkie.triggerEvent('movementPathVerifiedByServer_', 'battleClick.js', {
+      entityId: unitId,
       path: responseUnitPath
     });
   }
