@@ -7,7 +7,7 @@ module.exports = () => {
     produce: () => {
       return {
         figureName: 'castleRandom',
-        spriteOffset: { x: -32, y: 0 },
+        spriteOffset: { x: -32, y: -64 },
         collision: true
       };
     }

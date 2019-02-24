@@ -47,11 +47,14 @@ g.main = function main() {
     g.common.tweenMovementPath(walkie, viewport, freshEntities);
 
     g.world.worldInterfaceToggle($body, walkie);
+    g.world.worldToggle(walkie, viewport, freshEntities);
+    g.world.drawBackground(walkie, viewport, freshEntities);
+    g.world.drawFigures(walkie, auth, viewport, freshEntities);
+    // g.world.worldRender(walkie, auth, viewport, freshEntities);
     g.world.informationButton($body);
     g.world.informationModal($body, walkie, freshEntities);
     g.world.recruitUnit($body, auth);
     g.world.chat($body, walkie);
-    g.world.worldRender(walkie, auth, viewport, freshEntities);
     g.world.figurePositionChange(walkie, freshEntities);
     g.world.tweenFigureJourney(walkie, viewport, freshEntities);
     g.world.keyboard(walkie, auth, freshEntities);

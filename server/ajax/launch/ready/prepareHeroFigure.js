@@ -47,7 +47,7 @@ module.exports = (db) => {
 
         hero.spriteOffset = {};
         hero.spriteOffset.x = -9;
-        hero.spriteOffset.y = 0;
+        hero.spriteOffset.y = -18;
 
         hero.heroStats = {};
         hero.heroStats.movement = 15;

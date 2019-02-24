@@ -5,7 +5,11 @@
 module.exports = () => {
   return {
     produce: () => {
-      return { figureName: 'tree', collision: true };
+      return {
+        figureName: 'tree',
+        spriteOffset: { x: 0, y: -10 },
+        collision: true
+      };
     }
   };
 };
