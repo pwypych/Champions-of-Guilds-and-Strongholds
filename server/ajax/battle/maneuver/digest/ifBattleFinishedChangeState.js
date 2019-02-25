@@ -5,24 +5,20 @@
 const debug = require('debug')('cogs:ifBattleFinishedChangeState');
 const _ = require('lodash');
 
-module.exports = (findEntitiesByGameId, db) => {
-  return (gameId, unitId, callback) => {
+module.exports = (db) => {
+  return (req, res, next) => {
     (function init() {
       debug(
         '// Check if all units in battle belong to the same boss. If true changes game state to summaryState'
       );
 
-      runFindEntitiesByGameId();
+      const entities = res.locals.entities;
+      const gameId = entities._id;
+
+      checkEveryUnitInBattleHasSameBoss(entities, gameId);
     })();
 
-    function runFindEntitiesByGameId() {
-      findEntitiesByGameId(gameId, (error, entities) => {
-        debug('runFindEntitiesByGameId');
-        checkEveryUnitInBattleHasSameBoss(entities);
-      });
-    }
-
-    function checkEveryUnitInBattleHasSameBoss(entities) {
+    function checkEveryUnitInBattleHasSameBoss(entities, gameId) {
       const bossNameInBattleArray = [];
 
       _.forEach(entities, (entity) => {
@@ -35,7 +31,7 @@ module.exports = (findEntitiesByGameId, db) => {
 
       if (bossNameInBattleArray.length > 1) {
         debug('checkEveryUnitInBattleHasSameBoss: No!');
-        callback(false);
+        next();
         return;
       }
 
@@ -43,17 +39,17 @@ module.exports = (findEntitiesByGameId, db) => {
         'checkEveryUnitInBattleHasSameBoss: Yes, only units of one boss!:',
         bossNameInBattleArray
       );
-      waitBeforeUpdateState();
+      waitBeforeUpdateState(entities, gameId);
     }
 
-    function waitBeforeUpdateState() {
+    function waitBeforeUpdateState(gameId) {
       setTimeout(() => {
         debug('waitBeforeUpdateState: Wait 2000Ms!');
-        updateGameState();
+        updateGameState(gameId);
       }, 2000);
     }
 
-    function updateGameState() {
+    function updateGameState(gameId) {
       const query = { _id: gameId };
       const field = gameId + '.state';
       const $set = {};
@@ -66,9 +62,10 @@ module.exports = (findEntitiesByGameId, db) => {
         update,
         options,
         (error) => {
-          debug('updateGameState: error: ', error);
+          if (error) {
+            debug('updateGameState: error: ', error);
+          }
           debug('updateGameState: summaryState');
-          callback(true);
         }
       );
     }
