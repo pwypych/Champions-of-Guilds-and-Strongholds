@@ -245,7 +245,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     '/ajax/world/movement/pathPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
-    require('./library/middlewareAjaxStateAuth.js')('battleState'),
+    require('./library/middlewareAjaxStateAuth.js')('worldState'),
     require('./ajax/commonMovement/entityIdVerify.js')(),
     require('./ajax/commonMovement/flagIsProcessingInspect.js')(),
     require('./ajax/commonMovement/pathVerify.js')(),

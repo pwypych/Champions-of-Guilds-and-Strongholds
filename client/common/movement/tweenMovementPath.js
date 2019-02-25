@@ -7,6 +7,7 @@ g.common.tweenMovementPath = (walkie, viewport) => {
   const blockHeightPx = 32;
 
   const battleContainer = viewport.getChildByName('battleContainer');
+  const worldContainer = viewport.getChildByName('worldContainer');
 
   let tweeningEntityIdByPathVerifiedByServer;
 
@@ -52,7 +53,11 @@ g.common.tweenMovementPath = (walkie, viewport) => {
   }
 
   function findEntityContainer(entityId, path) {
-    const entityContainer = battleContainer.getChildByName(entityId);
+    let entityContainer = worldContainer.getChildByName(entityId);
+
+    if (!entityContainer) {
+      entityContainer = battleContainer.getChildByName(entityId);
+    }
 
     generateTweenTimeline(entityContainer, path);
   }
@@ -67,10 +72,15 @@ g.common.tweenMovementPath = (walkie, viewport) => {
       }
       const xPixel = position.x * blockWidthPx;
       const yPixel = position.y * blockHeightPx;
+      const zOrder = 100 + position.y;
 
-      console.log('generateTweenTimeline', xPixel, yPixel);
+      console.log('generateTweenTimeline', xPixel, yPixel, zOrder);
 
-      timeline.to(entityContainer, 0.15, { x: xPixel, y: yPixel });
+      timeline.to(entityContainer, 0.15, {
+        x: xPixel,
+        y: yPixel,
+        zOrder: zOrder
+      });
     });
 
     timeline.addCallback(() => {

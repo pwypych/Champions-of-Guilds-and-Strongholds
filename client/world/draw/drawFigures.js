@@ -42,7 +42,7 @@ g.world.drawFigures = (walkie, auth, viewport, freshEntities) => {
 
     if (!figureContainer) {
       // Should happen only once
-      // console.log('drawFigures: figure container', id);
+      // console.log('drawFigures: figure container', figureId);
       figureContainer = new PIXI.Container();
       figureContainer.name = figureId;
       const zIndex = 100 + entity.position.y;
