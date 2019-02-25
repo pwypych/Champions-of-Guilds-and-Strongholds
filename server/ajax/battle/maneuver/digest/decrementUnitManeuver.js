@@ -5,17 +5,19 @@
 const debug = require('debug')('cogs:decrementUnitManeuver');
 
 module.exports = (db) => {
-  return (gameId, unitId, callback) => {
+  return (req, res, next) => {
     (function init() {
       debug('// Decrements maneuver in unitStats by 1');
+      const gameId = res.locals.entities._id;
+      const entityId = res.locals.entityId;
 
-      updateUnitManeuver();
+      updateUnitManeuver(gameId, entityId);
     })();
 
-    function updateUnitManeuver() {
+    function updateUnitManeuver(gameId, entityId) {
       const query = { _id: gameId };
 
-      const field = unitId + '.unitStats.current.maneuver';
+      const field = entityId + '.unitStats.current.maneuver';
       const $inc = {};
       $inc[field] = -1;
 
@@ -27,9 +29,12 @@ module.exports = (db) => {
         update,
         options,
         (error) => {
-          debug('updateUnitManeuver: error: ', error);
+          if (error) {
+            debug('updateUnitManeuver: error: ', error);
+          }
+
           debug('updateUnitManeuver: Success!');
-          callback(null);
+          next();
         }
       );
     }
