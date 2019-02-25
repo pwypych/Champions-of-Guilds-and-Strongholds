@@ -45,7 +45,8 @@ g.world.drawBackground = (walkie, viewport, freshEntities) => {
       const width = viewport.worldWidth;
       const height = viewport.worldHeight;
       background.drawRect(x, y, width, height);
-      worldContainer.addChildZ(background, 1);
+      const zOrder = 1;
+      worldContainer.addChildZ(background, zOrder);
     }
   }
 };

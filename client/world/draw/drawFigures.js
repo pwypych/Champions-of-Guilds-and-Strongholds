@@ -45,8 +45,8 @@ g.world.drawFigures = (walkie, auth, viewport, freshEntities) => {
       // console.log('drawFigures: figure container', figureId);
       figureContainer = new PIXI.Container();
       figureContainer.name = figureId;
-      const zIndex = 100 + entity.position.y;
-      worldContainer.addChildZ(figureContainer, zIndex);
+      const zOrder = 100 + entity.position.y;
+      worldContainer.addChildZ(figureContainer, zOrder);
 
       figureContainer.x = entity.position.x * blockWidthPx;
       figureContainer.y = entity.position.y * blockHeightPx;

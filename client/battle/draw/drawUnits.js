@@ -44,8 +44,8 @@ g.battle.drawUnits = (walkie, auth, viewport, freshEntities) => {
       // console.log('drawUnits: unit container', id);
       unitContainer = new PIXI.Container();
       unitContainer.name = unitId;
-      const zIndex = 100 + entity.position.y;
-      battleContainer.addChildZ(unitContainer, zIndex);
+      const zOrder = 100 + entity.position.y;
+      battleContainer.addChildZ(unitContainer, zOrder);
 
       unitContainer.x = entity.position.x * blockWidthPx;
       unitContainer.y = entity.position.y * blockHeightPx;

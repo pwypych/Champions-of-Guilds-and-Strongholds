@@ -48,7 +48,8 @@ g.battle.drawBackground = (walkie, viewport, freshEntities) => {
       const width = viewport.worldWidth;
       const height = viewport.worldHeight;
       background.drawRect(x, y, width, height);
-      battleContainer.addChildZ(background, 1);
+      const zOrder = 1;
+      battleContainer.addChildZ(background, zOrder);
     }
 
     drawGrid();
@@ -80,7 +81,8 @@ g.battle.drawBackground = (walkie, viewport, freshEntities) => {
         const toX = index * blockWidthPx;
         const toY = viewport.worldHeight;
         line.moveTo(fromX, fromY).lineTo(toX, toY);
-        battleContainer.addChildZ(line, 2);
+        const zOrder = 2;
+        battleContainer.addChildZ(line, zOrder);
       }
     });
 
@@ -106,7 +108,8 @@ g.battle.drawBackground = (walkie, viewport, freshEntities) => {
         const toX = viewport.worldWidth;
         const toY = index * blockHeightPx;
         line.moveTo(fromX, fromY).lineTo(toX, toY);
-        battleContainer.addChildZ(line, 2);
+        const zOrder = 2;
+        battleContainer.addChildZ(line, zOrder);
       }
     });
   }
