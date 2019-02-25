@@ -242,6 +242,24 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db)
   );
 
+  app.post(
+    '/ajax/world/movement/pathPost',
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
+    require('./library/middlewareAjaxStateAuth.js')('worldState'),
+    require('./ajax/commonMovement/entityIdVerify.js')(),
+    require('./ajax/commonMovement/flagIsProcessingInspect.js')(),
+    require('./ajax/commonMovement/pathVerify.js')(),
+    // require('./ajax/battle/movement/pathUnitMovementPointsVerify.js')(),
+    // require('./ajax/battle/movement/pathCollisionInBattleVerify.js')(),
+    require('./ajax/commonMovement/flagIsProcessingCreate.js')(db),
+    require('./ajax/commonMovement/recentActivityOnMovement.js')(db),
+    require('./ajax/commonMovement/pathSendResponse.js')(),
+    require('./ajax/commonMovement/movementTimeout.js')(),
+    require('./ajax/commonMovement/positionUpdate.js')(db),
+    require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db)
+  );
+
   const unitStats = require('./ajax/world/endTurn/unitStats.js');
   app.post(
     '/ajax/world/endTurn/endTurnPost',
@@ -289,45 +307,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/battle/maneuver/digest/nominateNewActiveUnit.js')(db)
   ]);
 
-  const updateUnitPosition = require('./ajax/battle/unitJourney/updateUnitPosition.js')(
-    db
-  );
-  const updateRecentActivity = require('./ajax/battle/maneuver/updateRecentActivity.js')(
-    db
-  );
-  const decrementUnitMovement = require('./ajax/battle/unitJourney/decrementUnitMovement.js')(
-    db
-  );
-  const decideUnitStep = require('./ajax/battle/unitJourney/decideUnitStep.js')(
-    db,
-    findEntitiesByGameId,
-    decrementUnitMovement,
-    updateUnitPosition,
-    updateRecentActivity
-  );
-  const refillUnitMovement = require('./ajax/battle/unitJourney/refillUnitMovement.js')(
-    db,
-    findEntitiesByGameId
-  );
   app.post(
-    '/ajax/battle/unitJourney/maneuverJourneyPost',
-    require('./library/readEntities.js')(db),
-    require('./library/middlewareTokenAuth.js')(),
-    require('./library/middlewareAjaxStateAuth.js')('battleState'),
-    require('./ajax/battle/maneuver/maneuverSendResponse.js')(),
-    maneuverVerify,
-    require('./ajax/battle/unitJourney/maneuverJourney.js')(
-      db,
-      decideUnitStep,
-      refillUnitMovement,
-      updateRecentActivity
-    ),
-    maneuverDigest,
-    require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db)
-  );
-
-  app.post(
-    '/ajax/movement/pathPost',
+    '/ajax/battle/movement/pathPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),

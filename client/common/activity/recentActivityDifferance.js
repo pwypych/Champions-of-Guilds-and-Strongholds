@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.battle.recentActivityDifferance = (walkie, freshEntities) => {
+g.common.recentActivityDifferance = (walkie, freshEntities) => {
   let oldEntities;
 
   (function init() {
@@ -14,11 +14,6 @@ g.battle.recentActivityDifferance = (walkie, freshEntities) => {
       'entitiesGet_',
       'recentActivityDifferance.js',
       () => {
-        const gameEntity = freshEntities()[freshEntities()._id];
-        if (gameEntity.state !== 'battleState') {
-          return;
-        }
-
         ensureOldEntitiesDefined();
       },
       false
@@ -54,7 +49,7 @@ g.battle.recentActivityDifferance = (walkie, freshEntities) => {
     if (entity.recentActivity) {
       if (!_.isEqual(entity.recentActivity, oldEntities[id].recentActivity)) {
         const data = {
-          unitId: id,
+          entityId: id,
           entity: entity,
           entityOld: oldEntities[id]
         };

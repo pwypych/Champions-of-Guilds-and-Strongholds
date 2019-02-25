@@ -5,9 +5,9 @@
 // What does this module do?
 // It listens to path events, and renders path accordingly
 g.world.heroPath = (walkie, auth, viewport, freshEntities) => {
-  let heroId;
-  let pathArray;
+  let path;
   let gPathArray = [];
+  let heroId;
 
   const blockWidthPx = 32;
   const blockHeightPx = 32;
@@ -16,13 +16,12 @@ g.world.heroPath = (walkie, auth, viewport, freshEntities) => {
     onPathCalculated();
     onPathImpossible();
     onPathAccepted();
-    onWorldRenderDone();
   })();
 
   function onPathCalculated() {
     walkie.onEvent('heroPathCalculated_', 'heroPath.js', (data) => {
       toolRemoveOldPath();
-      pathArray = data.pathArray;
+      path = data.path;
       heroId = data.heroId;
       findHeroMovement();
     });
@@ -40,26 +39,14 @@ g.world.heroPath = (walkie, auth, viewport, freshEntities) => {
     });
   }
 
-  function onWorldRenderDone() {
-    walkie.onEvent(
-      'renderDone_',
-      'heroPath.js',
-      () => {
-        if (!_.isEmpty(pathArray)) {
-          findHeroMovement();
-        }
-      },
-      false
-    );
-  }
-
   function toolRemoveOldPath() {
     gPathArray.forEach((gPath) => {
       viewport.removeChild(gPath);
     });
 
-    pathArray = [];
+    path = [];
     gPathArray = [];
+    heroId = undefined;
   }
 
   function findHeroMovement() {
@@ -68,12 +55,10 @@ g.world.heroPath = (walkie, auth, viewport, freshEntities) => {
   }
 
   function forEachPosition(movement) {
-    pathArray.forEach((fromPosition, index) => {
-      if (pathArray.length === index + 1) {
+    path.forEach((fromPosition, index) => {
+      if (path.length === index + 1) {
         return;
       }
-
-      const toPosition = pathArray[index + 1];
 
       let isFirst = false;
       if (index === 0) {
@@ -87,12 +72,11 @@ g.world.heroPath = (walkie, auth, viewport, freshEntities) => {
 
       let isLast = false;
       // path always one longer than step count
-      if (index === pathArray.length - 2) {
+      if (index === path.length - 2) {
         isLast = true;
       }
 
-      // console.log('fromPosition', fromPosition);
-      // console.log('toPosition', toPosition);
+      const toPosition = path[index + 1];
 
       drawPath(fromPosition, toPosition, isFirst, isInRange, isLast);
     });

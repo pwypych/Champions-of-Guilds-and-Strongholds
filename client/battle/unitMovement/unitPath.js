@@ -19,7 +19,7 @@ g.battle.unitPath = (walkie, auth, viewport, freshEntities) => {
   })();
 
   function onPathCalculated() {
-    walkie.onEvent('pathCalculated_', 'unitPath.js', (data) => {
+    walkie.onEvent('unitPathCalculated_', 'unitPath.js', (data) => {
       toolRemoveOldPath();
       path = data.path;
       unitId = data.unitId;
@@ -28,13 +28,13 @@ g.battle.unitPath = (walkie, auth, viewport, freshEntities) => {
   }
 
   function onPathImpossible() {
-    walkie.onEvent('pathImpossible_', 'unitPath.js', () => {
+    walkie.onEvent('unitPathImpossible_', 'unitPath.js', () => {
       toolRemoveOldPath();
     });
   }
 
   function onPathAccepted() {
-    walkie.onEvent('pathAccepted_', 'unitPath.js', () => {
+    walkie.onEvent('unitPathAccepted_', 'unitPath.js', () => {
       toolRemoveOldPath();
     });
   }
