@@ -270,14 +270,14 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/world/recruit/recruitUnitPost.js')(db, unitStats)
   );
 
-  const verifyManeuver = compose([
+  const maneuverVerify = compose([
     require('./library/readEntities.js')(db),
     require('./ajax/battle/maneuver/verify/checkUnitOwner.js')(),
     require('./ajax/battle/maneuver/verify/checkUnitActive.js')(),
     require('./ajax/battle/maneuver/verify/checkUnitManeuverGreatherThenZero.js')()
   ]);
 
-  const digestFinishedManeuverMiddleware = compose([
+  const maneuverDigest = compose([
     require('./library/readEntities.js')(db),
     require('./ajax/battle/maneuver/digest/decrementUnitManeuver.js')(db),
     require('./ajax/battle/maneuver/digest/ifBattleFinishedChangeState.js')(db),
@@ -315,14 +315,14 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     require('./ajax/battle/maneuver/maneuverSendResponse.js')(),
-    verifyManeuver,
+    maneuverVerify,
     require('./ajax/battle/unitJourney/maneuverJourney.js')(
       db,
       decideUnitStep,
       refillUnitMovement,
       updateRecentActivity
     ),
-    digestFinishedManeuverMiddleware,
+    maneuverDigest,
     require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db)
   );
 
@@ -332,7 +332,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     require('./ajax/commonMovement/entityIdVerify.js')(),
-    verifyManeuver,
+    maneuverVerify,
     require('./ajax/commonMovement/flagIsProcessingInspect.js')(),
     require('./ajax/commonMovement/pathVerify.js')(),
     require('./ajax/battle/movement/pathUnitMovementPointsVerify.js')(),
@@ -342,7 +342,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/commonMovement/pathSendResponse.js')(),
     require('./ajax/commonMovement/movementTimeout.js')(),
     require('./ajax/commonMovement/positionUpdate.js')(db),
-    digestFinishedManeuverMiddleware,
+    maneuverDigest,
     require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db)
   );
 
@@ -352,9 +352,9 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     require('./ajax/battle/maneuver/maneuverSendResponse.js')(),
-    verifyManeuver,
+    maneuverVerify,
     require('./ajax/battle/melee/maneuverMelee.js')(db),
-    digestFinishedManeuverMiddleware,
+    maneuverDigest,
     require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db)
   );
 
@@ -364,9 +364,9 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     require('./ajax/battle/maneuver/maneuverSendResponse.js')(),
-    verifyManeuver,
+    maneuverVerify,
     require('./ajax/battle/shoot/maneuverShoot.js')(db),
-    digestFinishedManeuverMiddleware
+    maneuverDigest
   );
 
   // summaryState endpoints
