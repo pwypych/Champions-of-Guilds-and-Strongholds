@@ -36,7 +36,6 @@ module.exports = (db) => {
         (error) => {
           if (error) {
             debug('decrementHeroMovement: mongo error:', error);
-            res.send({ error: 1, message: 'database error' });
             return;
           }
 

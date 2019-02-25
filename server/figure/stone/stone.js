@@ -5,7 +5,7 @@
 module.exports = () => {
   return {
     produce: () => {
-      return { figureName: 'stone', collect: { resource: 'stone', amount: 7 } };
+      return { figureName: 'stone', resource: { name: 'stone', amount: 7 } };
     }
   };
 };
