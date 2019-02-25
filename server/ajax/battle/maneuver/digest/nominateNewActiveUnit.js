@@ -5,21 +5,25 @@
 const debug = require('debug')('cogs:nominateNewActiveUnit.js');
 const _ = require('lodash');
 
-module.exports = (db, findEntitiesByGameId) => {
-  return (gameId, unitId, callback) => {
+module.exports = (db) => {
+  return (req, res, next) => {
     (function init() {
       debug(
         '// It marks unit that just did maneuver as not active, finds unit with highest initiative that has some maneuvers left, and marks it with active component'
       );
 
-      updateSetUnitActiveToFalse();
+      const entities = res.locals.entities;
+      const entityId = res.locals.entityId;
+      const gameId = entities._id;
+
+      updateSetUnitActiveToFalse(entities, gameId, entityId);
     })();
 
-    function updateSetUnitActiveToFalse() {
+    function updateSetUnitActiveToFalse(entities, gameId, entityId) {
       const query = { _id: gameId };
       const $set = {};
 
-      const field = unitId + '.active';
+      const field = entityId + '.active';
       $set[field] = false;
 
       const update = { $set: $set };
@@ -32,19 +36,12 @@ module.exports = (db, findEntitiesByGameId) => {
         (error) => {
           debug('updateSetUnitActiveToFalse: error:', error);
           debug('updateSetUnitActiveToFalse: Success');
-          runFindEntitiesByGameId();
+          findUnitWithHighestInitiative(entities, gameId);
         }
       );
     }
 
-    function runFindEntitiesByGameId() {
-      findEntitiesByGameId(gameId, (error, entities) => {
-        debug('runFindEntitiesByGameId');
-        findUnitWithHighestInitiative(entities);
-      });
-    }
-
-    function findUnitWithHighestInitiative(entities) {
+    function findUnitWithHighestInitiative(entities, gameId) {
       let nominatedUnitId;
       let highestInitiative = 0;
 
@@ -61,10 +58,10 @@ module.exports = (db, findEntitiesByGameId) => {
         'findUnitWithHighestInitiative: highestInitiative:',
         highestInitiative
       );
-      updateSetUnitActiveToTrue(nominatedUnitId);
+      updateSetUnitActiveToTrue(gameId, nominatedUnitId);
     }
 
-    function updateSetUnitActiveToTrue(nominatedUnitId) {
+    function updateSetUnitActiveToTrue(gameId, nominatedUnitId) {
       const query = { _id: gameId };
       const $set = {};
       const field = nominatedUnitId + '.active';
@@ -77,9 +74,12 @@ module.exports = (db, findEntitiesByGameId) => {
         update,
         options,
         (error) => {
-          debug('updateSetUnitActiveToTrue: error:', error);
+          if (error) {
+            debug('updateSetUnitActiveToTrue: error:', error);
+          }
+
           debug('updateSetUnitActiveToTrue: nominatedUnitId:', nominatedUnitId);
-          callback(null);
+          next();
         }
       );
     }

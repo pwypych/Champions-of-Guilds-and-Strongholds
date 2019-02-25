@@ -4,23 +4,20 @@
 
 const debug = require('debug')('cogs:checkUnitOwner');
 
-module.exports = (findEntitiesByGameId) => {
-  return (gameId, unitId, playerId, callback) => {
+module.exports = () => {
+  return (req, res, next) => {
     (function init() {
       debug('// Check if player sending request is owner of unit');
 
-      runFindEntitiesByGameId();
+      const entities = res.locals.entities;
+      const entityId = res.locals.entityId;
+      const playerId = res.locals.playerId;
+
+      checkUnitOwner(entities, entityId, playerId);
     })();
 
-    function runFindEntitiesByGameId() {
-      findEntitiesByGameId(gameId, (error, entities) => {
-        debug('runFindEntitiesByGameId');
-        checkUnitOwner(entities);
-      });
-    }
-
-    function checkUnitOwner(entities) {
-      const unit = entities[unitId];
+    function checkUnitOwner(entities, entityId, playerId) {
+      const unit = entities[entityId];
       if (unit.owner !== playerId) {
         debug(
           'checkUnitOwner: owner and playerId are different, unit.owner:',
@@ -28,12 +25,11 @@ module.exports = (findEntitiesByGameId) => {
           'playerId',
           playerId
         );
-        callback(null, false);
         return;
       }
 
       debug('checkUnitOwner: Yes!');
-      callback(null, true);
+      next();
     }
   };
 };

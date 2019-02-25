@@ -4,31 +4,24 @@
 
 const debug = require('debug')('cogs:checkUnitActive');
 
-module.exports = (findEntitiesByGameId) => {
-  return (gameId, unitId, callback) => {
+module.exports = () => {
+  return (req, res, next) => {
     (function init() {
       debug('// Check is unit active (its "active" component is set to true)');
-
-      runFindEntitiesByGameId();
+      const entities = res.locals.entities;
+      const entityId = res.locals.entityId;
+      isUnitActive(entities, entityId);
     })();
 
-    function runFindEntitiesByGameId() {
-      findEntitiesByGameId(gameId, (error, entities) => {
-        debug('runFindEntitiesByGameId');
-        isUnitActive(entities);
-      });
-    }
-
-    function isUnitActive(entities) {
-      const unit = entities[unitId];
+    function isUnitActive(entities, entityId) {
+      const unit = entities[entityId];
       if (!unit.active) {
         debug('isUnitActive: unit.active:', unit.active);
-        callback(null, false);
         return;
       }
 
       debug('isUnitActive: Yes!');
-      callback(null, true);
+      next();
     }
   };
 };

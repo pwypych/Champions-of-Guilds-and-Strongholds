@@ -7,6 +7,7 @@ const debug = require('debug')('cogs:app');
 const express = require('express');
 const mongodb = require('mongodb').MongoClient;
 const bodyParser = require('body-parser');
+const compose = require('compose-middleware').compose;
 
 // Instances of libraries
 const app = express();
@@ -268,54 +269,25 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
     require('./ajax/world/recruit/recruitUnitPost.js')(db, unitStats)
   );
-  // battleState endpoints
-  const checkUnitActive = require('./ajax/battle/maneuver/verify/checkUnitActive.js')(
-    findEntitiesByGameId
-  );
-  const checkUnitOwner = require('./ajax/battle/maneuver/verify/checkUnitOwner.js')(
-    findEntitiesByGameId
-  );
-  const checkUnitManeuverGreatherThenZero = require('./ajax/battle/maneuver/verify/checkUnitManeuverGreatherThenZero.js')(
-    findEntitiesByGameId
-  );
-  const verifyManeuver = require('./ajax/battle/maneuver/verify/verifyManeuver.js')(
-    checkUnitOwner,
-    checkUnitActive,
-    checkUnitManeuverGreatherThenZero
-  );
 
-  const decrementUnitManeuver = require('./ajax/battle/maneuver/digest/decrementUnitManeuver.js')(
-    db
-  );
-  const checkIsUnitManeuverZero = require('./ajax/battle/maneuver/verify/checkIsUnitManeuverZero.js')(
-    db,
-    findEntitiesByGameId
-  );
-  const checkIsEveryUnitManeuverZero = require('./ajax/battle/maneuver/verify/checkIsEveryUnitManeuverZero.js')(
-    db,
-    findEntitiesByGameId
-  );
-  const refillEveryUnitManeuver = require('./ajax/battle/maneuver/digest/refillEveryUnitManeuver.js')(
-    db,
-    findEntitiesByGameId
-  );
-  const nominateNewActiveUnit = require('./ajax/battle/maneuver/digest/nominateNewActiveUnit.js')(
-    db,
-    findEntitiesByGameId
-  );
-  const ifBattleFinishedChangeState = require('./ajax/battle/maneuver/digest/ifBattleFinishedChangeState.js')(
-    findEntitiesByGameId,
-    db
-  );
-  const digestFinishedManeuverMiddleware = require('./ajax/battle/maneuver/digest/digestFinishedManeuver.js')(
-    db,
-    decrementUnitManeuver,
-    checkIsUnitManeuverZero,
-    checkIsEveryUnitManeuverZero,
-    refillEveryUnitManeuver,
-    nominateNewActiveUnit,
-    ifBattleFinishedChangeState
-  );
+  const verifyManeuver = compose([
+    require('./library/readEntities.js')(db),
+    require('./ajax/battle/maneuver/verify/checkUnitOwner.js')(),
+    require('./ajax/battle/maneuver/verify/checkUnitActive.js')(),
+    require('./ajax/battle/maneuver/verify/checkUnitManeuverGreatherThenZero.js')()
+  ]);
+
+  const digestFinishedManeuverMiddleware = compose([
+    require('./library/readEntities.js')(db),
+    require('./ajax/battle/maneuver/digest/decrementUnitManeuver.js')(db),
+    require('./ajax/battle/maneuver/digest/ifBattleFinishedChangeState.js')(db),
+    require('./library/readEntities.js')(db),
+    require('./ajax/battle/maneuver/verify/checkIsUnitManeuverZero.js')(),
+    require('./ajax/battle/maneuver/verify/ifEveryUnitManeuverZeroRefill.js')(
+      db
+    ),
+    require('./ajax/battle/maneuver/digest/nominateNewActiveUnit.js')(db)
+  ]);
 
   const updateUnitPosition = require('./ajax/battle/unitJourney/updateUnitPosition.js')(
     db
@@ -359,8 +331,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
-    verifyManeuver,
     require('./ajax/commonMovement/entityIdVerify.js')(),
+    verifyManeuver,
     require('./ajax/commonMovement/flagIsProcessingInspect.js')(),
     require('./ajax/commonMovement/pathVerify.js')(),
     require('./ajax/battle/movement/pathUnitMovementPointsVerify.js')(),
