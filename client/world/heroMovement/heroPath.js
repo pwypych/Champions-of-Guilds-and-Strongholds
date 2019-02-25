@@ -50,7 +50,7 @@ g.world.heroPath = (walkie, auth, viewport, freshEntities) => {
   }
 
   function findHeroMovement() {
-    const movement = freshEntities()[heroId].heroStats.movement;
+    const movement = freshEntities()[heroId].heroStats.current.movement;
     forEachPosition(movement);
   }
 

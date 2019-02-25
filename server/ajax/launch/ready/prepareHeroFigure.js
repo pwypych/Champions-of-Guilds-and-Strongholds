@@ -49,9 +49,10 @@ module.exports = (db) => {
         hero.spriteOffset.x = -9;
         hero.spriteOffset.y = -18;
 
-        hero.heroStats = {};
-        hero.heroStats.movement = 15;
-        hero.heroStats.movementMax = 15;
+        hero.heroStats = {
+          current: { movement: 15 },
+          base: { movement: 15 }
+        };
 
         hero.unitCounts = {
           spearbarer: 10,

@@ -61,10 +61,10 @@ g.world.informationModal = ($body, walkie, freshEntities) => {
       }
     });
 
-    const movement = hero.heroStats.movement;
-    const movementMax = hero.heroStats.movementMax;
+    const movementCurrent = hero.heroStats.current.movement;
+    const movementBase = hero.heroStats.base.movement;
 
-    const percent = Math.ceil((movement * 100) / movementMax);
+    const percent = Math.ceil((movementCurrent * 100) / movementBase);
 
     $movement.css('width', percent);
 

@@ -8,7 +8,7 @@ const _ = require('lodash');
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
-      debug('// Middleware that update hero.heroStats.movement to 0');
+      debug('// Middleware that update hero.heroStats.current.movement to 0');
 
       const entities = res.locals.entities;
       const playerId = res.locals.playerId;
@@ -33,7 +33,7 @@ module.exports = (db) => {
       const gameId = entities._id;
 
       const query = { _id: gameId };
-      const field = heroId + '.heroStats.movement';
+      const field = heroId + '.heroStats.current.movement';
       const $set = {};
       $set[field] = 0;
       const update = { $set: $set };

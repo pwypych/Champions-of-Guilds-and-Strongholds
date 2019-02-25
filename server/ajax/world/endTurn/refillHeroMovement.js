@@ -8,7 +8,9 @@ const _ = require('lodash');
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
-      debug('// Middleware, set hero.movement to hero.movementMax');
+      debug(
+        '// Middleware, set heroStats.current.movement to heroStats.base.movement'
+      );
 
       const entities = res.locals.entities;
 
@@ -21,8 +23,8 @@ module.exports = (db) => {
       const $set = {};
       _.forEach(entities, (entity, id) => {
         if (entity.heroStats) {
-          const field = id + '.heroStats.movement';
-          $set[field] = entity.heroStats.movementMax;
+          const field = id + '.heroStats.current.movement';
+          $set[field] = entity.heroStats.base.movement;
         }
       });
       const update = { $set: $set };
