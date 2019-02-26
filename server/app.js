@@ -132,7 +132,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   const templateToHtml = require('./library/templateToHtml.js')();
   const findEntitiesByGameId = require('./library/findEntitiesByGameId.js')(db);
 
-  // general endpoints
+  // general
   app.get('/', (req, res) => {
     res.redirect('/panel');
   });
@@ -181,7 +181,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/cheat/entities/cheatEntitiesGet.js')()
   );
 
-  // launchState endpoints
+  // launch
   app.post(
     '/ajax/launch/ready/playerReadyPost',
     require('./library/readEntities.js')(db),
@@ -204,43 +204,13 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/launch/name/playerNamePost.js')(db)
   );
 
-  // worldState endpoints
+  // world
   app.get(
     '/ajax/world/load/spriteFilenameArray',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./ajax/world/load/spriteFilenameArrayGet.js')(environment)
   );
-
-  // const updateHeroPosition = require('./ajax/world/heroJourney/updateHeroPosition.js')(
-  //   db
-  // );
-  // const collectResource = require('./ajax/world/heroJourney/collectResource.js')(
-  //   db
-  // );
-  // const prepareHeroForBattle = require('./ajax/world/heroJourney/prepareHeroForBattle.js')(
-  //   db
-  // );
-  // const decideHeroStep = require('./ajax/world/heroJourney/decideHeroStep.js')(
-  //   db,
-  //   findEntitiesByGameId,
-  //   updateHeroPosition,
-  //   collectResource,
-  //   prepareHeroForBattle
-  // );
-  // app.post(
-  //   '/ajax/world/heroJourney/heroJourneyPost',
-  //   require('./library/readEntities.js')(db),
-  //   require('./library/middlewareTokenAuth.js')(),
-  //   require('./library/middlewareAjaxStateAuth.js')('worldState'),
-  //   require('./ajax/world/heroJourney/heroJourneyPost.js')(),
-  //   require('./ajax/world/heroJourney/checkHeroOwner.js')(),
-  //   require('./ajax/world/heroJourney/processHeroJourney.js')(
-  //     db,
-  //     decideHeroStep
-  //   ),
-  //   require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db)
-  // );
 
   const saveGame = compose([
     require('./library/readEntities.js')(db),
@@ -296,6 +266,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/world/recruit/recruitUnitPost.js')(db, unitStats)
   );
 
+  // battle
   const maneuverVerify = compose([
     require('./library/readEntities.js')(db),
     require('./ajax/battle/maneuver/verify/checkUnitOwner.js')(),
@@ -358,7 +329,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     maneuverDigest
   );
 
-  // summaryState endpoints
+  // summary
   app.post(
     '/ajax/summary/summaryConfirmPost',
     require('./library/readEntities.js')(db),
