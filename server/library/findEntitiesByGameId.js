@@ -22,7 +22,10 @@ module.exports = (db) => {
         query,
         options,
         (error, entities) => {
-          debug('findGameById: error: ', error);
+          if (error) {
+            debug('findGameById: error: ', error);
+          }
+
           debug('findGameById', entities._id);
           callback(null, entities);
         }

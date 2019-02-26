@@ -224,6 +224,7 @@ module.exports = (db, unitStats) => {
           if (error) {
             debug('updateSetUnitEntities: error:', error);
           }
+
           debug('updateSetUnitEntities');
           updateSetBattleStatusToActive(entities, battleId);
         }
@@ -249,6 +250,7 @@ module.exports = (db, unitStats) => {
           if (error) {
             debug('updateSetBattleStatusToActive: error:', error);
           }
+
           debug('updateSetBattleStatusToActive');
         }
       );

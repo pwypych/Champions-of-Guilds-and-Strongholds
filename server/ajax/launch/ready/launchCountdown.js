@@ -35,7 +35,10 @@ module.exports = (db) => {
         update,
         options,
         (error) => {
-          debug('updateGameState: error: ', error);
+          if (error) {
+            debug('updateGameState: error: ', error);
+          }
+
           debug('updateGameState: worldState');
           next();
         }

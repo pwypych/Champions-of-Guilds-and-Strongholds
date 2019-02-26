@@ -70,7 +70,10 @@ module.exports = (db, decideHeroStep) => {
         update,
         options,
         (error) => {
-          debug('setProcessingJourneyUntilTimestamp: error: ', error);
+          if (error) {
+            debug('setProcessingJourneyUntilTimestamp: error: ', error);
+          }
+
           runDecideHeroStep(ctx);
         }
       );

@@ -42,6 +42,7 @@ module.exports = (db) => {
           if (error) {
             debug('updateUnsetEndTurnFlags: error:', error);
           }
+
           debug('updateUnsetEndTurnFlags');
         }
       );
