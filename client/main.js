@@ -55,18 +55,10 @@ g.main = function main() {
     g.world.heroPathAcceptedPost(walkie, auth);
     g.world.hasBeenCollectedHide(walkie, viewport);
     g.world.hasBeenCollectedIndicate(walkie, viewport);
-
-    // g.world.worldRender(walkie, auth, viewport, freshEntities);
     g.world.informationButton($body);
     g.world.informationModal($body, walkie, freshEntities);
     g.world.recruitUnit($body, auth);
     g.world.chat($body, walkie);
-    // g.world.figurePositionChange(walkie, freshEntities);
-    // g.world.tweenFigureJourney(walkie, viewport, freshEntities);
-    g.world.keyboard(walkie, auth, freshEntities);
-    // g.world.worldClick(walkie, auth, viewport, freshEntities);
-    // g.world.heroPath(walkie, auth, viewport, freshEntities);
-    // g.world.heroJourney(walkie, auth);
     g.world.endTurnButton($body, auth, walkie, freshEntities);
     g.world.endTurnCountdown(walkie, freshEntities);
 
