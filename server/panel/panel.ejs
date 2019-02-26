@@ -59,18 +59,6 @@
                 <input name="gameId" type="hidden" value="<%= game._id %>">
                 <button type="submit">Delete</button>
               </form>
-              <form class="inline-block" action="/panel/saveGamePost" method="post">
-                <input name="gameId" type="hidden" value="<%= game._id %>">
-                <input name="redirect" type="hidden" value="true">
-                <button type="submit">Save</button>
-              </form>
-              <% if (viewModel._.find(viewModel.saves, {_id: game._id})) { %>
-                <form class="inline-block" action="/panel/loadGamePost" method="post">
-                  <input name="gameId" type="hidden" value="<%= game._id %>">
-                  <input name="redirect" type="hidden" value="true">
-                  <button type="submit">Load</button>
-                </form>
-              <% } %>
             </div>
           </div>
 
