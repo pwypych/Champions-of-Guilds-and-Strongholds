@@ -1,0 +1,134 @@
+// @format
+
+'use strict';
+
+const debug = require('debug')('cogs:battleInitiate');
+const _ = require('lodash');
+const shortid = require('shortid');
+
+module.exports = (db) => {
+  return (req, res, next) => {
+    (function init() {
+      debug(
+        '// Checks if end of path is battle, zeros hero movement points and creates battle entity'
+      );
+      const entities = res.locals.entities;
+      const heroId = res.locals.entityId;
+      const path = res.locals.path;
+      const position = path[path.length - 1];
+
+      checkIsPositionBattle(entities, heroId, position);
+    })();
+
+    function checkIsPositionBattle(entities, heroId, position) {
+      debug('checkIsWishedPositionBattle');
+      const battleArray = [];
+
+      _.forEach(entities, (entity, id) => {
+        if (entity.unitCounts && !entity.heroStats) {
+          [
+            { x: 0, y: -1 },
+            { x: 1, y: 0 },
+            { x: 0, y: 1 },
+            { x: -1, y: 0 }
+          ].forEach((offset) => {
+            if (
+              entity.position.x === position.x + offset.x &&
+              entity.position.y === position.y + offset.y
+            ) {
+              debug(
+                'checkIsWishedPositionBattle: Battle On x:',
+                entity.position.x,
+                'y:',
+                entity.position.y
+              );
+
+              const battle = {};
+              battle.attackerId = heroId;
+              battle.defenderId = id;
+              battle.battleStatus = 'pending';
+              battle.battleHeight = 15;
+              battle.battleWidth = 20;
+              battleArray.push(battle);
+            }
+          });
+        }
+      });
+
+      if (_.isEmpty(battleArray)) {
+        debug('checkIsWishedPositionBattle: No battle found!');
+        next();
+        return;
+      }
+
+      debug(
+        'checkIsWishedPositionBattle: Yes ' +
+          battleArray.length +
+          ' battle found!'
+      );
+      zeroHeroMovement(entities, heroId, battleArray);
+    }
+
+    function zeroHeroMovement(entities, heroId, battleArray) {
+      const gameId = entities._id;
+      const query = { _id: gameId };
+      const movementField = heroId + '.heroStats.current.movement';
+      const $set = {};
+      $set[movementField] = 0;
+      const update = { $set: $set };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('zeroHeroMovement: mongo error:', error);
+            next();
+            return;
+          }
+
+          forEachBattle(entities, battleArray);
+        }
+      );
+    }
+
+    function forEachBattle(entities, battleArray) {
+      const done = _.after(battleArray.length, () => {
+        debug('forEachBattle: Done!');
+        next();
+      });
+
+      battleArray.forEach((battle) => {
+        insertBattleEntity(entities, battle, done);
+      });
+    }
+
+    function insertBattleEntity(entities, battle, done) {
+      const gameId = entities._id;
+      const query = { _id: gameId };
+      const battleField = 'battle__' + shortid.generate();
+      const $set = {};
+      $set[battleField] = battle;
+      const update = { $set: $set };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('zeroHeroMovement: mongo error:', error);
+            next();
+            return;
+          }
+
+          debug('insertBattleEntity: battle.id:', battleField);
+          done();
+        }
+      );
+    }
+  };
+};

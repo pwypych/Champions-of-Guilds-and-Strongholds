@@ -264,6 +264,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/commonMovement/movementTimeout.js')(),
     require('./ajax/commonMovement/positionUpdate.js')(db),
     require('./ajax/world/movement/collectResource.js')(db),
+    require('./ajax/world/movement/battleInitiate.js')(db),
     saveGame
   );
 
