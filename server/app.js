@@ -242,6 +242,11 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   //   require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db)
   // );
 
+  const saveGame = compose([
+    require('./library/readEntities.js')(db),
+    require('./ajax/saveLoad/saveGame.js')(db)
+  ]);
+
   app.post(
     '/ajax/world/movement/pathPost',
     require('./library/readEntities.js')(db),
@@ -259,7 +264,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/commonMovement/movementTimeout.js')(),
     require('./ajax/commonMovement/positionUpdate.js')(db),
     require('./ajax/world/movement/collectResource.js')(db),
-    require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db)
+    saveGame
   );
 
   const unitStats = require('./ajax/world/endTurn/unitStats.js');
@@ -326,7 +331,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/commonMovement/movementTimeout.js')(),
     require('./ajax/commonMovement/positionUpdate.js')(db),
     maneuverDigest,
-    require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db)
+    saveGame
   );
 
   app.post(
@@ -338,7 +343,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     maneuverVerify,
     require('./ajax/battle/melee/maneuverMelee.js')(db),
     maneuverDigest,
-    require('./ajax/saveLoad/saveGame.js')(findEntitiesByGameId, db)
+    saveGame
   );
 
   app.post(

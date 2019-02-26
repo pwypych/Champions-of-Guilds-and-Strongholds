@@ -5,22 +5,16 @@
 const debug = require('debug')('cogs:saveGame.js');
 const _ = require('lodash');
 
-module.exports = (findEntitiesByGameId, db) => {
+module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
       debug('// Add game to save collection, increment turnCount');
 
+      const entities = res.locals.entities;
       const gameId = res.locals.entities._id;
 
-      runFindEntitiesByGameId(gameId);
+      findSavedGame(gameId, entities);
     })();
-
-    function runFindEntitiesByGameId(gameId) {
-      findEntitiesByGameId(gameId, (error, entities) => {
-        debug('runFindEntitiesByGameId');
-        findSavedGame(gameId, entities);
-      });
-    }
 
     function findSavedGame(gameId, entities) {
       const query = { _id: gameId };
