@@ -84,5 +84,6 @@ g.main = function main() {
     g.summary.summaryConfirm($body, auth);
 
     g.cheat.playerChangeButtons($body, auth);
+    g.cheat.testFeatureLink($body, auth);
   }
 };
