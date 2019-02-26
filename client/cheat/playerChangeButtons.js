@@ -36,7 +36,7 @@ g.cheat.playerChangeButtons = ($body, auth) => {
   }
 
   function renderLinks(links) {
-    $cheat.html('');
+    // $cheat.html('');
 
     let i = 0;
     _.forEach(links, (link) => {

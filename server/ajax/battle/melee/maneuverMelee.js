@@ -257,7 +257,10 @@ module.exports = (db) => {
         update,
         options,
         (error) => {
-          debug('updateSetTargetAmount: error: ', error);
+          if (error) {
+            debug('updateSetTargetAmount: error: ', error);
+          }
+
           debug('updateSetTargetAmount: Target life and amount updated!');
           next();
         }

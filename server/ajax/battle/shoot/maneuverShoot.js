@@ -285,7 +285,10 @@ module.exports = (db) => {
         update,
         options,
         (error) => {
-          debug('updateUnsetUnitEntitiy: error: ', error);
+          if (error) {
+            debug('updateUnsetUnitEntitiy: error: ', error);
+          }
+
           debug('updateUnsetUnitEntitiy: Target was killed');
           next();
         }
