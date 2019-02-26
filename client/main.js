@@ -44,7 +44,7 @@ g.main = function main() {
     g.common.keyboardLoadSavedGame(walkie, auth);
 
     g.common.recentActivityDifferance(walkie, freshEntities);
-    g.common.tweenMovementPath(walkie, viewport, freshEntities);
+    g.common.tweenMovementPath(walkie, viewport);
 
     g.world.worldInterfaceToggle($body, walkie);
     g.world.worldToggle(walkie, viewport, freshEntities);
@@ -53,6 +53,8 @@ g.main = function main() {
     g.world.worldClick(walkie, auth, viewport, freshEntities);
     g.world.heroPath(walkie, auth, viewport, freshEntities);
     g.world.heroPathAcceptedPost(walkie, auth);
+    g.world.hasBeenCollectedHide(walkie, viewport);
+    g.world.hasBeenCollectedIndicate(walkie, viewport);
 
     // g.world.worldRender(walkie, auth, viewport, freshEntities);
     g.world.informationButton($body);
