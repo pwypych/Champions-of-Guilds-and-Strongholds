@@ -17,8 +17,8 @@ module.exports = (db) => {
       const entities = res.locals.entities;
       ctx.gameId = entities._id;
       ctx.playerId = res.locals.playerId;
-      ctx.unitId = res.locals.unitId;
-      ctx.unit = entities[ctx.unitId];
+      ctx.entityId = res.locals.entityId;
+      ctx.unit = entities[ctx.entityId];
 
       checkRequestBodyMeleeOnPosition(ctx);
     })();
@@ -147,7 +147,7 @@ module.exports = (db) => {
     function calculateDamageModificator(ctx) {
       let damageModificator = 100;
       const obsticlesAroundTarget = ctx.obsticlesAroundTarget;
-      const unitId = ctx.unitId;
+      const entityId = ctx.entityId;
       const unit = ctx.unit;
       const entities = res.locals.entities;
 
@@ -157,7 +157,7 @@ module.exports = (db) => {
           damageModificator += 20;
         }
 
-        if (unit.boss === obsticle.boss && obsticleId !== unitId) {
+        if (unit.boss === obsticle.boss && obsticleId !== entityId) {
           damageModificator += 40;
         }
       });
@@ -244,11 +244,20 @@ module.exports = (db) => {
       const targetUnitsRemaining = ctx.targetUnitsRemaining;
 
       const query = { _id: gameId };
+
+      const recentActivity = {};
+      recentActivity.name = 'gotHit';
+      recentActivity.timestamp = Date.now();
+
+      const fieldRecentActivity = targetId + '.recentActivity';
       const fieldLife = targetId + '.unitStats.current.life';
       const fieldAmount = targetId + '.amount';
+
       const $set = {};
+      $set[fieldRecentActivity] = recentActivity;
       $set[fieldLife] = lifeRemaining;
       $set[fieldAmount] = targetUnitsRemaining;
+
       const update = { $set: $set };
       const options = {};
 
@@ -270,12 +279,26 @@ module.exports = (db) => {
     function updateUnsetUnitEntitiy(ctx) {
       const gameId = ctx.gameId;
       const targetId = ctx.targetId;
+      debug('updateUnsetUnitEntitiy: targetId:', targetId);
+      const target = ctx.target;
+      const position = target.position;
+      const unitName = target.unitName;
 
       const query = { _id: gameId };
+
+      const recentActivity = {};
+      recentActivity.name = 'justDied';
+      recentActivity.timestamp = Date.now();
+
       const field = targetId;
-      const $unset = {};
-      $unset[field] = true;
-      const update = { $unset: $unset };
+      const $set = {};
+      $set[field] = {
+        unitName: unitName,
+        position: position,
+        recentActivity: recentActivity
+      };
+
+      const update = { $set: $set };
       const options = {};
 
       db.collection('gameCollection').updateOne(
@@ -284,6 +307,8 @@ module.exports = (db) => {
         options,
         (error) => {
           debug('updateUnsetUnitEntitiy: error: ', error);
+          debug('updateUnsetUnitEntitiy: query: ', query);
+          debug('updateUnsetUnitEntitiy: update: ', update);
           debug('updateUnsetUnitEntitiy: Target was killed');
           next();
         }

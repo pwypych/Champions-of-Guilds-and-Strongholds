@@ -271,6 +271,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   // battle
   const maneuverVerify = compose([
     require('./library/readEntities.js')(db),
+    require('./ajax/commonMovement/entityIdVerify.js')(),
     require('./ajax/battle/maneuver/verify/checkUnitOwner.js')(),
     require('./ajax/battle/maneuver/verify/checkUnitActive.js')(),
     require('./ajax/battle/maneuver/verify/checkUnitManeuverGreatherThenZero.js')()
@@ -285,6 +286,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/battle/maneuver/verify/ifEveryUnitManeuverZeroRefill.js')(
       db
     ),
+    require('./library/readEntities.js')(db),
     require('./ajax/battle/maneuver/digest/nominateNewActiveUnit.js')(db)
   ]);
 
@@ -293,7 +295,6 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
-    require('./ajax/commonMovement/entityIdVerify.js')(),
     maneuverVerify,
     require('./ajax/commonMovement/flagIsProcessingInspect.js')(),
     require('./ajax/commonMovement/pathVerify.js')(),
