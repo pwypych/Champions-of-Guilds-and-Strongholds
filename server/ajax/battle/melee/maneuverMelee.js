@@ -295,7 +295,8 @@ module.exports = (db) => {
       $set[field] = {
         unitName: unitName,
         position: position,
-        recentActivity: recentActivity
+        recentActivity: recentActivity,
+        dead: true
       };
 
       const update = { $set: $set };
