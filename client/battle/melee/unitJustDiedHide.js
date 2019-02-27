@@ -15,27 +15,53 @@ g.battle.unitJustDiedHide = (walkie, viewport) => {
       'unitJustDiedHide.js',
       (data) => {
         if (data.entity.recentActivity.name === 'justDied') {
-          const figureId = data.entityId;
-          const figure = data.entity;
-          console.log('unitJustDiedHide: figureId:', figureId);
-          findFigureContainer(figureId, figure);
+          const unitId = data.entityId;
+          const unit = data.entity;
+          console.log('unitJustDiedHide: unitId:', unitId);
+          findUnitContainer(unitId, unit);
         }
       },
       false
     );
   }
 
-  function findFigureContainer(figureId, figure) {
-    const figureContainer = battleContainer.getChildByName(figureId);
+  function findUnitContainer(unitId, unit) {
+    const unitContainer = battleContainer.getChildByName(unitId);
 
-    hideFigureSprite(figureId, figure, figureContainer);
+    hideFigureSprite(unitId, unit, unitContainer);
   }
 
-  function hideFigureSprite(figureId, figure, figureContainer) {
-    const sprite = figureContainer.getChildByName('sprite');
+  function hideFigureSprite(unitId, unit, unitContainer) {
+    const sprite = unitContainer.getChildByName('sprite');
     sprite.visible = false;
 
-    const amount = figureContainer.getChildByName('amount');
+    const amount = unitContainer.getChildByName('amount');
     amount.visible = false;
+
+    instantiateIndicator(unit, unitContainer);
+  }
+
+  function instantiateIndicator(unit, unitContainer) {
+    // Should happen only once
+    // console.log('drawActiveUnitMarker', unitId, 'indicator');
+    const textureName = 'bloodSplatt';
+    const texture = PIXI.loader.resources[textureName].texture;
+    const indicator = new PIXI.Sprite(texture);
+    indicator.name = 'bloodSplatt';
+    unitContainer.addChild(indicator);
+
+    console.log('!!!!!! indicator.width:', indicator.width);
+    console.log('!!!!!! indicator.height:', indicator.height);
+
+    indicator.x = 5;
+    indicator.y = 5;
+
+    destroyAfterTimeout(indicator);
+  }
+
+  function destroyAfterTimeout(indicator) {
+    setTimeout(() => {
+      indicator.destroy();
+    }, 1000);
   }
 };
