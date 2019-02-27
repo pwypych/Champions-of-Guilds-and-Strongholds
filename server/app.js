@@ -283,6 +283,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/battle/maneuver/verify/ifEveryUnitManeuverZeroRefill.js')(
       db
     ),
+    require('./library/readEntities.js')(db),
     require('./ajax/battle/maneuver/digest/nominateNewActiveUnit.js')(db)
   ]);
 
