@@ -227,6 +227,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/commonMovement/pathVerify.js')(),
     require('./ajax/world/movement/pathHeroMovementPointsSlice.js')(),
     require('./ajax/world/movement/pathIfBattleSlice.js')(),
+    require('./ajax/world/movement/pathIfResourceSlice.js')(),
     require('./ajax/world/movement/pathCollisionInWorldVerify.js')(),
     require('./ajax/world/movement/heroMovementPointsDecrement.js')(db),
     require('./ajax/commonMovement/flagIsProcessingCreate.js')(db),
