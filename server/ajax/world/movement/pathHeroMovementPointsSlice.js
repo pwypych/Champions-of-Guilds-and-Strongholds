@@ -2,12 +2,12 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:pathHeroMovementPointsVerify');
+const debug = require('debug')('cogs:pathHeroMovementPointsSlice');
 
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
-      debug('// Verifies hero movement and slices path when in battleState');
+      debug('// Verifies hero movement and slices path');
       const entities = res.locals.entities;
       const entityId = res.locals.entityId;
       const path = res.locals.path;

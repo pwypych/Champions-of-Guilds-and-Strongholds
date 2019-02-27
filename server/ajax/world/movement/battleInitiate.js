@@ -21,7 +21,7 @@ module.exports = (db) => {
     })();
 
     function checkIsPositionBattle(entities, heroId, position) {
-      debug('checkIsWishedPositionBattle');
+      debug('checkIsPositionBattle');
       const battleArray = [];
 
       _.forEach(entities, (entity, id) => {
@@ -36,12 +36,7 @@ module.exports = (db) => {
               entity.position.x === position.x + offset.x &&
               entity.position.y === position.y + offset.y
             ) {
-              debug(
-                'checkIsWishedPositionBattle: Battle On x:',
-                entity.position.x,
-                'y:',
-                entity.position.y
-              );
+              debug('checkIsPositionBattle: Battle On position:', position);
 
               const battle = {};
               battle.attackerId = heroId;
@@ -56,15 +51,13 @@ module.exports = (db) => {
       });
 
       if (_.isEmpty(battleArray)) {
-        debug('checkIsWishedPositionBattle: No battle found!');
+        debug('checkIsPositionBattle: No battle found!');
         next();
         return;
       }
 
       debug(
-        'checkIsWishedPositionBattle: Yes ' +
-          battleArray.length +
-          ' battle found!'
+        'checkIsPositionBattle: Yes ' + battleArray.length + ' battle found!'
       );
       zeroHeroMovement(entities, heroId, battleArray);
     }
