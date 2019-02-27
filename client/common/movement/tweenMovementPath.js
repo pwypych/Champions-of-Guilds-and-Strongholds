@@ -45,10 +45,11 @@ g.common.tweenMovementPath = (walkie, viewport) => {
         if (data.entity.recentActivity.name === 'onMovement') {
           const entityId = data.entityId;
           const path = data.entity.recentActivity.path;
+          console.log('tweenMovementPath: onMovement: entityId:', entityId);
           findEntityContainer(entityId, path);
         }
       },
-      true
+      false
     );
   }
 
