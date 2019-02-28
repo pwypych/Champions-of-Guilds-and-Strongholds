@@ -74,6 +74,7 @@ g.main = function main() {
     g.battle.unitJustDiedHide(walkie, viewport);
     g.battle.unitGotHit(walkie, viewport);
     g.battle.unitGotHitAnimation(walkie, viewport);
+    g.battle.unitJustDiedAnimation(walkie, viewport);
 
     g.summary.summaryToggle($body, walkie, auth, freshEntities);
     g.summary.summaryConfirm($body, auth);
