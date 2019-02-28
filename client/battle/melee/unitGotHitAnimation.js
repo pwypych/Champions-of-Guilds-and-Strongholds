@@ -3,6 +3,9 @@
 'use strict';
 
 g.battle.unitGotHitAnimation = (walkie, viewport) => {
+  const blockWidthPx = 32;
+  const blockHeightPx = 32;
+
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
@@ -39,9 +42,11 @@ g.battle.unitGotHitAnimation = (walkie, viewport) => {
     indicator.name = 'bloodSplatt';
     unitContainer.addChild(indicator);
 
-    indicator.x = 6;
-    indicator.y = 6;
+    const randomOffsetX = _.random(-10, 10);
+    const randomOffsetY = _.random(-10, 10);
 
+    indicator.x = (blockWidthPx - indicator.width) / 2 + randomOffsetX;
+    indicator.y = (blockHeightPx - indicator.height) / 2 + randomOffsetY;
     destroyAfterTimeout(indicator);
   }
 
