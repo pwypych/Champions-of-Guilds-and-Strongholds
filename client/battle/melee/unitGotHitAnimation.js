@@ -31,28 +31,28 @@ g.battle.unitGotHitAnimation = (walkie, viewport) => {
   function findUnitContainer(unitId, unit) {
     const unitContainer = battleContainer.getChildByName(unitId);
 
-    instantiateAnimation(unit, unitContainer);
+    instantiateSprite(unit, unitContainer);
   }
 
-  function instantiateAnimation(unit, unitContainer) {
+  function instantiateSprite(unit, unitContainer) {
     const textureName = 'bloodSplatt';
     const texture = PIXI.loader.resources[textureName].texture;
-    const indicator = new PIXI.Sprite(texture);
+    const sprite = new PIXI.Sprite(texture);
 
-    indicator.name = 'bloodSplatt';
-    unitContainer.addChild(indicator);
+    sprite.name = 'bloodSplatt';
+    unitContainer.addChild(sprite);
 
     const randomOffsetX = _.random(-10, 10);
     const randomOffsetY = _.random(-10, 10);
 
-    indicator.x = (blockWidthPx - indicator.width) / 2 + randomOffsetX;
-    indicator.y = (blockHeightPx - indicator.height) / 2 + randomOffsetY;
-    destroyAfterTimeout(indicator);
+    sprite.x = (blockWidthPx - sprite.width) / 2 + randomOffsetX;
+    sprite.y = (blockHeightPx - sprite.height) / 2 + randomOffsetY;
+    destroyAfterTimeout(sprite);
   }
 
-  function destroyAfterTimeout(indicator) {
+  function destroyAfterTimeout(sprite) {
     setTimeout(() => {
-      indicator.destroy();
+      sprite.destroy();
     }, 1000);
   }
 };

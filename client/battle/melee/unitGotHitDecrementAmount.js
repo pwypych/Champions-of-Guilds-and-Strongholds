@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.battle.unitGotHit = (walkie, viewport) => {
+g.battle.unitGotHitDecrementAmount = (walkie, viewport) => {
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
@@ -12,12 +12,12 @@ g.battle.unitGotHit = (walkie, viewport) => {
   function onRecentActivityDifferance() {
     walkie.onEvent(
       'recentActivityDifferanceFound_',
-      'unitGotHit.js',
+      'unitGotHitDecrementAmount.js',
       (data) => {
         if (data.entity.recentActivity.name === 'gotHit') {
           const unitId = data.entityId;
           const unit = data.entity;
-          console.log('unitGotHit: unitId:', unitId);
+          console.log('unitGotHitDecrementAmount: unitId:', unitId);
           findUnitContainer(unitId, unit);
         }
       },
