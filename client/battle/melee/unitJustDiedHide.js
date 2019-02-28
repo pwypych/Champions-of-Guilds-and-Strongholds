@@ -42,8 +42,6 @@ g.battle.unitJustDiedHide = (walkie, viewport) => {
   }
 
   function instantiateIndicator(unit, unitContainer) {
-    // Should happen only once
-    // console.log('drawActiveUnitMarker', unitId, 'indicator');
     const textureName = 'bloodSplatt';
     const texture = PIXI.loader.resources[textureName].texture;
     const indicator = new PIXI.Sprite(texture);

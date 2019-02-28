@@ -57,8 +57,8 @@ g.battle.drawUnits = (walkie, auth, viewport, freshEntities) => {
   function instantiateMarker(entity, unitId, unitContainer) {
     let marker = unitContainer.getChildByName('marker');
 
+    // Should happen only once
     if (!marker) {
-      // Should happen only once
       // console.log('drawActiveUnitMarker', unitId, 'marker');
       const textureName = 'activeUnitMarker';
       const texture = PIXI.loader.resources[textureName].texture;
@@ -83,8 +83,8 @@ g.battle.drawUnits = (walkie, auth, viewport, freshEntities) => {
   function instantiateSprite(entity, unitId, unitContainer) {
     let sprite = unitContainer.getChildByName('sprite');
 
+    // Should happen only once
     if (!sprite) {
-      // Should happen only once
       // console.log('drawUnits: unit sprite', unitId, 'sprite');
       const texture = PIXI.loader.resources[entity.unitName].texture;
       sprite = new PIXI.Sprite(texture);
@@ -104,8 +104,8 @@ g.battle.drawUnits = (walkie, auth, viewport, freshEntities) => {
   function instantiateAmount(entity, unitId, unitContainer) {
     let amount = unitContainer.getChildByName('amount');
 
+    // Should happen only once
     if (!amount) {
-      // Should happen only once
       // console.log('drawAmount', unitId, 'amount');
       const amountTextStyle = new PIXI.TextStyle({
         fontFamily: 'Courier New',
