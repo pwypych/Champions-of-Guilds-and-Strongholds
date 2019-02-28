@@ -72,7 +72,7 @@ g.world.informationModal = ($body, walkie, freshEntities) => {
   }
 
   function updateUnitAmounts(hero) {
-    _.forEach(hero.unitCounts, (count, unitName) => {
+    _.forEach(hero.unitAmounts, (count, unitName) => {
       const $amount = $recruitUnit.find(
         ".js-unit-amount[data-unit-name='" + unitName + "']"
       );
