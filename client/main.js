@@ -72,6 +72,8 @@ g.main = function main() {
     g.battle.unitPathAcceptedPost(walkie, auth);
     g.battle.keyboardMelee(walkie, auth, freshEntities);
     g.battle.unitJustDiedHide(walkie, viewport);
+    g.battle.unitGotHit(walkie, viewport);
+    g.battle.unitGotHitAnimation(walkie, viewport);
 
     g.summary.summaryToggle($body, walkie, auth, freshEntities);
     g.summary.summaryConfirm($body, auth);
