@@ -131,7 +131,7 @@ module.exports = (db, unitStats) => {
       const unitName = ctx.unitName;
 
       const query = { _id: gameId };
-      const field = heroId + '.unitCounts.' + unitName;
+      const field = heroId + '.unitAmounts.' + unitName;
       const $inc = {};
       $inc[field] = 1;
 

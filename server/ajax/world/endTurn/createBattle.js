@@ -42,8 +42,8 @@ module.exports = (db, unitStats) => {
       const attackerId = battle.attackerId;
       const defenderId = battle.defenderId;
 
-      const attackerUnitCounts = entities[attackerId].unitCounts;
-      const defenderUnitCounts = entities[defenderId].unitCounts;
+      const attackerUnitCounts = entities[attackerId].unitAmounts;
+      const defenderUnitCounts = entities[defenderId].unitAmounts;
 
       debug('generateUnits:attackerUnitCounts:', attackerUnitCounts);
       debug('generateUnits:defenderUnitCounts:', defenderUnitCounts);

@@ -54,7 +54,7 @@ module.exports = (db) => {
           base: { movement: 15 }
         };
 
-        hero.unitCounts = {
+        hero.unitAmounts = {
           spearbarer: 10,
           archer: 10,
           rogue: 10,
