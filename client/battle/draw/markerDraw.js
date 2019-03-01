@@ -2,16 +2,16 @@
 
 'use strict';
 
-g.battle.markerDraw = (walkie, auth, viewport, freshEntities) => {
-  let isDone = false;
-
+g.battle.markerDraw = (walkie, viewport, freshEntities) => {
   const battleContainer = viewport.getChildByName('battleContainer');
 
+  let isDone = false;
+
   (function init() {
-    onRecentActivityDifferanceDone();
+    onEntitiesGet();
   })();
 
-  function onRecentActivityDifferanceDone() {
+  function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
       'markerDraw.js',
@@ -33,10 +33,10 @@ g.battle.markerDraw = (walkie, auth, viewport, freshEntities) => {
       return;
     }
 
-    findPlayerCurrent();
+    findPlayerId();
   }
 
-  function findPlayerCurrent() {
+  function findPlayerId() {
     _.forEach(freshEntities(), (entity, id) => {
       if (entity.playerCurrent) {
         const playerId = id;
@@ -46,20 +46,20 @@ g.battle.markerDraw = (walkie, auth, viewport, freshEntities) => {
   }
 
   function findPlayerUnits(playerId) {
-    const playerUnits = [];
-    let playerBoss;
+    const unitIds = [];
     _.forEach(freshEntities(), (entity, id) => {
       if (entity.owner === playerId) {
-        playerUnits.push(id);
-        playerBoss = entity.boss;
+        unitIds.push(id);
       }
     });
 
-    drawMarkerGreen(playerUnits, playerBoss, playerId);
+    const unitId = unitIds[0];
+    const boss = freshEntities()[unitId].boss;
+    drawMarkerGreen(unitIds, boss, playerId);
   }
 
-  function drawMarkerGreen(playerUnits, playerBoss, playerId) {
-    _.forEach(playerUnits, (unitId) => {
+  function drawMarkerGreen(unitIds, boss, playerId) {
+    _.forEach(unitIds, (unitId) => {
       const unitContainer = battleContainer.getChildByName(unitId);
       let marker = unitContainer.getChildByName('marker');
 
@@ -78,22 +78,21 @@ g.battle.markerDraw = (walkie, auth, viewport, freshEntities) => {
       }
     });
 
-    findNPCUnits(playerBoss, playerId);
+    findNPCUnits(boss, playerId);
   }
 
-  function findNPCUnits(playerBoss, playerId) {
+  function findNPCUnits(boss, playerId) {
     const nPCUnits = [];
     _.forEach(freshEntities(), (entity, id) => {
-      if (entity.boss === playerBoss && entity.owner !== playerId) {
+      if (entity.boss === boss && entity.owner !== playerId) {
         nPCUnits.push(id);
       }
     });
 
-    console.log('nPCUnits.length:', nPCUnits.length);
-    drawMarkerGrey(nPCUnits, playerBoss);
+    drawMarkerGrey(nPCUnits, boss);
   }
 
-  function drawMarkerGrey(nPCUnits, playerBoss) {
+  function drawMarkerGrey(nPCUnits, boss) {
     _.forEach(nPCUnits, (unitId) => {
       const unitContainer = battleContainer.getChildByName(unitId);
       let marker = unitContainer.getChildByName('marker');
@@ -113,19 +112,18 @@ g.battle.markerDraw = (walkie, auth, viewport, freshEntities) => {
       }
     });
 
-    findEnemyUnits(playerBoss);
+    findEnemyUnits(boss);
   }
 
-  function findEnemyUnits(playerBoss) {
+  function findEnemyUnits(boss) {
     const enemyUnits = [];
     _.forEach(freshEntities(), (entity, id) => {
-      if (entity.unitStats && entity.boss !== playerBoss) {
+      if (entity.unitStats && entity.boss !== boss) {
         enemyUnits.push(id);
         console.log('id:', id);
       }
     });
 
-    console.log('enemyUnits.length:', enemyUnits.length);
     drawMarkerRed(enemyUnits);
   }
 
