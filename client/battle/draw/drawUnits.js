@@ -51,34 +51,34 @@ g.battle.drawUnits = (walkie, auth, viewport, freshEntities) => {
       unitContainer.y = entity.position.y * blockHeightPx;
     }
 
-    instantiateMarker(entity, unitId, unitContainer);
-  }
-
-  function instantiateMarker(entity, unitId, unitContainer) {
-    let marker = unitContainer.getChildByName('marker');
-
-    // Should happen only once
-    if (!marker) {
-      // console.log('drawActiveUnitMarker', unitId, 'marker');
-      const textureName = 'activeUnitMarker';
-      const texture = PIXI.loader.resources[textureName].texture;
-      marker = new PIXI.Sprite(texture);
-      marker.name = 'marker';
-      unitContainer.addChild(marker);
-
-      const offsetY = 2;
-      marker.x = 0;
-      marker.y = offsetY;
-    }
-
-    if (entity.active) {
-      marker.visible = true;
-    } else {
-      marker.visible = false;
-    }
-
     instantiateSprite(entity, unitId, unitContainer);
   }
+
+  // function instantiateMarker(entity, unitId, unitContainer) {
+  //   let marker = unitContainer.getChildByName('marker');
+  //
+  //   // Should happen only once
+  //   if (!marker) {
+  //     // console.log('drawActiveUnitMarker', unitId, 'marker');
+  //     const textureName = 'activeUnitMarker';
+  //     const texture = PIXI.loader.resources[textureName].texture;
+  //     marker = new PIXI.Sprite(texture);
+  //     marker.name = 'marker';
+  //     unitContainer.addChild(marker);
+  //
+  //     const offsetY = 2;
+  //     marker.x = 0;
+  //     marker.y = offsetY;
+  //   }
+  //
+  //   if (entity.active) {
+  //     marker.visible = true;
+  //   } else {
+  //     marker.visible = false;
+  //   }
+  //
+  //   instantiateSprite(entity, unitId, unitContainer);
+  // }
 
   function instantiateSprite(entity, unitId, unitContainer) {
     let sprite = unitContainer.getChildByName('sprite');
