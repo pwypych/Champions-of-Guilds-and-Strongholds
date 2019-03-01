@@ -60,7 +60,7 @@ g.battle.drawUnits = (walkie, auth, viewport, freshEntities) => {
   //   // Should happen only once
   //   if (!marker) {
   //     // console.log('drawActiveUnitMarker', unitId, 'marker');
-  //     const textureName = 'activeUnitMarker';
+  //     const textureName = 'markerGreen';
   //     const texture = PIXI.loader.resources[textureName].texture;
   //     marker = new PIXI.Sprite(texture);
   //     marker.name = 'marker';
