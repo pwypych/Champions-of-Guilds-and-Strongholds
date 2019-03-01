@@ -40,13 +40,14 @@ g.battle.markerDraw = (walkie, viewport, freshEntities) => {
     _.forEach(freshEntities(), (entity, id) => {
       if (entity.playerCurrent) {
         const playerId = id;
-        findPlayerUnits(playerId);
+        findPlayerUnitIds(playerId);
       }
     });
   }
 
-  function findPlayerUnits(playerId) {
+  function findPlayerUnitIds(playerId) {
     const unitIds = [];
+
     _.forEach(freshEntities(), (entity, id) => {
       if (entity.owner === playerId) {
         unitIds.push(id);
@@ -78,22 +79,22 @@ g.battle.markerDraw = (walkie, viewport, freshEntities) => {
       }
     });
 
-    findNPCUnits(boss, playerId);
+    findNPCUnitIds(boss, playerId);
   }
 
-  function findNPCUnits(boss, playerId) {
-    const nPCUnits = [];
+  function findNPCUnitIds(boss, playerId) {
+    const nPCUnitIds = [];
     _.forEach(freshEntities(), (entity, id) => {
       if (entity.boss === boss && entity.owner !== playerId) {
-        nPCUnits.push(id);
+        nPCUnitIds.push(id);
       }
     });
 
-    drawMarkerGrey(nPCUnits, boss);
+    drawMarkerGrey(nPCUnitIds, boss);
   }
 
-  function drawMarkerGrey(nPCUnits, boss) {
-    _.forEach(nPCUnits, (unitId) => {
+  function drawMarkerGrey(nPCUnitIds, boss) {
+    _.forEach(nPCUnitIds, (unitId) => {
       const unitContainer = battleContainer.getChildByName(unitId);
       let marker = unitContainer.getChildByName('marker');
 
@@ -112,23 +113,22 @@ g.battle.markerDraw = (walkie, viewport, freshEntities) => {
       }
     });
 
-    findEnemyUnits(boss);
+    findEnemyUnitIds(boss);
   }
 
-  function findEnemyUnits(boss) {
-    const enemyUnits = [];
+  function findEnemyUnitIds(boss) {
+    const enemyUnitIds = [];
     _.forEach(freshEntities(), (entity, id) => {
       if (entity.unitStats && entity.boss !== boss) {
-        enemyUnits.push(id);
-        console.log('id:', id);
+        enemyUnitIds.push(id);
       }
     });
 
-    drawMarkerRed(enemyUnits);
+    drawMarkerRed(enemyUnitIds);
   }
 
-  function drawMarkerRed(enemyUnits) {
-    _.forEach(enemyUnits, (unitId) => {
+  function drawMarkerRed(enemyUnitIds) {
+    _.forEach(enemyUnitIds, (unitId) => {
       const unitContainer = battleContainer.getChildByName(unitId);
       let marker = unitContainer.getChildByName('marker');
 
