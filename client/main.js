@@ -75,6 +75,7 @@ g.main = function main() {
     g.battle.unitJustDiedAnimation(walkie, viewport);
     g.battle.unitGotHitDecrementAmount(walkie, viewport);
     g.battle.unitGotHitAnimation(walkie, viewport);
+    g.battle.markerDraw(walkie, auth, viewport, freshEntities);
 
     g.summary.summaryToggle($body, walkie, auth, freshEntities);
     g.summary.summaryConfirm($body, auth);
