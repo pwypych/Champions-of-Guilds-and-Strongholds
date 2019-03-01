@@ -3,35 +3,28 @@
 'use strict';
 
 // What does this module do?
-// It listens to mouse click events, generates path through library and sends path events
-g.battle.battleClick = (walkie, auth, viewport, freshEntities) => {
+// It listens to click_ events, generates path through library and sends path events
+g.battle.emptyBlockClick = (walkie, auth, viewport, freshEntities) => {
   let lastPathPositionX;
   let lastPathPositionY;
 
   (function init() {
-    addListener();
+    onClick();
   })();
 
-  function addListener() {
-    viewport.on('clicked', (event) => {
-      const gameEntity = freshEntities()[freshEntities()._id];
-      if (gameEntity.state !== 'battleState') {
-        return;
-      }
-
-      calculateClickedTile(event);
-    });
+  function onClick() {
+    walkie.onEvent(
+      'click_',
+      'emptyBlockClick.js',
+      (data) => {
+        const clickPosition = data.position;
+        findPlayerId(clickPosition);
+      },
+      false
+    );
   }
 
-  function calculateClickedTile(event) {
-    const click = {};
-    click.x = Math.floor(event.world.x / 32);
-    click.y = Math.floor(event.world.y / 32);
-
-    findPlayerId(click);
-  }
-
-  function findPlayerId(click) {
+  function findPlayerId(clickPosition) {
     const entities = freshEntities();
 
     let playerId;
@@ -41,10 +34,10 @@ g.battle.battleClick = (walkie, auth, viewport, freshEntities) => {
       }
     });
 
-    findUnitPosition(click, playerId);
+    findUnitPosition(clickPosition, playerId);
   }
 
-  function findUnitPosition(click, playerId) {
+  function findUnitPosition(clickPosition, playerId) {
     const entities = freshEntities();
 
     let unit;
@@ -70,10 +63,10 @@ g.battle.battleClick = (walkie, auth, viewport, freshEntities) => {
     unitPositon.x = parseInt(unit.position.x, 10);
     unitPositon.y = parseInt(unit.position.y, 10);
 
-    generatePathArray(click, unitPositon, unitId);
+    generatePathArray(clickPosition, unitPositon, unitId);
   }
 
-  function generatePathArray(click, unitPositon, unitId) {
+  function generatePathArray(clickPosition, unitPositon, unitId) {
     let battleEntity;
     _.forEach(freshEntities(), (entity) => {
       if (entity.battleStatus === 'active') {
@@ -101,8 +94,8 @@ g.battle.battleClick = (walkie, auth, viewport, freshEntities) => {
     const pathArrayOfArrays = finder.findPath(
       unitPositon.x,
       unitPositon.y,
-      click.x,
-      click.y,
+      clickPosition.x,
+      clickPosition.y,
       grid
     );
 
@@ -110,22 +103,21 @@ g.battle.battleClick = (walkie, auth, viewport, freshEntities) => {
       return { x: pathArray[0], y: pathArray[1] };
     });
 
-    triggerEvents(path, click, unitId);
+    triggerEvents(path, clickPosition, unitId);
   }
 
-  function triggerEvents(path, click, unitId) {
-    console.log('lastPathPositionX', lastPathPositionX);
-    console.log('lastPathPositionY', lastPathPositionY);
-    console.log('click', click);
-
+  function triggerEvents(path, clickPosition, unitId) {
     if (
       typeof lastPathPositionX !== 'undefined' &&
       typeof lastPathPositionY !== 'undefined'
     ) {
-      if (lastPathPositionX === click.x && lastPathPositionY === click.y) {
+      if (
+        lastPathPositionX === clickPosition.x &&
+        lastPathPositionY === clickPosition.y
+      ) {
         lastPathPositionX = undefined;
         lastPathPositionY = undefined;
-        walkie.triggerEvent('unitPathAccepted_', 'battleClick.js', {
+        walkie.triggerEvent('unitPathAccepted_', 'emptyBlockClick.js', {
           unitId: unitId,
           path: path
         });
@@ -142,12 +134,12 @@ g.battle.battleClick = (walkie, auth, viewport, freshEntities) => {
     }
 
     if (!_.isEmpty(path) && path.length > 1) {
-      walkie.triggerEvent('unitPathCalculated_', 'battleClick.js', {
+      walkie.triggerEvent('unitPathCalculated_', 'emptyBlockClick.js', {
         unitId: unitId,
         path: path
       });
     } else {
-      walkie.triggerEvent('unitPathImpossible_', 'battleClick.js');
+      walkie.triggerEvent('unitPathImpossible_', 'emptyBlockClick.js');
     }
   }
 };
