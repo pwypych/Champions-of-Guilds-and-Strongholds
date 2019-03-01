@@ -70,6 +70,7 @@ g.main = function main() {
     g.battle.battleClick(walkie, auth, viewport, freshEntities);
     g.battle.unitPath(walkie, auth, viewport, freshEntities);
     g.battle.unitPathAcceptedPost(walkie, auth);
+    g.battle.iconMelee(walkie, viewport, freshEntities);
     g.battle.keyboardMelee(walkie, auth, freshEntities);
     g.battle.unitJustDiedHide(walkie, viewport);
 

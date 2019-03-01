@@ -23,13 +23,13 @@ g.battle.drawUnits = (walkie, auth, viewport, freshEntities) => {
           return;
         }
 
-        forEachFigure();
+        forEachUnit();
       },
       false
     );
   }
 
-  function forEachFigure() {
+  function forEachUnit() {
     _.forEach(freshEntities(), (entity, id) => {
       if (entity.unitName && entity.position && !entity.dead) {
         instantiateUnitContainer(entity, id);
