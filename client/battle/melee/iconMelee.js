@@ -74,19 +74,19 @@ g.battle.iconMelee = (walkie, viewport, freshEntities) => {
       icon.visible = false;
     });
 
-    findPlayerCurrent();
+    findPlayerId();
   }
 
-  function findPlayerCurrent() {
+  function findPlayerId() {
     _.forEach(freshEntities(), (entity, id) => {
       if (entity.playerCurrent) {
         const playerId = id;
-        forEachActiveUnit(playerId);
+        findActiveUnit(playerId);
       }
     });
   }
 
-  function forEachActiveUnit(playerId) {
+  function findActiveUnit(playerId) {
     _.forEach(freshEntities(), (entity) => {
       if (entity.unitStats && entity.active && entity.owner === playerId) {
         const unit = entity;

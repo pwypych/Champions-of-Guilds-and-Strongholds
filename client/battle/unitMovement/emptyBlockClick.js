@@ -25,16 +25,12 @@ g.battle.emptyBlockClick = (walkie, auth, viewport, freshEntities) => {
   }
 
   function findPlayerId(clickPosition) {
-    const entities = freshEntities();
-
-    let playerId;
-    _.forEach(entities, (entity, id) => {
+    _.forEach(freshEntities(), (entity, id) => {
       if (entity.playerCurrent) {
-        playerId = id;
+        const playerId = id;
+        findUnitPosition(clickPosition, playerId);
       }
     });
-
-    findUnitPosition(clickPosition, playerId);
   }
 
   function findUnitPosition(clickPosition, playerId) {
