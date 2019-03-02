@@ -37,5 +37,8 @@ g.battle.unitJustDiedHide = (walkie, viewport) => {
 
     const amount = unitContainer.getChildByName('amount');
     amount.visible = false;
+
+    const marker = unitContainer.getChildByName('marker');
+    marker.visible = false;
   }
 };

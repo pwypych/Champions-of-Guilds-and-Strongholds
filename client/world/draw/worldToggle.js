@@ -34,7 +34,6 @@ g.world.worldToggle = (walkie, viewport, freshEntities) => {
     battleContainer.visible = false;
     worldContainer.visible = true;
 
-    console.log('worldToggle.js: battleShow()');
     setViewportDimentions(gameEntity);
   }
 

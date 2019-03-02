@@ -34,8 +34,6 @@ g.battle.battleToggle = (walkie, viewport, freshEntities) => {
     battleContainer.visible = true;
     worldContainer.visible = false;
 
-    console.log('battleToggle.js: battleShow()');
-
     findBattleEntity();
   }
 
