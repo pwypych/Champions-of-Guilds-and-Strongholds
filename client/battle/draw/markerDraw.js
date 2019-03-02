@@ -49,7 +49,7 @@ g.battle.markerDraw = (walkie, viewport, freshEntities) => {
     const unitIds = [];
 
     _.forEach(freshEntities(), (entity, id) => {
-      if (entity.owner === playerId) {
+      if (entity.owner === playerId && !entity.dead) {
         unitIds.push(id);
       }
     });

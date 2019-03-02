@@ -76,7 +76,7 @@ module.exports = (db) => {
 
       let targetId;
       _.forEach(entities, (entity, id) => {
-        if (entity.unitName) {
+        if (entity.unitName && !entity.dead) {
           if (
             entity.position.x === meleeOnPosition.x &&
             entity.position.y === meleeOnPosition.y
@@ -106,6 +106,8 @@ module.exports = (db) => {
       const target = ctx.target;
       if (target.boss === unit.boss) {
         debug('checkIsTragetFriendly: Cannot attack friendly unit');
+        debug('checkIsTragetFriendly: Attacker:', unit);
+        debug('checkIsTragetFriendly: Defender:', target);
         return;
       }
 
@@ -119,7 +121,7 @@ module.exports = (db) => {
       const obsticlesAroundTarget = [];
 
       _.forEach(entities, (entity, id) => {
-        if (entity.unitName) {
+        if (entity.unitName && !entity.dead) {
           [
             { x: 0, y: -1 },
             { x: 1, y: 0 },
