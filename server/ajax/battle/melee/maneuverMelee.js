@@ -283,6 +283,8 @@ module.exports = (db) => {
       const target = ctx.target;
       const position = target.position;
       const unitName = target.unitName;
+      const owner = target.owner;
+      const boss = target.boss;
 
       const query = { _id: gameId };
 
@@ -295,6 +297,8 @@ module.exports = (db) => {
       $set[field] = {
         unitName: unitName,
         position: position,
+        owner: owner,
+        boss: boss,
         recentActivity: recentActivity,
         dead: true
       };
@@ -307,9 +311,10 @@ module.exports = (db) => {
         update,
         options,
         (error) => {
-          debug('updateUnsetUnitEntitiy: error: ', error);
-          debug('updateUnsetUnitEntitiy: query: ', query);
-          debug('updateUnsetUnitEntitiy: update: ', update);
+          if (error) {
+            debug('updateUnsetUnitEntitiy: error: ', error);
+          }
+
           debug('updateUnsetUnitEntitiy: Target was killed');
           next();
         }

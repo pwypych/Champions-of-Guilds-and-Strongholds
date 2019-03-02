@@ -198,7 +198,7 @@ module.exports = (db) => {
 
       const query = { _id: gameId };
       const $set = {};
-      const field = winnerFigureId + '.unitCounts';
+      const field = winnerFigureId + '.unitAmounts';
 
       $set[field] = unitsRemaining;
       const update = { $set: $set };
@@ -214,7 +214,7 @@ module.exports = (db) => {
           }
 
           debug(
-            'updateWinnerHeroUnitCounts: Update winner hero unitCounts!',
+            'updateWinnerHeroUnitCounts: Update winner hero unitAmounts!',
             ctx.unitsRemaining
           );
           next();

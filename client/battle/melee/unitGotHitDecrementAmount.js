@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.battle.unitJustDiedHide = (walkie, viewport) => {
+g.battle.unitGotHitDecrementAmount = (walkie, viewport) => {
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
@@ -12,12 +12,12 @@ g.battle.unitJustDiedHide = (walkie, viewport) => {
   function onRecentActivityDifferance() {
     walkie.onEvent(
       'recentActivityDifferanceFound_',
-      'unitJustDiedHide.js',
+      'unitGotHitDecrementAmount.js',
       (data) => {
-        if (data.entity.recentActivity.name === 'justDied') {
+        if (data.entity.recentActivity.name === 'gotHit') {
           const unitId = data.entityId;
           const unit = data.entity;
-          console.log('unitJustDiedHide: unitId:', unitId);
+          console.log('unitGotHitDecrementAmount: unitId:', unitId);
           findUnitContainer(unitId, unit);
         }
       },
@@ -28,14 +28,11 @@ g.battle.unitJustDiedHide = (walkie, viewport) => {
   function findUnitContainer(unitId, unit) {
     const unitContainer = battleContainer.getChildByName(unitId);
 
-    hideFigureSprite(unitId, unit, unitContainer);
+    changeUnitAmount(unitId, unit, unitContainer);
   }
 
-  function hideFigureSprite(unitId, unit, unitContainer) {
-    const sprite = unitContainer.getChildByName('sprite');
-    sprite.visible = false;
-
-    const amount = unitContainer.getChildByName('amount');
-    amount.visible = false;
+  function changeUnitAmount(unitId, unit, unitContainer) {
+    const pixiText = unitContainer.getChildByName('amount');
+    pixiText.text = unit.amount;
   }
 };
