@@ -42,7 +42,7 @@ g.battle.drawUnits = (walkie, auth, viewport, freshEntities) => {
 
     if (!unitContainer) {
       // console.log('drawUnits: unit container', id);
-      unitContainer = new PIXI.Container();
+      unitContainer = new PIXI.ContainerZ();
       unitContainer.name = unitId;
       const zOrder = 100 + entity.position.y;
       battleContainer.addChildZ(unitContainer, zOrder);
@@ -95,7 +95,9 @@ g.battle.drawUnits = (walkie, auth, viewport, freshEntities) => {
         sprite.y += entity.spriteOffset.y;
       }
 
-      unitContainer.addChild(sprite);
+      const zOrder = 5;
+      unitContainer.addChildZ(sprite, zOrder);
+      unitContainer.sortChildren();
     }
 
     instantiateAmount(entity, unitId, unitContainer);
@@ -117,7 +119,9 @@ g.battle.drawUnits = (walkie, auth, viewport, freshEntities) => {
 
       amount = new PIXI.Text(entity.amount, amountTextStyle);
       amount.name = 'amount';
-      unitContainer.addChild(amount);
+      const zOrder = 10;
+      unitContainer.addChildZ(amount, zOrder);
+      unitContainer.sortChildren();
 
       const paddingRight = 2;
       const paddingTop = 3;

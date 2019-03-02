@@ -71,7 +71,9 @@ g.battle.markerDraw = (walkie, viewport, freshEntities) => {
         const texture = PIXI.loader.resources[textureName].texture;
         marker = new PIXI.Sprite(texture);
         marker.name = 'marker';
-        unitContainer.addChild(marker);
+        const zOrder = 1;
+        unitContainer.addChildZ(marker, zOrder);
+        unitContainer.sortChildren();
 
         const offsetY = 2;
         marker.x = 0;
@@ -105,7 +107,9 @@ g.battle.markerDraw = (walkie, viewport, freshEntities) => {
         const texture = PIXI.loader.resources[textureName].texture;
         marker = new PIXI.Sprite(texture);
         marker.name = 'marker';
-        unitContainer.addChild(marker);
+        const zOrder = 1;
+        unitContainer.addChildZ(marker, zOrder);
+        unitContainer.sortChildren();
 
         const offsetY = 2;
         marker.x = 0;
@@ -139,7 +143,9 @@ g.battle.markerDraw = (walkie, viewport, freshEntities) => {
         const texture = PIXI.loader.resources[textureName].texture;
         marker = new PIXI.Sprite(texture);
         marker.name = 'marker';
-        unitContainer.addChild(marker);
+        const zOrder = 1;
+        unitContainer.addChildZ(marker, zOrder);
+        unitContainer.sortChildren();
 
         const offsetY = 2;
         marker.x = 0;
