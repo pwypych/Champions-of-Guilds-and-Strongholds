@@ -24,15 +24,17 @@ g.battle.battleToggle = (walkie, viewport, freshEntities) => {
           return;
         }
 
-        battleToggle();
+        battleShow();
       },
       false
     );
   }
 
-  function battleToggle() {
+  function battleShow() {
     battleContainer.visible = true;
     worldContainer.visible = false;
+
+    console.log('battleToggle.js: battleShow()');
 
     findBattleEntity();
   }

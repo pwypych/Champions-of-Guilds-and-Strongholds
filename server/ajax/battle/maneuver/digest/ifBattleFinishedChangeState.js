@@ -13,6 +13,7 @@ module.exports = (db) => {
       );
 
       const entities = res.locals.entities;
+      debug('init', entities._id);
       const gameId = entities._id;
 
       checkEveryUnitInBattleHasSameBoss(entities, gameId);
@@ -39,7 +40,7 @@ module.exports = (db) => {
         'checkEveryUnitInBattleHasSameBoss: Yes, only units of one boss!:',
         bossNameInBattleArray
       );
-      waitBeforeUpdateState(entities, gameId);
+      waitBeforeUpdateState(gameId);
     }
 
     function waitBeforeUpdateState(gameId) {
@@ -56,6 +57,8 @@ module.exports = (db) => {
       $set[field] = 'summaryState';
       const update = { $set: $set };
       const options = {};
+
+      debug('updateGameState', query, update);
 
       db.collection('gameCollection').updateOne(
         query,

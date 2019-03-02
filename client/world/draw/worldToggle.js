@@ -24,16 +24,17 @@ g.world.worldToggle = (walkie, viewport, freshEntities) => {
           return;
         }
 
-        worldToggle(gameEntity);
+        worldShow(gameEntity);
       },
       false
     );
   }
 
-  function worldToggle(gameEntity) {
+  function worldShow(gameEntity) {
     battleContainer.visible = false;
     worldContainer.visible = true;
 
+    console.log('worldToggle.js: battleShow()');
     setViewportDimentions(gameEntity);
   }
 

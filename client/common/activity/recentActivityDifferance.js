@@ -46,6 +46,10 @@ g.common.recentActivityDifferance = (walkie, freshEntities) => {
   }
 
   function checkRecentActivityDifferance(entity, id) {
+    if (!oldEntities[id]) {
+      oldEntities = freshEntities();
+    }
+
     if (entity.recentActivity) {
       if (!_.isEqual(entity.recentActivity, oldEntities[id].recentActivity)) {
         const data = {
