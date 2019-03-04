@@ -67,7 +67,7 @@ g.battle.markerDraw = (walkie, viewport, freshEntities) => {
       // Should happen only once - memory leak danger!
       if (!marker) {
         // console.log('markerDraw', unitId, 'marker');
-        const textureName = 'markerGreenO';
+        const textureName = 'markerGreen';
         const texture = PIXI.loader.resources[textureName].texture;
         marker = new PIXI.Sprite(texture);
         marker.name = 'marker';
@@ -139,7 +139,7 @@ g.battle.markerDraw = (walkie, viewport, freshEntities) => {
       // Should happen only once - memory leak danger!
       if (!marker) {
         // console.log('markerDraw', unitId, 'marker');
-        const textureName = 'markerRedO';
+        const textureName = 'markerRed';
         const texture = PIXI.loader.resources[textureName].texture;
         marker = new PIXI.Sprite(texture);
         marker.name = 'marker';
