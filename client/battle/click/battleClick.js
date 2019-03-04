@@ -24,7 +24,7 @@ g.battle.battleClick = (walkie, viewport, freshEntities) => {
   }
 
   function checkViewportBounds(event) {
-    if (event.world.x > viewport.width) {
+    if (event.world.x > viewport.worldWidth) {
       return;
     }
 
@@ -32,7 +32,7 @@ g.battle.battleClick = (walkie, viewport, freshEntities) => {
       return;
     }
 
-    if (event.world.y > viewport.height) {
+    if (event.world.y > viewport.worldHeight) {
       return;
     }
 
