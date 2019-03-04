@@ -42,8 +42,8 @@ module.exports = (db) => {
               battle.attackerId = heroId;
               battle.defenderId = id;
               battle.battleStatus = 'pending';
-              battle.battleHeight = 15;
-              battle.battleWidth = 20;
+              battle.battleHeight = 11;
+              battle.battleWidth = 13;
               battleArray.push(battle);
             }
           });

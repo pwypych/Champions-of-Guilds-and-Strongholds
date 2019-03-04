@@ -50,13 +50,13 @@ module.exports = (db, unitStats) => {
 
       const units = {};
 
-      // battle map is 15 x 20
+      // battle map is 11 x 13
       const attackerPositions = [
-        { x: 1, y: 7 },
-        { x: 1, y: 4 },
-        { x: 1, y: 10 },
-        { x: 1, y: 1 },
-        { x: 1, y: 13 }
+        { x: 0, y: 1 },
+        { x: 0, y: 3 },
+        { x: 0, y: 5 },
+        { x: 0, y: 7 },
+        { x: 0, y: 9 }
       ];
 
       let counter = 0;
@@ -88,13 +88,13 @@ module.exports = (db, unitStats) => {
         counter += 1;
       });
 
-      // battle map is 15 x 20
+      // battle map is 11 x 13
       const defenderPositions = [
-        { x: 18, y: 7 },
-        { x: 18, y: 4 },
-        { x: 18, y: 10 },
-        { x: 18, y: 1 },
-        { x: 18, y: 13 }
+        { x: 12, y: 1 },
+        { x: 12, y: 3 },
+        { x: 12, y: 5 },
+        { x: 12, y: 7 },
+        { x: 12, y: 9 }
       ];
 
       let amount = 0;
@@ -171,8 +171,8 @@ module.exports = (db, unitStats) => {
     ) {
       const obsticles = [];
 
-      _.forEach(_.range(3, 17), (x) => {
-        _.times(15, (y) => {
+      _.forEach(_.range(2, 12), (x) => {
+        _.times(11, (y) => {
           const density = _.random(1, 3);
           if (density === 1) {
             if (_.random(1, 8) === 3) {
