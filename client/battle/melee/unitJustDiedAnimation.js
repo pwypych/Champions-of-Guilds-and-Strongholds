@@ -35,7 +35,7 @@ g.battle.unitJustDiedAnimation = (walkie, viewport) => {
   }
 
   function instantiateSprite(unit, unitContainer) {
-    const textureName = 'skeleton';
+    const textureName = 'grave';
     const texture = PIXI.loader.resources[textureName].texture;
     const sprite = new PIXI.Sprite(texture);
 
