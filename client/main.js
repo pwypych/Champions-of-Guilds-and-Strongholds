@@ -80,7 +80,7 @@ g.main = function main() {
     g.battle.markerDraw(walkie, viewport, freshEntities);
     g.battle.markerActiveAnimate(walkie, viewport, freshEntities);
 
-    g.summary.summaryToggle($body, walkie, auth, freshEntities);
+    g.summary.summaryToggle($body, walkie, viewport, auth, freshEntities);
     g.summary.summaryConfirm($body, auth);
 
     g.cheat.playerChangeButtons($body, auth);
