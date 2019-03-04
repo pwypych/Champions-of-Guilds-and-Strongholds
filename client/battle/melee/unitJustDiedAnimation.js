@@ -3,8 +3,8 @@
 'use strict';
 
 g.battle.unitJustDiedAnimation = (walkie, viewport) => {
-  const blockWidthPx = 32;
-  const blockHeightPx = 32;
+  // const blockWidthPx = 32;
+  // const blockHeightPx = 32;
 
   const battleContainer = viewport.getChildByName('battleContainer');
 
@@ -35,18 +35,18 @@ g.battle.unitJustDiedAnimation = (walkie, viewport) => {
   }
 
   function instantiateSprite(unit, unitContainer) {
-    const textureName = 'bloodSplatt';
+    const textureName = 'skeleton';
     const texture = PIXI.loader.resources[textureName].texture;
     const sprite = new PIXI.Sprite(texture);
 
     sprite.name = 'bloodSplatt';
     unitContainer.addChild(sprite);
-
-    const randomX = _.random(-10, 10);
-    const randomY = _.random(-10, 10);
-
-    sprite.x = (blockWidthPx - sprite.width) / 2 + randomX;
-    sprite.y = (blockHeightPx - sprite.height) / 2 + randomY;
+    //
+    // const randomX = _.random(-10, 10);
+    // const randomY = _.random(-10, 10);
+    //
+    // sprite.x = (blockWidthPx - sprite.width) / 2 + randomX;
+    // sprite.y = (blockHeightPx - sprite.height) / 2 + randomY;
 
     destroyAfterTimeout(sprite);
   }
