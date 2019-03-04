@@ -6,7 +6,6 @@ g.world.recruitUnit = ($body, auth) => {
   const $recruitUnit = $body.find('.js-recruit-unit');
 
   (function init() {
-    console.log('recruitUnit', $recruitUnit);
     onRecruitUnitButtonClick();
   })();
 

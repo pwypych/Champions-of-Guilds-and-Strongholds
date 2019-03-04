@@ -32,10 +32,8 @@ g.world.worldClick = (walkie, auth, viewport, freshEntities) => {
   }
 
   function findPlayerId(click) {
-    const entities = freshEntities();
-
     let playerId;
-    _.forEach(entities, (entity, id) => {
+    _.forEach(freshEntities(), (entity, id) => {
       if (entity.playerCurrent) {
         playerId = id;
       }
@@ -45,11 +43,9 @@ g.world.worldClick = (walkie, auth, viewport, freshEntities) => {
   }
 
   function findHeroPosition(click, playerId) {
-    const entities = freshEntities();
-
     let hero;
     let heroId;
-    _.forEach(entities, (entity, id) => {
+    _.forEach(freshEntities(), (entity, id) => {
       if (
         entity.figureName === 'heroHuman' &&
         entity.owner === playerId &&

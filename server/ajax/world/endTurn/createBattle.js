@@ -171,7 +171,7 @@ module.exports = (db, unitStats) => {
     ) {
       const obsticles = [];
 
-      _.forEach(_.range(2, 12), (x) => {
+      _.forEach(_.range(1, 12), (x) => {
         _.times(11, (y) => {
           const density = _.random(1, 3);
           if (density === 1) {
