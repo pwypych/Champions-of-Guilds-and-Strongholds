@@ -29,6 +29,7 @@ module.exports = (db) => {
 
           if (!entities) {
             debug('entities object is empty');
+            res.status(404).send('404 Not found - Game not exist');
             return;
           }
 
