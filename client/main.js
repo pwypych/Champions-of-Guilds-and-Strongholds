@@ -67,8 +67,8 @@ g.main = function main() {
     g.battle.battleInterfaceToggle($body, walkie);
     g.battle.waitMock($body, auth, freshEntities);
     g.battle.battleToggle(walkie, viewport, freshEntities);
-    g.battle.drawBackground(walkie, viewport, freshEntities);
-    g.battle.drawUnits(walkie, auth, viewport, freshEntities);
+    g.battle.backgroundDraw(walkie, viewport);
+    g.battle.unitsDraw(walkie, auth, viewport, freshEntities);
     g.battle.iconMelee(walkie, viewport, freshEntities);
     g.battle.battleClick(walkie, viewport, freshEntities);
     g.battle.enemyClick(walkie, auth, viewport, freshEntities);

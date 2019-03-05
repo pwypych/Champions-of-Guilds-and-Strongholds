@@ -31,7 +31,6 @@ g.common.viewportClamp = (walkie, viewport) => {
   }
 
   function clampViewport() {
-    console.log('clamp');
     viewport.clamp({
       left: -32,
       right: viewport.worldWidth + 32,
