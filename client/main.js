@@ -49,8 +49,8 @@ g.main = function main() {
     g.world.worldInterfaceToggle($body, walkie);
     g.world.worldToggle(walkie, viewport, freshEntities);
     g.world.focusHero(walkie, viewport, freshEntities);
-    g.world.drawBackground(walkie, viewport, freshEntities);
-    g.world.drawFigures(walkie, auth, viewport, freshEntities);
+    g.world.backgroundDraw(walkie, viewport, freshEntities);
+    g.world.figuresDraw(walkie, auth, viewport, freshEntities);
     g.world.worldClick(walkie, auth, viewport, freshEntities);
     g.world.heroPath(walkie, auth, viewport, freshEntities);
     g.world.heroPathAcceptedPost(walkie, auth);

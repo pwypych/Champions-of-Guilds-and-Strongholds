@@ -6,42 +6,19 @@ g.world.focusHero = (walkie, viewport, freshEntities) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
-  let wasAllreadyFocused;
-
   (function init() {
-    onStateChange();
-    onEntitiesGet();
+    onEntitiesGetFirst();
   })();
 
-  function onStateChange() {
+  function onEntitiesGetFirst() {
     walkie.onEvent(
-      'stateChange_',
-      'worldInterfaceToggle.js',
-      (state) => {
-        if (state === 'worldState') {
-          wasAllreadyFocused = false;
-        }
-      },
-      false
-    );
-  }
-
-  function onEntitiesGet() {
-    walkie.onEvent(
-      'entitiesGet_',
+      'viewportWorldReady_',
       'focusHero.js',
-      (entities) => {
-        const gameEntity = entities[entities._id];
-
+      () => {
+        const gameEntity = freshEntities()[freshEntities()._id];
         if (gameEntity.state !== 'worldState') {
           return;
         }
-
-        if (wasAllreadyFocused) {
-          return;
-        }
-
-        wasAllreadyFocused = true;
 
         findPlayerId();
       },
@@ -82,7 +59,7 @@ g.world.focusHero = (walkie, viewport, freshEntities) => {
     const xPixel = position.x * blockWidthPx + $(window).width() / 4 + 16;
     const yPixel = position.y * blockHeightPx + $(window).height() / 4 + 16;
 
-    console.log('focusHero: focusHeroPosition()', position, xPixel, yPixel);
+    console.log('focusHero.js: focusHeroPosition()', position, xPixel, yPixel);
     viewport.snap(xPixel, yPixel, { time: 500, removeOnComplete: true });
   }
 };

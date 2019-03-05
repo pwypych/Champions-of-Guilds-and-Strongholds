@@ -15,10 +15,8 @@ g.common.canvasWrapperToggle = ($body, walkie) => {
       'canvasWrapperToggle.js',
       (state) => {
         if (state === 'worldState' || state === 'battleState') {
-          console.log('canvasWrapperToggle.js: show $canvasWrapper');
           $canvasWrapper.show();
         } else {
-          console.log('canvasWrapperToggle.js: hide $canvasWrapper');
           $canvasWrapper.hide();
         }
       },

@@ -15,14 +15,12 @@ g.battle.battleInterfaceToggle = ($body, walkie) => {
       'battleInterfaceToggle.js',
       (state) => {
         if (state === 'battleState') {
-          console.log('battleInterfaceToggle.js: show $buttons');
           $buttons.show();
         } else {
-          console.log('battleInterfaceToggle.js: hide $buttons');
           $buttons.hide();
         }
       },
-      true
+      false
     );
   }
 };
