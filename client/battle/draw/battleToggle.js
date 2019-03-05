@@ -15,7 +15,7 @@ g.battle.battleToggle = (walkie, viewport, freshEntities) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
+      'entitiesGetFirst_',
       'battleToggle.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
@@ -55,5 +55,11 @@ g.battle.battleToggle = (walkie, viewport, freshEntities) => {
   function setViewportDimentions(battleEntity) {
     viewport.worldWidth = battleEntity.battleWidth * blockWidthPx;
     viewport.worldHeight = battleEntity.battleHeight * blockHeightPx;
+
+    triggerViewportReady();
+  }
+
+  function triggerViewportReady() {
+    walkie.triggerEvent('viewportReady_', 'battleToggle.js', {}, true);
   }
 };

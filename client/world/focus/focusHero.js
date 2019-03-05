@@ -12,7 +12,7 @@ g.world.focusHero = (walkie, viewport, freshEntities) => {
 
   function onEntitiesGetFirst() {
     walkie.onEvent(
-      'viewportWorldReady_',
+      'viewportReady_',
       'focusHero.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];

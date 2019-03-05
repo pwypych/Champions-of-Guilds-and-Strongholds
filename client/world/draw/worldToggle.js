@@ -45,6 +45,6 @@ g.world.worldToggle = (walkie, viewport, freshEntities) => {
   }
 
   function triggerViewportWorldReady() {
-    walkie.triggerEvent('viewportWorldReady_', 'worldToggle.js', {}, true);
+    walkie.triggerEvent('viewportReady_', 'worldToggle.js', {}, true);
   }
 };

@@ -14,7 +14,7 @@ g.world.figuresDraw = (walkie, auth, viewport, freshEntities) => {
 
   function onRecentActivityDifferanceDone() {
     walkie.onEvent(
-      'viewportWorldReady_',
+      'viewportReady_',
       'figuresDraw.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];

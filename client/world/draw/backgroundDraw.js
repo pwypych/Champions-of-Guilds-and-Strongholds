@@ -11,7 +11,7 @@ g.world.backgroundDraw = (walkie, viewport, freshEntities) => {
 
   function onEntitiesGetFirst() {
     walkie.onEvent(
-      'viewportWorldReady_',
+      'viewportReady_',
       'backgroundDraw.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
