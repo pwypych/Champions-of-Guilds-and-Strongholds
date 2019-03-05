@@ -27,17 +27,6 @@ module.exports = {
     recruitCost: 100
   },
 
-  rogue: {
-    tier: 2,
-    damageMin: 7,
-    damageMax: 7,
-    life: 20,
-    initiative: 62,
-    movement: 8,
-    maneuver: 2,
-    recruitCost: 200
-  },
-
   archer: {
     tier: 2,
     damageMin: 8,
@@ -62,6 +51,171 @@ module.exports = {
 
   bear: {
     tier: 3,
+    damageMin: 10,
+    damageMax: 10,
+    life: 30,
+    initiative: 30,
+    movement: 5,
+    maneuver: 2,
+    recruitCost: 300
+  },
+
+  butterfly: {
+    tier: 1,
+    damageMin: 10,
+    damageMax: 10,
+    life: 30,
+    initiative: 30,
+    movement: 5,
+    maneuver: 2,
+    recruitCost: 300
+  },
+
+  eyball: {
+    tier: 2,
+    damageMin: 10,
+    damageMax: 10,
+    life: 30,
+    initiative: 30,
+    movement: 5,
+    maneuver: 2,
+    recruitCost: 300
+  },
+
+  plant: {
+    tier: 3,
+    damageMin: 10,
+    damageMax: 10,
+    life: 30,
+    initiative: 30,
+    movement: 5,
+    maneuver: 2,
+    recruitCost: 300
+  },
+
+  worm: {
+    tier: 4,
+    damageMin: 10,
+    damageMax: 10,
+    life: 30,
+    initiative: 30,
+    movement: 5,
+    maneuver: 2,
+    recruitCost: 300
+  },
+
+  minotaur: {
+    tier: 5,
+    damageMin: 10,
+    damageMax: 10,
+    life: 30,
+    initiative: 30,
+    movement: 5,
+    maneuver: 2,
+    recruitCost: 300
+  },
+
+  skeleton: {
+    tier: 1,
+    damageMin: 10,
+    damageMax: 10,
+    life: 30,
+    initiative: 30,
+    movement: 5,
+    maneuver: 2,
+    recruitCost: 300
+  },
+
+  undeadRouge: {
+    tier: 2,
+    damageMin: 10,
+    damageMax: 10,
+    life: 30,
+    initiative: 30,
+    movement: 5,
+    maneuver: 2,
+    recruitCost: 300
+  },
+
+  crazyWizard: {
+    tier: 3,
+    damageMin: 10,
+    damageMax: 10,
+    life: 30,
+    initiative: 30,
+    movement: 5,
+    maneuver: 2,
+    recruitCost: 300
+  },
+
+  orc: {
+    tier: 4,
+    damageMin: 10,
+    damageMax: 10,
+    life: 30,
+    initiative: 30,
+    movement: 5,
+    maneuver: 2,
+    recruitCost: 300
+  },
+
+  blackKnight: {
+    tier: 5,
+    damageMin: 10,
+    damageMax: 10,
+    life: 30,
+    initiative: 30,
+    movement: 5,
+    maneuver: 2,
+    recruitCost: 300
+  },
+
+  rogue: {
+    tier: 1,
+    damageMin: 10,
+    damageMax: 10,
+    life: 30,
+    initiative: 30,
+    movement: 5,
+    maneuver: 2,
+    recruitCost: 300
+  },
+
+  warrior: {
+    tier: 2,
+    damageMin: 10,
+    damageMax: 10,
+    life: 30,
+    initiative: 30,
+    movement: 5,
+    maneuver: 2,
+    recruitCost: 300
+  },
+
+  ranger: {
+    tier: 3,
+    damageMin: 10,
+    damageMax: 10,
+    life: 30,
+    initiative: 30,
+    movement: 5,
+    maneuver: 2,
+    recruitCost: 300
+  },
+
+  wizard: {
+    tier: 4,
+    damageMin: 10,
+    damageMax: 10,
+    life: 30,
+    initiative: 30,
+    movement: 5,
+    maneuver: 2,
+    recruitCost: 300
+  },
+
+  cleric: {
+    tier: 5,
     damageMin: 10,
     damageMax: 10,
     life: 30,
