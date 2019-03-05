@@ -55,11 +55,11 @@ module.exports = (db) => {
         };
 
         hero.unitAmounts = {
-          spearbarer: 10,
-          archer: 10,
           rogue: 10,
-          bear: 10,
-          alchemist: 10
+          warrior: 10,
+          ranger: 10,
+          wizard: 10,
+          cleric: 10
         };
 
         heroArray.push(hero);

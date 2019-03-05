@@ -59,7 +59,7 @@ module.exports = {
     maneuver: 2,
     recruitCost: 300
   },
-
+  // Forest units
   butterfly: {
     tier: 1,
     damageMin: 10,
@@ -114,7 +114,7 @@ module.exports = {
     maneuver: 2,
     recruitCost: 300
   },
-
+  // Necromancy units
   skeleton: {
     tier: 1,
     damageMin: 10,
@@ -169,7 +169,7 @@ module.exports = {
     maneuver: 2,
     recruitCost: 300
   },
-
+  // Human units
   rogue: {
     tier: 1,
     damageMin: 10,
