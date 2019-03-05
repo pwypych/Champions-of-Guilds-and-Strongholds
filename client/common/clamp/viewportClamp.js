@@ -5,11 +5,23 @@
 g.common.viewportClamp = (walkie, viewport) => {
   (function init() {
     onViewportWorldReady();
+    onViewportBattleReady();
   })();
 
   function onViewportWorldReady() {
     walkie.onEvent(
-      'viewportReady_',
+      'viewportWorldReady_',
+      'worldClamp.js',
+      () => {
+        clampViewport();
+      },
+      false
+    );
+  }
+
+  function onViewportBattleReady() {
+    walkie.onEvent(
+      'viewportBattleReady_',
       'worldClamp.js',
       () => {
         clampViewport();

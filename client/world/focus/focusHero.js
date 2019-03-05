@@ -12,14 +12,9 @@ g.world.focusHero = (walkie, viewport, freshEntities) => {
 
   function onEntitiesGetFirst() {
     walkie.onEvent(
-      'viewportReady_',
+      'viewportWorldReady_',
       'focusHero.js',
       () => {
-        const gameEntity = freshEntities()[freshEntities()._id];
-        if (gameEntity.state !== 'worldState') {
-          return;
-        }
-
         findPlayerId();
       },
       false

@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.world.backgroundDraw = (walkie, viewport, freshEntities) => {
+g.world.backgroundDraw = (walkie, viewport) => {
   const worldContainer = viewport.getChildByName('worldContainer');
 
   (function init() {
@@ -11,14 +11,9 @@ g.world.backgroundDraw = (walkie, viewport, freshEntities) => {
 
   function onEntitiesGetFirst() {
     walkie.onEvent(
-      'viewportReady_',
+      'viewportWorldReady_',
       'backgroundDraw.js',
       () => {
-        const gameEntity = freshEntities()[freshEntities()._id];
-        if (gameEntity.state !== 'worldState') {
-          return;
-        }
-
         drawBackground();
       },
       false

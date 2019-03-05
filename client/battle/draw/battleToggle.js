@@ -60,6 +60,6 @@ g.battle.battleToggle = (walkie, viewport, freshEntities) => {
   }
 
   function triggerViewportReady() {
-    walkie.triggerEvent('viewportReady_', 'battleToggle.js', {}, true);
+    walkie.triggerEvent('viewportBattleReady_', 'battleToggle.js', {}, true);
   }
 };
