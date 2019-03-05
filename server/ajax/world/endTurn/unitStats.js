@@ -126,7 +126,7 @@ module.exports = {
     recruitCost: 300
   },
 
-  undeadRouge: {
+  undeadRogue: {
     tier: 2,
     damageMin: 10,
     damageMax: 10,
