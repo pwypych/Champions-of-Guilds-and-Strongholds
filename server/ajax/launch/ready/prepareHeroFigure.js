@@ -54,13 +54,38 @@ module.exports = (db) => {
           base: { movement: 15 }
         };
 
-        hero.unitAmounts = {
-          spearbarer: 10,
-          archer: 10,
-          rogue: 10,
-          bear: 10,
-          alchemist: 10
-        };
+        if (player.playerData.race === 'human') {
+          debug('generateHeroArray: player race:', player.playerData.race);
+          hero.unitAmounts = {
+            rogue: 10,
+            warrior: 10,
+            ranger: 10,
+            wizard: 10,
+            cleric: 10
+          };
+        }
+
+        if (player.playerData.race === 'necromancy') {
+          debug('generateHeroArray: player race:', player.playerData.race);
+          hero.unitAmounts = {
+            skeleton: 10,
+            undeadRogue: 10,
+            crazyWizard: 10,
+            orc: 10,
+            blackKnight: 10
+          };
+        }
+
+        if (player.playerData.race === 'forest') {
+          debug('generateHeroArray: player race:', player.playerData.race);
+          hero.unitAmounts = {
+            butterfly: 10,
+            eyball: 10,
+            plant: 10,
+            worm: 10,
+            minotaur: 10
+          };
+        }
 
         heroArray.push(hero);
       });

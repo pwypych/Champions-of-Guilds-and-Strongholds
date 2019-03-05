@@ -35,6 +35,7 @@ g.main = function main() {
 
     g.launch.launchToggle($body, walkie);
     g.launch.launchInputName($body, auth);
+    g.launch.launchSelectRace($body, auth);
     g.launch.launchButtonReady($body, auth);
     g.launch.launchTable($body, walkie);
     g.launch.launchCountdown($body, walkie);
