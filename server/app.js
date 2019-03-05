@@ -204,6 +204,14 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     require('./ajax/launch/name/playerNamePost.js')(db)
   );
 
+  app.post(
+    '/ajax/launch/race/playerRacePost',
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
+    require('./library/middlewareAjaxStateAuth.js')('launchState'),
+    require('./ajax/launch/race/playerRacePost.js')(db)
+  );
+
   // world
   app.get(
     '/ajax/world/load/spriteFilenameArray',

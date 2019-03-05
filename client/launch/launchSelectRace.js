@@ -6,12 +6,11 @@ g.launch.launchSelectRace = ($body, auth) => {
   const $selectRace = $body.find('#js-launch .js-select-race');
 
   (function init() {
-    inputNameOn();
+    selectRaceOn();
   })();
 
-  function inputNameOn() {
+  function selectRaceOn() {
     $selectRace.on('change', () => {
-      console.log('launchSelectRace: race changeg!');
       sendPost();
     });
   }
@@ -22,9 +21,9 @@ g.launch.launchSelectRace = ($body, auth) => {
     };
     console.log('sendPost: data.playerRace:', data.playerRace);
 
-    $.post('/ajax/launch/name/playerRacePost' + auth.uri, data, () => {
+    $.post('/ajax/launch/race/playerRacePost' + auth.uri, data, () => {
       console.log(
-        'launchSelectRace: POST -> /ajax/launch/playerRacePost',
+        'launchSelectRace: POST -> /ajax/launch/race/playerRacePost',
         data
       );
     });
