@@ -45,6 +45,7 @@ g.main = function main() {
 
     g.common.recentActivityDifferance(walkie, freshEntities);
     g.common.tweenMovementPath(walkie, viewport);
+    g.common.viewportClamp(walkie, viewport);
 
     g.world.worldInterfaceToggle($body, walkie);
     g.world.worldToggle(walkie, viewport, freshEntities);

@@ -18,9 +18,10 @@ g.setup.setupViewport = (app) => {
   viewport.pinch();
   viewport.wheel();
   viewport.decelerate();
+  viewport.zoomPercent(1);
 
   // align screen to have a little margin
-  viewport.moveCorner(-32, -32);
+  // viewport.moveCorner(-32, -32);
 
   // viewport.on('clicked', (e) =>
   //   console.log('clicked (' + e.world.x + ',' + e.world.y + ')')

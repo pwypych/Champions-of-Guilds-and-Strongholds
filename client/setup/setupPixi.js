@@ -13,7 +13,7 @@ g.setup.setupPixi = ($body) => {
   const options = {};
   options.width = window.innerWidth;
   options.height = window.innerHeight;
-  options.resolution = 2; // double pixel ratio
+  options.resolution = 1; // double pixel ratio
   options.forceCanvas = true;
   options.view = eCanvas;
 
