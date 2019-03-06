@@ -132,6 +132,8 @@ function setupLibrariesAndRoutes(figureManagerTree) {
   const templateToHtml = require('./library/templateToHtml.js')();
   const findEntitiesByGameId = require('./library/findEntitiesByGameId.js')(db);
 
+  const unitStats = require('./stats/unitStats.js');
+
   // general
   app.get('/', (req, res) => {
     res.redirect('/panel');
@@ -248,7 +250,6 @@ function setupLibrariesAndRoutes(figureManagerTree) {
     saveGame
   );
 
-  const unitStats = require('./ajax/world/endTurn/unitStats.js');
   app.post(
     '/ajax/world/endTurn/endTurnPost',
     require('./library/readEntities.js')(db),
