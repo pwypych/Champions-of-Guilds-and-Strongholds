@@ -2,9 +2,16 @@
 
 'use strict';
 
+const deepFreeze = require('deep-freeze');
+
 // What does this module do?
 // Returns object with all unit stats
-module.exports = {
+const unitStats = {
+  // Tier 1
+  // Tier 2
+  // Tier 3
+  // Tier 4
+  // Tier 5
   goblin: {
     tier: 1,
     damageMin: 2,
@@ -59,7 +66,7 @@ module.exports = {
     maneuver: 2,
     recruitCost: 150
   },
-  // Forest units
+
   butterfly: {
     tier: 1,
     damageMin: 1,
@@ -114,7 +121,7 @@ module.exports = {
     maneuver: 2,
     recruitCost: 600
   },
-  // Necromancy units
+
   skeleton: {
     tier: 1,
     damageMin: 2,
@@ -225,3 +232,6 @@ module.exports = {
     recruitCost: 500
   }
 };
+
+deepFreeze(unitStats);
+module.exports = unitStats;
