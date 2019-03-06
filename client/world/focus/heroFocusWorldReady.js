@@ -55,12 +55,6 @@ g.world.heroFocusWorldReady = (walkie, viewport, freshEntities) => {
     const xPixel = position.x * blockWidthPx + blockWidthPx / 2;
     const yPixel = position.y * blockHeightPx + blockHeightPx / 2;
 
-    console.log(
-      'heroFocusWorldReady.js: focusHeroPosition()',
-      position,
-      xPixel,
-      yPixel
-    );
     setTimeout(() => {
       viewport.snap(xPixel, yPixel, { time: 500, removeOnComplete: true });
     });

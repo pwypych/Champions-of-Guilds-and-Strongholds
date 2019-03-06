@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.battle.focusUnitActive = (walkie, viewport, freshEntities) => {
+g.battle.unitFocusActive = (walkie, viewport, freshEntities) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
@@ -15,7 +15,7 @@ g.battle.focusUnitActive = (walkie, viewport, freshEntities) => {
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
-      'focusUnitActive.js',
+      'unitFocusActive.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
 
@@ -47,12 +47,6 @@ g.battle.focusUnitActive = (walkie, viewport, freshEntities) => {
     const xPixel = position.x * blockWidthPx + blockWidthPx / 2;
     const yPixel = position.y * blockHeightPx + blockHeightPx / 2;
 
-    console.log(
-      'focusUnitActive.js: focusUnitPosition()',
-      position,
-      xPixel,
-      yPixel
-    );
     setTimeout(() => {
       viewport.snap(xPixel, yPixel, { time: 500, removeOnComplete: true });
     });

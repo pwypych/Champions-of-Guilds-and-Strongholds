@@ -48,7 +48,6 @@ g.world.heroFocusTween = (walkie, viewport, freshEntities) => {
     const xPixel = position.x * blockWidthPx + blockWidthPx / 2;
     const yPixel = position.y * blockHeightPx + blockHeightPx / 2;
 
-    console.log('heroFocusTween.js: focusPosition()', position, xPixel, yPixel);
     setTimeout(() => {
       viewport.snap(xPixel, yPixel, { time: time, removeOnComplete: true });
     });

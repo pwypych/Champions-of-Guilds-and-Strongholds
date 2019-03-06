@@ -83,8 +83,8 @@ g.main = function main() {
     g.battle.unitGotHitAnimation(walkie, viewport);
     g.battle.markerDraw(walkie, viewport, freshEntities);
     g.battle.markerActiveAnimate(walkie, viewport, freshEntities);
-    g.battle.focusUnitActive(walkie, viewport, freshEntities);
-    g.battle.focusUnitTween(walkie, viewport, freshEntities);
+    g.battle.unitFocusActive(walkie, viewport, freshEntities);
+    g.battle.unitFocusTween(walkie, viewport, freshEntities);
 
     g.summary.summaryToggle($body, walkie, viewport, auth, freshEntities);
     g.summary.summaryConfirm($body, auth);
