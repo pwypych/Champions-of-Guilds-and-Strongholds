@@ -7,7 +7,7 @@ const shortid = require('shortid');
 const validator = require('validator');
 const _ = require('lodash');
 
-module.exports = (environment, db, figureManagerTree) => {
+module.exports = (environment, db, figureStats) => {
   return (req, res) => {
     (function init() {
       debug(
@@ -123,29 +123,23 @@ module.exports = (environment, db, figureManagerTree) => {
 
       mapObject.mapLayerWithStrings.forEach((row, y) => {
         row.forEach((figureName, x) => {
+          debug('generateFigureEntities: figureName:', figureName);
           if (figureName === 'empty') {
             return;
           }
 
-          if (!figureManagerTree[figureName]) {
+          if (!figureStats[figureName]) {
             const error =
               'Cannot load figure that is required by the map: ' + figureName;
             errorArray.push(error);
             return;
           }
 
-          if (!figureManagerTree[figureName].produce) {
-            const error =
-              'Cannot load blueprint for figure that is required by the map: ' +
-              figureName;
-            errorArray.push(error);
-            return;
-          }
-
-          const entity = figureManagerTree[figureName].produce();
+          const entity = _.cloneDeep(figureStats[figureName]);
 
           // Add unique id to each figure instance
           const id = figureName + '_figure__' + shortid.generate();
+          entity.figureName = figureName;
           entity.position = { x: x, y: y };
 
           entities[id] = entity;
