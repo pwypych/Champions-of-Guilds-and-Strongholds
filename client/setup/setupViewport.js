@@ -18,7 +18,8 @@ g.setup.setupViewport = (app) => {
   viewport.pinch();
   viewport.wheel();
   viewport.decelerate();
-  viewport.zoomPercent(1);
+  const pixelRatio = window.devicePixelRatio;
+  viewport.zoomPercent(1 / pixelRatio);
 
   // align screen to have a little margin
   // viewport.moveCorner(-32, -32);
