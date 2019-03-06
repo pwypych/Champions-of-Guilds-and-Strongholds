@@ -50,7 +50,8 @@ g.main = function main() {
 
     g.world.worldInterfaceToggle($body, walkie);
     g.world.worldToggle(walkie, viewport, freshEntities);
-    g.world.focusHero(walkie, viewport, freshEntities);
+    g.world.heroFocusWorldReady(walkie, viewport, freshEntities);
+    g.world.heroFocusTween(walkie, viewport, freshEntities);
     g.world.backgroundDraw(walkie, viewport);
     g.world.figuresDraw(walkie, auth, viewport, freshEntities);
     g.world.worldClick(walkie, auth, viewport, freshEntities);
@@ -83,6 +84,7 @@ g.main = function main() {
     g.battle.markerDraw(walkie, viewport, freshEntities);
     g.battle.markerActiveAnimate(walkie, viewport, freshEntities);
     g.battle.focusUnitActive(walkie, viewport, freshEntities);
+    g.battle.focusUnitTween(walkie, viewport, freshEntities);
 
     g.summary.summaryToggle($body, walkie, viewport, auth, freshEntities);
     g.summary.summaryConfirm($body, auth);

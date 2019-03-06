@@ -60,10 +60,10 @@ g.common.tweenMovementPath = (walkie, viewport) => {
       entityContainer = battleContainer.getChildByName(entityId);
     }
 
-    generateTweenTimeline(entityContainer, path);
+    generateTweenTimeline(entityContainer, path, entityId);
   }
 
-  function generateTweenTimeline(entityContainer, path) {
+  function generateTweenTimeline(entityContainer, path, entityId) {
     const timeline = new TimelineMax();
 
     path.forEach((position, index) => {
@@ -86,7 +86,7 @@ g.common.tweenMovementPath = (walkie, viewport) => {
 
     const time = Math.round(0.15 * (path.length - 1) * 1000);
     const position = path[path.length - 1];
-    focusPosition(position, time);
+    triggerEntityTweenStart(entityId, position, time);
 
     timeline.addCallback(() => {
       setTimeout(() => {
@@ -97,18 +97,16 @@ g.common.tweenMovementPath = (walkie, viewport) => {
     timeline.play();
   }
 
-  function focusPosition(position, time) {
-    const xPixel = position.x * blockWidthPx + blockWidthPx / 2;
-    const yPixel = position.y * blockHeightPx + blockHeightPx / 2;
-
-    console.log(
-      'tweenMovementPath.js: focusPosition()',
-      position,
-      xPixel,
-      yPixel
+  function triggerEntityTweenStart(entityId, position, time) {
+    walkie.triggerEvent(
+      'entityTweenStart_',
+      'tweenMovementPath.js',
+      {
+        entityId: entityId,
+        position: position,
+        time: time
+      },
+      true
     );
-    setTimeout(() => {
-      viewport.snap(xPixel, yPixel, { time: time, removeOnComplete: true });
-    });
   }
 };

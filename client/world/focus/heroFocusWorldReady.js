@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.world.focusHero = (walkie, viewport, freshEntities) => {
+g.world.heroFocusWorldReady = (walkie, viewport, freshEntities) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
@@ -13,7 +13,7 @@ g.world.focusHero = (walkie, viewport, freshEntities) => {
   function onEntitiesGetFirst() {
     walkie.onEvent(
       'viewportWorldReady_',
-      'focusHero.js',
+      'heroFocusWorldReady.js',
       () => {
         findPlayerId();
       },
@@ -55,7 +55,12 @@ g.world.focusHero = (walkie, viewport, freshEntities) => {
     const xPixel = position.x * blockWidthPx + blockWidthPx / 2;
     const yPixel = position.y * blockHeightPx + blockHeightPx / 2;
 
-    console.log('focusHero.js: focusHeroPosition()', position, xPixel, yPixel);
+    console.log(
+      'heroFocusWorldReady.js: focusHeroPosition()',
+      position,
+      xPixel,
+      yPixel
+    );
     setTimeout(() => {
       viewport.snap(xPixel, yPixel, { time: 500, removeOnComplete: true });
     });
