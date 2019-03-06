@@ -31,6 +31,7 @@ g.world.focusHero = (walkie, viewport, freshEntities) => {
 
     findHeroPosition(playerId);
   }
+
   function findHeroPosition(playerId) {
     let hero;
     _.forEach(freshEntities(), (entity) => {
@@ -51,8 +52,8 @@ g.world.focusHero = (walkie, viewport, freshEntities) => {
   }
 
   function focusHeroPosition(position) {
-    const xPixel = position.x * blockWidthPx + 16;
-    const yPixel = position.y * blockHeightPx + 16;
+    const xPixel = position.x * blockWidthPx + blockWidthPx / 2;
+    const yPixel = position.y * blockHeightPx + blockHeightPx / 2;
 
     console.log('focusHero.js: focusHeroPosition()', position, xPixel, yPixel);
     setTimeout(() => {

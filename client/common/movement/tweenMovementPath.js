@@ -84,6 +84,10 @@ g.common.tweenMovementPath = (walkie, viewport) => {
       });
     });
 
+    const time = Math.round(0.15 * (path.length - 1) * 1000);
+    const position = path[path.length - 1];
+    focusPosition(position, time);
+
     timeline.addCallback(() => {
       setTimeout(() => {
         tweeningEntityIdByPathVerifiedByServer = undefined;
@@ -91,5 +95,20 @@ g.common.tweenMovementPath = (walkie, viewport) => {
     });
 
     timeline.play();
+  }
+
+  function focusPosition(position, time) {
+    const xPixel = position.x * blockWidthPx + blockWidthPx / 2;
+    const yPixel = position.y * blockHeightPx + blockHeightPx / 2;
+
+    console.log(
+      'tweenMovementPath.js: focusPosition()',
+      position,
+      xPixel,
+      yPixel
+    );
+    setTimeout(() => {
+      viewport.snap(xPixel, yPixel, { time: time, removeOnComplete: true });
+    });
   }
 };
