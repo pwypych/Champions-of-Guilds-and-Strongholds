@@ -65,7 +65,7 @@ module.exports = (db) => {
           };
         }
 
-        if (player.playerData.race === 'necromancy') {
+        if (player.playerData.race === 'undead') {
           debug('generateHeroArray: player race:', player.playerData.race);
           hero.unitAmounts = {
             skeleton: 10,
@@ -76,7 +76,7 @@ module.exports = (db) => {
           };
         }
 
-        if (player.playerData.race === 'forest') {
+        if (player.playerData.race === 'beast') {
           debug('generateHeroArray: player race:', player.playerData.race);
           hero.unitAmounts = {
             butterfly: 10,
