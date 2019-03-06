@@ -102,37 +102,19 @@ function setupMapCollection() {
     }
 
     debug('setupMapCollection: mapCount:', mapCount);
-    setupFigureManagerTree();
+    setupLibrariesAndRoutes();
   });
 }
 /* eslint-enable global-require */
 
 /* eslint-disable global-require */
-function setupFigureManagerTree() {
-  const generateFigureManagerTree = require('./figure/generateFigureManagerTree.js')(
-    environment
-  );
-
-  generateFigureManagerTree((error, figureManagerTree) => {
-    if (error) {
-      debug('setupFigureManagerTree: Errors:', error);
-      process.exit(1);
-      return;
-    }
-
-    debug('setupFigureManagerTree: figureManagerTree:', figureManagerTree);
-    setupLibrariesAndRoutes(figureManagerTree);
-  });
-}
-/* eslint-enable global-require */
-
-/* eslint-disable global-require */
-function setupLibrariesAndRoutes(figureManagerTree) {
+function setupLibrariesAndRoutes() {
   // libraries
   const templateToHtml = require('./library/templateToHtml.js')();
   const findEntitiesByGameId = require('./library/findEntitiesByGameId.js')(db);
 
   const unitStats = require('./stats/unitStats.js');
+  const figureStats = require('./stats/figureStats.js');
 
   // general
   app.get('/', (req, res) => {
@@ -146,7 +128,7 @@ function setupLibrariesAndRoutes(figureManagerTree) {
 
   app.post(
     '/panel/createGamePost',
-    require('./panel/createGamePost.js')(environment, db, figureManagerTree)
+    require('./panel/createGamePost.js')(environment, db, figureStats)
   );
 
   app.post(
