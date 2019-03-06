@@ -2,8 +2,6 @@
 
 'use strict';
 
-const deepFreeze = require('deep-freeze');
-
 // What does this module do?
 // Returns object with all unit stats
 const unitBlueprint = {
@@ -233,5 +231,6 @@ const unitBlueprint = {
   }
 };
 
-deepFreeze(unitBlueprint);
-module.exports = unitBlueprint;
+module.exports = () => {
+  return unitBlueprint;
+};

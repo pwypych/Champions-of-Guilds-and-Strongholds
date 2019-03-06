@@ -2,8 +2,6 @@
 
 'use strict';
 
-const deepFreeze = require('deep-freeze');
-
 // What does this module do?
 // Returns object with all figures stats
 const figureBlueprint = {
@@ -55,5 +53,6 @@ const figureBlueprint = {
   wood: { resource: { name: 'wood', amount: 5 } }
 };
 
-deepFreeze(figureBlueprint);
-module.exports = figureBlueprint;
+module.exports = () => {
+  return figureBlueprint;
+};
