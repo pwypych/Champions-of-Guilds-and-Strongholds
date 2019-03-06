@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:prepareHeroFigure');
 const _ = require('lodash');
 const shortId = require('shortid');
 
-module.exports = (db) => {
+module.exports = (db, raceBlueprint) => {
   return (req, res, next) => {
     (function init() {
       debug('// Place every hero figure in front of a castle');
@@ -38,6 +38,8 @@ module.exports = (db) => {
       const heroArray = [];
       _.forEach(playerArray, (player, index) => {
         const hero = {};
+        const races = raceBlueprint();
+
         hero.owner = player.id;
         hero.figureName = 'heroHuman';
 
@@ -54,38 +56,7 @@ module.exports = (db) => {
           base: { movement: 15 }
         };
 
-        if (player.playerData.race === 'human') {
-          debug('generateHeroArray: player race:', player.playerData.race);
-          hero.unitAmounts = {
-            rogue: 10,
-            warrior: 10,
-            ranger: 10,
-            wizard: 10,
-            cleric: 10
-          };
-        }
-
-        if (player.playerData.race === 'necromancy') {
-          debug('generateHeroArray: player race:', player.playerData.race);
-          hero.unitAmounts = {
-            skeleton: 10,
-            undeadRogue: 10,
-            crazyWizard: 10,
-            orc: 10,
-            blackKnight: 10
-          };
-        }
-
-        if (player.playerData.race === 'forest') {
-          debug('generateHeroArray: player race:', player.playerData.race);
-          hero.unitAmounts = {
-            butterfly: 10,
-            eyball: 10,
-            plant: 10,
-            worm: 10,
-            minotaur: 10
-          };
-        }
+        hero.unitAmounts = races[player.playerData.race].unitAmounts;
 
         heroArray.push(hero);
       });
