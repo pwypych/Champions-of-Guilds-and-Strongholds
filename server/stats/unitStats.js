@@ -8,10 +8,6 @@ const deepFreeze = require('deep-freeze');
 // Returns object with all unit stats
 const unitStats = {
   // Tier 1
-  // Tier 2
-  // Tier 3
-  // Tier 4
-  // Tier 5
   goblin: {
     tier: 1,
     damageMin: 2,
@@ -34,6 +30,40 @@ const unitStats = {
     recruitCost: 60
   },
 
+  butterfly: {
+    tier: 1,
+    damageMin: 1,
+    damageMax: 1,
+    life: 4,
+    initiative: 75,
+    movement: 8,
+    maneuver: 2,
+    recruitCost: 40
+  },
+
+  skeleton: {
+    tier: 1,
+    damageMin: 2,
+    damageMax: 2,
+    life: 6,
+    initiative: 25,
+    movement: 4,
+    maneuver: 2,
+    recruitCost: 60
+  },
+
+  rogue: {
+    tier: 1,
+    damageMin: 3,
+    damageMax: 3,
+    life: 5,
+    initiative: 50,
+    movement: 4,
+    maneuver: 2,
+    recruitCost: 80
+  },
+
+  // Tier 2
   archer: {
     tier: 2,
     damageMin: 4,
@@ -45,6 +75,40 @@ const unitStats = {
     recruitCost: 110
   },
 
+  eyball: {
+    tier: 2,
+    damageMin: 5,
+    damageMax: 5,
+    life: 10,
+    initiative: 35,
+    movement: 6,
+    maneuver: 2,
+    recruitCost: 120
+  },
+
+  undeadRogue: {
+    tier: 2,
+    damageMin: 4,
+    damageMax: 4,
+    life: 13,
+    initiative: 35,
+    movement: 4,
+    maneuver: 2,
+    recruitCost: 110
+  },
+
+  warrior: {
+    tier: 2,
+    damageMin: 2,
+    damageMax: 2,
+    life: 17,
+    initiative: 40,
+    movement: 4,
+    maneuver: 2,
+    recruitCost: 130
+  },
+
+  // Tier 3
   alchemist: {
     tier: 3,
     damageMin: 6,
@@ -67,28 +131,6 @@ const unitStats = {
     recruitCost: 150
   },
 
-  butterfly: {
-    tier: 1,
-    damageMin: 1,
-    damageMax: 1,
-    life: 4,
-    initiative: 75,
-    movement: 8,
-    maneuver: 2,
-    recruitCost: 40
-  },
-
-  eyball: {
-    tier: 2,
-    damageMin: 5,
-    damageMax: 5,
-    life: 10,
-    initiative: 35,
-    movement: 6,
-    maneuver: 2,
-    recruitCost: 120
-  },
-
   plant: {
     tier: 3,
     damageMin: 5,
@@ -98,50 +140,6 @@ const unitStats = {
     movement: 4,
     maneuver: 2,
     recruitCost: 200
-  },
-
-  worm: {
-    tier: 4,
-    damageMin: 8,
-    damageMax: 8,
-    life: 30,
-    initiative: 60,
-    movement: 6,
-    maneuver: 2,
-    recruitCost: 320
-  },
-
-  minotaur: {
-    tier: 5,
-    damageMin: 10,
-    damageMax: 10,
-    life: 60,
-    initiative: 50,
-    movement: 5,
-    maneuver: 2,
-    recruitCost: 600
-  },
-
-  skeleton: {
-    tier: 1,
-    damageMin: 2,
-    damageMax: 2,
-    life: 6,
-    initiative: 25,
-    movement: 4,
-    maneuver: 2,
-    recruitCost: 60
-  },
-
-  undeadRogue: {
-    tier: 2,
-    damageMin: 4,
-    damageMax: 4,
-    life: 13,
-    initiative: 35,
-    movement: 4,
-    maneuver: 2,
-    recruitCost: 110
   },
 
   crazyWizard: {
@@ -155,50 +153,6 @@ const unitStats = {
     recruitCost: 240
   },
 
-  orc: {
-    tier: 4,
-    damageMin: 7,
-    damageMax: 7,
-    life: 35,
-    initiative: 45,
-    movement: 6,
-    maneuver: 2,
-    recruitCost: 350
-  },
-
-  blackKnight: {
-    tier: 5,
-    damageMin: 15,
-    damageMax: 15,
-    life: 45,
-    initiative: 55,
-    movement: 5,
-    maneuver: 2,
-    recruitCost: 550
-  },
-  // Human units
-  rogue: {
-    tier: 1,
-    damageMin: 3,
-    damageMax: 3,
-    life: 5,
-    initiative: 50,
-    movement: 4,
-    maneuver: 2,
-    recruitCost: 80
-  },
-
-  warrior: {
-    tier: 2,
-    damageMin: 2,
-    damageMax: 2,
-    life: 17,
-    initiative: 40,
-    movement: 4,
-    maneuver: 2,
-    recruitCost: 130
-  },
-
   ranger: {
     tier: 3,
     damageMin: 4,
@@ -210,6 +164,18 @@ const unitStats = {
     recruitCost: 200
   },
 
+  // Tier 4
+  worm: {
+    tier: 4,
+    damageMin: 8,
+    damageMax: 8,
+    life: 30,
+    initiative: 60,
+    movement: 6,
+    maneuver: 2,
+    recruitCost: 320
+  },
+
   wizard: {
     tier: 4,
     damageMin: 8,
@@ -219,6 +185,40 @@ const unitStats = {
     movement: 6,
     maneuver: 2,
     recruitCost: 300
+  },
+
+  orc: {
+    tier: 4,
+    damageMin: 7,
+    damageMax: 7,
+    life: 35,
+    initiative: 45,
+    movement: 6,
+    maneuver: 2,
+    recruitCost: 350
+  },
+
+  // Tier 5
+  minotaur: {
+    tier: 5,
+    damageMin: 10,
+    damageMax: 10,
+    life: 60,
+    initiative: 50,
+    movement: 5,
+    maneuver: 2,
+    recruitCost: 600
+  },
+
+  blackKnight: {
+    tier: 5,
+    damageMin: 15,
+    damageMax: 15,
+    life: 45,
+    initiative: 55,
+    movement: 5,
+    maneuver: 2,
+    recruitCost: 550
   },
 
   cleric: {
