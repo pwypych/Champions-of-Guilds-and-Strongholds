@@ -102,26 +102,7 @@ function setupMapCollection() {
     }
 
     debug('setupMapCollection: mapCount:', mapCount);
-    setupFigureManagerTree();
-  });
-}
-/* eslint-enable global-require */
-
-/* eslint-disable global-require */
-function setupFigureManagerTree() {
-  const generateFigureManagerTree = require('./figure/generateFigureManagerTree.js')(
-    environment
-  );
-
-  generateFigureManagerTree((error, figureManagerTree) => {
-    if (error) {
-      debug('setupFigureManagerTree: Errors:', error);
-      process.exit(1);
-      return;
-    }
-
-    debug('setupFigureManagerTree: figureManagerTree:', figureManagerTree);
-    setupLibrariesAndRoutes(figureManagerTree);
+    setupLibrariesAndRoutes();
   });
 }
 /* eslint-enable global-require */
