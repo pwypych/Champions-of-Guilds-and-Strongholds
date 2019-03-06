@@ -115,6 +115,7 @@ function setupLibrariesAndRoutes() {
 
   const unitBlueprint = require('./stats/unitBlueprint.js');
   const figureBlueprint = require('./stats/figureBlueprint.js');
+  const raceBlueprint = require('./stats/raceBlueprint.js');
 
   // general
   app.get('/', (req, res) => {
@@ -175,7 +176,7 @@ function setupLibrariesAndRoutes() {
     require('./library/readEntities.js')(db),
     require('./ajax/launch/ready/everyPlayerReadyChecker.js')(),
     require('./ajax/launch/ready/preparePlayerResource.js')(db),
-    require('./ajax/launch/ready/prepareHeroFigure.js')(db),
+    require('./ajax/launch/ready/prepareHeroFigure.js')(db, raceBlueprint),
     require('./ajax/launch/ready/launchCountdown.js')(db),
     require('./ajax/launch/ready/unsetReadyForLaunch.js')(db)
   );
