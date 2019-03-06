@@ -14,8 +14,10 @@ const raceBlueprint = {
       ranger: 10,
       wizard: 10,
       cleric: 10
-    }
+    },
+    heroStats: { movement: 15 }
   },
+
   undead: {
     unitAmounts: {
       skeleton: 10,
@@ -23,8 +25,10 @@ const raceBlueprint = {
       crazyWizard: 10,
       orc: 10,
       blackKnight: 10
-    }
+    },
+    heroStats: { movement: 15 }
   },
+
   beast: {
     unitAmounts: {
       butterfly: 10,
@@ -32,7 +36,8 @@ const raceBlueprint = {
       plant: 10,
       worm: 10,
       minotaur: 10
-    }
+    },
+    heroStats: { movement: 15 }
   }
 };
 

@@ -54,10 +54,7 @@ module.exports = (db, raceBlueprint) => {
           base: { movement: 15 }
         };
 
-        debug('generateHeroArray: player race:', player.playerData.race);
-
         hero.unitAmounts = raceBlueprint[player.playerData.race].unitAmounts;
-        debug('generateHeroArray: hero.unitAmounts:', hero.unitAmounts);
 
         heroArray.push(hero);
       });
