@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:createBattle');
 const _ = require('lodash');
 const shortId = require('shortid');
 
-module.exports = (db, unitStats) => {
+module.exports = (db, unitBlueprint) => {
   return (req, res, next) => {
     (function init() {
       debug(
@@ -75,8 +75,8 @@ module.exports = (db, unitStats) => {
         unit.collision = true;
         unit.position = attackerPositions[counter];
         unit.unitStats = {
-          current: JSON.parse(JSON.stringify(unitStats[unitName])),
-          base: JSON.parse(JSON.stringify(unitStats[unitName]))
+          current: unitBlueprint()[unitName],
+          base: unitBlueprint()[unitName]
         };
 
         // @temp only for testing first unit is active
@@ -117,8 +117,8 @@ module.exports = (db, unitStats) => {
         unit.collision = true;
         unit.position = defenderPositions[index];
         unit.unitStats = {
-          current: JSON.parse(JSON.stringify(unitStats[unitName])),
-          base: JSON.parse(JSON.stringify(unitStats[unitName]))
+          current: unitBlueprint()[unitName],
+          base: unitBlueprint()[unitName]
         };
 
         units[id] = unit;

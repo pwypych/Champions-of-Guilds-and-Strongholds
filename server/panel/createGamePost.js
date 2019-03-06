@@ -7,7 +7,7 @@ const shortid = require('shortid');
 const validator = require('validator');
 const _ = require('lodash');
 
-module.exports = (environment, db, figureStats) => {
+module.exports = (environment, db, figureBlueprint) => {
   return (req, res) => {
     (function init() {
       debug(
@@ -128,14 +128,14 @@ module.exports = (environment, db, figureStats) => {
             return;
           }
 
-          if (!figureStats[figureName]) {
+          if (!figureBlueprint()[figureName]) {
             const error =
               'Cannot load figure that is required by the map: ' + figureName;
             errorArray.push(error);
             return;
           }
 
-          const entity = _.cloneDeep(figureStats[figureName]);
+          const entity = figureBlueprint()[figureName];
 
           // Add unique id to each figure instance
           const id = figureName + '_figure__' + shortid.generate();

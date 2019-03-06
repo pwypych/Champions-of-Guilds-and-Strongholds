@@ -38,6 +38,8 @@ module.exports = (db, raceBlueprint) => {
       const heroArray = [];
       _.forEach(playerArray, (player, index) => {
         const hero = {};
+        const races = raceBlueprint();
+
         hero.owner = player.id;
         hero.figureName = 'heroHuman';
 
@@ -54,7 +56,7 @@ module.exports = (db, raceBlueprint) => {
           base: { movement: 15 }
         };
 
-        hero.unitAmounts = raceBlueprint[player.playerData.race].unitAmounts;
+        hero.unitAmounts = races[player.playerData.race].unitAmounts;
 
         heroArray.push(hero);
       });
