@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.battle.drawBackground = (walkie, viewport, freshEntities) => {
+g.battle.backgroundDraw = (walkie, viewport) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
@@ -14,15 +14,9 @@ g.battle.drawBackground = (walkie, viewport, freshEntities) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
-      'drawBackground.js',
+      'viewportBattleReady_',
+      'backgroundDraw.js',
       () => {
-        const gameEntity = freshEntities()[freshEntities()._id];
-
-        if (gameEntity.state !== 'battleState') {
-          return;
-        }
-
         drawBackground();
       },
       false

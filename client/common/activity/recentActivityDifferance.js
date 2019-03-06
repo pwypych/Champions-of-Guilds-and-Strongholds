@@ -23,6 +23,7 @@ g.common.recentActivityDifferance = (walkie, freshEntities) => {
   function ensureOldEntitiesDefined() {
     if (!oldEntities) {
       oldEntities = freshEntities();
+      triggerEntitiesGetFirst();
     }
 
     forEachEntity();
@@ -48,6 +49,7 @@ g.common.recentActivityDifferance = (walkie, freshEntities) => {
   function checkRecentActivityDifferance(entity, id) {
     if (!oldEntities[id]) {
       oldEntities = freshEntities();
+      triggerEntitiesGetFirst();
     }
 
     if (entity.recentActivity) {
@@ -66,5 +68,14 @@ g.common.recentActivityDifferance = (walkie, freshEntities) => {
         );
       }
     }
+  }
+
+  function triggerEntitiesGetFirst() {
+    walkie.triggerEvent(
+      'entitiesGetFirst_',
+      'recentActivityDifferance.js',
+      {},
+      true
+    );
   }
 };

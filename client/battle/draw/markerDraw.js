@@ -5,35 +5,19 @@
 g.battle.markerDraw = (walkie, viewport, freshEntities) => {
   const battleContainer = viewport.getChildByName('battleContainer');
 
-  let isDone = false;
-
   (function init() {
     onEntitiesGet();
   })();
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
+      'viewportBattleReady_',
       'markerDraw.js',
       () => {
-        const gameEntity = freshEntities()[freshEntities()._id];
-
-        if (gameEntity.state !== 'battleState') {
-          return;
-        }
-
-        checkIsDone();
+        findPlayerId();
       },
       false
     );
-  }
-
-  function checkIsDone() {
-    if (isDone) {
-      return;
-    }
-
-    findPlayerId();
   }
 
   function findPlayerId() {
@@ -152,7 +136,5 @@ g.battle.markerDraw = (walkie, viewport, freshEntities) => {
         marker.y = offsetY;
       }
     });
-
-    isDone = true;
   }
 };

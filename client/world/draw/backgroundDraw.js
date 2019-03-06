@@ -2,24 +2,18 @@
 
 'use strict';
 
-g.world.drawBackground = (walkie, viewport, freshEntities) => {
+g.world.backgroundDraw = (walkie, viewport) => {
   const worldContainer = viewport.getChildByName('worldContainer');
 
   (function init() {
-    onEntitiesGet();
+    onEntitiesGetFirst();
   })();
 
-  function onEntitiesGet() {
+  function onEntitiesGetFirst() {
     walkie.onEvent(
-      'entitiesGet_',
-      'drawBackground.js',
+      'viewportWorldReady_',
+      'backgroundDraw.js',
       () => {
-        const gameEntity = freshEntities()[freshEntities()._id];
-
-        if (gameEntity.state !== 'worldState') {
-          return;
-        }
-
         drawBackground();
       },
       false
@@ -47,6 +41,7 @@ g.world.drawBackground = (walkie, viewport, freshEntities) => {
       background.drawRect(x, y, width, height);
       const zOrder = 1;
       worldContainer.addChildZ(background, zOrder);
+      worldContainer.sortChildren();
     }
   }
 };

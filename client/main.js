@@ -46,12 +46,13 @@ g.main = function main() {
 
     g.common.recentActivityDifferance(walkie, freshEntities);
     g.common.tweenMovementPath(walkie, viewport);
+    g.common.viewportClamp(walkie, viewport);
 
     g.world.worldInterfaceToggle($body, walkie);
     g.world.worldToggle(walkie, viewport, freshEntities);
     g.world.focusHero(walkie, viewport, freshEntities);
-    g.world.drawBackground(walkie, viewport, freshEntities);
-    g.world.drawFigures(walkie, auth, viewport, freshEntities);
+    g.world.backgroundDraw(walkie, viewport);
+    g.world.figuresDraw(walkie, auth, viewport, freshEntities);
     g.world.worldClick(walkie, auth, viewport, freshEntities);
     g.world.heroPath(walkie, auth, viewport, freshEntities);
     g.world.heroPathAcceptedPost(walkie, auth);
@@ -67,8 +68,8 @@ g.main = function main() {
     g.battle.battleInterfaceToggle($body, walkie);
     g.battle.waitMock($body, auth, freshEntities);
     g.battle.battleToggle(walkie, viewport, freshEntities);
-    g.battle.drawBackground(walkie, viewport, freshEntities);
-    g.battle.drawUnits(walkie, auth, viewport, freshEntities);
+    g.battle.backgroundDraw(walkie, viewport);
+    g.battle.unitsDraw(walkie, auth, viewport, freshEntities);
     g.battle.iconMelee(walkie, viewport, freshEntities);
     g.battle.battleClick(walkie, viewport, freshEntities);
     g.battle.enemyClick(walkie, auth, viewport, freshEntities);

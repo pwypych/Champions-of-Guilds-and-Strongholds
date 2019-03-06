@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.world.drawFigures = (walkie, auth, viewport, freshEntities) => {
+g.world.figuresDraw = (walkie, auth, viewport, freshEntities) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
@@ -14,15 +14,9 @@ g.world.drawFigures = (walkie, auth, viewport, freshEntities) => {
 
   function onRecentActivityDifferanceDone() {
     walkie.onEvent(
-      'recentActivityDifferanceDone_',
-      'drawFigures.js',
+      'viewportWorldReady_',
+      'figuresDraw.js',
       () => {
-        const gameEntity = freshEntities()[freshEntities()._id];
-
-        if (gameEntity.state !== 'worldState') {
-          return;
-        }
-
         forEachFigure();
       },
       false
@@ -42,7 +36,7 @@ g.world.drawFigures = (walkie, auth, viewport, freshEntities) => {
 
     if (!figureContainer) {
       // Should happen only once
-      // console.log('drawFigures: figure container', figureId);
+      // console.log('figuresDraw: figure container', figureId);
       figureContainer = new PIXI.Container();
       figureContainer.name = figureId;
       const zOrder = 100 + entity.position.y;

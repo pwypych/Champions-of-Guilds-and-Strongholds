@@ -15,7 +15,7 @@ g.world.worldToggle = (walkie, viewport, freshEntities) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
+      'entitiesGetFirst_',
       'worldToggle.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
@@ -40,5 +40,11 @@ g.world.worldToggle = (walkie, viewport, freshEntities) => {
   function setViewportDimentions(gameEntity) {
     viewport.worldWidth = gameEntity.mapData.width * blockWidthPx;
     viewport.worldHeight = gameEntity.mapData.height * blockHeightPx;
+
+    triggerViewportWorldReady();
+  }
+
+  function triggerViewportWorldReady() {
+    walkie.triggerEvent('viewportWorldReady_', 'worldToggle.js', {}, true);
   }
 };
