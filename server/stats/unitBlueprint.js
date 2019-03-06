@@ -6,7 +6,7 @@ const deepFreeze = require('deep-freeze');
 
 // What does this module do?
 // Returns object with all unit stats
-const unitStats = {
+const unitBlueprint = {
   // Tier 1
   goblin: {
     tier: 1,
@@ -233,5 +233,5 @@ const unitStats = {
   }
 };
 
-deepFreeze(unitStats);
-module.exports = unitStats;
+deepFreeze(unitBlueprint);
+module.exports = unitBlueprint;

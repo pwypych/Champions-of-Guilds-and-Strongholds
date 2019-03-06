@@ -113,8 +113,8 @@ function setupLibrariesAndRoutes() {
   const templateToHtml = require('./library/templateToHtml.js')();
   const findEntitiesByGameId = require('./library/findEntitiesByGameId.js')(db);
 
-  const unitStats = require('./stats/unitStats.js');
-  const figureStats = require('./stats/figureStats.js');
+  const unitBlueprint = require('./stats/unitBlueprint.js');
+  const figureBlueprint = require('./stats/figureBlueprint.js');
 
   // general
   app.get('/', (req, res) => {
@@ -128,7 +128,7 @@ function setupLibrariesAndRoutes() {
 
   app.post(
     '/panel/createGamePost',
-    require('./panel/createGamePost.js')(environment, db, figureStats)
+    require('./panel/createGamePost.js')(environment, db, figureBlueprint)
   );
 
   app.post(
@@ -245,7 +245,7 @@ function setupLibrariesAndRoutes() {
     ),
     require('./library/readEntities.js')(db),
     require('./ajax/world/endTurn/battleChecker.js')(db),
-    require('./ajax/world/endTurn/createBattle.js')(db, unitStats),
+    require('./ajax/world/endTurn/createBattle.js')(db, unitBlueprint),
     require('./ajax/world/endTurn/newDay.js')(db),
     require('./ajax/world/endTurn/refillHeroMovement.js')(db),
     require('./ajax/world/endTurn/unsetEndTurnFlags.js')(db)
@@ -256,7 +256,7 @@ function setupLibrariesAndRoutes() {
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/world/recruit/recruitUnitPost.js')(db, unitStats)
+    require('./ajax/world/recruit/recruitUnitPost.js')(db, unitBlueprint)
   );
 
   // battle
@@ -333,7 +333,7 @@ function setupLibrariesAndRoutes() {
     require('./library/readEntities.js')(db),
     require('./ajax/summary/confirm/worldChecker.js')(db),
     require('./ajax/world/endTurn/battleChecker.js')(db),
-    require('./ajax/world/endTurn/createBattle.js')(db, unitStats),
+    require('./ajax/world/endTurn/createBattle.js')(db, unitBlueprint),
     require('./ajax/world/endTurn/newDay.js')(db),
     require('./ajax/world/endTurn/refillHeroMovement.js')(db),
     require('./ajax/world/endTurn/unsetEndTurnFlags.js')(db)
