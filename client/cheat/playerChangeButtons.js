@@ -44,7 +44,7 @@ g.cheat.playerChangeButtons = ($body, auth) => {
       const $a = $('<a href="' + link.url + '">Player ' + i + '</a>');
       $a.css('margin-right', '10px');
       if (link.playerCurrent) {
-        $a.css('color', '#ffd700');
+        $a.addClass('text-blue-dark');
       }
 
       $cheat.append($a);

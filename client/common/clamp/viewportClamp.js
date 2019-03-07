@@ -32,10 +32,10 @@ g.common.viewportClamp = (walkie, viewport) => {
 
   function clampViewport() {
     viewport.clamp({
-      left: -32,
-      right: viewport.worldWidth + 32,
-      top: -32,
-      bottom: viewport.worldHeight + 32
+      left: -16,
+      right: viewport.worldWidth + 16,
+      top: -16,
+      bottom: viewport.worldHeight + 16
     });
   }
 };
