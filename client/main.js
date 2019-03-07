@@ -50,7 +50,7 @@ g.main = function main() {
 
     g.world.worldInterfaceToggle($body, walkie);
     g.world.worldToggle(walkie, viewport, freshEntities);
-    g.world.recruitUnitPrepare($body, walkie, freshEntities);
+    g.world.recruitUnitPrepare($body, walkie, freshEntities, auth);
     g.world.heroFocusWorldReady(walkie, viewport, freshEntities);
     g.world.heroFocusTween(walkie, viewport, freshEntities);
     g.world.backgroundDraw(walkie, viewport);
@@ -62,7 +62,6 @@ g.main = function main() {
     g.world.hasBeenCollectedIndicate(walkie, viewport);
     g.world.informationButton($body);
     g.world.informationModal($body, walkie, freshEntities);
-    g.world.recruitUnitClick($body, auth);
     g.world.chat($body, walkie);
     g.world.endTurnButton($body, auth, walkie, freshEntities);
     g.world.endTurnCountdown(walkie, freshEntities);

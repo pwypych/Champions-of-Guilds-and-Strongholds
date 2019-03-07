@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.world.recruitUnitPrepare = ($body, walkie, freshEntities) => {
+g.world.recruitUnitPrepare = ($body, walkie, freshEntities, auth) => {
   const $recruitUnit = $body.find(
     '.js-world-interface-information-modal .js-recruit-unit'
   );
@@ -71,6 +71,26 @@ g.world.recruitUnitPrepare = ($body, walkie, freshEntities) => {
       $recruitUnit.append($amountSpan);
       $recruitUnit.append($buyButton);
       $recruitUnit.append($seperator10);
+
+      onRecruitUnitButtonClick($buyButton);
+    });
+  }
+
+  function onRecruitUnitButtonClick($buyButton) {
+    $buyButton.on('click', (event) => {
+      const unitName = $(event.target).attr('data-unit-name');
+      console.log('recruitUnitClick:unitName:', unitName);
+      sendRecruitUnitPost(unitName);
+    });
+  }
+
+  function sendRecruitUnitPost(unitName) {
+    const data = { unitName: unitName };
+    $.post('/ajax/world/recruit/recruitUnitPost' + auth.uri, data, () => {
+      console.log(
+        'sendRecruitUnitPost: POST -> /ajax/world/recruit/recruitUnitPost',
+        data
+      );
     });
   }
 };
