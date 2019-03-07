@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.launch.launchTable = ($body, walkie) => {
+g.launch.launchTable = ($body, walkie, freshEntities) => {
   const $table = $body.find('#js-launch .js-table-name');
 
   (function init() {
@@ -11,19 +11,22 @@ g.launch.launchTable = ($body, walkie) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
-      'launchTable.js',
-      (entities) => {
-        if (entities[entities._id].state === 'launchState') {
-          // console.log('launchTable.js: update $table');
-          updateTable(entities);
+      'entitiesGetFirst_',
+      'battleToggle.js',
+      () => {
+        const gameEntity = freshEntities()[freshEntities()._id];
+
+        if (gameEntity.state !== 'battleState') {
+          return;
         }
+
+        updateTable();
       },
       false
     );
   }
 
-  function updateTable(entities) {
+  function updateTable() {
     $table.empty();
     const $title = $('<tr></tr>');
     $title.append('<td>Name</td>');
@@ -32,7 +35,7 @@ g.launch.launchTable = ($body, walkie) => {
     $title.append('<td>Ready</td>');
     $table.append($title);
 
-    _.forEach(entities, (entity) => {
+    _.forEach(freshEntities(), (entity) => {
       if (!entity.playerData) {
         return;
       }

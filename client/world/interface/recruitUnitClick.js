@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.world.recruitUnit = ($body, auth) => {
+g.world.recruitUnitClick = ($body, auth) => {
   const $recruitUnit = $body.find('.js-recruit-unit');
 
   (function init() {
@@ -14,7 +14,7 @@ g.world.recruitUnit = ($body, auth) => {
 
     $buttons.on('click', (event) => {
       const unitName = $(event.target).attr('data-unit-name');
-      console.log('recruitUnit:unitName:', unitName);
+      console.log('recruitUnitClick:unitName:', unitName);
       sendRecruitUnitPost(unitName);
     });
   }
