@@ -26,7 +26,7 @@ g.setup.setupImages = (auth, callback) => {
   function forEachSpriteFilename(spriteFilenameArray) {
     let message = '';
     spriteFilenameArray.forEach((spriteFilename) => {
-      const uri = '/sprite/' + spriteFilename;
+      const uri = '/sprite/' + spriteFilename + '?t=' + Date.now();
       const name = spriteFilename.substr(0, spriteFilename.length - 4);
       PIXI.loader.add(name, uri);
       message += name + ' ';
