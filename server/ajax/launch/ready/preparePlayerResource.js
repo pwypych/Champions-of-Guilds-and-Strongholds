@@ -5,23 +5,8 @@
 const debug = require('debug')('cogs:preparePlayerResource');
 const _ = require('lodash');
 
-module.exports = (db) => {
+module.exports = (db, raceBlueprint) => {
   return (req, res, next) => {
-    const raceResourceMap = {
-      human: {
-        wood: 0,
-        stone: 0,
-        gold: 1000,
-        crystal: 0
-      },
-      orc: {
-        wood: 0,
-        stone: 0,
-        gold: 2000,
-        crystal: 0
-      }
-    };
-
     (function init() {
       debug('// Set every player resources depending on chosen race');
 
@@ -54,7 +39,7 @@ module.exports = (db) => {
 
       const field = playerId + '.playerResources';
       const $set = {};
-      $set[field] = raceResourceMap[playerRace];
+      $set[field] = raceBlueprint()[playerRace].playerResources;
       const update = { $set: $set };
       const options = {};
 
