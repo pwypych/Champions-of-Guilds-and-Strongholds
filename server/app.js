@@ -175,7 +175,7 @@ function setupLibrariesAndRoutes() {
     require('./ajax/launch/ready/playerReadyPost.js')(db),
     require('./library/readEntities.js')(db),
     require('./ajax/launch/ready/everyPlayerReadyChecker.js')(),
-    require('./ajax/launch/ready/preparePlayerResource.js')(db),
+    require('./ajax/launch/ready/preparePlayerResource.js')(db, raceBlueprint),
     require('./ajax/launch/ready/prepareHeroFigure.js')(db, raceBlueprint),
     require('./ajax/launch/ready/launchCountdown.js')(db),
     require('./ajax/launch/ready/unsetReadyForLaunch.js')(db)

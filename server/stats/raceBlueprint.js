@@ -15,7 +15,13 @@ module.exports = () => {
         wizard: 10,
         cleric: 10
       },
-      heroStats: { movement: 15 }
+      heroStats: { movement: 15 },
+      playerResources: {
+        wood: 10,
+        stone: 5,
+        crystal: 1,
+        gold: 1500
+      }
     },
 
     undead: {
@@ -26,7 +32,13 @@ module.exports = () => {
         orc: 10,
         blackKnight: 10
       },
-      heroStats: { movement: 15 }
+      heroStats: { movement: 15 },
+      playerResources: {
+        wood: 5,
+        stone: 5,
+        crystal: 3,
+        gold: 1000
+      }
     },
 
     beast: {
@@ -37,7 +49,13 @@ module.exports = () => {
         worm: 10,
         minotaur: 10
       },
-      heroStats: { movement: 15 }
+      heroStats: { movement: 15 },
+      playerResources: {
+        wood: 15,
+        stone: 5,
+        crystal: 5,
+        gold: 500
+      }
     }
   };
 };
