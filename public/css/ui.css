@@ -8,9 +8,14 @@
 
 body {
   outline: 0;
-  font-family: 'Press Start 2P', cursive;
+  font-family: 'Arial', cursive;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
   color: #fff;
-  text-shadow: -3px -3px 0 #823c3d,  3px -3px 0 #823c3d, -3px 3px 0 #823c3d, 3px 3px 0 #823c3d;
+  /* text-shadow: -1px -1px 0 #000,  1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; */
+  text-shadow: -2px -2px 0 #000,  2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+  /* text-shadow: -3px -3px 0 #823c3d,  3px -3px 0 #823c3d, -3px 3px 0 #823c3d, 3px 3px 0 #823c3d; */
   background-color: #000;
 }
 
@@ -21,11 +26,13 @@ button {
   border-image-repeat: repeat;
   background: none;
 
-  font-family: 'Press Start 2P', cursive;
-  font-size: 12px;
-  line-height: 18px;
+  font-family: 'Arial', cursive;
+  font-size: 22px;
+  font-weight: 700;
   color: #fff;
-  text-shadow: -3px -3px 0 #376d03,  3px -3px 0 #376d03, -3px 3px 0 #376d03, 3px 3px 0 #376d03;
+  /* text-shadow: -2px -2px 0 #000,  2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000; */
+  text-shadow: -1px -1px 0 #000,  1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  /* text-shadow: -3px -3px 0 #376d03,  3px -3px 0 #376d03, -3px 3px 0 #376d03, 3px 3px 0 #376d03; */
   padding: 0px 0px 5px 5px
 }
 
@@ -36,7 +43,9 @@ button:active {
 
 button:disabled {
   padding: 3px 0px 2px 5px;
-  text-shadow: -3px -3px 0 #343434,  3px -3px 0 #343434, -3px 3px 0 #343434, 3px 3px 0 #343434;
+  text-shadow: -1px -1px 0 #000,  1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  /* text-shadow: -2px -2px 0 #000,  2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000; */
+  /* text-shadow: -3px -3px 0 #343434,  3px -3px 0 #343434, -3px 3px 0 #343434, 3px 3px 0 #343434; */
   border-image-source: url('/image/ui/border-image-button-disabled.png');
 }
 
@@ -52,20 +61,27 @@ input {
   border-image-slice: 6 fill;
   border-image-repeat: repeat;
 
-  font-family: 'Press Start 2P', cursive;
-  font-size: 15px;
+  font-family: 'Arial', cursive;
+  font-size: 22px;
+  font-weight: 700;
   color: #fff;
-  text-shadow: -3px -3px 0 #823c3d,  3px -3px 0 #823c3d, -3px 3px 0 #823c3d, 3px 3px 0 #823c3d;
+  text-shadow: -1px -1px 0 #000,  1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  /* text-shadow: -2px -2px 0 #000,  2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000; */
+  /* text-shadow: -3px -3px 0 #823c3d,  3px -3px 0 #823c3d, -3px 3px 0 #823c3d, 3px 3px 0 #823c3d; */
 }
 
 input:disabled {
   border-image-source: url('/image/ui/border-image-input-disabled.png');
-  text-shadow: -3px -3px 0 #343434,  3px -3px 0 #343434, -3px 3px 0 #343434, 3px 3px 0 #343434;
+  /* text-shadow: -2px -2px 0 #000,  2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000; */
+  text-shadow: -1px -1px 0 #000,  1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  /* text-shadow: -3px -3px 0 #343434,  3px -3px 0 #343434, -3px 3px 0 #343434, 3px 3px 0 #343434; */
 }
 
 a {
-  color: #fff;
-  text-shadow: -3px -3px 0 #0084ff,  3px -3px 0 #0084ff, -3px 3px 0 #0084ff, 3px 3px 0 #0084ff;
+  color: #0084ff;
+  text-shadow: -1px -1px 0 #000,  1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  /* text-shadow: -3px -3px 0 #0084ff,  3px -3px 0 #0084ff, -3px 3px 0 #0084ff, 3px 3px 0 #0084ff; */
+  /* text-shadow: -2px -2px 0 #000,  2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000; */
 }
 
 .card-brown {
