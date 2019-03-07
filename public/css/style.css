@@ -1,6 +1,6 @@
 /* needed by pixi */
 body {
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1;
 
   margin: 0;
@@ -60,14 +60,6 @@ p {
 
 .inline-block {
   display: inline-block;
-}
-
-.big {
-  font-size: 20px;
-}
-
-.huge {
-  font-size: 22px;
 }
 
 .vertical-align {
