@@ -1,7 +1,7 @@
 /* needed by pixi */
 body {
-  font-size: 12px;
-  line-height: 18px;
+  font-size: 18px;
+  line-height: 1;
 
   margin: 0;
   padding: 0;
@@ -29,12 +29,12 @@ h1, h2, h3, h4, h5 {
 }
 
 h1 {
-  font-size: 18px;
+  font-size: 22px;
   line-height: 28px;
 }
 
 h2 {
-  font-size: 14px;
+  font-size: 20px;
   line-height: 20px;
 }
 
@@ -63,11 +63,11 @@ p {
 }
 
 .big {
-  font-size: 14px;
+  font-size: 20px;
 }
 
 .huge {
-  font-size: 18px;
+  font-size: 22px;
 }
 
 .vertical-align {
@@ -88,6 +88,10 @@ p {
 
 .margin-bottom {
   margin-bottom: 15px;
+}
+
+.text-blue-dark {
+  color: #5094e0;
 }
 
 .background-green {
