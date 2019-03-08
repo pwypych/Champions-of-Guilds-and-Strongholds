@@ -113,9 +113,9 @@ function setupLibrariesAndRoutes() {
   const templateToHtml = require('./library/templateToHtml.js')();
   const findEntitiesByGameId = require('./library/findEntitiesByGameId.js')(db);
 
-  const unitBlueprint = require('./stats/unitBlueprint.js');
-  const figureBlueprint = require('./stats/figureBlueprint.js');
-  const raceBlueprint = require('./stats/raceBlueprint.js');
+  const unitBlueprint = require('./blueprint/unitBlueprint.js');
+  const figureBlueprint = require('./blueprint/figureBlueprint.js');
+  const raceBlueprint = require('./blueprint/raceBlueprint.js');
 
   // general
   app.get('/', (req, res) => {
