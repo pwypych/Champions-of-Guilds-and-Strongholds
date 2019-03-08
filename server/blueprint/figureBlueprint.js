@@ -7,6 +7,7 @@
 
 module.exports = () => {
   return {
+    // Units figures
     skeleton: {
       unitAmounts: {
         skeleton: 10
@@ -55,9 +56,9 @@ module.exports = () => {
       }
     },
 
-    eyball: {
+    eyeball: {
       unitAmounts: {
-        eyball: 8
+        eyeball: 8
       }
     },
 
@@ -97,60 +98,26 @@ module.exports = () => {
       }
     },
 
-    alchemist: {
-      unitAmounts: {
-        alchemist: 5
-      }
-    },
+    // Resource figures
+    crystal: { resource: { name: 'crystal', amount: 3 } },
 
-    archer: {
-      unitAmounts: {
-        archer: 5
-      }
-    },
+    gold: { resource: { name: 'gold', amount: 500 } },
 
-    bear: {
-      unitAmounts: {
-        bear: 5
-      }
-    },
+    wood: { resource: { name: 'wood', amount: 5 } },
 
+    stone: { resource: { name: 'stone', amount: 7 } },
+
+    // Rest of figures
     castleRandom: {
       spriteOffset: { x: -32, y: -64 },
       collision: true
     },
 
-    crystal: {
-      resource: { name: 'crystal', amount: 3 }
-    },
-
-    dirt: { collision: true },
-    goblin: {
-      unitAmounts: {
-        goblin: 5
-      }
-    },
-
-    gold: { resource: { name: 'gold', amount: 1500 } },
     rock: { collision: true },
-    rogue: {
-      unitAmounts: {
-        rogue: 5
-      }
-    },
 
-    spearbarer: {
-      unitAmounts: {
-        spearbarer: 5
-      }
-    },
-
-    stone: { resource: { name: 'stone', amount: 7 } },
     tree: {
       spriteOffset: { x: 0, y: -10 },
       collision: true
-    },
-
-    wood: { resource: { name: 'wood', amount: 5 } }
+    }
   };
 };

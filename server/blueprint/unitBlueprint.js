@@ -8,28 +8,6 @@
 module.exports = () => {
   return {
     // Tier 1
-    goblin: {
-      tier: 1,
-      damageMin: 2,
-      damageMax: 2,
-      life: 5,
-      initiative: 35,
-      movement: 5,
-      maneuver: 2,
-      recruitCost: 50
-    },
-
-    spearbarer: {
-      tier: 1,
-      damageMin: 3,
-      damageMax: 3,
-      life: 7,
-      initiative: 42,
-      movement: 3,
-      maneuver: 2,
-      recruitCost: 60
-    },
-
     butterfly: {
       tier: 1,
       damageMin: 1,
@@ -64,18 +42,7 @@ module.exports = () => {
     },
 
     // Tier 2
-    archer: {
-      tier: 2,
-      damageMin: 4,
-      damageMax: 4,
-      life: 15,
-      initiative: 60,
-      movement: 5,
-      maneuver: 2,
-      recruitCost: 110
-    },
-
-    eyball: {
+    eyeball: {
       tier: 2,
       damageMin: 5,
       damageMax: 5,
@@ -109,28 +76,6 @@ module.exports = () => {
     },
 
     // Tier 3
-    alchemist: {
-      tier: 3,
-      damageMin: 6,
-      damageMax: 6,
-      life: 15,
-      initiative: 55,
-      movement: 4,
-      maneuver: 2,
-      recruitCost: 250
-    },
-
-    bear: {
-      tier: 3,
-      damageMin: 3,
-      damageMax: 3,
-      life: 30,
-      initiative: 35,
-      movement: 3,
-      maneuver: 2,
-      recruitCost: 150
-    },
-
     plant: {
       tier: 3,
       damageMin: 5,

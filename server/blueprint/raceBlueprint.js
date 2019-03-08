@@ -9,51 +9,51 @@ module.exports = () => {
   return {
     human: {
       unitAmounts: {
-        rogue: 25,
-        warrior: 15,
-        ranger: 10,
-        wizard: 10,
-        cleric: 5
+        rogue: 10,
+        warrior: 5,
+        ranger: 0,
+        wizard: 0,
+        cleric: 0
       },
-      heroStats: { movement: 15 },
+      heroStats: { movement: 10 },
       playerResources: {
-        wood: 10,
-        stone: 5,
-        crystal: 1,
-        gold: 1500
+        wood: 0,
+        stone: 0,
+        crystal: 0,
+        gold: 500
       }
     },
 
     undead: {
       unitAmounts: {
-        skeleton: 25,
-        undeadRogue: 15,
-        crazyWizard: 10,
-        orc: 10,
-        blackKnight: 5
+        skeleton: 12,
+        undeadRogue: 4,
+        crazyWizard: 0,
+        orc: 0,
+        blackKnight: 0
       },
-      heroStats: { movement: 15 },
+      heroStats: { movement: 9 },
       playerResources: {
-        wood: 5,
-        stone: 5,
-        crystal: 3,
-        gold: 1000
+        wood: 0,
+        stone: 0,
+        crystal: 0,
+        gold: 500
       }
     },
 
     beast: {
       unitAmounts: {
-        butterfly: 25,
-        eyball: 15,
-        plant: 10,
-        worm: 10,
-        minotaur: 5
+        butterfly: 15,
+        eyeball: 5,
+        plant: 0,
+        worm: 0,
+        minotaur: 0
       },
-      heroStats: { movement: 15 },
+      heroStats: { movement: 11 },
       playerResources: {
-        wood: 15,
-        stone: 5,
-        crystal: 5,
+        wood: 0,
+        stone: 0,
+        crystal: 0,
         gold: 500
       }
     }
