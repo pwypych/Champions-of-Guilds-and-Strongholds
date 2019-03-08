@@ -75,7 +75,7 @@ module.exports = () => {
       recruitCost: 110
     },
 
-    eyball: {
+    eyeball: {
       tier: 2,
       damageMin: 5,
       damageMax: 5,

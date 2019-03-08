@@ -55,9 +55,9 @@ module.exports = () => {
       }
     },
 
-    eyball: {
+    eyeball: {
       unitAmounts: {
-        eyball: 8
+        eyeball: 8
       }
     },
 
