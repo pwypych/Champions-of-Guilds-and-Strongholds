@@ -312,28 +312,20 @@ module.exports = (environment, db) => {
             return;
           }
 
-          if (!foundTiledTile.properties) {
+          if (!foundTiledTile.image) {
             throw new Error(
-              'Tiled tile has no properties defined: ' + foundTiledTile.image
+              'Tiled tile has no image defined: ' + foundTiledTile.image
             );
           }
 
-          // tile properties are an array in tiled tileset. We must go through them to find 'name' property
-          let foundValue;
-          foundTiledTile.properties.forEach((property) => {
-            if (property.name === 'name') {
-              foundValue = property.value;
-            }
-          });
+          // find filename of image that corresponds to sprite name
+          // foundTiledTile is like: ../public/sprite/tree.png
+          const path = foundTiledTile.image;
+          const pathSplitted = path.split('/');
+          const filenameWithExtension = pathSplitted[pathSplitted.length - 1];
+          const spriteName = filenameWithExtension.split('.png').join('');
 
-          // if tile has no name property it is considered empty
-          if (!foundValue) {
-            throw new Error(
-              'Tiled tile has no name property defined: ' + foundTiledTile.image
-            );
-          }
-
-          mapLayer[y][x] = foundValue;
+          mapLayer[y][x] = spriteName;
 
           // debug('toolConvertNumbersToNames', y, x, mapLayer[y][x]);
         });

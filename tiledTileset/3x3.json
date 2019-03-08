@@ -21,13 +21,7 @@
          "id":0,
          "image":"..\/public\/sprite\/castleRandom.png",
          "imageheight":96,
-         "imagewidth":96,
-         "properties":[
-                {
-                 "name":"name",
-                 "type":"string",
-                 "value":"castleRandom"
-                }]
+         "imagewidth":96
         }],
  "tilewidth":96,
  "type":"tileset",
