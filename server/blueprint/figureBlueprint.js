@@ -113,6 +113,8 @@ module.exports = () => {
       collision: true
     },
 
+    dirt: { collision: true },
+
     rock: { collision: true },
 
     tree: {
