@@ -11,18 +11,18 @@ g.launch.launchTable = ($body, walkie, freshEntities) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGetFirst_',
-      'battleToggle.js',
+      'entitiesGet_',
+      'launchTable.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
 
-        if (gameEntity.state !== 'battleState') {
+        if (gameEntity.state !== 'launchState') {
           return;
         }
 
         updateTable();
       },
-      false
+      true
     );
   }
 
