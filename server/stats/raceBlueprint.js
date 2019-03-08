@@ -9,11 +9,11 @@ module.exports = () => {
   return {
     human: {
       unitAmounts: {
-        rogue: 10,
-        warrior: 10,
+        rogue: 25,
+        warrior: 15,
         ranger: 10,
         wizard: 10,
-        cleric: 10
+        cleric: 5
       },
       heroStats: { movement: 15 },
       playerResources: {
@@ -26,11 +26,11 @@ module.exports = () => {
 
     undead: {
       unitAmounts: {
-        skeleton: 10,
-        undeadRogue: 10,
+        skeleton: 25,
+        undeadRogue: 15,
         crazyWizard: 10,
         orc: 10,
-        blackKnight: 10
+        blackKnight: 5
       },
       heroStats: { movement: 15 },
       playerResources: {
@@ -43,11 +43,11 @@ module.exports = () => {
 
     beast: {
       unitAmounts: {
-        butterfly: 10,
-        eyball: 10,
+        butterfly: 25,
+        eyball: 15,
         plant: 10,
         worm: 10,
-        minotaur: 10
+        minotaur: 5
       },
       heroStats: { movement: 15 },
       playerResources: {
