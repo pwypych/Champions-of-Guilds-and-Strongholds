@@ -52,16 +52,20 @@ module.exports = (db, unitBlueprint) => {
 
       // battle map is 11 x 13
       const attackerPositions = [
-        { x: 0, y: 1 },
-        { x: 0, y: 3 },
         { x: 0, y: 5 },
+        { x: 0, y: 3 },
         { x: 0, y: 7 },
+        { x: 0, y: 1 },
         { x: 0, y: 9 }
       ];
 
       let counter = 0;
       _.forEach(attackerUnitCounts, (amount, unitName) => {
         if (counter > 5) {
+          return;
+        }
+
+        if (amount < 1) {
           return;
         }
 
@@ -90,10 +94,10 @@ module.exports = (db, unitBlueprint) => {
 
       // battle map is 11 x 13
       const defenderPositions = [
-        { x: 12, y: 1 },
-        { x: 12, y: 3 },
         { x: 12, y: 5 },
+        { x: 12, y: 3 },
         { x: 12, y: 7 },
+        { x: 12, y: 1 },
         { x: 12, y: 9 }
       ];
 
