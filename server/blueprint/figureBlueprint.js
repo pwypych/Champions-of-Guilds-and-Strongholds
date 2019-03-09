@@ -101,7 +101,7 @@ module.exports = () => {
     // Resource figures
     crystal: { resource: { name: 'crystal', amount: 3 } },
 
-    gold: { resource: { name: 'gold', amount: 500 } },
+    gold: { resource: { name: 'gold', amount: 1000 } },
 
     wood: { resource: { name: 'wood', amount: 5 } },
 
