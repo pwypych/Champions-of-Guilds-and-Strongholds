@@ -5,11 +5,11 @@
 const debug = require('debug')('cogs:summaryConfirm');
 const _ = require('lodash');
 
-module.exports = (db) => {
+module.exports = (db, raceBlueprint) => {
   return (req, res, next) => {
     (function init() {
       debug(
-        '// Expect winner player to confirm, remove all battle entities and update hero unit amount'
+        '// Expect winner player to confirm, remove all battle entities and update hero unit amounts'
       );
       const ctx = {};
       const entities = res.locals.entities;
@@ -74,7 +74,10 @@ module.exports = (db) => {
 
     function generateWinnerUnitsRemaining(ctx) {
       const entities = res.locals.entities;
-      const unitsRemaining = {};
+      const playerId = ctx.playerId;
+      const player = entities[playerId];
+      const race = player.playerData.race;
+      const unitsRemaining = raceBlueprint()[race].unitAmounts;
 
       _.forEach(entities, (entity) => {
         if (entity.unitStats) {

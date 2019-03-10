@@ -330,7 +330,7 @@ function setupLibrariesAndRoutes() {
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('summaryState'),
-    require('./ajax/summary/confirm/summaryConfirm.js')(db),
+    require('./ajax/summary/confirm/summaryConfirm.js')(db, raceBlueprint),
     require('./library/readEntities.js')(db),
     require('./ajax/summary/confirm/worldChecker.js')(db),
     require('./ajax/world/endTurn/battleChecker.js')(db),

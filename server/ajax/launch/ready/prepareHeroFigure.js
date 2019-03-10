@@ -38,16 +38,16 @@ module.exports = (db, raceBlueprint) => {
       const heroArray = [];
       _.forEach(playerArray, (player, index) => {
         const hero = {};
-        const races = raceBlueprint();
 
         hero.owner = player.id;
-        hero.figureName = races[player.playerData.race].heroFigure;
+        hero.figureName = raceBlueprint()[player.playerData.race].heroFigure;
 
         hero.position = {};
         hero.position.x = castleRandomArray[index].position.x;
         hero.position.y = castleRandomArray[index].position.y + 1;
 
-        const spriteOffset = races[player.playerData.race].spriteOffset;
+        const spriteOffset = raceBlueprint()[player.playerData.race]
+          .spriteOffset;
         hero.spriteOffset = spriteOffset;
 
         hero.heroStats = {
@@ -55,7 +55,7 @@ module.exports = (db, raceBlueprint) => {
           base: { movement: 15 }
         };
 
-        hero.unitAmounts = races[player.playerData.race].unitAmounts;
+        hero.unitAmounts = raceBlueprint()[player.playerData.race].unitAmounts;
 
         heroArray.push(hero);
       });
