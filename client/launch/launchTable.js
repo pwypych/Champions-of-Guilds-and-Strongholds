@@ -22,7 +22,7 @@ g.launch.launchTable = ($body, walkie, freshEntities) => {
 
         updateTable();
       },
-      true
+      false
     );
   }
 
