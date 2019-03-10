@@ -47,9 +47,8 @@ module.exports = (db, raceBlueprint) => {
         hero.position.x = castleRandomArray[index].position.x;
         hero.position.y = castleRandomArray[index].position.y + 1;
 
-        hero.spriteOffset = {};
-        hero.spriteOffset.x = -9;
-        hero.spriteOffset.y = -18;
+        const spriteOffset = races[player.playerData.race].spriteOffset;
+        hero.spriteOffset = spriteOffset;
 
         hero.heroStats = {
           current: { movement: 15 },

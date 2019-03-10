@@ -17,6 +17,7 @@ module.exports = () => {
       },
       heroStats: { movement: 10 },
       heroFigure: 'humanHero',
+      spriteOffset: { x: -5, y: -8 },
       playerResources: {
         wood: 0,
         stone: 0,
@@ -35,6 +36,7 @@ module.exports = () => {
       },
       heroStats: { movement: 9 },
       heroFigure: 'undeadHero',
+      spriteOffset: { x: -4, y: -8 },
       playerResources: {
         wood: 0,
         stone: 0,
@@ -53,6 +55,7 @@ module.exports = () => {
       },
       heroStats: { movement: 11 },
       heroFigure: 'beastHero',
+      spriteOffset: { x: -3, y: -16 },
       playerResources: {
         wood: 0,
         stone: 0,
