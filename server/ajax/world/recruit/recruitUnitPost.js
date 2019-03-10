@@ -14,8 +14,48 @@ module.exports = (db, unitBlueprint) => {
       ctx.gameId = res.locals.entities._id;
       ctx.playerId = res.locals.playerId;
 
-      findRecruitUnitCost(ctx);
+      findHeroUnitAmounts(ctx);
     })();
+
+    function findHeroUnitAmounts(ctx) {
+      const entities = ctx.entities;
+      const playerId = ctx.playerId;
+      let unitAmounts;
+
+      _.forEach(entities, (entity) => {
+        if (entity.heroStats && entity.owner === playerId) {
+          unitAmounts = entity.unitAmounts;
+        }
+      });
+
+      ctx.unitAmounts = unitAmounts;
+      checkCanPlayerRecruitUnit(ctx);
+    }
+
+    function checkCanPlayerRecruitUnit(ctx) {
+      const unitAmounts = ctx.unitAmounts;
+      const unitName = req.body.unitName;
+      let canPlayerRecruitUnit = false;
+
+      _.forEach(unitAmounts, (amount, heroUnitName) => {
+        if (unitName === heroUnitName) {
+          canPlayerRecruitUnit = true;
+        }
+      });
+
+      if (!canPlayerRecruitUnit) {
+        res.status(503);
+        res.send({
+          error: 'This unit is not from player race!'
+        });
+        debug('This unit is not from player race:');
+        debug('checkCanPlayerRecruitUnit: unitName:', unitName);
+        debug('******************** error ********************');
+        return;
+      }
+
+      findRecruitUnitCost(ctx);
+    }
 
     function findRecruitUnitCost(ctx) {
       const unitName = req.body.unitName;
@@ -48,10 +88,10 @@ module.exports = (db, unitBlueprint) => {
 
       ctx.playerGold = playerGold;
       debug('findPlayerCurrentGold: playerGold:', playerGold);
-      checkCanPlayerRecruitUnit(ctx);
+      checkCanPlayerAffordUnit(ctx);
     }
 
-    function checkCanPlayerRecruitUnit(ctx) {
+    function checkCanPlayerAffordUnit(ctx) {
       const playerGold = ctx.playerGold;
       const recruitCost = ctx.recruitCost;
       const unitName = ctx.unitName;
@@ -62,7 +102,7 @@ module.exports = (db, unitBlueprint) => {
       if (playerGoldRemaining < 0) {
         message =
           'Cannot afford ' + unitName + ' it cost: ' + recruitCost + ' gold.';
-        debug('checkCanPlayerRecruitUnit:', message);
+        debug('checkCanPlayerAffordUnit:', message);
         res.send({
           error: 1,
           message: message
@@ -78,7 +118,7 @@ module.exports = (db, unitBlueprint) => {
       });
 
       ctx.playerGoldRemaining = playerGoldRemaining;
-      debug('checkCanPlayerRecruitUnit: Yes!');
+      debug('checkCanPlayerAffordUnit: Yes!');
       updateSetPlayerResources(ctx);
     }
 
