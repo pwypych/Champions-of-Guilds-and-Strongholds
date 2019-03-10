@@ -13,7 +13,7 @@ module.exports = () => {
       life: 4,
       initiative: 75,
       movement: 8,
-      maneuver: 2,
+      maneuverPoints: 2,
       recruitCost: 40,
       skills: {
         melee: {
@@ -27,7 +27,7 @@ module.exports = () => {
       life: 6,
       initiative: 25,
       movement: 4,
-      maneuver: 2,
+      maneuverPoints: 2,
       recruitCost: 60,
       skills: {
         melee: {
@@ -41,7 +41,7 @@ module.exports = () => {
       life: 5,
       initiative: 50,
       movement: 4,
-      maneuver: 2,
+      maneuverPoints: 2,
       recruitCost: 80,
       skills: {
         melee: {
@@ -56,7 +56,7 @@ module.exports = () => {
       life: 10,
       initiative: 35,
       movement: 6,
-      maneuver: 2,
+      maneuverPoints: 2,
       recruitCost: 120,
       skills: {
         melee: {
@@ -70,7 +70,7 @@ module.exports = () => {
       life: 13,
       initiative: 35,
       movement: 4,
-      maneuver: 2,
+      maneuverPoints: 2,
       recruitCost: 110,
       skills: {
         melee: {
@@ -84,7 +84,7 @@ module.exports = () => {
       life: 17,
       initiative: 40,
       movement: 4,
-      maneuver: 2,
+      maneuverPoints: 2,
       recruitCost: 130,
       skills: {
         melee: {
@@ -99,7 +99,7 @@ module.exports = () => {
       life: 22,
       initiative: 40,
       movement: 4,
-      maneuver: 2,
+      maneuverPoints: 2,
       recruitCost: 200,
       skills: {
         melee: {
@@ -113,7 +113,7 @@ module.exports = () => {
       life: 17,
       initiative: 45,
       movement: 5,
-      maneuver: 2,
+      maneuverPoints: 2,
       recruitCost: 240,
       skills: {
         melee: {
@@ -127,7 +127,7 @@ module.exports = () => {
       life: 20,
       initiative: 55,
       movement: 5,
-      maneuver: 2,
+      maneuverPoints: 2,
       recruitCost: 200,
       skills: {
         melee: {
@@ -142,7 +142,7 @@ module.exports = () => {
       life: 30,
       initiative: 60,
       movement: 6,
-      maneuver: 2,
+      maneuverPoints: 2,
       recruitCost: 320,
       skills: {
         melee: {
@@ -156,7 +156,7 @@ module.exports = () => {
       life: 20,
       initiative: 30,
       movement: 6,
-      maneuver: 2,
+      maneuverPoints: 2,
       recruitCost: 300,
       skills: {
         melee: {
@@ -170,7 +170,7 @@ module.exports = () => {
       life: 35,
       initiative: 45,
       movement: 6,
-      maneuver: 2,
+      maneuverPoints: 2,
       recruitCost: 350,
       skills: {
         melee: {
@@ -185,7 +185,7 @@ module.exports = () => {
       life: 60,
       initiative: 50,
       movement: 5,
-      maneuver: 2,
+      maneuverPoints: 2,
       recruitCost: 600,
       skills: {
         melee: {
@@ -199,7 +199,7 @@ module.exports = () => {
       life: 45,
       initiative: 55,
       movement: 5,
-      maneuver: 2,
+      maneuverPoints: 2,
       recruitCost: 550,
       skills: {
         melee: {
@@ -213,7 +213,7 @@ module.exports = () => {
       life: 55,
       initiative: 70,
       movement: 6,
-      maneuver: 2,
+      maneuverPoints: 2,
       recruitCost: 500,
       skills: {
         melee: {

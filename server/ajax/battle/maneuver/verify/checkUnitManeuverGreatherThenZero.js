@@ -7,26 +7,26 @@ const debug = require('debug')('cogs:checkUnitManeuverGreatherThenZero');
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
-      debug('// Checks if unit have any maneuvers left');
+      debug('// Checks if unit have any maneuverPoints left');
       const entities = res.locals.entities;
       const entityId = res.locals.entityId;
 
-      checkUnitManeuver(entities, entityId);
+      checkUnitManeuverPoints(entities, entityId);
     })();
 
-    function checkUnitManeuver(entities, entityId) {
+    function checkUnitManeuverPoints(entities, entityId) {
       const unit = entities[entityId];
-      if (unit.unitStats.current.maneuver < 1) {
+      if (unit.unitStats.current.maneuverPoints < 1) {
         debug(
-          'checkUnitManeuver: No maneuvers remaining! - unit.unitStats.current.maneuver:',
-          unit.unitStats.current.maneuver
+          'checkUnitManeuverPoints: No maneuverPoints remaining! - unit.unitStats.current.maneuverPoints:',
+          unit.unitStats.current.maneuverPoints
         );
         return;
       }
 
       debug(
-        'checkUnitManeuver: Maneuvers remaining:',
-        unit.unitStats.current.maneuver
+        'checkUnitManeuverPoints: maneuverPoints remaining:',
+        unit.unitStats.current.maneuverPoints
       );
       next();
     }

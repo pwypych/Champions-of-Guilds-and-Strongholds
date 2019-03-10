@@ -8,7 +8,7 @@ module.exports = () => {
   return (req, res, next) => {
     (function init() {
       debug(
-        '// If unit has no maneuvers left it returns true, if unit does have maneuvers it returns false'
+        '// If unit has no maneuverPoints left it returns true, if unit does have maneuverPoints it returns false'
       );
 
       const entities = res.locals.entities;
@@ -19,18 +19,18 @@ module.exports = () => {
     })();
 
     function isUnitManeuverZero(unit) {
-      if (unit.unitStats.current.maneuver < 1) {
+      if (unit.unitStats.current.maneuverPoints < 1) {
         debug(
-          'isUnitManeuverZero: Yes, no maneuvers remaining:',
-          unit.unitStats.current.maneuver
+          'isUnitManeuverZero: maneuverPoints zero!',
+          unit.unitStats.current.maneuverPoints
         );
         next();
         return;
       }
 
       debug(
-        'isUnitManeuverZero: No, maneuvers remaining:',
-        unit.unitStats.current.maneuver
+        'isUnitManeuverZero: maneuverPoints remaining!',
+        unit.unitStats.current.maneuverPoints
       );
     }
   };

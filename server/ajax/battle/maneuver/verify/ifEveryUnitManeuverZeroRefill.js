@@ -9,7 +9,7 @@ module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
       debug(
-        '// If every unit in battle has no maneuvers left it returns true, if any unit does have maneuvers it returns false'
+        '// If every unit in battle has no maneuverPoints left it returns true, if any unit does have maneuverPoints it returns false'
       );
 
       const entities = res.locals.entities;
@@ -22,7 +22,7 @@ module.exports = (db) => {
       let isEveryUnitManeuverZero = true;
       _.forEach(entities, (entity) => {
         if (entity.unitStats) {
-          if (entity.unitStats.current.maneuver > 0) {
+          if (entity.unitStats.current.maneuverPoints > 0) {
             isEveryUnitManeuverZero = false;
           }
         }
@@ -49,8 +49,8 @@ module.exports = (db) => {
       const $set = {};
       _.forEach(entities, (entity, id) => {
         if (entity.unitStats) {
-          const field = id + '.unitStats.current.maneuver';
-          $set[field] = entity.unitStats.base.maneuver;
+          const field = id + '.unitStats.current.maneuverPoints';
+          $set[field] = entity.unitStats.base.maneuverPoints;
         }
       });
       const update = { $set: $set };

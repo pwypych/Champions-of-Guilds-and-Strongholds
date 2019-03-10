@@ -9,7 +9,7 @@ module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
       debug(
-        '// It marks unit that just did maneuver as not active, finds unit with highest initiative that has some maneuvers left, and marks it with active component'
+        '// It marks unit that just did maneuver as not active, finds unit with highest initiative that has some maneuverPoints left, and marks it with active component'
       );
 
       const entities = res.locals.entities;
@@ -46,7 +46,7 @@ module.exports = (db) => {
       let highestInitiative = 0;
 
       _.forEach(entities, (entity, id) => {
-        if (entity.unitStats && entity.unitStats.current.maneuver > 0) {
+        if (entity.unitStats && entity.unitStats.current.maneuverPoints > 0) {
           if (entity.unitStats.current.initiative > highestInitiative) {
             highestInitiative = entity.unitStats.current.initiative;
             nominatedUnitId = id;
