@@ -15,7 +15,7 @@ module.exports = () => {
       movement: 8,
       maneuverPoints: 2,
       recruitCost: 40,
-      skills: {
+      maneuvers: {
         melee: {
           damage: 1
         }
@@ -29,7 +29,7 @@ module.exports = () => {
       movement: 4,
       maneuverPoints: 2,
       recruitCost: 60,
-      skills: {
+      maneuvers: {
         melee: {
           damage: 2
         }
@@ -43,7 +43,7 @@ module.exports = () => {
       movement: 4,
       maneuverPoints: 2,
       recruitCost: 80,
-      skills: {
+      maneuvers: {
         melee: {
           damage: 3
         }
@@ -58,7 +58,7 @@ module.exports = () => {
       movement: 6,
       maneuverPoints: 2,
       recruitCost: 120,
-      skills: {
+      maneuvers: {
         melee: {
           damage: 5
         }
@@ -72,7 +72,7 @@ module.exports = () => {
       movement: 4,
       maneuverPoints: 2,
       recruitCost: 110,
-      skills: {
+      maneuvers: {
         melee: {
           damage: 4
         }
@@ -86,7 +86,7 @@ module.exports = () => {
       movement: 4,
       maneuverPoints: 2,
       recruitCost: 130,
-      skills: {
+      maneuvers: {
         melee: {
           damage: 2
         }
@@ -101,7 +101,7 @@ module.exports = () => {
       movement: 4,
       maneuverPoints: 2,
       recruitCost: 200,
-      skills: {
+      maneuvers: {
         melee: {
           damage: 5
         }
@@ -115,7 +115,7 @@ module.exports = () => {
       movement: 5,
       maneuverPoints: 2,
       recruitCost: 240,
-      skills: {
+      maneuvers: {
         melee: {
           damage: 6
         }
@@ -129,7 +129,7 @@ module.exports = () => {
       movement: 5,
       maneuverPoints: 2,
       recruitCost: 200,
-      skills: {
+      maneuvers: {
         melee: {
           damage: 4
         }
@@ -144,7 +144,7 @@ module.exports = () => {
       movement: 6,
       maneuverPoints: 2,
       recruitCost: 320,
-      skills: {
+      maneuvers: {
         melee: {
           damage: 7
         }
@@ -158,7 +158,7 @@ module.exports = () => {
       movement: 6,
       maneuverPoints: 2,
       recruitCost: 300,
-      skills: {
+      maneuvers: {
         melee: {
           damage: 8
         }
@@ -172,7 +172,7 @@ module.exports = () => {
       movement: 6,
       maneuverPoints: 2,
       recruitCost: 350,
-      skills: {
+      maneuvers: {
         melee: {
           damage: 6
         }
@@ -187,7 +187,7 @@ module.exports = () => {
       movement: 5,
       maneuverPoints: 2,
       recruitCost: 600,
-      skills: {
+      maneuvers: {
         melee: {
           damage: 10
         }
@@ -201,7 +201,7 @@ module.exports = () => {
       movement: 5,
       maneuverPoints: 2,
       recruitCost: 550,
-      skills: {
+      maneuvers: {
         melee: {
           damage: 15
         }
@@ -215,7 +215,7 @@ module.exports = () => {
       movement: 6,
       maneuverPoints: 2,
       recruitCost: 500,
-      skills: {
+      maneuvers: {
         melee: {
           damage: 13
         }

@@ -25,7 +25,7 @@ module.exports = (db) => {
 
     function checkUnitSkill(ctx) {
       const unit = ctx.unit;
-      if (!unit.unitStats.current.skills.melee) {
+      if (!unit.unitStats.current.maneuvers.melee) {
         debug('checkUnitSkill: Unit does not have "melee" skill!');
         return;
       }
@@ -189,7 +189,7 @@ module.exports = (db) => {
       const unit = ctx.unit;
       const unitAmount = unit.amount;
       const damageModificator = ctx.damageModificator / 100;
-      const damage = unit.unitStats.current.skills.melee.damage;
+      const damage = unit.unitStats.current.maneuvers.melee.damage;
 
       debug(
         'calculateUnitDamageSum: damageSum = ',
