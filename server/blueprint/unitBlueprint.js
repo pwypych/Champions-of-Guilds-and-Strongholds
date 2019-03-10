@@ -10,171 +10,216 @@ module.exports = () => {
     // Tier 1
     butterfly: {
       tier: 1,
-      damageMin: 1,
-      damageMax: 1,
       life: 4,
       initiative: 75,
       movement: 8,
       maneuver: 2,
-      recruitCost: 40
+      recruitCost: 40,
+      skills: {
+        melee: {
+          damage: 1
+        }
+      }
     },
 
     skeleton: {
       tier: 1,
-      damageMin: 2,
-      damageMax: 2,
       life: 6,
       initiative: 25,
       movement: 4,
       maneuver: 2,
-      recruitCost: 60
+      recruitCost: 60,
+      skills: {
+        melee: {
+          damage: 2
+        }
+      }
     },
 
     rogue: {
       tier: 1,
-      damageMin: 3,
-      damageMax: 3,
       life: 5,
       initiative: 50,
       movement: 4,
       maneuver: 2,
-      recruitCost: 80
+      recruitCost: 80,
+      skills: {
+        melee: {
+          damage: 3
+        }
+      }
     },
 
     // Tier 2
     eyeball: {
       tier: 2,
-      damageMin: 5,
-      damageMax: 5,
       life: 10,
       initiative: 35,
       movement: 6,
       maneuver: 2,
-      recruitCost: 120
+      recruitCost: 120,
+      skills: {
+        melee: {
+          damage: 5
+        }
+      }
     },
 
     undeadRogue: {
       tier: 2,
-      damageMin: 4,
-      damageMax: 4,
       life: 13,
       initiative: 35,
       movement: 4,
       maneuver: 2,
-      recruitCost: 110
+      recruitCost: 110,
+      skills: {
+        melee: {
+          damage: 4
+        }
+      }
     },
 
     warrior: {
       tier: 2,
-      damageMin: 2,
-      damageMax: 2,
       life: 17,
       initiative: 40,
       movement: 4,
       maneuver: 2,
-      recruitCost: 130
+      recruitCost: 130,
+      skills: {
+        melee: {
+          damage: 2
+        }
+      }
     },
 
     // Tier 3
     plant: {
       tier: 3,
-      damageMin: 5,
-      damageMax: 5,
       life: 22,
       initiative: 40,
       movement: 4,
       maneuver: 2,
-      recruitCost: 200
+      recruitCost: 200,
+      skills: {
+        melee: {
+          damage: 5
+        }
+      }
     },
 
     crazyWizard: {
       tier: 3,
-      damageMin: 6,
-      damageMax: 6,
       life: 17,
       initiative: 45,
       movement: 5,
       maneuver: 2,
-      recruitCost: 240
+      recruitCost: 240,
+      skills: {
+        melee: {
+          damage: 6
+        }
+      }
     },
 
     ranger: {
       tier: 3,
-      damageMin: 4,
-      damageMax: 4,
       life: 20,
       initiative: 55,
       movement: 5,
       maneuver: 2,
-      recruitCost: 200
+      recruitCost: 200,
+      skills: {
+        melee: {
+          damage: 4
+        }
+      }
     },
 
     // Tier 4
     worm: {
       tier: 4,
-      damageMin: 8,
-      damageMax: 8,
       life: 30,
       initiative: 60,
       movement: 6,
       maneuver: 2,
-      recruitCost: 320
+      recruitCost: 320,
+      skills: {
+        melee: {
+          damage: 7
+        }
+      }
     },
 
     wizard: {
       tier: 4,
-      damageMin: 8,
-      damageMax: 8,
       life: 20,
       initiative: 30,
       movement: 6,
       maneuver: 2,
-      recruitCost: 300
+      recruitCost: 300,
+      skills: {
+        melee: {
+          damage: 8
+        }
+      }
     },
 
     orc: {
       tier: 4,
-      damageMin: 7,
-      damageMax: 7,
       life: 35,
       initiative: 45,
       movement: 6,
       maneuver: 2,
-      recruitCost: 350
+      recruitCost: 350,
+      skills: {
+        melee: {
+          damage: 6
+        }
+      }
     },
 
     // Tier 5
     minotaur: {
       tier: 5,
-      damageMin: 10,
-      damageMax: 10,
       life: 60,
       initiative: 50,
       movement: 5,
       maneuver: 2,
-      recruitCost: 600
+      recruitCost: 600,
+      skills: {
+        melee: {
+          damage: 10
+        }
+      }
     },
 
     blackKnight: {
       tier: 5,
-      damageMin: 15,
-      damageMax: 15,
       life: 45,
       initiative: 55,
       movement: 5,
       maneuver: 2,
-      recruitCost: 550
+      recruitCost: 550,
+      skills: {
+        melee: {
+          damage: 15
+        }
+      }
     },
 
     cleric: {
       tier: 5,
-      damageMin: 13,
-      damageMax: 13,
       life: 55,
       initiative: 70,
       movement: 6,
       maneuver: 2,
-      recruitCost: 500
+      recruitCost: 500,
+      skills: {
+        melee: {
+          damage: 13
+        }
+      }
     }
   };
 };
