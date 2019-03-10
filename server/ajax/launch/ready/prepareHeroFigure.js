@@ -41,7 +41,7 @@ module.exports = (db, raceBlueprint) => {
         const races = raceBlueprint();
 
         hero.owner = player.id;
-        hero.figureName = 'heroHuman';
+        hero.figureName = races[player.playerData.race].heroFigure;
 
         hero.position = {};
         hero.position.x = castleRandomArray[index].position.x;

@@ -35,11 +35,7 @@ g.world.heroFocusWorldReady = (walkie, viewport, freshEntities) => {
   function findHeroPosition(playerId) {
     let hero;
     _.forEach(freshEntities(), (entity) => {
-      if (
-        entity.figureName === 'heroHuman' &&
-        entity.owner === playerId &&
-        entity.position
-      ) {
+      if (entity.heroStats && entity.owner === playerId && entity.position) {
         hero = entity;
       }
     });
