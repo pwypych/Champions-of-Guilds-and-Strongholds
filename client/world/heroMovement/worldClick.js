@@ -46,11 +46,7 @@ g.world.worldClick = (walkie, auth, viewport, freshEntities) => {
     let hero;
     let heroId;
     _.forEach(freshEntities(), (entity, id) => {
-      if (
-        entity.figureName === 'heroHuman' &&
-        entity.owner === playerId &&
-        entity.position
-      ) {
+      if (entity.heroStats && entity.owner === playerId && entity.position) {
         hero = entity;
         heroId = id;
       }

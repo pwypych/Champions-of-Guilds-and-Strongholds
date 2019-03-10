@@ -16,6 +16,7 @@ module.exports = () => {
         cleric: 0
       },
       heroStats: { movement: 10 },
+      heroFigure: 'humanHero',
       playerResources: {
         wood: 0,
         stone: 0,
@@ -33,6 +34,7 @@ module.exports = () => {
         blackKnight: 0
       },
       heroStats: { movement: 9 },
+      heroFigure: 'undeadHero',
       playerResources: {
         wood: 0,
         stone: 0,
@@ -50,6 +52,7 @@ module.exports = () => {
         minotaur: 0
       },
       heroStats: { movement: 11 },
+      heroFigure: 'beastHero',
       playerResources: {
         wood: 0,
         stone: 0,
