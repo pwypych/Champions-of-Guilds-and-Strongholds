@@ -20,8 +20,19 @@ module.exports = (db) => {
       ctx.entityId = res.locals.entityId;
       ctx.unit = entities[ctx.entityId];
 
-      checkRequestBodyMeleeOnPosition(ctx);
+      checkUnitSkill(ctx);
     })();
+
+    function checkUnitSkill(ctx) {
+      const unit = ctx.unit;
+      if (!unit.unitStats.current.skills.melee) {
+        debug('checkUnitSkill: Unit does not have "melee" skill!');
+        return;
+      }
+
+      debug('checkUnitSkill: Unit has "melee" skill!');
+      checkRequestBodyMeleeOnPosition(ctx);
+    }
 
     function checkRequestBodyMeleeOnPosition(ctx) {
       const meleeOnPosition = req.body.meleeOnPosition;
@@ -32,7 +43,9 @@ module.exports = (db) => {
         !validator.isNumeric(meleeOnPosition.x) ||
         !validator.isNumeric(meleeOnPosition.y)
       ) {
-        debug('POST parameter meleeOnPosition not valid');
+        debug(
+          'checkRequestBodyMeleeOnPosition: POST parameter meleeOnPosition not valid!'
+        );
         return;
       }
 
@@ -55,13 +68,13 @@ module.exports = (db) => {
       const distanceY = Math.abs(unit.position.y - meleeOnPosition.y);
 
       if (distanceX !== 0 && distanceX !== 1) {
-        const message = 'Cannot melee more than one step';
+        const message = 'Cannot melee more than one step!';
         debug('checkIsMeleePositionInRange: ', message);
         return;
       }
 
       if (distanceY !== 0 && distanceY !== 1) {
-        const message = 'Cannot melee more than one step';
+        const message = 'Cannot melee more than one step!';
         debug('checkIsMeleePositionInRange: ', message);
         return;
       }
@@ -89,7 +102,7 @@ module.exports = (db) => {
 
       if (!targetId) {
         debug(
-          'checkIsUnitOnMeleePosition - No target found on: meleeOnPosition:',
+          'checkIsUnitOnMeleePosition: No target found! meleeOnPosition:',
           meleeOnPosition
         );
         return;
@@ -105,7 +118,7 @@ module.exports = (db) => {
       const unit = ctx.unit;
       const target = ctx.target;
       if (target.boss === unit.boss) {
-        debug('checkIsTragetFriendly: Cannot attack friendly unit');
+        debug('checkIsTragetFriendly: Cannot attack friendly unit!');
         debug('checkIsTragetFriendly: Attacker:', unit);
         debug('checkIsTragetFriendly: Defender:', target);
         return;
@@ -174,23 +187,19 @@ module.exports = (db) => {
 
     function calculateUnitDamageSum(ctx) {
       const unit = ctx.unit;
-      const damageMax = unit.unitStats.current.damageMax;
-      const damageMin = unit.unitStats.current.damageMin;
       const unitAmount = unit.amount;
       const damageModificator = ctx.damageModificator / 100;
+      const damage = unit.unitStats.current.skills.melee.damage;
 
-      const randomDamage = _.random(damageMin, damageMax);
       debug(
         'calculateUnitDamageSum: damageSum = ',
-        randomDamage,
+        damage,
         ' * ',
         unitAmount,
         ' * ',
         damageModificator
       );
-      const damageSum = Math.floor(
-        randomDamage * unitAmount * damageModificator
-      );
+      const damageSum = Math.floor(damage * unitAmount * damageModificator);
       debug('countUnitDamage: damageSum:', damageSum);
       ctx.damageSum = damageSum;
       calculateTargetLifeSum(ctx);
@@ -221,7 +230,7 @@ module.exports = (db) => {
 
       if (targetLifeSumRemaining < 1) {
         debug('calculateTargetUnitsRemaining: Unit should DIE!');
-        updateUnsetUnitEntitiy(ctx);
+        updateUnitThatDied(ctx);
         return;
       }
 
@@ -230,12 +239,13 @@ module.exports = (db) => {
         targetLifeSumRemaining / targetBaseLife
       );
 
-      const lifeRemaining = targetLifeSumRemaining % targetBaseLife;
+      const damageRemaining = damageSum % targetBaseLife;
 
       ctx.targetUnitsRemaining = targetUnitsRemaining;
-      ctx.lifeRemaining = lifeRemaining;
+      ctx.lifeRemaining = targetBaseLife - damageRemaining;
 
-      debug('calculateTargetUnitsRemaining: lifeRemaining', lifeRemaining);
+      debug('calculateTargetUnitsRemaining: damageRemaining', damageRemaining);
+      debug('calculateTargetUnitsRemaining: lifeRemaining', ctx.lifeRemaining);
       updateSetTargetAmount(ctx);
     }
 
@@ -278,10 +288,10 @@ module.exports = (db) => {
       );
     }
 
-    function updateUnsetUnitEntitiy(ctx) {
+    function updateUnitThatDied(ctx) {
       const gameId = ctx.gameId;
       const targetId = ctx.targetId;
-      debug('updateUnsetUnitEntitiy: targetId:', targetId);
+      debug('updateUnitThatDied: targetId:', targetId);
       const target = ctx.target;
       const position = target.position;
       const unitName = target.unitName;
@@ -314,10 +324,10 @@ module.exports = (db) => {
         options,
         (error) => {
           if (error) {
-            debug('updateUnsetUnitEntitiy: error: ', error);
+            debug('updateUnitThatDied: error: ', error);
           }
 
-          debug('updateUnsetUnitEntitiy: Target was killed');
+          debug('updateUnitThatDied: Target was killed');
           next();
         }
       );
