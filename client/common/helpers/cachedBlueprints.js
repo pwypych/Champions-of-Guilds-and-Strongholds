@@ -2,22 +2,23 @@
 
 'use strict';
 
-g.common.chachedBlueprints = (auth) => {
-  let chachedBlueprints = {};
+g.common.cachedBlueprints = (auth) => {
+  let cachedBlueprints = {};
 
   (function init() {
-    console.log('init');
+    console.log('init g.common.cachedBlueprints');
     getCachedBlueprints();
   })();
 
   function getCachedBlueprints() {
     $.get('/ajax/blueprint/blueprintGet' + auth.uri, (blueprints) => {
-      chachedBlueprints = blueprints;
+      console.log('getCachedBlueprints: blueprints:', blueprints);
+      cachedBlueprints = blueprints;
     });
   }
 
   function read() {
-    return chachedBlueprints;
+    return cachedBlueprints;
   }
 
   return read;

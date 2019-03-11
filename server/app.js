@@ -161,8 +161,13 @@ function setupLibrariesAndRoutes() {
 
   app.get(
     '/ajax/blueprint/blueprintGet',
+    require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
-    require('./ajax/blueprint/blueprintGet.js')()
+    require('./ajax/blueprint/blueprintGet.js')(
+      unitBlueprint,
+      figureBlueprint,
+      raceBlueprint
+    )
   );
 
   app.get(
