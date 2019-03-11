@@ -23,7 +23,7 @@ module.exports = (unitBlueprint, figureBlueprint, raceBlueprint) => {
     }
 
     function sendBlueprintObject(blueprint) {
-      debug('sendBlueprintObject: blueprint:', blueprint);
+      debug('sendBlueprintObject');
       res.send(blueprint);
       debug('******************** ajax ********************');
     }
