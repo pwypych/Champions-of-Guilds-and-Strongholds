@@ -86,8 +86,7 @@ g.battle.emptyBlockClick = (walkie, auth, viewport, freshEntities) => {
     });
 
     const finder = new PF.AStarFinder({
-      allowDiagonal: false,
-      weight: -1000
+      allowDiagonal: false
     });
 
     const pathArrayOfArrays = finder.findPath(
