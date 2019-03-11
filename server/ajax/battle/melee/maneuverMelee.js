@@ -64,23 +64,22 @@ module.exports = (db) => {
       const meleeOnPosition = ctx.meleeOnPosition;
       const unit = ctx.unit;
 
-      const distanceX = Math.abs(unit.position.x - meleeOnPosition.x);
-      const distanceY = Math.abs(unit.position.y - meleeOnPosition.y);
+      [
+        { x: 0, y: -1 },
+        { x: 1, y: 0 },
+        { x: 0, y: 1 },
+        { x: -1, y: 0 }
+      ].forEach((offset) => {
+        if (
+          meleeOnPosition.x === unit.position.x + offset.x &&
+          meleeOnPosition.y === unit.position.y + offset.y
+        ) {
+          debug('checkIsMeleePositionInRange: Yes, attack possible!');
+          checkIsUnitOnMeleePosition(ctx);
+        }
+      });
 
-      if (distanceX !== 0 && distanceX !== 1) {
-        const message = 'Cannot melee more than one step!';
-        debug('checkIsMeleePositionInRange: ', message);
-        return;
-      }
-
-      if (distanceY !== 0 && distanceY !== 1) {
-        const message = 'Cannot melee more than one step!';
-        debug('checkIsMeleePositionInRange: ', message);
-        return;
-      }
-
-      debug('checkIsMeleePositionInRange: Yes, melee attack in range!');
-      checkIsUnitOnMeleePosition(ctx);
+      debug('checkIsMeleePositionInRange: No, cannot attack this position!');
     }
 
     function checkIsUnitOnMeleePosition(ctx) {

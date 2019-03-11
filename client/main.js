@@ -32,6 +32,7 @@ g.main = function main() {
     g.common.entitiesInterval(walkie, auth);
 
     const freshEntities = g.common.freshEntities(walkie);
+    const cachedBlueprints = g.common.cachedBlueprints(auth);
 
     g.launch.launchToggle($body, walkie);
     g.launch.launchInputName($body, auth);
