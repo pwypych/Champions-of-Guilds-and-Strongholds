@@ -33,7 +33,9 @@ g.summary.summaryToggle = ($body, walkie, viewport, auth, freshEntities) => {
   function destroySpritesInBattleContainer() {
     const battleContainer = viewport.getChildByName('battleContainer');
     _.forEach(battleContainer.children, (child) => {
-      child.destroy({ children: true });
+      if (child) {
+        child.destroy({ children: true });
+      }
     });
 
     findPlayerId();
