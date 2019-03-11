@@ -77,7 +77,12 @@ module.exports = (db, raceBlueprint) => {
       const playerId = ctx.playerId;
       const player = entities[playerId];
       const race = player.playerData.race;
-      const unitsRemaining = raceBlueprint()[race].unitAmounts;
+      const unitAmountsBase = raceBlueprint()[race].unitAmounts;
+      const unitsRemaining = {};
+
+      _.forEach(unitAmountsBase, (amount, unitName) => {
+        unitsRemaining[unitName] = 0;
+      });
 
       _.forEach(entities, (entity) => {
         if (entity.unitStats) {

@@ -9,8 +9,8 @@ module.exports = () => {
   return {
     human: {
       unitAmounts: {
-        rogue: 0,
-        warrior: 0,
+        rogue: 10,
+        warrior: 5,
         ranger: 0,
         wizard: 0,
         cleric: 0
@@ -22,14 +22,14 @@ module.exports = () => {
         wood: 0,
         stone: 0,
         crystal: 0,
-        gold: 2500
+        gold: 1500
       }
     },
 
     undead: {
       unitAmounts: {
-        skeleton: 0,
-        undeadRogue: 0,
+        skeleton: 10,
+        undeadRogue: 5,
         crazyWizard: 0,
         orc: 0,
         blackKnight: 0
@@ -41,14 +41,14 @@ module.exports = () => {
         wood: 0,
         stone: 0,
         crystal: 0,
-        gold: 2500
+        gold: 1500
       }
     },
 
     beast: {
       unitAmounts: {
-        butterfly: 0,
-        eyeball: 0,
+        butterfly: 10,
+        eyeball: 5,
         plant: 0,
         worm: 0,
         minotaur: 0
@@ -60,7 +60,7 @@ module.exports = () => {
         wood: 0,
         stone: 0,
         crystal: 0,
-        gold: 2500
+        gold: 1500
       }
     }
   };
