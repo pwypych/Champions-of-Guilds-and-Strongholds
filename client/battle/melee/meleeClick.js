@@ -4,7 +4,7 @@
 
 // What does this module do?
 // It listens to click_ events, checks if click happened on enemy one block away and sends melee POST
-g.battle.enemyClick = (walkie, auth, viewport, freshEntities) => {
+g.battle.meleeClick = (walkie, auth, viewport, freshEntities) => {
   (function init() {
     onClick();
   })();
@@ -12,7 +12,7 @@ g.battle.enemyClick = (walkie, auth, viewport, freshEntities) => {
   function onClick() {
     walkie.onEvent(
       'click_',
-      'enemyClick.js',
+      'meleeClick.js',
       (data) => {
         const clickPosition = data.position;
         findPlayerId(clickPosition);

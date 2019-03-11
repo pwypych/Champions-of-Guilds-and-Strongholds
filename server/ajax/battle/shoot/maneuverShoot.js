@@ -20,8 +20,19 @@ module.exports = (db) => {
       ctx.unitId = res.locals.unitId;
       ctx.unit = entities[ctx.unitId];
 
-      checkRequestBodyShootPath(ctx);
+      checkUnitSkill(ctx);
     })();
+
+    function checkUnitSkill(ctx) {
+      const unit = ctx.unit;
+      if (!unit.unitStats.current.maneuvers.shoot) {
+        debug('checkUnitSkill: Unit does not have "shoot" skill!');
+        return;
+      }
+
+      debug('checkUnitSkill: Unit has "shoot" skill!');
+      checkRequestBodyShootPath(ctx);
+    }
 
     function checkRequestBodyShootPath(ctx) {
       const shootPath = [];

@@ -72,8 +72,8 @@ g.main = function main() {
     g.battle.backgroundDraw(walkie, viewport);
     g.battle.unitsDraw(walkie, auth, viewport, freshEntities);
     g.battle.iconMelee(walkie, viewport, freshEntities);
-    g.battle.battleClick(walkie, viewport, freshEntities);
-    g.battle.enemyClick(walkie, auth, viewport, freshEntities);
+    g.battle.movementClick(walkie, viewport, freshEntities);
+    g.battle.meleeClick(walkie, auth, viewport, freshEntities);
     g.battle.emptyBlockClick(walkie, auth, viewport, freshEntities);
     g.battle.unitPath(walkie, auth, viewport, freshEntities);
     g.battle.unitPathAcceptedPost(walkie, auth);
@@ -85,6 +85,7 @@ g.main = function main() {
     g.battle.markerActiveAnimate(walkie, viewport, freshEntities);
     g.battle.unitFocusActive(walkie, viewport, freshEntities);
     g.battle.unitFocusTween(walkie, viewport, freshEntities);
+    g.battle.iconShoot(walkie, viewport, freshEntities);
 
     g.summary.summaryToggle($body, walkie, viewport, auth, freshEntities);
     g.summary.summaryConfirm($body, auth);
