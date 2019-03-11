@@ -113,9 +113,9 @@ function setupLibrariesAndRoutes() {
   const templateToHtml = require('./library/templateToHtml.js')();
   const findEntitiesByGameId = require('./library/findEntitiesByGameId.js')(db);
 
-  const unitBlueprint = require('./blueprint/unitBlueprint.js');
-  const figureBlueprint = require('./blueprint/figureBlueprint.js');
-  const raceBlueprint = require('./blueprint/raceBlueprint.js');
+  const unitBlueprint = require('./ajax/blueprint/unitBlueprint.js');
+  const figureBlueprint = require('./ajax/blueprint/figureBlueprint.js');
+  const raceBlueprint = require('./ajax/blueprint/raceBlueprint.js');
 
   // general
   app.get('/', (req, res) => {
@@ -157,6 +157,12 @@ function setupLibrariesAndRoutes() {
     require('./ajax/world/entities/worldEntitiesGet.js')(),
     require('./ajax/battle/entities/battleEntitiesGet.js')(),
     require('./ajax/summary/entities/summaryEntitiesGet.js')()
+  );
+
+  app.get(
+    '/ajax/blueprint/blueprintGet',
+    require('./library/middlewareTokenAuth.js')(),
+    require('./ajax/blueprint/blueprintGet.js')()
   );
 
   app.get(
