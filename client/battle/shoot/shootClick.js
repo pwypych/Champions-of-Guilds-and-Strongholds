@@ -3,8 +3,8 @@
 'use strict';
 
 // What does this module do?
-// It listens to click_ events, checks if click happened on enemy one block away and sends melee POST
-g.battle.meleeClick = (walkie, auth, viewport, freshEntities) => {
+// It listens to click_ events, checks if click happened on enemy that is not one block away and sends shoot POST
+g.battle.shootClick = (walkie, auth, viewport, freshEntities) => {
   (function init() {
     onClick();
   })();
@@ -12,7 +12,7 @@ g.battle.meleeClick = (walkie, auth, viewport, freshEntities) => {
   function onClick() {
     walkie.onEvent(
       'click_',
-      'meleeClick.js',
+      'shootClick.js',
       (data) => {
         const clickPosition = data.position;
         findPlayerId(clickPosition);
@@ -75,17 +75,52 @@ g.battle.meleeClick = (walkie, auth, viewport, freshEntities) => {
       }
     );
 
-    if (!isNear) {
-      console.log('meleeClick:isEnemyNear: Nope!');
+    if (isNear) {
+      console.log('shootClick:isEnemyNear: Yes, enemy too near to shoot!');
       return;
     }
 
-    maneuverMeleePost(clickPosition, unitId);
+    generatePathArray(clickPosition, unit, unitId);
   }
 
-  function maneuverMeleePost(clickPosition, unitId) {
-    const data = { meleeOnPosition: clickPosition, entityId: unitId };
-    console.log('maneuverMeleePost: data:', data);
-    $.post('/ajax/battle/melee/maneuverMeleePost' + auth.uri, data, () => {});
+  function generatePathArray(clickPosition, unit, unitId) {
+    const unitPosition = unit.position;
+    let battleEntity;
+    _.forEach(freshEntities(), (entity) => {
+      if (entity.battleStatus === 'active') {
+        battleEntity = entity;
+      }
+    });
+
+    if (!battleEntity) {
+      return;
+    }
+
+    const width = battleEntity.battleWidth;
+    const height = battleEntity.battleHeight;
+
+    const grid = new PF.Grid(width, height);
+
+    const finder = new PF.AStarFinder({ allowDiagonal: true });
+
+    const pathArrayOfArrays = finder.findPath(
+      unitPosition.x,
+      unitPosition.y,
+      clickPosition.x,
+      clickPosition.y,
+      grid
+    );
+
+    const path = pathArrayOfArrays.map((pathArray) => {
+      return { x: pathArray[0], y: pathArray[1] };
+    });
+
+    maneuverShootPost(path, unitId);
+  }
+
+  function maneuverShootPost(path, unitId) {
+    const data = { shootPath: path, entityId: unitId };
+    console.log('maneuverShootPost: data:', data);
+    $.post('/ajax/battle/shoot/maneuverShootPost' + auth.uri, data, () => {});
   }
 };

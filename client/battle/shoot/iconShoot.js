@@ -90,9 +90,17 @@ g.battle.iconShoot = (walkie, viewport, freshEntities) => {
     _.forEach(freshEntities(), (entity) => {
       if (entity.unitStats && entity.active && entity.owner === playerId) {
         const unit = entity;
-        findEnemies(unit);
+        checkUnitSkill(unit);
       }
     });
+  }
+
+  function checkUnitSkill(unit) {
+    if (!unit.unitStats.current.maneuvers.shoot) {
+      return;
+    }
+
+    findEnemies(unit);
   }
 
   function findEnemies(unit) {

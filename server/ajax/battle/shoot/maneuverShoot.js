@@ -17,8 +17,8 @@ module.exports = (db) => {
       const entities = res.locals.entities;
       ctx.gameId = entities._id;
       ctx.playerId = res.locals.playerId;
-      ctx.unitId = res.locals.unitId;
-      ctx.unit = entities[ctx.unitId];
+      ctx.entityId = res.locals.entityId;
+      ctx.unit = entities[ctx.entityId];
 
       checkUnitSkill(ctx);
     })();
@@ -161,16 +161,8 @@ module.exports = (db) => {
       const negativeObsticles = ctx.negativeObsticles;
       let damageModificator = 1;
 
-      if (negativeObsticles === 1) {
-        damageModificator = 0.5;
-      }
-
-      if (negativeObsticles === 2) {
-        damageModificator = 0.3;
-      }
-
-      if (negativeObsticles > 2) {
-        damageModificator = 0.1;
+      if (negativeObsticles >= 1) {
+        damageModificator = 0.2;
       }
 
       ctx.damageModificator = damageModificator;
@@ -183,24 +175,19 @@ module.exports = (db) => {
 
     function calculateUnitDamageSum(ctx) {
       const unit = ctx.unit;
-      const damageMax = unit.unitStats.current.damageMax;
-      const damageMin = unit.unitStats.current.damageMin;
       const unitAmount = unit.amount;
       const damageModificator = ctx.damageModificator;
+      const damage = unit.unitStats.current.maneuvers.shoot.damage;
 
-      const randomDamage = _.random(damageMin, damageMax);
       debug(
         'calculateUnitDamageSum: damageSum = ',
-        randomDamage,
+        damage,
         ' * ',
         unitAmount,
         ' * ',
         damageModificator
       );
-      const damageSum = Math.floor(
-        randomDamage * unitAmount * damageModificator
-      );
-
+      const damageSum = Math.floor(damage * unitAmount * damageModificator);
       debug('countUnitDamage: damageSum:', damageSum);
       ctx.damageSum = damageSum;
       calculateTargetLifeSum(ctx);
@@ -231,7 +218,7 @@ module.exports = (db) => {
 
       if (targetLifeSumRemaining < 1) {
         debug('calculateTargetUnitsRemaining: Unit should DIE!');
-        updateUnsetUnitEntitiy(ctx);
+        updateUnitThatDied(ctx);
         return;
       }
 
@@ -240,16 +227,13 @@ module.exports = (db) => {
         targetLifeSumRemaining / targetBaseLife
       );
 
-      const lifeRemaining = targetLifeSumRemaining % targetBaseLife;
+      const damageRemaining = damageSum % targetBaseLife;
 
       ctx.targetUnitsRemaining = targetUnitsRemaining;
-      ctx.lifeRemaining = lifeRemaining;
+      ctx.lifeRemaining = targetBaseLife - damageRemaining;
 
-      debug('calculateTargetUnitsRemaining: lifeRemaining', lifeRemaining);
-      debug(
-        'calculateTargetUnitsRemaining: targetUnitsRemaining',
-        targetUnitsRemaining
-      );
+      debug('calculateTargetUnitsRemaining: damageRemaining', damageRemaining);
+      debug('calculateTargetUnitsRemaining: lifeRemaining', ctx.lifeRemaining);
       updateSetTargetAmount(ctx);
     }
 
@@ -260,11 +244,20 @@ module.exports = (db) => {
       const targetUnitsRemaining = ctx.targetUnitsRemaining;
 
       const query = { _id: gameId };
+
+      const recentActivity = {};
+      recentActivity.name = 'gotHit';
+      recentActivity.timestamp = Date.now();
+
+      const fieldRecentActivity = targetId + '.recentActivity';
       const fieldLife = targetId + '.unitStats.current.life';
       const fieldAmount = targetId + '.amount';
+
       const $set = {};
+      $set[fieldRecentActivity] = recentActivity;
       $set[fieldLife] = lifeRemaining;
       $set[fieldAmount] = targetUnitsRemaining;
+
       const update = { $set: $set };
       const options = {};
 
@@ -273,22 +266,44 @@ module.exports = (db) => {
         update,
         options,
         (error) => {
-          debug('updateSetTargetAmount: error: ', error);
+          if (error) {
+            debug('updateSetTargetAmount: error: ', error);
+          }
+
           debug('updateSetTargetAmount: Target life and amount updated!');
           next();
         }
       );
     }
 
-    function updateUnsetUnitEntitiy(ctx) {
+    function updateUnitThatDied(ctx) {
       const gameId = ctx.gameId;
       const targetId = ctx.targetId;
+      debug('updateUnitThatDied: targetId:', targetId);
+      const target = ctx.target;
+      const position = target.position;
+      const unitName = target.unitName;
+      const owner = target.owner;
+      const boss = target.boss;
 
       const query = { _id: gameId };
+
+      const recentActivity = {};
+      recentActivity.name = 'justDied';
+      recentActivity.timestamp = Date.now();
+
       const field = targetId;
-      const $unset = {};
-      $unset[field] = true;
-      const update = { $unset: $unset };
+      const $set = {};
+      $set[field] = {
+        unitName: unitName,
+        position: position,
+        owner: owner,
+        boss: boss,
+        recentActivity: recentActivity,
+        dead: true
+      };
+
+      const update = { $set: $set };
       const options = {};
 
       db.collection('gameCollection').updateOne(
@@ -297,10 +312,10 @@ module.exports = (db) => {
         options,
         (error) => {
           if (error) {
-            debug('updateUnsetUnitEntitiy: error: ', error);
+            debug('updateUnitThatDied: error: ', error);
           }
 
-          debug('updateUnsetUnitEntitiy: Target was killed');
+          debug('updateUnitThatDied: Target was killed');
           next();
         }
       );

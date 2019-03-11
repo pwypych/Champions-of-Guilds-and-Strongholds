@@ -55,14 +55,14 @@ g.battle.emptyBlockClick = (walkie, auth, viewport, freshEntities) => {
       return;
     }
 
-    const unitPositon = {};
-    unitPositon.x = parseInt(unit.position.x, 10);
-    unitPositon.y = parseInt(unit.position.y, 10);
+    const unitPosition = {};
+    unitPosition.x = parseInt(unit.position.x, 10);
+    unitPosition.y = parseInt(unit.position.y, 10);
 
-    generatePathArray(clickPosition, unitPositon, unitId);
+    generatePathArray(clickPosition, unitPosition, unitId);
   }
 
-  function generatePathArray(clickPosition, unitPositon, unitId) {
+  function generatePathArray(clickPosition, unitPosition, unitId) {
     let battleEntity;
     _.forEach(freshEntities(), (entity) => {
       if (entity.battleStatus === 'active') {
@@ -85,11 +85,14 @@ g.battle.emptyBlockClick = (walkie, auth, viewport, freshEntities) => {
       }
     });
 
-    const finder = new PF.AStarFinder({ allowDiagonal: false, weight: 2 });
+    const finder = new PF.AStarFinder({
+      allowDiagonal: false,
+      weight: -1000
+    });
 
     const pathArrayOfArrays = finder.findPath(
-      unitPositon.x,
-      unitPositon.y,
+      unitPosition.x,
+      unitPosition.y,
       clickPosition.x,
       clickPosition.y,
       grid

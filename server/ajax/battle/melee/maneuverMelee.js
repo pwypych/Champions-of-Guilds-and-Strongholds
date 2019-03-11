@@ -160,7 +160,7 @@ module.exports = (db) => {
     }
 
     function calculateDamageModificator(ctx) {
-      let damageModificator = 100;
+      let damageModificator = 1;
       const obsticlesAroundTarget = ctx.obsticlesAroundTarget;
       const entityId = ctx.entityId;
       const unit = ctx.unit;
@@ -169,11 +169,11 @@ module.exports = (db) => {
       obsticlesAroundTarget.forEach((obsticleId) => {
         const obsticle = entities[obsticleId];
         if (!obsticle.unitStats) {
-          damageModificator += 20;
+          damageModificator += 0.2;
         }
 
         if (unit.boss === obsticle.boss && obsticleId !== entityId) {
-          damageModificator += 40;
+          damageModificator += 0.4;
         }
       });
 
@@ -188,7 +188,7 @@ module.exports = (db) => {
     function calculateUnitDamageSum(ctx) {
       const unit = ctx.unit;
       const unitAmount = unit.amount;
-      const damageModificator = ctx.damageModificator / 100;
+      const damageModificator = ctx.damageModificator;
       const damage = unit.unitStats.current.maneuvers.melee.damage;
 
       debug(

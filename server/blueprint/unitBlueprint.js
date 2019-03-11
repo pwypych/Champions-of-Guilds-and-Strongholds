@@ -18,9 +18,6 @@ module.exports = () => {
       maneuvers: {
         melee: {
           damage: 1
-        },
-        shoot: {
-          damage: 1
         }
       }
     },
@@ -35,9 +32,6 @@ module.exports = () => {
       maneuvers: {
         melee: {
           damage: 2
-        },
-        shoot: {
-          damage: 1
         }
       }
     },
@@ -52,9 +46,6 @@ module.exports = () => {
       maneuvers: {
         melee: {
           damage: 3
-        },
-        shoot: {
-          damage: 1
         }
       }
     },
@@ -112,6 +103,9 @@ module.exports = () => {
       recruitCost: 200,
       maneuvers: {
         melee: {
+          damage: 2
+        },
+        shoot: {
           damage: 5
         }
       }
@@ -126,6 +120,9 @@ module.exports = () => {
       recruitCost: 240,
       maneuvers: {
         melee: {
+          damage: 1
+        },
+        shoot: {
           damage: 6
         }
       }
@@ -140,6 +137,9 @@ module.exports = () => {
       recruitCost: 200,
       maneuvers: {
         melee: {
+          damage: 1
+        },
+        shoot: {
           damage: 4
         }
       }
