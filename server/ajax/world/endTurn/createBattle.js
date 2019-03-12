@@ -42,6 +42,9 @@ module.exports = (db, unitBlueprint) => {
       const attackerId = battle.attackerId;
       const defenderId = battle.defenderId;
 
+      debug('generateUnits:attackerId:', battle.attackerId);
+      debug('generateUnits:defenderId:', battle.defenderId);
+
       const attackerUnitCounts = entities[attackerId].unitAmounts;
       const defenderUnitCounts = entities[defenderId].unitAmounts;
 

@@ -94,8 +94,31 @@ module.exports = (db) => {
       });
 
       battleArray.forEach((battle) => {
-        insertBattleEntity(entities, battle, done);
+        checkIfBattleExists(entities, battle, done);
       });
+    }
+
+    function checkIfBattleExists(entities, battle, done) {
+      let battleExists = false;
+
+      _.forEach(entities, (entity) => {
+        if (entity.battleStatus) {
+          if (
+            entity.attackerId === battle.attackerId &&
+            entity.defenderId === battle.defenderId
+          ) {
+            battleExists = true;
+          }
+        }
+      });
+
+      if (battleExists) {
+        debug('checkIfBattleExists: Yes, battle allready exist!');
+        return;
+      }
+
+      debug('checkIfBattleExists: Not, battle not existing, inserting new!');
+      insertBattleEntity(entities, battle, done);
     }
 
     function insertBattleEntity(entities, battle, done) {
