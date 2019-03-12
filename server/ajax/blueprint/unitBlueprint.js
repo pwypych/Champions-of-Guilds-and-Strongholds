@@ -46,6 +46,9 @@ module.exports = () => {
       maneuvers: {
         melee: {
           damage: 1
+        },
+        shoot: {
+          damage: 1
         }
       }
     },
