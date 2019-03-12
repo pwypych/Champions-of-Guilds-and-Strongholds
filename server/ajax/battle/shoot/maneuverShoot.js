@@ -5,6 +5,7 @@
 const debug = require('debug')('cogs:maneuverShoot');
 const _ = require('lodash');
 const validator = require('validator');
+const bresenham = require('bresenham');
 
 module.exports = (db) => {
   return (req, res, next) => {
@@ -31,37 +32,48 @@ module.exports = (db) => {
       }
 
       debug('checkUnitSkill: Unit has "shoot" skill!');
-      checkRequestBodyShootPath(ctx);
+      checkRequestBodyMeleeOnPosition(ctx);
     }
 
-    function checkRequestBodyShootPath(ctx) {
-      const shootPath = [];
-      let isError = false;
+    function checkRequestBodyMeleeOnPosition(ctx) {
+      const shootOnPosition = req.body.shootOnPosition;
 
-      req.body.shootPath.forEach((position) => {
-        if (
-          typeof position.x === 'undefined' ||
-          typeof position.y === 'undefined' ||
-          !validator.isNumeric(position.x) ||
-          !validator.isNumeric(position.y)
-        ) {
-          debug('POST parameter shootPath not valid!');
-          isError = true;
-          return;
-        }
-
-        const parsedPosition = {};
-        parsedPosition.x = parseInt(position.x, 10);
-        parsedPosition.y = parseInt(position.y, 10);
-        shootPath.push(parsedPosition);
-      });
-
-      if (isError) {
+      if (
+        typeof shootOnPosition.x === 'undefined' ||
+        typeof shootOnPosition.y === 'undefined' ||
+        !validator.isNumeric(shootOnPosition.x) ||
+        !validator.isNumeric(shootOnPosition.y)
+      ) {
+        debug(
+          'checkRequestBodyMeleeOnPosition: POST parameter shootOnPosition not valid!'
+        );
         return;
       }
-      ctx.shootPath = shootPath;
 
-      debug('checkRequestBodyShootPath: shootPath', shootPath);
+      shootOnPosition.x = parseInt(shootOnPosition.x, 10);
+      shootOnPosition.y = parseInt(shootOnPosition.y, 10);
+
+      ctx.shootOnPosition = shootOnPosition;
+      debug(
+        'checkRequestBodyMeleeOnPosition: shootOnPosition',
+        shootOnPosition
+      );
+      generateShootPath(ctx);
+    }
+
+    function generateShootPath(ctx) {
+      const unitPosition = ctx.unit.position;
+      const shootOnPosition = ctx.shootOnPosition;
+
+      const shootPath = bresenham(
+        unitPosition.x,
+        unitPosition.y,
+        shootOnPosition.x,
+        shootOnPosition.y
+      );
+
+      ctx.shootPath = shootPath;
+      debug('generateShootPath: shootPath:', shootPath);
       checkIsTargetOnShootPosition(ctx);
     }
 
@@ -105,15 +117,15 @@ module.exports = (db) => {
       }
 
       debug('checkIsTragetFriendly: Target unit is enemy!');
-      findObsticlesOnRangedPath(ctx);
+      findObsticlesOnShootPath(ctx);
     }
 
-    function findObsticlesOnRangedPath(ctx) {
+    function findObsticlesOnShootPath(ctx) {
       const entities = res.locals.entities;
       const shootPath = ctx.shootPath;
       const shootPathWithoutTarget = shootPath;
       shootPathWithoutTarget.pop();
-      const obsticlesOnRangedPath = [];
+      const entitiesOnShootPath = [];
 
       _.forEach(entities, (entity, id) => {
         if (entity.unitName) {
@@ -122,46 +134,47 @@ module.exports = (db) => {
               entity.position.x === position.x &&
               entity.position.y === position.y
             ) {
-              obsticlesOnRangedPath.push(id);
+              entitiesOnShootPath.push(id);
             }
           });
         }
       });
 
       debug(
-        'findObsticlesOnRangedPath: obsticlesOnRangedPath:',
-        obsticlesOnRangedPath.length
+        'findObsticlesOnShootPath: entitiesOnShootPath:',
+        entitiesOnShootPath.length
       );
-      ctx.obsticlesOnRangedPath = obsticlesOnRangedPath;
-      sieveNegativeObsticlesOnRangedPath(ctx);
+      ctx.entitiesOnShootPath = entitiesOnShootPath;
+      findNegativeObsticlesOnShootPath(ctx);
     }
 
-    function sieveNegativeObsticlesOnRangedPath(ctx) {
+    function findNegativeObsticlesOnShootPath(ctx) {
       const entities = res.locals.entities;
-      const obsticlesOnRangedPath = ctx.obsticlesOnRangedPath;
+      const entitiesOnShootPath = ctx.entitiesOnShootPath;
       const unit = ctx.unit;
-      let negativeObsticles = 0;
+      let obsticle;
+      let obsticlePosition;
 
-      _.forEach(obsticlesOnRangedPath, (obsticleId) => {
-        const obsticle = entities[obsticleId];
-        if (!obsticle.boss || obsticle.boss !== unit.boss) {
-          negativeObsticles += 1;
+      _.forEach(entitiesOnShootPath, (entityId) => {
+        const entity = entities[entityId];
+        if (!entity.boss || entity.boss !== unit.boss) {
+          if (!obsticle) {
+            obsticle = entity;
+            obsticlePosition = entity.position;
+          }
         }
       });
 
-      ctx.negativeObsticles = negativeObsticles;
-      debug(
-        'sieveNegativeObsticlesOnRangedPath: negativeObsticles:',
-        negativeObsticles
-      );
+      ctx.obsticlePosition = obsticlePosition;
+      debug('findNegativeObsticlesOnShootPath: entityObsticle:', obsticle);
       calculateDamageModificator(ctx);
     }
 
     function calculateDamageModificator(ctx) {
-      const negativeObsticles = ctx.negativeObsticles;
+      const obsticlePosition = ctx.obsticlePosition;
       let damageModificator = 1;
 
-      if (negativeObsticles >= 1) {
+      if (obsticlePosition) {
         damageModificator = 0.2;
       }
 
@@ -242,12 +255,14 @@ module.exports = (db) => {
       const targetId = ctx.targetId;
       const lifeRemaining = ctx.lifeRemaining;
       const targetUnitsRemaining = ctx.targetUnitsRemaining;
+      const obsticlePosition = ctx.obsticlePosition;
 
       const query = { _id: gameId };
 
       const recentActivity = {};
       recentActivity.name = 'gotHit';
       recentActivity.timestamp = Date.now();
+      recentActivity.obsticlePosition = obsticlePosition;
 
       const fieldRecentActivity = targetId + '.recentActivity';
       const fieldLife = targetId + '.unitStats.current.life';

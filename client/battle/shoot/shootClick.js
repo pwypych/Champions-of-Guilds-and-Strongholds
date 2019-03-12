@@ -80,46 +80,11 @@ g.battle.shootClick = (walkie, auth, viewport, freshEntities) => {
       return;
     }
 
-    generatePathArray(clickPosition, unit, unitId);
+    maneuverShootPost(clickPosition, unitId);
   }
 
-  function generatePathArray(clickPosition, unit, unitId) {
-    const unitPosition = unit.position;
-    let battleEntity;
-    _.forEach(freshEntities(), (entity) => {
-      if (entity.battleStatus === 'active') {
-        battleEntity = entity;
-      }
-    });
-
-    if (!battleEntity) {
-      return;
-    }
-
-    const width = battleEntity.battleWidth;
-    const height = battleEntity.battleHeight;
-
-    const grid = new PF.Grid(width, height);
-
-    const finder = new PF.AStarFinder({ allowDiagonal: true });
-
-    const pathArrayOfArrays = finder.findPath(
-      unitPosition.x,
-      unitPosition.y,
-      clickPosition.x,
-      clickPosition.y,
-      grid
-    );
-
-    const path = pathArrayOfArrays.map((pathArray) => {
-      return { x: pathArray[0], y: pathArray[1] };
-    });
-
-    maneuverShootPost(path, unitId);
-  }
-
-  function maneuverShootPost(path, unitId) {
-    const data = { shootPath: path, entityId: unitId };
+  function maneuverShootPost(clickPosition, unitId) {
+    const data = { shootOnPosition: clickPosition, entityId: unitId };
     console.log('maneuverShootPost: data:', data);
     $.post('/ajax/battle/shoot/maneuverShootPost' + auth.uri, data, () => {});
   }
