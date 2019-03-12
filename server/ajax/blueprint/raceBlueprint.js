@@ -9,9 +9,9 @@ module.exports = () => {
   return {
     human: {
       unitAmounts: {
-        rogue: 10,
-        warrior: 5,
-        ranger: 0,
+        ranger: 10,
+        rogue: 5,
+        warrior: 0,
         wizard: 0,
         cleric: 0
       },
@@ -48,8 +48,8 @@ module.exports = () => {
     beast: {
       unitAmounts: {
         butterfly: 10,
-        eyeball: 5,
-        plant: 0,
+        plant: 5,
+        eyeball: 0,
         worm: 0,
         minotaur: 0
       },

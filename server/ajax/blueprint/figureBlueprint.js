@@ -8,9 +8,27 @@
 module.exports = () => {
   return {
     // Units figures
+    butterfly: {
+      unitAmounts: {
+        butterfly: 10
+      }
+    },
+
     skeleton: {
       unitAmounts: {
         skeleton: 10
+      }
+    },
+
+    ranger: {
+      unitAmounts: {
+        ranger: 10
+      }
+    },
+
+    plant: {
+      unitAmounts: {
+        plant: 8
       }
     },
 
@@ -20,81 +38,63 @@ module.exports = () => {
       }
     },
 
+    rogue: {
+      unitAmounts: {
+        rogue: 8
+      }
+    },
+
+    eyeball: {
+      unitAmounts: {
+        eyeball: 6
+      }
+    },
+
     crazyWizard: {
       unitAmounts: {
         crazyWizard: 6
       }
     },
 
-    orc: {
+    warrior: {
       unitAmounts: {
-        orc: 4
-      }
-    },
-
-    blackKnight: {
-      unitAmounts: {
-        blackKnight: 2
-      }
-    },
-
-    minotaur: {
-      unitAmounts: {
-        minotaur: 2
+        warrior: 6
       }
     },
 
     worm: {
       unitAmounts: {
-        worm: 4
-      }
-    },
-
-    plant: {
-      unitAmounts: {
-        plant: 6
-      }
-    },
-
-    eyeball: {
-      unitAmounts: {
-        eyeball: 8
-      }
-    },
-
-    butterfly: {
-      unitAmounts: {
-        butterfly: 10
-      }
-    },
-
-    rogue: {
-      unitAmounts: {
-        rogue: 10
-      }
-    },
-
-    warrior: {
-      unitAmounts: {
-        warrior: 8
-      }
-    },
-
-    ranger: {
-      unitAmounts: {
-        ranger: 6
+        worm: 5
       }
     },
 
     wizard: {
       unitAmounts: {
-        wizard: 4
+        wizard: 5
+      }
+    },
+
+    orc: {
+      unitAmounts: {
+        orc: 5
+      }
+    },
+
+    minotaur: {
+      unitAmounts: {
+        minotaur: 3
+      }
+    },
+
+    blackKnight: {
+      unitAmounts: {
+        blackKnight: 3
       }
     },
 
     cleric: {
       unitAmounts: {
-        cleric: 2
+        cleric: 3
       }
     },
 

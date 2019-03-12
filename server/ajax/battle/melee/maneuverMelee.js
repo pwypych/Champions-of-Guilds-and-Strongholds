@@ -168,11 +168,11 @@ module.exports = (db) => {
       obsticlesAroundTarget.forEach((obsticleId) => {
         const obsticle = entities[obsticleId];
         if (!obsticle.unitStats) {
-          damageModificator += 0.2;
+          damageModificator += 0.3;
         }
 
         if (unit.boss === obsticle.boss && obsticleId !== entityId) {
-          damageModificator += 0.4;
+          damageModificator += 0.6;
         }
       });
 
