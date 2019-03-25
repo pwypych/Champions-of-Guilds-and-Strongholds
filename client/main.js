@@ -21,18 +21,24 @@ g.main = function main() {
     const auth = g.setup.setupAuth();
 
     g.setup.setupImages(auth, () => {
-      setupLibraries($body, app, viewport, auth);
+      setupBlueprints($body, app, viewport, auth);
     });
   }
 
-  function setupLibraries($body, app, viewport, auth) {
+  function setupBlueprints($body, app, viewport, auth) {
+    $.get('/ajax/blueprint/blueprintGet' + auth.uri, (blueprints) => {
+      console.log('setupBlueprints: Got blueprints!');
+      setupLibraries($body, app, viewport, auth, blueprints);
+    });
+  }
+
+  function setupLibraries($body, app, viewport, auth, blueprints) {
     const walkie = g.setup.setupWalkie();
 
     g.common.stateChange(walkie, auth);
     g.common.entitiesInterval(walkie, auth);
 
     const freshEntities = g.common.freshEntities(walkie);
-    const cachedBlueprints = g.common.cachedBlueprints(auth);
 
     g.launch.launchToggle($body, walkie);
     g.launch.launchInputName($body, auth);
