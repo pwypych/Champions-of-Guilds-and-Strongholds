@@ -127,17 +127,17 @@ module.exports = (db) => {
       shootPathWithoutTarget.pop();
       const entitiesOnShootPath = [];
 
-      _.forEach(entities, (entity, id) => {
-        if (entity.unitName) {
-          shootPathWithoutTarget.forEach((position) => {
+      shootPathWithoutTarget.forEach((position) => {
+        _.forEach(entities, (entity, id) => {
+          if (entity.unitName) {
             if (
               entity.position.x === position.x &&
               entity.position.y === position.y
             ) {
               entitiesOnShootPath.push(id);
             }
-          });
-        }
+          }
+        });
       });
 
       debug(

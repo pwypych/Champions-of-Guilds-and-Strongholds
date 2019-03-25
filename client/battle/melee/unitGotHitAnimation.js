@@ -19,22 +19,21 @@ g.battle.unitGotHitAnimation = (walkie, viewport) => {
       (data) => {
         if (data.entity.recentActivity.name === 'gotHit') {
           const unitId = data.entityId;
-          const unit = data.entity;
           console.log('unitGotHitAnimation: unitId:', unitId);
-          findUnitContainer(unitId, unit);
+          findUnitContainer(unitId);
         }
       },
       false
     );
   }
 
-  function findUnitContainer(unitId, unit) {
+  function findUnitContainer(unitId) {
     const unitContainer = battleContainer.getChildByName(unitId);
 
-    instantiateSprite(unit, unitContainer);
+    instantiateSprite(unitContainer);
   }
 
-  function instantiateSprite(unit, unitContainer) {
+  function instantiateSprite(unitContainer) {
     const textureName = 'bloodSplatt';
     const texture = PIXI.loader.resources[textureName].texture;
     const sprite = new PIXI.Sprite(texture);
