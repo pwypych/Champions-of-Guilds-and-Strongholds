@@ -5,6 +5,7 @@
 g.launch.launchDisableUi = ($body, walkie) => {
   const $button = $body.find('#js-launch .js-button-ready');
   const $inputName = $body.find('#js-launch .js-input-name');
+  const $selectRace = $body.find('#js-launch .js-select-race');
 
   (function init() {
     onEntitiesGet();
@@ -30,6 +31,7 @@ g.launch.launchDisableUi = ($body, walkie) => {
     if (player.readyForLaunch) {
       $button.attr('disabled', 'disabled');
       $inputName.attr('disabled', 'disabled');
+      $selectRace.attr('disabled', 'disabled');
     }
   }
 };
