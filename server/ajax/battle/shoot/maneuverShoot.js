@@ -265,7 +265,7 @@ module.exports = (db) => {
       const query = { _id: gameId };
 
       const recentActivity = {};
-      recentActivity.name = 'gotHit';
+      recentActivity.name = 'gotShot';
       recentActivity.timestamp = Date.now();
       recentActivity.obsticlePosition = obsticlePosition;
 

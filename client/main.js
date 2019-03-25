@@ -86,8 +86,9 @@ g.main = function main() {
     g.battle.unitPathAcceptedPost(walkie, auth);
     g.battle.unitJustDiedHide(walkie, viewport);
     g.battle.unitJustDiedAnimation(walkie, viewport);
-    g.battle.unitGotHitDecrementAmount(walkie, viewport);
+    g.battle.unitDecrementAmount(walkie, viewport);
     g.battle.unitGotHitAnimation(walkie, viewport);
+    g.battle.unitGotShotAnimation(walkie, viewport);
     g.battle.markerDraw(walkie, viewport, freshEntities);
     g.battle.markerActiveAnimate(walkie, viewport, freshEntities);
     g.battle.unitFocusActive(walkie, viewport, freshEntities);
