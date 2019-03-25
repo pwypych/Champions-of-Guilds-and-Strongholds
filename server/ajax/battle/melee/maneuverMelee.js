@@ -164,15 +164,19 @@ module.exports = (db) => {
       const entityId = ctx.entityId;
       const unit = ctx.unit;
       const entities = res.locals.entities;
+      ctx.obsticleEnemyPositions = [];
+      ctx.obsticleCollidablesPositions = [];
 
       obsticlesAroundTarget.forEach((obsticleId) => {
         const obsticle = entities[obsticleId];
         if (!obsticle.unitStats) {
           damageModificator += 0.3;
+          ctx.obsticleCollidablesPositions.push(obsticle.position);
         }
 
         if (unit.boss === obsticle.boss && obsticleId !== entityId) {
           damageModificator += 0.6;
+          ctx.obsticleEnemyPositions.push(obsticle.position);
         }
       });
 
@@ -258,12 +262,16 @@ module.exports = (db) => {
       const targetId = ctx.targetId;
       const lifeRemaining = ctx.lifeRemaining;
       const targetUnitsRemaining = ctx.targetUnitsRemaining;
+      const obsticleCollidablesPositions = ctx.obsticleCollidablesPositions;
+      const obsticleEnemyPositions = ctx.obsticleEnemyPositions;
 
       const query = { _id: gameId };
 
       const recentActivity = {};
       recentActivity.name = 'gotHit';
       recentActivity.timestamp = Date.now();
+      recentActivity.obsticleCollidablesPositions = obsticleCollidablesPositions;
+      recentActivity.obsticleEnemyPositions = obsticleEnemyPositions;
 
       const fieldRecentActivity = targetId + '.recentActivity';
       const fieldLife = targetId + '.unitStats.current.life';
