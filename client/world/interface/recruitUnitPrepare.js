@@ -2,7 +2,13 @@
 
 'use strict';
 
-g.world.recruitUnitPrepare = ($body, walkie, freshEntities, auth) => {
+g.world.recruitUnitPrepare = (
+  $body,
+  walkie,
+  freshEntities,
+  auth,
+  blueprints
+) => {
   const $recruitUnit = $body.find(
     '.js-world-interface-information-modal .js-recruit-unit'
   );
@@ -50,7 +56,7 @@ g.world.recruitUnitPrepare = ($body, walkie, freshEntities, auth) => {
     $recruitUnit.empty();
 
     _.forEach(unitAmounts, (amount, unitName) => {
-      const $img = $(
+      const $unit = $(
         '<img class="vertical-align" src="/sprite/' +
           unitName +
           '.png" width="36" height="36">'
@@ -63,11 +69,13 @@ g.world.recruitUnitPrepare = ($body, walkie, freshEntities, auth) => {
       const $buyButton = $(
         '<button class="js-button-buy" data-unit-name="' +
           unitName +
-          '">Recruit</button>'
+          '">' +
+          blueprints.unitBlueprint[unitName].recruitCost +
+          '<img class="vertical-align" src="/sprite/gold.png" width="24" height="24"></button>'
       );
       const $seperator10 = $('<div class="seperator-10"></div>');
 
-      $recruitUnit.append($img);
+      $recruitUnit.append($unit);
       $recruitUnit.append($amountSpan);
       $recruitUnit.append($buyButton);
       $recruitUnit.append($seperator10);
@@ -77,8 +85,8 @@ g.world.recruitUnitPrepare = ($body, walkie, freshEntities, auth) => {
   }
 
   function onRecruitUnitButtonClick($buyButton) {
-    $buyButton.on('click', (event) => {
-      const unitName = $(event.target).attr('data-unit-name');
+    $buyButton.on('click', () => {
+      const unitName = $buyButton.attr('data-unit-name');
       console.log('recruitUnitClick:unitName:', unitName);
       sendRecruitUnitPost(unitName);
     });
