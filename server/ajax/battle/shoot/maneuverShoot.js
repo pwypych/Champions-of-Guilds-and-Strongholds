@@ -235,6 +235,7 @@ module.exports = (db) => {
         return;
       }
 
+      const targetCurrentLife = target.unitStats.current.life;
       const targetBaseLife = target.unitStats.base.life;
       const targetUnitsRemaining = _.ceil(
         targetLifeSumRemaining / targetBaseLife
@@ -243,7 +244,11 @@ module.exports = (db) => {
       const damageRemaining = damageSum % targetBaseLife;
 
       ctx.targetUnitsRemaining = targetUnitsRemaining;
-      ctx.lifeRemaining = targetBaseLife - damageRemaining;
+      ctx.lifeRemaining = targetCurrentLife - damageRemaining;
+
+      if (ctx.lifeRemaining < 1) {
+        ctx.lifeRemaining = targetBaseLife + ctx.lifeRemaining;
+      }
 
       debug('calculateTargetUnitsRemaining: damageRemaining', damageRemaining);
       debug('calculateTargetUnitsRemaining: lifeRemaining', ctx.lifeRemaining);
