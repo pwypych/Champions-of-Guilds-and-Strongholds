@@ -78,13 +78,13 @@ g.main = function main() {
     g.battle.battleToggle(walkie, viewport, freshEntities);
     g.battle.backgroundDraw(walkie, viewport);
     g.battle.unitsDraw(walkie, auth, viewport, freshEntities);
+    g.battle.battleClick(walkie, viewport, freshEntities);
+
     g.battle.iconMovement(walkie, viewport, freshEntities);
-    g.battle.movementClick(walkie, viewport, freshEntities);
     g.battle.emptyBlockClick(walkie, auth, viewport, freshEntities);
+
     g.battle.iconMelee(walkie, viewport, freshEntities);
     g.battle.meleeClick(walkie, auth, viewport, freshEntities);
-    g.battle.unitPath(walkie, auth, viewport, freshEntities);
-    g.battle.unitPathAcceptedPost(walkie, auth);
     g.battle.unitJustDiedHide(walkie, viewport);
     g.battle.unitJustDiedAnimation(walkie, viewport);
     g.battle.unitDecrementAmount(walkie, viewport);

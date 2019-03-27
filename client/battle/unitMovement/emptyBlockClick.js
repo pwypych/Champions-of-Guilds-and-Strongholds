@@ -5,9 +5,6 @@
 // What does this module do?
 // It listens to click_ events, generates path through library and sends path events
 g.battle.emptyBlockClick = (walkie, auth, viewport, freshEntities) => {
-  let lastPathPositionX;
-  let lastPathPositionY;
-
   (function init() {
     onClick();
   })();
@@ -105,39 +102,36 @@ g.battle.emptyBlockClick = (walkie, auth, viewport, freshEntities) => {
   }
 
   function triggerEvents(path, clickPosition, unitId) {
-    if (
-      typeof lastPathPositionX !== 'undefined' &&
-      typeof lastPathPositionY !== 'undefined'
-    ) {
-      if (
-        lastPathPositionX === clickPosition.x &&
-        lastPathPositionY === clickPosition.y
-      ) {
-        lastPathPositionX = undefined;
-        lastPathPositionY = undefined;
-        walkie.triggerEvent('unitPathAccepted_', 'emptyBlockClick.js', {
-          unitId: unitId,
-          path: path
-        });
-        return;
+    if (_.isEmpty(path) || path.length < 1) {
+      return;
+    }
+
+    const unit = freshEntities()[unitId];
+    const movement = unit.unitStats.current.movement;
+
+    if (path.length - 1 > movement) {
+      return;
+    }
+
+    sendRequest(path, unitId);
+  }
+
+  function sendRequest(path, entityId) {
+    const data = { path: path, entityId: entityId };
+    $.post('/ajax/battle/movement/pathPost' + auth.uri, data, (response) => {
+      console.log('unitPathAcceptedPost.js: POST pathPost', response);
+
+      if (response && response.path) {
+        const responseUnitPath = response.path;
+        triggerUnitPathVerifiedByServer(entityId, responseUnitPath);
       }
-    }
+    });
+  }
 
-    if (!_.isEmpty(path) && path.length > 1) {
-      lastPathPositionX = path[path.length - 1].x;
-      lastPathPositionY = path[path.length - 1].y;
-    } else {
-      lastPathPositionX = undefined;
-      lastPathPositionY = undefined;
-    }
-
-    if (!_.isEmpty(path) && path.length > 1) {
-      walkie.triggerEvent('unitPathCalculated_', 'emptyBlockClick.js', {
-        unitId: unitId,
-        path: path
-      });
-    } else {
-      walkie.triggerEvent('unitPathImpossible_', 'emptyBlockClick.js');
-    }
+  function triggerUnitPathVerifiedByServer(entityId, responseUnitPath) {
+    walkie.triggerEvent('movementPathVerifiedByServer_', 'battleClick.js', {
+      entityId: entityId,
+      path: responseUnitPath
+    });
   }
 };

@@ -57,7 +57,7 @@ g.battle.iconMovement = (walkie, viewport, freshEntities) => {
 
           icon.x = x * blockWidthPx;
           icon.y = y * blockHeightPx;
-          icon.alpha = 0.3;
+          icon.alpha = 0.2;
         });
       });
     }
@@ -148,7 +148,6 @@ g.battle.iconMovement = (walkie, viewport, freshEntities) => {
     });
 
     positions = _.uniq(positions);
-    _.remove(positions, { x: x, y: y });
 
     forEachPossiblePosition(positions);
   }

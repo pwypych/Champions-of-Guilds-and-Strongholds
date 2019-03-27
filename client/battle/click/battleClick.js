@@ -4,7 +4,7 @@
 
 // What does this module do?
 // It listens to viewport clicked events, validates it and sends click_ event through walkie
-g.battle.movementClick = (walkie, viewport, freshEntities) => {
+g.battle.battleClick = (walkie, viewport, freshEntities) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
@@ -54,7 +54,7 @@ g.battle.movementClick = (walkie, viewport, freshEntities) => {
   function triggerClick(position) {
     walkie.triggerEvent(
       'click_',
-      'movementClick.js',
+      'battleClick.js',
       {
         position: position
       },
