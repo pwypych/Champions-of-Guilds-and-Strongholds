@@ -34,32 +34,16 @@ g.battle.waitMock = ($body, auth, freshEntities) => {
     });
 
     console.log('activeUnitPosition:', activeUnitPosition);
-    generateShootPath(activeUnitPosition, unitId);
+    sendPost(unitId);
   }
 
-  function generateShootPath(activeUnitPosition, unitId) {
-    const shootPath = [];
-    for (let i = 1; i < 4; i += 1) {
-      const position = {};
-      position.x = activeUnitPosition.x + i;
-      position.y = activeUnitPosition.y;
-      shootPath.push(position);
-    }
-
-    console.log('shootPath.length:', shootPath.length);
-    sendPost(shootPath, unitId);
-  }
-
-  function sendPost(shootPath, unitId) {
+  function sendPost(unitId) {
     const data = {};
     data.entityId = unitId;
-    data.shootPath = shootPath;
+    data.wait = true;
 
-    $.post('/ajax/battle/shoot/maneuverShootPost' + auth.uri, data, () => {
-      console.log(
-        'waitMock: POST -> /ajax/battle/shoot/maneuverShootPost',
-        data
-      );
+    $.post('/ajax/battle/wait/maneuverwait' + auth.uri, data, () => {
+      console.log('waitMock: POST -> /ajax/battle/wait/maneuverwait', data);
     });
   }
 };
