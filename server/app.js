@@ -337,7 +337,7 @@ function setupLibrariesAndRoutes() {
   );
 
   app.post(
-    '/ajax/battle/wait/maneuverwait',
+    '/ajax/battle/wait/maneuverWait',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
