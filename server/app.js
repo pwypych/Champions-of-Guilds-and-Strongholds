@@ -332,7 +332,19 @@ function setupLibrariesAndRoutes() {
     require('./ajax/battle/maneuver/maneuverSendResponse.js')(),
     maneuverVerify,
     require('./ajax/battle/shoot/maneuverShoot.js')(db),
-    maneuverDigest
+    maneuverDigest,
+    saveGame
+  );
+
+  app.post(
+    '/ajax/battle/wait/maneuverWait',
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
+    require('./library/middlewareAjaxStateAuth.js')('battleState'),
+    require('./ajax/battle/maneuver/maneuverSendResponse.js')(),
+    maneuverVerify,
+    maneuverDigest,
+    saveGame
   );
 
   // summary

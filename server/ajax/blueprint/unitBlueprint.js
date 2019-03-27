@@ -10,7 +10,7 @@ module.exports = () => {
     // Tier 1
     butterfly: {
       tier: 1,
-      life: 8,
+      life: 5,
       initiative: 75,
       movement: 8,
       maneuverPoints: 2,
@@ -24,7 +24,7 @@ module.exports = () => {
 
     skeleton: {
       tier: 1,
-      life: 12,
+      life: 8,
       initiative: 25,
       movement: 4,
       maneuverPoints: 2,
@@ -38,7 +38,7 @@ module.exports = () => {
 
     ranger: {
       tier: 1,
-      life: 8,
+      life: 5,
       initiative: 50,
       movement: 4,
       maneuverPoints: 2,
@@ -56,7 +56,7 @@ module.exports = () => {
     // Tier 2
     plant: {
       tier: 2,
-      life: 20,
+      life: 14,
       initiative: 35,
       movement: 6,
       maneuverPoints: 2,
@@ -73,7 +73,7 @@ module.exports = () => {
 
     undeadRogue: {
       tier: 2,
-      life: 26,
+      life: 18,
       initiative: 35,
       movement: 4,
       maneuverPoints: 2,
@@ -87,7 +87,7 @@ module.exports = () => {
 
     rogue: {
       tier: 2,
-      life: 30,
+      life: 21,
       initiative: 40,
       movement: 4,
       maneuverPoints: 2,
@@ -102,7 +102,7 @@ module.exports = () => {
     // Tier 3
     eyeball: {
       tier: 3,
-      life: 44,
+      life: 31,
       initiative: 40,
       movement: 4,
       maneuverPoints: 2,
@@ -116,7 +116,7 @@ module.exports = () => {
 
     crazyWizard: {
       tier: 3,
-      life: 34,
+      life: 24,
       initiative: 45,
       movement: 5,
       maneuverPoints: 2,
@@ -133,7 +133,7 @@ module.exports = () => {
 
     warrior: {
       tier: 3,
-      life: 50,
+      life: 35,
       initiative: 55,
       movement: 5,
       maneuverPoints: 2,
@@ -148,7 +148,7 @@ module.exports = () => {
     // Tier 4
     worm: {
       tier: 4,
-      life: 60,
+      life: 42,
       initiative: 60,
       movement: 6,
       maneuverPoints: 2,
@@ -162,7 +162,7 @@ module.exports = () => {
 
     wizard: {
       tier: 4,
-      life: 40,
+      life: 28,
       initiative: 30,
       movement: 6,
       maneuverPoints: 2,
@@ -179,7 +179,7 @@ module.exports = () => {
 
     orc: {
       tier: 4,
-      life: 70,
+      life: 49,
       initiative: 45,
       movement: 6,
       maneuverPoints: 2,
@@ -194,7 +194,7 @@ module.exports = () => {
     // Tier 5
     minotaur: {
       tier: 5,
-      life: 130,
+      life: 91,
       initiative: 50,
       movement: 4,
       maneuverPoints: 2,
@@ -208,7 +208,7 @@ module.exports = () => {
 
     blackKnight: {
       tier: 5,
-      life: 110,
+      life: 77,
       initiative: 55,
       movement: 5,
       maneuverPoints: 2,
@@ -222,7 +222,7 @@ module.exports = () => {
 
     cleric: {
       tier: 5,
-      life: 90,
+      life: 63,
       initiative: 70,
       movement: 6,
       maneuverPoints: 2,

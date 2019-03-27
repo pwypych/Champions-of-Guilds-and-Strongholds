@@ -17,7 +17,6 @@ g.launch.launchDisableUi = ($body, walkie) => {
       'launchTable.js',
       (entities) => {
         if (entities[entities._id].state === 'launchState') {
-          console.log('launchTable.js: update $table');
           disableUi(entities);
         }
       },
