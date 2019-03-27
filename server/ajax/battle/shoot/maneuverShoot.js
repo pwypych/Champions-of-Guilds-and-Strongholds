@@ -83,7 +83,7 @@ module.exports = (db) => {
 
       let targetId;
       _.forEach(entities, (entity, id) => {
-        if (entity.unitName) {
+        if (entity.unitName && !entity.dead) {
           if (
             entity.position.x === shootPosition.x &&
             entity.position.y === shootPosition.y
@@ -112,7 +112,7 @@ module.exports = (db) => {
       const unit = ctx.unit;
       const target = ctx.target;
       if (target.boss === unit.boss) {
-        debug('checkIsTragetFriendly: Cannot attack friendly unit');
+        debug('checkIsTragetFriendly: Cannot attack friendly unit', target);
         return;
       }
 
