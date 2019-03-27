@@ -12,7 +12,7 @@ module.exports = () => {
       tier: 1,
       life: 4,
       initiative: 75,
-      movement: 8,
+      movement: 7,
       maneuverPoints: 2,
       recruitCost: 50,
       maneuvers: {
@@ -26,7 +26,7 @@ module.exports = () => {
       tier: 1,
       life: 7,
       initiative: 25,
-      movement: 4,
+      movement: 5,
       maneuverPoints: 2,
       recruitCost: 70,
       maneuvers: {
@@ -42,7 +42,7 @@ module.exports = () => {
       initiative: 50,
       movement: 4,
       maneuverPoints: 2,
-      recruitCost: 80,
+      recruitCost: 60,
       maneuvers: {
         melee: {
           damage: 1
