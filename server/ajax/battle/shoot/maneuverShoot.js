@@ -129,7 +129,7 @@ module.exports = (db) => {
 
       shootPathWithoutTarget.forEach((position) => {
         _.forEach(entities, (entity, id) => {
-          if (entity.unitName) {
+          if (entity.unitName && !entity.dead) {
             if (
               entity.position.x === position.x &&
               entity.position.y === position.y
