@@ -220,9 +220,18 @@ module.exports = (db, unitBlueprint) => {
       });
 
       _.forEach(obsticles, (position) => {
+        const obsticleNameArray = [
+          'bush',
+          'rock2',
+          'treeStomp',
+          'log',
+          'bush2'
+        ];
+        const unitName = _.sample(obsticleNameArray);
+
         const unit = {};
-        const id = 'workbench_unit__' + shortId.generate();
-        unit.unitName = 'workbench';
+        const id = unitName + '_unit__' + shortId.generate();
+        unit.unitName = unitName;
         unit.collision = true;
         unit.position = position;
         units[id] = unit;
