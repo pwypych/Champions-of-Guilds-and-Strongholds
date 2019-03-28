@@ -51,7 +51,7 @@ g.battle.markerDraw = (walkie, viewport, freshEntities) => {
       // Should happen only once - memory leak danger!
       if (!marker) {
         // console.log('markerDraw', unitId, 'marker');
-        const textureName = 'markerGreen';
+        const textureName = 'markerBlue';
         const texture = PIXI.loader.resources[textureName].texture;
         marker = new PIXI.Sprite(texture);
         marker.name = 'marker';

@@ -24,26 +24,35 @@ g.battle.backgroundDraw = (walkie, viewport) => {
   }
 
   function drawBackground() {
-    const name = 'battle_background';
-    let background;
+    let backgroundContainer = battleContainer.getChildByName(
+      'backgroundContainer'
+    );
 
-    if (battleContainer.getChildByName(name)) {
-      background = battleContainer.getChildByName(name);
+    if (!backgroundContainer) {
+      backgroundContainer = new PIXI.Container();
+      backgroundContainer.name = 'backgroundContainer';
+      battleContainer.addChildZ(backgroundContainer, 1);
     }
 
-    if (!battleContainer.getChildByName(name)) {
-      // console.log('drawBackground', name);
-      background = new PIXI.Graphics();
-      background.name = name;
-      const color = 0xc7c7c7;
-      background.beginFill(color);
-      const x = 0;
-      const y = 0;
-      const width = viewport.worldWidth;
-      const height = viewport.worldHeight;
-      background.drawRect(x, y, width, height);
-      const zOrder = 1;
-      battleContainer.addChildZ(background, zOrder);
+    if (backgroundContainer.children.length < 1) {
+      const width = viewport.worldWidth / blockWidthPx;
+      const height = viewport.worldHeight / blockHeightPx;
+
+      _.times(width, (x) => {
+        _.times(height, (y) => {
+          let textureName = 'backgroundGrass1';
+          if (_.random(1, 3) === 3) {
+            textureName = 'backgroundGrass' + _.random(2, 17);
+          }
+
+          const texture = PIXI.loader.resources[textureName].texture;
+          const background = new PIXI.Sprite(texture);
+          background.name = 'background' + x + '_' + y;
+          background.x = x * blockWidthPx;
+          background.y = y * blockHeightPx;
+          backgroundContainer.addChild(background);
+        });
+      });
     }
 
     drawGrid();
