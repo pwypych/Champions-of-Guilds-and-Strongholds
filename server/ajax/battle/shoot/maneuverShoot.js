@@ -291,7 +291,7 @@ module.exports = (db) => {
           }
 
           debug('updateSetTargetAmount: Target life and amount updated!');
-          next();
+          setManeuverEndingTurn();
         }
       );
     }
@@ -336,9 +336,14 @@ module.exports = (db) => {
           }
 
           debug('updateUnitThatDied: Target was killed');
-          next();
+          setManeuverEndingTurn();
         }
       );
+    }
+
+    function setManeuverEndingTurn() {
+      res.locals.isManeuverEndingTurn = true;
+      next();
     }
   };
 };

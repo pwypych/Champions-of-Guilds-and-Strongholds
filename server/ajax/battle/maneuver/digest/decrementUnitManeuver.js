@@ -15,8 +15,8 @@ module.exports = (db) => {
     })();
 
     function decideManeuverDecrementType(gameId, entityId) {
-      if (res.locals.attack) {
-        updateSetToZeroUnitManeuver(gameId, entityId);
+      if (res.locals.isManeuverEndingTurn) {
+        updateSetUnitManeuverToZero(gameId, entityId);
         return;
       }
 
@@ -48,7 +48,7 @@ module.exports = (db) => {
       );
     }
 
-    function updateSetToZeroUnitManeuver(gameId, entityId) {
+    function updateSetUnitManeuverToZero(gameId, entityId) {
       const query = { _id: gameId };
 
       const field = entityId + '.unitStats.current.maneuverPoints';
