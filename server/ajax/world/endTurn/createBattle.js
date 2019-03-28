@@ -86,11 +86,6 @@ module.exports = (db, unitBlueprint) => {
           base: unitBlueprint()[unitName]
         };
 
-        // @temp only for testing first unit is active
-        if (counter === 0) {
-          unit.active = true;
-        }
-
         units[id] = unit;
         counter += 1;
       });
@@ -132,6 +127,31 @@ module.exports = (db, unitBlueprint) => {
       });
 
       debug('generateUnits: units:', _.size(units));
+      nominateActiveUnit(entities, units, attackerId, defenderId, battleId);
+    }
+
+    function nominateActiveUnit(
+      entities,
+      units,
+      attackerId,
+      defenderId,
+      battleId
+    ) {
+      let highestInitiativeNumber = 1;
+      let highestInitiativeUnitId;
+
+      _.forEach(units, (unit, id) => {
+        if (unit.unitStats.base.initiative > highestInitiativeNumber) {
+          highestInitiativeNumber = unit.unitStats.base.initiative;
+          highestInitiativeUnitId = id;
+        }
+      });
+
+      debug(
+        'nominateActiveUnit: highestInitiativeUnitId:',
+        highestInitiativeUnitId
+      );
+      units[highestInitiativeUnitId].active = true;
       generateUnitOwner(entities, units, attackerId, defenderId, battleId);
     }
 
