@@ -57,7 +57,7 @@ g.battle.iconShoot = (walkie, viewport, freshEntities) => {
 
           icon.x = x * blockWidthPx;
           icon.y = y * blockHeightPx;
-          icon.alpha = 0.6;
+          icon.alpha = 0.55;
         });
       });
     }

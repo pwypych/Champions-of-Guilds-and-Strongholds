@@ -35,6 +35,22 @@ g.battle.backgroundDraw = (walkie, viewport) => {
     }
 
     if (backgroundContainer.children.length < 1) {
+      const background = new PIXI.Graphics();
+      background.name = 'backgroundWhite';
+      const color = 0xffffff;
+      background.beginFill(color);
+      const backgroundX = 0;
+      const backgroundY = 0;
+      const backgroundWidth = viewport.worldWidth;
+      const backgroundHeight = viewport.worldHeight;
+      background.drawRect(
+        backgroundX,
+        backgroundY,
+        backgroundWidth,
+        backgroundHeight
+      );
+      backgroundContainer.addChild(background);
+
       const width = viewport.worldWidth / blockWidthPx;
       const height = viewport.worldHeight / blockHeightPx;
 
@@ -46,11 +62,12 @@ g.battle.backgroundDraw = (walkie, viewport) => {
           }
 
           const texture = PIXI.loader.resources[textureName].texture;
-          const background = new PIXI.Sprite(texture);
-          background.name = 'background' + x + '_' + y;
-          background.x = x * blockWidthPx;
-          background.y = y * blockHeightPx;
-          backgroundContainer.addChild(background);
+          const backgroundTile = new PIXI.Sprite(texture);
+          backgroundTile.name = 'backgroundTile' + x + '_' + y;
+          backgroundTile.x = x * blockWidthPx;
+          backgroundTile.y = y * blockHeightPx;
+          backgroundTile.alpha = 0.9;
+          backgroundContainer.addChild(backgroundTile);
         });
       });
     }
