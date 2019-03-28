@@ -17,21 +17,53 @@ g.battle.unitsDraw = (walkie, auth, viewport, freshEntities) => {
       'viewportBattleReady_',
       'unitsDraw.js',
       () => {
-        forEachUnit();
+        findBattleEntity();
       },
       false
     );
   }
 
-  function forEachUnit() {
+  function findBattleEntity() {
+    let battleEntity;
+    _.forEach(freshEntities(), (entity) => {
+      if (entity.attackerId && entity.defenderId) {
+        battleEntity = entity;
+      }
+    });
+
+    findPlayerId(battleEntity);
+  }
+
+  function findPlayerId(battleEntity) {
+    let playerId;
+    _.forEach(freshEntities(), (entity, id) => {
+      if (entity.playerCurrent) {
+        playerId = id;
+      }
+    });
+
+    findPlayerUnitBoss(playerId, battleEntity);
+  }
+
+  function findPlayerUnitBoss(playerId, battleEntity) {
+    let boss;
+    _.forEach(freshEntities(), (entity) => {
+      if (entity.unitStats && entity.owner === playerId) {
+        boss = entity.boss;
+      }
+    });
+    forEachUnit(boss, battleEntity);
+  }
+
+  function forEachUnit(boss, battleEntity) {
     _.forEach(freshEntities(), (entity, id) => {
       if (entity.unitName && entity.position && !entity.dead) {
-        instantiateUnitContainer(entity, id);
+        instantiateUnitContainer(entity, id, boss, battleEntity);
       }
     });
   }
 
-  function instantiateUnitContainer(entity, unitId) {
+  function instantiateUnitContainer(entity, unitId, boss, battleEntity) {
     let unitContainer = battleContainer.getChildByName(unitId);
 
     if (!unitContainer) {
@@ -45,10 +77,16 @@ g.battle.unitsDraw = (walkie, auth, viewport, freshEntities) => {
       unitContainer.y = entity.position.y * blockHeightPx;
     }
 
-    instantiateSprite(entity, unitId, unitContainer);
+    instantiateSprite(entity, unitId, unitContainer, boss, battleEntity);
   }
 
-  function instantiateSprite(entity, unitId, unitContainer) {
+  function instantiateSprite(
+    entity,
+    unitId,
+    unitContainer,
+    boss,
+    battleEntity
+  ) {
     let sprite = unitContainer.getChildByName('sprite');
 
     // Should happen only once
@@ -68,10 +106,16 @@ g.battle.unitsDraw = (walkie, auth, viewport, freshEntities) => {
       unitContainer.sortChildren();
     }
 
-    instantiateAmount(entity, unitId, unitContainer);
+    instantiateAmount(entity, unitId, unitContainer, boss, battleEntity);
   }
 
-  function instantiateAmount(entity, unitId, unitContainer) {
+  function instantiateAmount(
+    entity,
+    unitId,
+    unitContainer,
+    boss,
+    battleEntity
+  ) {
     let amount = unitContainer.getChildByName('amount');
 
     // Should happen only once
@@ -85,7 +129,16 @@ g.battle.unitsDraw = (walkie, auth, viewport, freshEntities) => {
         strokeThickness: 2
       });
 
-      amount = new PIXI.Text(entity.amount, amountTextStyle);
+      let unitAmount = entity.amount;
+      if (
+        battleEntity.attackerId !== boss &&
+        entity.boss !== boss &&
+        entity.unitStats
+      ) {
+        unitAmount = '?';
+      }
+
+      amount = new PIXI.Text(unitAmount, amountTextStyle);
       amount.name = 'amount';
       const zOrder = 10;
       unitContainer.addChildZ(amount, zOrder);
