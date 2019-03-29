@@ -31,46 +31,46 @@ module.exports = () => {
     }
 
     function generateBattleEntities(entities, playerId) {
-      const battleEntities = {};
-      battleEntities._id = entities._id;
+      const filteredEntities = {};
+      filteredEntities._id = entities._id;
 
       _.forEach(entities, (entity, id) => {
         // Game entity
         if (entity.mapData && entity.state) {
-          battleEntities[id] = entity;
+          filteredEntities[id] = entity;
         }
 
         // Battle entity
         if (entity.battleStatus === 'active') {
-          battleEntities[id] = entity;
+          filteredEntities[id] = entity;
         }
 
         // Unit entities
         if (entity.unitName) {
-          battleEntities[id] = entity;
+          filteredEntities[id] = entity;
         }
 
         // Player entities
         if (entity.playerToken && entity.playerData) {
-          battleEntities[id] = {
+          filteredEntities[id] = {
             playerData: entity.playerData
           };
 
           // Player current
           if (id === playerId) {
-            battleEntities[id].playerCurrent = true;
+            filteredEntities[id].playerCurrent = true;
           }
         }
       });
 
-      debug('generateData: battleEntities', battleEntities);
-      sendBattleEntities(battleEntities);
+      debug('generateData: filteredEntities', filteredEntities);
+      addFilteredEntitiesToLocals(filteredEntities);
     }
 
-    function sendBattleEntities(battleEntities) {
-      debug('sendBattleEntities');
-      res.send(battleEntities);
-      debug('******************** ajax ********************');
+    function addFilteredEntitiesToLocals(filteredEntities) {
+      debug('addFilteredEntitiesToLocals');
+      res.locals.filteredEntities = filteredEntities;
+      next();
     }
   };
 };
