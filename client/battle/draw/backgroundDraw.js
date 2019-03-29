@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.battle.backgroundDraw = (walkie, viewport) => {
+g.battle.backgroundDraw = (walkie, viewport, freshEntities) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
@@ -17,13 +17,24 @@ g.battle.backgroundDraw = (walkie, viewport) => {
       'viewportBattleReady_',
       'backgroundDraw.js',
       () => {
-        drawBackground();
+        findBattleEntity();
       },
       false
     );
   }
 
-  function drawBackground() {
+  function findBattleEntity() {
+    let battleId;
+    _.forEach(freshEntities(), (entity, id) => {
+      if (entity.attackerId && entity.defenderId) {
+        battleId = id;
+      }
+    });
+
+    drawBackground(battleId);
+  }
+
+  function drawBackground(battleId) {
     let backgroundContainer = battleContainer.getChildByName(
       'backgroundContainer'
     );
@@ -54,11 +65,18 @@ g.battle.backgroundDraw = (walkie, viewport) => {
       const width = viewport.worldWidth / blockWidthPx;
       const height = viewport.worldHeight / blockHeightPx;
 
+      /* eslint-disable new-cap */
+      const randomGenerator = new Math.seedrandom(battleId);
+      /* eslint-enable new-cap */
+
       _.times(width, (x) => {
         _.times(height, (y) => {
           let textureName = 'backgroundGrass1';
-          if (_.random(1, 3) === 3) {
-            textureName = 'backgroundGrass' + _.random(2, 17);
+
+          const random1to3 = Math.floor(randomGenerator() * 3) + 1;
+          if (random1to3 === 3) {
+            const random2to17 = Math.floor(randomGenerator() * 17) + 1;
+            textureName = 'backgroundGrass' + random2to17;
           }
 
           const texture = PIXI.loader.resources[textureName].texture;
