@@ -2,13 +2,13 @@
 
 'use strict';
 
-const debug = require('debug')('nope:cogs:battleEntitiesGet');
+const debug = require('debug')('nope:cogs:summaryEntitiesFilter');
 const _ = require('lodash');
 
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
-      debug('// Send filtered info about actual battle');
+      debug('// Send filtered info about actual summary');
 
       const entities = res.locals.entities;
       const playerId = res.locals.playerId;
@@ -20,57 +20,57 @@ module.exports = () => {
       const gameId = entities._id;
       const gameEntity = entities[gameId];
 
-      if (gameEntity.state !== 'battleState') {
-        debug('compareState: not battleState!');
+      if (gameEntity.state !== 'summaryState') {
+        debug('compareState: not summaryState!');
         next();
         return;
       }
 
       debug('compareState: state ok!', gameEntity.state);
-      generateBattleEntities(entities, playerId);
+      generateEntitiesFiltered(entities, playerId);
     }
 
-    function generateBattleEntities(entities, playerId) {
-      const battleEntities = {};
-      battleEntities._id = entities._id;
+    function generateEntitiesFiltered(entities, playerId) {
+      const entitiesFiltered = {};
+      entitiesFiltered._id = entities._id;
 
       _.forEach(entities, (entity, id) => {
         // Game entity
         if (entity.mapData && entity.state) {
-          battleEntities[id] = entity;
+          entitiesFiltered[id] = entity;
         }
 
         // Battle entity
         if (entity.battleStatus === 'active') {
-          battleEntities[id] = entity;
+          entitiesFiltered[id] = entity;
         }
 
         // Unit entities
         if (entity.unitName) {
-          battleEntities[id] = entity;
+          entitiesFiltered[id] = entity;
         }
 
         // Player entities
         if (entity.playerToken && entity.playerData) {
-          battleEntities[id] = {
+          entitiesFiltered[id] = {
             playerData: entity.playerData
           };
 
           // Player current
           if (id === playerId) {
-            battleEntities[id].playerCurrent = true;
+            entitiesFiltered[id].playerCurrent = true;
           }
         }
       });
 
-      debug('generateData: battleEntities', battleEntities);
-      sendBattleEntities(battleEntities);
+      debug('generateData: entitiesFiltered', entitiesFiltered);
+      addEntitiesFilteredToLocals(entitiesFiltered);
     }
 
-    function sendBattleEntities(battleEntities) {
-      debug('sendBattleEntities');
-      res.send(battleEntities);
-      debug('******************** ajax ********************');
+    function addEntitiesFilteredToLocals(entitiesFiltered) {
+      debug('addEntitiesFilteredToLocals');
+      res.locals.entitiesFiltered = entitiesFiltered;
+      next();
     }
   };
 };

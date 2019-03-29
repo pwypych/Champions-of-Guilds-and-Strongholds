@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('nope:cogs:worldEntitiesGet');
+const debug = require('debug')('nope:cogs:worldEntitiesFilter');
 const _ = require('lodash');
 
 module.exports = () => {
@@ -26,49 +26,49 @@ module.exports = () => {
       }
 
       debug('compareState: state ok!', gameEntity.state);
-      generateWorldEntities(entities);
+      generateEntitiesFiltered(entities);
     }
 
-    function generateWorldEntities(entities) {
+    function generateEntitiesFiltered(entities) {
       const playerId = res.locals.playerId;
 
-      const worldEntities = {};
-      worldEntities._id = entities._id;
+      const dentitiesFiltered = {};
+      dentitiesFiltered._id = entities._id;
 
       _.forEach(entities, (entity, id) => {
         // Game entity
         if (entity.mapData && entity.state) {
-          worldEntities[id] = entity;
+          dentitiesFiltered[id] = entity;
         }
 
         // Player entities
         if (entity.playerToken && entity.playerData) {
-          worldEntities[id] = {
+          dentitiesFiltered[id] = {
             playerData: entity.playerData,
             endTurn: entity.endTurn
           };
 
           // Player current
           if (id === playerId) {
-            worldEntities[id].playerCurrent = true;
-            worldEntities[id].playerResources = entity.playerResources;
+            dentitiesFiltered[id].playerCurrent = true;
+            dentitiesFiltered[id].playerResources = entity.playerResources;
           }
         }
 
         // Figure entities
         if (entity.figureName) {
-          worldEntities[id] = entity;
+          dentitiesFiltered[id] = entity;
         }
       });
 
-      debug('generateData: worldEntities', worldEntities);
-      sendWorldEntities(worldEntities);
+      debug('generateData: dentitiesFiltered', dentitiesFiltered);
+      addEntitiesFilteredToLocals(dentitiesFiltered);
     }
 
-    function sendWorldEntities(worldEntities) {
-      debug('sendWorldEntities');
-      res.send(worldEntities);
-      debug('******************** ajax ********************');
+    function addEntitiesFilteredToLocals(dentitiesFiltered) {
+      debug('addEntitiesFilteredToLocals');
+      res.locals.dentitiesFiltered = dentitiesFiltered;
+      next();
     }
   };
 };

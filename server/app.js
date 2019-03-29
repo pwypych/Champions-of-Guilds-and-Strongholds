@@ -153,10 +153,11 @@ function setupLibrariesAndRoutes() {
     '/ajax/entitiesGet',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
-    require('./ajax/launch/entities/launchEntitiesGet.js')(),
-    require('./ajax/world/entities/worldEntitiesGet.js')(),
-    require('./ajax/battle/entities/battleEntitiesGet.js')(),
-    require('./ajax/summary/entities/summaryEntitiesGet.js')()
+    require('./ajax/launch/entities/launchEntitiesFilter.js')(),
+    require('./ajax/world/entities/worldEntitiesFilter.js')(),
+    require('./ajax/battle/entities/battleEntitiesFilter.js')(),
+    require('./ajax/summary/entities/summaryEntitiesFilter.js')(),
+    require('./ajax/common/entitiesFilterSendResponse.js')()
   );
 
   app.get(

@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('nope:cogs:launchEntitiesGet');
+const debug = require('debug')('nope:cogs:launchEntitiesFilter');
 const _ = require('lodash');
 
 module.exports = () => {
@@ -25,44 +25,44 @@ module.exports = () => {
       }
 
       debug('compareState: state ok!', gameEntity.state);
-      generateLaunchEntities(entities);
+      generateEntitiesFiltered(entities);
     }
 
-    function generateLaunchEntities(entities) {
+    function generateEntitiesFiltered(entities) {
       const playerId = res.locals.playerId;
 
-      const launchEntities = {};
-      launchEntities._id = entities._id;
+      const entitiesFiltered = {};
+      entitiesFiltered._id = entities._id;
 
       _.forEach(entities, (entity, id) => {
         // Game entity
         if (entity.mapData && entity.state) {
-          launchEntities[id] = entity;
+          entitiesFiltered[id] = entity;
         }
 
         // Player entities
         if (entity.playerToken && entity.playerData) {
-          launchEntities[id] = {
+          entitiesFiltered[id] = {
             playerData: entity.playerData,
             readyForLaunch: entity.readyForLaunch
           };
 
           // Player current
           if (id === playerId) {
-            launchEntities[id].playerCurrent = true;
+            entitiesFiltered[id].playerCurrent = true;
           }
         }
       });
 
-      debug('generateLaunchEntities: launchEntities', launchEntities);
+      debug('generateEntitiesFiltered: entitiesFiltered', entitiesFiltered);
 
-      sendResponse(launchEntities);
+      addEntitiesFilteredToLocals(entitiesFiltered);
     }
 
-    function sendResponse(launchEntities) {
-      debug('sendResponse');
-      res.send(launchEntities);
-      debug('******************** ajax ********************');
+    function addEntitiesFilteredToLocals(entitiesFiltered) {
+      debug('addEntitiesFilteredToLocals');
+      res.locals.entitiesFiltered = entitiesFiltered;
+      next();
     }
   };
 };
