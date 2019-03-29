@@ -25,43 +25,43 @@ module.exports = () => {
       }
 
       debug('compareState: state ok!', gameEntity.state);
-      generateLaunchEntities(entities);
+      generateEntitiesFiltered(entities);
     }
 
-    function generateLaunchEntities(entities) {
+    function generateEntitiesFiltered(entities) {
       const playerId = res.locals.playerId;
 
-      const filteredEntities = {};
-      filteredEntities._id = entities._id;
+      const entitiesFiltered = {};
+      entitiesFiltered._id = entities._id;
 
       _.forEach(entities, (entity, id) => {
         // Game entity
         if (entity.mapData && entity.state) {
-          filteredEntities[id] = entity;
+          entitiesFiltered[id] = entity;
         }
 
         // Player entities
         if (entity.playerToken && entity.playerData) {
-          filteredEntities[id] = {
+          entitiesFiltered[id] = {
             playerData: entity.playerData,
             readyForLaunch: entity.readyForLaunch
           };
 
           // Player current
           if (id === playerId) {
-            filteredEntities[id].playerCurrent = true;
+            entitiesFiltered[id].playerCurrent = true;
           }
         }
       });
 
-      debug('generateLaunchEntities: filteredEntities', filteredEntities);
+      debug('generateEntitiesFiltered: entitiesFiltered', entitiesFiltered);
 
-      addFilteredEntitiesToLocals(filteredEntities);
+      addEntitiesFilteredToLocals(entitiesFiltered);
     }
 
-    function addFilteredEntitiesToLocals(filteredEntities) {
-      debug('addFilteredEntitiesToLocals');
-      res.locals.filteredEntities = filteredEntities;
+    function addEntitiesFilteredToLocals(entitiesFiltered) {
+      debug('addEntitiesFilteredToLocals');
+      res.locals.entitiesFiltered = entitiesFiltered;
       next();
     }
   };

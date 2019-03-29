@@ -9,14 +9,14 @@ module.exports = () => {
     (function init() {
       debug('// Send filtered entities');
 
-      const filteredEntities = res.locals.filteredEntities;
+      const entitiesFiltered = res.locals.entitiesFiltered;
 
-      sendFilteredEntities(filteredEntities);
+      sendEntitiesFiltered(entitiesFiltered);
     })();
 
-    function sendFilteredEntities(filteredEntities) {
-      debug('sendFilteredEntities');
-      res.send(filteredEntities);
+    function sendEntitiesFiltered(entitiesFiltered) {
+      debug('sendEntitiesFiltered');
+      res.send(entitiesFiltered);
       debug('******************** ajax ********************');
     }
   };

@@ -27,49 +27,49 @@ module.exports = () => {
       }
 
       debug('compareState: state ok!', gameEntity.state);
-      generateSummaryEntities(entities, playerId);
+      generateEntitiesFiltered(entities, playerId);
     }
 
-    function generateSummaryEntities(entities, playerId) {
-      const filteredEntities = {};
-      filteredEntities._id = entities._id;
+    function generateEntitiesFiltered(entities, playerId) {
+      const entitiesFiltered = {};
+      entitiesFiltered._id = entities._id;
 
       _.forEach(entities, (entity, id) => {
         // Game entity
         if (entity.mapData && entity.state) {
-          filteredEntities[id] = entity;
+          entitiesFiltered[id] = entity;
         }
 
         // Battle entity
         if (entity.battleStatus === 'active') {
-          filteredEntities[id] = entity;
+          entitiesFiltered[id] = entity;
         }
 
         // Unit entities
         if (entity.unitName) {
-          filteredEntities[id] = entity;
+          entitiesFiltered[id] = entity;
         }
 
         // Player entities
         if (entity.playerToken && entity.playerData) {
-          filteredEntities[id] = {
+          entitiesFiltered[id] = {
             playerData: entity.playerData
           };
 
           // Player current
           if (id === playerId) {
-            filteredEntities[id].playerCurrent = true;
+            entitiesFiltered[id].playerCurrent = true;
           }
         }
       });
 
-      debug('generateData: filteredEntities', filteredEntities);
-      addFilteredEntitiesToLocals(filteredEntities);
+      debug('generateData: entitiesFiltered', entitiesFiltered);
+      addEntitiesFilteredToLocals(entitiesFiltered);
     }
 
-    function addFilteredEntitiesToLocals(filteredEntities) {
-      debug('addFilteredEntitiesToLocals');
-      res.locals.filteredEntities = filteredEntities;
+    function addEntitiesFilteredToLocals(entitiesFiltered) {
+      debug('addEntitiesFilteredToLocals');
+      res.locals.entitiesFiltered = entitiesFiltered;
       next();
     }
   };

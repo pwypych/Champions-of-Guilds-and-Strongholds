@@ -26,48 +26,48 @@ module.exports = () => {
       }
 
       debug('compareState: state ok!', gameEntity.state);
-      generateWorldEntities(entities);
+      generateEntitiesFiltered(entities);
     }
 
-    function generateWorldEntities(entities) {
+    function generateEntitiesFiltered(entities) {
       const playerId = res.locals.playerId;
 
-      const filteredEntities = {};
-      filteredEntities._id = entities._id;
+      const dentitiesFiltered = {};
+      dentitiesFiltered._id = entities._id;
 
       _.forEach(entities, (entity, id) => {
         // Game entity
         if (entity.mapData && entity.state) {
-          filteredEntities[id] = entity;
+          dentitiesFiltered[id] = entity;
         }
 
         // Player entities
         if (entity.playerToken && entity.playerData) {
-          filteredEntities[id] = {
+          dentitiesFiltered[id] = {
             playerData: entity.playerData,
             endTurn: entity.endTurn
           };
 
           // Player current
           if (id === playerId) {
-            filteredEntities[id].playerCurrent = true;
-            filteredEntities[id].playerResources = entity.playerResources;
+            dentitiesFiltered[id].playerCurrent = true;
+            dentitiesFiltered[id].playerResources = entity.playerResources;
           }
         }
 
         // Figure entities
         if (entity.figureName) {
-          filteredEntities[id] = entity;
+          dentitiesFiltered[id] = entity;
         }
       });
 
-      debug('generateData: filteredEntities', filteredEntities);
-      addFilteredEntitiesToLocals(filteredEntities);
+      debug('generateData: dentitiesFiltered', dentitiesFiltered);
+      addEntitiesFilteredToLocals(dentitiesFiltered);
     }
 
-    function addFilteredEntitiesToLocals(filteredEntities) {
-      debug('addFilteredEntitiesToLocals');
-      res.locals.filteredEntities = filteredEntities;
+    function addEntitiesFilteredToLocals(dentitiesFiltered) {
+      debug('addEntitiesFilteredToLocals');
+      res.locals.dentitiesFiltered = dentitiesFiltered;
       next();
     }
   };
