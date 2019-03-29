@@ -61,7 +61,7 @@ g.main = function main() {
     g.world.recruitUnitPrepare($body, walkie, freshEntities, auth, blueprints);
     g.world.heroFocusWorldReady(walkie, viewport, freshEntities);
     g.world.heroFocusTween(walkie, viewport, freshEntities);
-    g.world.backgroundDraw(walkie, viewport);
+    g.world.backgroundDraw(walkie, viewport, auth);
     g.world.figuresDraw(walkie, auth, viewport, freshEntities);
     g.world.worldClick(walkie, auth, viewport, freshEntities);
     g.world.heroPath(walkie, auth, viewport, freshEntities);

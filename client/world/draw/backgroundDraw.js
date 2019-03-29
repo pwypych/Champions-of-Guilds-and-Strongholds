@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.world.backgroundDraw = (walkie, viewport) => {
+g.world.backgroundDraw = (walkie, viewport, auth) => {
+  const blockWidthPx = 32;
+  const blockHeightPx = 32;
+
   const worldContainer = viewport.getChildByName('worldContainer');
 
   (function init() {
@@ -21,27 +24,59 @@ g.world.backgroundDraw = (walkie, viewport) => {
   }
 
   function drawBackground() {
-    const name = 'world_background';
-    let background;
+    let backgroundContainer = worldContainer.getChildByName(
+      'backgroundContainer'
+    );
 
-    if (worldContainer.getChildByName(name)) {
-      background = worldContainer.getChildByName(name);
+    if (!backgroundContainer) {
+      backgroundContainer = new PIXI.Container();
+      backgroundContainer.name = 'backgroundContainer';
+      worldContainer.addChildZ(backgroundContainer, 1);
     }
 
-    if (!worldContainer.getChildByName(name)) {
-      // console.log('drawBackground', name);
-      background = new PIXI.Graphics();
-      background.name = name;
-      const color = 0xc7c7c7;
+    if (backgroundContainer.children.length < 1) {
+      const background = new PIXI.Graphics();
+      background.name = 'backgroundWhite';
+      const color = 0xffffff;
       background.beginFill(color);
-      const x = 0;
-      const y = 0;
-      const width = viewport.worldWidth;
-      const height = viewport.worldHeight;
-      background.drawRect(x, y, width, height);
-      const zOrder = 1;
-      worldContainer.addChildZ(background, zOrder);
-      worldContainer.sortChildren();
+      const backgroundX = 0;
+      const backgroundY = 0;
+      const backgroundWidth = viewport.worldWidth;
+      const backgroundHeight = viewport.worldHeight;
+      background.drawRect(
+        backgroundX,
+        backgroundY,
+        backgroundWidth,
+        backgroundHeight
+      );
+      backgroundContainer.addChild(background);
+
+      const width = viewport.worldWidth / blockWidthPx;
+      const height = viewport.worldHeight / blockHeightPx;
+
+      /* eslint-disable new-cap */
+      const randomGenerator = new Math.seedrandom(auth.gameId);
+      /* eslint-enable new-cap */
+
+      _.times(width, (x) => {
+        _.times(height, (y) => {
+          let textureName = 'backgroundGrass1';
+
+          const random1to3 = Math.floor(randomGenerator() * 3) + 1;
+          if (random1to3 === 3) {
+            const random2to17 = Math.floor(randomGenerator() * 17) + 1;
+            textureName = 'backgroundGrass' + random2to17;
+          }
+
+          const texture = PIXI.loader.resources[textureName].texture;
+          const backgroundTile = new PIXI.Sprite(texture);
+          backgroundTile.name = 'backgroundTile' + x + '_' + y;
+          backgroundTile.x = x * blockWidthPx;
+          backgroundTile.y = y * blockHeightPx;
+          backgroundTile.alpha = 0.9;
+          backgroundContainer.addChild(backgroundTile);
+        });
+      });
     }
   }
 };
