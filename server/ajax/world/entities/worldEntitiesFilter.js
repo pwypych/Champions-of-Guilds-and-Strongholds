@@ -32,42 +32,42 @@ module.exports = () => {
     function generateEntitiesFiltered(entities) {
       const playerId = res.locals.playerId;
 
-      const dentitiesFiltered = {};
-      dentitiesFiltered._id = entities._id;
+      const entitiesFiltered = {};
+      entitiesFiltered._id = entities._id;
 
       _.forEach(entities, (entity, id) => {
         // Game entity
         if (entity.mapData && entity.state) {
-          dentitiesFiltered[id] = entity;
+          entitiesFiltered[id] = entity;
         }
 
         // Player entities
         if (entity.playerToken && entity.playerData) {
-          dentitiesFiltered[id] = {
+          entitiesFiltered[id] = {
             playerData: entity.playerData,
             endTurn: entity.endTurn
           };
 
           // Player current
           if (id === playerId) {
-            dentitiesFiltered[id].playerCurrent = true;
-            dentitiesFiltered[id].playerResources = entity.playerResources;
+            entitiesFiltered[id].playerCurrent = true;
+            entitiesFiltered[id].playerResources = entity.playerResources;
           }
         }
 
         // Figure entities
         if (entity.figureName) {
-          dentitiesFiltered[id] = entity;
+          entitiesFiltered[id] = entity;
         }
       });
 
-      debug('generateData: dentitiesFiltered', dentitiesFiltered);
-      addEntitiesFilteredToLocals(dentitiesFiltered);
+      debug('generateData: entitiesFiltered', entitiesFiltered);
+      addEntitiesFilteredToLocals(entitiesFiltered);
     }
 
-    function addEntitiesFilteredToLocals(dentitiesFiltered) {
+    function addEntitiesFilteredToLocals(entitiesFiltered) {
       debug('addEntitiesFilteredToLocals');
-      res.locals.dentitiesFiltered = dentitiesFiltered;
+      res.locals.entitiesFiltered = entitiesFiltered;
       next();
     }
   };
