@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('nope:cogs:battleEntitiesGet');
+const debug = require('debug')('nope:cogs:battleEntitiesFilter');
 const _ = require('lodash');
 
 module.exports = () => {
