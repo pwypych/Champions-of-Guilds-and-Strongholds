@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('nope:cogs:worldEntitiesGet');
+const debug = require('debug')('nope:cogs:worldEntitiesFilter');
 const _ = require('lodash');
 
 module.exports = () => {
@@ -32,43 +32,43 @@ module.exports = () => {
     function generateWorldEntities(entities) {
       const playerId = res.locals.playerId;
 
-      const worldEntities = {};
-      worldEntities._id = entities._id;
+      const filteredEntities = {};
+      filteredEntities._id = entities._id;
 
       _.forEach(entities, (entity, id) => {
         // Game entity
         if (entity.mapData && entity.state) {
-          worldEntities[id] = entity;
+          filteredEntities[id] = entity;
         }
 
         // Player entities
         if (entity.playerToken && entity.playerData) {
-          worldEntities[id] = {
+          filteredEntities[id] = {
             playerData: entity.playerData,
             endTurn: entity.endTurn
           };
 
           // Player current
           if (id === playerId) {
-            worldEntities[id].playerCurrent = true;
-            worldEntities[id].playerResources = entity.playerResources;
+            filteredEntities[id].playerCurrent = true;
+            filteredEntities[id].playerResources = entity.playerResources;
           }
         }
 
         // Figure entities
         if (entity.figureName) {
-          worldEntities[id] = entity;
+          filteredEntities[id] = entity;
         }
       });
 
-      debug('generateData: worldEntities', worldEntities);
-      sendWorldEntities(worldEntities);
+      debug('generateData: filteredEntities', filteredEntities);
+      addFilteredEntitiesToLocals(filteredEntities);
     }
 
-    function sendWorldEntities(worldEntities) {
-      debug('sendWorldEntities');
-      res.send(worldEntities);
-      debug('******************** ajax ********************');
+    function addFilteredEntitiesToLocals(filteredEntities) {
+      debug('addFilteredEntitiesToLocals');
+      res.locals.filteredEntities = filteredEntities;
+      next();
     }
   };
 };
