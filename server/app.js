@@ -149,7 +149,6 @@ function setupLibrariesAndRoutes() {
     require('./game/game.js')(environment, db, templateToHtml)
   );
 
-  // launchEntitiesFilter
   app.get(
     '/ajax/entitiesGet',
     require('./library/readEntities.js')(db),
@@ -157,9 +156,8 @@ function setupLibrariesAndRoutes() {
     require('./ajax/launch/entities/launchEntitiesFilter.js')(),
     require('./ajax/world/entities/worldEntitiesFilter.js')(),
     require('./ajax/battle/entities/battleEntitiesFilter.js')(),
-    // require('./ajax/summary/entities/summaryEntitiesGet.js')()
+    require('./ajax/summary/entities/summaryEntitiesFilter.js')(),
     require('./ajax/common/entitiesFilterSendResponse.js')()
-    // entitiesFilterSendResponce
   );
 
   app.get(

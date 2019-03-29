@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('nope:cogs:summaryEntitiesGet');
+const debug = require('debug')('nope:cogs:summaryEntitiesFilter');
 const _ = require('lodash');
 
 module.exports = () => {
@@ -31,46 +31,46 @@ module.exports = () => {
     }
 
     function generateSummaryEntities(entities, playerId) {
-      const summaryEntities = {};
-      summaryEntities._id = entities._id;
+      const filteredEntities = {};
+      filteredEntities._id = entities._id;
 
       _.forEach(entities, (entity, id) => {
         // Game entity
         if (entity.mapData && entity.state) {
-          summaryEntities[id] = entity;
+          filteredEntities[id] = entity;
         }
 
         // Battle entity
         if (entity.battleStatus === 'active') {
-          summaryEntities[id] = entity;
+          filteredEntities[id] = entity;
         }
 
         // Unit entities
         if (entity.unitName) {
-          summaryEntities[id] = entity;
+          filteredEntities[id] = entity;
         }
 
         // Player entities
         if (entity.playerToken && entity.playerData) {
-          summaryEntities[id] = {
+          filteredEntities[id] = {
             playerData: entity.playerData
           };
 
           // Player current
           if (id === playerId) {
-            summaryEntities[id].playerCurrent = true;
+            filteredEntities[id].playerCurrent = true;
           }
         }
       });
 
-      debug('generateData: summaryEntities', summaryEntities);
-      sendSummaryEntities(summaryEntities);
+      debug('generateData: filteredEntities', filteredEntities);
+      addFilteredEntitiesToLocals(filteredEntities);
     }
 
-    function sendSummaryEntities(summaryEntities) {
-      debug('sendSummaryEntities');
-      res.send(summaryEntities);
-      debug('******************** ajax ********************');
+    function addFilteredEntitiesToLocals(filteredEntities) {
+      debug('addFilteredEntitiesToLocals');
+      res.locals.filteredEntities = filteredEntities;
+      next();
     }
   };
 };
