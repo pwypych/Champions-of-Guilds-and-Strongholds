@@ -108,13 +108,19 @@ module.exports = (db, unitBlueprint) => {
         unitName = key;
       });
 
+      // Randomize npc unit amount
+      const maxAmount = Math.round(amount * 1.25);
+      const minAmount = Math.round(amount * 0.5);
+      debug('generateUnits:maxAmount:', maxAmount);
+      debug('generateUnits:minAmount:', minAmount);
+
       _.times(5, (index) => {
         const id = unitName + '_unit__' + shortId.generate();
-
         const unit = {};
         unit.unitName = unitName;
         unit.boss = defenderId;
-        unit.amount = amount;
+        unit.amount = _.random(minAmount, maxAmount, false);
+        debug('generateUnits:unit.amount:', unit.amount);
         unit.active = false;
         unit.collision = true;
         unit.position = defenderPositions[index];
