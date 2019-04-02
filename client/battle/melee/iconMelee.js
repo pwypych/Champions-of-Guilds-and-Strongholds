@@ -9,15 +9,27 @@ g.battle.iconMelee = (walkie, viewport, freshEntities) => {
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
+    onViewportBattleReady();
     onEntitiesGet();
   })();
+
+  function onViewportBattleReady() {
+    walkie.onEvent(
+      'viewportBattleReady_',
+      'iconMelee.js',
+      () => {
+        drawIconsOnce();
+      },
+      false
+    );
+  }
 
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
       'iconMelee.js',
       () => {
-        drawIconsOnce();
+        hideIcons();
       },
       false
     );
@@ -58,17 +70,20 @@ g.battle.iconMelee = (walkie, viewport, freshEntities) => {
           icon.x = x * blockWidthPx;
           icon.y = y * blockHeightPx;
           icon.alpha = 0.55;
+          icon.visible = false;
         });
       });
     }
-
-    hideIcons();
   }
 
   function hideIcons() {
     const iconMeleeContainer = battleContainer.getChildByName(
       'iconMeleeContainer'
     );
+
+    if (!iconMeleeContainer) {
+      return;
+    }
 
     _.forEach(iconMeleeContainer.children, (icon) => {
       icon.visible = false;

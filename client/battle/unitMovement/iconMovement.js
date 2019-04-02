@@ -9,15 +9,27 @@ g.battle.iconMovement = (walkie, viewport, freshEntities) => {
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
+    onViewportBattleReady();
     onEntitiesGet();
   })();
+
+  function onViewportBattleReady() {
+    walkie.onEvent(
+      'viewportBattleReady_',
+      'iconMovement.js',
+      () => {
+        drawIconsOnce();
+      },
+      false
+    );
+  }
 
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
       'iconMovement.js',
       () => {
-        drawIconsOnce();
+        hideIcons();
       },
       false
     );
@@ -58,17 +70,20 @@ g.battle.iconMovement = (walkie, viewport, freshEntities) => {
           icon.x = x * blockWidthPx;
           icon.y = y * blockHeightPx;
           icon.alpha = 0.2;
+          icon.visible = false;
         });
       });
     }
-
-    hideIcons();
   }
 
   function hideIcons() {
     const iconMovementContainer = battleContainer.getChildByName(
       'iconMovementContainer'
     );
+
+    if (!iconMovementContainer) {
+      return;
+    }
 
     _.forEach(iconMovementContainer.children, (icon) => {
       icon.visible = false;

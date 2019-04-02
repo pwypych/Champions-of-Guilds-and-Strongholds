@@ -10,10 +10,10 @@ g.battle.battleToggle = (walkie, viewport, freshEntities) => {
   const worldContainer = viewport.getChildByName('worldContainer');
 
   (function init() {
-    onEntitiesGet();
+    onEntitiesGetFirst();
   })();
 
-  function onEntitiesGet() {
+  function onEntitiesGetFirst() {
     walkie.onEvent(
       'entitiesGetFirst_',
       'battleToggle.js',

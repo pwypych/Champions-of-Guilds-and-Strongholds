@@ -9,15 +9,27 @@ g.battle.iconShoot = (walkie, viewport, freshEntities) => {
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
+    onViewportBattleReady();
     onEntitiesGet();
   })();
+
+  function onViewportBattleReady() {
+    walkie.onEvent(
+      'viewportBattleReady_',
+      'iconShoot.js',
+      () => {
+        drawIconsOnce();
+      },
+      false
+    );
+  }
 
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
       'iconShoot.js',
       () => {
-        drawIconsOnce();
+        hideIcons();
       },
       false
     );
@@ -58,17 +70,20 @@ g.battle.iconShoot = (walkie, viewport, freshEntities) => {
           icon.x = x * blockWidthPx;
           icon.y = y * blockHeightPx;
           icon.alpha = 0.55;
+          icon.visible = false;
         });
       });
     }
-
-    hideIcons();
   }
 
   function hideIcons() {
     const iconShootContainer = battleContainer.getChildByName(
       'iconShootContainer'
     );
+
+    if (!iconShootContainer) {
+      return;
+    }
 
     _.forEach(iconShootContainer.children, (icon) => {
       icon.visible = false;

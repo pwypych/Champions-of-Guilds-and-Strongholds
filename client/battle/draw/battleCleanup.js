@@ -1,0 +1,36 @@
+// @format
+
+'use strict';
+
+g.battle.battleCleanup = (walkie, viewport, freshEntities) => {
+  const battleContainer = viewport.getChildByName('battleContainer');
+
+  (function init() {
+    onEntitiesGet();
+  })();
+
+  function onEntitiesGet() {
+    walkie.onEvent(
+      'entitiesGet_',
+      'battleCleanup.js',
+      () => {
+        const gameEntity = freshEntities()[freshEntities()._id];
+
+        if (gameEntity.state !== 'battleState') {
+          destroySpritesInBattleContainer();
+        }
+      },
+      false
+    );
+  }
+
+  function destroySpritesInBattleContainer() {
+    // @bug, cannot use forEach, looks like children are destroyed on next processor tick
+    while (battleContainer.children[0]) {
+      const child = battleContainer.children[0];
+      console.log('destroy', child.name);
+      child.destroy({ children: true });
+      battleContainer.removeChild(child);
+    }
+  }
+};
