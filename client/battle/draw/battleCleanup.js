@@ -28,7 +28,6 @@ g.battle.battleCleanup = (walkie, viewport, freshEntities) => {
     // @bug, cannot use forEach, looks like children are destroyed on next processor tick
     while (battleContainer.children[0]) {
       const child = battleContainer.children[0];
-      console.log('destroy', child.name);
       child.destroy({ children: true });
       battleContainer.removeChild(child);
     }

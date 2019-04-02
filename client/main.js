@@ -58,6 +58,7 @@ g.main = function main() {
 
     g.world.worldInterfaceToggle($body, walkie);
     g.world.worldToggle(walkie, viewport, freshEntities);
+    g.world.worldCleanup(walkie, viewport, freshEntities);
     g.world.recruitUnitPrepare($body, walkie, freshEntities, auth, blueprints);
     g.world.heroFocusWorldReady(walkie, viewport, freshEntities);
     g.world.heroFocusTween(walkie, viewport, freshEntities);
