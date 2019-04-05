@@ -74,6 +74,7 @@ g.main = function main() {
     g.world.chat($body, walkie);
     g.world.endTurnButton($body, auth, walkie, freshEntities);
     g.world.endTurnCountdown(walkie, freshEntities);
+    g.world.heroNearBattleAnimation(walkie, viewport, freshEntities);
 
     g.battle.battleInterfaceToggle($body, walkie);
     g.battle.waitMock($body, auth, freshEntities);
