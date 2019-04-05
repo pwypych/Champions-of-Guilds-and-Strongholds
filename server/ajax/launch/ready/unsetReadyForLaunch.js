@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:unsetReadyForLaunch');
 const _ = require('lodash');
 
 module.exports = (db) => {
-  return (req, res) => {
+  return (req, res, next) => {
     (function init() {
       debug('// Middleware that unset readyForLaunch flag from player entitie');
 
@@ -50,6 +50,7 @@ module.exports = (db) => {
           }
 
           debug('******************** middleware after ********************');
+          next();
         }
       );
     }

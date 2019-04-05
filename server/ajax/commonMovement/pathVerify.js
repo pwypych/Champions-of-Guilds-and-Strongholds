@@ -52,6 +52,20 @@ module.exports = () => {
       res.locals.path = path;
 
       debug('verifyRequestBody: path.length', path.length);
+      verifyPathLength(entities, entityId, path);
+    }
+
+    function verifyPathLength(entities, entityId, path) {
+      if (path.length < 2) {
+        debug('verifyPathLength: Path is less than one step!', path.length);
+        res.send({
+          error: 1,
+          message: 'Path is too short'
+        });
+        return;
+      }
+
+      debug('verifyPathLength: path.length:', path.length);
       verifyInsideMapBoundaries(entities, entityId, path);
     }
 

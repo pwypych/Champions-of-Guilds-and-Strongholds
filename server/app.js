@@ -179,6 +179,11 @@ function setupLibrariesAndRoutes() {
     require('./ajax/cheat/entities/cheatEntitiesGet.js')()
   );
 
+  const saveGame = compose([
+    require('./library/readEntities.js')(db),
+    require('./ajax/saveLoad/saveGame.js')(db)
+  ]);
+
   // launch
   app.post(
     '/ajax/launch/ready/playerReadyPost',
@@ -191,7 +196,8 @@ function setupLibrariesAndRoutes() {
     require('./ajax/launch/ready/preparePlayerResource.js')(db, raceBlueprint),
     require('./ajax/launch/ready/prepareHeroFigure.js')(db, raceBlueprint),
     require('./ajax/launch/ready/launchCountdown.js')(db),
-    require('./ajax/launch/ready/unsetReadyForLaunch.js')(db)
+    require('./ajax/launch/ready/unsetReadyForLaunch.js')(db),
+    saveGame
   );
 
   app.post(
@@ -217,11 +223,6 @@ function setupLibrariesAndRoutes() {
     require('./library/middlewareTokenAuth.js')(),
     require('./ajax/world/load/spriteFilenameArrayGet.js')(environment)
   );
-
-  const saveGame = compose([
-    require('./library/readEntities.js')(db),
-    require('./ajax/saveLoad/saveGame.js')(db)
-  ]);
 
   app.post(
     '/ajax/world/movement/pathPost',
@@ -345,6 +346,7 @@ function setupLibrariesAndRoutes() {
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     require('./ajax/battle/maneuver/maneuverSendResponse.js')(),
     maneuverVerify,
+    require('./ajax/battle/wait/maneuverWait.js')(),
     maneuverDigest,
     saveGame
   );
