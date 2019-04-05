@@ -345,6 +345,7 @@ function setupLibrariesAndRoutes() {
     require('./library/middlewareAjaxStateAuth.js')('battleState'),
     require('./ajax/battle/maneuver/maneuverSendResponse.js')(),
     maneuverVerify,
+    require('./ajax/battle/wait/maneuverWait.js')(),
     maneuverDigest,
     saveGame
   );

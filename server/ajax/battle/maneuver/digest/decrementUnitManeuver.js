@@ -7,7 +7,7 @@ const debug = require('debug')('cogs:decrementUnitManeuver');
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
-      debug('// Decrements maneuverPoints in unitStats by 1');
+      debug('// Decrements maneuverPoints in unitStats');
       const gameId = res.locals.entities._id;
       const entityId = res.locals.entityId;
 
