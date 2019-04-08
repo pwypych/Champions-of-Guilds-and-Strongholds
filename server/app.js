@@ -39,6 +39,7 @@ function setupEnvironment() {
   environment.basepath = path.join(__dirname, '..');
   environment.basepathTiledMap = environment.basepath + '/tiledMap';
   environment.basepathTiledTileset = environment.basepath + '/tiledTileset';
+  environment.basepathTiledParcel = environment.basepath + '/tiledParcel';
   environment.basepathFigure = environment.basepath + '/server/figure';
 
   debug('setupEnvironment()', environment);
@@ -108,6 +109,25 @@ function setupMapCollection() {
 /* eslint-enable global-require */
 
 /* eslint-disable global-require */
+function setupParcelCollection() {
+  const generateParcelCollection = require('./library/generateParcelCollection.js')(
+    environment,
+    db
+  );
+  generateParcelCollection((error, parcelCount) => {
+    if (error) {
+      debug('setupMapCollection: Errors:', error);
+      process.exit(1);
+      return;
+    }
+
+    debug('setupParcelCollection: parcelCount:', parcelCount);
+    setupLibrariesAndRoutes();
+  });
+}
+/* eslint-enable global-require */
+
+/* eslint-disable global-require */
 function setupLibrariesAndRoutes() {
   // libraries
   const templateToHtml = require('./library/templateToHtml.js')();
@@ -140,6 +160,27 @@ function setupLibrariesAndRoutes() {
   app.post(
     '/panel/loadGamePost',
     require('./panel/loadGamePost.js')(environment, db)
+  );
+
+  // Old Panel
+  app.get(
+    '/panelOld',
+    require('./panelOld/panelOld.js')(environment, db, templateToHtml)
+  );
+
+  app.post(
+    '/panelOld/createGamePost',
+    require('./panelOld/createGamePostOld.js')(environment, db, figureBlueprint)
+  );
+
+  app.post(
+    '/panelOld/deleteGamePost',
+    require('./panelOld/deleteGamePostOld.js')(environment, db)
+  );
+
+  app.post(
+    '/panelOld/loadGamePost',
+    require('./panelOld/loadGamePostOld.js')(environment, db)
   );
 
   app.get(

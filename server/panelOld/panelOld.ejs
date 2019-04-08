@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+
+    <title>Champions of Guilds &amp; Strongholds</title>
+
+    <link rel="stylesheet" href="<%= viewModel.baseurl %>/css/style.css?v=<%= viewModel.timestamp %>">
+    <link rel="stylesheet" href="<%= viewModel.baseurl %>/css/ui.css?v=<%= viewModel.timestamp %>">
+  </head>
+
+  <body>
+    <div class="card-brown">
+      <h1>! ! ! OLD VERSION ! ! ! Champions of Guilds &amp; Strongholds - create game ! ! ! OLD VERSION ! ! !</h1>
+
+      <form action="<%= viewModel.baseurl %>/panelOld/createGamePost" method="POST">
+        <button class="js-create" type="submit">Create Game</button>
+
+        <div class="seperator-20"></div>
+
+        <span>Map:</span><br />
+        <select name="mapName">
+          <% viewModel.mapNameArray.forEach((mapName) => { %>
+            <option value="<%= mapName %>"><%= mapName %></option>
+          <% }); %>
+        </select>
+      </form>
+
+      <div class="seperator-10"></div>
+      <hr />
+      <div class="seperator-10"></div>
+
+      <h2>Game instances</h2>
+
+      <div class="seperator-10"></div>
+      <hr />
+      <div class="seperator-10"></div>
+
+      <div>
+
+        <% viewModel.games.forEach((game) => { %>
+          <div class="inline-block">
+            <div>ID: <%= game._id %></div>
+            <div>MAP: <%= game[game._id].mapData.name %></div>
+            <% viewModel._.forEach(game, (entity) => { %>
+              <% if (entity.playerToken && entity.playerData) { %>
+                <div class="seperator-10"></div>
+                <div><span>NAME: <%= entity.playerData.name %></span></div>
+                <% const uri = '/game?gameId=' + game._id + '&playerToken=' + entity.playerToken; %>
+                <div><a href="<%= viewModel.baseurl + uri %>">Open Map</a></div>
+              <% } %>
+            <% }); %>
+            <div class="seperator-10"></div>
+            <div>
+              <form class="inline-block" action="/panelOld/deleteGamePost" method="post">
+                <input name="gameId" type="hidden" value="<%= game._id %>">
+                <button type="submit">Delete</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="seperator-10"></div>
+          <hr />
+          <div class="seperator-10"></div>
+        <% }); %>
+
+      </div>
+    </div>
+
+    <div style="display: none;">
+       <img src="<%= viewModel.baseurl %>/image/ui/border-image-button-down.png">
+    </div>
+  </body>
+</html>
