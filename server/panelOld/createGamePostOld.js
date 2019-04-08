@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:createGamePost');
+const debug = require('debug')('cogs:createGamePostOld');
 const shortid = require('shortid');
 const validator = require('validator');
 const _ = require('lodash');

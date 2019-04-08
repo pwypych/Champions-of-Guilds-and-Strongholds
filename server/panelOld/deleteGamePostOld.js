@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:deleteGamePost');
+const debug = require('debug')('cogs:deleteGamePostOld');
 const shortid = require('shortid');
 
 module.exports = (environment, db) => {

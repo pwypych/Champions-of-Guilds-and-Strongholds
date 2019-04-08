@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:panel');
+const debug = require('debug')('cogs:panelOld');
 const _ = require('lodash');
 
 module.exports = (environment, db, templateToHtml) => {

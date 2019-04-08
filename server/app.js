@@ -150,17 +150,17 @@ function setupLibrariesAndRoutes() {
 
   app.post(
     '/panelOld/createGamePost',
-    require('./panelOld/createGamePost.js')(environment, db, figureBlueprint)
+    require('./panelOld/createGamePostOld.js')(environment, db, figureBlueprint)
   );
 
   app.post(
     '/panelOld/deleteGamePost',
-    require('./panelOld/deleteGamePost.js')(environment, db)
+    require('./panelOld/deleteGamePostOld.js')(environment, db)
   );
 
   app.post(
     '/panelOld/loadGamePost',
-    require('./panelOld/loadGamePost.js')(environment, db)
+    require('./panelOld/loadGamePostOld.js')(environment, db)
   );
 
   app.get(
