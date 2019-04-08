@@ -119,7 +119,7 @@ function setupLibrariesAndRoutes() {
 
   // general
   app.get('/', (req, res) => {
-    res.redirect('/panel');
+    res.redirect('/panelOld');
   });
 
   app.get(
@@ -140,6 +140,27 @@ function setupLibrariesAndRoutes() {
   app.post(
     '/panel/loadGamePost',
     require('./panel/loadGamePost.js')(environment, db)
+  );
+
+  // Old Panel
+  app.get(
+    '/panelOld',
+    require('./panelOld/panelOld.js')(environment, db, templateToHtml)
+  );
+
+  app.post(
+    '/panelOld/createGamePost',
+    require('./panelOld/createGamePost.js')(environment, db, figureBlueprint)
+  );
+
+  app.post(
+    '/panelOld/deleteGamePost',
+    require('./panelOld/deleteGamePost.js')(environment, db)
+  );
+
+  app.post(
+    '/panelOld/loadGamePost',
+    require('./panelOld/loadGamePost.js')(environment, db)
   );
 
   app.get(
