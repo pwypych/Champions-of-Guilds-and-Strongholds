@@ -39,6 +39,7 @@ function setupEnvironment() {
   environment.basepath = path.join(__dirname, '..');
   environment.basepathTiledMap = environment.basepath + '/tiledMap';
   environment.basepathTiledTileset = environment.basepath + '/tiledTileset';
+  environment.basepathTiledParcel = environment.basepath + '/tiledParcel';
   environment.basepathFigure = environment.basepath + '/server/figure';
 
   debug('setupEnvironment()', environment);
@@ -102,6 +103,25 @@ function setupMapCollection() {
     }
 
     debug('setupMapCollection: mapCount:', mapCount);
+    setupLibrariesAndRoutes();
+  });
+}
+/* eslint-enable global-require */
+
+/* eslint-disable global-require */
+function setupParcelCollection() {
+  const generateParcelCollection = require('./library/generateParcelCollection.js')(
+    environment,
+    db
+  );
+  generateParcelCollection((error, parcelCount) => {
+    if (error) {
+      debug('setupMapCollection: Errors:', error);
+      process.exit(1);
+      return;
+    }
+
+    debug('setupParcelCollection: parcelCount:', parcelCount);
     setupLibrariesAndRoutes();
   });
 }
