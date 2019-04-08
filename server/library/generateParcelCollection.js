@@ -23,7 +23,7 @@ module.exports = (environment, db) => {
     })();
 
     function dropParcelCollection() {
-      db.collection('mapCollection').drop((error) => {
+      db.collection('parcelCollection').drop((error) => {
         if (error) {
           // When no map collection this error is thrown, ignore it
           if (error.message !== 'ns not found') {
@@ -32,36 +32,60 @@ module.exports = (environment, db) => {
           }
         }
 
-        debug('dropParcelCollection');
-        scanMapBaseFolder();
+        debug('dropParcelCollection - success!');
+
+        scanParcelBaseFolder();
       });
     }
 
-    function scanMapBaseFolder() {
-      fs.readdir(environment.basepathTiledMap, (error, folderNameArray) => {
-        debug('scanMapBaseFolder: folderNameArray:', folderNameArray);
-        forEachFolderName(folderNameArray);
+    function scanParcelBaseFolder() {
+      fs.readdir(environment.basepathTiledParcel, (error, folderNameArray) => {
+        debug('scanParcelBaseFolder: folderNameArray:', folderNameArray);
+        forEachParcelCategoryFolder(folderNameArray);
       });
     }
 
-    function forEachFolderName(folderNameArray) {
+    // Parcel category folders  => castle, treasure
+    function forEachParcelCategoryFolder(folderNameArray) {
       const done = _.after(folderNameArray.length, () => {
-        debug('forEachFolderName: done!');
+        debug('forEachParcelCategoryFolder: done!');
         checkForEachErrorArray(folderNameArray.length);
       });
 
-      folderNameArray.forEach((folderName) => {
-        debug('forEachFolderName', folderName);
+      folderNameArray.forEach((folderParcelCategory) => {
+        debug('forEachParcelCategoryFolder', folderParcelCategory);
+        scanParcelCategoryFolder(folderParcelCategory, done);
+      });
+    }
+
+    function scanParcelCategoryFolder(folderParcelCategory, done) {
+      const pathParcelCategory =
+        environment.basepathTiledParcel + '/' + folderParcelCategory;
+      fs.readdir(pathParcelCategory, (error, parcelTypeArray) => {
+        debug('scanParcelBaseFolder: folderNameArray:', parcelTypeArray);
+        forEachParcelTypeFolder(parcelTypeArray, done);
+      });
+    }
+
+    // Parcel type folders  => oooo, zzzo, zozo, ... (15)
+    function forEachParcelTypeFolder(folderParcelCategory) {
+      const done = _.after(folderParcelCategory.length, () => {
+        debug('forEachParcelTypeFolder: done!');
+        checkForEachErrorArray(folderParcelCategory.length);
+      });
+
+      folderParcelCategory.forEach((folderName) => {
+        debug('forEachParcelTypeFolder', folderName);
         instantiateMapObject(folderName, done);
       });
     }
 
     function instantiateMapObject(folderName, done) {
-      const mapObject = {};
-      mapObject._id = folderName;
-      mapObject.folderName = folderName;
+      const parcelObject = {};
+      parcelObject._id = folderName;
+      parcelObject.folderName = folderName;
 
-      mapObject.pathTiledMap =
+      parcelObject.pathTiledMap =
         environment.basepathTiledMap +
         '/' +
         folderName +
@@ -69,40 +93,46 @@ module.exports = (environment, db) => {
         folderName +
         '.json';
 
-      debug('instantiateMapObject: mapObject:', mapObject);
-      checkTiledMapFileExists(mapObject, done);
+      debug('instantiateMapObject: parcelObject:', parcelObject);
+      done();
+      // callback(null, 5);
+      // checkTiledParcelFileExists(parcelObject, done);
     }
 
-    function checkTiledMapFileExists(mapObject, done) {
-      fs.stat(mapObject.pathTiledMap, (error, stats) => {
+    function checkTiledParcelFileExists(parcelObject, done) {
+      fs.stat(parcelObject.pathTiledMap, (error, stats) => {
         if (error) {
           errorArray.push(
-            mapObject.folderName +
-              ': checkTiledMapFileExists: File does not exist, or other read error'
+            parcelObject.folderName +
+              ': checkTiledParcelFileExists: File does not exist, or other read error'
           );
           done();
           return;
         }
 
-        debug('checkTiledMapFileExists: stats.size', stats.size);
-        readTiledMapFile(mapObject, done);
+        debug('checkTiledParcelFileExists: stats.size', stats.size);
+        readTiledMapFile(parcelObject, done);
       });
     }
 
-    function readTiledMapFile(mapObject, done) {
-      fs.readFile(mapObject.pathTiledMap, 'utf8', (error, tiledMapString) => {
-        debug('readTiledMapFile', tiledMapString.length);
-        parseJsonMapString(mapObject, tiledMapString, done);
-      });
+    function readTiledMapFile(parcelObject, done) {
+      fs.readFile(
+        parcelObject.pathTiledMap,
+        'utf8',
+        (error, tiledMapString) => {
+          debug('readTiledMapFile', tiledMapString.length);
+          parseJsonMapString(parcelObject, tiledMapString, done);
+        }
+      );
     }
 
-    function parseJsonMapString(mapObject, tiledMapString, done) {
+    function parseJsonMapString(parcelObject, tiledMapString, done) {
       let tiledMapObject;
       try {
         tiledMapObject = JSON.parse(tiledMapString);
       } catch (error) {
         errorArray.push(
-          mapObject.folderName +
+          parcelObject.folderName +
             ': parseJsonMapString: JSON parse error, not valid map file'
         );
         done();
@@ -110,16 +140,16 @@ module.exports = (environment, db) => {
       }
 
       debug(
-        'parseJsonMapString: mapObject.tiledMapObject.height:',
+        'parseJsonMapString: parcelObject.tiledMapObject.height:',
         tiledMapObject.height
       );
-      validateTiledMapObject(mapObject, tiledMapObject, done);
+      validateTiledMapObject(parcelObject, tiledMapObject, done);
     }
 
-    function validateTiledMapObject(mapObject, tiledMapObject, done) {
+    function validateTiledMapObject(parcelObject, tiledMapObject, done) {
       if (!tiledMapObject.layers) {
         errorArray.push(
-          mapObject.folderName +
+          parcelObject.folderName +
             ': validateTiledMapObject: tiledMapObject missing layers array'
         );
         done();
@@ -128,7 +158,7 @@ module.exports = (environment, db) => {
 
       if (!Array.isArray(tiledMapObject.layers)) {
         errorArray.push(
-          mapObject.folderName +
+          parcelObject.folderName +
             ': validateTiledMapObject: tiledMapObject.layers is not array'
         );
         done();
@@ -139,10 +169,10 @@ module.exports = (environment, db) => {
         'validateTiledMapObject: tiledMapObject.layers[0].data.length:',
         tiledMapObject.layers[0].data.length
       );
-      readTilesetFiles(mapObject, tiledMapObject, done);
+      readTilesetFiles(parcelObject, tiledMapObject, done);
     }
 
-    function readTilesetFiles(mapObject, tiledMapObject, done) {
+    function readTilesetFiles(parcelObject, tiledMapObject, done) {
       const filePathArray = [
         environment.basepathTiledTileset + '/1x1.json',
         environment.basepathTiledTileset + '/3x3.json'
@@ -152,7 +182,7 @@ module.exports = (environment, db) => {
       const doneTilesets = _.after(filePathArray.length, () => {
         const tiledTilesetArray = _.flatten(tiledTilesetArrayDeep);
         debug('readTilesetFiles', tiledTilesetArray);
-        convertFromTiled(mapObject, tiledMapObject, tiledTilesetArray, done);
+        convertFromTiled(parcelObject, tiledMapObject, tiledTilesetArray, done);
       });
 
       filePathArray.forEach((filepath) => {
@@ -188,7 +218,7 @@ module.exports = (environment, db) => {
     }
 
     function convertFromTiled(
-      mapObject,
+      parcelObject,
       tiledMapObject,
       tiledTilesetArray,
       done
@@ -212,7 +242,7 @@ module.exports = (environment, db) => {
         );
       } catch (error) {
         errorArray.push(
-          mapObject.folderName + ': Errors in Tiled tiles: ' + error.message
+          parcelObject.folderName + ': Errors in Tiled tiles: ' + error.message
         );
         done();
         return;
@@ -224,16 +254,16 @@ module.exports = (environment, db) => {
       );
 
       debug('convertFromTiled');
-      mapObject.mapLayerWithStrings = mapLayerWithStrings;
+      parcelObject.mapLayerWithStrings = mapLayerWithStrings;
 
-      insertMapObject(mapObject, done);
+      insertMapObject(parcelObject, done);
     }
 
-    function insertMapObject(mapObject, done) {
-      db.collection('mapCollection').insertOne(mapObject, (error) => {
+    function insertMapObject(parcelObject, done) {
+      db.collection('mapCollection').insertOne(parcelObject, (error) => {
         if (error) {
           errorArray.push(
-            mapObject.folderName +
+            parcelObject.folderName +
               ': ERROR: insert mongo error:' +
               JSON.stringify(error)
           );
