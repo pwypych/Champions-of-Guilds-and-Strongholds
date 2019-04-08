@@ -119,7 +119,7 @@ function setupLibrariesAndRoutes() {
 
   // general
   app.get('/', (req, res) => {
-    res.redirect('/panelOld');
+    res.redirect('/panel');
   });
 
   app.get(
