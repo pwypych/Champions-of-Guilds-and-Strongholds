@@ -103,7 +103,6 @@ function setupMapCollection() {
     }
 
     debug('setupMapCollection: mapCount:', mapCount);
-    // setupLibrariesAndRoutes();
     setupParcelCollection();
   });
 }

@@ -17,37 +17,8 @@ module.exports = (environment, db, templateToHtml) => {
       viewModel.timestamp = Date.now();
       viewModel._ = _;
 
-      findMapNames(viewModel);
+      findGames(viewModel);
     })();
-
-    function findMapNames(viewModel) {
-      const query = {};
-      const options = {};
-      options.projection = { _id: 1 };
-
-      db.collection('mapCollection')
-        .find(query, options)
-        .toArray((error, mapArray) => {
-          if (error) {
-            debug('findMapNames: error:', error);
-            res
-              .status(503)
-              .send(
-                '503 Service Unavailable: Mongo error, cannot run find on mapCollection'
-              );
-            return;
-          }
-
-          const mapNameArray = mapArray.map((mapObject) => {
-            return mapObject._id;
-          });
-
-          viewModel.mapNameArray = mapNameArray;
-
-          debug('findMapNames', mapNameArray);
-          findGames(viewModel);
-        });
-    }
 
     function findGames(viewModel) {
       const query = {};
