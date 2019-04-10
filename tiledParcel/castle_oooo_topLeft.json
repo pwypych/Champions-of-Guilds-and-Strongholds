@@ -22,11 +22,11 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"..\/..\/..\/tiledTileset\/1x1.json"
+         "source":"..\/tiledTileset\/1x1.json"
         }, 
         {
          "firstgid":44,
-         "source":"..\/..\/..\/tiledTileset\/3x3.json"
+         "source":"..\/tiledTileset\/3x3.json"
         }],
  "tilewidth":32,
  "type":"map",

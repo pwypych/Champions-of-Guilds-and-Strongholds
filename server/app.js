@@ -103,7 +103,8 @@ function setupMapCollection() {
     }
 
     debug('setupMapCollection: mapCount:', mapCount);
-    setupLibrariesAndRoutes();
+    // setupLibrariesAndRoutes();
+    setupParcelCollection();
   });
 }
 /* eslint-enable global-require */

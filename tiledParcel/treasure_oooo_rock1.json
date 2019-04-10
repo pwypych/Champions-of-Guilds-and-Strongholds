@@ -2,7 +2,7 @@
  "infinite":false,
  "layers":[
         {
-         "data":[1, 1, 6, 0, 0, 7, 2, 5, 1, 0, 5, 0, 0, 2, 33, 5, 0, 1, 1, 0, 0, 5, 0, 0, 1, 1, 5, 0, 0, 0, 5, 1, 2, 2, 0, 2, 0, 0, 5, 0, 7, 0, 2, 2, 5, 32, 6, 2, 2],
+         "data":[2, 2, 7, 0, 1, 5, 31, 5, 2, 2, 0, 1, 1, 5, 0, 0, 0, 0, 1, 6, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 2, 2, 5, 0, 2, 7, 0, 0, 2, 2, 5, 2, 2, 5, 0, 2, 5, 35],
          "height":7,
          "id":1,
          "name":"Tile Layer 1",
@@ -22,11 +22,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"..\/..\/..\/tiledTileset\/1x1.json"
-        }, 
-        {
-         "firstgid":44,
-         "source":"..\/..\/..\/tiledTileset\/3x3.json"
+         "source":"..\/tiledTileset\/1x1.json"
         }],
  "tilewidth":32,
  "type":"map",
