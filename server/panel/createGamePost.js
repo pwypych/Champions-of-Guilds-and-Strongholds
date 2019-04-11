@@ -4,7 +4,6 @@
 
 const debug = require('debug')('cogs:createGamePost');
 const shortid = require('shortid');
-const validator = require('validator');
 const _ = require('lodash');
 
 module.exports = (environment, db, figureBlueprint) => {
@@ -34,7 +33,7 @@ module.exports = (environment, db, figureBlueprint) => {
             return;
           }
 
-          debug('findParcels', parcelArray);
+          debug('findParcels: parcelArray.length:', parcelArray.length);
           generateSuperParcel(parcelArray);
         });
     }
@@ -44,24 +43,23 @@ module.exports = (environment, db, figureBlueprint) => {
       superParcel[0] = [parcelArray[0], parcelArray[1]];
       superParcel[1] = [parcelArray[2], parcelArray[3]];
 
-      debug('generateSuperParcel: superParcel[0]:', superParcel[0]);
+      debug('generateSuperParcel: superParcel.length:', superParcel.length);
       forEachSuperParcelY(superParcel);
     }
 
     function forEachSuperParcelY(superParcel) {
       const result = [];
       superParcel.forEach((superParcelRow, superParcelY) => {
-        // debug('forEachSuperParcelY: superParcelY:', superParcelY);
         forEachSuperParcelX(superParcelRow, superParcelY, result);
       });
 
-      debug('forEachSuperParcelY: result:', result);
+      debug('forEachSuperParcelY: result.length:', result.length);
+      debug('forEachSuperParcelY: result[0].length:', result[0].length);
       generateGameEntity(result);
     }
 
     function forEachSuperParcelX(superParcelRow, superParcelY, result) {
       superParcelRow.forEach((parcel, superParcelX) => {
-        // debug('forEachSuperParcelX: superParcelX:', superParcelX);
         forEachParcelY(parcel, superParcelY, superParcelX, result);
       });
     }
@@ -69,11 +67,9 @@ module.exports = (environment, db, figureBlueprint) => {
     function forEachParcelY(parcel, superParcelY, superParcelX, result) {
       parcel.parcelLayerWithStrings.forEach((parcelRow, parcelY) => {
         const y = parcelY + 7 * superParcelY;
-        // debug('forEachParcelY: y:', y);
         if (!_.isArray(result[y])) {
           result[y] = [];
         }
-        // debug('forEachParcelY: parcelY:', parcelY);
         forEachParcelX(parcelRow, parcelY, y, superParcelX, result);
       });
     }
@@ -82,8 +78,6 @@ module.exports = (environment, db, figureBlueprint) => {
       parcelRow.forEach((tile, parcelX) => {
         const x = parcelX + 7 * superParcelX;
         result[y][x] = tile;
-        debug('forEachParcelX: y:', y, 'x:', x, 'result[y][x]:', result[y][x]);
-        // debug('forEachParcelX: tile:', tile);
       });
     }
 
