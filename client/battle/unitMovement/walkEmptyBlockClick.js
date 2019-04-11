@@ -3,8 +3,8 @@
 'use strict';
 
 // What does this module do?
-// It listens to click_ events, generates path through library and sends path events
-g.battle.emptyBlockClick = (walkie, auth, viewport, freshEntities) => {
+// It listens to click_ events, for walking units, generates path through library and sends path events
+g.battle.walkEmptyBlockClick = (walkie, auth, viewport, freshEntities) => {
   (function init() {
     onClick();
   })();
@@ -12,7 +12,7 @@ g.battle.emptyBlockClick = (walkie, auth, viewport, freshEntities) => {
   function onClick() {
     walkie.onEvent(
       'click_',
-      'emptyBlockClick.js',
+      'walkEmptyBlockClick.js',
       (data) => {
         const clickPosition = data.position;
         findPlayerId(clickPosition);
@@ -25,12 +25,12 @@ g.battle.emptyBlockClick = (walkie, auth, viewport, freshEntities) => {
     _.forEach(freshEntities(), (entity, id) => {
       if (entity.playerCurrent) {
         const playerId = id;
-        findUnitPosition(clickPosition, playerId);
+        findUnit(clickPosition, playerId);
       }
     });
   }
 
-  function findUnitPosition(clickPosition, playerId) {
+  function findUnit(clickPosition, playerId) {
     const entities = freshEntities();
 
     let unit;
@@ -48,7 +48,14 @@ g.battle.emptyBlockClick = (walkie, auth, viewport, freshEntities) => {
     });
 
     if (!unit) {
-      console.log('Error: Current player not controlling the active unit');
+      console.log(
+        'walkEmptyBlockClick: Error: Current player not controlling the active unit'
+      );
+      return;
+    }
+
+    if (!unit.unitStats.current.maneuvers.walk) {
+      console.log('walkEmptyBlockClick: This unit does not walk!');
       return;
     }
 
