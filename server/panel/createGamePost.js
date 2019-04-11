@@ -34,14 +34,54 @@ module.exports = (environment, db, figureBlueprint) => {
           }
 
           debug('findParcels: parcelArray.length:', parcelArray.length);
-          generateSuperParcel(parcelArray);
+          sortParcelArray(parcelArray);
         });
     }
 
-    function generateSuperParcel(parcelArray) {
+    function sortParcelArray(parcelArray) {
+      const sortedParcelObject = {};
+      sortedParcelObject.castle = [];
+      sortedParcelObject.treasure = [];
+
+      parcelArray.forEach((parcel) => {
+        if (parcel.category === 'castle') {
+          sortedParcelObject.castle.push(parcel);
+        }
+
+        if (parcel.category === 'treasure') {
+          sortedParcelObject.treasure.push(parcel);
+        }
+      });
+
+      debug(
+        'sortParcelArray: sortedParcelObject.castle.length:',
+        sortedParcelObject.castle.length
+      );
+      debug(
+        'sortParcelArray: sortedParcelObject.treasure.length:',
+        sortedParcelObject.treasure.length
+      );
+
+      generateSuperParcel(sortedParcelObject);
+    }
+
+    function generateSuperParcel(sortedParcelObject) {
       const superParcel = [];
-      superParcel[0] = [parcelArray[0], parcelArray[1]];
-      superParcel[1] = [parcelArray[2], parcelArray[3]];
+      const width = 5;
+      const height = 5;
+      const treasureParcelCount = sortedParcelObject.treasure.length - 1;
+      debug('generateSuperParcel: treasureParcelCount:', treasureParcelCount);
+
+      for (let y = 0; y < width; y += 1) {
+        superParcel[y] = [];
+        for (let x = 0; x < height; x += 1) {
+          superParcel[y][x] =
+            sortedParcelObject.treasure[_.random(0, treasureParcelCount)];
+        }
+      }
+
+      superParcel[0][0] = sortedParcelObject.castle[1];
+      superParcel[width - 1][height - 1] = sortedParcelObject.castle[0];
 
       debug('generateSuperParcel: superParcel.length:', superParcel.length);
       forEachSuperParcelY(superParcel);
