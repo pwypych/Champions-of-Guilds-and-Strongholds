@@ -14,51 +14,80 @@ module.exports = (environment, db, figureBlueprint) => {
         '// Creates game in db based on map choosen by a player, sets starting properties'
       );
 
-      checkRequestBody();
+      findParcels();
     })();
 
-    function checkRequestBody() {
-      if (typeof req.body.mapName !== 'string') {
-        debug('checkRequestBody: mapName not a string: ', req.body);
-        res.status(503);
-        res.send(
-          '503 Service Unavailable - Wrong POST parameter or empty mapName parameter'
-        );
-        return;
-      }
-
-      debug('checkRequestBody');
-      sanitizeRequestBody();
-    }
-
-    function sanitizeRequestBody() {
-      const mapName = validator.whitelist(
-        req.body.mapName,
-        'abcdefghijklmnopqrstuvwxyz01234567890|_'
-      );
-      debug('checkRequestBody', mapName);
-      findMap(mapName);
-    }
-
-    function findMap(mapName) {
-      const query = { _id: mapName };
+    function findParcels() {
+      const query = {};
       const options = {};
 
-      db.collection('mapCollection').findOne(query, options, (error, data) => {
-        if (error) {
-          debug('findMap: error:', error);
-          res.status(503).send('503 Service Unavailable - Cannot find map');
-          return;
-        }
+      db.collection('parcelCollection')
+        .find(query, options)
+        .toArray((error, parcelArray) => {
+          if (error) {
+            debug('findParcels: error:', error);
+            res
+              .status(503)
+              .send(
+                '503 Service Unavailable: Mongo error, cannot run find on gameCollection'
+              );
+            return;
+          }
 
-        const mapObject = data;
+          debug('findParcels', parcelArray);
+          generateSuperParcel(parcelArray);
+        });
+    }
 
-        debug('findMap: mapObject._id:', mapObject._id);
-        generateGameEntity(mapObject);
+    function generateSuperParcel(parcelArray) {
+      const superParcel = [];
+      superParcel[0] = [parcelArray[0], parcelArray[1]];
+      superParcel[1] = [parcelArray[2], parcelArray[3]];
+
+      debug('generateSuperParcel: superParcel[0]:', superParcel[0]);
+      forEachSuperParcelY(superParcel);
+    }
+
+    function forEachSuperParcelY(superParcel) {
+      const result = [];
+      superParcel.forEach((superParcelRow, superParcelY) => {
+        // debug('forEachSuperParcelY: superParcelY:', superParcelY);
+        forEachSuperParcelX(superParcelRow, superParcelY, result);
+      });
+
+      debug('forEachSuperParcelY: result:', result);
+      generateGameEntity(result);
+    }
+
+    function forEachSuperParcelX(superParcelRow, superParcelY, result) {
+      superParcelRow.forEach((parcel, superParcelX) => {
+        // debug('forEachSuperParcelX: superParcelX:', superParcelX);
+        forEachParcelY(parcel, superParcelY, superParcelX, result);
       });
     }
 
-    function generateGameEntity(mapObject) {
+    function forEachParcelY(parcel, superParcelY, superParcelX, result) {
+      parcel.parcelLayerWithStrings.forEach((parcelRow, parcelY) => {
+        const y = parcelY + 7 * superParcelY;
+        // debug('forEachParcelY: y:', y);
+        if (!_.isArray(result[y])) {
+          result[y] = [];
+        }
+        // debug('forEachParcelY: parcelY:', parcelY);
+        forEachParcelX(parcelRow, parcelY, y, superParcelX, result);
+      });
+    }
+
+    function forEachParcelX(parcelRow, parcelY, y, superParcelX, result) {
+      parcelRow.forEach((tile, parcelX) => {
+        const x = parcelX + 7 * superParcelX;
+        result[y][x] = tile;
+        debug('forEachParcelX: y:', y, 'x:', x, 'result[y][x]:', result[y][x]);
+        // debug('forEachParcelX: tile:', tile);
+      });
+    }
+
+    function generateGameEntity(result) {
       const entities = {};
 
       const id = 'game__' + shortid.generate();
@@ -67,20 +96,21 @@ module.exports = (environment, db, figureBlueprint) => {
 
       entities[id] = {};
       entities[id].mapData = {};
-      entities[id].mapData.name = mapObject._id;
-      entities[id].mapData.width = mapObject.mapLayerWithStrings[0].length;
-      entities[id].mapData.height = mapObject.mapLayerWithStrings.length;
+      // entities[id].mapData.name = mapObject._id;
+      entities[id].mapData.name = 'random_map_2x2';
+      entities[id].mapData.width = result[0].length;
+      entities[id].mapData.height = result.length;
 
       entities[id].state = 'launchState';
       entities[id].day = 1;
 
       debug('generateGameEntity', entities[id]);
-      calculatePlayerCount(mapObject, entities);
+      calculatePlayerCount(result, entities);
     }
 
-    function calculatePlayerCount(mapObject, entities) {
+    function calculatePlayerCount(result, entities) {
       let playerCount = 0;
-      mapObject.mapLayerWithStrings.forEach((row) => {
+      result.forEach((row) => {
         row.forEach((tileName) => {
           if (tileName === 'castleRandom') {
             playerCount += 1;
@@ -89,10 +119,10 @@ module.exports = (environment, db, figureBlueprint) => {
       });
 
       debug('calculatePlayerCount: playerCount:', playerCount);
-      generatePlayerEntities(mapObject, entities, playerCount);
+      generatePlayerEntities(result, entities, playerCount);
     }
 
-    function generatePlayerEntities(mapObject, entities, playerCount) {
+    function generatePlayerEntities(result, entities, playerCount) {
       const colorArray = [
         'red',
         'blue',
@@ -115,15 +145,15 @@ module.exports = (environment, db, figureBlueprint) => {
         debug('generatePlayerEntities: playerEntity:', entities[id]);
       });
 
-      generateFigureEntities(mapObject, entities);
+      generateFigureEntities(result, entities);
     }
 
-    function generateFigureEntities(mapObject, entities) {
+    function generateFigureEntities(result, entities) {
       const errorArray = [];
 
-      mapObject.mapLayerWithStrings.forEach((row, y) => {
+      result.forEach((row, y) => {
         row.forEach((figureName, x) => {
-          debug('generateFigureEntities: figureName:', figureName);
+          // debug('generateFigureEntities: figureName:', figureName);
           if (figureName === 'empty') {
             return;
           }
@@ -156,6 +186,7 @@ module.exports = (environment, db, figureBlueprint) => {
 
       debug('generateFigureEntities');
       insertGame(entities);
+      // res.redirect('/panel');
     }
 
     function insertGame(entities) {
