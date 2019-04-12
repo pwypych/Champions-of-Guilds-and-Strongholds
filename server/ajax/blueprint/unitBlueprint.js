@@ -65,7 +65,7 @@ module.exports = () => {
       maneuverPoints: 2,
       recruitCost: 130,
       maneuvers: {
-        fly: true,
+        walk: true,
         melee: {
           damage: 1
         },
@@ -129,7 +129,7 @@ module.exports = () => {
       maneuverPoints: 2,
       recruitCost: 240,
       maneuvers: {
-        walk: true,
+        fly: true,
         melee: {
           damage: 1
         },
