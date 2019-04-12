@@ -168,7 +168,8 @@ module.exports = (environment, db) => {
     function readTilesetFiles(parcelObject, tiledParcelObject, done) {
       const filePathArray = [
         environment.basepathTiledTileset + '/1x1.json',
-        environment.basepathTiledTileset + '/3x3.json'
+        environment.basepathTiledTileset + '/3x3.json',
+        environment.basepathTiledTileset + '/parcelTileset.json'
       ];
       const tiledTilesetArrayDeep = [];
 
