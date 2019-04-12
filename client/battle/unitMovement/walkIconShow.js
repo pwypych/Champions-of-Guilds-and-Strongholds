@@ -2,78 +2,22 @@
 
 'use strict';
 
-g.battle.iconMovement = (walkie, viewport, freshEntities) => {
-  const blockWidthPx = 32;
-  const blockHeightPx = 32;
-
+g.battle.walkIconShow = (walkie, viewport, freshEntities) => {
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
-    onViewportBattleReady();
     onEntitiesGet();
   })();
-
-  function onViewportBattleReady() {
-    walkie.onEvent(
-      'viewportBattleReady_',
-      'iconMovement.js',
-      () => {
-        drawIconsOnce();
-      },
-      false
-    );
-  }
 
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
-      'iconMovement.js',
+      'walkIconShow.js',
       () => {
         hideIcons();
       },
       false
     );
-  }
-
-  function drawIconsOnce() {
-    let iconMovementContainer = battleContainer.getChildByName(
-      'iconMovementContainer'
-    );
-
-    if (!iconMovementContainer) {
-      iconMovementContainer = new PIXI.Container();
-      iconMovementContainer.name = 'iconMovementContainer';
-      battleContainer.addChildZ(iconMovementContainer, 3);
-    }
-
-    let battleWidth;
-    let battleHeight;
-
-    if (iconMovementContainer.children.length < 1) {
-      _.forEach(freshEntities(), (entity) => {
-        if (entity.battleStatus === 'active') {
-          battleWidth = entity.battleWidth;
-          battleHeight = entity.battleHeight;
-        }
-      });
-
-      _.times(battleWidth, (x) => {
-        _.times(battleHeight, (y) => {
-          const iconName = 'iconMovement_' + x + '_' + y;
-
-          const textureName = 'iconMovement';
-          const texture = PIXI.loader.resources[textureName].texture;
-          const icon = new PIXI.Sprite(texture);
-          icon.name = iconName;
-          iconMovementContainer.addChild(icon);
-
-          icon.x = x * blockWidthPx;
-          icon.y = y * blockHeightPx;
-          icon.alpha = 0.2;
-          icon.visible = false;
-        });
-      });
-    }
   }
 
   function hideIcons() {
@@ -102,6 +46,11 @@ g.battle.iconMovement = (walkie, viewport, freshEntities) => {
   }
 
   function checkUnitMovement(unit) {
+    if (!unit.unitStats.current.maneuvers.walk) {
+      console.log('walkIconShow: This unit does not walk!');
+      return;
+    }
+
     const movement = unit.unitStats.current.movement;
     const position = unit.position;
     toolGenerateGrid(position, movement);

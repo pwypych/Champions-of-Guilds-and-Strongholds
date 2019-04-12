@@ -84,8 +84,9 @@ g.main = function main() {
     g.battle.unitsDraw(walkie, auth, viewport, freshEntities);
     g.battle.battleClick(walkie, viewport, freshEntities);
 
-    g.battle.iconMovement(walkie, viewport, freshEntities);
-    g.battle.emptyBlockClick(walkie, auth, viewport, freshEntities);
+    g.battle.iconMovementDraw(walkie, viewport, freshEntities);
+    g.battle.walkIconShow(walkie, viewport, freshEntities);
+    g.battle.walkEmptyBlockClick(walkie, auth, viewport, freshEntities);
 
     g.battle.iconMelee(walkie, viewport, freshEntities);
     g.battle.meleeClick(walkie, auth, viewport, freshEntities);

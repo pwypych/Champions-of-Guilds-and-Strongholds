@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:pathCollisionInBattleVerify');
+const debug = require('debug')('cogs:walkPathInBattleVerify');
 const _ = require('lodash');
 
 module.exports = () => {
@@ -13,8 +13,20 @@ module.exports = () => {
       const entityId = res.locals.entityId;
       const path = res.locals.path;
 
-      verifyCollision(entities, entityId, path);
+      checkUnit(entities, entityId, path);
     })();
+
+    function checkUnit(entities, entityId, path) {
+      const unit = entities[entityId];
+
+      if (!unit.unitStats.current.maneuvers.walk) {
+        debug('checkUnit: Unit does not walk!');
+        return;
+      }
+
+      debug('checkUnit');
+      verifyCollision(entities, entityId, path);
+    }
 
     function verifyCollision(entities, entityId, path) {
       let isCollision = false;

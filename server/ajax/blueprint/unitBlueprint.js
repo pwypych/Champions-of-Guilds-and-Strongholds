@@ -16,6 +16,7 @@ module.exports = () => {
       maneuverPoints: 2,
       recruitCost: 50,
       maneuvers: {
+        fly: true,
         melee: {
           damage: 2
         }
@@ -30,6 +31,7 @@ module.exports = () => {
       maneuverPoints: 2,
       recruitCost: 70,
       maneuvers: {
+        walk: true,
         melee: {
           damage: 2
         }
@@ -44,6 +46,7 @@ module.exports = () => {
       maneuverPoints: 2,
       recruitCost: 60,
       maneuvers: {
+        walk: true,
         melee: {
           damage: 1
         },
@@ -62,6 +65,7 @@ module.exports = () => {
       maneuverPoints: 2,
       recruitCost: 130,
       maneuvers: {
+        fly: true,
         melee: {
           damage: 1
         },
@@ -79,6 +83,7 @@ module.exports = () => {
       maneuverPoints: 2,
       recruitCost: 110,
       maneuvers: {
+        walk: true,
         melee: {
           damage: 5
         }
@@ -93,6 +98,7 @@ module.exports = () => {
       maneuverPoints: 2,
       recruitCost: 100,
       maneuvers: {
+        walk: true,
         melee: {
           damage: 3
         }
@@ -108,6 +114,7 @@ module.exports = () => {
       maneuverPoints: 2,
       recruitCost: 200,
       maneuvers: {
+        fly: true,
         melee: {
           damage: 5
         }
@@ -122,6 +129,7 @@ module.exports = () => {
       maneuverPoints: 2,
       recruitCost: 240,
       maneuvers: {
+        walk: true,
         melee: {
           damage: 1
         },
@@ -139,6 +147,7 @@ module.exports = () => {
       maneuverPoints: 2,
       recruitCost: 200,
       maneuvers: {
+        walk: true,
         melee: {
           damage: 4
         }
@@ -154,6 +163,7 @@ module.exports = () => {
       maneuverPoints: 2,
       recruitCost: 320,
       maneuvers: {
+        walk: true,
         melee: {
           damage: 7
         }
@@ -168,6 +178,7 @@ module.exports = () => {
       maneuverPoints: 2,
       recruitCost: 300,
       maneuvers: {
+        fly: true,
         melee: {
           damage: 8
         },
@@ -185,6 +196,7 @@ module.exports = () => {
       maneuverPoints: 2,
       recruitCost: 350,
       maneuvers: {
+        walk: true,
         melee: {
           damage: 6
         }
@@ -200,6 +212,7 @@ module.exports = () => {
       maneuverPoints: 2,
       recruitCost: 600,
       maneuvers: {
+        walk: true,
         melee: {
           damage: 15
         }
@@ -214,6 +227,7 @@ module.exports = () => {
       maneuverPoints: 2,
       recruitCost: 550,
       maneuvers: {
+        walk: true,
         melee: {
           damage: 13
         }
@@ -228,6 +242,7 @@ module.exports = () => {
       maneuverPoints: 2,
       recruitCost: 500,
       maneuvers: {
+        walk: true,
         melee: {
           damage: 10
         }
