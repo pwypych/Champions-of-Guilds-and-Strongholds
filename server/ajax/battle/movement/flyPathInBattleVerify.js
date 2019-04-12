@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:walkPathInBattleVerify');
+const debug = require('debug')('cogs:flyPathInBattleVerify');
 const _ = require('lodash');
 
 module.exports = () => {
@@ -19,8 +19,8 @@ module.exports = () => {
     function checkUnit(entities, entityId, path) {
       const unit = entities[entityId];
 
-      if (!unit.unitStats.current.maneuvers.walk) {
-        debug('checkUnit: Unit does not walk!');
+      if (!unit.unitStats.current.maneuvers.fly) {
+        debug('checkUnit: Unit does not fly!');
         next();
         return;
       }
@@ -31,22 +31,19 @@ module.exports = () => {
 
     function verifyCollision(entities, entityId, path) {
       let isCollision = false;
-      _.forEach(path, (position, index) => {
-        if (index === 0) {
-          return;
-        }
 
-        _.forEach(entities, (entity) => {
-          // filter for only battle units here
-          if (entity.unitName && entity.collision && entity.position) {
-            if (
-              entity.position.x === position.x &&
-              entity.position.y === position.y
-            ) {
-              isCollision = index;
-            }
+      const positionLast = path[path.length - 1];
+
+      _.forEach(entities, (entity) => {
+        // filter for only battle units here
+        if (entity.unitName && entity.collision && entity.position) {
+          if (
+            entity.position.x === positionLast.x &&
+            entity.position.y === positionLast.y
+          ) {
+            isCollision = true;
           }
-        });
+        }
       });
 
       if (isCollision) {

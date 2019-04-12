@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.battle.walkIconShow = (walkie, viewport, freshEntities) => {
+g.battle.flyIconShow = (walkie, viewport, freshEntities) => {
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
@@ -12,7 +12,7 @@ g.battle.walkIconShow = (walkie, viewport, freshEntities) => {
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
-      'walkIconShow.js',
+      'flyIconShow.js',
       () => {
         findActiveUnit();
       },
@@ -30,8 +30,8 @@ g.battle.walkIconShow = (walkie, viewport, freshEntities) => {
   }
 
   function checkUnitMovement(unit) {
-    if (!unit.unitStats.current.maneuvers.walk) {
-      // console.log('walkIconShow: This unit does not walk!');
+    if (!unit.unitStats.current.maneuvers.fly) {
+      // console.log('flyIconShow: This unit does not fly!');
       return;
     }
 
@@ -75,12 +75,6 @@ g.battle.walkIconShow = (walkie, viewport, freshEntities) => {
       });
     });
 
-    _.forEach(freshEntities(), (entity) => {
-      if (entity.collision) {
-        grid[entity.position.y][entity.position.x] = false;
-      }
-    });
-
     const x = unitPosition.x;
     const y = unitPosition.y;
 
@@ -109,6 +103,20 @@ g.battle.walkIconShow = (walkie, viewport, freshEntities) => {
           positions.push(positionPossible);
         });
       });
+    });
+
+    _.forEach(freshEntities(), (entity) => {
+      if (entity.collision) {
+        positions = _.filter(positions, (position) => {
+          if (
+            position.x === entity.position.x &&
+            position.y === entity.position.y
+          ) {
+            return false;
+          }
+          return true;
+        });
+      }
     });
 
     positions = _.uniq(positions);

@@ -3,8 +3,8 @@
 'use strict';
 
 // What does this module do?
-// It listens to click_ events, for walking units, generates path through library and sends path events
-g.battle.walkEmptyBlockClick = (walkie, auth, viewport, freshEntities) => {
+// It listens to click_ events, for flying units, generates path through library and sends path events
+g.battle.flyEmptyBlockClick = (walkie, auth, viewport, freshEntities) => {
   (function init() {
     onClick();
   })();
@@ -12,7 +12,7 @@ g.battle.walkEmptyBlockClick = (walkie, auth, viewport, freshEntities) => {
   function onClick() {
     walkie.onEvent(
       'click_',
-      'walkEmptyBlockClick.js',
+      'flyEmptyBlockClick.js',
       (data) => {
         const clickPosition = data.position;
         findPlayerId(clickPosition);
@@ -49,13 +49,13 @@ g.battle.walkEmptyBlockClick = (walkie, auth, viewport, freshEntities) => {
 
     if (!unit) {
       console.log(
-        'walkEmptyBlockClick: Error: Current player not controlling the active unit'
+        'flyEmptyBlockClick: Error: Current player not controlling the active unit'
       );
       return;
     }
 
-    if (!unit.unitStats.current.maneuvers.walk) {
-      // console.log('walkEmptyBlockClick: This unit does not walk!');
+    if (!unit.unitStats.current.maneuvers.fly) {
+      // console.log('flyEmptyBlockClick: This unit does not fly!');
       return;
     }
 
@@ -84,7 +84,11 @@ g.battle.walkEmptyBlockClick = (walkie, auth, viewport, freshEntities) => {
     const grid = new PF.Grid(width, height);
 
     _.forEach(freshEntities(), (entity) => {
-      if (entity.collision) {
+      if (
+        entity.collision &&
+        entity.position.x === clickPosition.x &&
+        entity.position.y === clickPosition.y
+      ) {
         grid.setWalkableAt(entity.position.x, entity.position.y, false);
       }
     });

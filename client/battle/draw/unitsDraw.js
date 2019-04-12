@@ -63,7 +63,12 @@ g.battle.unitsDraw = (walkie, auth, viewport, freshEntities) => {
         sprite.y += entity.spriteOffset.y;
       }
 
-      const zOrder = 5;
+      let zOrder = 5;
+
+      if (entity.unitStats) {
+        zOrder = 10;
+      }
+
       unitContainer.addChildZ(sprite, zOrder);
       unitContainer.sortChildren();
     }
