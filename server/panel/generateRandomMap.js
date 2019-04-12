@@ -69,8 +69,8 @@ module.exports = (environment, db) => {
 
     function generateSuperParcel(sortedParcelObject, randomParcel) {
       const superParcel = [];
-      const width = 2;
-      const height = 2;
+      const width = 5;
+      const height = 5;
       const treasureParcelCount = sortedParcelObject.treasure.length - 1;
       debug('generateSuperParcel: treasureParcelCount:', treasureParcelCount);
 
@@ -82,12 +82,12 @@ module.exports = (environment, db) => {
         }
       }
 
-      // superParcel[0][0] = sortedParcelObject.castle[1];
+      superParcel[0][0] = sortedParcelObject.castle[1];
       superParcel[width - 1][height - 1] = sortedParcelObject.castle[0];
 
-      superParcel[0][0] = randomParcel;
-      superParcel[0][1] = randomParcel;
-      superParcel[1][0] = randomParcel;
+      // superParcel[0][0] = randomParcel;
+      // superParcel[0][1] = randomParcel;
+      // superParcel[1][0] = randomParcel;
 
       debug('generateSuperParcel: superParcel.length:', superParcel.length);
       forEachSuperParcelY(superParcel);
@@ -101,7 +101,7 @@ module.exports = (environment, db) => {
 
       debug('forEachSuperParcelY: result.length:', result.length);
       debug('forEachSuperParcelY: result[0].length:', result[0].length);
-      res.locals.result = result;
+      res.locals.mapObject = result;
       next();
     }
 
@@ -124,8 +124,28 @@ module.exports = (environment, db) => {
     function forEachParcelX(parcelRow, parcelY, y, superParcelX, result) {
       parcelRow.forEach((tile, parcelX) => {
         const x = parcelX + 7 * superParcelX;
-        result[y][x] = tile;
         debug('forEachParcelX: tile:', tile);
+        result[y][x] = tile;
+
+        if (tile === 'treasure') {
+          result[y][x] = 'gold';
+        }
+
+        if (tile === 'monster') {
+          result[y][x] = 'skeleton';
+        }
+
+        if (tile === 'barier') {
+          result[y][x] = 'tree';
+        }
+
+        if (
+          tile === 'barierMaybe' ||
+          tile === 'treasureMaybe' ||
+          tile === 'monsterMaybe'
+        ) {
+          result[y][x] = 'empty';
+        }
       });
     }
   };

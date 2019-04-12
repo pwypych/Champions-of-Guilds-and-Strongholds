@@ -13,12 +13,12 @@ module.exports = (environment, db, figureBlueprint) => {
         '// Creates game in db based on map choosen by a player, sets starting properties'
       );
 
-      const result = res.locals.result;
+      const mapObject = res.locals.mapObject;
 
-      generateGameEntity(result);
+      generateGameEntity(mapObject);
     })();
 
-    function generateGameEntity(result) {
+    function generateGameEntity(mapObject) {
       const entities = {};
 
       const id = 'game__' + shortid.generate();
@@ -29,19 +29,19 @@ module.exports = (environment, db, figureBlueprint) => {
       entities[id].mapData = {};
       // entities[id].mapData.name = mapObject._id;
       entities[id].mapData.name = 'random_map_2x2';
-      entities[id].mapData.width = result[0].length;
-      entities[id].mapData.height = result.length;
+      entities[id].mapData.width = mapObject[0].length;
+      entities[id].mapData.height = mapObject.length;
 
       entities[id].state = 'launchState';
       entities[id].day = 1;
 
       debug('generateGameEntity', entities[id]);
-      calculatePlayerCount(result, entities);
+      calculatePlayerCount(mapObject, entities);
     }
 
-    function calculatePlayerCount(result, entities) {
+    function calculatePlayerCount(mapObject, entities) {
       let playerCount = 0;
-      result.forEach((row) => {
+      mapObject.forEach((row) => {
         row.forEach((tileName) => {
           if (tileName === 'castleRandom') {
             playerCount += 1;
@@ -50,10 +50,10 @@ module.exports = (environment, db, figureBlueprint) => {
       });
 
       debug('calculatePlayerCount: playerCount:', playerCount);
-      generatePlayerEntities(result, entities, playerCount);
+      generatePlayerEntities(mapObject, entities, playerCount);
     }
 
-    function generatePlayerEntities(result, entities, playerCount) {
+    function generatePlayerEntities(mapObject, entities, playerCount) {
       const colorArray = [
         'red',
         'blue',
@@ -76,13 +76,13 @@ module.exports = (environment, db, figureBlueprint) => {
         debug('generatePlayerEntities: playerEntity:', entities[id]);
       });
 
-      generateFigureEntities(result, entities);
+      generateFigureEntities(mapObject, entities);
     }
 
-    function generateFigureEntities(result, entities) {
+    function generateFigureEntities(mapObject, entities) {
       const errorArray = [];
 
-      result.forEach((row, y) => {
+      mapObject.forEach((row, y) => {
         row.forEach((figureName, x) => {
           // debug('generateFigureEntities: figureName:', figureName);
           if (figureName === 'empty') {
