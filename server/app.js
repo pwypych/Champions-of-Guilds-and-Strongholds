@@ -349,6 +349,7 @@ function setupLibrariesAndRoutes() {
     require('./ajax/battle/movement/pathUnitMovementPointsVerify.js')(),
     require('./ajax/battle/movement/walkPathInBattleVerify.js')(),
     require('./ajax/battle/movement/flyPathInBattleVerify.js')(),
+    require('./ajax/battle/movement/isUnitEscapingFromEnemy.js')(),
     require('./ajax/commonMovement/flagIsProcessingCreate.js')(db),
     require('./ajax/commonMovement/recentActivityOnMovement.js')(db),
     require('./ajax/commonMovement/pathSendResponse.js')(),
