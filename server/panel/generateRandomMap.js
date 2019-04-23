@@ -134,55 +134,50 @@ module.exports = (environment, unitBlueprint, db) => {
     function forEachParcelX(parcelRow, parcelY, y, superParcelX, result) {
       parcelRow.forEach((tile, parcelX) => {
         const x = parcelX + 7 * superParcelX;
-
-        if (tile === 'treasure' || tile === 'treasureMaybe') {
-          generateRandomTreasure(tile, result, x, y);
-          return;
-        }
-
-        if (tile === 'monster' || tile === 'monsterMaybe') {
-          generateRandomMonster(tile, result, x, y);
-          return;
-        }
-
-        if (tile === 'barier' || tile === 'barierMaybe') {
-          generateRandomBarrier(tile, result, x, y);
-          return;
-        }
+        const figureChance = _.random(0, 99);
 
         debug('forEachParcelX: tile:', tile);
         result[y][x] = tile;
+
+        if (tile === 'treasure') {
+          result[y][x] = treasureArray[_.random(0, treasureArray.length - 1)];
+          return;
+        }
+
+        if (tile === 'treasureMaybe') {
+          result[y][x] = 'empty';
+
+          if (figureChance > 80) {
+            result[y][x] = treasureArray[_.random(0, treasureArray.length - 1)];
+          }
+        }
+
+        if (tile === 'monster') {
+          result[y][x] = monsterArray[_.random(0, monsterArray.length - 1)];
+          return;
+        }
+
+        if (tile === 'monsterMaybe') {
+          result[y][x] = 'empty';
+
+          if (figureChance > 60) {
+            result[y][x] = monsterArray[_.random(0, monsterArray.length - 1)];
+          }
+        }
+
+        if (tile === 'barier') {
+          result[y][x] = barrierArray[_.random(0, barrierArray.length - 1)];
+          return;
+        }
+
+        if (tile === 'barierMaybe') {
+          result[y][x] = 'empty';
+
+          if (figureChance > 40) {
+            result[y][x] = barrierArray[_.random(0, barrierArray.length - 1)];
+          }
+        }
       });
-    }
-
-    function generateRandomTreasure(tile, result, x, y) {
-      const random = _.random(0, 99);
-      if (tile === 'treasure' || (tile === 'treasureMaybe' && random > 80)) {
-        result[y][x] = treasureArray[_.random(0, treasureArray.length - 1)];
-        return;
-      }
-
-      result[y][x] = 'empty';
-    }
-
-    function generateRandomMonster(tile, result, x, y) {
-      const random = _.random(0, 99);
-      if (tile === 'monster' || (tile === 'monsterMaybe' && random > 60)) {
-        result[y][x] = monsterArray[_.random(0, monsterArray.length - 1)];
-        return;
-      }
-
-      result[y][x] = 'empty';
-    }
-
-    function generateRandomBarrier(tile, result, x, y) {
-      const random = _.random(0, 99);
-      if (tile === 'barier' || (tile === 'barierMaybe' && random > 50)) {
-        result[y][x] = barrierArray[_.random(0, barrierArray.length - 1)];
-        return;
-      }
-
-      result[y][x] = 'empty';
     }
   };
 };
