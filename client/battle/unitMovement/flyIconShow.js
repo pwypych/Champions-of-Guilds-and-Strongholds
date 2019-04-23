@@ -81,6 +81,8 @@ g.battle.flyIconShow = (walkie, viewport, freshEntities) => {
     let positions = [];
     positions.push({ x: x, y: y });
 
+    const checkUsed = {};
+
     _.times(movement, () => {
       _.forEach(positions, (position) => {
         const positionPossibleArray = [];
@@ -95,7 +97,11 @@ g.battle.flyIconShow = (walkie, viewport, freshEntities) => {
           check.y = position.y - offset.y;
 
           if (grid[check.y] && grid[check.y][check.x]) {
-            positionPossibleArray.push(check);
+            const name = check.y + '_' + check.x;
+            if (!checkUsed[name]) {
+              positionPossibleArray.push(check);
+              checkUsed[name] = true;
+            }
           }
         });
 
@@ -118,8 +124,6 @@ g.battle.flyIconShow = (walkie, viewport, freshEntities) => {
         });
       }
     });
-
-    positions = _.uniq(positions);
 
     forEachPossiblePosition(positions);
   }
