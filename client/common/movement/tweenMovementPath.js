@@ -73,7 +73,7 @@ g.common.tweenMovementPath = (walkie, viewport) => {
       }
       const xPixel = position.x * blockWidthPx;
       const yPixel = position.y * blockHeightPx;
-      const zOrder = 100 + position.y;
+      const zOrder = 100.5 + position.y; // halv here to make transition faster
 
       console.log('generateTweenTimeline', xPixel, yPixel, zOrder);
 
