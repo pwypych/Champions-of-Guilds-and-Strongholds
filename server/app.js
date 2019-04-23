@@ -149,7 +149,7 @@ function setupLibrariesAndRoutes() {
 
   app.post(
     '/panel/createGamePost',
-    require('./panel/generateRandomMap.js')(environment, db),
+    require('./panel/generateRandomMap.js')(environment, unitBlueprint, db),
     require('./panel/createGamePost.js')(environment, db, figureBlueprint)
   );
 

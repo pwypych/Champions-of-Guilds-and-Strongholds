@@ -5,7 +5,17 @@
 const debug = require('debug')('cogs:generateRandomMap');
 const _ = require('lodash');
 
-module.exports = (environment, db) => {
+const monsterArray = [
+  'butterfly',
+  'skeleton',
+  'ranger',
+  'plant',
+  'undeadRogue'
+];
+const treasureArray = ['stone', 'wood', 'gold', 'crystal'];
+const barrierArray = ['dirt', 'rock', 'tree'];
+
+module.exports = (environment, unitBlueprint, db) => {
   return (req, res, next) => {
     (function init() {
       debug('// Generate random map based on parcels');
@@ -69,8 +79,8 @@ module.exports = (environment, db) => {
 
     function generateSuperParcel(sortedParcelObject, randomParcel) {
       const superParcel = [];
-      const width = 5;
-      const height = 5;
+      const width = 2;
+      const height = 2;
       const treasureParcelCount = sortedParcelObject.treasure.length - 1;
       debug('generateSuperParcel: treasureParcelCount:', treasureParcelCount);
 
@@ -82,12 +92,12 @@ module.exports = (environment, db) => {
         }
       }
 
-      superParcel[0][0] = sortedParcelObject.castle[1];
+      // superParcel[0][0] = sortedParcelObject.castle[1];
       superParcel[width - 1][height - 1] = sortedParcelObject.castle[0];
 
-      // superParcel[0][0] = randomParcel;
-      // superParcel[0][1] = randomParcel;
-      // superParcel[1][0] = randomParcel;
+      superParcel[0][0] = randomParcel;
+      superParcel[0][1] = randomParcel;
+      superParcel[1][0] = randomParcel;
 
       debug('generateSuperParcel: superParcel.length:', superParcel.length);
       forEachSuperParcelY(superParcel);
@@ -124,27 +134,48 @@ module.exports = (environment, db) => {
     function forEachParcelX(parcelRow, parcelY, y, superParcelX, result) {
       parcelRow.forEach((tile, parcelX) => {
         const x = parcelX + 7 * superParcelX;
+        const figureChance = _.random(0, 99);
+
         debug('forEachParcelX: tile:', tile);
         result[y][x] = tile;
 
         if (tile === 'treasure') {
-          result[y][x] = 'gold';
+          result[y][x] = treasureArray[_.random(0, treasureArray.length - 1)];
+          return;
+        }
+
+        if (tile === 'treasureMaybe') {
+          result[y][x] = 'empty';
+
+          if (figureChance > 80) {
+            result[y][x] = treasureArray[_.random(0, treasureArray.length - 1)];
+          }
         }
 
         if (tile === 'monster') {
-          result[y][x] = 'skeleton';
+          result[y][x] = monsterArray[_.random(0, monsterArray.length - 1)];
+          return;
+        }
+
+        if (tile === 'monsterMaybe') {
+          result[y][x] = 'empty';
+
+          if (figureChance > 60) {
+            result[y][x] = monsterArray[_.random(0, monsterArray.length - 1)];
+          }
         }
 
         if (tile === 'barier') {
-          result[y][x] = 'tree';
+          result[y][x] = barrierArray[_.random(0, barrierArray.length - 1)];
+          return;
         }
 
-        if (
-          tile === 'barierMaybe' ||
-          tile === 'treasureMaybe' ||
-          tile === 'monsterMaybe'
-        ) {
+        if (tile === 'barierMaybe') {
           result[y][x] = 'empty';
+
+          if (figureChance > 40) {
+            result[y][x] = barrierArray[_.random(0, barrierArray.length - 1)];
+          }
         }
       });
     }
