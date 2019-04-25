@@ -114,7 +114,7 @@ module.exports = () => {
       maneuverPoints: 2,
       recruitCost: 200,
       maneuvers: {
-        fly: true,
+        walk: true,
         melee: {
           damage: 5
         }
