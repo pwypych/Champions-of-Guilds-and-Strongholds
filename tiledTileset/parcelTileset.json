@@ -14,37 +14,37 @@
  "tiles":[
         {
          "id":0,
-         "image":"..\/public\/sprite\/barier.png",
+         "image":"..\/public\/sprite\/barrier.png",
          "imageheight":32,
          "imagewidth":32
         }, 
         {
          "id":1,
-         "image":"..\/public\/sprite\/barierMaybe.png",
+         "image":"..\/public\/sprite\/barrierMaybe.png",
          "imageheight":32,
          "imagewidth":32
         }, 
         {
          "id":2,
-         "image":"..\/public\/sprite\/monster.png",
-         "imageheight":32,
-         "imagewidth":32
-        }, 
-        {
-         "id":3,
-         "image":"..\/public\/sprite\/monsterMaybe.png",
-         "imageheight":32,
-         "imagewidth":32
-        }, 
-        {
-         "id":4,
          "image":"..\/public\/sprite\/treasure.png",
          "imageheight":32,
          "imagewidth":32
         }, 
         {
-         "id":5,
+         "id":3,
          "image":"..\/public\/sprite\/treasureMaybe.png",
+         "imageheight":32,
+         "imagewidth":32
+        }, 
+        {
+         "id":4,
+         "image":"..\/public\/sprite\/monster.png",
+         "imageheight":32,
+         "imagewidth":32
+        }, 
+        {
+         "id":5,
+         "image":"..\/public\/sprite\/monsterMaybe.png",
          "imageheight":32,
          "imagewidth":32
         }],

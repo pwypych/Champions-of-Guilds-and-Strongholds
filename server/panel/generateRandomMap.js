@@ -79,8 +79,8 @@ module.exports = (environment, unitBlueprint, db) => {
 
     function generateSuperParcel(sortedParcelObject, randomParcel) {
       const superParcel = [];
-      const width = 2;
-      const height = 2;
+      const width = 5;
+      const height = 5;
       const treasureParcelCount = sortedParcelObject.treasure.length - 1;
       debug('generateSuperParcel: treasureParcelCount:', treasureParcelCount);
 
@@ -92,12 +92,12 @@ module.exports = (environment, unitBlueprint, db) => {
         }
       }
 
-      // superParcel[0][0] = sortedParcelObject.castle[1];
+      superParcel[0][0] = sortedParcelObject.castle[1];
       superParcel[width - 1][height - 1] = sortedParcelObject.castle[0];
 
-      superParcel[0][0] = randomParcel;
-      superParcel[0][1] = randomParcel;
-      superParcel[1][0] = randomParcel;
+      // superParcel[0][0] = randomParcel;
+      // superParcel[0][1] = randomParcel;
+      // superParcel[1][0] = randomParcel;
 
       debug('generateSuperParcel: superParcel.length:', superParcel.length);
       forEachSuperParcelY(superParcel);
@@ -150,6 +150,7 @@ module.exports = (environment, unitBlueprint, db) => {
           if (figureChance > 80) {
             result[y][x] = treasureArray[_.random(0, treasureArray.length - 1)];
           }
+          return;
         }
 
         if (tile === 'monster') {
@@ -163,19 +164,21 @@ module.exports = (environment, unitBlueprint, db) => {
           if (figureChance > 60) {
             result[y][x] = monsterArray[_.random(0, monsterArray.length - 1)];
           }
+          return;
         }
 
-        if (tile === 'barier') {
+        if (tile === 'barrier') {
           result[y][x] = barrierArray[_.random(0, barrierArray.length - 1)];
           return;
         }
 
-        if (tile === 'barierMaybe') {
+        if (tile === 'barrierMaybe') {
           result[y][x] = 'empty';
 
           if (figureChance > 40) {
             result[y][x] = barrierArray[_.random(0, barrierArray.length - 1)];
           }
+          return;
         }
       });
     }
