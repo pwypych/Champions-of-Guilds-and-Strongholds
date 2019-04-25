@@ -3,7 +3,7 @@
 'use strict';
 
 g.world.chat = ($body, walkie) => {
-  const $chat = $body.find('#js-chat');
+  const $chat = $body.find('.js-chat');
 
   (function init() {
     onChatMessage();
