@@ -70,7 +70,7 @@ module.exports = (environment, unitBlueprint, db) => {
       generateSuperParcel(sortedParcelObject, randomParcel);
     }
 
-    function generateSuperParcel(sortedParcelObject, randomParcel) {
+    function generateSuperParcel(sortedParcelObject) {
       const superParcel = [];
       const width = 5;
       const height = 5;
@@ -189,7 +189,6 @@ module.exports = (environment, unitBlueprint, db) => {
           if (figureChance > 40) {
             result[y][x] = barrierArray[_.random(0, barrierArray.length - 1)];
           }
-          return;
         }
       });
     }
