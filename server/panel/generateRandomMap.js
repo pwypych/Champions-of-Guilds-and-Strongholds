@@ -5,13 +5,6 @@
 const debug = require('debug')('cogs:generateRandomMap');
 const _ = require('lodash');
 
-const monsterArray = [
-  'butterfly',
-  'skeleton',
-  'ranger',
-  'plant',
-  'undeadRogue'
-];
 const treasureArray = ['stone', 'wood', 'gold', 'crystal'];
 const barrierArray = ['dirt', 'rock', 'tree'];
 
@@ -127,11 +120,29 @@ module.exports = (environment, unitBlueprint, db) => {
         if (!_.isArray(result[y])) {
           result[y] = [];
         }
-        forEachParcelX(parcelRow, parcelY, y, superParcelX, result);
+        generateMonsterArray(parcelRow, parcelY, y, superParcelX, result);
       });
     }
 
-    function forEachParcelX(parcelRow, parcelY, y, superParcelX, result) {
+    function generateMonsterArray(parcelRow, parcelY, y, superParcelX, result) {
+      debug('generateMonsterArray:');
+      const monsterArray = [];
+      _.forEach(unitBlueprint(), (unit, name) => {
+        debug('generateMonsterArray: name:', name);
+        monsterArray.push(name);
+      });
+
+      forEachParcelX(parcelRow, parcelY, y, superParcelX, result, monsterArray);
+    }
+
+    function forEachParcelX(
+      parcelRow,
+      parcelY,
+      y,
+      superParcelX,
+      result,
+      monsterArray
+    ) {
       parcelRow.forEach((tile, parcelX) => {
         const x = parcelX + 7 * superParcelX;
         const figureChance = _.random(0, 99);
