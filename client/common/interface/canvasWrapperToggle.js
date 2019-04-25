@@ -3,7 +3,7 @@
 'use strict';
 
 g.common.canvasWrapperToggle = ($body, walkie) => {
-  const $canvasWrapper = $body.find('#js-canvas-wrapper');
+  const $canvasWrapper = $body.find('.js-canvas-wrapper');
 
   (function init() {
     onStateChange();
