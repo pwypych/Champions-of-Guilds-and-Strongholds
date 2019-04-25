@@ -3,7 +3,7 @@
 'use strict';
 
 g.launch.launchToggle = ($body, walkie) => {
-  const $launch = $body.find('#js-launch');
+  const $launch = $body.find('.js-launch');
 
   (function init() {
     onStateChange();

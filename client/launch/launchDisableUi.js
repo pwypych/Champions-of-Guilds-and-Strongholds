@@ -3,9 +3,9 @@
 'use strict';
 
 g.launch.launchDisableUi = ($body, walkie) => {
-  const $button = $body.find('#js-launch .js-button-ready');
-  const $inputName = $body.find('#js-launch .js-input-name');
-  const $selectRace = $body.find('#js-launch .js-select-race');
+  const $button = $body.find('.js-launch .js-button-ready');
+  const $inputName = $body.find('.js-launch .js-input-name');
+  const $selectRace = $body.find('.js-launch .js-select-race');
 
   (function init() {
     onEntitiesGet();

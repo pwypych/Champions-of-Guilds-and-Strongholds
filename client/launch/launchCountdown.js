@@ -3,7 +3,7 @@
 'use strict';
 
 g.launch.launchCountdown = ($body, walkie) => {
-  const $countdown = $body.find('#js-launch .js-countdown');
+  const $countdown = $body.find('.js-launch .js-countdown');
 
   let isCountDownRunning = false;
 

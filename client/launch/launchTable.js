@@ -3,7 +3,7 @@
 'use strict';
 
 g.launch.launchTable = ($body, walkie, freshEntities) => {
-  const $table = $body.find('#js-launch .js-table-name');
+  const $table = $body.find('.js-launch .js-table-name');
 
   (function init() {
     onEntitiesGet();

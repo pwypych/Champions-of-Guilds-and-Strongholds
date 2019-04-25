@@ -3,7 +3,7 @@
 'use strict';
 
 g.launch.launchSelectRace = ($body, auth) => {
-  const $selectRace = $body.find('#js-launch .js-select-race');
+  const $selectRace = $body.find('.js-launch .js-select-race');
 
   (function init() {
     selectRaceOn();

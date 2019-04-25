@@ -8,7 +8,7 @@ g.launch.launchSelectRaceOptions = (
   freshEntities,
   blueprints
 ) => {
-  const $select = $body.find('#js-launch .js-select-race');
+  const $select = $body.find('.js-launch .js-select-race');
 
   (function init() {
     onEntitiesGet();

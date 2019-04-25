@@ -3,7 +3,7 @@
 'use strict';
 
 g.launch.launchButtonReady = ($body, auth) => {
-  const $button = $body.find('#js-launch .js-button-ready');
+  const $button = $body.find('.js-launch .js-button-ready');
 
   (function init() {
     buttonOnClick();
