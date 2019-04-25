@@ -136,7 +136,7 @@ module.exports = (environment, unitBlueprint, db) => {
         const x = parcelX + 7 * superParcelX;
         const figureChance = _.random(0, 99);
 
-        debug('forEachParcelX: tile:', tile);
+        // debug('forEachParcelX: tile:', tile);
         result[y][x] = tile;
 
         if (tile === 'treasure') {
