@@ -22,7 +22,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"..\/tiledTileset\/parcelTileset.json"
+         "source":"..\/tiledTileset\/abstractFigureTileset.json"
         }],
  "tilewidth":32,
  "type":"map",

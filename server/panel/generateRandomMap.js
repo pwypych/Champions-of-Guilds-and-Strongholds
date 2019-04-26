@@ -12,11 +12,12 @@ module.exports = (environment, unitBlueprint, db) => {
   return (req, res, next) => {
     (function init() {
       debug('// Generate random map based on parcels');
+      const ctx = {};
 
-      findParcels();
+      findParcels(ctx);
     })();
 
-    function findParcels() {
+    function findParcels(ctx) {
       const query = {};
       const options = {};
 
@@ -34,72 +35,72 @@ module.exports = (environment, unitBlueprint, db) => {
           }
 
           debug('findParcels: parcelArray.length:', parcelArray.length);
-          sortParcelArray(parcelArray);
+          ctx.parcelArray = parcelArray;
+          generateParcelList(ctx);
         });
     }
 
-    function sortParcelArray(parcelArray) {
-      const sortedParcelObject = {};
-      sortedParcelObject.castle = [];
-      sortedParcelObject.treasure = [];
-      let randomParcel;
+    function generateParcelList(ctx) {
+      const parcelArray = ctx.parcelArray;
+      const parcelList = {};
+      parcelList.castle = [];
+      parcelList.treasure = [];
 
       parcelArray.forEach((parcel) => {
         if (parcel.category === 'castle') {
-          sortedParcelObject.castle.push(parcel);
+          parcelList.castle.push(parcel);
         }
 
         if (parcel.category === 'treasure') {
-          sortedParcelObject.treasure.push(parcel);
-        }
-
-        if (parcel.name === 'randomForest1') {
-          randomParcel = parcel;
+          parcelList.treasure.push(parcel);
         }
       });
 
       debug(
-        'sortParcelArray: sortedParcelObject.castle.length:',
-        sortedParcelObject.castle.length
+        'generateParcelList: parcelList.castle.length:',
+        parcelList.castle.length
       );
       debug(
-        'sortParcelArray: sortedParcelObject.treasure.length:',
-        sortedParcelObject.treasure.length
+        'generateParcelList: parcelList.treasure.length:',
+        parcelList.treasure.length
       );
 
-      generateSuperParcel(sortedParcelObject, randomParcel);
+      ctx.parcelList = parcelList;
+      generateSuperParcel(ctx);
     }
 
-    function generateSuperParcel(sortedParcelObject) {
+    function generateSuperParcel(ctx) {
+      const parcelList = ctx.parcelList;
       const superParcel = [];
-      const width = 5;
-      const height = 5;
-      const treasureParcelCount = sortedParcelObject.treasure.length - 1;
+      const width = 3;
+      const height = 3;
+      const treasureParcelCount = parcelList.treasure.length - 1;
       debug('generateSuperParcel: treasureParcelCount:', treasureParcelCount);
 
       for (let y = 0; y < width; y += 1) {
         superParcel[y] = [];
         for (let x = 0; x < height; x += 1) {
           superParcel[y][x] =
-            sortedParcelObject.treasure[_.random(0, treasureParcelCount)];
+            parcelList.treasure[_.random(0, treasureParcelCount)];
         }
       }
 
-      superParcel[0][0] = sortedParcelObject.castle[1];
-      superParcel[width - 1][height - 1] = sortedParcelObject.castle[0];
+      superParcel[0][0] = parcelList.castle[1];
+      superParcel[width - 1][height - 1] = parcelList.castle[0];
 
-      // superParcel[0][0] = randomParcel;
-      // superParcel[0][1] = randomParcel;
-      // superParcel[1][0] = randomParcel;
-
-      debug('generateSuperParcel: superParcel.length:', superParcel.length);
-      forEachSuperParcelY(superParcel);
+      ctx.superParcel = superParcel;
+      forEachSuperParcelY(ctx);
     }
 
-    function forEachSuperParcelY(superParcel) {
+    function forEachSuperParcelY(ctx) {
+      const superParcel = ctx.superParcel;
       const result = [];
+      ctx.result = result;
+
       superParcel.forEach((superParcelRow, superParcelY) => {
-        forEachSuperParcelX(superParcelRow, superParcelY, result);
+        ctx.superParcelRow = superParcelRow;
+        ctx.superParcelY = superParcelY;
+        forEachSuperParcelX(ctx);
       });
 
       debug('forEachSuperParcelY: result.length:', result.length);
@@ -108,41 +109,50 @@ module.exports = (environment, unitBlueprint, db) => {
       next();
     }
 
-    function forEachSuperParcelX(superParcelRow, superParcelY, result) {
+    function forEachSuperParcelX(ctx) {
+      const superParcelRow = ctx.superParcelRow;
       superParcelRow.forEach((parcel, superParcelX) => {
-        forEachParcelY(parcel, superParcelY, superParcelX, result);
+        ctx.parcel = parcel;
+        ctx.superParcelX = superParcelX;
+        forEachParcelY(ctx);
       });
     }
 
-    function forEachParcelY(parcel, superParcelY, superParcelX, result) {
+    function forEachParcelY(ctx) {
+      const parcel = ctx.parcel;
+      const result = ctx.result;
+      const superParcelY = ctx.superParcelY;
       parcel.parcelLayerWithStrings.forEach((parcelRow, parcelY) => {
         const y = parcelY + 7 * superParcelY;
         if (!_.isArray(result[y])) {
           result[y] = [];
         }
-        generateMonsterArray(parcelRow, parcelY, y, superParcelX, result);
+
+        ctx.parcelRow = parcelRow;
+        ctx.parcelY = parcelY;
+        ctx.y = y;
+        generateMonsterArray(ctx);
       });
     }
 
-    function generateMonsterArray(parcelRow, parcelY, y, superParcelX, result) {
+    function generateMonsterArray(ctx) {
       debug('generateMonsterArray:');
       const monsterArray = [];
       _.forEach(unitBlueprint(), (unit, name) => {
-        debug('generateMonsterArray: name:', name);
         monsterArray.push(name);
       });
 
-      forEachParcelX(parcelRow, parcelY, y, superParcelX, result, monsterArray);
+      ctx.monsterArray = monsterArray;
+      forEachParcelX(ctx);
     }
 
-    function forEachParcelX(
-      parcelRow,
-      parcelY,
-      y,
-      superParcelX,
-      result,
-      monsterArray
-    ) {
+    function forEachParcelX(ctx) {
+      const parcelRow = ctx.parcelRow;
+      const superParcelX = ctx.superParcelX;
+      const result = ctx.result;
+      const y = ctx.y;
+      const monsterArray = ctx.monsterArray;
+
       parcelRow.forEach((tile, parcelX) => {
         const x = parcelX + 7 * superParcelX;
         const figureChance = _.random(0, 99);

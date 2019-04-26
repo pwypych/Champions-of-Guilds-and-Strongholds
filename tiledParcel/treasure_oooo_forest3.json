@@ -30,7 +30,7 @@
         }, 
         {
          "firstgid":45,
-         "source":"..\/tiledTileset\/parcelTileset.json"
+         "source":"..\/tiledTileset\/abstractFigureTileset.json"
         }],
  "tilewidth":32,
  "type":"map",

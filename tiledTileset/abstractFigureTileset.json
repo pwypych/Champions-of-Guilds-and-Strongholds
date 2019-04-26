@@ -6,7 +6,7 @@
      "width":1
     },
  "margin":0,
- "name":"parcelTileset",
+ "name":"abstractFigureTileset",
  "spacing":0,
  "tilecount":6,
  "tiledversion":"2019.04.03",
