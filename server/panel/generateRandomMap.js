@@ -82,6 +82,7 @@ module.exports = (environment, unitBlueprint, db) => {
         for (let x = 0; x < height; x += 1) {
           superParcel[y][x] =
             parcelList.treasure[_.random(0, treasureParcelCount)];
+          debug('generateSuperParcel: parcel id:', superParcel[y][x]._id);
         }
       }
 
@@ -136,7 +137,6 @@ module.exports = (environment, unitBlueprint, db) => {
     }
 
     function generateMonsterArray(ctx) {
-      debug('generateMonsterArray:');
       const monsterArray = [];
       _.forEach(unitBlueprint(), (unit, name) => {
         monsterArray.push(name);
