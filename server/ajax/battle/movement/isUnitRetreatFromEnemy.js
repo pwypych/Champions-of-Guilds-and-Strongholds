@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:isUnitEscapingFromEnemy');
+const debug = require('debug')('cogs:isUnitRetreatFromEnemy');
 const _ = require('lodash');
 
 module.exports = () => {

@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.battle.unitEscapingIndicator = (walkie, viewport, freshEntities) => {
+g.battle.unitRetreatIndicator = (walkie, viewport, freshEntities) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
@@ -15,7 +15,7 @@ g.battle.unitEscapingIndicator = (walkie, viewport, freshEntities) => {
   function onRecentActivityDifferance() {
     walkie.onEvent(
       'recentActivityDifferanceFound_',
-      'unitEscapingIndicator.js',
+      'unitRetreatIndicator.js',
       (data) => {
         if (data.entity.recentActivity.name === 'onMovement') {
           const entityId = data.entityId;
@@ -50,13 +50,13 @@ g.battle.unitEscapingIndicator = (walkie, viewport, freshEntities) => {
 
     if (positionEnemy) {
       console.log(
-        // 'unitEscapingIndicator: Yes, enemy found nearby!',
+        // 'unitRetreatIndicator: Yes, enemy found nearby!',
         positionEnemy
       );
       instantiateIndicator(positionInitial);
     }
 
-    // console.log('unitEscapingIndicator: No enemy to escape!');
+    // console.log('unitRetreatIndicator: No enemy to escape!');
   }
 
   function toolIsEnemyOnPosition(entities, unit, positionMaybeEnemy) {

@@ -105,7 +105,7 @@ g.main = function main() {
     g.battle.unitFocusTween(walkie, viewport, freshEntities);
     g.battle.iconShoot(walkie, viewport, freshEntities);
     g.battle.shootClick(walkie, auth, viewport, freshEntities);
-    g.battle.unitEscapingIndicator(walkie, viewport, freshEntities);
+    g.battle.unitRetreatIndicator(walkie, viewport, freshEntities);
 
     g.summary.summaryToggle($body, walkie, viewport, auth, freshEntities);
     g.summary.summaryConfirm($body, auth);
