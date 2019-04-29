@@ -16,41 +16,41 @@ module.exports = () => {
     function generateLand() {
       const land = {};
       land.name = 'nazwa';
-      land.landMap = [];
+      land.abstractMap = [];
 
       fillLandMapForTwoPlayersWithAbstractParcels(land);
     }
 
     function fillLandMapForTwoPlayersWithAbstractParcels(land) {
-      land.landMap[0] = [
+      land.abstractMap[0] = [
         abstractParcelFactory(0),
         abstractParcelFactory(1),
         abstractParcelFactory(2),
         abstractParcelFactory(3),
         abstractParcelFactory(4)
       ];
-      land.landMap[1] = [
+      land.abstractMap[1] = [
         abstractParcelFactory(1),
         abstractParcelFactory(2),
         abstractParcelFactory(3),
         abstractParcelFactory(4),
         abstractParcelFactory(5)
       ];
-      land.landMap[2] = [
+      land.abstractMap[2] = [
         abstractParcelFactory(2),
         abstractParcelFactory(3),
         abstractParcelFactory(4),
         abstractParcelFactory(3),
         abstractParcelFactory(2)
       ];
-      land.landMap[3] = [
+      land.abstractMap[3] = [
         abstractParcelFactory(3),
         abstractParcelFactory(4),
         abstractParcelFactory(3),
         abstractParcelFactory(2),
         abstractParcelFactory(1)
       ];
-      land.landMap[4] = [
+      land.abstractMap[4] = [
         abstractParcelFactory(4),
         abstractParcelFactory(3),
         abstractParcelFactory(2),
@@ -59,25 +59,24 @@ module.exports = () => {
       ];
 
       debug(
-        'fillLandMapForTwoPlayersWithAbstractParcels: land.landMap.length:',
-        land.landMap.length
+        'fillLandMapForTwoPlayersWithAbstractParcels: land.abstractMap.length:',
+        land.abstractMap.length
       );
       debug(
-        'fillLandMapForTwoPlayersWithAbstractParcels: land.landMap[0][0]:',
-        land.landMap[0][0]
+        'fillLandMapForTwoPlayersWithAbstractParcels: land.abstractMap[0][0]:',
+        land.abstractMap[0][0]
       );
 
       addCastleAbstractParcels(land);
     }
 
     function addCastleAbstractParcels(land) {
-      const parcelList = res.locals.parcelList;
-      land.landMap[0][0] = parcelList.castle[0];
-      land.landMap[4][4] = parcelList.castle[1];
+      land.abstractMap[0][0].category = 'castle';
+      land.abstractMap[4][4].category = 'castle';
 
       debug(
-        'addCastleAbstractParcels: land.landMap[0][0]:',
-        land.landMap[0][0]
+        'addCastleAbstractParcels: land.abstractMap[0][0]:',
+        land.abstractMap[0][0]
       );
 
       res.locals.land = land;
@@ -85,14 +84,9 @@ module.exports = () => {
     }
 
     function abstractParcelFactory(level) {
-      const parcelList = res.locals.parcelList;
-      const treasureParcelCount = parcelList.treasure.length - 1;
-
       const abstractParcel = {};
       abstractParcel.category = 'treasure';
       abstractParcel.level = level;
-      abstractParcel.parcelMap =
-        parcelList.treasure[_.random(0, treasureParcelCount)];
 
       return abstractParcel;
     }
