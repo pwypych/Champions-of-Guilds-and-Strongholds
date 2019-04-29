@@ -8,66 +8,15 @@ const _ = require('lodash');
 const treasureArray = ['stone', 'wood', 'gold', 'crystal'];
 const barrierArray = ['dirt', 'rock', 'tree'];
 
-module.exports = (environment, unitBlueprint, db) => {
+module.exports = (environment, unitBlueprint) => {
   return (req, res, next) => {
     (function init() {
       debug('// Generate random map based on parcels');
       const ctx = {};
+      ctx.parcelList = res.locals.parcelList;
 
-      findParcels(ctx);
-    })();
-
-    function findParcels(ctx) {
-      const query = {};
-      const options = {};
-
-      db.collection('parcelCollection')
-        .find(query, options)
-        .toArray((error, parcelArray) => {
-          if (error) {
-            debug('findParcels: error:', error);
-            res
-              .status(503)
-              .send(
-                '503 Service Unavailable: Mongo error, cannot run find on gameCollection'
-              );
-            return;
-          }
-
-          debug('findParcels: parcelArray.length:', parcelArray.length);
-          ctx.parcelArray = parcelArray;
-          generateParcelList(ctx);
-        });
-    }
-
-    function generateParcelList(ctx) {
-      const parcelArray = ctx.parcelArray;
-      const parcelList = {};
-      parcelList.castle = [];
-      parcelList.treasure = [];
-
-      parcelArray.forEach((parcel) => {
-        if (parcel.category === 'castle') {
-          parcelList.castle.push(parcel);
-        }
-
-        if (parcel.category === 'treasure') {
-          parcelList.treasure.push(parcel);
-        }
-      });
-
-      debug(
-        'generateParcelList: parcelList.castle.length:',
-        parcelList.castle.length
-      );
-      debug(
-        'generateParcelList: parcelList.treasure.length:',
-        parcelList.treasure.length
-      );
-
-      ctx.parcelList = parcelList;
       generateSuperParcel(ctx);
-    }
+    })();
 
     function generateSuperParcel(ctx) {
       const parcelList = ctx.parcelList;
