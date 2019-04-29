@@ -15,32 +15,8 @@ module.exports = (environment, unitBlueprint) => {
       const ctx = {};
       ctx.parcelList = res.locals.parcelList;
 
-      generateSuperParcel(ctx);
-    })();
-
-    function generateSuperParcel(ctx) {
-      const parcelList = ctx.parcelList;
-      const superParcel = [];
-      const width = 3;
-      const height = 3;
-      const treasureParcelCount = parcelList.treasure.length - 1;
-      debug('generateSuperParcel: treasureParcelCount:', treasureParcelCount);
-
-      for (let y = 0; y < width; y += 1) {
-        superParcel[y] = [];
-        for (let x = 0; x < height; x += 1) {
-          superParcel[y][x] =
-            parcelList.treasure[_.random(0, treasureParcelCount)];
-          debug('generateSuperParcel: parcel id:', superParcel[y][x]._id);
-        }
-      }
-
-      superParcel[0][0] = parcelList.castle[1];
-      superParcel[width - 1][height - 1] = parcelList.castle[0];
-
-      ctx.superParcel = superParcel;
       forEachSuperParcelY(ctx);
-    }
+    })();
 
     function forEachSuperParcelY(ctx) {
       const superParcel = ctx.superParcel;
