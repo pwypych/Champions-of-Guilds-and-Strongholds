@@ -175,7 +175,7 @@ module.exports = (environment, db) => {
 
       const doneTilesets = _.after(filePathArray.length, () => {
         const tiledTilesetArray = _.flatten(tiledTilesetArrayDeep);
-        debug('readTilesetFiles', tiledTilesetArray);
+        // debug('readTilesetFiles', tiledTilesetArray);
         convertFromTiled(
           parcelObject,
           tiledParcelObject,

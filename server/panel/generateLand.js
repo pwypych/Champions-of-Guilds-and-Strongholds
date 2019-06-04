@@ -3,7 +3,6 @@
 'use strict';
 
 const debug = require('debug')('cogs:generateLand');
-const _ = require('lodash');
 
 module.exports = () => {
   return (req, res, next) => {
@@ -16,41 +15,41 @@ module.exports = () => {
     function generateLand() {
       const land = {};
       land.name = 'nazwa';
-      land.abstractMap = [];
+      land.abstractParcelMap = [];
 
       fillLandMapForTwoPlayersWithAbstractParcels(land);
     }
 
     function fillLandMapForTwoPlayersWithAbstractParcels(land) {
-      land.abstractMap[0] = [
+      land.abstractParcelMap[0] = [
         abstractParcelFactory(0),
         abstractParcelFactory(1),
         abstractParcelFactory(2),
         abstractParcelFactory(3),
         abstractParcelFactory(4)
       ];
-      land.abstractMap[1] = [
+      land.abstractParcelMap[1] = [
         abstractParcelFactory(1),
         abstractParcelFactory(2),
         abstractParcelFactory(3),
         abstractParcelFactory(4),
         abstractParcelFactory(5)
       ];
-      land.abstractMap[2] = [
+      land.abstractParcelMap[2] = [
         abstractParcelFactory(2),
         abstractParcelFactory(3),
         abstractParcelFactory(4),
         abstractParcelFactory(3),
         abstractParcelFactory(2)
       ];
-      land.abstractMap[3] = [
+      land.abstractParcelMap[3] = [
         abstractParcelFactory(3),
         abstractParcelFactory(4),
         abstractParcelFactory(3),
         abstractParcelFactory(2),
         abstractParcelFactory(1)
       ];
-      land.abstractMap[4] = [
+      land.abstractParcelMap[4] = [
         abstractParcelFactory(4),
         abstractParcelFactory(3),
         abstractParcelFactory(2),
@@ -59,24 +58,24 @@ module.exports = () => {
       ];
 
       debug(
-        'fillLandMapForTwoPlayersWithAbstractParcels: land.abstractMap.length:',
-        land.abstractMap.length
+        'fillLandMapForTwoPlayersWithAbstractParcels: land.abstractParcelMap.length:',
+        land.abstractParcelMap.length
       );
       debug(
-        'fillLandMapForTwoPlayersWithAbstractParcels: land.abstractMap[0][0]:',
-        land.abstractMap[0][0]
+        'fillLandMapForTwoPlayersWithAbstractParcels: land.abstractParcelMap[0][0]:',
+        land.abstractParcelMap[0][0]
       );
 
       addCastleAbstractParcels(land);
     }
 
     function addCastleAbstractParcels(land) {
-      land.abstractMap[0][0].category = 'castle';
-      land.abstractMap[4][4].category = 'castle';
+      land.abstractParcelMap[0][0].category = 'castle';
+      land.abstractParcelMap[4][4].category = 'castle';
 
       debug(
-        'addCastleAbstractParcels: land.abstractMap[0][0]:',
-        land.abstractMap[0][0]
+        'addCastleAbstractParcels: land.abstractParcelMap[0][0]:',
+        land.abstractParcelMap[0][0]
       );
 
       res.locals.land = land;
