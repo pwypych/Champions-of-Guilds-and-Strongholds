@@ -8,143 +8,81 @@ const _ = require('lodash');
 const treasureArray = ['stone', 'wood', 'gold', 'crystal'];
 const barrierArray = ['dirt', 'rock', 'tree'];
 
-module.exports = (environment, unitBlueprint, db) => {
+module.exports = (environment, unitBlueprint) => {
   return (req, res, next) => {
     (function init() {
       debug('// Generate random map based on parcels');
+      const ctx = {};
+      ctx.land = res.locals.land;
 
-      findParcels();
+      forEachLandAbstractMapY(ctx);
     })();
 
-    function findParcels() {
-      const query = {};
-      const options = {};
-
-      db.collection('parcelCollection')
-        .find(query, options)
-        .toArray((error, parcelArray) => {
-          if (error) {
-            debug('findParcels: error:', error);
-            res
-              .status(503)
-              .send(
-                '503 Service Unavailable: Mongo error, cannot run find on gameCollection'
-              );
-            return;
-          }
-
-          debug('findParcels: parcelArray.length:', parcelArray.length);
-          sortParcelArray(parcelArray);
-        });
-    }
-
-    function sortParcelArray(parcelArray) {
-      const sortedParcelObject = {};
-      sortedParcelObject.castle = [];
-      sortedParcelObject.treasure = [];
-      let randomParcel;
-
-      parcelArray.forEach((parcel) => {
-        if (parcel.category === 'castle') {
-          sortedParcelObject.castle.push(parcel);
-        }
-
-        if (parcel.category === 'treasure') {
-          sortedParcelObject.treasure.push(parcel);
-        }
-
-        if (parcel.name === 'randomForest1') {
-          randomParcel = parcel;
-        }
-      });
-
-      debug(
-        'sortParcelArray: sortedParcelObject.castle.length:',
-        sortedParcelObject.castle.length
-      );
-      debug(
-        'sortParcelArray: sortedParcelObject.treasure.length:',
-        sortedParcelObject.treasure.length
-      );
-
-      generateSuperParcel(sortedParcelObject, randomParcel);
-    }
-
-    function generateSuperParcel(sortedParcelObject) {
-      const superParcel = [];
-      const width = 5;
-      const height = 5;
-      const treasureParcelCount = sortedParcelObject.treasure.length - 1;
-      debug('generateSuperParcel: treasureParcelCount:', treasureParcelCount);
-
-      for (let y = 0; y < width; y += 1) {
-        superParcel[y] = [];
-        for (let x = 0; x < height; x += 1) {
-          superParcel[y][x] =
-            sortedParcelObject.treasure[_.random(0, treasureParcelCount)];
-        }
-      }
-
-      superParcel[0][0] = sortedParcelObject.castle[1];
-      superParcel[width - 1][height - 1] = sortedParcelObject.castle[0];
-
-      // superParcel[0][0] = randomParcel;
-      // superParcel[0][1] = randomParcel;
-      // superParcel[1][0] = randomParcel;
-
-      debug('generateSuperParcel: superParcel.length:', superParcel.length);
-      forEachSuperParcelY(superParcel);
-    }
-
-    function forEachSuperParcelY(superParcel) {
+    function forEachLandAbstractMapY(ctx) {
+      const land = ctx.land;
       const result = [];
-      superParcel.forEach((superParcelRow, superParcelY) => {
-        forEachSuperParcelX(superParcelRow, superParcelY, result);
+      ctx.result = result;
+
+      land.landMap.forEach((landRow, landY) => {
+        ctx.landRow = landRow;
+        ctx.landY = landY;
+        forEachLandX(ctx);
       });
 
-      debug('forEachSuperParcelY: result.length:', result.length);
-      debug('forEachSuperParcelY: result[0].length:', result[0].length);
+      debug('forEachLandAbstractMapY: result.length:', result.length);
+      debug('forEachLandAbstractMapY: result[0].length:', result[0].length);
       res.locals.mapObject = result;
       next();
     }
 
-    function forEachSuperParcelX(superParcelRow, superParcelY, result) {
-      superParcelRow.forEach((parcel, superParcelX) => {
-        forEachParcelY(parcel, superParcelY, superParcelX, result);
+    function forEachLandX(ctx) {
+      const landRow = ctx.landRow;
+      landRow.forEach((abstractParcel, landX) => {
+        ctx.abstractParcel = abstractParcel;
+        ctx.landX = landX;
+        forEachParcelY(ctx);
       });
     }
 
-    function forEachParcelY(parcel, superParcelY, superParcelX, result) {
-      parcel.parcelLayerWithStrings.forEach((parcelRow, parcelY) => {
-        const y = parcelY + 7 * superParcelY;
-        if (!_.isArray(result[y])) {
-          result[y] = [];
+    function forEachParcelY(ctx) {
+      const abstractParcel = ctx.abstractParcel;
+      const result = ctx.result;
+      const landY = ctx.landY;
+      // debug('forEachParcelY: abstractParcel:', abstractParcel);
+      abstractParcel.parcelLayerWithStrings.forEach(
+        (abstractParcelRow, abstractParcelY) => {
+          const y = abstractParcelY + 7 * landY;
+          if (!_.isArray(result[y])) {
+            result[y] = [];
+          }
+
+          ctx.abstractParcelRow = abstractParcelRow;
+          ctx.abstractParcelY = abstractParcelY;
+          ctx.y = y;
+          generateMonsterArray(ctx);
         }
-        generateMonsterArray(parcelRow, parcelY, y, superParcelX, result);
-      });
+      );
     }
 
-    function generateMonsterArray(parcelRow, parcelY, y, superParcelX, result) {
-      debug('generateMonsterArray:');
+    function generateMonsterArray(ctx) {
       const monsterArray = [];
       _.forEach(unitBlueprint(), (unit, name) => {
-        debug('generateMonsterArray: name:', name);
         monsterArray.push(name);
       });
 
-      forEachParcelX(parcelRow, parcelY, y, superParcelX, result, monsterArray);
+      ctx.monsterArray = monsterArray;
+      forEachParcelX(ctx);
     }
 
-    function forEachParcelX(
-      parcelRow,
-      parcelY,
-      y,
-      superParcelX,
-      result,
-      monsterArray
-    ) {
-      parcelRow.forEach((tile, parcelX) => {
-        const x = parcelX + 7 * superParcelX;
+    function forEachParcelX(ctx) {
+      const abstractParcelRow = ctx.abstractParcelRow;
+      const landX = ctx.landX;
+      const result = ctx.result;
+      const y = ctx.y;
+      const monsterArray = ctx.monsterArray;
+
+      abstractParcelRow.forEach((tile, abstractParcelX) => {
+        const x = abstractParcelX + 7 * landX;
         const figureChance = _.random(0, 99);
 
         // debug('forEachParcelX: tile:', tile);

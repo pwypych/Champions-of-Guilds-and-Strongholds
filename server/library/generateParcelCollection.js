@@ -169,7 +169,7 @@ module.exports = (environment, db) => {
       const filePathArray = [
         environment.basepathTiledTileset + '/1x1.json',
         environment.basepathTiledTileset + '/3x3.json',
-        environment.basepathTiledTileset + '/parcelTileset.json'
+        environment.basepathTiledTileset + '/abstractFigureTileset.json'
       ];
       const tiledTilesetArrayDeep = [];
 
