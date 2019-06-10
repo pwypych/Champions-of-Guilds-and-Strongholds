@@ -30,28 +30,34 @@ g.battle.unitGotHitAnimation = (walkie, viewport) => {
   function findUnitContainer(unitId) {
     const unitContainer = battleContainer.getChildByName(unitId);
 
-    instantiateSprite(unitContainer);
+    instantiateAnimation(unitContainer);
   }
 
-  function instantiateSprite(unitContainer) {
-    const textureName = 'bloodSplatt';
-    const texture = PIXI.loader.resources[textureName].texture;
-    const sprite = new PIXI.Sprite(texture);
+  function instantiateAnimation(unitContainer) {
+    const textureArray = [];
 
-    sprite.name = 'bloodSplatt';
-    unitContainer.addChild(sprite);
+    _.times(12, (index) => {
+      const textureName = 'hitSlash' + index;
+      const texture = PIXI.loader.resources[textureName].texture;
+      textureArray.push(texture);
+    });
 
-    const randomOffsetX = _.random(-10, 10);
-    const randomOffsetY = _.random(-10, 10);
+    const animated = new PIXI.extras.AnimatedSprite(textureArray);
 
-    sprite.x = (blockWidthPx - sprite.width) / 2 + randomOffsetX;
-    sprite.y = (blockHeightPx - sprite.height) / 2 + randomOffsetY;
-    destroyAfterTimeout(sprite);
+    animated.name = 'hitSlash';
+    animated.x = (blockWidthPx - animated.width) / 2;
+    animated.y = (blockHeightPx - animated.height) / 2;
+    animated.loop = false;
+    animated.play();
+
+    unitContainer.addChild(animated);
+
+    destroyAfterTimeout(animated);
   }
 
-  function destroyAfterTimeout(sprite) {
+  function destroyAfterTimeout(animated) {
     setTimeout(() => {
-      sprite.destroy();
+      animated.destroy();
     }, 1000);
   }
 };
