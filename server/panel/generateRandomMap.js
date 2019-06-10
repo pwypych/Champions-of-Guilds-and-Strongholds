@@ -23,7 +23,7 @@ module.exports = (environment, unitBlueprint) => {
       const result = [];
       ctx.result = result;
 
-      land.landMap.forEach((landRow, landY) => {
+      land.abstractParcelMap.forEach((landRow, landY) => {
         ctx.landRow = landRow;
         ctx.landY = landY;
         forEachLandX(ctx);
@@ -40,15 +40,38 @@ module.exports = (environment, unitBlueprint) => {
       landRow.forEach((abstractParcel, landX) => {
         ctx.abstractParcel = abstractParcel;
         ctx.landX = landX;
-        forEachParcelY(ctx);
+        insertParcelbyAbstractParcel(ctx);
       });
+    }
+
+    function insertParcelbyAbstractParcel(ctx) {
+      const result = ctx.result;
+      const abstractParcelMap = ctx.land.abstractParcelMap;
+      const landY = ctx.landY;
+      const landX = ctx.landX;
+      const parcelList = res.locals.parcelList;
+      const parcelCategory = abstractParcelMap[landY][landX].category;
+      debug('insertParcelbyAbstractParcel: parcelCategory:', parcelCategory);
+      debug('insertParcelbyAbstractParcel: landX:', landX);
+      debug('insertParcelbyAbstractParcel: landY:', landY);
+      debug(
+        'insertParcelbyAbstractParcel: abstractParcelMap[landY][landX]:',
+        abstractParcelMap[landY][landX]
+      );
+
+      result[landY][landX] = parcelList[parcelCategory][0];
+      debug(
+        'insertParcelbyAbstractParcel: result[landY][landX]:',
+        result[landY][landX]
+      );
+      forEachParcelY(ctx);
     }
 
     function forEachParcelY(ctx) {
       const abstractParcel = ctx.abstractParcel;
       const result = ctx.result;
       const landY = ctx.landY;
-      // debug('forEachParcelY: abstractParcel:', abstractParcel);
+      // debug('forEachParcelY: res.locals.parcelList:', res.locals.parcelList);
       abstractParcel.parcelLayerWithStrings.forEach(
         (abstractParcelRow, abstractParcelY) => {
           const y = abstractParcelY + 7 * landY;
