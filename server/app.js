@@ -151,7 +151,8 @@ function setupLibrariesAndRoutes() {
     '/panel/createGamePost',
     require('./panel/generateParcelList.js')(db),
     require('./panel/generateLand.js')(),
-    require('./panel/generateRandomMap.js')(environment, unitBlueprint),
+    require('./panel/generateParcelMap.js')(environment, unitBlueprint),
+    require('./panel/generateFigureMap.js')(environment, unitBlueprint),
     require('./panel/createGamePost.js')(environment, db, figureBlueprint)
   );
 
