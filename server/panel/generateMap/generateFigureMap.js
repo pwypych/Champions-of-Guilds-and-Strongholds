@@ -15,10 +15,10 @@ module.exports = (environment, unitBlueprint) => {
       const ctx = {};
       ctx.land = res.locals.land;
 
-      forEachAbstractParcelMapY(ctx);
+      forEachParcelMapY(ctx);
     })();
 
-    function forEachAbstractParcelMapY(ctx) {
+    function forEachParcelMapY(ctx) {
       const parcelMap = ctx.land.parcelMap;
       const figureMap = [];
       ctx.figureMap = figureMap;
@@ -29,19 +29,20 @@ module.exports = (environment, unitBlueprint) => {
         if (!figureMap[parcelMapY]) {
           figureMap[parcelMapY] = [];
         }
-        forEachAbstractParcelMapX(ctx);
+
+        forEachParcelMapX(ctx);
       });
       res.locals.mapObject = figureMap;
       next();
     }
 
-    function forEachAbstractParcelMapX(ctx) {
+    function forEachParcelMapX(ctx) {
       const parcelMapRow = ctx.parcelMapRow;
       parcelMapRow.forEach((parcel, parcelMapX) => {
         ctx.parcel = parcel;
         ctx.parcelMapX = parcelMapX;
 
-        debug('forEachAbstractParcelMapX: parcel:', parcel);
+        debug('forEachParcelMapX: parcel:', parcel);
 
         forEachParcelY(ctx);
       });
@@ -87,20 +88,20 @@ module.exports = (environment, unitBlueprint) => {
       const y = ctx.y;
       const monsterArray = ctx.monsterArray;
 
-      parcelRow.forEach((tile, parcelX) => {
+      parcelRow.forEach((abstractFigure, parcelX) => {
         const x = parcelX + 7 * parcelMapX;
         const figureChance = _.random(0, 99);
 
-        // debug('forEachParcelX: tile:', tile);
-        figureMap[y][x] = tile;
+        // debug('forEachParcelX: abstractFigure:', abstractFigure);
+        figureMap[y][x] = abstractFigure;
 
-        if (tile === 'treasure') {
+        if (abstractFigure === 'treasure') {
           figureMap[y][x] =
             treasureArray[_.random(0, treasureArray.length - 1)];
           return;
         }
 
-        if (tile === 'treasureMaybe') {
+        if (abstractFigure === 'treasureMaybe') {
           figureMap[y][x] = 'empty';
 
           if (figureChance > 80) {
@@ -110,12 +111,12 @@ module.exports = (environment, unitBlueprint) => {
           return;
         }
 
-        if (tile === 'monster') {
+        if (abstractFigure === 'monster') {
           figureMap[y][x] = monsterArray[_.random(0, monsterArray.length - 1)];
           return;
         }
 
-        if (tile === 'monsterMaybe') {
+        if (abstractFigure === 'monsterMaybe') {
           figureMap[y][x] = 'empty';
 
           if (figureChance > 60) {
@@ -125,12 +126,12 @@ module.exports = (environment, unitBlueprint) => {
           return;
         }
 
-        if (tile === 'barrier') {
+        if (abstractFigure === 'barrier') {
           figureMap[y][x] = barrierArray[_.random(0, barrierArray.length - 1)];
           return;
         }
 
-        if (tile === 'barrierMaybe') {
+        if (abstractFigure === 'barrierMaybe') {
           figureMap[y][x] = 'empty';
 
           if (figureChance > 40) {

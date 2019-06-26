@@ -19,20 +19,19 @@ module.exports = () => {
 
     function forEachAbstractParcelMapY(ctx) {
       const land = ctx.land;
+      const abstractParcelMap = land.abstractParcelMap;
       const parcelMap = [];
       ctx.parcelMap = parcelMap;
 
-      land.abstractParcelMap.forEach(
-        (abstractParcelMapRow, abstractParcelMapY) => {
-          ctx.abstractParcelMapRow = abstractParcelMapRow;
-          ctx.abstractParcelMapY = abstractParcelMapY;
-          if (!parcelMap[abstractParcelMapY]) {
-            parcelMap[abstractParcelMapY] = [];
-          }
-
-          forEachAbstractParcelMapX(ctx);
+      abstractParcelMap.forEach((abstractParcelMapRow, abstractParcelMapY) => {
+        ctx.abstractParcelMapRow = abstractParcelMapRow;
+        ctx.abstractParcelMapY = abstractParcelMapY;
+        if (!parcelMap[abstractParcelMapY]) {
+          parcelMap[abstractParcelMapY] = [];
         }
-      );
+
+        forEachAbstractParcelMapX(ctx);
+      });
 
       debug('forEachAbstractParcelMapY: parcelMap.length:', parcelMap.length);
       debug(
