@@ -9,10 +9,10 @@ module.exports = () => {
     (function init() {
       debug('// Generate land object filled with abstractParcels');
 
-      generateAbstractParcelMapArray();
+      generateAbstractParcelMapWithLandSize();
     })();
 
-    function generateAbstractParcelMapArray() {
+    function generateAbstractParcelMapWithLandSize() {
       const land = res.locals.land;
       const abstractParcelMap = [];
 
@@ -24,11 +24,16 @@ module.exports = () => {
       }
 
       debug(
-        'fillLandMapForTwoPlayersWithAbstractParcels: abstractParcelMap.length:',
+        'generateAbstractParcelMapWithLandSize: abstractParcelMap.length:',
         abstractParcelMap.length
       );
       debug(
-        'fillLandMapForTwoPlayersWithAbstractParcels: abstractParcelMap[0][0]:',
+        'generateAbstractParcelMapWithLandSize: abstractParcelMap.length:',
+        abstractParcelMap[0].length
+      );
+
+      debug(
+        'generateAbstractParcelMapWithLandSize: abstractParcelMap[0][0]:',
         abstractParcelMap[0][0]
       );
 
@@ -46,7 +51,8 @@ module.exports = () => {
       );
 
       land.abstractParcelMap = abstractParcelMap;
-      // next();
+      debug('addCastleAbstractParcels: land:', land);
+      next();
     }
 
     function abstractParcelFactory(level) {

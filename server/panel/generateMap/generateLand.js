@@ -19,6 +19,7 @@ module.exports = () => {
       land.height = 5;
       land.players = 2;
 
+      debug('generateLand: land:', land);
       res.locals.land = land;
       next();
     }
