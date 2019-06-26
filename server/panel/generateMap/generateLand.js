@@ -16,7 +16,7 @@ module.exports = () => {
       const land = {};
       land.name = 'nazwa';
       land.width = 5;
-      land.height = 7;
+      land.height = 5;
       land.players = 2;
 
       debug('generateLand: land:', land);

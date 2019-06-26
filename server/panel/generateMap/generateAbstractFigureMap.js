@@ -16,6 +16,7 @@ module.exports = () => {
     })();
 
     function forEachParcelMapY(ctx) {
+      const land = ctx.land;
       const parcelMap = ctx.land.parcelMap;
       const abstractFigureMap = [];
       ctx.abstractFigureMap = abstractFigureMap;
@@ -29,7 +30,7 @@ module.exports = () => {
 
         forEachParcelMapX(ctx);
       });
-      res.locals.abstractFigureMap = abstractFigureMap;
+      land.abstractFigureMap = abstractFigureMap;
       next();
     }
 

@@ -15,61 +15,8 @@ module.exports = (environment, unitBlueprint) => {
       const ctx = {};
       ctx.land = res.locals.land;
 
-      forEachParcelMapY(ctx);
+      generateMonsterArray(ctx);
     })();
-
-    function forEachParcelMapY(ctx) {
-      const parcelMap = ctx.land.parcelMap;
-      const figureMap = [];
-      ctx.figureMap = figureMap;
-
-      parcelMap.forEach((parcelMapRow, parcelMapY) => {
-        ctx.parcelMapRow = parcelMapRow;
-        ctx.parcelMapY = parcelMapY;
-        if (!figureMap[parcelMapY]) {
-          figureMap[parcelMapY] = [];
-        }
-
-        forEachParcelMapX(ctx);
-      });
-      res.locals.mapObject = figureMap;
-      next();
-    }
-
-    function forEachParcelMapX(ctx) {
-      const parcelMapRow = ctx.parcelMapRow;
-      parcelMapRow.forEach((parcel, parcelMapX) => {
-        ctx.parcel = parcel;
-        ctx.parcelMapX = parcelMapX;
-
-        debug('forEachParcelMapX: parcel:', parcel);
-
-        forEachParcelY(ctx);
-      });
-    }
-
-    function forEachParcelY(ctx) {
-      const parcel = ctx.parcel;
-      const figureMap = ctx.figureMap;
-      const parcelMapY = ctx.parcelMapY;
-
-      // debug(
-      //   'forEachParcelY: parcel.parcelLayerWithStrings:',
-      //   parcel.parcelLayerWithStrings
-      // );
-
-      parcel.parcelLayerWithStrings.forEach((parcelRow, parcelY) => {
-        const y = parcelY + 7 * parcelMapY;
-        if (!_.isArray(figureMap[y])) {
-          figureMap[y] = [];
-        }
-
-        ctx.parcelRow = parcelRow;
-        ctx.parcelY = parcelY;
-        ctx.y = y;
-        generateMonsterArray(ctx);
-      });
-    }
 
     function generateMonsterArray(ctx) {
       const monsterArray = [];
@@ -78,64 +25,84 @@ module.exports = (environment, unitBlueprint) => {
       });
 
       ctx.monsterArray = monsterArray;
-      forEachParcelX(ctx);
+      forEachAbstractFigureMapY(ctx);
     }
 
-    function forEachParcelX(ctx) {
-      const parcelRow = ctx.parcelRow;
-      const parcelMapX = ctx.parcelMapX;
-      const figureMap = ctx.figureMap;
-      const y = ctx.y;
-      const monsterArray = ctx.monsterArray;
+    function forEachAbstractFigureMapY(ctx) {
+      const abstractFigureMap = ctx.land.abstractFigureMap;
+      const figureMap = [];
+      ctx.figureMap = figureMap;
 
-      parcelRow.forEach((abstractFigure, parcelX) => {
-        const x = parcelX + 7 * parcelMapX;
+      abstractFigureMap.forEach((abstractFigureMapRow, abstractFigureMapY) => {
+        ctx.abstractFigureMapRow = abstractFigureMapRow;
+        ctx.abstractFigureMapY = abstractFigureMapY;
+        if (!figureMap[abstractFigureMapY]) {
+          figureMap[abstractFigureMapY] = [];
+        }
+
+        forEachAbstractFigureMapX(ctx);
+      });
+
+      res.locals.mapObject = figureMap;
+      next();
+    }
+
+    function forEachAbstractFigureMapX(ctx) {
+      const abstractFigureMapRow = ctx.abstractFigureMapRow;
+      abstractFigureMapRow.forEach((abstractFigure, abstractFigureMapX) => {
+        debug('forEachAbstractFigureMapX: abstractFigure:', abstractFigure);
+        const figureMap = ctx.figureMap;
+        const monsterArray = ctx.monsterArray;
+        const abstractFigureMapY = ctx.abstractFigureMapY;
+
         const figureChance = _.random(0, 99);
 
         // debug('forEachParcelX: abstractFigure:', abstractFigure);
-        figureMap[y][x] = abstractFigure;
+        figureMap[abstractFigureMapY][abstractFigureMapX] = abstractFigure;
 
         if (abstractFigure === 'treasure') {
-          figureMap[y][x] =
+          figureMap[abstractFigureMapY][abstractFigureMapX] =
             treasureArray[_.random(0, treasureArray.length - 1)];
           return;
         }
 
         if (abstractFigure === 'treasureMaybe') {
-          figureMap[y][x] = 'empty';
+          figureMap[abstractFigureMapY][abstractFigureMapX] = 'empty';
 
           if (figureChance > 80) {
-            figureMap[y][x] =
+            figureMap[abstractFigureMapY][abstractFigureMapX] =
               treasureArray[_.random(0, treasureArray.length - 1)];
           }
           return;
         }
 
         if (abstractFigure === 'monster') {
-          figureMap[y][x] = monsterArray[_.random(0, monsterArray.length - 1)];
+          figureMap[abstractFigureMapY][abstractFigureMapX] =
+            monsterArray[_.random(0, monsterArray.length - 1)];
           return;
         }
 
         if (abstractFigure === 'monsterMaybe') {
-          figureMap[y][x] = 'empty';
+          figureMap[abstractFigureMapY][abstractFigureMapX] = 'empty';
 
           if (figureChance > 60) {
-            figureMap[y][x] =
+            figureMap[abstractFigureMapY][abstractFigureMapX] =
               monsterArray[_.random(0, monsterArray.length - 1)];
           }
           return;
         }
 
         if (abstractFigure === 'barrier') {
-          figureMap[y][x] = barrierArray[_.random(0, barrierArray.length - 1)];
+          figureMap[abstractFigureMapY][abstractFigureMapX] =
+            barrierArray[_.random(0, barrierArray.length - 1)];
           return;
         }
 
         if (abstractFigure === 'barrierMaybe') {
-          figureMap[y][x] = 'empty';
+          figureMap[abstractFigureMapY][abstractFigureMapX] = 'empty';
 
           if (figureChance > 40) {
-            figureMap[y][x] =
+            figureMap[abstractFigureMapY][abstractFigureMapX] =
               barrierArray[_.random(0, barrierArray.length - 1)];
           }
         }
