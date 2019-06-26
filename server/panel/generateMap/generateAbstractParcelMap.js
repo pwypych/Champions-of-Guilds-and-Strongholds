@@ -7,7 +7,9 @@ const debug = require('debug')('cogs:generateAbstractParcelMap');
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
-      debug('// Generate land object filled with abstractParcels');
+      debug(
+        '// Generate abstractParcelMap that is two dimensional array filled with abstractParcels'
+      );
 
       generateAbstractParcelMapWithLandSize();
     })();

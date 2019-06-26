@@ -7,7 +7,7 @@ const debug = require('debug')('cogs:generateLand');
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
-      debug('// Generate land object filled with abstractParcels');
+      debug('// Generate land object with its configuration settings');
 
       generateLand();
     })();
@@ -16,7 +16,7 @@ module.exports = () => {
       const land = {};
       land.name = 'nazwa';
       land.width = 5;
-      land.height = 5;
+      land.height = 7;
       land.players = 2;
 
       debug('generateLand: land:', land);

@@ -3,61 +3,76 @@
 'use strict';
 
 const debug = require('debug')('cogs:generateParcelMap');
+const _ = require('lodash');
 
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
-      debug('// Generate random map based on parcels');
+      debug(
+        '// Generate random pracelMap based on abstractParcels from abstractParcelMap'
+      );
       const ctx = {};
       ctx.land = res.locals.land;
 
-      forEachLandAbstractMapY(ctx);
+      forEachAbstractParcelMapY(ctx);
     })();
 
-    function forEachLandAbstractMapY(ctx) {
+    function forEachAbstractParcelMapY(ctx) {
       const land = ctx.land;
       const parcelMap = [];
       ctx.parcelMap = parcelMap;
 
-      land.abstractParcelMap.forEach((landRow, landY) => {
-        ctx.landRow = landRow;
-        ctx.landY = landY;
-        if (!parcelMap[landY]) {
-          parcelMap[landY] = [];
-        }
-        forEachLandX(ctx);
-      });
+      land.abstractParcelMap.forEach(
+        (abstractParcelMapRow, abstractParcelMapY) => {
+          ctx.abstractParcelMapRow = abstractParcelMapRow;
+          ctx.abstractParcelMapY = abstractParcelMapY;
+          if (!parcelMap[abstractParcelMapY]) {
+            parcelMap[abstractParcelMapY] = [];
+          }
 
-      debug('forEachLandAbstractMapY: parcelMap.length:', parcelMap.length);
+          forEachAbstractParcelMapX(ctx);
+        }
+      );
+
+      debug('forEachAbstractParcelMapY: parcelMap.length:', parcelMap.length);
       debug(
-        'forEachLandAbstractMapY: parcelMap[0].length:',
+        'forEachAbstractParcelMapY: parcelMap[0].length:',
         parcelMap[0].length
       );
       land.parcelMap = parcelMap;
       next();
     }
 
-    function forEachLandX(ctx) {
-      const landRow = ctx.landRow;
-      landRow.forEach((abstractParcel, landX) => {
+    function forEachAbstractParcelMapX(ctx) {
+      const abstractParcelMapRow = ctx.abstractParcelMapRow;
+      abstractParcelMapRow.forEach((abstractParcel, abstractParcelMapX) => {
         ctx.abstractParcel = abstractParcel;
-        ctx.landX = landX;
-        insertParcelbyAbstractParcel(ctx);
+        ctx.abstractParcelMapX = abstractParcelMapX;
+        insertRandomParcelbyAbstractParcel(ctx);
       });
     }
 
-    function insertParcelbyAbstractParcel(ctx) {
+    function insertRandomParcelbyAbstractParcel(ctx) {
       const parcelMap = ctx.parcelMap;
       const abstractParcelMap = ctx.land.abstractParcelMap;
-      const landY = ctx.landY;
-      const landX = ctx.landX;
+      const abstractParcelMapY = ctx.abstractParcelMapY;
+      const abstractParcelMapX = ctx.abstractParcelMapX;
       const parcelList = res.locals.parcelList;
-      const parcelCategory = abstractParcelMap[landY][landX].category;
+      const parcelCategory =
+        abstractParcelMap[abstractParcelMapY][abstractParcelMapX].category;
+      const categoryOfParcelsAmount = parcelList[parcelCategory].length;
+      const randomParcel = _.random(0, categoryOfParcelsAmount - 1);
 
-      parcelMap[landY][landX] = parcelList[parcelCategory][0];
       debug(
-        'insertParcelbyAbstractParcel: parcelMap[landY][landX]:',
-        parcelMap[landY][landX]
+        'insertRandomParcelbyAbstractParcel: categoryOfParcelsAmount:',
+        categoryOfParcelsAmount
+      );
+
+      parcelMap[abstractParcelMapY][abstractParcelMapX] =
+        parcelList[parcelCategory][randomParcel];
+      debug(
+        'insertRandomParcelbyAbstractParcel: parcelMap[abstractParcelMapY][abstractParcelMapX]:',
+        parcelMap[abstractParcelMapY][abstractParcelMapX]
       );
     }
   };

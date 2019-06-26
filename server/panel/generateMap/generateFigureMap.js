@@ -51,6 +51,12 @@ module.exports = (environment, unitBlueprint) => {
       const parcel = ctx.parcel;
       const figureMap = ctx.figureMap;
       const parcelMapY = ctx.parcelMapY;
+
+      // debug(
+      //   'forEachParcelY: parcel.parcelLayerWithStrings:',
+      //   parcel.parcelLayerWithStrings
+      // );
+
       parcel.parcelLayerWithStrings.forEach((parcelRow, parcelY) => {
         const y = parcelY + 7 * parcelMapY;
         if (!_.isArray(figureMap[y])) {
