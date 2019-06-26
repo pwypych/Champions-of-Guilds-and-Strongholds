@@ -152,10 +152,8 @@ function setupLibrariesAndRoutes() {
     require('./panel/generateParcelList.js')(db),
     require('./panel/generateMap/generateLand.js')(),
     require('./panel/generateMap/generateAbstractParcelMap.js')(),
-    require('./panel/generateMap/generateParcelMap.js')(
-      environment,
-      unitBlueprint
-    ),
+    require('./panel/generateMap/generateParcelMap.js')(),
+    require('./panel/generateMap/generateAbstractFigureMap.js')(),
     require('./panel/generateMap/generateFigureMap.js')(
       environment,
       unitBlueprint

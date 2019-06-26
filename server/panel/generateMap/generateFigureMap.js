@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:generateFigureMap');
+const debug = require('debug')('cogs:generateAbstractFigureMap');
 const _ = require('lodash');
 
 const treasureArray = ['stone', 'wood', 'gold', 'crystal'];
