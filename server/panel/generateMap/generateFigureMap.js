@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:generateAbstractFigureMap');
+const debug = require('debug')('cogs:generateFigureMap');
 const _ = require('lodash');
 
 const treasureArray = ['stone', 'wood', 'gold', 'crystal'];
@@ -21,7 +21,8 @@ module.exports = (environment, unitBlueprint) => {
     function generateMonsterArray(ctx) {
       const monsterArray = [];
       _.forEach(unitBlueprint(), (unit, name) => {
-        monsterArray.push(name);
+        debug('generateMonsterArray: unit:', unit);
+        monsterArray.push({ name: name, tier: unit.tier });
       });
 
       ctx.monsterArray = monsterArray;
@@ -50,7 +51,7 @@ module.exports = (environment, unitBlueprint) => {
     function forEachAbstractFigureMapX(ctx) {
       const abstractFigureMapRow = ctx.abstractFigureMapRow;
       abstractFigureMapRow.forEach((abstractFigure, abstractFigureMapX) => {
-        debug('forEachAbstractFigureMapX: abstractFigure:', abstractFigure);
+        // debug('forEachAbstractFigureMapX: abstractFigure:', abstractFigure);
         const figureMap = ctx.figureMap;
         const monsterArray = ctx.monsterArray;
         const abstractFigureMapY = ctx.abstractFigureMapY;
@@ -58,15 +59,16 @@ module.exports = (environment, unitBlueprint) => {
         const figureChance = _.random(0, 99);
 
         // debug('forEachParcelX: abstractFigure:', abstractFigure);
-        figureMap[abstractFigureMapY][abstractFigureMapX] = abstractFigure;
+        figureMap[abstractFigureMapY][abstractFigureMapX] =
+          abstractFigure.figureName;
 
-        if (abstractFigure === 'treasure') {
+        if (abstractFigure.figureName === 'treasure') {
           figureMap[abstractFigureMapY][abstractFigureMapX] =
             treasureArray[_.random(0, treasureArray.length - 1)];
           return;
         }
 
-        if (abstractFigure === 'treasureMaybe') {
+        if (abstractFigure.figureName === 'treasureMaybe') {
           figureMap[abstractFigureMapY][abstractFigureMapX] = 'empty';
 
           if (figureChance > 80) {
@@ -76,29 +78,45 @@ module.exports = (environment, unitBlueprint) => {
           return;
         }
 
-        if (abstractFigure === 'monster') {
-          figureMap[abstractFigureMapY][abstractFigureMapX] =
-            monsterArray[_.random(0, monsterArray.length - 1)];
+        if (abstractFigure.figureName === 'monster') {
+          do {
+            const monsterIndex = _.random(0, monsterArray.length - 1);
+            if (monsterArray[monsterIndex].tier === abstractFigure.level) {
+              figureMap[abstractFigureMapY][abstractFigureMapX] =
+                monsterArray[monsterIndex].name;
+            }
+          } while (
+            figureMap[abstractFigureMapY][abstractFigureMapX] === 'monster'
+          );
+
+          // figureMap[abstractFigureMapY][abstractFigureMapX] =
+          //   monsterArray[_.random(0, monsterArray.length - 1)];
+
+          debug(figureMap[abstractFigureMapY][abstractFigureMapX]);
           return;
         }
 
-        if (abstractFigure === 'monsterMaybe') {
+        if (abstractFigure.figureName === 'monsterMaybe') {
           figureMap[abstractFigureMapY][abstractFigureMapX] = 'empty';
 
           if (figureChance > 60) {
             figureMap[abstractFigureMapY][abstractFigureMapX] =
-              monsterArray[_.random(0, monsterArray.length - 1)];
+              monsterArray[_.random(0, monsterArray.length - 1)].name;
+            debug(
+              'monsterMaybe:',
+              figureMap[abstractFigureMapY][abstractFigureMapX]
+            );
           }
           return;
         }
 
-        if (abstractFigure === 'barrier') {
+        if (abstractFigure.figureName === 'barrier') {
           figureMap[abstractFigureMapY][abstractFigureMapX] =
             barrierArray[_.random(0, barrierArray.length - 1)];
           return;
         }
 
-        if (abstractFigure === 'barrierMaybe') {
+        if (abstractFigure.figureName === 'barrierMaybe') {
           figureMap[abstractFigureMapY][abstractFigureMapX] = 'empty';
 
           if (figureChance > 40) {

@@ -18,6 +18,20 @@ module.exports = () => {
       land.width = 5;
       land.height = 5;
       land.players = 2;
+      land.parcelLevelMap = [
+        [0, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 0]
+      ];
+      land.mazeMap = [
+        ['xxxxx', 'xxxxx', 'xxxxx', 'xxxxx', 'xxxxx'],
+        ['xxxxx', 'xxxxx', 'xxxxx', 'xxxxx', 'xxxxx'],
+        ['xxxxx', 'xxxxx', 'xxxxx', 'xxxxx', 'xxxxx'],
+        ['xxxxx', 'xxxxx', 'xxxxx', 'xxxxx', 'xxxxx'],
+        ['xxxxx', 'xxxxx', 'xxxxx', 'xxxxx', 'xxxxx']
+      ];
 
       debug('generateLand: land:', land);
       res.locals.land = land;

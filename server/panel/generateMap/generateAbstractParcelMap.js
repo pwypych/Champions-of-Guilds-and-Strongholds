@@ -16,12 +16,21 @@ module.exports = () => {
 
     function generateAbstractParcelMapWithLandSize() {
       const land = res.locals.land;
+      const parcelLevelMap = land.parcelLevelMap;
+      const mazeMap = land.mazeMap;
       const abstractParcelMap = [];
 
       for (let y = 0; y < land.width; y += 1) {
         abstractParcelMap[y] = [];
         for (let x = 0; x < land.height; x += 1) {
-          abstractParcelMap[y][x] = abstractParcelFactory(0);
+          abstractParcelMap[y][x] = abstractParcelFactory(
+            parcelLevelMap[y][x],
+            mazeMap[y][x]
+          );
+          debug(
+            'generateAbstractParcelMapWithLandSize: abstractParcelMap[y][x]:',
+            abstractParcelMap[y][x]
+          );
         }
       }
 
@@ -34,33 +43,18 @@ module.exports = () => {
         abstractParcelMap[0].length
       );
 
-      debug(
-        'generateAbstractParcelMapWithLandSize: abstractParcelMap[0][0]:',
-        abstractParcelMap[0][0]
-      );
-
-      addCastleAbstractParcels(abstractParcelMap);
-    }
-
-    function addCastleAbstractParcels(abstractParcelMap) {
-      const land = res.locals.land;
-      abstractParcelMap[0][0].category = 'castle';
-      abstractParcelMap[4][4].category = 'castle';
-
-      debug(
-        'addCastleAbstractParcels: abstractParcelMap[0][0]:',
-        abstractParcelMap[0][0]
-      );
-
       land.abstractParcelMap = abstractParcelMap;
-      debug('addCastleAbstractParcels: land:', land);
       next();
     }
 
-    function abstractParcelFactory(level) {
+    function abstractParcelFactory(level, exits) {
       const abstractParcel = {};
       abstractParcel.category = 'treasure';
+      if (level === 0) {
+        abstractParcel.category = 'castle';
+      }
       abstractParcel.level = level;
+      abstractParcel.exits = exits;
 
       return abstractParcel;
     }

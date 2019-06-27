@@ -57,18 +57,20 @@ module.exports = () => {
       const abstractParcelMapY = ctx.abstractParcelMapY;
       const abstractParcelMapX = ctx.abstractParcelMapX;
       const parcelList = res.locals.parcelList;
-      const parcelCategory =
-        abstractParcelMap[abstractParcelMapY][abstractParcelMapX].category;
-      const categoryOfParcelsAmount = parcelList[parcelCategory].length;
-      const randomParcel = _.random(0, categoryOfParcelsAmount - 1);
+      const abstractParcel =
+        abstractParcelMap[abstractParcelMapY][abstractParcelMapX];
+      const categoryOfParcelsAmount =
+        parcelList[abstractParcel.category].length;
+      const randomParcelIndex = _.random(0, categoryOfParcelsAmount - 1);
 
       debug(
         'insertRandomParcelbyAbstractParcel: categoryOfParcelsAmount:',
         categoryOfParcelsAmount
       );
-
-      parcelMap[abstractParcelMapY][abstractParcelMapX] =
-        parcelList[parcelCategory][randomParcel];
+      const randomParcel =
+        parcelList[abstractParcel.category][randomParcelIndex];
+      randomParcel.level = abstractParcel.level;
+      parcelMap[abstractParcelMapY][abstractParcelMapX] = randomParcel;
       debug(
         'insertRandomParcelbyAbstractParcel: parcelMap[abstractParcelMapY][abstractParcelMapX]:',
         parcelMap[abstractParcelMapY][abstractParcelMapX]

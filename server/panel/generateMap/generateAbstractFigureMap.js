@@ -51,11 +51,6 @@ module.exports = () => {
       const abstractFigureMap = ctx.abstractFigureMap;
       const parcelMapY = ctx.parcelMapY;
 
-      // debug(
-      //   'forEachParcelY: parcel.parcelLayerWithStrings:',
-      //   parcel.parcelLayerWithStrings
-      // );
-
       parcel.parcelLayerWithStrings.forEach((parcelRow, parcelY) => {
         const y = parcelY + 7 * parcelMapY;
         if (!_.isArray(abstractFigureMap[y])) {
@@ -70,6 +65,7 @@ module.exports = () => {
     }
 
     function forEachParcelX(ctx) {
+      const parcel = ctx.parcel;
       const parcelRow = ctx.parcelRow;
       const parcelMapX = ctx.parcelMapX;
       const abstractFigureMap = ctx.abstractFigureMap;
@@ -79,7 +75,10 @@ module.exports = () => {
         const x = parcelX + 7 * parcelMapX;
 
         debug('forEachParcelX: abstractFigure:', abstractFigure);
-        abstractFigureMap[y][x] = abstractFigure;
+        abstractFigureMap[y][x] = {
+          figureName: abstractFigure,
+          level: parcel.level
+        };
       });
     }
   };
