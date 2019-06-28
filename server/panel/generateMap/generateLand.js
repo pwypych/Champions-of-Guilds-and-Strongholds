@@ -24,8 +24,8 @@ module.exports = () => {
         [1, 1, 5, 1, 0]
       ];
       land.mazeMap = [
-        ['oooo', 'oooo', 'oxoo', 'oooo', 'oooo'],
-        ['oooo', 'oooo', 'oxoo', 'oooo', 'oooo'],
+        ['oooo', 'oooo', 'ooox', 'oooo', 'oooo'],
+        ['oooo', 'oooo', 'ooox', 'oooo', 'oooo'],
         ['ooxo', 'ooxo', 'oxoo', 'xooo', 'xooo'],
         ['oooo', 'oooo', 'oxoo', 'oooo', 'oooo'],
         ['oooo', 'oooo', 'oxoo', 'oooo', 'oooo']
