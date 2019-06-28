@@ -3,6 +3,7 @@
 'use strict';
 
 const debug = require('debug')('cogs:generateParcelList');
+const _ = require('lodash');
 
 module.exports = (db) => {
   return (req, res, next) => {
@@ -32,22 +33,29 @@ module.exports = (db) => {
           }
 
           debug('findParcels: parcelArray.length:', parcelArray.length);
+          debug('findParcels: parcelArray[0]:', parcelArray[0]);
           generateParcelList(parcelArray);
         });
     }
 
     function generateParcelList(parcelArray) {
       const parcelList = {};
-      parcelList.castle = [];
-      parcelList.treasure = [];
+      parcelList.castle = {};
+      parcelList.treasure = {};
 
       parcelArray.forEach((parcel) => {
         if (parcel.category === 'castle') {
-          parcelList.castle.push(parcel);
+          if (!_.isArray(parcelList.castle[parcel.exits])) {
+            parcelList.castle[parcel.exits] = [];
+          }
+          parcelList.castle[parcel.exits].push(parcel);
         }
 
         if (parcel.category === 'treasure') {
-          parcelList.treasure.push(parcel);
+          if (!_.isArray(parcelList.treasure[parcel.exits])) {
+            parcelList.treasure[parcel.exits] = [];
+          }
+          parcelList.treasure[parcel.exits].push(parcel);
         }
       });
 
@@ -55,10 +63,7 @@ module.exports = (db) => {
         'generateParcelList: parcelList.castle.length:',
         parcelList.castle.length
       );
-      debug(
-        'generateParcelList: parcelList.treasure.length:',
-        parcelList.treasure.length
-      );
+      debug('generateParcelList: parcelList.treasure:', parcelList.treasure);
 
       res.locals.parcelList = parcelList;
       next();

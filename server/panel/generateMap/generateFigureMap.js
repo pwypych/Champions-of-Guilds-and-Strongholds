@@ -21,7 +21,6 @@ module.exports = (environment, unitBlueprint) => {
     function generateMonsterArray(ctx) {
       const monsterArray = [];
       _.forEach(unitBlueprint(), (unit, name) => {
-        debug('generateMonsterArray: unit:', unit);
         monsterArray.push({ name: name, tier: unit.tier });
       });
 
@@ -89,10 +88,6 @@ module.exports = (environment, unitBlueprint) => {
             figureMap[abstractFigureMapY][abstractFigureMapX] === 'monster'
           );
 
-          // figureMap[abstractFigureMapY][abstractFigureMapX] =
-          //   monsterArray[_.random(0, monsterArray.length - 1)];
-
-          debug(figureMap[abstractFigureMapY][abstractFigureMapX]);
           return;
         }
 

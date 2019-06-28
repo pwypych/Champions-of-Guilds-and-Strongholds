@@ -40,8 +40,6 @@ module.exports = () => {
         ctx.parcel = parcel;
         ctx.parcelMapX = parcelMapX;
 
-        debug('forEachParcelMapX: parcel:', parcel);
-
         forEachParcelY(ctx);
       });
     }
@@ -74,7 +72,6 @@ module.exports = () => {
       parcelRow.forEach((abstractFigure, parcelX) => {
         const x = parcelX + 7 * parcelMapX;
 
-        debug('forEachParcelX: abstractFigure:', abstractFigure);
         abstractFigureMap[y][x] = {
           figureName: abstractFigure,
           level: parcel.level

@@ -57,24 +57,26 @@ module.exports = () => {
       const abstractParcelMapY = ctx.abstractParcelMapY;
       const abstractParcelMapX = ctx.abstractParcelMapX;
       const parcelList = res.locals.parcelList;
+
       const abstractParcel =
         abstractParcelMap[abstractParcelMapY][abstractParcelMapX];
-      const categoryOfParcelsAmount =
-        parcelList[abstractParcel.category].length;
-      const randomParcelIndex = _.random(0, categoryOfParcelsAmount - 1);
 
+      const categoryOfParcelsAmount =
+        parcelList[abstractParcel.category][abstractParcel.exits].length;
       debug(
         'insertRandomParcelbyAbstractParcel: categoryOfParcelsAmount:',
         categoryOfParcelsAmount
       );
+
+      const randomParcelIndex = _.random(0, categoryOfParcelsAmount - 1);
+
       const randomParcel =
-        parcelList[abstractParcel.category][randomParcelIndex];
+        parcelList[abstractParcel.category][abstractParcel.exits][
+          randomParcelIndex
+        ];
+
       randomParcel.level = abstractParcel.level;
       parcelMap[abstractParcelMapY][abstractParcelMapX] = randomParcel;
-      debug(
-        'insertRandomParcelbyAbstractParcel: parcelMap[abstractParcelMapY][abstractParcelMapX]:',
-        parcelMap[abstractParcelMapY][abstractParcelMapX]
-      );
     }
   };
 };
