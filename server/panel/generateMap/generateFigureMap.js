@@ -100,11 +100,14 @@ module.exports = (environment, unitBlueprint) => {
           figureMap[abstractFigureMapY][abstractFigureMapX] = 'empty';
 
           if (figureChance > 60) {
-            figureMap[abstractFigureMapY][abstractFigureMapX] =
-              monsterArray[_.random(0, monsterArray.length - 1)].name;
-            debug(
-              'monsterMaybe:',
-              figureMap[abstractFigureMapY][abstractFigureMapX]
+            do {
+              const monsterIndex = _.random(0, monsterArray.length - 1);
+              if (monsterArray[monsterIndex].tier === abstractFigure.level) {
+                figureMap[abstractFigureMapY][abstractFigureMapX] =
+                  monsterArray[monsterIndex].name;
+              }
+            } while (
+              figureMap[abstractFigureMapY][abstractFigureMapX] === 'empty'
             );
           }
           return;

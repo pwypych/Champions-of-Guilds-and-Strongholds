@@ -15,15 +15,13 @@ module.exports = () => {
     function generateLand() {
       const land = {};
       land.name = 'nazwa';
-      land.width = 5;
-      land.height = 5;
       land.players = 2;
-      land.parcelLevelMap = [
-        [0, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 0]
+      land.levelMap = [
+        [0, 1, 5, 5, 5],
+        [1, 1, 5, 5, 5],
+        [5, 5, 5, 5, 5],
+        [5, 5, 5, 1, 1],
+        [5, 5, 5, 1, 0]
       ];
       land.mazeMap = [
         ['xxxxx', 'xxxxx', 'xxxxx', 'xxxxx', 'xxxxx'],

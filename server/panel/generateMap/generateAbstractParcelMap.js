@@ -16,15 +16,15 @@ module.exports = () => {
 
     function generateAbstractParcelMapWithLandSize() {
       const land = res.locals.land;
-      const parcelLevelMap = land.parcelLevelMap;
+      const landLevelMap = land.levelMap;
       const mazeMap = land.mazeMap;
       const abstractParcelMap = [];
 
-      for (let y = 0; y < land.width; y += 1) {
+      for (let y = 0; y < land.levelMap.length; y += 1) {
         abstractParcelMap[y] = [];
-        for (let x = 0; x < land.height; x += 1) {
+        for (let x = 0; x < land.levelMap[0].length; x += 1) {
           abstractParcelMap[y][x] = abstractParcelFactory(
-            parcelLevelMap[y][x],
+            landLevelMap[y][x],
             mazeMap[y][x]
           );
           debug(
