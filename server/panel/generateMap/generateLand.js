@@ -17,16 +17,16 @@ module.exports = () => {
       land.name = 'nazwa';
       land.players = 2;
       land.levelMap = [
-        [0, 1, 5, 1, 1],
-        [1, 1, 5, 1, 1],
-        [5, 5, 5, 5, 5],
-        [1, 1, 5, 1, 1],
-        [1, 1, 5, 1, 0]
+        [0, 1, 4, 1, 1],
+        [1, 2, 5, 1, 1],
+        [4, 5, 5, 5, 4],
+        [1, 1, 5, 2, 1],
+        [1, 1, 4, 1, 0]
       ];
       land.mazeMap = [
         ['oooo', 'oooo', 'ooox', 'oooo', 'oooo'],
         ['oooo', 'oooo', 'ooox', 'oooo', 'oooo'],
-        ['ooxo', 'ooxo', 'oxoo', 'xooo', 'xooo'],
+        ['ooxo', 'ooxo', 'oooo', 'xooo', 'xooo'],
         ['oooo', 'oooo', 'oxoo', 'oooo', 'oooo'],
         ['oooo', 'oooo', 'oxoo', 'oooo', 'oooo']
       ];
