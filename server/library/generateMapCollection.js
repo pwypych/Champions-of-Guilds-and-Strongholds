@@ -268,9 +268,13 @@ module.exports = (environment, db) => {
 
       const mapLayer = [];
 
-      for (let i = 0; i < height; i += 1) {
+      _.times(height, () => {
         mapLayer.push([]);
-      }
+      });
+
+      // for (let i = 0; i < height; i += 1) {
+      //   mapLayer.push([]);
+      // }
 
       let x = 0;
       let y = 0;
