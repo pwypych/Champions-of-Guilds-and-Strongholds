@@ -261,6 +261,7 @@ module.exports = (db) => {
       const lifeRemaining = ctx.lifeRemaining;
       const targetUnitsRemaining = ctx.targetUnitsRemaining;
       const obsticlePosition = ctx.obsticlePosition;
+      const shootFromPosition = ctx.unit.position;
 
       const query = { _id: gameId };
 
@@ -268,6 +269,7 @@ module.exports = (db) => {
       recentActivity.name = 'gotShot';
       recentActivity.timestamp = Date.now();
       recentActivity.obsticlePosition = obsticlePosition;
+      recentActivity.shootFromPosition = shootFromPosition;
 
       const fieldRecentActivity = targetId + '.recentActivity';
       const fieldLife = targetId + '.unitStats.current.life';

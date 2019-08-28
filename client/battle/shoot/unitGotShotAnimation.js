@@ -18,40 +18,57 @@ g.battle.unitGotShotAnimation = (walkie, viewport) => {
       'unitGotShotAnimation.js',
       (data) => {
         if (data.entity.recentActivity.name === 'gotShot') {
-          const unitId = data.entityId;
-          console.log('unitGotShotAnimation: unitId:', unitId);
-          findUnitContainer(unitId);
+          const unitPosition = data.entity.position;
+          const shootFromPosition =
+            data.entity.recentActivity.shootFromPosition;
+          console.log('unitGotShotAnimation: unitPosition:', unitPosition);
+          console.log(
+            'unitGotShotAnimation: shootFromPosition:',
+            shootFromPosition
+          );
+          instantiateSprite(shootFromPosition, unitPosition);
         }
       },
       false
     );
   }
 
-  function findUnitContainer(unitId) {
-    const unitContainer = battleContainer.getChildByName(unitId);
-
-    instantiateSprite(unitContainer);
-  }
-
-  function instantiateSprite(unitContainer) {
-    const textureName = 'bloodSplatt';
+  function instantiateSprite(shootFromPosition, unitPosition) {
+    const textureName = 'arrow';
     const texture = PIXI.loader.resources[textureName].texture;
     const sprite = new PIXI.Sprite(texture);
 
-    sprite.name = 'bloodSplatt';
-    unitContainer.addChild(sprite);
+    sprite.name = 'arrow';
+    battleContainer.addChild(sprite);
 
-    const randomOffsetX = _.random(-10, 10);
-    const randomOffsetY = _.random(-10, 10);
+    sprite.x = shootFromPosition.x * blockWidthPx + 16;
+    sprite.y = shootFromPosition.y * blockHeightPx + 16;
+    sprite.anchor = { x: 0.5, y: 0.5 };
 
-    sprite.x = (blockWidthPx - sprite.width) / 2 + randomOffsetX;
-    sprite.y = (blockHeightPx - sprite.height) / 2 + randomOffsetY;
+    // flip sprite if shooting from other direction
+    if (shootFromPosition.x > unitPosition.x) {
+      sprite.rotation = toolDegToRad(180);
+    }
+
+    generateTween(sprite, unitPosition);
     destroyAfterTimeout(sprite);
+  }
+
+  function generateTween(sprite, unitPosition) {
+    TweenMax.to(sprite, 0.7, {
+      x: unitPosition.x * blockWidthPx + 16,
+      y: unitPosition.y * blockHeightPx + 16,
+      ease: 'Strong'
+    });
   }
 
   function destroyAfterTimeout(sprite) {
     setTimeout(() => {
       sprite.destroy();
-    }, 1000);
+    }, 700);
+  }
+
+  function toolDegToRad(degrees) {
+    return (degrees * Math.PI) / 180;
   }
 };
