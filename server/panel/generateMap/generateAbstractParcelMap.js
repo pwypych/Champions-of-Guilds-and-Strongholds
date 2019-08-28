@@ -20,19 +20,19 @@ module.exports = () => {
       const mazeMap = land.mazeMap;
       const abstractParcelMap = [];
 
-      for (let y = 0; y < land.levelMap.length; y += 1) {
-        abstractParcelMap[y] = [];
-        for (let x = 0; x < land.levelMap[0].length; x += 1) {
-          abstractParcelMap[y][x] = abstractParcelFactory(
-            landLevelMap[y][x],
-            mazeMap[y][x]
+      landLevelMap.forEach((levelMapRow, levelMapY) => {
+        abstractParcelMap[levelMapY] = [];
+        levelMapRow.forEach((mapLevel, levelMapX) => {
+          abstractParcelMap[levelMapY][levelMapX] = abstractParcelFactory(
+            landLevelMap[levelMapY][levelMapX],
+            mazeMap[levelMapY][levelMapX]
           );
           debug(
             'generateAbstractParcelMapWithLandSize: abstractParcelMap[y][x]:',
-            abstractParcelMap[y][x]
+            abstractParcelMap[levelMapY][levelMapX]
           );
-        }
-      }
+        });
+      });
 
       debug(
         'generateAbstractParcelMapWithLandSize: abstractParcelMap.length:',
