@@ -40,7 +40,10 @@ module.exports = (environment, db) => {
 
     function scanParcelBaseFolder() {
       fs.readdir(environment.basepathTiledParcel, (error, folderNameArray) => {
-        debug('scanParcelBaseFolder: folderNameArray:', folderNameArray);
+        debug(
+          'scanParcelBaseFolder: folderNameArray.length:',
+          folderNameArray.length
+        );
         forEachParcel(folderNameArray);
       });
     }
@@ -53,7 +56,7 @@ module.exports = (environment, db) => {
       });
 
       folderNameArray.forEach((parcel) => {
-        debug('forEachParcel', parcel);
+        // debug('forEachParcel', parcel);
         splitParcelFileName(parcel, done);
       });
     }
@@ -64,7 +67,7 @@ module.exports = (environment, db) => {
         parcelWithExtension.length - 5
       );
       const parcelSplitArray = parcel.split('_');
-      debug('splitParcelFileName: parcelSplitArray:', parcelSplitArray);
+      // debug('splitParcelFileName: parcelSplitArray:', parcelSplitArray);
       instantiateParcelObject(
         parcelSplitArray,
         parcelWithExtension,
@@ -88,12 +91,12 @@ module.exports = (environment, db) => {
       parcelObject.pathTiledParcel =
         environment.basepathTiledParcel + '/' + parcelWithExtension;
 
-      debug('instantiateParcelObject: parcelObject:', parcelObject);
+      // debug('instantiateParcelObject: parcelObject:', parcelObject);
       checkTiledParcelFileExists(parcelObject, done);
     }
 
     function checkTiledParcelFileExists(parcelObject, done) {
-      fs.stat(parcelObject.pathTiledParcel, (error, stats) => {
+      fs.stat(parcelObject.pathTiledParcel, (error) => {
         if (error) {
           errorArray.push(
             parcelObject.folderName +
@@ -103,7 +106,7 @@ module.exports = (environment, db) => {
           return;
         }
 
-        debug('checkTiledParcelFileExists: stats.size', stats.size);
+        // debug('checkTiledParcelFileExists: stats.size', stats.size);
         readTiledParcelFile(parcelObject, done);
       });
     }
@@ -113,7 +116,7 @@ module.exports = (environment, db) => {
         parcelObject.pathTiledParcel,
         'utf8',
         (error, tiledParcelString) => {
-          debug('readTiledParcelFile', tiledParcelString.length);
+          // debug('readTiledParcelFile', tiledParcelString.length);
           parseJsonParcelString(parcelObject, tiledParcelString, done);
         }
       );
@@ -124,6 +127,7 @@ module.exports = (environment, db) => {
       try {
         tiledParcelObject = JSON.parse(tiledParcelString);
       } catch (error) {
+        debug('parseJsonParcelString: JSON parse error, not valid map file!');
         errorArray.push(
           parcelObject.folderName +
             ': parseJsonParcelString: JSON parse error, not valid map file'
@@ -132,15 +136,16 @@ module.exports = (environment, db) => {
         return;
       }
 
-      debug(
-        'parseJsonParcelString: parcelObject.tiledParcelObject.height:',
-        tiledParcelObject.height
-      );
+      // debug(
+      //   'parseJsonParcelString: parcelObject.tiledParcelObject.height:',
+      //   tiledParcelObject.height
+      // );
       validateTiledParcelObject(parcelObject, tiledParcelObject, done);
     }
 
     function validateTiledParcelObject(parcelObject, tiledParcelObject, done) {
       if (!tiledParcelObject.layers) {
+        debug('parseJsonParcelString: tiledParcelObject missing layers array!');
         errorArray.push(
           parcelObject.folderName +
             ': validateTiledParcelObject: tiledParcelObject missing layers array'
@@ -150,6 +155,7 @@ module.exports = (environment, db) => {
       }
 
       if (!Array.isArray(tiledParcelObject.layers)) {
+        debug('parseJsonParcelString: tiledParcelObject.layers is not array!');
         errorArray.push(
           parcelObject.folderName +
             ': validateTiledParcelObject: tiledParcelObject.layers is not array'
@@ -158,10 +164,10 @@ module.exports = (environment, db) => {
         return;
       }
 
-      debug(
-        'validateTiledParcelObject: tiledParcelObject.layers[0].data.length:',
-        tiledParcelObject.layers[0].data.length
-      );
+      // debug(
+      //   'validateTiledParcelObject: tiledParcelObject.layers[0].data.length:',
+      //   tiledParcelObject.layers[0].data.length
+      // );
       readTilesetFiles(parcelObject, tiledParcelObject, done);
     }
 
@@ -201,9 +207,9 @@ module.exports = (environment, db) => {
             }
           });
 
-          debug('readTilesetFiles: name:', tiledTilesetObject.name);
-          debug('readTilesetFiles: filepath:', filepath);
-          debug('readTilesetFiles: firstgid:', tiledFirstGid);
+          // debug('readTilesetFiles: name:', tiledTilesetObject.name);
+          // debug('readTilesetFiles: filepath:', filepath);
+          // debug('readTilesetFiles: firstgid:', tiledFirstGid);
 
           const tiledTiles = toolConvertTilesetTileIndexes(
             tiledTilesetObject.tiles,
@@ -226,10 +232,10 @@ module.exports = (environment, db) => {
       const parcelLayerWithNumbers = toolConvertTiledLayer(
         tiledParcelObject.layers[0]
       );
-      debug(
-        'convertFromTiled:parcelLayerWithNumbers:',
-        JSON.stringify(parcelLayerWithNumbers).slice(0, 50)
-      );
+      // debug(
+      //   'convertFromTiled:parcelLayerWithNumbers:',
+      //   JSON.stringify(parcelLayerWithNumbers).slice(0, 50)
+      // );
 
       // We convert tiled id of tile to its tile "value", that will become figureName
       let parcelLayerWithStrings;
@@ -240,6 +246,7 @@ module.exports = (environment, db) => {
           tiledTilesetArray
         );
       } catch (error) {
+        debug('convertFromTiled: Errors in Tiled tiles!');
         errorArray.push(
           parcelObject.folderName + ': Errors in Tiled tiles: ' + error.message
         );
@@ -247,12 +254,11 @@ module.exports = (environment, db) => {
         return;
       }
 
-      debug(
-        'convertFromTiled:mapLayer:',
-        JSON.stringify(parcelLayerWithStrings).slice(0, 50)
-      );
+      // debug(
+      //   'convertFromTiled:mapLayer:',
+      //   JSON.stringify(parcelLayerWithStrings).slice(0, 50)
+      // );
 
-      debug('convertFromTiled');
       parcelObject.parcelLayerWithStrings = parcelLayerWithStrings;
 
       insertParcelObject(parcelObject, done);
@@ -261,6 +267,7 @@ module.exports = (environment, db) => {
     function insertParcelObject(parcelObject, done) {
       db.collection('parcelCollection').insertOne(parcelObject, (error) => {
         if (error) {
+          debug('insertParcelObject: Insert mongo error!');
           errorArray.push(
             parcelObject.folderName +
               ': ERROR: insert mongo error:' +
@@ -268,7 +275,7 @@ module.exports = (environment, db) => {
           );
         }
 
-        debug('insertParcelObject');
+        debug('insertParcelObject: parcelObject._id:', parcelObject._id);
         done();
       });
     }
