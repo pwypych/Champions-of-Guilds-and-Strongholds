@@ -151,7 +151,10 @@ module.exports = (environment, db) => {
 
       const doneTilesets = _.after(filePathArray.length, () => {
         const tiledTilesetArray = _.flatten(tiledTilesetArrayDeep);
-        debug('readTilesetFiles', tiledTilesetArray);
+        debug(
+          'readTilesetFiles: tiledTilesetArray.length',
+          tiledTilesetArray.length
+        );
         convertFromTiled(mapObject, tiledMapObject, tiledTilesetArray, done);
       });
 
@@ -271,10 +274,6 @@ module.exports = (environment, db) => {
       _.times(height, () => {
         mapLayer.push([]);
       });
-
-      // for (let i = 0; i < height; i += 1) {
-      //   mapLayer.push([]);
-      // }
 
       let x = 0;
       let y = 0;
