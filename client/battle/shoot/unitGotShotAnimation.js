@@ -45,28 +45,41 @@ g.battle.unitGotShotAnimation = (walkie, viewport) => {
     sprite.y = shootFromPosition.y * blockHeightPx + 16;
     sprite.anchor = { x: 0.5, y: 0.5 };
 
-    // flip sprite if shooting from other direction
+    sprite.rotation = toolCalculateTwoPointAngle(
+      shootFromPosition,
+      unitPosition
+    );
+
+    // rotate sprite 180 if shooting from right to left
     if (shootFromPosition.x > unitPosition.x) {
-      sprite.rotation = toolDegToRad(180);
+      sprite.rotation += Math.PI;
     }
 
-    generateTween(sprite, unitPosition);
-    hideAfterTimeout(sprite);
+    const distance = toolCalculateTwoPointDistance(
+      shootFromPosition,
+      unitPosition
+    );
+
+    const speed = 24; // 24 tiles per second
+    const animationTimeInSeconds = distance / speed;
+
+    generateTween(sprite, unitPosition, animationTimeInSeconds);
+    hideAfterTimeout(sprite, animationTimeInSeconds);
   }
 
-  function generateTween(sprite, unitPosition) {
-    TweenMax.to(sprite, 0.5, {
+  function generateTween(sprite, unitPosition, animationTimeInSeconds) {
+    TweenMax.to(sprite, animationTimeInSeconds, {
       x: unitPosition.x * blockWidthPx + 16,
       y: unitPosition.y * blockHeightPx + 16,
       ease: Power0.easeNone
     });
   }
 
-  function hideAfterTimeout(sprite) {
+  function hideAfterTimeout(sprite, animationTimeInSeconds) {
     setTimeout(() => {
       sprite.visible = false;
       destroyAfterTimeout(sprite);
-    }, 500);
+    }, animationTimeInSeconds * 1000);
   }
 
   function destroyAfterTimeout(sprite) {
@@ -75,7 +88,27 @@ g.battle.unitGotShotAnimation = (walkie, viewport) => {
     }, 500);
   }
 
-  function toolDegToRad(degrees) {
-    return (degrees * Math.PI) / 180;
+  function toolCalculateTwoPointAngle(fromPosition, toPosition) {
+    const m = (toPosition.y - fromPosition.y) / (toPosition.x - fromPosition.x);
+    const radians = Math.atan(m);
+    return radians;
   }
+
+  function toolCalculateTwoPointDistance(fromPosition, toPosition) {
+    // dist = sq( (to.x - from.x)^2 + (to.y - from.y)^2 )
+    /* eslint-disable no-restricted-properties */
+    const a = Math.pow(toPosition.x - fromPosition.x, 2);
+    const b = Math.pow(toPosition.y - fromPosition.y, 2);
+    /* eslint-enable no-restricted-properties */
+    const distance = Math.sqrt(a + b);
+    return distance;
+  }
+
+  // function toolDegToRad(degrees) {
+  //   return (degrees * Math.PI) / 180;
+  // }
+
+  // function toolRadToDeg(rad) {
+  //   return rad * (180 / Math.PI);
+  // }
 };
