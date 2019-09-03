@@ -17,6 +17,7 @@ module.exports = {
     g: false,
     TweenMax: false,
     TimelineMax: false,
+    Power0: false, // TweenMax ease
     PF: false // pathfinding
   },
   rules: {

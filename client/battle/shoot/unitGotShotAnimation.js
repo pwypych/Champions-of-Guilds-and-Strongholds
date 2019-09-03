@@ -51,21 +51,28 @@ g.battle.unitGotShotAnimation = (walkie, viewport) => {
     }
 
     generateTween(sprite, unitPosition);
-    destroyAfterTimeout(sprite);
+    hideAfterTimeout(sprite);
   }
 
   function generateTween(sprite, unitPosition) {
-    TweenMax.to(sprite, 0.7, {
+    TweenMax.to(sprite, 0.5, {
       x: unitPosition.x * blockWidthPx + 16,
       y: unitPosition.y * blockHeightPx + 16,
-      ease: 'Strong'
+      ease: Power0.easeNone
     });
+  }
+
+  function hideAfterTimeout(sprite) {
+    setTimeout(() => {
+      sprite.visible = false;
+      destroyAfterTimeout(sprite);
+    }, 500);
   }
 
   function destroyAfterTimeout(sprite) {
     setTimeout(() => {
       sprite.destroy();
-    }, 700);
+    }, 500);
   }
 
   function toolDegToRad(degrees) {
