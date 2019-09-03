@@ -272,10 +272,6 @@ module.exports = (environment, db) => {
         mapLayer.push([]);
       });
 
-      // for (let i = 0; i < height; i += 1) {
-      //   mapLayer.push([]);
-      // }
-
       let x = 0;
       let y = 0;
 
