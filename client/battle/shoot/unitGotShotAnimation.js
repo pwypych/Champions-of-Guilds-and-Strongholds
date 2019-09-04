@@ -9,6 +9,7 @@ g.battle.unitGotShotAnimation = (walkie, viewport) => {
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
+    // Renders arrow after unit gotShot or justDiedShot
     onRecentActivityDifferance();
   })();
 
@@ -18,6 +19,18 @@ g.battle.unitGotShotAnimation = (walkie, viewport) => {
       'unitGotShotAnimation.js',
       (data) => {
         if (data.entity.recentActivity.name === 'gotShot') {
+          const unitPosition = data.entity.position;
+          const shootFromPosition =
+            data.entity.recentActivity.shootFromPosition;
+          console.log('unitGotShotAnimation: unitPosition:', unitPosition);
+          console.log(
+            'unitGotShotAnimation: shootFromPosition:',
+            shootFromPosition
+          );
+          instantiateSprite(shootFromPosition, unitPosition);
+        }
+
+        if (data.entity.recentActivity.name === 'justDiedShot') {
           const unitPosition = data.entity.position;
           const shootFromPosition =
             data.entity.recentActivity.shootFromPosition;

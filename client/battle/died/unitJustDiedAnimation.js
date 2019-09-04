@@ -17,7 +17,10 @@ g.battle.unitJustDiedAnimation = (walkie, viewport) => {
       'recentActivityDifferanceFound_',
       'unitJustDiedAnimation.js',
       (data) => {
-        if (data.entity.recentActivity.name === 'justDied') {
+        if (
+          data.entity.recentActivity.name === 'justDiedShot' ||
+          data.entity.recentActivity.name === 'justDiedHit'
+        ) {
           const unitId = data.entityId;
           const unit = data.entity;
           console.log('unitJustDiedAnimation: unitId:', unitId);
@@ -31,7 +34,13 @@ g.battle.unitJustDiedAnimation = (walkie, viewport) => {
   function findUnitContainer(unitId, unit) {
     const unitContainer = battleContainer.getChildByName(unitId);
 
-    instantiateSprite(unit, unitContainer);
+    waitBeforeHitAnimation(unit, unitContainer);
+  }
+
+  function waitBeforeHitAnimation(unit, unitContainer) {
+    setTimeout(() => {
+      instantiateSprite(unit, unitContainer);
+    }, 500);
   }
 
   function instantiateSprite(unit, unitContainer) {
@@ -39,14 +48,8 @@ g.battle.unitJustDiedAnimation = (walkie, viewport) => {
     const texture = PIXI.loader.resources[textureName].texture;
     const sprite = new PIXI.Sprite(texture);
 
-    sprite.name = 'bloodSplatt';
+    sprite.name = 'grave';
     unitContainer.addChild(sprite);
-    //
-    // const randomX = _.random(-10, 10);
-    // const randomY = _.random(-10, 10);
-    //
-    // sprite.x = (blockWidthPx - sprite.width) / 2 + randomX;
-    // sprite.y = (blockHeightPx - sprite.height) / 2 + randomY;
 
     destroyAfterTimeout(sprite);
   }

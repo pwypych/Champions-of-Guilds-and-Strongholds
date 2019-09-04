@@ -307,12 +307,14 @@ module.exports = (db) => {
       const unitName = target.unitName;
       const owner = target.owner;
       const boss = target.boss;
+      const shootFromPosition = ctx.unit.position;
 
       const query = { _id: gameId };
 
       const recentActivity = {};
-      recentActivity.name = 'justDied';
+      recentActivity.name = 'justDiedShot';
       recentActivity.timestamp = Date.now();
+      recentActivity.shootFromPosition = shootFromPosition;
 
       const field = targetId;
       const $set = {};

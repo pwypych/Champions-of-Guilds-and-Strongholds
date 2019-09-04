@@ -313,7 +313,7 @@ module.exports = (db) => {
       const query = { _id: gameId };
 
       const recentActivity = {};
-      recentActivity.name = 'justDied';
+      recentActivity.name = 'justDiedHit';
       recentActivity.timestamp = Date.now();
 
       const field = targetId;

@@ -14,7 +14,10 @@ g.battle.unitJustDiedHide = (walkie, viewport) => {
       'recentActivityDifferanceFound_',
       'unitJustDiedHide.js',
       (data) => {
-        if (data.entity.recentActivity.name === 'justDied') {
+        if (
+          data.entity.recentActivity.name === 'justDiedShot' ||
+          data.entity.recentActivity.name === 'justDiedHit'
+        ) {
           const unitId = data.entityId;
           const unit = data.entity;
           console.log('unitJustDiedHide: unitId:', unitId);
@@ -28,7 +31,13 @@ g.battle.unitJustDiedHide = (walkie, viewport) => {
   function findUnitContainer(unitId, unit) {
     const unitContainer = battleContainer.getChildByName(unitId);
 
-    hideFigureSprite(unitId, unit, unitContainer);
+    waitBeforeHitAnimation(unitId, unit, unitContainer);
+  }
+
+  function waitBeforeHitAnimation(unitId, unit, unitContainer) {
+    setTimeout(() => {
+      hideFigureSprite(unitId, unit, unitContainer);
+    }, 500);
   }
 
   function hideFigureSprite(unitId, unit, unitContainer) {

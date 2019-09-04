@@ -9,6 +9,7 @@ g.battle.unitGotHitAnimation = (walkie, viewport) => {
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
+    // Renders slash animation after unit gotHit with melee attack or justDiedHit
     onRecentActivityDifferance();
   })();
 
@@ -18,6 +19,12 @@ g.battle.unitGotHitAnimation = (walkie, viewport) => {
       'unitGotHitAnimation.js',
       (data) => {
         if (data.entity.recentActivity.name === 'gotHit') {
+          const unitId = data.entityId;
+          console.log('unitGotHitAnimation: unitId:', unitId);
+          findUnitContainer(unitId);
+        }
+
+        if (data.entity.recentActivity.name === 'justDiedHit') {
           const unitId = data.entityId;
           console.log('unitGotHitAnimation: unitId:', unitId);
           findUnitContainer(unitId);
