@@ -116,12 +116,31 @@ function setupParcelCollection() {
   );
   generateParcelCollection((error, parcelCount) => {
     if (error) {
-      debug('setupMapCollection: Errors:', error);
+      debug('setupParcelCollection: Errors:', error);
       process.exit(1);
       return;
     }
 
     debug('setupParcelCollection: parcelCount:', parcelCount);
+    setupLandCollection();
+  });
+}
+/* eslint-enable global-require */
+
+/* eslint-disable global-require */
+function setupLandCollection() {
+  const generateLandCollection = require('./library/generateParcelCollection.js')(
+    environment,
+    db
+  );
+  generateLandCollection((error, parcelCount) => {
+    if (error) {
+      debug('setupLandCollection: Errors:', error);
+      process.exit(1);
+      return;
+    }
+
+    debug('setupLandCollection: parcelCount:', parcelCount);
     setupLibrariesAndRoutes();
   });
 }
