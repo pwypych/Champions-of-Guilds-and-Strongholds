@@ -34,10 +34,10 @@ g.battle.unitJustDiedAnimation = (walkie, viewport) => {
   function findUnitContainer(unitId, unit) {
     const unitContainer = battleContainer.getChildByName(unitId);
 
-    waitBeforeHitAnimation(unit, unitContainer);
+    waitForAnimation(unit, unitContainer);
   }
 
-  function waitBeforeHitAnimation(unit, unitContainer) {
+  function waitForAnimation(unit, unitContainer) {
     setTimeout(() => {
       instantiateSprite(unit, unitContainer);
     }, 500);

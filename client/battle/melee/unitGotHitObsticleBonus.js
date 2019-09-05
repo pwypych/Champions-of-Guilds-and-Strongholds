@@ -59,7 +59,7 @@ g.battle.unitGotHitObsticleBonus = (walkie, viewport) => {
     });
 
     const text = new PIXI.Text(bonusPercent, amountTextStyle);
-    text.name = 'hasBeenCollectedIndicator';
+    text.name = 'obsticleBonusIndicator';
     battleContainer.addChild(text);
     text.x =
       blockWidthPx * obsticlePosition.x + blockWidthPx / 2 - text.width / 2;

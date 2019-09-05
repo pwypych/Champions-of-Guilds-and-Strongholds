@@ -31,10 +31,10 @@ g.battle.unitJustDiedHide = (walkie, viewport) => {
   function findUnitContainer(unitId, unit) {
     const unitContainer = battleContainer.getChildByName(unitId);
 
-    waitBeforeHitAnimation(unitId, unit, unitContainer);
+    waitForAnimation(unitId, unit, unitContainer);
   }
 
-  function waitBeforeHitAnimation(unitId, unit, unitContainer) {
+  function waitForAnimation(unitId, unit, unitContainer) {
     setTimeout(() => {
       hideFigureSprite(unitId, unit, unitContainer);
     }, 500);

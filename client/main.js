@@ -99,6 +99,7 @@ g.main = function main() {
     g.battle.unitGotHitObsticleBonus(walkie, viewport);
     g.battle.unitGotShotAnimation(walkie, viewport);
     g.battle.unitGotShotObsticleBonus(walkie, viewport);
+    g.battle.unitDamageGradeBonus(walkie, viewport);
     g.battle.markerDraw(walkie, viewport, freshEntities);
     g.battle.markerActiveAnimate(walkie, viewport, freshEntities);
     g.battle.unitFocusActive(walkie, viewport, freshEntities);
