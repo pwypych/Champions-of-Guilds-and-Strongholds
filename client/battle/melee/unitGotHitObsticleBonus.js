@@ -17,7 +17,10 @@ g.battle.unitGotHitObsticleBonus = (walkie, viewport) => {
       'recentActivityDifferanceFound_',
       'unitGotHitObsticleBonus.js',
       (data) => {
-        if (data.entity.recentActivity.name === 'gotHit') {
+        if (
+          data.entity.recentActivity.name === 'gotHit' ||
+          data.entity.recentActivity.name === 'justDiedHit'
+        ) {
           const obsticleCollidablesPositions =
             data.entity.recentActivity.obsticleCollidablesPositions;
           const obsticleEnemyPositions =

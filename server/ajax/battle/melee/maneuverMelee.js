@@ -357,6 +357,8 @@ module.exports = (db) => {
       const unitName = target.unitName;
       const owner = target.owner;
       const boss = target.boss;
+      const obsticleCollidablesPositions = ctx.obsticleCollidablesPositions;
+      const obsticleEnemyPositions = ctx.obsticleEnemyPositions;
       const damageGrade = ctx.damageGrade;
 
       const query = { _id: gameId };
@@ -364,6 +366,8 @@ module.exports = (db) => {
       const recentActivity = {};
       recentActivity.name = 'justDiedHit';
       recentActivity.timestamp = Date.now();
+      recentActivity.obsticleCollidablesPositions = obsticleCollidablesPositions;
+      recentActivity.obsticleEnemyPositions = obsticleEnemyPositions;
       recentActivity.damageGrade = damageGrade;
 
       const field = targetId;

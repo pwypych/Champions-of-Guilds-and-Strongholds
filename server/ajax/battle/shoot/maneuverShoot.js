@@ -355,6 +355,7 @@ module.exports = (db) => {
       const unitName = target.unitName;
       const owner = target.owner;
       const boss = target.boss;
+      const obsticlePosition = ctx.obsticlePosition;
       const shootFromPosition = ctx.unit.position;
       const damageGrade = ctx.damageGrade;
 
@@ -363,6 +364,7 @@ module.exports = (db) => {
       const recentActivity = {};
       recentActivity.name = 'justDiedShot';
       recentActivity.timestamp = Date.now();
+      recentActivity.obsticlePosition = obsticlePosition;
       recentActivity.shootFromPosition = shootFromPosition;
       recentActivity.damageGrade = damageGrade;
 

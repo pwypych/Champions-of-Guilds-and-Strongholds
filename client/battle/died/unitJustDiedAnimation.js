@@ -57,6 +57,6 @@ g.battle.unitJustDiedAnimation = (walkie, viewport) => {
   function destroyAfterTimeout(sprite) {
     setTimeout(() => {
       sprite.destroy();
-    }, 1000);
+    }, 1500);
   }
 };

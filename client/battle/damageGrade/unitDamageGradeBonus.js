@@ -24,17 +24,11 @@ g.battle.unitDamageGradeBonus = (walkie, viewport) => {
 
           console.log('unitDamageGradeBonus: damageGrade:', damageGrade);
 
-          waitForAnimation(unitPosition, damageGrade);
+          instantiateIndicator(unitPosition, damageGrade);
         }
       },
       false
     );
-  }
-
-  function waitForAnimation(unitPosition, damageGrade) {
-    setTimeout(() => {
-      instantiateIndicator(unitPosition, damageGrade);
-    }, 500);
   }
 
   function instantiateIndicator(unitPosition, damageGrade) {
