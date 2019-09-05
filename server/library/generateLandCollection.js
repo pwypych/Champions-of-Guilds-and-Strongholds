@@ -2,13 +2,12 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:generateMapCollection');
+const debug = require('debug')('cogs:generateLandCollection');
 const fs = require('fs');
 const _ = require('lodash');
 
-// Map base folder is in /tiledMap/ and has a folder for each map
-// Map folder should have a name, f.ex "desert" and jsonfile desert.json
-// We need tileset files in /tiledTileset/ folder
+// Land base folder is in /tiledLand and should have a name, f.ex "desert" and jsonfile desert.json
+// We need tileset for land files in /tiledTileset/ folder
 
 // @todo
 // refactor names, tool functions should be located in waterfall
@@ -17,232 +16,261 @@ module.exports = (environment, db) => {
     const errorArray = [];
 
     (function init() {
-      debug('// Reloads tiled map files into database');
+      debug('// Reloads tiled land files into database');
 
-      dropMapCollection();
+      dropLandCollection();
     })();
 
-    function dropMapCollection() {
-      db.collection('mapCollection').drop((error) => {
+    function dropLandCollection() {
+      db.collection('landCollection').drop((error) => {
         if (error) {
-          // When no map collection this error is thrown, ignore it
+          // When no land collection this error is thrown, ignore it
           if (error.message !== 'ns not found') {
             callback('remove mongo error:' + JSON.stringify(error));
             return;
           }
         }
 
-        debug('dropMapCollection');
-        scanMapBaseFolder();
+        debug('dropLandCollection');
+        scanLandBaseFolder();
       });
     }
 
-    function scanMapBaseFolder() {
-      fs.readdir(environment.basepathTiledMap, (error, folderNameArray) => {
-        debug('scanMapBaseFolder: folderNameArray:', folderNameArray);
-        forEachFolderName(folderNameArray);
+    function scanLandBaseFolder() {
+      fs.readdir(environment.basepathTiledLand, (error, landNameArray) => {
+        debug('scanLandBaseFolder: landNameArray:', landNameArray);
+        forEachLandName(landNameArray);
       });
     }
 
-    function forEachFolderName(folderNameArray) {
-      const done = _.after(folderNameArray.length, () => {
-        debug('forEachFolderName: done!');
-        checkForEachErrorArray(folderNameArray.length);
+    function forEachLandName(landNameArray) {
+      const done = _.after(landNameArray.length, () => {
+        debug('forEachLandName: done!');
+        checkForEachErrorArray(landNameArray.length);
       });
 
-      folderNameArray.forEach((folderName) => {
-        debug('forEachFolderName', folderName);
-        instantiateMapObject(folderName, done);
+      landNameArray.forEach((landName) => {
+        debug('forEachLandName', landName);
+        instantiateLandObject(landName, done);
       });
     }
 
-    function instantiateMapObject(folderName, done) {
-      const mapObject = {};
-      mapObject._id = folderName;
-      mapObject.folderName = folderName;
+    function instantiateLandObject(landName, done) {
+      const landObject = {};
+      landObject._id = landName;
 
-      mapObject.pathTiledMap =
-        environment.basepathTiledMap +
-        '/' +
-        folderName +
-        '/' +
-        folderName +
-        '.json';
+      landObject.pathTiledLand = environment.basepathTiledLand + '/' + landName;
 
-      debug('instantiateMapObject: mapObject:', mapObject);
-      checkTiledMapFileExists(mapObject, done);
+      debug('instantiateLandObject: landObject:', landObject);
+      checkTiledLandFileExists(landObject, done);
     }
 
-    function checkTiledMapFileExists(mapObject, done) {
-      fs.stat(mapObject.pathTiledMap, (error, stats) => {
+    function checkTiledLandFileExists(landObject, done) {
+      fs.stat(landObject.pathTiledLand, (error, stats) => {
         if (error) {
+          debug('instantiateLandObject: File does not exist!');
           errorArray.push(
-            mapObject.folderName +
-              ': checkTiledMapFileExists: File does not exist, or other read error'
+            landObject.folderName +
+              ': checkTiledLandFileExists: File does not exist, or other read error'
           );
           done();
           return;
         }
 
-        debug('checkTiledMapFileExists: stats.size', stats.size);
-        readTiledMapFile(mapObject, done);
+        debug('checkTiledLandFileExists: stats.size', stats.size);
+        readTiledLandFile(landObject, done);
       });
     }
 
-    function readTiledMapFile(mapObject, done) {
-      fs.readFile(mapObject.pathTiledMap, 'utf8', (error, tiledMapString) => {
-        debug('readTiledMapFile', tiledMapString.length);
-        parseJsonMapString(mapObject, tiledMapString, done);
-      });
+    function readTiledLandFile(landObject, done) {
+      fs.readFile(
+        landObject.pathTiledLand,
+        'utf8',
+        (error, tiledLandString) => {
+          debug('readTiledLandFile', tiledLandString.length);
+          parseJsonLandString(landObject, tiledLandString, done);
+        }
+      );
     }
 
-    function parseJsonMapString(mapObject, tiledMapString, done) {
-      let tiledMapObject;
+    function parseJsonLandString(landObject, tiledLandString, done) {
+      let tiledLandObject;
+
       try {
-        tiledMapObject = JSON.parse(tiledMapString);
+        tiledLandObject = JSON.parse(tiledLandString);
       } catch (error) {
         errorArray.push(
-          mapObject.folderName +
-            ': parseJsonMapString: JSON parse error, not valid map file'
+          landObject.folderName +
+            ': parseJsonLandString: JSON parse error, not valid map file'
         );
         done();
         return;
       }
 
       debug(
-        'parseJsonMapString: mapObject.tiledMapObject.height:',
-        tiledMapObject.height
+        'parseJsonLandString: tiledLandObject.layers[0].data.length:',
+        tiledLandObject.layers[0].data.length
       );
-      validateTiledMapObject(mapObject, tiledMapObject, done);
+      validateTiledLandObject(landObject, tiledLandObject, done);
     }
 
-    function validateTiledMapObject(mapObject, tiledMapObject, done) {
-      if (!tiledMapObject.layers) {
+    function validateTiledLandObject(landObject, tiledLandObject, done) {
+      if (!tiledLandObject.layers) {
         errorArray.push(
-          mapObject.folderName +
-            ': validateTiledMapObject: tiledMapObject missing layers array'
+          landObject.folderName +
+            ': validateTiledLandObject: tiledLandObject missing layers array'
         );
         done();
         return;
       }
 
-      if (!Array.isArray(tiledMapObject.layers)) {
+      if (!Array.isArray(tiledLandObject.layers)) {
         errorArray.push(
-          mapObject.folderName +
-            ': validateTiledMapObject: tiledMapObject.layers is not array'
+          landObject.folderName +
+            ': validateTiledLandObject: tiledLandObject.layers is not array'
+        );
+        done();
+        return;
+      }
+
+      if (tiledLandObject.layers.length !== 3) {
+        errorArray.push(
+          landObject.folderName +
+            ': validateTiledLandObject: tiledLandObject.layers[1].name is not manzeMap'
         );
         done();
         return;
       }
 
       debug(
-        'validateTiledMapObject: tiledMapObject.layers[0].data.length:',
-        tiledMapObject.layers[0].data.length
+        'validateTiledLandObject: tiledLandObject.layers[0].data.length:',
+        tiledLandObject.layers[0].data.length
       );
-      readTilesetFiles(mapObject, tiledMapObject, done);
+      readTilesetFiles(landObject, tiledLandObject, done);
     }
 
-    function readTilesetFiles(mapObject, tiledMapObject, done) {
-      const filePathArray = [
-        environment.basepathTiledTileset + '/1x1.json',
-        environment.basepathTiledTileset + '/3x3.json'
-      ];
+    function readTilesetFiles(landObject, tiledLandObject, done) {
+      const tilesetFilePath =
+        environment.basepathTiledTileset + '/abstractParcelTileset.json';
+
       const tiledTilesetArrayDeep = [];
 
-      const doneTilesets = _.after(filePathArray.length, () => {
-        const tiledTilesetArray = _.flatten(tiledTilesetArrayDeep);
-        debug(
-          'readTilesetFiles: tiledTilesetArray.length',
-          tiledTilesetArray.length
-        );
-        convertFromTiled(mapObject, tiledMapObject, tiledTilesetArray, done);
-      });
+      fs.readFile(tilesetFilePath, 'utf8', (error, tiledTilesetString) => {
+        const tiledTilesetObject = JSON.parse(tiledTilesetString);
 
-      filePathArray.forEach((filepath) => {
-        fs.readFile(filepath, 'utf8', (error, tiledTilesetString) => {
-          const tiledTilesetObject = JSON.parse(tiledTilesetString);
+        // all tilesets .json files in tiled starts at 0, but on tilemap the numbers starts from 1 up
+        // the tileset firstgid property in tilemap file tells what is the offset between tile id in tileset
+        // and tile id in tilemap layer
 
-          // all tilesets .json files in tiled starts at 0, but on tilemap the numbers starts from 1 up
-          // the tileset firstgid property in tilemap file tells what is the offset between tile id in tileset
-          // and tile id in tilemap layer
-
-          // find firstgid
-          const tilesetName = tiledTilesetObject.name; // ex. 3x3
-          let tiledFirstGid;
-          tiledMapObject.tilesets.forEach((tilesetInfo) => {
-            if (tilesetInfo.source.includes(tilesetName)) {
-              tiledFirstGid = tilesetInfo.firstgid;
-            }
-          });
-
-          debug('readTilesetFiles: name:', tiledTilesetObject.name);
-          debug('readTilesetFiles: filepath:', filepath);
-          debug('readTilesetFiles: firstgid:', tiledFirstGid);
-
-          const tiledTiles = toolConvertTilesetTileIndexes(
-            tiledTilesetObject.tiles,
-            tiledFirstGid
-          );
-
-          tiledTilesetArrayDeep.push(tiledTiles);
-          doneTilesets();
+        // find firstgid
+        const tilesetName = tiledTilesetObject.name; // ex. 3x3
+        let tiledFirstGid;
+        tiledLandObject.tilesets.forEach((tilesetInfo) => {
+          if (tilesetInfo.source.includes(tilesetName)) {
+            tiledFirstGid = tilesetInfo.firstgid;
+          }
         });
+
+        debug('readTilesetFiles: name:', tiledTilesetObject.name);
+        debug('readTilesetFiles: firstgid:', tiledFirstGid);
+
+        const tiledTiles = toolConvertTilesetTileIndexes(
+          tiledTilesetObject.tiles,
+          tiledFirstGid
+        );
+
+        tiledTilesetArrayDeep.push(tiledTiles);
+        const tiledTilesetArray = _.flatten(tiledTilesetArrayDeep);
+        convertFromTiled(landObject, tiledLandObject, tiledTilesetArray, done);
       });
     }
 
     function convertFromTiled(
-      mapObject,
-      tiledMapObject,
+      landObject,
+      tiledLandObject,
       tiledTilesetArray,
       done
     ) {
       // We convert tiled layer which is long array of numbers [0, 0, 0, 1, 0 ...] to two dimentional array of numbers
-      const mapLayerWithNumbers = toolConvertTiledLayer(
-        tiledMapObject.layers[0]
-      );
-      debug(
-        'convertFromTiled:mapLayerWithNumbers:',
-        JSON.stringify(mapLayerWithNumbers).slice(0, 50)
-      );
 
+      const landLayersWithNumbers = {};
+      tiledLandObject.layers.forEach((layer) => {
+        landLayersWithNumbers[layer.name] = {};
+        landLayersWithNumbers[layer.name].map = toolConvertTiledLayer(layer);
+        landLayersWithNumbers[layer.name].name = layer.name;
+      });
+
+      debug('convertFromTiled: landLayersWithNumbers:', landLayersWithNumbers);
       // We convert tiled id of tile to its tile "value", that will become figureName
-      let mapLayerWithStrings;
+      const landLayerWithStringsObject = {};
 
-      try {
-        mapLayerWithStrings = toolConvertNumbersToNames(
-          mapLayerWithNumbers,
-          tiledTilesetArray
-        );
-      } catch (error) {
-        errorArray.push(
-          mapObject.folderName + ': Errors in Tiled tiles: ' + error.message
-        );
-        done();
-        return;
-      }
+      _.forEach(landLayersWithNumbers, (landLayer) => {
+        debug('landLayer:', landLayer);
+        try {
+          landLayerWithStringsObject[
+            landLayer.name
+          ] = toolConvertNumbersToNames(landLayer.map, tiledTilesetArray);
+        } catch (error) {
+          errorArray.push(
+            landObject.folderName + ': Errors in Tiled tiles: ' + error.message
+          );
+          done();
+        }
+      });
 
       debug(
-        'convertFromTiled:mapLayer:',
-        JSON.stringify(mapLayerWithStrings).slice(0, 50)
+        'convertFromTiled: landLayerWithStringsObject:',
+        landLayerWithStringsObject
       );
 
       debug('convertFromTiled');
-      mapObject.mapLayerWithStrings = mapLayerWithStrings;
-
-      insertMapObject(mapObject, done);
+      generateAbstractParcelMap(landObject, landLayerWithStringsObject, done);
     }
 
-    function insertMapObject(mapObject, done) {
-      db.collection('mapCollection').insertOne(mapObject, (error) => {
+    function generateAbstractParcelMap(
+      landObject,
+      landLayerWithStringsObject,
+      done
+    ) {
+      const abstractParcelMap = [];
+
+      landLayerWithStringsObject.mazeMap.forEach((row, rowY) => {
+        abstractParcelMap[rowY] = [];
+        row.forEach((tile, rowX) => {
+          abstractParcelMap[rowY][rowX] = {};
+        });
+      });
+
+      debug('abstractParcelMap:', abstractParcelMap);
+
+      abstractParcelMap.forEach((abstractParcelMapRow, y) => {
+        abstractParcelMapRow.forEach((abstractParcel, x) => {
+          abstractParcelMap[y][x].category =
+            landLayerWithStringsObject.categoryMap[y][x];
+          abstractParcelMap[y][x].level =
+            landLayerWithStringsObject.levelMap[y][x];
+          abstractParcelMap[y][x].exits =
+            landLayerWithStringsObject.mazeMap[y][x];
+        });
+      });
+
+      landObject.abstractParcelMap = abstractParcelMap;
+
+      debug('abstractParcelMap:', abstractParcelMap);
+      insertLandObject(landObject, done);
+    }
+
+    function insertLandObject(landObject, done) {
+      db.collection('landCollection').insertOne(landObject, (error) => {
         if (error) {
           errorArray.push(
-            mapObject.folderName +
+            landObject.folderName +
               ': ERROR: insert mongo error:' +
               JSON.stringify(error)
           );
         }
 
-        debug('insertMapObject');
+        debug('insertLandObject');
         done();
       });
     }

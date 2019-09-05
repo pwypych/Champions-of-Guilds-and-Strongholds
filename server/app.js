@@ -38,8 +38,9 @@ function setupEnvironment() {
   }
   environment.basepath = path.join(__dirname, '..');
   environment.basepathTiledMap = environment.basepath + '/tiledMap';
-  environment.basepathTiledTileset = environment.basepath + '/tiledTileset';
+  environment.basepathTiledLand = environment.basepath + '/tiledLand';
   environment.basepathTiledParcel = environment.basepath + '/tiledParcel';
+  environment.basepathTiledTileset = environment.basepath + '/tiledTileset';
   environment.basepathFigure = environment.basepath + '/server/figure';
 
   debug('setupEnvironment()', environment);
@@ -129,7 +130,7 @@ function setupParcelCollection() {
 
 /* eslint-disable global-require */
 function setupLandCollection() {
-  const generateLandCollection = require('./library/generateParcelCollection.js')(
+  const generateLandCollection = require('./library/generateLandCollection.js')(
     environment,
     db
   );
