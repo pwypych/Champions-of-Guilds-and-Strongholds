@@ -167,40 +167,86 @@ module.exports = (db) => {
 
       ctx.obsticlePosition = obsticlePosition;
       debug('findNegativeObsticlesOnShootPath: entityObsticle:', obsticle);
-      calculateDamageModificator(ctx);
+      calculateDamageObsticleModificator(ctx);
     }
 
-    function calculateDamageModificator(ctx) {
+    function calculateDamageObsticleModificator(ctx) {
       const obsticlePosition = ctx.obsticlePosition;
-      let damageModificator = 1;
+      let damageObsticleModificator = 1;
 
       if (obsticlePosition) {
-        damageModificator = 0.2;
+        damageObsticleModificator = 0.2;
       }
 
-      ctx.damageModificator = damageModificator;
+      ctx.damageObsticleModificator = damageObsticleModificator;
       debug(
-        'calculateDamageModificator: damageModificator:',
-        damageModificator
+        'calculateDamageObsticleModificator: damageObsticleModificator:',
+        damageObsticleModificator
       );
-      calculateUnitDamageSum(ctx);
+      calculateDamageGradeModificator(ctx);
     }
 
-    function calculateUnitDamageSum(ctx) {
+    function calculateDamageGradeModificator(ctx) {
+      let damageGradeModificator = 1;
+      let damageGrade = 'mid';
+
+      const roll = _.random(1, 100);
+
+      if (roll >= 1 && roll <= 5) {
+        damageGradeModificator = 0;
+        damageGrade = 'miss';
+      }
+
+      if (roll >= 6 && roll <= 35) {
+        damageGradeModificator = 0.5;
+        damageGrade = 'low';
+      }
+
+      if (roll >= 36 && roll <= 65) {
+        damageGradeModificator = 1;
+        damageGrade = 'mid';
+      }
+
+      if (roll >= 66 && roll <= 95) {
+        damageGradeModificator = 1.5;
+        damageGrade = 'high';
+      }
+
+      if (roll >= 96 && roll <= 100) {
+        damageGradeModificator = 3;
+        damageGrade = 'crit';
+      }
+
+      ctx.damageGradeModificator = damageGradeModificator;
+      ctx.damageGrade = damageGrade;
+
+      debug(
+        'calculateDamageGradeModificator: damageGradeModificator:',
+        damageGradeModificator
+      );
+      calculateDamageSum(ctx);
+    }
+
+    function calculateDamageSum(ctx) {
       const unit = ctx.unit;
       const unitAmount = unit.amount;
-      const damageModificator = ctx.damageModificator;
+      const damageObsticleModificator = ctx.damageObsticleModificator;
+      const damageGradeModificator = ctx.damageGradeModificator;
       const damage = unit.unitStats.current.maneuvers.shoot.damage;
 
       debug(
-        'calculateUnitDamageSum: damageSum = ',
+        'calculateDamageSum: damageSum = ',
         damage,
         ' * ',
         unitAmount,
         ' * ',
-        damageModificator
+        damageObsticleModificator,
+        ' * ',
+        damageGradeModificator
       );
-      const damageSum = Math.floor(damage * unitAmount * damageModificator);
+      const damageSum = Math.floor(
+        damage * unitAmount * damageObsticleModificator * damageGradeModificator
+      );
       debug('countUnitDamage: damageSum:', damageSum);
       ctx.damageSum = damageSum;
       calculateTargetLifeSum(ctx);
@@ -262,6 +308,7 @@ module.exports = (db) => {
       const targetUnitsRemaining = ctx.targetUnitsRemaining;
       const obsticlePosition = ctx.obsticlePosition;
       const shootFromPosition = ctx.unit.position;
+      const damageGrade = ctx.damageGrade;
 
       const query = { _id: gameId };
 
@@ -270,6 +317,7 @@ module.exports = (db) => {
       recentActivity.timestamp = Date.now();
       recentActivity.obsticlePosition = obsticlePosition;
       recentActivity.shootFromPosition = shootFromPosition;
+      recentActivity.damageGrade = damageGrade;
 
       const fieldRecentActivity = targetId + '.recentActivity';
       const fieldLife = targetId + '.unitStats.current.life';
@@ -308,6 +356,7 @@ module.exports = (db) => {
       const owner = target.owner;
       const boss = target.boss;
       const shootFromPosition = ctx.unit.position;
+      const damageGrade = ctx.damageGrade;
 
       const query = { _id: gameId };
 
@@ -315,6 +364,7 @@ module.exports = (db) => {
       recentActivity.name = 'justDiedShot';
       recentActivity.timestamp = Date.now();
       recentActivity.shootFromPosition = shootFromPosition;
+      recentActivity.damageGrade = damageGrade;
 
       const field = targetId;
       const $set = {};

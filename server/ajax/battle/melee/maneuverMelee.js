@@ -155,11 +155,11 @@ module.exports = (db) => {
         obsticlesAroundTarget.length
       );
       ctx.obsticlesAroundTarget = obsticlesAroundTarget;
-      calculateDamageModificator(ctx);
+      calculateDamageObsticleModificator(ctx);
     }
 
-    function calculateDamageModificator(ctx) {
-      let damageModificator = 1;
+    function calculateDamageObsticleModificator(ctx) {
+      let damageObsticleModificator = 1;
       const obsticlesAroundTarget = ctx.obsticlesAroundTarget;
       const entityId = ctx.entityId;
       const unit = ctx.unit;
@@ -170,39 +170,85 @@ module.exports = (db) => {
       obsticlesAroundTarget.forEach((obsticleId) => {
         const obsticle = entities[obsticleId];
         if (!obsticle.unitStats) {
-          damageModificator += 0.3;
+          damageObsticleModificator += 0.3;
           ctx.obsticleCollidablesPositions.push(obsticle.position);
         }
 
         if (unit.boss === obsticle.boss && obsticleId !== entityId) {
-          damageModificator += 0.6;
+          damageObsticleModificator += 0.6;
           ctx.obsticleEnemyPositions.push(obsticle.position);
         }
       });
 
-      ctx.damageModificator = damageModificator;
+      ctx.damageObsticleModificator = damageObsticleModificator;
       debug(
-        'calculateDamageModificator: damageModificator:',
-        damageModificator
+        'calculateDamageObsticleModificator: damageObsticleModificator:',
+        damageObsticleModificator
       );
-      calculateUnitDamageSum(ctx);
+      calculateDamageGradeModificator(ctx);
     }
 
-    function calculateUnitDamageSum(ctx) {
+    function calculateDamageGradeModificator(ctx) {
+      let damageGradeModificator = 1;
+      let damageGrade = 'mid';
+
+      const roll = _.random(1, 100);
+
+      if (roll >= 1 && roll <= 5) {
+        damageGradeModificator = 0;
+        damageGrade = 'miss';
+      }
+
+      if (roll >= 6 && roll <= 35) {
+        damageGradeModificator = 0.5;
+        damageGrade = 'low';
+      }
+
+      if (roll >= 36 && roll <= 65) {
+        damageGradeModificator = 1;
+        damageGrade = 'mid';
+      }
+
+      if (roll >= 66 && roll <= 95) {
+        damageGradeModificator = 1.5;
+        damageGrade = 'high';
+      }
+
+      if (roll >= 96 && roll <= 100) {
+        damageGradeModificator = 3;
+        damageGrade = 'crit';
+      }
+
+      ctx.damageGradeModificator = damageGradeModificator;
+      ctx.damageGrade = damageGrade;
+
+      debug(
+        'calculateDamageGradeModificator: damageGradeModificator:',
+        damageGradeModificator
+      );
+      calculateDamageSum(ctx);
+    }
+
+    function calculateDamageSum(ctx) {
       const unit = ctx.unit;
       const unitAmount = unit.amount;
-      const damageModificator = ctx.damageModificator;
+      const damageObsticleModificator = ctx.damageObsticleModificator;
+      const damageGradeModificator = ctx.damageGradeModificator;
       const damage = unit.unitStats.current.maneuvers.melee.damage;
 
       debug(
-        'calculateUnitDamageSum: damageSum = ',
+        'calculateDamageSum: damageSum = ',
         damage,
         ' * ',
         unitAmount,
         ' * ',
-        damageModificator
+        damageObsticleModificator,
+        ' * ',
+        damageGradeModificator
       );
-      const damageSum = Math.floor(damage * unitAmount * damageModificator);
+      const damageSum = Math.floor(
+        damage * unitAmount * damageObsticleModificator * damageGradeModificator
+      );
       debug('countUnitDamage: damageSum:', damageSum);
       ctx.damageSum = damageSum;
       calculateTargetLifeSum(ctx);
@@ -264,6 +310,7 @@ module.exports = (db) => {
       const targetUnitsRemaining = ctx.targetUnitsRemaining;
       const obsticleCollidablesPositions = ctx.obsticleCollidablesPositions;
       const obsticleEnemyPositions = ctx.obsticleEnemyPositions;
+      const damageGrade = ctx.damageGrade;
 
       const query = { _id: gameId };
 
@@ -272,6 +319,7 @@ module.exports = (db) => {
       recentActivity.timestamp = Date.now();
       recentActivity.obsticleCollidablesPositions = obsticleCollidablesPositions;
       recentActivity.obsticleEnemyPositions = obsticleEnemyPositions;
+      recentActivity.damageGrade = damageGrade;
 
       const fieldRecentActivity = targetId + '.recentActivity';
       const fieldLife = targetId + '.unitStats.current.life';
@@ -309,12 +357,14 @@ module.exports = (db) => {
       const unitName = target.unitName;
       const owner = target.owner;
       const boss = target.boss;
+      const damageGrade = ctx.damageGrade;
 
       const query = { _id: gameId };
 
       const recentActivity = {};
       recentActivity.name = 'justDiedHit';
       recentActivity.timestamp = Date.now();
+      recentActivity.damageGrade = damageGrade;
 
       const field = targetId;
       const $set = {};
