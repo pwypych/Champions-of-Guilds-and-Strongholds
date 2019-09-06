@@ -33,7 +33,7 @@ module.exports = () => {
 
       debug('generateLand: land:', land);
       res.locals.land = land;
-      next();
+      // next();
     }
   };
 };
