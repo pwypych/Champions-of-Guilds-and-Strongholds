@@ -134,14 +134,14 @@ function setupLandCollection() {
     environment,
     db
   );
-  generateLandCollection((error, parcelCount) => {
+  generateLandCollection((error, landCount) => {
     if (error) {
       debug('setupLandCollection: Errors:', error);
       process.exit(1);
       return;
     }
 
-    debug('setupLandCollection: parcelCount:', parcelCount);
+    debug('setupLandCollection: landCount:', landCount);
     setupLibrariesAndRoutes();
   });
 }

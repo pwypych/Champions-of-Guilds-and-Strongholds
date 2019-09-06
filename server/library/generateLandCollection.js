@@ -58,10 +58,11 @@ module.exports = (environment, db) => {
     function instantiateLandObject(landName, done) {
       const landObject = {};
       landObject._id = landName;
+      landObject.name = landName.substring(landName.length - 5, 0);
 
       landObject.pathTiledLand = environment.basepathTiledLand + '/' + landName;
 
-      debug('instantiateLandObject: landObject:', landObject);
+      // debug('instantiateLandObject: landObject:', landObject);
       checkTiledLandFileExists(landObject, done);
     }
 
@@ -107,10 +108,10 @@ module.exports = (environment, db) => {
         return;
       }
 
-      debug(
-        'parseJsonLandString: tiledLandObject.layers[0].data.length:',
-        tiledLandObject.layers[0].data.length
-      );
+      landObject.landHeight = tiledLandObject.height;
+      landObject.landWidth = tiledLandObject.width;
+
+      // debug('parseJsonLandString: tiledLandObject:', tiledLandObject);
       validateTiledLandObject(landObject, tiledLandObject, done);
     }
 
@@ -200,12 +201,10 @@ module.exports = (environment, db) => {
         landLayersWithNumbers[layer.name].name = layer.name;
       });
 
-      debug('convertFromTiled: landLayersWithNumbers:', landLayersWithNumbers);
       // We convert tiled id of tile to its tile "value", that will become figureName
       const landLayerWithStringsObject = {};
 
       _.forEach(landLayersWithNumbers, (landLayer) => {
-        debug('landLayer:', landLayer);
         try {
           landLayerWithStringsObject[
             landLayer.name
@@ -218,10 +217,10 @@ module.exports = (environment, db) => {
         }
       });
 
-      debug(
-        'convertFromTiled: landLayerWithStringsObject:',
-        landLayerWithStringsObject
-      );
+      // debug(
+      //   'convertFromTiled: landLayerWithStringsObject:',
+      //   landLayerWithStringsObject
+      // );
 
       debug('convertFromTiled');
       generateAbstractParcelMap(landObject, landLayerWithStringsObject, done);
@@ -241,7 +240,7 @@ module.exports = (environment, db) => {
         });
       });
 
-      debug('abstractParcelMap:', abstractParcelMap);
+      // debug('abstractParcelMap:', abstractParcelMap);
 
       abstractParcelMap.forEach((abstractParcelMapRow, y) => {
         abstractParcelMapRow.forEach((abstractParcel, x) => {
@@ -256,11 +255,12 @@ module.exports = (environment, db) => {
 
       landObject.abstractParcelMap = abstractParcelMap;
 
-      debug('abstractParcelMap:', abstractParcelMap);
+      // debug('abstractParcelMap:', abstractParcelMap);
       insertLandObject(landObject, done);
     }
 
     function insertLandObject(landObject, done) {
+      debug('insertLandObject: landObject:', landObject);
       db.collection('landCollection').insertOne(landObject, (error) => {
         if (error) {
           errorArray.push(

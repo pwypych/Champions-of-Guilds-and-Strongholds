@@ -17,6 +17,15 @@
 
       <form action="<%= viewModel.baseurl %>/panel/createGamePost" method="POST">
         <button class="js-create" type="submit">Create Game</button>
+
+        <div class="seperator-20"></div>
+
+        <span>Map:</span><br />
+        <select name="mapName">
+          <% viewModel.landNameArray.forEach((landName) => { %>
+            <option value="<%= landName %>"><%= landName %></option>
+          <% }); %>
+        </select>
       </form>
 
       <div class="seperator-10"></div>
@@ -24,7 +33,7 @@
       <div class="seperator-10"></div>
 
       <h2>Game instances</h2>
-      
+
       <div class="seperator-10"></div>
 
       <div>
