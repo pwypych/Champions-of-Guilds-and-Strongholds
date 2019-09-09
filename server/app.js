@@ -78,16 +78,12 @@ function setupMongo() {
     useNewUrlParser: true
   };
 
-  mongodb.connect(
-    connectionUrl,
-    options,
-    (error, client) => {
-      db = client.db(dbName);
+  mongodb.connect(connectionUrl, options, (error, client) => {
+    db = client.db(dbName);
 
-      debug('setupMongo()');
-      setupMapCollection();
-    }
-  );
+    debug('setupMongo()');
+    setupMapCollection();
+  });
 }
 
 /* eslint-disable global-require */

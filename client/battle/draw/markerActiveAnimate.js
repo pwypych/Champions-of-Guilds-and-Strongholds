@@ -28,35 +28,60 @@ g.battle.markerActiveAnimate = (walkie, viewport, freshEntities) => {
 
   function findActiveUnit() {
     _.forEach(freshEntities(), (entity, id) => {
+      const unitId = id;
+
       if (entity.unitStats && entity.active) {
-        const unit = entity;
-        const unitId = id;
-        turnBlinkOn(unit, unitId);
+        drawMarkerActive(unitId);
+      } else {
+        hideMarker(unitId);
       }
     });
   }
 
-  function turnBlinkOn(unit, unitId) {
+  function hideMarker(unitId) {
     const unitContainer = battleContainer.getChildByName(unitId);
-    const marker = unitContainer.getChildByName('marker');
+    if (unitContainer) {
+      const marker = unitContainer.getChildByName('activeMarker');
+      if (marker) {
+        marker.visible = false;
+      }
+    }
+  }
 
-    if (marker.timeline) {
-      return;
+  function drawMarkerActive(unitId) {
+    const unitContainer = battleContainer.getChildByName(unitId);
+    let marker = unitContainer.getChildByName('activeMarker');
+
+    // Should happen only once - memory leak danger!
+    if (!marker) {
+      // console.log('markerDraw', unitId, 'marker');
+      const textureName = 'markerActive';
+      const texture = PIXI.loader.resources[textureName].texture;
+      marker = new PIXI.Sprite(texture);
+      marker.name = 'activeMarker';
+      const zOrder = 1;
+      unitContainer.addChildZ(marker, zOrder);
+      unitContainer.sortChildren();
+
+      marker.x = 0;
+      marker.y = 32 - marker.height;
+      turnBlinkOn(unitId);
     }
 
-    const timeline = new TimelineMax();
-    timeline.to(marker, 0.2, {
-      alpha: 0
-    });
-    timeline.to(marker, 0.2, {
-      alpha: 1
-    });
+    marker.visible = true;
+  }
 
-    timeline.addCallback(() => {
-      timeline.kill();
-      delete marker.timeline;
-    });
+  function turnBlinkOn(unitId) {
+    const unitContainer = battleContainer.getChildByName(unitId);
+    const marker = unitContainer.getChildByName('activeMarker');
 
-    marker.timeline = timeline;
+    const animationTimeInSeconds = 0.5;
+
+    TweenMax.to(marker, animationTimeInSeconds, {
+      alpha: 0,
+      repeat: -1,
+      yoyo: true,
+      ease: Power0.easeNone
+    });
   }
 };

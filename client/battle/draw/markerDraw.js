@@ -40,10 +40,10 @@ g.battle.markerDraw = (walkie, viewport, freshEntities) => {
 
     const unitId = unitIds[0];
     const boss = freshEntities()[unitId].boss;
-    drawMarkerGreen(unitIds, boss, playerId);
+    drawMarkerPlayerUnits(unitIds, boss, playerId);
   }
 
-  function drawMarkerGreen(unitIds, boss, playerId) {
+  function drawMarkerPlayerUnits(unitIds, boss, playerId) {
     _.forEach(unitIds, (unitId) => {
       const unitContainer = battleContainer.getChildByName(unitId);
       let marker = unitContainer.getChildByName('marker');
@@ -51,17 +51,16 @@ g.battle.markerDraw = (walkie, viewport, freshEntities) => {
       // Should happen only once - memory leak danger!
       if (!marker) {
         // console.log('markerDraw', unitId, 'marker');
-        const textureName = 'markerBlue';
+        const textureName = 'markerShield';
         const texture = PIXI.loader.resources[textureName].texture;
         marker = new PIXI.Sprite(texture);
         marker.name = 'marker';
-        const zOrder = 1;
+        const zOrder = 10;
         unitContainer.addChildZ(marker, zOrder);
         unitContainer.sortChildren();
 
-        const offsetY = 2;
         marker.x = 0;
-        marker.y = offsetY;
+        marker.y = 32 - marker.height;
       }
     });
 
@@ -76,10 +75,10 @@ g.battle.markerDraw = (walkie, viewport, freshEntities) => {
       }
     });
 
-    drawMarkerGrey(nPCUnitIds, boss);
+    drawMarkerNPC(nPCUnitIds, boss);
   }
 
-  function drawMarkerGrey(nPCUnitIds, boss) {
+  function drawMarkerNPC(nPCUnitIds, boss) {
     _.forEach(nPCUnitIds, (unitId) => {
       const unitContainer = battleContainer.getChildByName(unitId);
       let marker = unitContainer.getChildByName('marker');
@@ -87,17 +86,16 @@ g.battle.markerDraw = (walkie, viewport, freshEntities) => {
       // Should happen only once - memory leak danger!
       if (!marker) {
         // console.log('markerDraw', unitId, 'marker');
-        const textureName = 'markerGrey';
+        const textureName = 'markerSkullDark';
         const texture = PIXI.loader.resources[textureName].texture;
         marker = new PIXI.Sprite(texture);
         marker.name = 'marker';
-        const zOrder = 1;
+        const zOrder = 10;
         unitContainer.addChildZ(marker, zOrder);
         unitContainer.sortChildren();
 
-        const offsetY = 2;
         marker.x = 0;
-        marker.y = offsetY;
+        marker.y = 32 - marker.height;
       }
     });
 
@@ -112,10 +110,10 @@ g.battle.markerDraw = (walkie, viewport, freshEntities) => {
       }
     });
 
-    drawMarkerRed(enemyUnitIds);
+    drawMarkerEnemy(enemyUnitIds);
   }
 
-  function drawMarkerRed(enemyUnitIds) {
+  function drawMarkerEnemy(enemyUnitIds) {
     _.forEach(enemyUnitIds, (unitId) => {
       const unitContainer = battleContainer.getChildByName(unitId);
       let marker = unitContainer.getChildByName('marker');
@@ -123,17 +121,16 @@ g.battle.markerDraw = (walkie, viewport, freshEntities) => {
       // Should happen only once - memory leak danger!
       if (!marker) {
         // console.log('markerDraw', unitId, 'marker');
-        const textureName = 'markerRed';
+        const textureName = 'markerSkull';
         const texture = PIXI.loader.resources[textureName].texture;
         marker = new PIXI.Sprite(texture);
         marker.name = 'marker';
-        const zOrder = 1;
+        const zOrder = 10;
         unitContainer.addChildZ(marker, zOrder);
         unitContainer.sortChildren();
 
-        const offsetY = 2;
         marker.x = 0;
-        marker.y = offsetY;
+        marker.y = 32 - marker.height;
       }
     });
   }
