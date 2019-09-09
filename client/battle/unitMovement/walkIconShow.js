@@ -14,33 +14,35 @@ g.battle.walkIconShow = (walkie, viewport, freshEntities) => {
       'entitiesGet_',
       'walkIconShow.js',
       () => {
-        findActiveUnit();
+        findPlayerId();
       },
       false
     );
   }
 
-  function findActiveUnit() {
+  function findPlayerId() {
+    _.forEach(freshEntities(), (entity, id) => {
+      if (entity.playerCurrent) {
+        const playerId = id;
+        findActiveUnit(playerId);
+      }
+    });
+  }
+
+  function findActiveUnit(playerId) {
     _.forEach(freshEntities(), (entity) => {
       if (entity.unitStats && entity.active) {
+        hideIcons();
+      }
+
+      if (entity.unitStats && entity.active && entity.owner === playerId) {
         const unit = entity;
         checkUnitMovement(unit);
       }
     });
   }
 
-  function checkUnitMovement(unit) {
-    if (!unit.unitStats.current.maneuvers.walk) {
-      // console.log('walkIconShow: This unit does not walk!');
-      return;
-    }
-
-    const movement = unit.unitStats.current.movement;
-    const unitPosition = unit.position;
-    hideIcons(unitPosition, movement);
-  }
-
-  function hideIcons(unitPosition, movement) {
+  function hideIcons() {
     const iconMovementContainer = battleContainer.getChildByName(
       'iconMovementContainer'
     );
@@ -52,7 +54,16 @@ g.battle.walkIconShow = (walkie, viewport, freshEntities) => {
     _.forEach(iconMovementContainer.children, (icon) => {
       icon.visible = false;
     });
+  }
 
+  function checkUnitMovement(unit) {
+    if (!unit.unitStats.current.maneuvers.walk) {
+      // console.log('walkIconShow: This unit does not walk!');
+      return;
+    }
+
+    const movement = unit.unitStats.current.movement;
+    const unitPosition = unit.position;
     toolGenerateGrid(unitPosition, movement);
   }
 

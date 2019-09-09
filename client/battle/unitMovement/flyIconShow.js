@@ -14,18 +14,43 @@ g.battle.flyIconShow = (walkie, viewport, freshEntities) => {
       'entitiesGet_',
       'flyIconShow.js',
       () => {
-        findActiveUnit();
+        findPlayerId();
       },
       false
     );
   }
 
-  function findActiveUnit() {
+  function findPlayerId() {
+    _.forEach(freshEntities(), (entity, id) => {
+      if (entity.playerCurrent) {
+        const playerId = id;
+        findActiveUnit(playerId);
+      }
+    });
+  }
+
+  function findActiveUnit(playerId) {
     _.forEach(freshEntities(), (entity) => {
       if (entity.unitStats && entity.active) {
+        hideIcons();
+      }
+
+      if (entity.unitStats && entity.active && entity.owner === playerId) {
         const unit = entity;
         checkUnitMovement(unit);
       }
+    });
+  }
+
+  function hideIcons() {
+    const iconFlyContainer = battleContainer.getChildByName('iconFlyContainer');
+
+    if (!iconFlyContainer) {
+      return;
+    }
+
+    _.forEach(iconFlyContainer.children, (icon) => {
+      icon.visible = false;
     });
   }
 
@@ -37,22 +62,6 @@ g.battle.flyIconShow = (walkie, viewport, freshEntities) => {
 
     const movement = unit.unitStats.current.movement;
     const unitPosition = unit.position;
-    hideIcons(unitPosition, movement);
-  }
-
-  function hideIcons(unitPosition, movement) {
-    const iconMovementContainer = battleContainer.getChildByName(
-      'iconMovementContainer'
-    );
-
-    if (!iconMovementContainer) {
-      return;
-    }
-
-    _.forEach(iconMovementContainer.children, (icon) => {
-      icon.visible = false;
-    });
-
     toolGenerateGrid(unitPosition, movement);
   }
 
@@ -135,12 +144,10 @@ g.battle.flyIconShow = (walkie, viewport, freshEntities) => {
   }
 
   function showIcon(position) {
-    const iconMovementContainer = battleContainer.getChildByName(
-      'iconMovementContainer'
-    );
+    const iconFlyContainer = battleContainer.getChildByName('iconFlyContainer');
 
-    const iconName = 'iconMovement_' + position.x + '_' + position.y;
-    const icon = iconMovementContainer.getChildByName(iconName);
+    const iconName = 'iconFly_' + position.x + '_' + position.y;
+    const icon = iconFlyContainer.getChildByName(iconName);
     icon.visible = true;
   }
 };

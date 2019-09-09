@@ -87,6 +87,7 @@ g.main = function main() {
     g.battle.iconMovementDraw(walkie, viewport, freshEntities);
     g.battle.walkIconShow(walkie, viewport, freshEntities);
     g.battle.walkEmptyBlockClick(walkie, auth, viewport, freshEntities);
+    g.battle.iconFlyDraw(walkie, viewport, freshEntities);
     g.battle.flyIconShow(walkie, viewport, freshEntities);
     g.battle.flyEmptyBlockClick(walkie, auth, viewport, freshEntities);
 
