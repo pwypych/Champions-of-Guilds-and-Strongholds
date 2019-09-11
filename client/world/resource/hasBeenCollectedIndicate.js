@@ -32,7 +32,7 @@ g.world.hasBeenCollectedIndicate = (walkie, viewport) => {
   function instantiateIndicator(position, amount) {
     const amountTextStyle = new PIXI.TextStyle({
       fontFamily: 'Arial',
-      fontSize: 12,
+      fontSize: 13,
       fontWeight: 'bolder',
       fill: 'white',
       strokeThickness: 2

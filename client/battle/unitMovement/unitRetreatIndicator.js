@@ -81,7 +81,7 @@ g.battle.unitRetreatIndicator = (walkie, viewport, freshEntities) => {
   function instantiateIndicator(position) {
     const amountTextStyle = new PIXI.TextStyle({
       fontFamily: 'Arial',
-      fontSize: 12,
+      fontSize: 13,
       fontWeight: 'bolder',
       fill: 'white',
       strokeThickness: 2

@@ -34,7 +34,7 @@ g.battle.unitDamageGradeBonus = (walkie, viewport) => {
   function instantiateIndicator(unitPosition, damageGrade) {
     const amountTextStyle = new PIXI.TextStyle({
       fontFamily: 'Arial',
-      fontSize: 10,
+      fontSize: 13,
       fontWeight: 'bolder',
       fill: 'white',
       strokeThickness: 2

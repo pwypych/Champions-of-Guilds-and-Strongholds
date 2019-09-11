@@ -42,7 +42,7 @@ g.battle.unitGotShotObsticleBonus = (walkie, viewport) => {
   function instantiateIndicator(obsticlePosition) {
     const amountTextStyle = new PIXI.TextStyle({
       fontFamily: 'Arial',
-      fontSize: 12,
+      fontSize: 13,
       fontWeight: 'bolder',
       fill: 'white',
       strokeThickness: 2

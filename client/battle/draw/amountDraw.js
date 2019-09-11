@@ -81,7 +81,7 @@ g.battle.amountDraw = (walkie, viewport, freshEntities) => {
       // console.log('drawAmount', unitId, 'amount');
       const amountTextStyle = new PIXI.TextStyle({
         fontFamily: 'Arial',
-        fontSize: 12,
+        fontSize: 13,
         fontWeight: 'bolder',
         fill: fill,
         stroke: stroke,
