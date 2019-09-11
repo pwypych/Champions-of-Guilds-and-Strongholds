@@ -61,6 +61,9 @@ module.exports = () => {
       const abstractParcel =
         abstractParcelMap[abstractParcelMapY][abstractParcelMapX];
 
+      debug('abstractParcel.category:', abstractParcel.category);
+      debug('abstractParcel.exits:', abstractParcel.exits);
+
       const categoryOfParcelsAmount =
         parcelList[abstractParcel.category][abstractParcel.exits].length;
       debug(

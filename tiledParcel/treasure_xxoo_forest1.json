@@ -1,0 +1,31 @@
+{ "height":7,
+ "infinite":false,
+ "layers":[
+        {
+         "data":[2, 2, 1, 1, 1, 1, 1, 2, 0, 0, 0, 0, 2, 1, 0, 0, 1, 6, 0, 0, 1, 0, 1, 1, 4, 0, 0, 1, 0, 3, 1, 2, 0, 0, 1, 1, 1, 3, 0, 0, 2, 1, 1, 2, 0, 0, 0, 4, 1],
+         "height":7,
+         "id":2,
+         "name":"Tile Layer 1",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":7,
+         "x":0,
+         "y":0
+        }],
+ "nextlayerid":3,
+ "nextobjectid":1,
+ "orientation":"orthogonal",
+ "renderorder":"right-down",
+ "tiledversion":"2019.04.03",
+ "tileheight":32,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "source":"..\/tiledTileset\/abstractFigureTileset.json"
+        }],
+ "tilewidth":32,
+ "type":"map",
+ "version":1.2,
+ "width":7
+}

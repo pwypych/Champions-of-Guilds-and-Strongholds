@@ -24,7 +24,24 @@ module.exports = (environment, unitBlueprint) => {
         monsterArray.push({ name: name, tier: unit.tier });
       });
 
-      ctx.monsterArray = monsterArray;
+      sortMonsterArrayByTier(ctx, monsterArray);
+    }
+
+    function sortMonsterArrayByTier(ctx, monsterArray) {
+      const monsterTierArray = {
+        tier1: [],
+        tier2: [],
+        tier3: [],
+        tier4: [],
+        tier5: []
+      };
+
+      monsterArray.forEach((monster) => {
+        const tier = 'tier' + monster.tier;
+        monsterTierArray[tier].push(monster);
+      });
+
+      ctx.monsterTierArray = monsterTierArray;
       forEachAbstractFigureMapY(ctx);
     }
 
@@ -43,6 +60,8 @@ module.exports = (environment, unitBlueprint) => {
         forEachAbstractFigureMapX(ctx);
       });
 
+      debug('forEachAbstractFigureMapY: figureMap:', figureMap);
+
       res.locals.mapObject = figureMap;
       next();
     }
@@ -50,79 +69,98 @@ module.exports = (environment, unitBlueprint) => {
     function forEachAbstractFigureMapX(ctx) {
       const abstractFigureMapRow = ctx.abstractFigureMapRow;
       abstractFigureMapRow.forEach((abstractFigure, abstractFigureMapX) => {
-        // debug('forEachAbstractFigureMapX: abstractFigure:', abstractFigure);
         const figureMap = ctx.figureMap;
-        const monsterArray = ctx.monsterArray;
         const abstractFigureMapY = ctx.abstractFigureMapY;
+
+        figureMap[abstractFigureMapY][abstractFigureMapX] =
+          abstractFigure.figureName;
+      });
+
+      forEachAbstractMonsterFigure(ctx);
+    }
+
+    function forEachAbstractMonsterFigure(ctx) {
+      const abstractFigureMapRow = ctx.abstractFigureMapRow;
+      const monsterTierArray = ctx.monsterTierArray;
+
+      abstractFigureMapRow.forEach((abstractFigure, x) => {
+        const y = ctx.abstractFigureMapY;
+        const figureMap = ctx.figureMap;
+
+        const tier = 'tier' + abstractFigure.level;
+        const figureChance = _.random(0, 99);
+        const monsterIndex = _.random(0, monsterTierArray[tier].length - 1);
+
+        if (abstractFigure.figureName === 'monster') {
+          figureMap[y][x] = monsterTierArray[tier][monsterIndex].name;
+          return;
+        }
+
+        if (abstractFigure.figureName === 'monsterMaybe') {
+          figureMap[y][x] = 'empty';
+
+          if (figureChance > 60) {
+            figureMap[y][x] = monsterTierArray[tier][monsterIndex].name;
+          }
+        }
+      });
+
+      forEachAbstractBarrierFigure(ctx);
+    }
+
+    function forEachAbstractBarrierFigure(ctx) {
+      const abstractFigureMapRow = ctx.abstractFigureMapRow;
+
+      abstractFigureMapRow.forEach((abstractFigure, x) => {
+        const y = ctx.abstractFigureMapY;
+        const figureMap = ctx.figureMap;
 
         const figureChance = _.random(0, 99);
 
-        // debug('forEachParcelX: abstractFigure:', abstractFigure);
-        figureMap[abstractFigureMapY][abstractFigureMapX] =
-          abstractFigure.figureName;
+        if (abstractFigure.figureName === 'barrier') {
+          figureMap[y][x] = barrierArray[_.random(0, barrierArray.length - 1)];
+          return;
+        }
+
+        if (abstractFigure.figureName === 'barrierMaybe') {
+          figureMap[y][x] = 'empty';
+
+          if (figureChance > 40) {
+            figureMap[y][x] =
+              barrierArray[_.random(0, barrierArray.length - 1)];
+          }
+        }
+      });
+
+      forEachAbstractTreasureFigure(ctx);
+    }
+
+    function forEachAbstractTreasureFigure(ctx) {
+      const abstractFigureMapRow = ctx.abstractFigureMapRow;
+
+      abstractFigureMapRow.forEach((abstractFigure, x) => {
+        const y = ctx.abstractFigureMapY;
+        const figureMap = ctx.figureMap;
+
+        const figureChance = _.random(0, 99);
 
         if (abstractFigure.figureName === 'treasure') {
-          figureMap[abstractFigureMapY][abstractFigureMapX] =
+          figureMap[y][x] =
             treasureArray[_.random(0, treasureArray.length - 1)];
           return;
         }
 
         if (abstractFigure.figureName === 'treasureMaybe') {
-          figureMap[abstractFigureMapY][abstractFigureMapX] = 'empty';
-
-          if (figureChance > 80) {
-            figureMap[abstractFigureMapY][abstractFigureMapX] =
-              treasureArray[_.random(0, treasureArray.length - 1)];
-          }
-          return;
-        }
-
-        if (abstractFigure.figureName === 'monster') {
-          do {
-            const monsterIndex = _.random(0, monsterArray.length - 1);
-            if (monsterArray[monsterIndex].tier === abstractFigure.level) {
-              figureMap[abstractFigureMapY][abstractFigureMapX] =
-                monsterArray[monsterIndex].name;
-            }
-          } while (
-            figureMap[abstractFigureMapY][abstractFigureMapX] === 'monster'
-          );
-
-          return;
-        }
-
-        if (abstractFigure.figureName === 'monsterMaybe') {
-          figureMap[abstractFigureMapY][abstractFigureMapX] = 'empty';
-
-          if (figureChance > 60) {
-            do {
-              const monsterIndex = _.random(0, monsterArray.length - 1);
-              if (monsterArray[monsterIndex].tier === abstractFigure.level) {
-                figureMap[abstractFigureMapY][abstractFigureMapX] =
-                  monsterArray[monsterIndex].name;
-              }
-            } while (
-              figureMap[abstractFigureMapY][abstractFigureMapX] === 'empty'
-            );
-          }
-          return;
-        }
-
-        if (abstractFigure.figureName === 'barrier') {
-          figureMap[abstractFigureMapY][abstractFigureMapX] =
-            barrierArray[_.random(0, barrierArray.length - 1)];
-          return;
-        }
-
-        if (abstractFigure.figureName === 'barrierMaybe') {
-          figureMap[abstractFigureMapY][abstractFigureMapX] = 'empty';
+          figureMap[y][x] = 'empty';
 
           if (figureChance > 40) {
-            figureMap[abstractFigureMapY][abstractFigureMapX] =
-              barrierArray[_.random(0, barrierArray.length - 1)];
+            figureMap[y][x] =
+              treasureArray[_.random(0, treasureArray.length - 1)];
           }
         }
       });
+
+      // forEachAbstractBarrierFigure(ctx);
     }
   };
 };

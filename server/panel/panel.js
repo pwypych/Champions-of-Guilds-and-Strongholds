@@ -17,8 +17,38 @@ module.exports = (environment, db, templateToHtml) => {
       viewModel.timestamp = Date.now();
       viewModel._ = _;
 
-      findGames(viewModel);
+      findLandNames(viewModel);
     })();
+
+    function findLandNames(viewModel) {
+      const query = {};
+      const options = {};
+      options.projection = { _id: 1, name: 1 };
+
+      db.collection('landCollection')
+        .find(query, options)
+        .toArray((error, landArray) => {
+          if (error) {
+            debug('findLandNames: error:', error);
+            res
+              .status(503)
+              .send(
+                '503 Service Unavailable: Mongo error, cannot run find on landCollection'
+              );
+            return;
+          }
+
+          const landNameArray = landArray.map((landObject) => {
+            debug('landObject:', landObject);
+            return landObject.name;
+          });
+
+          viewModel.landNameArray = landNameArray;
+
+          debug('findLandNames', landNameArray);
+          findGames(viewModel);
+        });
+    }
 
     function findGames(viewModel) {
       const query = {};
