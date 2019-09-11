@@ -188,33 +188,33 @@ module.exports = (db) => {
 
     function calculateDamageGradeModificator(ctx) {
       let damageGradeModificator = 1;
-      let damageGrade = 'mid';
+      let damageGrade = 'Mid';
 
       const roll = _.random(1, 100);
 
       if (roll >= 1 && roll <= 5) {
         damageGradeModificator = 0;
-        damageGrade = 'MISS';
+        damageGrade = 'Miss';
       }
 
       if (roll >= 6 && roll <= 35) {
         damageGradeModificator = 0.5;
-        damageGrade = 'LOW';
+        damageGrade = 'Low';
       }
 
       if (roll >= 36 && roll <= 65) {
         damageGradeModificator = 1;
-        damageGrade = 'MID';
+        damageGrade = 'Mid';
       }
 
       if (roll >= 66 && roll <= 95) {
         damageGradeModificator = 1.5;
-        damageGrade = 'HIGH';
+        damageGrade = 'High';
       }
 
       if (roll >= 96 && roll <= 100) {
         damageGradeModificator = 3;
-        damageGrade = 'CRIT';
+        damageGrade = 'Crit';
       }
 
       ctx.damageGradeModificator = damageGradeModificator;
