@@ -146,6 +146,11 @@ g.battle.flyIconShow = (walkie, viewport, freshEntities) => {
   function showIcon(position) {
     const iconFlyContainer = battleContainer.getChildByName('iconFlyContainer');
 
+    // happens when there are no units on battlefield
+    if (!iconFlyContainer) {
+      return;
+    }
+
     const iconName = 'iconFly_' + position.x + '_' + position.y;
     const icon = iconFlyContainer.getChildByName(iconName);
     icon.visible = true;

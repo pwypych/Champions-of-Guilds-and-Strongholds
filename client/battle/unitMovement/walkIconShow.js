@@ -142,6 +142,11 @@ g.battle.walkIconShow = (walkie, viewport, freshEntities) => {
       'iconMovementContainer'
     );
 
+    // happens when there are no units on battlefield
+    if (!iconMovementContainer) {
+      return;
+    }
+
     const iconName = 'iconMovement_' + position.x + '_' + position.y;
     const icon = iconMovementContainer.getChildByName(iconName);
     icon.visible = true;
