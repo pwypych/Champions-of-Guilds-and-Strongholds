@@ -9,7 +9,7 @@ module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
       debug(
-        '// It marks unit that just did maneuver as not active, finds unit with highest initiative that has some maneuverPoints left, and marks it with active component'
+        '// It marks unit that just did maneuver as not active, finds unit with highest initiative (of opposite player if possible) that has some maneuverPoints left, and marks it with active component'
       );
 
       const entities = res.locals.entities;
@@ -36,12 +36,51 @@ module.exports = (db) => {
         (error) => {
           debug('updateSetUnitActiveToFalse: error:', error);
           debug('updateSetUnitActiveToFalse: Success');
-          findUnitWithHighestInitiative(entities, gameId);
+          findOwnerId(entities, gameId, entityId);
         }
       );
     }
 
-    function findUnitWithHighestInitiative(entities, gameId) {
+    function findOwnerId(entities, gameId, entityId) {
+      const entity = entities[entityId];
+      const ownerId = entity.owner;
+
+      debug('findOwnerId: ownerId:', ownerId);
+      findNotOwnedUnitWithHighestInitiative(entities, gameId, ownerId);
+    }
+
+    function findNotOwnedUnitWithHighestInitiative(entities, gameId, ownerId) {
+      let nominatedUnitId;
+      let highestInitiative = 0;
+
+      _.forEach(entities, (entity, id) => {
+        if (
+          entity.unitStats &&
+          entity.unitStats.current.maneuverPoints > 0 &&
+          entity.owner !== ownerId
+        ) {
+          if (entity.unitStats.current.initiative > highestInitiative) {
+            highestInitiative = entity.unitStats.current.initiative;
+            nominatedUnitId = id;
+          }
+        }
+      });
+
+      debug(
+        'findNotOwnedUnitWithHighestInitiative: highestInitiative:',
+        highestInitiative,
+        'nominatedUnitId:',
+        nominatedUnitId
+      );
+
+      if (nominatedUnitId) {
+        updateSetUnitActiveToTrue(gameId, nominatedUnitId);
+      } else {
+        findAnyUnitWithHighestInitiative(entities, gameId);
+      }
+    }
+
+    function findAnyUnitWithHighestInitiative(entities, gameId) {
       let nominatedUnitId;
       let highestInitiative = 0;
 
@@ -55,7 +94,7 @@ module.exports = (db) => {
       });
 
       debug(
-        'findUnitWithHighestInitiative: highestInitiative:',
+        'findAnyUnitWithHighestInitiative: highestInitiative:',
         highestInitiative
       );
       updateSetUnitActiveToTrue(gameId, nominatedUnitId);
