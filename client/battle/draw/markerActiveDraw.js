@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.battle.markerActiveAnimate = (walkie, viewport, freshEntities) => {
+g.battle.markerActiveDraw = (walkie, viewport, freshEntities) => {
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
@@ -12,7 +12,7 @@ g.battle.markerActiveAnimate = (walkie, viewport, freshEntities) => {
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
-      'markerDraw.js',
+      'markerActiveDraw.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
 
@@ -20,17 +20,26 @@ g.battle.markerActiveAnimate = (walkie, viewport, freshEntities) => {
           return;
         }
 
-        findActiveUnit();
+        findPlayerId();
       },
       false
     );
   }
 
-  function findActiveUnit() {
+  function findPlayerId() {
+    _.forEach(freshEntities(), (entity, id) => {
+      if (entity.playerCurrent) {
+        const playerId = id;
+        findActiveUnit(playerId);
+      }
+    });
+  }
+
+  function findActiveUnit(playerId) {
     _.forEach(freshEntities(), (entity, id) => {
       const unitId = id;
 
-      if (entity.unitStats && entity.active) {
+      if (entity.unitStats && entity.active && entity.owner === playerId) {
         drawMarkerActive(unitId);
       } else {
         hideMarker(unitId);
@@ -41,7 +50,7 @@ g.battle.markerActiveAnimate = (walkie, viewport, freshEntities) => {
   function hideMarker(unitId) {
     const unitContainer = battleContainer.getChildByName(unitId);
     if (unitContainer) {
-      const marker = unitContainer.getChildByName('activeMarker');
+      const marker = unitContainer.getChildByName('markerActive');
       if (marker) {
         marker.visible = false;
       }
@@ -50,15 +59,15 @@ g.battle.markerActiveAnimate = (walkie, viewport, freshEntities) => {
 
   function drawMarkerActive(unitId) {
     const unitContainer = battleContainer.getChildByName(unitId);
-    let marker = unitContainer.getChildByName('activeMarker');
+    let marker = unitContainer.getChildByName('markerActive');
 
     // Should happen only once - memory leak danger!
     if (!marker) {
-      // console.log('markerDraw', unitId, 'marker');
+      // console.log('markerActiveDraw', unitId, 'marker');
       const textureName = 'markerActive';
       const texture = PIXI.loader.resources[textureName].texture;
       marker = new PIXI.Sprite(texture);
-      marker.name = 'activeMarker';
+      marker.name = 'markerActive';
       const zOrder = 1;
       unitContainer.addChildZ(marker, zOrder);
       unitContainer.sortChildren();
@@ -73,7 +82,7 @@ g.battle.markerActiveAnimate = (walkie, viewport, freshEntities) => {
 
   function turnBlinkOn(unitId) {
     const unitContainer = battleContainer.getChildByName(unitId);
-    const marker = unitContainer.getChildByName('activeMarker');
+    const marker = unitContainer.getChildByName('markerActive');
 
     const animationTimeInSeconds = 0.5;
 

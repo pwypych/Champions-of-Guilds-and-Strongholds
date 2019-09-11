@@ -81,7 +81,8 @@ g.main = function main() {
     g.battle.battleToggle(walkie, viewport, freshEntities);
     g.battle.battleCleanup(walkie, viewport, freshEntities);
     g.battle.backgroundDraw(walkie, viewport, freshEntities);
-    g.battle.unitsDraw(walkie, auth, viewport, freshEntities);
+    g.battle.unitsDraw(walkie, viewport, freshEntities);
+    g.battle.amountDraw(walkie, viewport, freshEntities);
     g.battle.battleClick(walkie, viewport, freshEntities);
 
     g.battle.iconMovementDraw(walkie, viewport, freshEntities);
@@ -95,14 +96,14 @@ g.main = function main() {
     g.battle.meleeClick(walkie, auth, viewport, freshEntities);
     g.battle.unitJustDiedHide(walkie, viewport);
     g.battle.unitJustDiedAnimation(walkie, viewport);
-    g.battle.unitDecrementAmount(walkie, viewport);
     g.battle.unitGotHitAnimation(walkie, viewport);
     g.battle.unitGotHitObsticleBonus(walkie, viewport);
     g.battle.unitGotShotAnimation(walkie, viewport);
     g.battle.unitGotShotObsticleBonus(walkie, viewport);
     g.battle.unitDamageGradeBonus(walkie, viewport);
     g.battle.markerDraw(walkie, viewport, freshEntities);
-    g.battle.markerActiveAnimate(walkie, viewport, freshEntities);
+    g.battle.markerActiveDraw(walkie, viewport, freshEntities);
+    g.battle.markerActiveEnemyDraw(walkie, viewport, freshEntities);
     g.battle.unitFocusActive(walkie, viewport, freshEntities);
     g.battle.unitFocusTween(walkie, viewport, freshEntities);
     g.battle.iconShoot(walkie, viewport, freshEntities);

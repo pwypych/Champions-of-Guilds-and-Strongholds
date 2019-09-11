@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.battle.unitsDraw = (walkie, auth, viewport, freshEntities) => {
+g.battle.unitsDraw = (walkie, viewport, freshEntities) => {
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
@@ -71,35 +71,6 @@ g.battle.unitsDraw = (walkie, auth, viewport, freshEntities) => {
 
       unitContainer.addChildZ(sprite, zOrder);
       unitContainer.sortChildren();
-    }
-
-    instantiateAmount(entity, unitId, unitContainer);
-  }
-
-  function instantiateAmount(entity, unitId, unitContainer) {
-    let amount = unitContainer.getChildByName('amount');
-
-    // Should happen only once
-    if (!amount) {
-      // console.log('drawAmount', unitId, 'amount');
-      const amountTextStyle = new PIXI.TextStyle({
-        fontFamily: 'Arial',
-        fontSize: 12,
-        fontWeight: 'bolder',
-        fill: 'white',
-        strokeThickness: 2
-      });
-
-      amount = new PIXI.Text(entity.amount, amountTextStyle);
-      amount.name = 'amount';
-      const zOrder = 10;
-      unitContainer.addChildZ(amount, zOrder);
-      unitContainer.sortChildren();
-
-      const paddingRight = 2;
-      const paddingTop = 3;
-      amount.x = blockWidthPx - amount.width + paddingRight;
-      amount.y = blockHeightPx - amount.height + paddingTop;
     }
   }
 };
