@@ -43,6 +43,8 @@ module.exports = (environment, unitBlueprint) => {
         forEachAbstractFigureMapX(ctx);
       });
 
+      debug('forEachAbstractFigureMapY: figureMap:', figureMap);
+
       res.locals.mapObject = figureMap;
       next();
     }
@@ -50,7 +52,7 @@ module.exports = (environment, unitBlueprint) => {
     function forEachAbstractFigureMapX(ctx) {
       const abstractFigureMapRow = ctx.abstractFigureMapRow;
       abstractFigureMapRow.forEach((abstractFigure, abstractFigureMapX) => {
-        // debug('forEachAbstractFigureMapX: abstractFigure:', abstractFigure);
+        debug('forEachAbstractFigureMapX: abstractFigure:', abstractFigure);
         const figureMap = ctx.figureMap;
         const monsterArray = ctx.monsterArray;
         const abstractFigureMapY = ctx.abstractFigureMapY;
