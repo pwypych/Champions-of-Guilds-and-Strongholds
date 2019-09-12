@@ -61,6 +61,11 @@ g.world.informationModal = ($body, walkie, freshEntities) => {
       }
     });
 
+    if (!hero) {
+      // when hero is dead
+      return;
+    }
+
     const movementCurrent = hero.heroStats.current.movement;
     const movementBase = hero.heroStats.base.movement;
 

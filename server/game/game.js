@@ -39,6 +39,15 @@ module.exports = (environment, db, templateToHtml) => {
       templateToHtml(path, viewModel, (error, html) => {
         viewModel.htmlInterfaceWorld = html;
         debug('generateInterfaceWorld: html.length:', html.length);
+        generateHeroDead();
+      });
+    }
+
+    function generateHeroDead() {
+      const path = environment.basepath + '/server/game/heroDead.ejs';
+      templateToHtml(path, viewModel, (error, html) => {
+        viewModel.htmlHeroDead = html;
+        debug('generateHeroDead: html.length:', html.length);
         generateInterfaceBattle();
       });
     }

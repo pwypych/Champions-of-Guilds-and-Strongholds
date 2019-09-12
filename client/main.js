@@ -75,6 +75,7 @@ g.main = function main() {
     g.world.endTurnButton($body, auth, walkie, freshEntities);
     g.world.endTurnCountdown(walkie, freshEntities);
     g.world.heroNearBattleAnimation(walkie, viewport, freshEntities);
+    g.world.heroDeadToggle($body, walkie, freshEntities);
 
     g.battle.battleInterfaceToggle($body, walkie);
     g.battle.waitMock($body, auth, freshEntities);
@@ -109,7 +110,7 @@ g.main = function main() {
     g.battle.shootClick(walkie, auth, viewport, freshEntities);
     g.battle.unitRetreatIndicator(walkie, viewport, freshEntities);
 
-    g.summary.summaryToggle($body, walkie, viewport, auth, freshEntities);
+    g.summary.summaryToggle($body, walkie, freshEntities);
     g.summary.summaryConfirm($body, auth);
 
     g.cheat.playerChangeButtons($body, auth);
