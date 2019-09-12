@@ -33,7 +33,6 @@ module.exports = (db) => {
           }
 
           debug('findParcels: parcelArray.length:', parcelArray.length);
-          debug('findParcels: parcelArray[0]:', parcelArray[0]);
           generateParcelList(parcelArray);
         });
     }
@@ -44,7 +43,6 @@ module.exports = (db) => {
       parcelList.countryside = {};
 
       parcelArray.forEach((parcel) => {
-        debug('generateParcelList: parcel.category:', parcel.category);
         if (parcel.category === 'castle') {
           if (!_.isArray(parcelList.castle[parcel.exits])) {
             parcelList.castle[parcel.exits] = [];
@@ -61,12 +59,12 @@ module.exports = (db) => {
       });
 
       debug(
-        'generateParcelList: parcelList.castle.length:',
-        parcelList.castle.length
+        'generateParcelList: parcelList.castle.oooo.length:',
+        parcelList.castle.oooo.length
       );
       debug(
-        'generateParcelList: parcelList.countryside:',
-        parcelList.countryside
+        'generateParcelList: parcelList.countryside.oooo.length:',
+        parcelList.countryside.oooo.length
       );
 
       res.locals.parcelList = parcelList;

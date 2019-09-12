@@ -60,7 +60,7 @@ module.exports = (environment, unitBlueprint) => {
         forEachAbstractFigureMapX(ctx);
       });
 
-      debug('forEachAbstractFigureMapY: figureMap:', figureMap);
+      // debug('forEachAbstractFigureMapY: figureMap:', figureMap);
 
       res.locals.mapObject = figureMap;
       next();

@@ -57,7 +57,6 @@ module.exports = () => {
       const abstractParcelMapY = ctx.abstractParcelMapY;
       const abstractParcelMapX = ctx.abstractParcelMapX;
       const parcelList = res.locals.parcelList;
-      debug('insertRandomParcelbyAbstractParcel: parcelList:', parcelList);
 
       const abstractParcel =
         abstractParcelMap[abstractParcelMapY][abstractParcelMapX];
