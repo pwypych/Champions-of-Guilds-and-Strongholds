@@ -72,11 +72,10 @@ module.exports = (environment, unitBlueprint) => {
         const figureMap = ctx.figureMap;
         const abstractFigureMapY = ctx.abstractFigureMapY;
 
-        figureMap[abstractFigureMapY][abstractFigureMapX] =
-          abstractFigure.figureName;
+        figureMap[abstractFigureMapY][abstractFigureMapX] = 'empty';
       });
 
-      forEachAbstractMonsterFigure(ctx);
+      // forEachAbstractMonsterFigure(ctx);
     }
 
     function forEachAbstractMonsterFigure(ctx) {
