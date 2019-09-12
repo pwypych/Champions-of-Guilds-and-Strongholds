@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:deleteGamePostOld');
+const debug = require('debug')('cogs:deleteGamePredefinedPost');
 const shortid = require('shortid');
 
 module.exports = (environment, db) => {
@@ -64,7 +64,7 @@ module.exports = (environment, db) => {
     function sendResponse() {
       debug('sendResponse()');
       debug('******************** should redirect ********************');
-      res.redirect(environment.baseurl + '/panelOld');
+      res.redirect(environment.baseurl + '/panelPredefined');
     }
   };
 };

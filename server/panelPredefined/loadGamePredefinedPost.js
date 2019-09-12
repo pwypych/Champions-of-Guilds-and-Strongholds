@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:loadGamePostOld');
+const debug = require('debug')('cogs:loadGamePredefinedPost');
 const shortid = require('shortid');
 const _ = require('lodash');
 
@@ -175,7 +175,7 @@ module.exports = (environment, db) => {
       debug('sendResponse()');
       if (req.body.redirect) {
         debug('******************** redirect ********************');
-        res.redirect(environment.baseurl + '/panelOld');
+        res.redirect(environment.baseurl + '/panelPredefined');
       } else {
         debug('******************** ajax ********************');
         res.send({ error: 0 });

@@ -190,23 +190,31 @@ function setupLibrariesAndRoutes() {
 
   // Old Panel
   app.get(
-    '/panelOld',
-    require('./panelOld/panelOld.js')(environment, db, templateToHtml)
+    '/panelPredefined',
+    require('./panelPredefined/panelPredefined.js')(
+      environment,
+      db,
+      templateToHtml
+    )
   );
 
   app.post(
-    '/panelOld/createGamePost',
-    require('./panelOld/createGamePostOld.js')(environment, db, figureBlueprint)
+    '/panelPredefined/createGamePost',
+    require('./panelPredefined/createGamePredefinedPost.js')(
+      environment,
+      db,
+      figureBlueprint
+    )
   );
 
   app.post(
-    '/panelOld/deleteGamePost',
-    require('./panelOld/deleteGamePostOld.js')(environment, db)
+    '/panelPredefined/deleteGamePost',
+    require('./panelPredefined/deleteGamePredefinedPost.js')(environment, db)
   );
 
   app.post(
-    '/panelOld/loadGamePost',
-    require('./panelOld/loadGamePostOld.js')(environment, db)
+    '/panelPredefined/loadGamePost',
+    require('./panelPredefined/loadGamePredefinedPost.js')(environment, db)
   );
 
   app.get(

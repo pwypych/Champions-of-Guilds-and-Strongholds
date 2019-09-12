@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:createGamePostOld');
+const debug = require('debug')('cogs:createGamePredefinedPost');
 const shortid = require('shortid');
 const validator = require('validator');
 const _ = require('lodash');
@@ -175,7 +175,7 @@ module.exports = (environment, db, figureBlueprint) => {
     function sendResponse() {
       debug('sendResponse()');
       debug('******************** should redirect ********************');
-      res.redirect(environment.baseurl + '/panelOld');
+      res.redirect(environment.baseurl + '/panelPredefined');
     }
   };
 };
