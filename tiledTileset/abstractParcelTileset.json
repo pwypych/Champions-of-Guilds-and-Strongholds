@@ -104,7 +104,7 @@
     },
     {
       "id": 15,
-      "image": "../tiledSprites/treasure.png",
+      "image": "../tiledSprites/countryside.png",
       "imageheight": 32,
       "imagewidth": 32
     },

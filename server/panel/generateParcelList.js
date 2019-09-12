@@ -33,7 +33,6 @@ module.exports = (db) => {
           }
 
           debug('findParcels: parcelArray.length:', parcelArray.length);
-          debug('findParcels: parcelArray[0]:', parcelArray[0]);
           generateParcelList(parcelArray);
         });
     }
@@ -41,7 +40,7 @@ module.exports = (db) => {
     function generateParcelList(parcelArray) {
       const parcelList = {};
       parcelList.castle = {};
-      parcelList.treasure = {};
+      parcelList.countryside = {};
 
       parcelArray.forEach((parcel) => {
         if (parcel.category === 'castle') {
@@ -51,19 +50,22 @@ module.exports = (db) => {
           parcelList.castle[parcel.exits].push(parcel);
         }
 
-        if (parcel.category === 'treasure') {
-          if (!_.isArray(parcelList.treasure[parcel.exits])) {
-            parcelList.treasure[parcel.exits] = [];
+        if (parcel.category === 'countryside') {
+          if (!_.isArray(parcelList.countryside[parcel.exits])) {
+            parcelList.countryside[parcel.exits] = [];
           }
-          parcelList.treasure[parcel.exits].push(parcel);
+          parcelList.countryside[parcel.exits].push(parcel);
         }
       });
 
       debug(
-        'generateParcelList: parcelList.castle.length:',
-        parcelList.castle.length
+        'generateParcelList: parcelList.castle.oooo.length:',
+        parcelList.castle.oooo.length
       );
-      debug('generateParcelList: parcelList.treasure:', parcelList.treasure);
+      debug(
+        'generateParcelList: parcelList.countryside.oooo.length:',
+        parcelList.countryside.oooo.length
+      );
 
       res.locals.parcelList = parcelList;
       next();

@@ -60,7 +60,7 @@ module.exports = (environment, unitBlueprint) => {
         forEachAbstractFigureMapX(ctx);
       });
 
-      debug('forEachAbstractFigureMapY: figureMap:', figureMap);
+      // debug('forEachAbstractFigureMapY: figureMap:', figureMap);
 
       res.locals.mapObject = figureMap;
       next();
@@ -72,11 +72,10 @@ module.exports = (environment, unitBlueprint) => {
         const figureMap = ctx.figureMap;
         const abstractFigureMapY = ctx.abstractFigureMapY;
 
-        figureMap[abstractFigureMapY][abstractFigureMapX] =
-          abstractFigure.figureName;
+        figureMap[abstractFigureMapY][abstractFigureMapX] = 'empty';
       });
 
-      forEachAbstractMonsterFigure(ctx);
+      // forEachAbstractMonsterFigure(ctx);
     }
 
     function forEachAbstractMonsterFigure(ctx) {
@@ -91,12 +90,12 @@ module.exports = (environment, unitBlueprint) => {
         const figureChance = _.random(0, 99);
         const monsterIndex = _.random(0, monsterTierArray[tier].length - 1);
 
-        if (abstractFigure.figureName === 'monster') {
+        if (abstractFigure.figureName === 'abstractMonster') {
           figureMap[y][x] = monsterTierArray[tier][monsterIndex].name;
           return;
         }
 
-        if (abstractFigure.figureName === 'monsterMaybe') {
+        if (abstractFigure.figureName === 'abstractMonsterMaybe') {
           figureMap[y][x] = 'empty';
 
           if (figureChance > 60) {
@@ -117,12 +116,12 @@ module.exports = (environment, unitBlueprint) => {
 
         const figureChance = _.random(0, 99);
 
-        if (abstractFigure.figureName === 'barrier') {
+        if (abstractFigure.figureName === 'abstractBarrier') {
           figureMap[y][x] = barrierArray[_.random(0, barrierArray.length - 1)];
           return;
         }
 
-        if (abstractFigure.figureName === 'barrierMaybe') {
+        if (abstractFigure.figureName === 'abstractBarrierMaybe') {
           figureMap[y][x] = 'empty';
 
           if (figureChance > 40) {
@@ -144,13 +143,13 @@ module.exports = (environment, unitBlueprint) => {
 
         const figureChance = _.random(0, 99);
 
-        if (abstractFigure.figureName === 'treasure') {
+        if (abstractFigure.figureName === 'abstractTreasure') {
           figureMap[y][x] =
             treasureArray[_.random(0, treasureArray.length - 1)];
           return;
         }
 
-        if (abstractFigure.figureName === 'treasureMaybe') {
+        if (abstractFigure.figureName === 'abstractTreasureMaybe') {
           figureMap[y][x] = 'empty';
 
           if (figureChance > 40) {

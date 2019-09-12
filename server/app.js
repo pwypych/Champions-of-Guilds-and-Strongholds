@@ -78,12 +78,16 @@ function setupMongo() {
     useNewUrlParser: true
   };
 
-  mongodb.connect(connectionUrl, options, (error, client) => {
-    db = client.db(dbName);
+  mongodb.connect(
+    connectionUrl,
+    options,
+    (error, client) => {
+      db = client.db(dbName);
 
-    debug('setupMongo()');
-    setupMapCollection();
-  });
+      debug('setupMongo()');
+      setupMapCollection();
+    }
+  );
 }
 
 /* eslint-disable global-require */
@@ -175,6 +179,13 @@ function setupLibrariesAndRoutes() {
       environment,
       unitBlueprint
     ),
+    require('./panel/generateMap/addMonsterToFigureMap.js')(
+      environment,
+      unitBlueprint
+    ),
+    require('./panel/generateMap/addBarrierToFigureMap.js')(),
+    require('./panel/generateMap/addTreasureToFigureMap.js')(),
+    require('./panel/generateMap/addNonAbstractToFgureMap.js')(),
     require('./panel/createGamePost.js')(environment, db, figureBlueprint)
   );
 
