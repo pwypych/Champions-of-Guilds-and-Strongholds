@@ -63,7 +63,7 @@ module.exports = (environment, unitBlueprint) => {
       const y = ctx.abstractFigureMapY;
 
       abstractFigureMapRow.forEach((abstractFigure, x) => {
-        const tier = 'tier' + abstractFigure.level;
+        const tier = abstractFigure.level;
         const figureChance = _.random(0, 99);
         const monsterIndex = _.random(0, monsterTierArray[tier].length - 1);
 
