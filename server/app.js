@@ -171,8 +171,6 @@ function setupLibrariesAndRoutes() {
     '/panel/createGamePost',
     require('./panel/generateMap/findLandByName.js')(db),
     require('./panel/generateParcelList.js')(db),
-    // require('./panel/generateMap/generateLand.js')(),
-    // require('./panel/generateMap/generateAbstractParcelMap.js')(),
     require('./panel/generateMap/generateParcelMap.js')(),
     require('./panel/generateMap/generateAbstractFigureMap.js')(),
     require('./panel/generateMap/generateFigureMap.js')(
