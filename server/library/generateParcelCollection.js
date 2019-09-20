@@ -34,22 +34,43 @@ module.exports = (environment, db) => {
 
         debug('dropParcelCollection - success!');
 
-        scanParcelBaseFolder();
+        tilesetFilesRead();
       });
     }
 
-    function scanParcelBaseFolder() {
+    function tilesetFilesRead() {
+      const filePathArray = [
+        environment.basepathTiledTileset + '/1x1.json',
+        environment.basepathTiledTileset + '/3x3.json',
+        environment.basepathTiledTileset + '/abstractFigureTileset.json'
+      ];
+      const tiledTilesetObjectArray = [];
+
+      const doneTilesets = _.after(filePathArray.length, () => {
+        scanParcelBaseFolder(tiledTilesetObjectArray);
+      });
+
+      filePathArray.forEach((filepath) => {
+        fs.readFile(filepath, 'utf8', (error, tiledTilesetString) => {
+          const tiledTilesetObject = JSON.parse(tiledTilesetString);
+          tiledTilesetObjectArray.push(tiledTilesetObject);
+          doneTilesets();
+        });
+      });
+    }
+
+    function scanParcelBaseFolder(tiledTilesetObjectArray) {
       fs.readdir(environment.basepathTiledParcel, (error, folderNameArray) => {
         debug(
           'scanParcelBaseFolder: folderNameArray.length:',
           folderNameArray.length
         );
-        forEachParcel(folderNameArray);
+        forEachParcel(folderNameArray, tiledTilesetObjectArray);
       });
     }
 
     // Parcel category folders  => castle, treasure
-    function forEachParcel(folderNameArray) {
+    function forEachParcel(folderNameArray, tiledTilesetObjectArray) {
       const done = _.after(folderNameArray.length, () => {
         debug('forEachParcel: done!');
         checkForEachErrorArray(folderNameArray.length);
@@ -57,11 +78,15 @@ module.exports = (environment, db) => {
 
       folderNameArray.forEach((parcel) => {
         // debug('forEachParcel', parcel);
-        splitParcelFileName(parcel, done);
+        splitParcelFileName(parcel, tiledTilesetObjectArray, done);
       });
     }
 
-    function splitParcelFileName(parcelWithExtension, done) {
+    function splitParcelFileName(
+      parcelWithExtension,
+      tiledTilesetObjectArray,
+      done
+    ) {
       const parcel = parcelWithExtension.substring(
         0,
         parcelWithExtension.length - 5
@@ -72,6 +97,7 @@ module.exports = (environment, db) => {
         parcelSplitArray,
         parcelWithExtension,
         parcel,
+        tiledTilesetObjectArray,
         done
       );
     }
@@ -80,6 +106,7 @@ module.exports = (environment, db) => {
       parcelSplitArray,
       parcelWithExtension,
       parcel,
+      tiledTilesetObjectArray,
       done
     ) {
       const parcelObject = {};
@@ -92,10 +119,14 @@ module.exports = (environment, db) => {
         environment.basepathTiledParcel + '/' + parcelWithExtension;
 
       // debug('instantiateParcelObject: parcelObject:', parcelObject);
-      checkTiledParcelFileExists(parcelObject, done);
+      checkTiledParcelFileExists(parcelObject, tiledTilesetObjectArray, done);
     }
 
-    function checkTiledParcelFileExists(parcelObject, done) {
+    function checkTiledParcelFileExists(
+      parcelObject,
+      tiledTilesetObjectArray,
+      done
+    ) {
       fs.stat(parcelObject.pathTiledParcel, (error) => {
         if (error) {
           errorArray.push(
@@ -107,22 +138,32 @@ module.exports = (environment, db) => {
         }
 
         // debug('checkTiledParcelFileExists: stats.size', stats.size);
-        readTiledParcelFile(parcelObject, done);
+        readTiledParcelFile(parcelObject, tiledTilesetObjectArray, done);
       });
     }
 
-    function readTiledParcelFile(parcelObject, done) {
+    function readTiledParcelFile(parcelObject, tiledTilesetObjectArray, done) {
       fs.readFile(
         parcelObject.pathTiledParcel,
         'utf8',
         (error, tiledParcelString) => {
           // debug('readTiledParcelFile', tiledParcelString.length);
-          parseJsonParcelString(parcelObject, tiledParcelString, done);
+          parseJsonParcelString(
+            parcelObject,
+            tiledParcelString,
+            tiledTilesetObjectArray,
+            done
+          );
         }
       );
     }
 
-    function parseJsonParcelString(parcelObject, tiledParcelString, done) {
+    function parseJsonParcelString(
+      parcelObject,
+      tiledParcelString,
+      tiledTilesetObjectArray,
+      done
+    ) {
       let tiledParcelObject;
       try {
         tiledParcelObject = JSON.parse(tiledParcelString);
@@ -140,10 +181,20 @@ module.exports = (environment, db) => {
       //   'parseJsonParcelString: parcelObject.tiledParcelObject.height:',
       //   tiledParcelObject.height
       // );
-      validateTiledParcelObject(parcelObject, tiledParcelObject, done);
+      validateTiledParcelObject(
+        parcelObject,
+        tiledParcelObject,
+        tiledTilesetObjectArray,
+        done
+      );
     }
 
-    function validateTiledParcelObject(parcelObject, tiledParcelObject, done) {
+    function validateTiledParcelObject(
+      parcelObject,
+      tiledParcelObject,
+      tiledTilesetObjectArray,
+      done
+    ) {
       if (!tiledParcelObject.layers) {
         debug('parseJsonParcelString: tiledParcelObject missing layers array!');
         errorArray.push(
@@ -168,10 +219,20 @@ module.exports = (environment, db) => {
       //   'validateTiledParcelObject: tiledParcelObject.layers[0].data.length:',
       //   tiledParcelObject.layers[0].data.length
       // );
-      readTilesetFiles(parcelObject, tiledParcelObject, done);
+      readTilesetFiles(
+        parcelObject,
+        tiledParcelObject,
+        tiledTilesetObjectArray,
+        done
+      );
     }
 
-    function readTilesetFiles(parcelObject, tiledParcelObject, done) {
+    function readTilesetFiles(
+      parcelObject,
+      tiledParcelObject,
+      tiledTilesetObjectArray,
+      done
+    ) {
       const filePathArray = [
         environment.basepathTiledTileset + '/1x1.json',
         environment.basepathTiledTileset + '/3x3.json',
@@ -193,6 +254,8 @@ module.exports = (environment, db) => {
       filePathArray.forEach((filepath) => {
         fs.readFile(filepath, 'utf8', (error, tiledTilesetString) => {
           const tiledTilesetObject = JSON.parse(tiledTilesetString);
+          // debug('tiledTilesetObject:', tiledTilesetObject);
+          // debug('readTilesetFiles: tiledTilesetObject:', tiledTilesetObject);
 
           // all tilesets .json files in tiled starts at 0, but on tilemap the numbers starts from 1 up
           // the tileset firstgid property in tilemap file tells what is the offset between tile id in tileset
