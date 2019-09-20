@@ -14,6 +14,12 @@ g.world.heroDeadToggle = ($body, walkie, freshEntities) => {
       'entitiesGet_',
       'heroDeadToggle.js',
       () => {
+        const gameEntity = freshEntities()[freshEntities()._id];
+
+        if (gameEntity.state !== 'worldState') {
+          return;
+        }
+
         findPlayerId();
       },
       false
