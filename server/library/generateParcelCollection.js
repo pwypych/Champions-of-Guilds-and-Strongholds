@@ -34,17 +34,48 @@ module.exports = (environment, db) => {
 
         debug('dropParcelCollection - success!');
 
-        scanParcelBaseFolder();
+        tilesetFilesRead();
       });
     }
 
-    function scanParcelBaseFolder() {
+    function tilesetFilesRead() {
+      const filePathArray = [
+        environment.basepathTiledTileset + '/1x1.json',
+        environment.basepathTiledTileset + '/3x3.json',
+        environment.basepathTiledTileset + '/abstractFigureTileset.json'
+      ];
+      const tiledTilesetArrayDeep = [];
+
+      const doneTilesets = _.after(filePathArray.length, () => {
+        const tiledTilesetArray = _.flatten(tiledTilesetArrayDeep);
+
+        debug(
+          'tilesetFilesRead: tiledTilesetArray.length:',
+          tiledTilesetArray.length
+        );
+        scanParcelBaseFolder(tiledTilesetArray);
+      });
+
+      filePathArray.forEach((filepath) => {
+        fs.readFile(filepath, 'utf8', (error, tiledTilesetString) => {
+          const tiledTilesetObject = JSON.parse(tiledTilesetString);
+          debug(
+            'tilesetFilesRead: tiledTilesetObject.name:',
+            tiledTilesetObject.name
+          );
+          tiledTilesetArrayDeep.push(tiledTilesetObject);
+          doneTilesets();
+        });
+      });
+    }
+
+    function scanParcelBaseFolder(tiledTilesetArray) {
       fs.readdir(environment.basepathTiledParcel, (error, folderNameArray) => {
         debug(
           'scanParcelBaseFolder: folderNameArray.length:',
           folderNameArray.length
         );
-        forEachParcel(folderNameArray);
+        forEachParcel(folderNameArray, tiledTilesetArray);
       });
     }
 
@@ -193,6 +224,7 @@ module.exports = (environment, db) => {
       filePathArray.forEach((filepath) => {
         fs.readFile(filepath, 'utf8', (error, tiledTilesetString) => {
           const tiledTilesetObject = JSON.parse(tiledTilesetString);
+          // debug('readTilesetFiles: tiledTilesetObject:', tiledTilesetObject);
 
           // all tilesets .json files in tiled starts at 0, but on tilemap the numbers starts from 1 up
           // the tileset firstgid property in tilemap file tells what is the offset between tile id in tileset
