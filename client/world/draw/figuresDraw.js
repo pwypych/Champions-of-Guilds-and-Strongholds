@@ -9,10 +9,10 @@ g.world.figuresDraw = (walkie, auth, viewport, freshEntities) => {
   const worldContainer = viewport.getChildByName('worldContainer');
 
   (function init() {
-    onRecentActivityDifferanceDone();
+    onViewPortWorldReady();
   })();
 
-  function onRecentActivityDifferanceDone() {
+  function onViewPortWorldReady() {
     walkie.onEvent(
       'viewportWorldReady_',
       'figuresDraw.js',

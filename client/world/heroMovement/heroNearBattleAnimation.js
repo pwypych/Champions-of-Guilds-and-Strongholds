@@ -32,7 +32,7 @@ g.world.heroNearBattleAnimation = (walkie, viewport, freshEntities) => {
     const offsets = [];
 
     _.forEach(freshEntities(), (entity) => {
-      if (entity.unitAmounts && !entity.heroStats) {
+      if (entity.unitAmounts && !entity.heroStats && !entity.dead) {
         [
           { x: 0, y: -1 },
           { x: 1, y: 0 },

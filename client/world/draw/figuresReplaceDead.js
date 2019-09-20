@@ -6,12 +6,24 @@ g.world.figuresReplaceDead = (walkie, viewport, freshEntities) => {
   const worldContainer = viewport.getChildByName('worldContainer');
 
   (function init() {
+    onViewPortWorldReady();
     onRecentActivityDifferanceDone();
   })();
 
+  function onViewPortWorldReady() {
+    walkie.onEvent(
+      'viewportWorldReady_',
+      'figuresDraw.js',
+      () => {
+        forEachFigure();
+      },
+      false
+    );
+  }
+
   function onRecentActivityDifferanceDone() {
     walkie.onEvent(
-      'entitiesGet_',
+      'recentActivityDifferanceFound_',
       'figuresReplaceDead.js',
       () => {
         forEachFigure();

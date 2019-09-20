@@ -68,7 +68,6 @@ g.main = function main() {
     g.world.worldClick(walkie, auth, viewport, freshEntities);
     g.world.heroPath(walkie, auth, viewport, freshEntities);
     g.world.heroPathAcceptedPost(walkie, auth);
-    g.world.hasBeenCollectedHide(walkie, viewport);
     g.world.hasBeenCollectedIndicate(walkie, viewport);
     g.world.informationButton($body);
     g.world.informationModal($body, walkie, freshEntities);
