@@ -24,7 +24,7 @@ module.exports = () => {
         }
 
         _.forEach(entities, (entity) => {
-          if (entity.resource) {
+          if (entity.resource && !entity.dead) {
             if (
               entity.position.x === position.x &&
               entity.position.y === position.y
