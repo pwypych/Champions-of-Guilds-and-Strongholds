@@ -66,9 +66,5 @@ g.world.figuresDraw = (walkie, auth, viewport, freshEntities) => {
 
       figureContainer.addChild(sprite);
     }
-
-    if (entity.dead) {
-      sprite.visible = false;
-    }
   }
 };

@@ -64,6 +64,7 @@ g.main = function main() {
     g.world.heroFocusTween(walkie, viewport, freshEntities);
     g.world.backgroundDraw(walkie, viewport, auth);
     g.world.figuresDraw(walkie, auth, viewport, freshEntities);
+    g.world.figuresReplaceDead(walkie, viewport, freshEntities);
     g.world.worldClick(walkie, auth, viewport, freshEntities);
     g.world.heroPath(walkie, auth, viewport, freshEntities);
     g.world.heroPathAcceptedPost(walkie, auth);

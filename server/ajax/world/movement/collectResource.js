@@ -28,7 +28,7 @@ module.exports = (db) => {
             entity.position.x === position.x &&
             entity.position.y === position.y
           ) {
-            if (entity.resource) {
+            if (entity.resource && !entity.dead) {
               debug('checkIsPositionCollectable: resource:', id);
               resourceId = id;
             }
@@ -88,7 +88,6 @@ module.exports = (db) => {
       const query = { _id: gameId };
 
       const $set = {};
-      const $unset = {};
 
       const fieldRecentActivity = resourceId + '.recentActivity';
       $set[fieldRecentActivity] = recentActivity;
@@ -96,10 +95,7 @@ module.exports = (db) => {
       const fieldDead = resourceId + '.dead';
       $set[fieldDead] = true;
 
-      const fieldResource = resourceId + '.resource';
-      $unset[fieldResource] = true;
-
-      const update = { $set: $set, $unset: $unset };
+      const update = { $set: $set };
       const options = {};
 
       db.collection('gameCollection').updateOne(

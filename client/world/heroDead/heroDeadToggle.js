@@ -46,8 +46,7 @@ g.world.heroDeadToggle = ($body, walkie, freshEntities) => {
     });
 
     // when hero is dead
-    if (!hero) {
-      console.log('hero is dead', $heroDead);
+    if (hero.dead) {
       $heroDead.show();
     }
   }

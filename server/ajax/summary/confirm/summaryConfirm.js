@@ -152,21 +152,22 @@ module.exports = (db, raceBlueprint) => {
           }
 
           debug('updateUnsetBattleEntity: Battle entity removed!');
-          updateUnsetLoserFigure(ctx);
+          updateLoserFigureDead(ctx);
         }
       );
     }
 
-    function updateUnsetLoserFigure(ctx) {
+    function updateLoserFigureDead(ctx) {
       const gameId = ctx.gameId;
-      const field = ctx.loserFigureId;
+      const loserFigureId = ctx.loserFigureId;
 
       const query = { _id: gameId };
 
-      const $unset = {};
-      $unset[field] = true;
+      const fieldDead = loserFigureId + '.dead';
+      const $set = {};
+      $set[fieldDead] = true;
 
-      const update = { $unset: $unset };
+      const update = { $set: $set };
       const options = {};
 
       db.collection('gameCollection').updateOne(
@@ -178,7 +179,7 @@ module.exports = (db, raceBlueprint) => {
             debug('ERROR: update mongo error:', error);
           }
 
-          debug('updateUnsetLoserFigure: Loser figure removed!');
+          debug('updateLoserFigureDead: Added dead property to loser figure!');
           checkIsHeroWinner(ctx);
         }
       );

@@ -40,11 +40,6 @@ g.world.heroFocusWorldReady = (walkie, viewport, freshEntities) => {
       }
     });
 
-    if (!hero) {
-      // when hero is dead
-      return;
-    }
-
     const position = {};
     position.x = parseInt(hero.position.x, 10);
     position.y = parseInt(hero.position.y, 10);
