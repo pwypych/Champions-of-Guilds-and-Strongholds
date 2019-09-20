@@ -242,7 +242,7 @@ module.exports = (environment, db) => {
 
       abstractParcelMap.forEach((abstractParcelMapRow, y) => {
         abstractParcelMapRow.forEach((abstractParcel, x) => {
-          debug('abstractParcelMap:', abstractParcelMap[0][0]);
+          // debug('abstractParcelMap:', abstractParcelMap[0][0]);
           abstractParcelMap[y][x].category =
             landLayerWithStringsObject.categoryMap[y][x];
           abstractParcelMap[y][x].level =
