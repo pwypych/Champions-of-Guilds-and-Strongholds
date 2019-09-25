@@ -324,6 +324,7 @@ function setupLibrariesAndRoutes() {
     require('./ajax/commonMovement/positionUpdate.js')(db),
     require('./ajax/world/movement/collectResource.js')(db),
     require('./ajax/world/movement/battleNpcInitiate.js')(db),
+    require('./ajax/world/movement/battleClashInitiate.js')(db),
     saveGame
   );
 
@@ -339,8 +340,9 @@ function setupLibrariesAndRoutes() {
       findEntitiesByGameId
     ),
     require('./library/readEntities.js')(db),
-    require('./ajax/world/endTurn/battleNpcChecker.js')(db),
+    require('./ajax/world/endTurn/battleChecker.js')(db),
     require('./ajax/world/endTurn/battleNpcCreate.js')(db, unitBlueprint),
+    require('./ajax/world/endTurn/battleClashCreate.js')(db, unitBlueprint),
     require('./ajax/world/endTurn/newDay.js')(db),
     require('./ajax/world/endTurn/refillHeroMovement.js')(db),
     require('./ajax/world/endTurn/unsetEndTurnFlags.js')(db)
@@ -442,8 +444,9 @@ function setupLibrariesAndRoutes() {
     require('./ajax/summary/confirm/summaryConfirm.js')(db, raceBlueprint),
     require('./library/readEntities.js')(db),
     require('./ajax/summary/confirm/worldChecker.js')(db),
-    require('./ajax/world/endTurn/battleNpcChecker.js')(db),
+    require('./ajax/world/endTurn/battleChecker.js')(db),
     require('./ajax/world/endTurn/battleNpcCreate.js')(db, unitBlueprint),
+    require('./ajax/world/endTurn/battleClashCreate.js')(db, unitBlueprint),
     require('./ajax/world/endTurn/newDay.js')(db),
     require('./ajax/world/endTurn/refillHeroMovement.js')(db),
     require('./ajax/world/endTurn/unsetEndTurnFlags.js')(db)

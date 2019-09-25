@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:battleNpcInitiate');
+const debug = require('debug')('cogs:battleClashInitiate');
 const _ = require('lodash');
 const shortid = require('shortid');
 
@@ -10,22 +10,27 @@ module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
       debug(
-        '// Checks if end of path is npc battle, zeros hero movement points and creates battle entity'
+        '// Checks if end of path is clash (hero) battle, zeros both hero movement points and creates battle entity'
       );
       const entities = res.locals.entities;
-      const heroId = res.locals.entityId;
+      const heroAttackerId = res.locals.entityId;
       const path = res.locals.path;
       const position = path[path.length - 1];
 
-      checkIsPositionBattle(entities, heroId, position);
+      checkIsPositionBattle(entities, heroAttackerId, position);
     })();
 
-    function checkIsPositionBattle(entities, heroId, position) {
+    function checkIsPositionBattle(entities, heroAttackerId, position) {
       debug('checkIsPositionBattle');
       const battleArray = [];
 
       _.forEach(entities, (entity, id) => {
-        if (entity.unitAmounts && !entity.heroStats && !entity.dead) {
+        if (
+          entity.unitAmounts &&
+          entity.heroStats &&
+          !entity.dead &&
+          id !== heroAttackerId
+        ) {
           [
             { x: 0, y: -1 },
             { x: 1, y: 0 },
@@ -36,12 +41,15 @@ module.exports = (db) => {
               entity.position.x === position.x + offset.x &&
               entity.position.y === position.y + offset.y
             ) {
-              debug('checkIsPositionBattle: Battle Npc On position:', position);
+              debug(
+                'checkIsPositionBattle: Battle Clash On position:',
+                position
+              );
 
               const battle = {};
-              battle.attackerId = heroId;
+              battle.attackerId = heroAttackerId;
               battle.defenderId = id;
-              battle.battleStatus = 'pending_npc';
+              battle.battleStatus = 'pending_clash';
               battle.battleHeight = 11;
               battle.battleWidth = 13;
               battleArray.push(battle);
@@ -51,7 +59,7 @@ module.exports = (db) => {
       });
 
       if (_.isEmpty(battleArray)) {
-        debug('checkIsPositionBattle: No battle npc found!');
+        debug('checkIsPositionBattle: No battle clash found!');
         next();
         return;
       }
@@ -59,15 +67,15 @@ module.exports = (db) => {
       debug(
         'checkIsPositionBattle: Yes ' +
           battleArray.length +
-          ' battle npc found!'
+          ' battle clash found!'
       );
-      zeroHeroMovement(entities, heroId, battleArray);
+      zeroHeroAttackerMovement(entities, heroAttackerId, battleArray);
     }
 
-    function zeroHeroMovement(entities, heroId, battleArray) {
+    function zeroHeroAttackerMovement(entities, heroAttackerId, battleArray) {
       const gameId = entities._id;
       const query = { _id: gameId };
-      const movementField = heroId + '.heroStats.current.movement';
+      const movementField = heroAttackerId + '.heroStats.current.movement';
       const $set = {};
       $set[movementField] = 0;
       const update = { $set: $set };
@@ -79,11 +87,12 @@ module.exports = (db) => {
         options,
         (error) => {
           if (error) {
-            debug('zeroHeroMovement: mongo error:', error);
+            debug('zeroHeroAttackerMovement: mongo error:', error);
             next();
             return;
           }
 
+          debug('zeroHeroAttackerMovement');
           forEachBattle(entities, battleArray);
         }
       );
@@ -96,8 +105,34 @@ module.exports = (db) => {
       });
 
       battleArray.forEach((battle) => {
-        checkIfBattleExists(entities, battle, done);
+        zeroHeroDefenderMovement(entities, battle, done);
       });
+    }
+
+    function zeroHeroDefenderMovement(entities, battle, done) {
+      const gameId = entities._id;
+      const query = { _id: gameId };
+      const movementField = battle.defenderId + '.heroStats.current.movement';
+      const $set = {};
+      $set[movementField] = 0;
+      const update = { $set: $set };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('zeroHeroDefenderMovement: mongo error:', error);
+            next();
+            return;
+          }
+
+          debug('zeroHeroDefenderMovement');
+          checkIfBattleExists(entities, battle, done);
+        }
+      );
     }
 
     function checkIfBattleExists(entities, battle, done) {
