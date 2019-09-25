@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:addMonsterToFigureMap');
+const debug = require('debug')('cogs:addBarrierToFigureMap');
 const _ = require('lodash');
 
 const barrierArray = ['dirt', 'rock', 'tree'];

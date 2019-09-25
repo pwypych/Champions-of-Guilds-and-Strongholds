@@ -59,12 +59,12 @@ module.exports = (db) => {
       });
 
       debug(
-        'generateParcelList: parcelList.castle.oooo.length:',
-        parcelList.castle.oooo.length
+        'generateParcelList: parcelList.castle.all.length:',
+        parcelList.castle.all.length
       );
       debug(
-        'generateParcelList: parcelList.countryside.oooo.length:',
-        parcelList.countryside.oooo.length
+        'generateParcelList: parcelList.countryside.all.length:',
+        parcelList.countryside.all.length
       );
 
       res.locals.parcelList = parcelList;
