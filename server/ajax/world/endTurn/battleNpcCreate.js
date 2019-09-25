@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:battleCreate');
+const debug = require('debug')('cogs:battleNpcCreate');
 const _ = require('lodash');
 const shortId = require('shortid');
 
@@ -10,30 +10,30 @@ module.exports = (db, unitBlueprint) => {
   return (req, res, next) => {
     (function init() {
       debug(
-        '// Checks if battle with battleStatus "pending" exists. Spawns units and obsticles. Attacker is player, defender is npc. Changes battleStatus to "active".'
+        '// Checks if battle with battleStatus "pending_npc" exists. Spawns units and obsticles. Attacker is player, defender is npc. Changes battleStatus to "active".'
       );
 
       const entities = res.locals.entities;
 
-      checkIfPendingBattleExists(entities);
+      checkIfPendingNpcBattleExists(entities);
     })();
 
-    function checkIfPendingBattleExists(entities) {
+    function checkIfPendingNpcBattleExists(entities) {
       let battleId;
 
       _.forEach(entities, (entity, id) => {
-        if (entity.battleStatus === 'pending') {
+        if (entity.battleStatus === 'pending_npc') {
           battleId = id;
         }
       });
 
       if (!battleId) {
-        debug('checkIfPendingBattleExists: No battle is pending!');
+        debug('checkIfPendingNpcBattleExists: No battle is pending_npc!');
         next();
         return;
       }
 
-      debug('checkIfPendingBattleExists: battleId:', battleId);
+      debug('checkIfPendingNpcBattleExists: battleId:', battleId);
       generateUnits(entities, battleId);
     }
 

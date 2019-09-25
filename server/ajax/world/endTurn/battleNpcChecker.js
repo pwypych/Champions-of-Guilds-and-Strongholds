@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:battleChecker');
+const debug = require('debug')('cogs:battleNpcChecker');
 const _ = require('lodash');
 
 module.exports = (db) => {

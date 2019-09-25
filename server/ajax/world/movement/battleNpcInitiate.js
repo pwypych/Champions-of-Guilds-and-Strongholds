@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:battleInitiate');
+const debug = require('debug')('cogs:battleNpcInitiate');
 const _ = require('lodash');
 const shortid = require('shortid');
 
@@ -41,7 +41,7 @@ module.exports = (db) => {
               const battle = {};
               battle.attackerId = heroId;
               battle.defenderId = id;
-              battle.battleStatus = 'pending';
+              battle.battleStatus = 'pending_npc';
               battle.battleHeight = 11;
               battle.battleWidth = 13;
               battleArray.push(battle);
