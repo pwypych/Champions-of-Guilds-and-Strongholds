@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:createBattle');
+const debug = require('debug')('cogs:battleCreate');
 const _ = require('lodash');
 const shortId = require('shortid');
 
