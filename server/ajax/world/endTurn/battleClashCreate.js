@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:createBattle');
+const debug = require('debug')('cogs:battleClashCreate');
 const _ = require('lodash');
 const shortId = require('shortid');
 
@@ -10,30 +10,30 @@ module.exports = (db, unitBlueprint) => {
   return (req, res, next) => {
     (function init() {
       debug(
-        '// Checks if battle with battleStatus "pending" exists. Spawns units and obsticles. Attacker is player, defender is npc. Changes battleStatus to "active".'
+        '// Checks if battle with battleStatus "pending_clash" exists. Spawns units and obsticles. Attacker is player, defender is npc. Changes battleStatus to "active".'
       );
 
       const entities = res.locals.entities;
 
-      checkIfPendingBattleExists(entities);
+      checkIfPendingNpcBattleExists(entities);
     })();
 
-    function checkIfPendingBattleExists(entities) {
+    function checkIfPendingNpcBattleExists(entities) {
       let battleId;
 
       _.forEach(entities, (entity, id) => {
-        if (entity.battleStatus === 'pending') {
+        if (entity.battleStatus === 'pending_clash') {
           battleId = id;
         }
       });
 
       if (!battleId) {
-        debug('checkIfPendingBattleExists: No battle is pending!');
+        debug('checkIfPendingNpcBattleExists: No battle is pending_clash!');
         next();
         return;
       }
 
-      debug('checkIfPendingBattleExists: battleId:', battleId);
+      debug('checkIfPendingNpcBattleExists: battleId:', battleId);
       generateUnits(entities, battleId);
     }
 
@@ -62,9 +62,10 @@ module.exports = (db, unitBlueprint) => {
         { x: 0, y: 9 }
       ];
 
-      let counter = 0;
+      // create attacker units
+      let counterA = 0;
       _.forEach(attackerUnitCounts, (amount, unitName) => {
-        if (counter > 5) {
+        if (counterA > 5) {
           return;
         }
 
@@ -80,14 +81,14 @@ module.exports = (db, unitBlueprint) => {
         unit.amount = amount;
         unit.active = false;
         unit.collision = true;
-        unit.position = attackerPositions[counter];
+        unit.position = attackerPositions[counterA];
         unit.unitStats = {
           current: unitBlueprint()[unitName],
           base: unitBlueprint()[unitName]
         };
 
         units[id] = unit;
-        counter += 1;
+        counterA += 1;
       });
 
       // battle map is 11 x 13
@@ -99,37 +100,33 @@ module.exports = (db, unitBlueprint) => {
         { x: 12, y: 9 }
       ];
 
-      let amount = 0;
-      let unitName;
+      // create defender units
+      let counterD = 0;
+      _.forEach(defenderUnitCounts, (amount, unitName) => {
+        if (counterD > 5) {
+          return;
+        }
 
-      // npc defenders always have just one unit
-      _.forEach(defenderUnitCounts, (value, key) => {
-        amount = value;
-        unitName = key;
-      });
+        if (amount < 1) {
+          return;
+        }
 
-      // Randomize npc unit amount
-      const maxAmount = Math.round(amount * 1.25);
-      const minAmount = Math.round(amount * 0.5);
-      debug('generateUnits:maxAmount:', maxAmount);
-      debug('generateUnits:minAmount:', minAmount);
-
-      _.times(5, (index) => {
         const id = unitName + '_unit__' + shortId.generate();
+
         const unit = {};
         unit.unitName = unitName;
         unit.boss = defenderId;
-        unit.amount = _.random(minAmount, maxAmount, false);
-        debug('generateUnits:unit.amount:', unit.amount);
+        unit.amount = amount;
         unit.active = false;
         unit.collision = true;
-        unit.position = defenderPositions[index];
+        unit.position = defenderPositions[counterD];
         unit.unitStats = {
           current: unitBlueprint()[unitName],
           base: unitBlueprint()[unitName]
         };
 
         units[id] = unit;
+        counterD += 1;
       });
 
       debug('generateUnits: units:', _.size(units));
@@ -175,21 +172,13 @@ module.exports = (db, unitBlueprint) => {
         }
       });
 
-      // defender is npc, update owner of all defender units as other players randomly
-      const otherPlayerIdArray = [];
-      _.forEach(entities, (entity, id) => {
-        if (entity.heroStats && id !== attackerId) {
-          otherPlayerIdArray.push(id);
-        }
-      });
+      // update owner of all defender
       _.forEach(units, (unit, id) => {
         if (unit.boss === defenderId) {
-          const randomHeroId = _.sample(otherPlayerIdArray);
-          units[id].owner = entities[randomHeroId].owner;
+          units[id].owner = entities[defenderId].owner;
         }
       });
 
-      debug('generateUnitOwner: otherPlayerIdArray:', otherPlayerIdArray);
       debug('generateUnitOwner: units:', units);
 
       generateObsticles(entities, units, attackerId, defenderId, battleId);
