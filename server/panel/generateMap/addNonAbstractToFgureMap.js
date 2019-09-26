@@ -35,10 +35,6 @@ module.exports = () => {
 
       abstractFigureMapRow.forEach((abstractFigure, x) => {
         const abstractFigurePrefix = abstractFigure.figureName.substring(0, 8);
-        debug(
-          'forEachAbstractTreasureFigure: abstractFigurePrefix:',
-          abstractFigurePrefix
-        );
         if (abstractFigurePrefix !== 'abstract') {
           figureMap[y][x] = abstractFigure.figureName;
         }

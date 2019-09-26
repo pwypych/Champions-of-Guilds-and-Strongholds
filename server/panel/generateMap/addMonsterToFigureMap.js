@@ -66,17 +66,6 @@ module.exports = (environment, unitBlueprint) => {
         const tier = abstractFigure.level;
         const figureChance = _.random(0, 99);
         const monsterIndex = _.random(0, monsterTierArray[tier].length - 1);
-
-        debug('forEachAbstractMonsterFigure: tier:', tier);
-        debug(
-          'forEachAbstractMonsterFigure: abstractFigure.figureName:',
-          abstractFigure.figureName
-        );
-        debug(
-          'forEachAbstractMonsterFigure: figureMap[y][x]:',
-          figureMap[y][x]
-        );
-
         if (abstractFigure.figureName === 'abstractMonster') {
           figureMap[y][x] = monsterTierArray[tier][monsterIndex].name;
           return;
