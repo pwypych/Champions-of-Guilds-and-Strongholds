@@ -44,14 +44,14 @@ module.exports = (db) => {
 
       parcelArray.forEach((parcel) => {
         if (parcel.category === 'castle') {
-          if (!_.isArray(parcelList.castle[parcel.exits])) {
+          if (!parcelList.castle[parcel.exits]) {
             parcelList.castle[parcel.exits] = [];
           }
           parcelList.castle[parcel.exits].push(parcel);
         }
 
         if (parcel.category === 'countryside') {
-          if (!_.isArray(parcelList.countryside[parcel.exits])) {
+          if (!parcelList.countryside[parcel.exits]) {
             parcelList.countryside[parcel.exits] = [];
           }
           parcelList.countryside[parcel.exits].push(parcel);
@@ -66,6 +66,8 @@ module.exports = (db) => {
         'generateParcelList: parcelList.countryside.all.length:',
         parcelList.countryside.all.length
       );
+
+      debug('generateParcelList: parcelList', parcelList);
 
       res.locals.parcelList = parcelList;
       next();
