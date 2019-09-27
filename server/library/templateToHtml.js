@@ -24,7 +24,7 @@ dot.templateSettings = {
 
 // Generates html based on .ejs and viewModel
 module.exports = () => {
-  return (filename, viewModel, callback) => {
+  return (path, viewModel, callback) => {
     let error = false;
     let html;
 
@@ -34,15 +34,6 @@ module.exports = () => {
     })();
 
     function loadFile() {
-      // const path = environment.basepath + '/' + templatePath;
-      let path;
-
-      if (filename.substr(-3, 3) === '.js') {
-        path = filename.substr(0, filename.length - 3) + '.ejs';
-      } else {
-        path = filename;
-      }
-
       debug('loadFile', path);
 
       fs.readFile(path, (errorReadFile, templateBuffer) => {
