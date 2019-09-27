@@ -12,26 +12,10 @@ module.exports = () => {
         '// Generate random pracelMap based on abstractParcels from abstractParcelMap'
       );
 
-      const matrix2D = [
-        [1, 2, 3, 4, 5],
-        [1, 2, 3, 4, 5],
-        [1, 2, 3, 4, 5],
-        [1, 2, 3, 4, 5],
-        [1, 2, 3, 4, 5]
-      ];
-
-      debug('init: matrix2D:', matrix2D);
-
-      const rotated90 = toolRotate2DMatrixBy90(matrix2D);
-      debug('init: rotated90:', rotated90);
-
-      const rotated180 = toolRotate2DMatrixBy90(rotated90);
-      debug('init: rotated180:', rotated180);
-
       const ctx = {};
       ctx.land = res.locals.land;
 
-      // forEachAbstractParcelMapY(ctx);
+      forEachAbstractParcelMapY(ctx);
     })();
 
     function forEachAbstractParcelMapY(ctx) {
@@ -69,15 +53,78 @@ module.exports = () => {
     }
 
     function transformParcelByExits(ctx) {
-      insertRandomParcelbyAbstractParcel(ctx);
+      const abstractParcel = ctx.abstractParcel;
+      const category = abstractParcel.category;
+      const exits = abstractParcel.exits;
+      const parcelList = res.locals.parcelList;
+      const categoryParcels = parcelList[category];
+
+      // Parcels ALL
+      if (exits === 'oooo') {
+        debug('transformParcelByExits: oooo:');
+        const parcel = _.sample(categoryParcels.all);
+        insertRandomParcelbyAbstractParcel(ctx, parcel);
+        return;
+      }
+
+      // Parcels TOP
+      if (exits === 'oxxx') {
+        debug('transformParcelByExits: oxxx:');
+        const parcel = _.sample(categoryParcels.top);
+        insertRandomParcelbyAbstractParcel(ctx, parcel);
+        return;
+      }
+
+      if (exits === 'xoxx') {
+        debug('transformParcelByExits: xoxx:');
+        const parcel = _.sample(categoryParcels.top);
+
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+        insertRandomParcelbyAbstractParcel(ctx, parcel);
+        return;
+      }
+
+      if (exits === 'xxox') {
+        debug('transformParcelByExits: xxox:');
+        const parcel = _.sample(categoryParcels.top);
+
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+        insertRandomParcelbyAbstractParcel(ctx, parcel);
+        return;
+      }
+
+      if (exits === 'xxxo') {
+        debug('transformParcelByExits: xxxo:');
+        const parcel = _.sample(categoryParcels.top);
+
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+        insertRandomParcelbyAbstractParcel(ctx, parcel);
+        return;
+      }
+
+      // insertRandomParcelbyAbstractParcel(ctx);
     }
 
     function insertRandomParcelbyAbstractParcel(ctx, parcel) {
       // const parcel = ctx.parcel;
-      // debug(
-      //   'insertRandomParcelbyAbstractParcel: parcel.parcelLayerWithStrings[2]:',
-      //   parcel.parcelLayerWithStrings[2]
-      // );
       const abstractParcel = ctx.abstractParcel;
 
       const parcelMap = ctx.parcelMap;
