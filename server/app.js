@@ -160,43 +160,47 @@ function setupLibrariesAndRoutes() {
 
   app.get(
     '/panel',
-    require('./panel/panel.js')(environment, db, templateToHtml)
+    require('./panel/random/panel.js')(environment, db, templateToHtml)
   );
 
   app.post(
-    '/panel/createGamePost',
-    require('./panel/generateMap/findLandByName.js')(db),
-    require('./panel/generateParcelList.js')(db),
-    require('./panel/generateMap/generateParcelMap.js')(),
-    require('./panel/generateMap/generateAbstractFigureMap.js')(),
-    require('./panel/generateMap/generateFigureMap.js')(
+    '/panelRandom/createGamePost',
+    require('./panel/random/generateMap/findLandByName.js')(db),
+    require('./panel/random/generateMap/generateParcelList.js')(db),
+    require('./panel/random/generateMap/generateParcelMap.js')(),
+    require('./panel/random/generateMap/generateAbstractFigureMap.js')(),
+    require('./panel/random/generateMap/generateFigureMap.js')(
       environment,
       unitBlueprint
     ),
-    require('./panel/generateMap/addMonsterToFigureMap.js')(
+    require('./panel/random/generateMap/addMonsterToFigureMap.js')(
       environment,
       unitBlueprint
     ),
-    require('./panel/generateMap/addBarrierToFigureMap.js')(),
-    require('./panel/generateMap/addTreasureToFigureMap.js')(),
-    require('./panel/generateMap/addNonAbstractToFgureMap.js')(),
-    require('./panel/createGamePost.js')(environment, db, figureBlueprint)
+    require('./panel/random/generateMap/addBarrierToFigureMap.js')(),
+    require('./panel/random/generateMap/addTreasureToFigureMap.js')(),
+    require('./panel/random/generateMap/addNonAbstractToFgureMap.js')(),
+    require('./panel/random/createGamePost.js')(
+      environment,
+      db,
+      figureBlueprint
+    )
   );
 
   app.post(
-    '/panel/deleteGamePost',
-    require('./panel/deleteGamePost.js')(environment, db)
+    '/panelRandom/deleteGamePost',
+    require('./panel/random/deleteGamePost.js')(environment, db)
   );
 
   app.post(
-    '/panel/loadGamePost',
-    require('./panel/loadGamePost.js')(environment, db)
+    '/panelRandom/loadGamePost',
+    require('./panel/random/loadGamePost.js')(environment, db)
   );
 
   // Old Panel
   app.get(
     '/panelPredefined',
-    require('./panelPredefined/panelPredefined.js')(
+    require('./panel/predefined/panelPredefined.js')(
       environment,
       db,
       templateToHtml
@@ -205,7 +209,7 @@ function setupLibrariesAndRoutes() {
 
   app.post(
     '/panelPredefined/createGamePost',
-    require('./panelPredefined/createGamePredefinedPost.js')(
+    require('./panel/predefined/createGamePredefinedPost.js')(
       environment,
       db,
       figureBlueprint
@@ -214,12 +218,12 @@ function setupLibrariesAndRoutes() {
 
   app.post(
     '/panelPredefined/deleteGamePost',
-    require('./panelPredefined/deleteGamePredefinedPost.js')(environment, db)
+    require('./panel/predefined/deleteGamePredefinedPost.js')(environment, db)
   );
 
   app.post(
     '/panelPredefined/loadGamePost',
-    require('./panelPredefined/loadGamePredefinedPost.js')(environment, db)
+    require('./panel/predefined/loadGamePredefinedPost.js')(environment, db)
   );
 
   app.get(

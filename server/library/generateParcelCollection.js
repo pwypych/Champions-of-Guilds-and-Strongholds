@@ -293,7 +293,7 @@ module.exports = (environment, db) => {
           );
         }
 
-        debug('insertParcelObject: parcelObject:', parcelObject);
+        // debug('insertParcelObject: parcelObject:', parcelObject);
         done();
       });
     }

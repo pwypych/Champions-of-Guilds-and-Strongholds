@@ -159,11 +159,11 @@ module.exports = () => {
       tier: 4,
       life: 42,
       initiative: 60,
-      movement: 6,
+      movement: 5,
       maneuverPoints: 2,
       recruitCost: 320,
       maneuvers: {
-        walk: true,
+        fly: true,
         melee: {
           damage: 7
         }
