@@ -13,32 +13,32 @@ module.exports = (db) => {
     })();
 
     function checkRequestBody() {
-      const mapName = req.body.mapName;
-      if (typeof mapName !== 'string') {
-        debug('checkRequestBody: mapName not a string: ', req.body);
+      const landName = req.body.landName;
+      if (typeof landName !== 'string') {
+        debug('checkRequestBody: landName not a string: ', req.body);
         res.status(503);
         res.send(
-          '503 Service Unavailable - Wrong POST parameter or empty mapName parameter'
+          '503 Service Unavailable - Wrong POST parameter or empty landName parameter'
         );
         return;
       }
 
       debug('checkRequestBody');
-      findMap(mapName);
+      findLand(landName);
     }
 
-    function findMap(mapName) {
-      const query = { name: mapName };
+    function findLand(landName) {
+      const query = { name: landName };
       const options = {};
 
       db.collection('landCollection').findOne(query, options, (error, land) => {
         if (error) {
-          debug('findMap: error:', error);
+          debug('findLand: error:', error);
           res.status(503).send('503 Service Unavailable - Cannot find map');
           return;
         }
 
-        debug('findMap: land:', land);
+        debug('findLand: land:', land);
         res.locals.land = land;
 
         next();
