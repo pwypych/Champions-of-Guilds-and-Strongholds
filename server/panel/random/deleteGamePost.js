@@ -64,7 +64,7 @@ module.exports = (environment, db) => {
     function sendResponse() {
       debug('sendResponse()');
       debug('******************** should redirect ********************');
-      res.redirect(environment.baseurl + '/panel');
+      res.redirect(environment.baseurl + '/panelRandom');
     }
   };
 };

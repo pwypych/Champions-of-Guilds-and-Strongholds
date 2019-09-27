@@ -155,12 +155,12 @@ function setupLibrariesAndRoutes() {
 
   // general
   app.get('/', (req, res) => {
-    res.redirect('/panel');
+    res.redirect('/panelRandom');
   });
 
   app.get(
-    '/panel',
-    require('./panel/random/panel.js')(environment, db, templateToHtml)
+    '/panelRandom',
+    require('./panel/random/panelRandom.js')(environment, db, templateToHtml)
   );
 
   app.post(

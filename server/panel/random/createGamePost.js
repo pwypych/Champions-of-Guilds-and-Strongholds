@@ -117,7 +117,7 @@ module.exports = (environment, db, figureBlueprint) => {
 
       debug('generateFigureEntities');
       insertGame(entities);
-      // res.redirect('/panel');
+      // res.redirect('/panelRandom');
     }
 
     function insertGame(entities) {
@@ -137,7 +137,7 @@ module.exports = (environment, db, figureBlueprint) => {
     function sendResponse() {
       debug('sendResponse()');
       debug('******************** should redirect ********************');
-      res.redirect(environment.baseurl + '/panel');
+      res.redirect(environment.baseurl + '/panelRandom');
     }
   };
 };
