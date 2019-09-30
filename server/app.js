@@ -168,7 +168,7 @@ function setupLibrariesAndRoutes() {
   );
 
   app.post(
-    '/panelRandom/createGamePost',
+    '/panelRandom/createGameRandomPost',
     require('./panel/random/generateMap/findLandByName.js')(db),
     require('./panel/random/generateMap/generateParcelList.js')(db),
     require('./panel/random/generateMap/generateParcelMap.js')(),
@@ -184,7 +184,7 @@ function setupLibrariesAndRoutes() {
     require('./panel/random/generateMap/addBarrierToFigureMap.js')(),
     require('./panel/random/generateMap/addTreasureToFigureMap.js')(),
     require('./panel/random/generateMap/addNonAbstractToFgureMap.js')(),
-    require('./panel/random/createGamePost.js')(
+    require('./panel/random/createGameRandomPost.js')(
       environment,
       db,
       figureBlueprint
