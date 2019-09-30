@@ -2,7 +2,7 @@
  "infinite":false,
  "layers":[
         {
-         "data":[8, 23, 15, 22],
+         "data":[8, 19, 13, 19],
          "height":2,
          "id":1,
          "name":"mazeMap",

@@ -56,37 +56,136 @@ module.exports = () => {
       const exits = abstractParcel.exits;
 
       const parcelList = res.locals.parcelList;
+      let parcel;
 
-      // Parcels ALL
+      // Parcels: ALL
       if (exits === 'oooo') {
         debug('transformParcelByExits: oooo:');
-        const parcel = toolSampleOneParcel(parcelList, category, 'all');
-        insertRandomParcelbyAbstractParcel(ctx, parcel);
-        return;
+        parcel = toolSampleOneParcel(parcelList, category, 'all');
+      }
+      // Parcels: TOP-RIGHT-BOTTOM
+      if (exits === 'ooox') {
+        debug('transformParcelByExits: ooox:');
+        parcel = toolSampleOneParcel(parcelList, category, 'topRightBottom');
       }
 
-      // Parcels TOP
+      if (exits === 'xooo') {
+        debug('transformParcelByExits: xooo:');
+        parcel = toolSampleOneParcel(parcelList, category, 'topRightBottom');
+
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+      }
+
+      if (exits === 'oxoo') {
+        debug('transformParcelByExits: oxoo:');
+        parcel = toolSampleOneParcel(parcelList, category, 'topRightBottom');
+
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+      }
+
+      if (exits === 'ooxo') {
+        debug('transformParcelByExits: ooxo:');
+        parcel = toolSampleOneParcel(parcelList, category, 'topRightBottom');
+
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+      }
+
+      // Parcels: TOP-RIGHT
+      if (exits === 'ooxx') {
+        debug('transformParcelByExits: ooxx:');
+        parcel = toolSampleOneParcel(parcelList, category, 'topRight');
+      }
+
+      if (exits === 'xoox') {
+        debug('transformParcelByExits: xoox:');
+        parcel = toolSampleOneParcel(parcelList, category, 'topRight');
+
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+      }
+
+      if (exits === 'xxoo') {
+        debug('transformParcelByExits: xxoo:');
+        parcel = toolSampleOneParcel(parcelList, category, 'topRight');
+
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+      }
+
+      if (exits === 'oxxo') {
+        debug('transformParcelByExits: oxxo:');
+        parcel = toolSampleOneParcel(parcelList, category, 'topRight');
+
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+      }
+
+      // Parcels: TOP-BOTTOM
+      if (exits === 'oxox') {
+        debug('transformParcelByExits: oxox:');
+        parcel = toolSampleOneParcel(parcelList, category, 'topBottom');
+      }
+
+      if (exits === 'xoxo') {
+        debug('transformParcelByExits: xoxo:');
+        parcel = toolSampleOneParcel(parcelList, category, 'topBottom');
+
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+      }
+
+      // Parcels: TOP
       if (exits === 'oxxx') {
         debug('transformParcelByExits: oxxx:');
-        const parcel = toolSampleOneParcel(parcelList, category, 'top');
-        insertRandomParcelbyAbstractParcel(ctx, parcel);
-        return;
+        parcel = toolSampleOneParcel(parcelList, category, 'top');
       }
 
-      // if (exits === 'xoxx') {
-      //   debug('transformParcelByExits: xoxx:');
-      //   const parcel = _.sample(categoryParcels.top);
+      if (exits === 'xoxx') {
+        debug('transformParcelByExits: xoxx:');
+        parcel = toolSampleOneParcel(parcelList, category, 'top');
 
-      //   parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
-      //     parcel.parcelLayerWithStrings
-      //   );
-      //   insertRandomParcelbyAbstractParcel(ctx, parcel);
-      //   return;
-      // }
+        parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
+          parcel.parcelLayerWithStrings
+        );
+      }
 
       if (exits === 'xxox') {
         debug('transformParcelByExits: xxox:');
-        const parcel = toolSampleOneParcel(parcelList, category, 'top');
+        parcel = toolSampleOneParcel(parcelList, category, 'top');
 
         parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
           parcel.parcelLayerWithStrings
@@ -95,13 +194,11 @@ module.exports = () => {
         parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
           parcel.parcelLayerWithStrings
         );
-        insertRandomParcelbyAbstractParcel(ctx, parcel);
-        return;
       }
 
       if (exits === 'xxxo') {
         debug('transformParcelByExits: xxxo:');
-        const parcel = toolSampleOneParcel(parcelList, category, 'top');
+        parcel = toolSampleOneParcel(parcelList, category, 'top');
 
         parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
           parcel.parcelLayerWithStrings
@@ -114,15 +211,14 @@ module.exports = () => {
         parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
           parcel.parcelLayerWithStrings
         );
-        insertRandomParcelbyAbstractParcel(ctx, parcel);
-        return;
       }
 
+      ctx.parcel = parcel;
       insertRandomParcelbyAbstractParcel(ctx);
     }
 
-    function insertRandomParcelbyAbstractParcel(ctx, parcel) {
-      // const parcel = ctx.parcel;
+    function insertRandomParcelbyAbstractParcel(ctx) {
+      const parcel = ctx.parcel;
       const abstractParcel = ctx.abstractParcel;
 
       const parcelMap = ctx.parcelMap;

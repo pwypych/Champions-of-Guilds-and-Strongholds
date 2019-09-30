@@ -14,7 +14,7 @@
          "y":0
         }, 
         {
-         "data":[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+         "data":[2, 2, 3, 5, 5, 2, 3, 4, 6, 5, 3, 4, 6, 4, 3, 5, 6, 4, 3, 2, 5, 5, 3, 2, 2],
          "height":5,
          "id":2,
          "name":"levelMap",
@@ -32,7 +32,7 @@
          "name":"categoryMap",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":5,
          "x":0,
          "y":0
