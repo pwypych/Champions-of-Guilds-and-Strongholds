@@ -212,7 +212,7 @@ function setupLibrariesAndRoutes() {
   );
 
   app.post(
-    '/panelPredefined/createGamePost',
+    '/panelPredefined/createGamePredefinedPost',
     require('./panel/predefined/createGamePredefinedPost.js')(
       environment,
       db,
