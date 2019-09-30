@@ -221,7 +221,7 @@ function setupLibrariesAndRoutes() {
   );
 
   app.post(
-    '/panelPredefined/deleteGamePost',
+    '/panelPredefined/deleteGamePredefinedPost',
     require('./panel/predefined/deleteGamePredefinedPost.js')(environment, db)
   );
 
