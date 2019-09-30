@@ -25,7 +25,7 @@ module.exports = (environment, db, templateToHtml) => {
       const options = {};
       options.projection = { _id: 1 };
 
-      db.collection('mapCollection')
+      db.collection('predefinedMapCollection')
         .find(query, options)
         .toArray((error, mapArray) => {
           if (error) {
@@ -33,7 +33,7 @@ module.exports = (environment, db, templateToHtml) => {
             res
               .status(503)
               .send(
-                '503 Service Unavailable: Mongo error, cannot run find on mapCollection'
+                '503 Service Unavailable: Mongo error, cannot run find on predefinedMapCollection'
               );
             return;
           }

@@ -37,7 +37,7 @@ function setupEnvironment() {
     environment.baseurl = 'https://axe.cogs.ovh';
   }
   environment.basepath = path.join(__dirname, '..');
-  environment.basepathTiledMap = environment.basepath + '/tiledMap';
+  environment.basepathTiledMap = environment.basepath + '/tiledPredefinedMap';
   environment.basepathTiledLand = environment.basepath + '/tiledLand';
   environment.basepathTiledParcel = environment.basepath + '/tiledParcel';
   environment.basepathTiledTileset = environment.basepath + '/tiledTileset';
@@ -78,28 +78,32 @@ function setupMongo() {
     useNewUrlParser: true
   };
 
-  mongodb.connect(connectionUrl, options, (error, client) => {
-    db = client.db(dbName);
+  mongodb.connect(
+    connectionUrl,
+    options,
+    (error, client) => {
+      db = client.db(dbName);
 
-    debug('setupMongo()');
-    setupMapCollection();
-  });
+      debug('setupMongo()');
+      setupPredefinedMapCollection();
+    }
+  );
 }
 
 /* eslint-disable global-require */
-function setupMapCollection() {
-  const generateMapCollection = require('./library/generateMapCollection.js')(
+function setupPredefinedMapCollection() {
+  const generateMapCollection = require('./library/generatePredefinedMapCollection.js')(
     environment,
     db
   );
   generateMapCollection((error, mapCount) => {
     if (error) {
-      debug('setupMapCollection: Errors:', error);
+      debug('setupPredefinedMapCollection: Errors:', error);
       process.exit(1);
       return;
     }
 
-    debug('setupMapCollection: mapCount:', mapCount);
+    debug('setupPredefinedMapCollection: mapCount:', mapCount);
     setupParcelCollection();
   });
 }

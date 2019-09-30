@@ -2,11 +2,11 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:generateMapCollection');
+const debug = require('debug')('cogs:generatePredefinedMapCollection');
 const fs = require('fs');
 const _ = require('lodash');
 
-// Map base folder is in /tiledMap/ and has a folder for each map
+// Predefined map base folder is in /predefinedTiledMap/ and has a folder for each map
 // Map folder should have a name, f.ex "desert" and jsonfile desert.json
 // We need tileset files in /tiledTileset/ folder
 
@@ -17,22 +17,22 @@ module.exports = (environment, db) => {
     const errorArray = [];
 
     (function init() {
-      debug('// Reloads tiled map files into database');
+      debug('// Reloads tiled predefined map files into database');
 
-      dropMapCollection();
+      dropPredefinedMapCollection();
     })();
 
-    function dropMapCollection() {
-      db.collection('mapCollection').drop((error) => {
+    function dropPredefinedMapCollection() {
+      db.collection('predefinedMapCollection').drop((error) => {
         if (error) {
-          // When no map collection this error is thrown, ignore it
+          // When no predefined map collection this error is thrown, ignore it
           if (error.message !== 'ns not found') {
             callback('remove mongo error:' + JSON.stringify(error));
             return;
           }
         }
 
-        debug('dropMapCollection');
+        debug('dropPredefinedMapCollection');
         scanMapBaseFolder();
       });
     }
@@ -233,7 +233,7 @@ module.exports = (environment, db) => {
     }
 
     function insertMapObject(mapObject, done) {
-      db.collection('mapCollection').insertOne(mapObject, (error) => {
+      db.collection('predefinedMapCollection').insertOne(mapObject, (error) => {
         if (error) {
           errorArray.push(
             mapObject.folderName +

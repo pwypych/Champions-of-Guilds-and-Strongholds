@@ -44,18 +44,22 @@ module.exports = (environment, db, figureBlueprint) => {
       const query = { _id: mapName };
       const options = {};
 
-      db.collection('mapCollection').findOne(query, options, (error, data) => {
-        if (error) {
-          debug('findMap: error:', error);
-          res.status(503).send('503 Service Unavailable - Cannot find map');
-          return;
+      db.collection('predefinedMapCollection').findOne(
+        query,
+        options,
+        (error, data) => {
+          if (error) {
+            debug('findMap: error:', error);
+            res.status(503).send('503 Service Unavailable - Cannot find map');
+            return;
+          }
+
+          const mapObject = data;
+
+          debug('findMap: mapObject._id:', mapObject._id);
+          generateGameEntity(mapObject);
         }
-
-        const mapObject = data;
-
-        debug('findMap: mapObject._id:', mapObject._id);
-        generateGameEntity(mapObject);
-      });
+      );
     }
 
     function generateGameEntity(mapObject) {
