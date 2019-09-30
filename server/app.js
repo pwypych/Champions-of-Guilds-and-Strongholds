@@ -192,8 +192,8 @@ function setupLibrariesAndRoutes() {
   );
 
   app.post(
-    '/panelRandom/deleteGamePost',
-    require('./panel/random/deleteGamePost.js')(environment, db)
+    '/panelRandom/deleteGameRandomPost',
+    require('./panel/random/deleteGameRandomPost.js')(environment, db)
   );
 
   app.post(
