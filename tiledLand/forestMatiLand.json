@@ -1,0 +1,55 @@
+{ "height":5,
+ "infinite":false,
+ "layers":[
+        {
+         "data":[1, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 1],
+         "height":5,
+         "id":3,
+         "name":"categoryMap",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":false,
+         "width":5,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "data":[2, 2, 4, 5, 6, 2, 3, 3, 4, 5, 3, 4, 6, 4, 3, 4, 5, 4, 3, 2, 5, 6, 3, 2, 2],
+         "height":5,
+         "id":2,
+         "name":"levelMap",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":5,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "data":[8, 21, 9, 10, 8, 9, 8, 14, 18, 10, 8, 14, 22, 9, 21, 13, 18, 10, 8, 8, 8, 14, 20, 10, 8],
+         "height":5,
+         "id":1,
+         "name":"mazeMap",
+         "opacity":0.77,
+         "type":"tilelayer",
+         "visible":true,
+         "width":5,
+         "x":0,
+         "y":0
+        }],
+ "nextlayerid":4,
+ "nextobjectid":1,
+ "orientation":"orthogonal",
+ "renderorder":"right-down",
+ "tiledversion":"2018.09.12",
+ "tileheight":32,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "source":"..\/tiledTileset\/abstractParcelTileset.json"
+        }],
+ "tilewidth":32,
+ "type":"map",
+ "version":1.2,
+ "width":5
+}
