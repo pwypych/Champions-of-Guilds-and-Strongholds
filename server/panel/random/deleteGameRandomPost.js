@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:deleteGamePost');
+const debug = require('debug')('cogs:deleteGameRandomPost');
 const shortid = require('shortid');
 
 module.exports = (environment, db) => {
@@ -38,12 +38,12 @@ module.exports = (environment, db) => {
     function deleteGame(gameId) {
       db.collection('gameCollection').deleteOne({ _id: gameId }, (error) => {
         if (error) {
-          debug('deleteGamePost: error:', error);
+          debug('deleteGame: error:', error);
           res.status(503).send('503 Error - Cannot delete game instance');
           return;
         }
 
-        debug('deleteGamePost');
+        debug('deleteGame');
         deleteSaveGame(gameId);
       });
     }
