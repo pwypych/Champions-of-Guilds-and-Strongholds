@@ -118,7 +118,7 @@ module.exports = () => {
     rock: { collision: true },
 
     tree: {
-      spriteOffset: { x: 0, y: -10 },
+      spriteOffset: { x: 0, y: 0 },
       collision: true
     }
   };
