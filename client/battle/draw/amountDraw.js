@@ -94,10 +94,13 @@ g.battle.amountDraw = (walkie, viewport, freshEntities) => {
       unitContainer.addChildZ(amount, zOrder);
       unitContainer.sortChildren();
 
-      const paddingRight = 2;
       const paddingTop = 3;
-      amount.x = blockWidthPx - amount.width + paddingRight;
+      amount.x = blockWidthPx - amount.width;
       amount.y = blockHeightPx - amount.height + paddingTop;
+
+      if (entity.mirrorSprite) {
+        amount.x = 0;
+      }
     }
 
     amount.text = entity.amount;
