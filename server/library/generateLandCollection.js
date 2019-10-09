@@ -247,7 +247,7 @@ module.exports = (environment, db) => {
             landLayerWithStringsObject.categoryMap[y][x];
           abstractParcelMap[y][x].level =
             landLayerWithStringsObject.levelMap[y][x];
-          abstractParcelMap[y][x].exits =
+          abstractParcelMap[y][x].exit =
             landLayerWithStringsObject.mazeMap[y][x];
         });
       });
