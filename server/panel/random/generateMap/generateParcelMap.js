@@ -55,23 +55,31 @@ module.exports = () => {
       const category = abstractParcel.category;
       const exits = abstractParcel.exits;
 
-      const parcelList = res.locals.parcelList;
+      const parcelCategoryExitList = res.locals.parcelCategoryExitList;
       let parcel;
 
       // Parcels: ALL
       if (exits === 'oooo') {
         debug('transformParcelByExits: oooo:');
-        parcel = toolSampleOneParcel(parcelList, category, 'all');
+        parcel = toolSampleOneParcel(parcelCategoryExitList, category, 'all');
       }
       // Parcels: TOP-RIGHT-BOTTOM
       if (exits === 'ooox') {
         debug('transformParcelByExits: ooox:');
-        parcel = toolSampleOneParcel(parcelList, category, 'topRightBottom');
+        parcel = toolSampleOneParcel(
+          parcelCategoryExitList,
+          category,
+          'topRightBottom'
+        );
       }
 
       if (exits === 'xooo') {
         debug('transformParcelByExits: xooo:');
-        parcel = toolSampleOneParcel(parcelList, category, 'topRightBottom');
+        parcel = toolSampleOneParcel(
+          parcelCategoryExitList,
+          category,
+          'topRightBottom'
+        );
 
         parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
           parcel.parcelLayerWithStrings
@@ -80,7 +88,11 @@ module.exports = () => {
 
       if (exits === 'oxoo') {
         debug('transformParcelByExits: oxoo:');
-        parcel = toolSampleOneParcel(parcelList, category, 'topRightBottom');
+        parcel = toolSampleOneParcel(
+          parcelCategoryExitList,
+          category,
+          'topRightBottom'
+        );
 
         parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
           parcel.parcelLayerWithStrings
@@ -93,7 +105,11 @@ module.exports = () => {
 
       if (exits === 'ooxo') {
         debug('transformParcelByExits: ooxo:');
-        parcel = toolSampleOneParcel(parcelList, category, 'topRightBottom');
+        parcel = toolSampleOneParcel(
+          parcelCategoryExitList,
+          category,
+          'topRightBottom'
+        );
 
         parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
           parcel.parcelLayerWithStrings
@@ -111,12 +127,20 @@ module.exports = () => {
       // Parcels: TOP-RIGHT
       if (exits === 'ooxx') {
         debug('transformParcelByExits: ooxx:');
-        parcel = toolSampleOneParcel(parcelList, category, 'topRight');
+        parcel = toolSampleOneParcel(
+          parcelCategoryExitList,
+          category,
+          'topRight'
+        );
       }
 
       if (exits === 'xoox') {
         debug('transformParcelByExits: xoox:');
-        parcel = toolSampleOneParcel(parcelList, category, 'topRight');
+        parcel = toolSampleOneParcel(
+          parcelCategoryExitList,
+          category,
+          'topRight'
+        );
 
         parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
           parcel.parcelLayerWithStrings
@@ -125,7 +149,11 @@ module.exports = () => {
 
       if (exits === 'xxoo') {
         debug('transformParcelByExits: xxoo:');
-        parcel = toolSampleOneParcel(parcelList, category, 'topRight');
+        parcel = toolSampleOneParcel(
+          parcelCategoryExitList,
+          category,
+          'topRight'
+        );
 
         parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
           parcel.parcelLayerWithStrings
@@ -138,7 +166,11 @@ module.exports = () => {
 
       if (exits === 'oxxo') {
         debug('transformParcelByExits: oxxo:');
-        parcel = toolSampleOneParcel(parcelList, category, 'topRight');
+        parcel = toolSampleOneParcel(
+          parcelCategoryExitList,
+          category,
+          'topRight'
+        );
 
         parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
           parcel.parcelLayerWithStrings
@@ -156,12 +188,20 @@ module.exports = () => {
       // Parcels: TOP-BOTTOM
       if (exits === 'oxox') {
         debug('transformParcelByExits: oxox:');
-        parcel = toolSampleOneParcel(parcelList, category, 'topBottom');
+        parcel = toolSampleOneParcel(
+          parcelCategoryExitList,
+          category,
+          'topBottom'
+        );
       }
 
       if (exits === 'xoxo') {
         debug('transformParcelByExits: xoxo:');
-        parcel = toolSampleOneParcel(parcelList, category, 'topBottom');
+        parcel = toolSampleOneParcel(
+          parcelCategoryExitList,
+          category,
+          'topBottom'
+        );
 
         parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
           parcel.parcelLayerWithStrings
@@ -171,12 +211,12 @@ module.exports = () => {
       // Parcels: TOP
       if (exits === 'oxxx') {
         debug('transformParcelByExits: oxxx:');
-        parcel = toolSampleOneParcel(parcelList, category, 'top');
+        parcel = toolSampleOneParcel(parcelCategoryExitList, category, 'top');
       }
 
       if (exits === 'xoxx') {
         debug('transformParcelByExits: xoxx:');
-        parcel = toolSampleOneParcel(parcelList, category, 'top');
+        parcel = toolSampleOneParcel(parcelCategoryExitList, category, 'top');
 
         parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
           parcel.parcelLayerWithStrings
@@ -185,7 +225,7 @@ module.exports = () => {
 
       if (exits === 'xxox') {
         debug('transformParcelByExits: xxox:');
-        parcel = toolSampleOneParcel(parcelList, category, 'top');
+        parcel = toolSampleOneParcel(parcelCategoryExitList, category, 'top');
 
         parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
           parcel.parcelLayerWithStrings
@@ -198,7 +238,7 @@ module.exports = () => {
 
       if (exits === 'xxxo') {
         debug('transformParcelByExits: xxxo:');
-        parcel = toolSampleOneParcel(parcelList, category, 'top');
+        parcel = toolSampleOneParcel(parcelCategoryExitList, category, 'top');
 
         parcel.parcelLayerWithStrings = toolRotate2DMatrixBy90(
           parcel.parcelLayerWithStrings
@@ -242,8 +282,8 @@ module.exports = () => {
       return newMatrix;
     }
 
-    function toolSampleOneParcel(parcelList, category, exit) {
-      const parcelBlueprint = _.sample(parcelList[category][exit]);
+    function toolSampleOneParcel(parcelCategoryExitList, category, exit) {
+      const parcelBlueprint = _.sample(parcelCategoryExitList[category][exit]);
       const parcel = JSON.parse(JSON.stringify(parcelBlueprint));
       return parcel;
     }

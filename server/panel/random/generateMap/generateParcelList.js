@@ -38,38 +38,41 @@ module.exports = (db) => {
     }
 
     function generateParcelList(parcelArray) {
-      const parcelList = {};
-      parcelList.castle = {};
-      parcelList.countryside = {};
+      const parcelCategoryExitList = {};
+      parcelCategoryExitList.castle = {};
+      parcelCategoryExitList.countryside = {};
 
       parcelArray.forEach((parcel) => {
         if (parcel.category === 'castle') {
-          if (!parcelList.castle[parcel.exits]) {
-            parcelList.castle[parcel.exits] = [];
+          if (!parcelCategoryExitList.castle[parcel.exits]) {
+            parcelCategoryExitList.castle[parcel.exits] = [];
           }
-          parcelList.castle[parcel.exits].push(parcel);
+          parcelCategoryExitList.castle[parcel.exits].push(parcel);
         }
 
         if (parcel.category === 'countryside') {
-          if (!parcelList.countryside[parcel.exits]) {
-            parcelList.countryside[parcel.exits] = [];
+          if (!parcelCategoryExitList.countryside[parcel.exits]) {
+            parcelCategoryExitList.countryside[parcel.exits] = [];
           }
-          parcelList.countryside[parcel.exits].push(parcel);
+          parcelCategoryExitList.countryside[parcel.exits].push(parcel);
         }
       });
 
       debug(
-        'generateParcelList: parcelList.castle.all.length:',
-        parcelList.castle.all.length
+        'generateParcelList: parcelCategoryExitList.castle.all.length:',
+        parcelCategoryExitList.castle.all.length
       );
       debug(
-        'generateParcelList: parcelList.countryside.all.length:',
-        parcelList.countryside.all.length
+        'generateParcelList: parcelCategoryExitList.countryside.all.length:',
+        parcelCategoryExitList.countryside.all.length
       );
 
-      debug('generateParcelList: parcelList', parcelList);
+      debug(
+        'generateParcelList: parcelCategoryExitList',
+        parcelCategoryExitList
+      );
 
-      res.locals.parcelList = parcelList;
+      res.locals.parcelCategoryExitList = parcelCategoryExitList;
       next();
     }
   };
