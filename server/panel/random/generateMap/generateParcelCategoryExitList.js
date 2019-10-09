@@ -43,17 +43,17 @@ module.exports = (db) => {
 
       parcelArray.forEach((parcel) => {
         if (parcel.category === 'castle') {
-          if (!parcelCategoryExitList.castle[parcel.exits]) {
-            parcelCategoryExitList.castle[parcel.exits] = [];
+          if (!parcelCategoryExitList.castle[parcel.exit]) {
+            parcelCategoryExitList.castle[parcel.exit] = [];
           }
-          parcelCategoryExitList.castle[parcel.exits].push(parcel);
+          parcelCategoryExitList.castle[parcel.exit].push(parcel);
         }
 
         if (parcel.category === 'countryside') {
-          if (!parcelCategoryExitList.countryside[parcel.exits]) {
-            parcelCategoryExitList.countryside[parcel.exits] = [];
+          if (!parcelCategoryExitList.countryside[parcel.exit]) {
+            parcelCategoryExitList.countryside[parcel.exit] = [];
           }
-          parcelCategoryExitList.countryside[parcel.exits].push(parcel);
+          parcelCategoryExitList.countryside[parcel.exit].push(parcel);
         }
       });
 

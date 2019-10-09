@@ -86,7 +86,7 @@ module.exports = (environment, db) => {
       const parcelObject = {};
       parcelObject._id = parcel;
       parcelObject.category = parcelSplitArray[0];
-      parcelObject.exits = parcelSplitArray[1];
+      parcelObject.exit = parcelSplitArray[1];
       parcelObject.name = parcelSplitArray[2];
 
       parcelObject.pathTiledParcel =

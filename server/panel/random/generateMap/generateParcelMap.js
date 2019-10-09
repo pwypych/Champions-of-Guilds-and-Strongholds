@@ -53,18 +53,18 @@ module.exports = () => {
     function transformParcelByExits(ctx) {
       const abstractParcel = ctx.abstractParcel;
       const category = abstractParcel.category;
-      const exits = abstractParcel.exits;
+      const exit = abstractParcel.exit;
 
       const parcelCategoryExitList = res.locals.parcelCategoryExitList;
       let parcel;
 
       // Parcels: ALL
-      if (exits === 'oooo') {
+      if (exit === 'oooo') {
         debug('transformParcelByExits: oooo:');
         parcel = toolSampleOneParcel(parcelCategoryExitList, category, 'all');
       }
       // Parcels: TOP-RIGHT-BOTTOM
-      if (exits === 'ooox') {
+      if (exit === 'ooox') {
         debug('transformParcelByExits: ooox:');
         parcel = toolSampleOneParcel(
           parcelCategoryExitList,
@@ -73,7 +73,7 @@ module.exports = () => {
         );
       }
 
-      if (exits === 'xooo') {
+      if (exit === 'xooo') {
         debug('transformParcelByExits: xooo:');
         parcel = toolSampleOneParcel(
           parcelCategoryExitList,
@@ -86,7 +86,7 @@ module.exports = () => {
         );
       }
 
-      if (exits === 'oxoo') {
+      if (exit === 'oxoo') {
         debug('transformParcelByExits: oxoo:');
         parcel = toolSampleOneParcel(
           parcelCategoryExitList,
@@ -103,7 +103,7 @@ module.exports = () => {
         );
       }
 
-      if (exits === 'ooxo') {
+      if (exit === 'ooxo') {
         debug('transformParcelByExits: ooxo:');
         parcel = toolSampleOneParcel(
           parcelCategoryExitList,
@@ -125,7 +125,7 @@ module.exports = () => {
       }
 
       // Parcels: TOP-RIGHT
-      if (exits === 'ooxx') {
+      if (exit === 'ooxx') {
         debug('transformParcelByExits: ooxx:');
         parcel = toolSampleOneParcel(
           parcelCategoryExitList,
@@ -134,7 +134,7 @@ module.exports = () => {
         );
       }
 
-      if (exits === 'xoox') {
+      if (exit === 'xoox') {
         debug('transformParcelByExits: xoox:');
         parcel = toolSampleOneParcel(
           parcelCategoryExitList,
@@ -147,7 +147,7 @@ module.exports = () => {
         );
       }
 
-      if (exits === 'xxoo') {
+      if (exit === 'xxoo') {
         debug('transformParcelByExits: xxoo:');
         parcel = toolSampleOneParcel(
           parcelCategoryExitList,
@@ -164,7 +164,7 @@ module.exports = () => {
         );
       }
 
-      if (exits === 'oxxo') {
+      if (exit === 'oxxo') {
         debug('transformParcelByExits: oxxo:');
         parcel = toolSampleOneParcel(
           parcelCategoryExitList,
@@ -186,7 +186,7 @@ module.exports = () => {
       }
 
       // Parcels: TOP-BOTTOM
-      if (exits === 'oxox') {
+      if (exit === 'oxox') {
         debug('transformParcelByExits: oxox:');
         parcel = toolSampleOneParcel(
           parcelCategoryExitList,
@@ -195,7 +195,7 @@ module.exports = () => {
         );
       }
 
-      if (exits === 'xoxo') {
+      if (exit === 'xoxo') {
         debug('transformParcelByExits: xoxo:');
         parcel = toolSampleOneParcel(
           parcelCategoryExitList,
@@ -209,12 +209,12 @@ module.exports = () => {
       }
 
       // Parcels: TOP
-      if (exits === 'oxxx') {
+      if (exit === 'oxxx') {
         debug('transformParcelByExits: oxxx:');
         parcel = toolSampleOneParcel(parcelCategoryExitList, category, 'top');
       }
 
-      if (exits === 'xoxx') {
+      if (exit === 'xoxx') {
         debug('transformParcelByExits: xoxx:');
         parcel = toolSampleOneParcel(parcelCategoryExitList, category, 'top');
 
@@ -223,7 +223,7 @@ module.exports = () => {
         );
       }
 
-      if (exits === 'xxox') {
+      if (exit === 'xxox') {
         debug('transformParcelByExits: xxox:');
         parcel = toolSampleOneParcel(parcelCategoryExitList, category, 'top');
 
@@ -236,7 +236,7 @@ module.exports = () => {
         );
       }
 
-      if (exits === 'xxxo') {
+      if (exit === 'xxxo') {
         debug('transformParcelByExits: xxxo:');
         parcel = toolSampleOneParcel(parcelCategoryExitList, category, 'top');
 
