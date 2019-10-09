@@ -143,10 +143,7 @@ module.exports = (environment, db) => {
     }
 
     function readTilesetFiles(mapObject, tiledMapObject, done) {
-      const filePathArray = [
-        environment.basepathTiledTileset + '/1x1.json',
-        environment.basepathTiledTileset + '/3x3.json'
-      ];
+      const filePathArray = [environment.basepathTiledTileset + '/1x1.json'];
       const tiledTilesetArrayDeep = [];
 
       const doneTilesets = _.after(filePathArray.length, () => {
@@ -167,7 +164,7 @@ module.exports = (environment, db) => {
           // and tile id in tilemap layer
 
           // find firstgid
-          const tilesetName = tiledTilesetObject.name; // ex. 3x3
+          const tilesetName = tiledTilesetObject.name;
           let tiledFirstGid;
           tiledMapObject.tilesets.forEach((tilesetInfo) => {
             if (tilesetInfo.source.includes(tilesetName)) {

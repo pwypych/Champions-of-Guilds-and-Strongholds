@@ -2,7 +2,7 @@
  "infinite":false,
  "layers":[
         {
-         "data":[45, 45, 46, 0, 45, 47, 49, 45, 48, 46, 0, 0, 45, 5, 0, 0, 0, 5, 0, 0, 0, 0, 48, 45, 49, 0, 46, 0, 46, 45, 45, 47, 0, 46, 45, 45, 45, 46, 0, 0, 45, 45, 45, 45, 48, 0, 46, 46, 45],
+         "data":[46, 46, 47, 0, 46, 48, 50, 46, 49, 47, 0, 0, 46, 5, 0, 0, 0, 5, 0, 0, 0, 0, 49, 46, 50, 0, 47, 0, 47, 46, 46, 48, 0, 47, 46, 46, 46, 47, 0, 0, 46, 46, 46, 46, 49, 0, 47, 47, 46],
          "height":7,
          "id":1,
          "name":"Tile Layer 1",
@@ -17,7 +17,7 @@
  "nextobjectid":1,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"2019.04.03",
+ "tiledversion":"2018.09.12",
  "tileheight":32,
  "tilesets":[
         {
@@ -25,11 +25,7 @@
          "source":"..\/tiledTileset\/1x1.json"
         }, 
         {
-         "firstgid":44,
-         "source":"..\/tiledTileset\/3x3.json"
-        }, 
-        {
-         "firstgid":45,
+         "firstgid":46,
          "source":"..\/tiledTileset\/abstractFigureTileset.json"
         }],
  "tilewidth":32,

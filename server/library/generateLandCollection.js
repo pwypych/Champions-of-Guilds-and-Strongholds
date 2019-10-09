@@ -164,7 +164,7 @@ module.exports = (environment, db) => {
         // and tile id in tilemap layer
 
         // find firstgid
-        const tilesetName = tiledTilesetObject.name; // ex. 3x3
+        const tilesetName = tiledTilesetObject.name;
         let tiledFirstGid;
         tiledLandObject.tilesets.forEach((tilesetInfo) => {
           if (tilesetInfo.source.includes(tilesetName)) {

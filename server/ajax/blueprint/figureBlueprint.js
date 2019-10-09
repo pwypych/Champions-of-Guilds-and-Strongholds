@@ -109,7 +109,7 @@ module.exports = () => {
 
     // Rest of figures
     castleRandom: {
-      spriteOffset: { x: -32, y: -64 },
+      spriteOffset: { x: 0, y: 0 },
       collision: true
     },
 

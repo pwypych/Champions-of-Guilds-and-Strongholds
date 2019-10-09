@@ -8,20 +8,20 @@
  "margin":0,
  "name":"1x1",
  "spacing":0,
- "tilecount":22,
+ "tilecount":23,
  "tiledversion":"2018.09.12",
- "tileheight":43,
+ "tileheight":32,
  "tiles":[
         {
          "id":0,
          "image":"..\/public\/sprite\/tree.png",
-         "imageheight":43,
+         "imageheight":32,
          "imagewidth":32
         }, 
         {
          "id":1,
          "image":"..\/public\/sprite\/rock.png",
-         "imageheight":37,
+         "imageheight":32,
          "imagewidth":32
         }, 
         {
@@ -141,6 +141,12 @@
         {
          "id":42,
          "image":"..\/public\/sprite\/blackKnight.png",
+         "imageheight":32,
+         "imagewidth":32
+        }, 
+        {
+         "id":44,
+         "image":"..\/public\/sprite\/castleRandom.png",
          "imageheight":32,
          "imagewidth":32
         }],
