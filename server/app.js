@@ -170,7 +170,7 @@ function setupLibrariesAndRoutes() {
   app.post(
     '/panelRandom/createGameRandomPost',
     require('./panel/random/generateMap/findLandByName.js')(db),
-    require('./panel/random/generateMap/generateParcelList.js')(db),
+    require('./panel/random/generateMap/generateParcelCategoryExitList.js')(db),
     require('./panel/random/generateMap/generateParcelMap.js')(),
     require('./panel/random/generateMap/generateAbstractFigureMap.js')(),
     require('./panel/random/generateMap/generateFigureMap.js')(

@@ -2,8 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:generateParcelList');
-const _ = require('lodash');
+const debug = require('debug')('cogs:generateParcelCategoryExitList');
 
 module.exports = (db) => {
   return (req, res, next) => {
@@ -33,11 +32,11 @@ module.exports = (db) => {
           }
 
           debug('findParcels: parcelArray.length:', parcelArray.length);
-          generateParcelList(parcelArray);
+          generateParcelCategoryExitList(parcelArray);
         });
     }
 
-    function generateParcelList(parcelArray) {
+    function generateParcelCategoryExitList(parcelArray) {
       const parcelCategoryExitList = {};
       parcelCategoryExitList.castle = {};
       parcelCategoryExitList.countryside = {};
@@ -59,16 +58,16 @@ module.exports = (db) => {
       });
 
       debug(
-        'generateParcelList: parcelCategoryExitList.castle.all.length:',
+        'generateParcelCategoryExitList: parcelCategoryExitList.castle.all.length:',
         parcelCategoryExitList.castle.all.length
       );
       debug(
-        'generateParcelList: parcelCategoryExitList.countryside.all.length:',
+        'generateParcelCategoryExitList: parcelCategoryExitList.countryside.all.length:',
         parcelCategoryExitList.countryside.all.length
       );
 
       debug(
-        'generateParcelList: parcelCategoryExitList',
+        'generateParcelCategoryExitList: parcelCategoryExitList',
         parcelCategoryExitList
       );
 
