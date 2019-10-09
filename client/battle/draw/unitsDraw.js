@@ -63,6 +63,11 @@ g.battle.unitsDraw = (walkie, viewport, freshEntities) => {
         sprite.y += entity.spriteOffset.y;
       }
 
+      if (entity.mirrorSprite) {
+        sprite.x += blockWidthPx;
+        sprite.scale.x = -1;
+      }
+
       let zOrder = 5;
 
       if (entity.unitStats) {

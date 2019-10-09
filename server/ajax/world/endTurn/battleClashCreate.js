@@ -119,6 +119,7 @@ module.exports = (db, unitBlueprint) => {
         unit.amount = amount;
         unit.active = false;
         unit.collision = true;
+        unit.mirrorSprite = true;
         unit.position = defenderPositions[counterD];
         unit.unitStats = {
           current: unitBlueprint()[unitName],

@@ -123,6 +123,7 @@ module.exports = (db, unitBlueprint) => {
         debug('generateUnits:unit.amount:', unit.amount);
         unit.active = false;
         unit.collision = true;
+        unit.mirrorSprite = true;
         unit.position = defenderPositions[index];
         unit.unitStats = {
           current: unitBlueprint()[unitName],
