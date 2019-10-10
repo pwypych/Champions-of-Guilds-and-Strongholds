@@ -156,6 +156,7 @@ function setupLibrariesAndRoutes() {
   const unitBlueprint = require('./ajax/blueprint/unitBlueprint.js');
   const figureBlueprint = require('./ajax/blueprint/figureBlueprint.js');
   const raceBlueprint = require('./ajax/blueprint/raceBlueprint.js');
+  const buildingBlueprint = require('./ajax/blueprint/buildingBlueprint.js');
 
   // general
   app.get('/', (req, res) => {
@@ -256,7 +257,8 @@ function setupLibrariesAndRoutes() {
     require('./ajax/blueprint/blueprintGet.js')(
       unitBlueprint,
       figureBlueprint,
-      raceBlueprint
+      raceBlueprint,
+      buildingBlueprint
     )
   );
 
