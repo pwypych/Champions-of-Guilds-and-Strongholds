@@ -72,7 +72,7 @@ g.main = function main() {
     g.world.informationButton($body);
     g.world.informationModal($body, walkie, freshEntities);
     g.world.castleButton($body);
-    g.world.castleModal($body, walkie, freshEntities);
+    g.world.castleModal($body, walkie, freshEntities, blueprints);
     g.world.chat($body, walkie);
     g.world.endTurnButton($body, auth, walkie, freshEntities);
     g.world.endTurnCountdown(walkie, freshEntities);

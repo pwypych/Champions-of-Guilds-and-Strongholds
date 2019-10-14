@@ -19,6 +19,15 @@ module.exports = () => {
       }
     },
 
+    humanBarracks: {
+      race: 'human',
+      buildingCost: {
+        gold: 1000,
+        wood: 10,
+        ore: 20
+      }
+    },
+
     beastCapitol: {
       race: 'beast',
       buildingCost: {
