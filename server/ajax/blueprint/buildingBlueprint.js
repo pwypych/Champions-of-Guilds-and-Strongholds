@@ -8,6 +8,7 @@
 module.exports = () => {
   return {
     humanCapitol: {
+      race: 'human',
       buildingCost: {
         gold: 2500,
         crystal: 2,
@@ -17,7 +18,9 @@ module.exports = () => {
         gold: 1000
       }
     },
+
     beastCapitol: {
+      race: 'beast',
       buildingCost: {
         gold: 2000,
         crystal: 3,
@@ -27,7 +30,9 @@ module.exports = () => {
         gold: 1000
       }
     },
+
     undeadCapitol: {
+      race: 'undead',
       buildingCost: {
         gold: 3000,
         wood: 10,
