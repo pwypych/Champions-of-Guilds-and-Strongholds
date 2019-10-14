@@ -8,12 +8,12 @@ g.world.castleModal = ($body, walkie, freshEntities, blueprints) => {
   const buildingBlueprint = blueprints.buildingBlueprint;
 
   (function init() {
-    onEntitiesGet();
+    onEntitiesGetFirst();
   })();
 
-  function onEntitiesGet() {
+  function onEntitiesGetFirst() {
     walkie.onEvent(
-      'entitiesGet_',
+      'entitiesGetFirst_',
       'informationModal.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
