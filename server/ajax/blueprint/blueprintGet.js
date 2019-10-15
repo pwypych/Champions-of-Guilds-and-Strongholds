@@ -4,7 +4,12 @@
 
 const debug = require('debug')('cogs:blueprintGet');
 
-module.exports = (unitBlueprint, figureBlueprint, raceBlueprint) => {
+module.exports = (
+  unitBlueprint,
+  figureBlueprint,
+  raceBlueprint,
+  buildingBlueprint
+) => {
   return (req, res) => {
     (function init() {
       debug('// Send blueprints');
@@ -18,6 +23,7 @@ module.exports = (unitBlueprint, figureBlueprint, raceBlueprint) => {
       blueprint.unitBlueprint = unitBlueprint();
       blueprint.figureBlueprint = figureBlueprint();
       blueprint.raceBlueprint = raceBlueprint();
+      blueprint.buildingBlueprint = buildingBlueprint();
 
       sendBlueprintObject(blueprint);
     }
