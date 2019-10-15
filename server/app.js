@@ -37,10 +37,12 @@ function setupEnvironment() {
     environment.baseurl = 'https://axe.cogs.ovh';
   }
   environment.basepath = path.join(__dirname, '..');
-  environment.basepathTiledMap = environment.basepath + '/tiledPredefinedMap';
-  environment.basepathTiledLand = environment.basepath + '/tiledLand';
-  environment.basepathTiledParcel = environment.basepath + '/tiledParcel';
-  environment.basepathTiledTileset = environment.basepath + '/tiledTileset';
+  environment.basepathTiledMap =
+    environment.basepath + '/tiled/tiledPredefinedMap';
+  environment.basepathTiledLand = environment.basepath + '/tiled/tiledLand';
+  environment.basepathTiledParcel = environment.basepath + '/tiled/tiledParcel';
+  environment.basepathTiledTileset =
+    environment.basepath + '/tiled/tiledTileset';
   environment.basepathFigure = environment.basepath + '/server/figure';
 
   debug('setupEnvironment()', environment);
@@ -78,16 +80,12 @@ function setupMongo() {
     useNewUrlParser: true
   };
 
-  mongodb.connect(
-    connectionUrl,
-    options,
-    (error, client) => {
-      db = client.db(dbName);
+  mongodb.connect(connectionUrl, options, (error, client) => {
+    db = client.db(dbName);
 
-      debug('setupMongo()');
-      setupPredefinedMapCollection();
-    }
-  );
+    debug('setupMongo()');
+    setupPredefinedMapCollection();
+  });
 }
 
 /* eslint-disable global-require */
