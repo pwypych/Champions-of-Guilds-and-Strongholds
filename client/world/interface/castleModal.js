@@ -2,9 +2,9 @@
 
 'use strict';
 
-g.world.castleModal = ($body, walkie, freshEntities, blueprints) => {
+g.world.castleModal = ($body, walkie, freshEntities, blueprints, auth) => {
   const $modal = $body.find('.js-world-interface-castle-modal');
-  const raceBuildings = $modal.find('.js-race-building');
+  const raceBuilding = $modal.find('.js-race-building');
   const buildingBlueprint = blueprints.buildingBlueprint;
 
   (function init() {
@@ -32,62 +32,37 @@ g.world.castleModal = ($body, walkie, freshEntities, blueprints) => {
     _.forEach(freshEntities(), (entity) => {
       if (entity.playerCurrent) {
         const playerRace = entity.playerData.race;
-        drawRaceBuildings(playerRace);
+        drawRaceBuildingToBuy(playerRace);
       }
     });
   }
 
-  function drawRaceBuildings(playerRace) {
-    raceBuildings.empty();
+  function drawRaceBuildingToBuy(playerRace) {
+    raceBuilding.empty();
     const $seperator10 = $('<div class="seperator-10"></div>');
 
     _.forEach(buildingBlueprint, (building, name) => {
       if (building.race === playerRace) {
-        const $buildingName = $('<div>' + name + '</div>');
-        raceBuildings.append($buildingName);
+        const $buildingName = $('<div>' + building.namePretty + '</div>');
+        raceBuilding.append($buildingName);
 
-        raceBuildings.append($seperator10);
+        raceBuilding.append($seperator10);
 
         const $buildingSprite = $(
           '<img class="vertical-align" src="/sprite/castleRandom.png" width="36" height="36">'
         );
-        raceBuildings.append($buildingSprite);
+        raceBuilding.append($buildingSprite);
 
-        if (building.buildingCost.gold) {
-          const $gold = $(
-            '<img class="vertical-align" src="/sprite/gold.png" width="36" height="36"><span>' +
-              building.buildingCost.gold +
+        _.forEach(building.buildingCost, (cost, resource) => {
+          const $resource = $(
+            '<img class="vertical-align" src="/sprite/' +
+              resource +
+              '.png" width="36" height="36"><span>' +
+              cost +
               '</span>'
           );
-          raceBuildings.append($gold);
-        }
-
-        if (building.buildingCost.wood) {
-          const $wood = $(
-            '<img class="vertical-align" src="/sprite/wood.png" width="36" height="36"><span>' +
-              building.buildingCost.wood +
-              '</span>'
-          );
-          raceBuildings.append($wood);
-        }
-
-        if (building.buildingCost.ore) {
-          const $ore = $(
-            '<img class="vertical-align" src="/sprite/stone.png" width="36" height="36"><span>' +
-              building.buildingCost.ore +
-              '</span>'
-          );
-          raceBuildings.append($ore);
-        }
-
-        if (building.buildingCost.crystal) {
-          const $crystal = $(
-            '<img class="vertical-align" src="/sprite/crystal.png" width="36" height="36"><span>' +
-              building.buildingCost.crystal +
-              '</span>'
-          );
-          raceBuildings.append($crystal);
-        }
+          raceBuilding.append($resource);
+        });
 
         const $buyButton = $(
           '<button class="js-button-buy" data-building-name="' +
@@ -95,10 +70,30 @@ g.world.castleModal = ($body, walkie, freshEntities, blueprints) => {
             '">Build</button>'
         );
 
-        raceBuildings.append($buyButton);
-        // console.log('name:', name);
-        // console.log('building:', building);
+        raceBuilding.append($buyButton);
+        onBuildCastleBuildingButtonClick($buyButton);
       }
+    });
+  }
+
+  function onBuildCastleBuildingButtonClick($buyButton) {
+    $buyButton.on('click', () => {
+      const buildingName = $buyButton.attr('data-building-name');
+      console.log(
+        'onBuildCastleBuildingButtonClick:buildingName:',
+        buildingName
+      );
+      sendBuildCastleBuildingPost(buildingName);
+    });
+  }
+
+  function sendBuildCastleBuildingPost(buildingName) {
+    const data = { buildingName: buildingName };
+    $.post('/ajax/world/build/buildCastleBuildingPost' + auth.uri, data, () => {
+      console.log(
+        'sendBuildCastleBuildingPost: POST -> /ajax/world/build/buildCastleBuildingPost',
+        data
+      );
     });
   }
 };
