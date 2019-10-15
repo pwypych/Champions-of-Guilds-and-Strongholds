@@ -26,7 +26,7 @@ module.exports = () => {
       buildingCost: {
         gold: 1000,
         wood: 10,
-        ore: 20
+        stone: 20
       }
     },
 
@@ -36,7 +36,7 @@ module.exports = () => {
       buildingCost: {
         gold: 2000,
         crystal: 3,
-        ore: 8
+        stone: 8
       },
       generatesDaily: {
         gold: 1000
@@ -49,7 +49,7 @@ module.exports = () => {
       buildingCost: {
         gold: 3000,
         wood: 10,
-        ore: 12
+        stone: 12
       },
       generatesDaily: {
         gold: 1000
