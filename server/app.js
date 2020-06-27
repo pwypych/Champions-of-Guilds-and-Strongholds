@@ -244,7 +244,6 @@ function setupLibrariesAndRoutes() {
     require('./ajax/world/entities/worldEntitiesFilter.js')(),
     require('./ajax/battle/entities/battleEntitiesFilter.js')(),
     require('./ajax/summary/entities/summaryEntitiesFilter.js')(),
-    require('./ajax/battle/entities/unitAmountCensore.js')(),
     require('./ajax/common/entitiesFilterSendResponse.js')()
   );
 
