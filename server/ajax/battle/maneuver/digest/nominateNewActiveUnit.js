@@ -9,7 +9,7 @@ module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
       debug(
-        '// It marks unit that just did maneuver as not active, finds unit with highest initiative (of opposite player if possible) that has some maneuverPoints left, and marks it with active component'
+        '// It marks unit that just did maneuver as not active, finds unit of the same boss that has some maneuverPoints left, and marks it with active component, if no unit found unit of different boss is chosen, on start of each round it changes boss'
       );
 
       const entities = res.locals.entities;
@@ -36,67 +36,76 @@ module.exports = (db) => {
         (error) => {
           debug('updateSetUnitActiveToFalse: error:', error);
           debug('updateSetUnitActiveToFalse: Success');
-          findOwnerId(entities, gameId, entityId);
+          findBossId(entities, gameId, entityId);
         }
       );
     }
 
-    function findOwnerId(entities, gameId, entityId) {
+    function findBossId(entities, gameId, entityId) {
       const entity = entities[entityId];
-      const ownerId = entity.owner;
+      const bossId = entity.boss;
 
-      debug('findOwnerId: ownerId:', ownerId);
-      findNotOwnedUnitWithHighestInitiative(entities, gameId, ownerId);
+      debug('findBossId: bossId:', bossId);
+      checkIsFirstRound(entities, gameId, bossId);
     }
 
-    function findNotOwnedUnitWithHighestInitiative(entities, gameId, ownerId) {
+    function checkIsFirstRound(entities, gameId, bossId) {
+      let isFirstRound = true;
+
+      _.forEach(entities, (entity, id) => {
+        if (
+          entity.unitStats &&
+          entity.unitStats.current.maneuverPoints < 1
+        ) {
+          isFirstRound = false;
+        }
+      });
+
+      debug('checkIsFirstRound:isFirstRound:', isFirstRound);
+
+      if (isFirstRound) {
+        findNextUnitDifferentBoss(entities, gameId, bossId);
+      } else {
+        findNextUnitSameBoss(entities, gameId, bossId);
+      }
+    }
+
+    function findNextUnitSameBoss(entities, gameId, bossId) {
       let nominatedUnitId;
-      let highestInitiative = 0;
 
       _.forEach(entities, (entity, id) => {
         if (
           entity.unitStats &&
           entity.unitStats.current.maneuverPoints > 0 &&
-          entity.owner !== ownerId
+          entity.boss === bossId
         ) {
-          if (entity.unitStats.current.initiative > highestInitiative) {
-            highestInitiative = entity.unitStats.current.initiative;
-            nominatedUnitId = id;
-          }
+          nominatedUnitId = id;
         }
       });
 
-      debug(
-        'findNotOwnedUnitWithHighestInitiative: highestInitiative:',
-        highestInitiative,
-        'nominatedUnitId:',
-        nominatedUnitId
-      );
+      debug('findNextUnitSameBoss:nominatedUnitId:', nominatedUnitId);
 
       if (nominatedUnitId) {
         updateSetUnitActiveToTrue(gameId, nominatedUnitId);
       } else {
-        findAnyUnitWithHighestInitiative(entities, gameId);
+        findNextUnitDifferentBoss(entities, gameId, bossId);
       }
     }
 
-    function findAnyUnitWithHighestInitiative(entities, gameId) {
+    function findNextUnitDifferentBoss(entities, gameId, bossId) {
       let nominatedUnitId;
-      let highestInitiative = 0;
 
       _.forEach(entities, (entity, id) => {
-        if (entity.unitStats && entity.unitStats.current.maneuverPoints > 0) {
-          if (entity.unitStats.current.initiative > highestInitiative) {
-            highestInitiative = entity.unitStats.current.initiative;
-            nominatedUnitId = id;
-          }
+        if (
+          entity.unitStats &&
+          entity.unitStats.current.maneuverPoints > 0 &&
+          entity.boss !== bossId
+        ) {
+          nominatedUnitId = id;
         }
       });
 
-      debug(
-        'findAnyUnitWithHighestInitiative: highestInitiative:',
-        highestInitiative
-      );
+      debug('findNextUnitDifferentBoss: nominatedUnitId:', nominatedUnitId);
       updateSetUnitActiveToTrue(gameId, nominatedUnitId);
     }
 
