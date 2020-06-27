@@ -8,7 +8,7 @@ const _ = require('lodash');
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
-      debug('// Verifies collisions when in battleState');
+      debug('// Verifies collisions when in worldState');
       const entities = res.locals.entities;
       const entityId = res.locals.entityId;
       const path = res.locals.path;
