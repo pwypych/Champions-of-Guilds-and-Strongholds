@@ -31,7 +31,7 @@ module.exports = () => {
     },
 
     beastCapitol: {
-      namePretty: '',
+      namePretty: 'Town hall',
       race: 'beast',
       buildingCost: {
         gold: 2000,
@@ -43,8 +43,17 @@ module.exports = () => {
       }
     },
 
+    beastBarracks: {
+      namePretty: 'Maze',
+      race: 'beast',
+      buildingCost: {
+        gold: 2500,
+        crystal: 2
+      }
+    },
+
     undeadCapitol: {
-      namePretty: '',
+      namePretty: 'Town hall',
       race: 'undead',
       buildingCost: {
         gold: 3000,
@@ -53,6 +62,16 @@ module.exports = () => {
       },
       generatesDaily: {
         gold: 1000
+      }
+    },
+
+    undeadBarracks: {
+      namePretty: 'Graveyard',
+      race: 'undead',
+      buildingCost: {
+        gold: 3000,
+        wood: 8,
+        stone: 5
       }
     }
   };
