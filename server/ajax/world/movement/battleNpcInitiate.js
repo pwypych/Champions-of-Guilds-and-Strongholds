@@ -42,8 +42,8 @@ module.exports = (db) => {
               battle.attackerId = heroId;
               battle.defenderId = id;
               battle.battleStatus = 'pending_npc';
-              battle.battleHeight = 11;
-              battle.battleWidth = 13;
+              battle.battleWidth = 9;
+              battle.battleHeight = 7;
               battleArray.push(battle);
             }
           });
