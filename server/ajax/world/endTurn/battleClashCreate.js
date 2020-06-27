@@ -141,21 +141,18 @@ module.exports = (db, unitBlueprint) => {
       defenderId,
       battleId
     ) {
-      let highestInitiativeNumber = 1;
-      let highestInitiativeUnitId;
-
+      let firstDefenderUnitId;
       _.forEach(units, (unit, id) => {
-        if (unit.unitStats.base.initiative > highestInitiativeNumber) {
-          highestInitiativeNumber = unit.unitStats.base.initiative;
-          highestInitiativeUnitId = id;
+        if (unit.boss === defenderId && !firstDefenderUnitId) {
+          firstDefenderUnitId = id;
         }
       });
 
       debug(
-        'nominateActiveUnit: highestInitiativeUnitId:',
-        highestInitiativeUnitId
+        'nominateActiveUnit: firstDefenderUnitId:',
+        firstDefenderUnitId
       );
-      units[highestInitiativeUnitId].active = true;
+      units[firstDefenderUnitId].active = true;
       generateUnitOwner(entities, units, attackerId, defenderId, battleId);
     }
 
