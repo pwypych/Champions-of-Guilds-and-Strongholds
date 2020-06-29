@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:maneuverSendResponse');
+const debug = require('debug')('cogs:sendResponseEarly');
 
 module.exports = () => {
   return (req, res, next) => {
