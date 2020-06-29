@@ -94,6 +94,7 @@ g.main = function main() {
     g.battle.iconFlyDraw(walkie, viewport, freshEntities);
     g.battle.flyIconShow(walkie, viewport, freshEntities);
     g.battle.flyEmptyBlockClick(walkie, auth, viewport, freshEntities);
+    g.battle.unitInactiveClick(walkie, auth, freshEntities);
 
     g.battle.iconMelee(walkie, viewport, freshEntities);
     g.battle.meleeClick(walkie, auth, viewport, freshEntities);

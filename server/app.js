@@ -442,6 +442,18 @@ function setupLibrariesAndRoutes() {
     saveGame
   );
 
+  app.post(
+    '/ajax/battle/activate/activateUnitPost',
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
+    require('./library/middlewareAjaxStateAuth.js')('battleState'),
+    require('./library/readEntities.js')(db),
+    require('./ajax/commonMovement/entityIdVerify.js')(),
+    require('./ajax/battle/maneuver/verify/checkUnitOwner.js')(),
+    require('./ajax/battle/maneuver/maneuverSendResponse.js')(),
+    require('./ajax/battle/activate/activateUnit.js')(db),
+  );
+
   // summary
   app.post(
     '/ajax/summary/summaryConfirmPost',
