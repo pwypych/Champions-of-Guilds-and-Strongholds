@@ -19,6 +19,7 @@ module.exports = (environment, db, figureBlueprint) => {
     })();
 
     function generateGameEntity(mapObject) {
+      const land = res.locals.land;
       const entities = {};
 
       const id = 'game__' + shortid.generate();
@@ -27,8 +28,7 @@ module.exports = (environment, db, figureBlueprint) => {
 
       entities[id] = {};
       entities[id].mapData = {};
-      // entities[id].mapData.name = mapObject._id;
-      entities[id].mapData.name = 'random_map_2x2';
+      entities[id].mapData.name = land.name;
       entities[id].mapData.width = mapObject[0].length;
       entities[id].mapData.height = mapObject.length;
 
