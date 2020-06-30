@@ -45,6 +45,7 @@ g.battle.unitInactiveClick = (walkie, auth, freshEntities) => {
         entity.position.x === clickPosition.x &&
         entity.position.y === clickPosition.y &&
         !entity.active &&
+        !entity.dead &&
         entity.unitStats.current.maneuverPoints > 0
       ) {
         unit = entity;

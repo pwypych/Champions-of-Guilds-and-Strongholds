@@ -4,8 +4,6 @@
 
 const debug = require('debug')('cogs:activateUnit');
 const _ = require('lodash');
-const validator = require('validator');
-const bresenham = require('bresenham');
 
 module.exports = (db) => {
   return (req, res, next) => {
@@ -47,7 +45,12 @@ module.exports = (db) => {
 
       let unitActiveId;
       _.forEach(entities, (entity, id) => {
-        if (entity.unitName && entity.owner === ctx.playerId && entity.active) {
+        if (
+          entity.unitName &&
+          entity.owner === ctx.playerId &&
+          entity.active &&
+          !entity.dead
+        ) {
           unitActiveId = id;
         }
       });
