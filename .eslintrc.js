@@ -28,6 +28,8 @@ module.exports = {
     'object-shorthand': ['error', 'consistent'], // Can use { variable: variable } in objects
     'prefer-template': 0, // Disable so it is not always needed to use `template strings`
     'arrow-body-style': ['error', 'always'], // Always braces when using arrow functions
-    'no-console': 0 // Allow console.log and not show any warnings
+    'no-console': 0, // Allow console.log and not show any warnings
+    strict: ['error', 'global'], // Always require 'use strict';
+    'no-trailing-spaces': ['error']
   }
 };
