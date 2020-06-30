@@ -451,7 +451,7 @@ function setupLibrariesAndRoutes() {
     require('./ajax/commonMovement/entityIdVerify.js')(),
     require('./ajax/battle/maneuver/verify/checkUnitOwner.js')(),
     require('./ajax/battle/response/sendResponseEarly.js')(),
-    require('./ajax/battle/activate/activateUnit.js')(db),
+    require('./ajax/battle/activate/activateUnit.js')(db)
   );
 
   // summary
