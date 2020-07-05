@@ -235,7 +235,7 @@ module.exports = () => {
     },
 
     ghost: {
-      tier: 0,
+      tier: 5,
       life: 1,
       movement: 3,
       maneuverPoints: 2,
