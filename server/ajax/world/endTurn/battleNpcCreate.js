@@ -143,6 +143,8 @@ module.exports = (db, unitBlueprint) => {
 
       unit.unitStats.base.maneuvers.shoot.damage = damage;
       unit.unitStats.current.maneuvers.shoot.damage = damage;
+      unit.unitStats.base.maneuvers.melee.damage = Math.round(damage / 2);
+      unit.unitStats.current.maneuvers.melee.damage = Math.round(damage / 2);
       unit.unitStats.base.life = life;
       unit.unitStats.current.life = life;
 
