@@ -34,22 +34,17 @@ module.exports = (db, unitBlueprint) => {
       }
 
       debug('checkIfPendingNpcBattleExists: battleId:', battleId);
-      generateUnits(entities, battleId);
+      generateUnitsAttacker(entities, battleId);
     }
 
-    function generateUnits(entities, battleId) {
+    function generateUnitsAttacker(entities, battleId) {
       const battle = entities[battleId];
+
       const attackerId = battle.attackerId;
-      const defenderId = battle.defenderId;
-
-      debug('generateUnits:attackerId:', battle.attackerId);
-      debug('generateUnits:defenderId:', battle.defenderId);
-
       const attackerUnitCounts = entities[attackerId].unitAmounts;
-      const defenderUnitCounts = entities[defenderId].unitAmounts;
 
-      debug('generateUnits:attackerUnitCounts:', attackerUnitCounts);
-      debug('generateUnits:defenderUnitCounts:', defenderUnitCounts);
+      debug('generateUnitsAttacker:attackerId:', battle.attackerId);
+      debug('generateUnitsAttacker:attackerUnitCounts:', attackerUnitCounts);
 
       const units = {};
 
@@ -90,19 +85,76 @@ module.exports = (db, unitBlueprint) => {
         counter += 1;
       });
 
+      debug('generateUnitsAttacker: units:', _.size(units));
+      generateUnitsGhost(entities, units, attackerId, battleId);
+    }
+
+    function generateUnitsGhost(entities, units, attackerId, battleId) {
+      const battle = entities[battleId];
+      const defenderId = battle.defenderId;
+
+      // generate stats for ghost
+      // its a reflection of attackers army
+      const amount = _.size(units);
+      let life = 0;
+      let damage = 0;
+
+      _.forEach(units, (unit) => {
+        life += unit.unitStats.base.life * unit.amount;
+        damage += unit.unitStats.base.maneuvers.melee.damage * unit.amount;
+      });
+
+      life = Math.round(life / amount);
+      damage = Math.round(damage / amount);
+
+      debug('generateUnitsGhost: life:', life);
+      debug('generateUnitsGhost: damage:', damage);
+
+      const id = 'ghost_unit__' + shortId.generate();
+      const unit = {};
+      unit.unitName = 'ghost';
+      unit.boss = defenderId;
+      unit.amount = 1;
+      unit.active = false;
+      unit.collision = true;
+      unit.mirrorSprite = true;
+      unit.position = { x: 8, y: 5 };
+      unit.unitStats = {
+        current: unitBlueprint().ghost,
+        base: unitBlueprint().ghost
+      };
+
+      unit.unitStats.base.maneuvers.shoot.damage = damage;
+      unit.unitStats.current.maneuvers.shoot.damage = damage;
+      unit.unitStats.base.life = life;
+      unit.unitStats.current.life = life;
+
+      units[id] = unit;
+
+      debug('generateUnitsGhost: unit:', unit);
+      generateUnitsDefender(entities, units, attackerId, defenderId, battleId);
+    }
+
+    function generateUnitsDefender(entities, units, attackerId, defenderId, battleId) {
+      const battle = entities[battleId];
+
+      const defenderUnitCounts = entities[defenderId].unitAmounts;
+
+      debug('generateUnitsAttacker:defenderId:', battle.defenderId);
+      debug('generateUnitsAttacker:defenderUnitCounts:', defenderUnitCounts);
+
       // battle map is 9 x 7
       const defenderPositions = [
         { x: 8, y: 1 },
         { x: 8, y: 2 },
         { x: 8, y: 3 },
-        { x: 8, y: 4 },
-        { x: 8, y: 5 }
+        { x: 8, y: 4 }
       ];
 
       let amount = 0;
       let unitName;
 
-      // npc defenders always have just one unit
+      // npc defenders always have just one unit, read its name and amount
       _.forEach(defenderUnitCounts, (value, key) => {
         amount = value;
         unitName = key;
@@ -111,16 +163,16 @@ module.exports = (db, unitBlueprint) => {
       // Randomize npc unit amount
       const maxAmount = Math.round(amount * 1.25);
       const minAmount = Math.round(amount * 0.5);
-      debug('generateUnits:maxAmount:', maxAmount);
-      debug('generateUnits:minAmount:', minAmount);
+      debug('generateUnitsDefender:maxAmount:', maxAmount);
+      debug('generateUnitsDefender:minAmount:', minAmount);
 
-      _.times(5, (index) => {
+      _.times(4, (index) => {
         const id = unitName + '_unit__' + shortId.generate();
         const unit = {};
         unit.unitName = unitName;
         unit.boss = defenderId;
         unit.amount = _.random(minAmount, maxAmount, false);
-        debug('generateUnits:unit.amount:', unit.amount);
+        debug('generateUnitsDefender:unit.amount:', unit.amount);
         unit.active = false;
         unit.collision = true;
         unit.mirrorSprite = true;
@@ -133,7 +185,7 @@ module.exports = (db, unitBlueprint) => {
         units[id] = unit;
       });
 
-      debug('generateUnits: units:', _.size(units));
+      debug('generateUnitsDefender: units:', _.size(units));
       nominateActiveUnit(entities, units, attackerId, defenderId, battleId);
     }
 
@@ -188,7 +240,7 @@ module.exports = (db, unitBlueprint) => {
       });
 
       debug('generateUnitOwner: otherPlayerIdArray:', otherPlayerIdArray);
-      debug('generateUnitOwner: units:', units);
+      // debug('generateUnitOwner: units:', units);
 
       generateObsticles(entities, units, attackerId, defenderId, battleId);
     }

@@ -232,6 +232,23 @@ module.exports = () => {
           damage: 10
         }
       }
-    }
+    },
+
+    ghost: {
+      tier: 0,
+      life: 1,
+      movement: 3,
+      maneuverPoints: 2,
+      recruitCost: 0,
+      maneuvers: {
+        fly: true,
+        melee: {
+          damage: 1
+        },
+        shoot: {
+          damage: 1
+        }
+      }
+    },
   };
 };
