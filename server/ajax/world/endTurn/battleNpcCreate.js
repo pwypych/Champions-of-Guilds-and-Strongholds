@@ -119,9 +119,26 @@ module.exports = (db, unitBlueprint) => {
       unit.collision = true;
       unit.mirrorSprite = true;
       unit.position = { x: 8, y: 5 };
+
+      const unitStats = {
+        tier: 5,
+        life: 1,
+        movement: 3,
+        maneuverPoints: 2,
+        recruitCost: 0,
+        maneuvers: {
+          fly: true,
+          melee: {
+            damage: 1
+          },
+          shoot: {
+            damage: 1
+          }
+        }
+      };
       unit.unitStats = {
-        current: unitBlueprint().ghost,
-        base: unitBlueprint().ghost
+        current: unitStats,
+        base: unitStats
       };
 
       unit.unitStats.base.maneuvers.shoot.damage = damage;
@@ -135,7 +152,13 @@ module.exports = (db, unitBlueprint) => {
       generateUnitsDefender(entities, units, attackerId, defenderId, battleId);
     }
 
-    function generateUnitsDefender(entities, units, attackerId, defenderId, battleId) {
+    function generateUnitsDefender(
+      entities,
+      units,
+      attackerId,
+      defenderId,
+      battleId
+    ) {
       const battle = entities[battleId];
 
       const defenderUnitCounts = entities[defenderId].unitAmounts;
@@ -203,10 +226,7 @@ module.exports = (db, unitBlueprint) => {
         }
       });
 
-      debug(
-        'nominateActiveUnit: firstDefenderUnitId:',
-        firstDefenderUnitId
-      );
+      debug('nominateActiveUnit: firstDefenderUnitId:', firstDefenderUnitId);
       units[firstDefenderUnitId].active = true;
       generateUnitOwner(entities, units, attackerId, defenderId, battleId);
     }
