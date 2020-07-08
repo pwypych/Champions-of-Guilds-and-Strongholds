@@ -4,6 +4,8 @@
 
 // External libraries
 const debug = require('debug')('cogs:app');
+const glob = require('glob');
+const fs = require('fs');
 const express = require('express');
 const mongodb = require('mongodb').MongoClient;
 const bodyParser = require('body-parser');
@@ -22,8 +24,30 @@ let db;
   debug('');
   debug('');
   debug('// Main file, starts everything else');
-  setupEnvironment();
+  buildClient();
 })();
+
+function buildClient() {
+  const pathRead = path.join(__dirname, '..', '/client/**/*.js');
+  glob(pathRead, {}, (error, files) => {
+    if (error) {
+      debug('buildClient: error:', error);
+      return;
+    }
+
+    let build = '';
+    files.forEach((file) => {
+      build += fs.readFileSync(file, 'utf8');
+    });
+
+    const pathWrite = path.join(__dirname, '..', '/public/build/bundle.js');
+
+    fs.writeFileSync(pathWrite, build);
+
+    debug('buildClient: bundle.js', build.length);
+    setupEnvironment();
+  });
+}
 
 function setupEnvironment() {
   if (

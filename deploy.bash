@@ -14,10 +14,6 @@ echo "*** Git pull ***"
 echo " "
 git pull
 echo " "
-echo "*** Build Client Javascript ***"
-echo " "
-./build_client.bash
-echo " "
 echo "*** Restart Node server ***"
 echo " "
 /home/ftpuser/npm/bin/pm2 restart cogs_axe
