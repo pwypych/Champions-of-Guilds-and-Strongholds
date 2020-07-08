@@ -1,5 +1,8 @@
 #!/bin/bash
 echo "*** START deploy.bash ***"
+echo " "
+echo "*** Local push ***"
+git push
 
 ssh ftpuser@51.68.142.93 -p 2222 << EOF
 echo " "
