@@ -24,30 +24,8 @@ let db;
   debug('');
   debug('');
   debug('// Main file, starts everything else');
-  buildClient();
+  setupEnvironment();
 })();
-
-function buildClient() {
-  const pathRead = path.join(__dirname, '..', '/client/**/*.js');
-  glob(pathRead, {}, (error, files) => {
-    if (error) {
-      debug('buildClient: error:', error);
-      return;
-    }
-
-    let build = '';
-    files.forEach((file) => {
-      build += fs.readFileSync(file, 'utf8');
-    });
-
-    const pathWrite = path.join(__dirname, '..', '/public/build/bundle.js');
-
-    fs.writeFileSync(pathWrite, build);
-
-    debug('buildClient: bundle.js', build.length);
-    setupEnvironment();
-  });
-}
 
 function setupEnvironment() {
   if (
@@ -70,7 +48,50 @@ function setupEnvironment() {
   environment.basepathFigure = environment.basepath + '/server/figure';
 
   debug('setupEnvironment()', environment);
-  setupLocals();
+  buildClient();
+}
+
+function buildClient() {
+  const pathRead = path.join(environment.basepath, '/client/**/*.js');
+  glob(pathRead, {}, (error, pathFiles) => {
+    if (error) {
+      debug('buildClient: error:', error);
+      return;
+    }
+
+    let build = '';
+    pathFiles.forEach((pathFile) => {
+      build += fs.readFileSync(pathFile, 'utf8');
+    });
+
+    const pathWrite = path.join(environment.basepath, '/public/build/bundle.js');
+
+    fs.writeFileSync(pathWrite, build);
+
+    debug('buildClient: bundle.js', build.length);
+    buildSprites();
+  });
+}
+
+function buildSprites() {
+  const pathRead = path.join(environment.basepath, '/server/plugin/**/*.png');
+  glob(pathRead, {}, (error, pathFiles) => {
+    if (error) {
+      debug('buildClient: error:', error);
+      return;
+    }
+
+    pathFiles.forEach((pathFile) => {
+      const fileName = path.basename(pathFile);
+      const pathCopy = path.join(environment.basepath, '/public/sprite/', fileName);
+      debug('buildSprites: fileName:', fileName);
+      fs.copyFileSync(pathFile, pathCopy);
+    });
+
+    debug('buildSprites: pathFiles:', pathFiles);
+    debug('buildSprites');
+    setupLocals();
+  });
 }
 
 function setupLocals() {
