@@ -408,6 +408,14 @@ function setupLibrariesAndRoutes() {
     require('./ajax/world/recruit/recruitUnitPost.js')(db, unitBlueprint)
   );
 
+  app.post(
+    '/ajax/world/build/buildCastleBuildingPost',
+    require('./library/readEntities.js')(db),
+    require('./library/middlewareTokenAuth.js')(),
+    require('./library/middlewareAjaxStateAuth.js')('worldState'),
+    require('./ajax/world/build/buildCastleBuildingPost.js')(db)
+  );
+
   // battle
   const maneuverVerify = compose([
     require('./library/readEntities.js')(db),
