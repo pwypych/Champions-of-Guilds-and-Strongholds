@@ -67,7 +67,7 @@ module.exports = (db, unitBlueprint) => {
           return;
         }
 
-        const id = unitName + '_unit__' + shortId.generate();
+        const id = 'unit_' + unitName + '__' + shortId.generate();
 
         const unit = {};
         unit.unitName = unitName;
@@ -110,7 +110,7 @@ module.exports = (db, unitBlueprint) => {
       debug('generateUnitsGhost: life:', life);
       debug('generateUnitsGhost: damage:', damage);
 
-      const id = 'ghost_unit__' + shortId.generate();
+      const id = 'unit_ghost__' + shortId.generate();
       const unit = {};
       unit.unitName = 'ghost';
       unit.boss = defenderId;
@@ -192,7 +192,7 @@ module.exports = (db, unitBlueprint) => {
       debug('generateUnitsDefender:minAmount:', minAmount);
 
       _.times(4, (index) => {
-        const id = unitName + '_unit__' + shortId.generate();
+        const id = 'unit_' + unitName + '__' + shortId.generate();
         const unit = {};
         unit.unitName = unitName;
         unit.boss = defenderId;
@@ -308,7 +308,7 @@ module.exports = (db, unitBlueprint) => {
         const unitName = _.sample(obsticleNameArray);
 
         const unit = {};
-        const id = unitName + '_unit__' + shortId.generate();
+        const id = 'unit_' + unitName + '__' + shortId.generate();
         unit.unitName = unitName;
         unit.collision = true;
         unit.position = position;
