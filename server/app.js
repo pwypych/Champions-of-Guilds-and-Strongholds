@@ -64,7 +64,10 @@ function buildClient() {
       build += fs.readFileSync(pathFile, 'utf8');
     });
 
-    const pathWrite = path.join(environment.basepath, '/public/build/bundle.js');
+    const pathWrite = path.join(
+      environment.basepath,
+      '/public/build/bundle.js'
+    );
 
     fs.writeFileSync(pathWrite, build);
 
@@ -83,7 +86,11 @@ function buildSprites() {
 
     pathFiles.forEach((pathFile) => {
       const fileName = path.basename(pathFile);
-      const pathCopy = path.join(environment.basepath, '/public/sprite/', fileName);
+      const pathCopy = path.join(
+        environment.basepath,
+        '/public/sprite/',
+        fileName
+      );
       debug('buildSprites: fileName:', fileName);
       fs.copyFileSync(pathFile, pathCopy);
     });
@@ -192,6 +199,13 @@ function setupLandCollection() {
 
 /* eslint-disable global-require */
 function setupLibrariesAndRoutes() {
+  // hooks testing
+  const hook = require('./core/hook.js')();
+
+  // should be loaded dynamically
+  // attach to hook
+  require('./plugin/visitableMineWood/mineWoodBlueprint.hook.js')(hook);
+
   // libraries
   const templateToHtml = require('./library/templateToHtml.js')();
   const findEntitiesByGameId = require('./library/findEntitiesByGameId.js')(db);
@@ -260,7 +274,8 @@ function setupLibrariesAndRoutes() {
     require('./panel/predefined/createGamePredefinedPost.js')(
       environment,
       db,
-      figureBlueprint
+      figureBlueprint,
+      hook
     )
   );
 

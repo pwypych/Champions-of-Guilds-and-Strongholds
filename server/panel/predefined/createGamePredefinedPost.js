@@ -7,7 +7,7 @@ const shortid = require('shortid');
 const validator = require('validator');
 const _ = require('lodash');
 
-module.exports = (environment, db, figureBlueprint) => {
+module.exports = (environment, db, figureBlueprint, hook) => {
   return (req, res) => {
     (function init() {
       debug(
@@ -79,7 +79,14 @@ module.exports = (environment, db, figureBlueprint) => {
       entities[id].day = 1;
 
       debug('generateGameEntity', entities[id]);
-      calculatePlayerCount(mapObject, entities);
+      generateBlueprints(mapObject, entities);
+    }
+
+    function generateBlueprints(mapObject, entities) {
+      const ctx = { entities: entities, db: db };
+      hook.run('generateBlueprints_', ctx, () => { // hook mutates ctx
+        calculatePlayerCount(mapObject, entities);
+      });
     }
 
     function calculatePlayerCount(mapObject, entities) {
