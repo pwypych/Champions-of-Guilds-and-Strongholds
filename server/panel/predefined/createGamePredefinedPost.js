@@ -142,7 +142,7 @@ module.exports = (environment, db, figureBlueprint) => {
           const entity = figureBlueprint()[figureName];
 
           // Add unique id to each figure instance
-          const id = 'figure_ ' + figureName + '__' + shortid.generate();
+          const id = 'figure_' + figureName + '__' + shortid.generate();
           entity.figureName = figureName;
           entity.position = { x: x, y: y };
 

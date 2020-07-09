@@ -81,7 +81,7 @@ module.exports = (db, raceBlueprint) => {
       const gameId = entities._id;
       const query = { _id: gameId };
 
-      const field = 'hero__figure__' + shortId.generate();
+      const field = 'figure_hero_' + shortId.generate();
       const $set = {};
       $set[field] = hero;
       const update = { $set: $set };
