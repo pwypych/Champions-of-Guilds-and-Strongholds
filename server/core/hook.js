@@ -18,7 +18,7 @@ module.exports = () => {
       hooks[hookName] = [];
     }
     hooks[hookName].push(functionToAttach);
-    debug('attach: Attached hooks for:', hookName);
+    // debug('attach: Attached hooks for:', hookName);
   };
 
   // ctx is passed by reference and can be modified in functionToRun

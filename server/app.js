@@ -20,6 +20,7 @@ const environment = {};
 let db;
 
 /* eslint-disable global-require */
+/* eslint-disable import/no-dynamic-require */
 
 (function init() {
   debug('');
@@ -82,7 +83,7 @@ function buildSprites() {
   const pathRead = path.join(environment.basepath, '/server/plugin/**/*.png');
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
-      debug('buildClient: error:', error);
+      debug('buildSprites: error:', error);
       return;
     }
 
@@ -93,12 +94,10 @@ function buildSprites() {
         '/public/sprite/',
         fileName
       );
-      debug('buildSprites: fileName:', fileName);
       fs.copyFileSync(pathFile, pathCopy);
     });
 
-    debug('buildSprites: pathFiles:', pathFiles);
-    debug('buildSprites');
+    debug('buildSprites:', pathFiles.length);
     setupLocals();
   });
 }
@@ -189,19 +188,32 @@ function setupLandCollection() {
     }
 
     debug('setupLandCollection: landCount:', landCount);
-    setupLibrariesAndRoutes();
+    setupHooks();
   });
 }
 
-function setupLibrariesAndRoutes() {
-  // hooks testing
+function setupHooks() {
   const hook = require('./core/hook.js')();
 
-  // should be loaded dynamically
-  // attach to hook
-  require('./plugin/visitableMineWood/mineWoodBlueprint.hook.js')(hook);
-  require('./plugin/visitableMineStone/mineStoneBlueprint.hook.js')(hook);
+  const pathRead = path.join(environment.basepath, '/server/plugin/**/*.hook.js');
+  glob(pathRead, {}, (error, pathFiles) => {
+    if (error) {
+      debug('setupHooks: error:', error);
+      return;
+    }
 
+    pathFiles.forEach((pathFile) => {
+      require(pathFile)(hook);
+
+      const fileName = path.basename(pathFile);
+      debug('setupHooks: fileName:', fileName);
+    });
+
+    setupLibrariesAndRoutes(hook);
+  });
+}
+
+function setupLibrariesAndRoutes(hook) {
   // libraries
   const templateToHtml = require('./library/templateToHtml.js')();
   const findEntitiesByGameId = require('./library/findEntitiesByGameId.js')(db);
