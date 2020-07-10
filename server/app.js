@@ -19,6 +19,8 @@ const path = require('path');
 const environment = {};
 let db;
 
+/* eslint-disable global-require */
+
 (function init() {
   debug('');
   debug('');
@@ -140,7 +142,6 @@ function setupMongo() {
   });
 }
 
-/* eslint-disable global-require */
 function setupPredefinedMapCollection() {
   const generateMapCollection = require('./library/generatePredefinedMapCollection.js')(
     environment,
@@ -157,9 +158,7 @@ function setupPredefinedMapCollection() {
     setupParcelCollection();
   });
 }
-/* eslint-enable global-require */
 
-/* eslint-disable global-require */
 function setupParcelCollection() {
   const generateParcelCollection = require('./library/generateParcelCollection.js')(
     environment,
@@ -176,9 +175,7 @@ function setupParcelCollection() {
     setupLandCollection();
   });
 }
-/* eslint-enable global-require */
 
-/* eslint-disable global-require */
 function setupLandCollection() {
   const generateLandCollection = require('./library/generateLandCollection.js')(
     environment,
@@ -195,9 +192,7 @@ function setupLandCollection() {
     setupLibrariesAndRoutes();
   });
 }
-/* eslint-enable global-require */
 
-/* eslint-disable global-require */
 function setupLibrariesAndRoutes() {
   // hooks testing
   const hook = require('./core/hook.js')();
@@ -205,6 +200,7 @@ function setupLibrariesAndRoutes() {
   // should be loaded dynamically
   // attach to hook
   require('./plugin/visitableMineWood/mineWoodBlueprint.hook.js')(hook);
+  require('./plugin/visitableMineStone/mineStoneBlueprint.hook.js')(hook);
 
   // libraries
   const templateToHtml = require('./library/templateToHtml.js')();
@@ -542,7 +538,6 @@ function setupLibrariesAndRoutes() {
   debug('setupLibrariesAndRoutes()');
   setupExpress();
 }
-/* eslint-enable global-require */
 
 function setupExpress() {
   debug('setupExpress()');
