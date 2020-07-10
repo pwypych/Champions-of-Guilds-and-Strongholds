@@ -84,7 +84,8 @@ module.exports = (environment, db, figureBlueprint, hook) => {
 
     function generateBlueprints(mapObject, entities) {
       const ctx = { entities: entities, db: db };
-      hook.run('generateBlueprints_', ctx, () => { // hook mutates ctx
+      hook.run('generateBlueprints_', ctx, (error) => { // hook mutates ctx
+        debug('generateBlueprints');
         calculatePlayerCount(mapObject, entities);
       });
     }
