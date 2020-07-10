@@ -1,5 +1,7 @@
 // @format
 
+'use strict';
+
 module.exports = {
   env: {
     browser: true,
@@ -30,6 +32,7 @@ module.exports = {
     'arrow-body-style': ['error', 'always'], // Always braces when using arrow functions
     'no-console': 0, // Allow console.log and not show any warnings
     strict: ['error', 'global'], // Always require 'use strict';
-    'no-trailing-spaces': ['error']
+    'no-trailing-spaces': ['error'],
+    'no-unused-vars': ['error', { argsIgnorePattern: '^error' }], // Allow unused vars with name starting with error*
   }
 };
