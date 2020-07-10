@@ -4,6 +4,7 @@
 
 const debug = require('debug')('cogs:hook');
 const async = require('async');
+const _ = require('lodash');
 
 const hooks = {};
 
@@ -23,6 +24,12 @@ module.exports = () => {
 
   // ctx is passed by reference and can be modified in functionToRun
   const run = (hookName, ctx, callback) => {
+    if (!hooks[hookName]) {
+      debug('run: No hooks attached to:', hookName);
+      callback(null);
+      return;
+    }
+
     async.eachSeries(
       hooks[hookName],
       (functionToRun, done) => {
@@ -31,7 +38,7 @@ module.exports = () => {
         });
       },
       (error) => {
-        debug('run: Runned hooks for:', hookName);
+        debug('run: Runned ' + _.size(hooks[hookName]) + ' hooks attached to:', hookName);
         callback(error);
       }
     );
