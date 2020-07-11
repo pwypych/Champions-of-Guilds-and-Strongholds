@@ -9,9 +9,9 @@ module.exports = (hook) => {
     ctx.entities.blueprint_figure_mineStone = {
       blueprintType: 'figure',
       collision: true,
-      visitableText: 'You have annexed a wood mine. <br> +1 wood a day',
+      visitableText: 'You have annexed a stone mine to your kingdom. <br> +1 stone a day',
       visitableType: 'ok',
-      visitableRoute: '/visitable/mineWood',
+      visitableRoute: '/visitable/mineStone',
     };
 
     done();
