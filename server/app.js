@@ -282,7 +282,6 @@ function setupLibrariesAndRoutes(hook) {
     require('./panel/predefined/createGamePredefinedPost.js')(
       environment,
       db,
-      figureBlueprint,
       hook
     )
   );
