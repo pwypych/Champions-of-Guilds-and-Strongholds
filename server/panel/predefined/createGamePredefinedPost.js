@@ -144,8 +144,11 @@ module.exports = (environment, db, hook) => {
           // Find figure blueprint
           let blueprint;
           _.forEach(entities, (entity) => {
-            if (entity.blueprintType && figureName === entity.figureName) {
-              blueprint = entity;
+            if (
+              entity.blueprint &&
+              entity.blueprint.figureName === figureName
+            ) {
+              blueprint = entity.blueprint;
             }
           });
 

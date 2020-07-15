@@ -253,7 +253,7 @@ function setupLibrariesAndRoutes(hook) {
     require('./panel/random/createGameRandomPost.js')(
       environment,
       db,
-      figureBlueprint
+      hook
     )
   );
 

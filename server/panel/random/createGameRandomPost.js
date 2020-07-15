@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:createGameRandomPost');
 const shortid = require('shortid');
 const _ = require('lodash');
 
-module.exports = (environment, db, figureBlueprint) => {
+module.exports = (environment, db, hook) => {
   return (req, res) => {
     (function init() {
       debug(
@@ -36,7 +36,16 @@ module.exports = (environment, db, figureBlueprint) => {
       entities[id].day = 1;
 
       debug('generateGameEntity', entities[id]);
-      calculatePlayerCount(mapObject, entities);
+      generateBlueprints(mapObject, entities);
+    }
+
+    function generateBlueprints(mapObject, entities) {
+      const ctx = { entities: entities, db: db };
+      hook.run('generateBlueprints_', ctx, (error) => {
+        // hook mutates ctx
+        debug('generateBlueprints');
+        calculatePlayerCount(mapObject, entities);
+      });
     }
 
     function calculatePlayerCount(mapObject, entities) {
@@ -89,14 +98,25 @@ module.exports = (environment, db, figureBlueprint) => {
             return;
           }
 
-          if (!figureBlueprint()[figureName]) {
+          // Find figure blueprint
+          let blueprint;
+          _.forEach(entities, (entity) => {
+            if (
+              entity.blueprint &&
+              entity.blueprint.figureName === figureName
+            ) {
+              blueprint = entity.blueprint;
+            }
+          });
+
+          if (!blueprint) {
             const error =
               'Cannot load figure that is required by the map: ' + figureName;
             errorArray.push(error);
             return;
           }
 
-          const entity = figureBlueprint()[figureName];
+          const entity = JSON.parse(JSON.stringify(blueprint));
 
           // Add unique id to each figure instance
           const id = 'figure_' + figureName + '__' + shortid.generate();
