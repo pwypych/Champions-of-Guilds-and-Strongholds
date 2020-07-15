@@ -364,11 +364,14 @@ function setupLibrariesAndRoutes() {
   );
 
   app.post(
-    '/ajax/world/build/buildCastleBuildingPost',
+    '/ajax/world/build/buildFortificationPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/world/build/buildCastleBuildingPost.js')(db)
+    require('./ajax/world/build/buildFortificationPost.js')(
+      db,
+      buildingBlueprint
+    )
   );
 
   // battle
