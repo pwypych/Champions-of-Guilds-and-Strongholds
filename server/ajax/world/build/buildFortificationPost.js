@@ -5,7 +5,7 @@
 const debug = require('debug')('cogs:buildFortificationPost.js');
 const _ = require('lodash');
 
-module.exports = (db, buildingBlueprint) => {
+module.exports = (db, fortificationBlueprint) => {
   return (req, res) => {
     (function init() {
       debug('// Endpoint, build one fortification in castle by given name');
@@ -25,7 +25,7 @@ module.exports = (db, buildingBlueprint) => {
       const player = ctx.entities[playerId];
       const playerRace = player.playerData.race;
       const fortificationName = req.body.fortificationName;
-      const fortification = buildingBlueprint()[fortificationName];
+      const fortification = fortificationBlueprint()[fortificationName];
       ctx.fortification = fortification;
 
       if (playerRace !== fortification.race) {

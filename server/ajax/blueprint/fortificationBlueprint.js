@@ -3,7 +3,7 @@
 'use strict';
 
 // What does this module do?
-// Returns object with buildings
+// Returns object with fortifications
 
 module.exports = () => {
   return {

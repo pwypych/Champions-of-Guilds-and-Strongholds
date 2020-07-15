@@ -5,7 +5,7 @@
 g.world.castleModal = ($body, walkie, freshEntities, blueprints, auth) => {
   const $modal = $body.find('.js-world-interface-castle-modal');
   const raceBuilding = $modal.find('.js-race-building');
-  const buildingBlueprint = blueprints.buildingBlueprint;
+  const fortificationBlueprint = blueprints.fortificationBlueprint;
 
   (function init() {
     onEntitiesGetFirst();
@@ -41,7 +41,7 @@ g.world.castleModal = ($body, walkie, freshEntities, blueprints, auth) => {
     raceBuilding.empty();
     const $seperator10 = $('<div class="seperator-10"></div>');
 
-    _.forEach(buildingBlueprint, (building, name) => {
+    _.forEach(fortificationBlueprint, (building, name) => {
       if (building.race === playerRace) {
         const $fortificationName = $('<div>' + building.namePretty + '</div>');
         raceBuilding.append($fortificationName);
