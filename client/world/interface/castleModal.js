@@ -43,8 +43,8 @@ g.world.castleModal = ($body, walkie, freshEntities, blueprints, auth) => {
 
     _.forEach(buildingBlueprint, (building, name) => {
       if (building.race === playerRace) {
-        const $buildingName = $('<div>' + building.namePretty + '</div>');
-        raceBuilding.append($buildingName);
+        const $fortificationName = $('<div>' + building.namePretty + '</div>');
+        raceBuilding.append($fortificationName);
 
         raceBuilding.append($seperator10);
 
@@ -71,27 +71,27 @@ g.world.castleModal = ($body, walkie, freshEntities, blueprints, auth) => {
         );
 
         raceBuilding.append($buyButton);
-        onBuildCastleBuildingButtonClick($buyButton);
+        onBuildFortificationButtonClick($buyButton);
       }
     });
   }
 
-  function onBuildCastleBuildingButtonClick($buyButton) {
+  function onBuildFortificationButtonClick($buyButton) {
     $buyButton.on('click', () => {
-      const buildingName = $buyButton.attr('data-building-name');
+      const fortificationName = $buyButton.attr('data-building-name');
       console.log(
-        'onBuildCastleBuildingButtonClick:buildingName:',
-        buildingName
+        'onBuildFortificationButtonClick:fortificationName:',
+        fortificationName
       );
-      sendBuildCastleBuildingPost(buildingName);
+      sendBuildFortificationPost(fortificationName);
     });
   }
 
-  function sendBuildCastleBuildingPost(buildingName) {
-    const data = { buildingName: buildingName };
-    $.post('/ajax/world/build/buildCastleBuildingPost' + auth.uri, data, () => {
+  function sendBuildFortificationPost(fortificationName) {
+    const data = { fortificationName: fortificationName };
+    $.post('/ajax/world/build/buildFortificationPost' + auth.uri, data, () => {
       console.log(
-        'sendBuildCastleBuildingPost: POST -> /ajax/world/build/buildCastleBuildingPost',
+        'sendBuildFortificationPost: POST -> /ajax/world/build/buildFortificationPost',
         data
       );
     });
