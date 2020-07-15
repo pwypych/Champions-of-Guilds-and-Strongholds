@@ -8,6 +8,7 @@ module.exports = (hook) => {
   hook.attach('generateBlueprints_', (ctx, done) => {
     ctx.entities.blueprint_figure_butterfly = {
       blueprintType: 'figure',
+      figureName: 'butterfly',
       unitAmounts: { butterfly: 10 }
     };
 

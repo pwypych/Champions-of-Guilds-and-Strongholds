@@ -8,10 +8,8 @@ module.exports = (hook) => {
   hook.attach('generateBlueprints_', (ctx, done) => {
     ctx.entities.blueprint_figure_mineWood = {
       blueprintType: 'figure',
+      figureName: 'mineWood',
       collision: true,
-      visitableText: 'You have annexed a wood mine. <br> +1 wood a day',
-      visitableType: 'ok',
-      visitableRoute: '/visitable/mineWood',
     };
 
     done();
