@@ -221,7 +221,7 @@ function setupLibrariesAndRoutes(hook) {
   const unitBlueprint = require('./ajax/blueprint/unitBlueprint.js');
   const figureBlueprint = require('./ajax/blueprint/figureBlueprint.js');
   const raceBlueprint = require('./ajax/blueprint/raceBlueprint.js');
-  const buildingBlueprint = require('./ajax/blueprint/buildingBlueprint.js');
+  const fortificationBlueprint = require('./ajax/blueprint/fortificationBlueprint.js');
 
   // general
   app.get('/', (req, res) => {
@@ -322,7 +322,7 @@ function setupLibrariesAndRoutes(hook) {
       unitBlueprint,
       figureBlueprint,
       raceBlueprint,
-      buildingBlueprint
+      fortificationBlueprint
     )
   );
 
@@ -431,11 +431,14 @@ function setupLibrariesAndRoutes(hook) {
   );
 
   app.post(
-    '/ajax/world/build/buildCastleBuildingPost',
+    '/ajax/world/build/buildFortificationPost',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/world/build/buildCastleBuildingPost.js')(db)
+    require('./ajax/world/build/buildFortificationPost.js')(
+      db,
+      fortificationBlueprint
+    )
   );
 
   // battle
