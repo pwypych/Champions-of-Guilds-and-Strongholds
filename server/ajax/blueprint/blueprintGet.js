@@ -8,7 +8,7 @@ module.exports = (
   unitBlueprint,
   figureBlueprint,
   raceBlueprint,
-  buildingBlueprint
+  fortificationBlueprint
 ) => {
   return (req, res) => {
     (function init() {
@@ -23,7 +23,7 @@ module.exports = (
       blueprint.unitBlueprint = unitBlueprint();
       blueprint.figureBlueprint = figureBlueprint();
       blueprint.raceBlueprint = raceBlueprint();
-      blueprint.buildingBlueprint = buildingBlueprint();
+      blueprint.fortificationBlueprint = fortificationBlueprint();
 
       sendBlueprintObject(blueprint);
     }
