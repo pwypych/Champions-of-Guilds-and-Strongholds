@@ -44,8 +44,21 @@ module.exports = (environment, db, hook) => {
       hook.run('generateBlueprints_', ctx, (error) => {
         // hook mutates ctx
         debug('generateBlueprints');
-        calculatePlayerCount(mapObject, entities);
+        addRandomPartToBlueprintId(mapObject, entities);
       });
+    }
+
+    function addRandomPartToBlueprintId(mapObject, entities) {
+      _.forEach(entities, (entity, id) => {
+        if (entity.blueprint) {
+          const idRandom = id + '__' + shortid.generate();
+          entities[idRandom] = entities[id];
+          delete entities[id];
+        }
+      });
+
+      debug('addRandomPartToBlueprintId');
+      calculatePlayerCount(mapObject, entities);
     }
 
     function calculatePlayerCount(mapObject, entities) {
