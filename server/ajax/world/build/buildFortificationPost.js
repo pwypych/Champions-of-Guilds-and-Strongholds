@@ -64,23 +64,49 @@ module.exports = (db, fortificationBlueprint) => {
         res.send({
           error: 'This fortification is already build!'
         });
-        debug('This fortification is already build!');
-        debug(
-          'checkIsFortificationAlreadyBuild: fortificationName:',
-          fortificationName
-        );
+        debug('This fortification is already build!', fortificationName);
         debug('******************** error ********************');
         return;
       }
 
+      checkPlayerAffordFortification(ctx);
+    }
+
+    // Check can player afford fortification
+    function checkPlayerAffordFortification(ctx) {
+      const fortification = ctx.fortification;
+      const fortificationCost = fortification.buildingCost;
+      const playerId = ctx.playerId;
+      const player = ctx.entities[playerId];
+      const playerResources = player.playerResources;
+      let canPlayerAffordFortification = true;
+
+      _.forEach(fortificationCost, (cost, resource) => {
+        if (playerResources[resource] < cost) {
+          canPlayerAffordFortification = false;
+          debug('checkPlayerAffordFortification: Not enaugh:', resource);
+        }
+      });
+
+      if (!canPlayerAffordFortification) {
+        res.status(503);
+        res.send({
+          error: 'This fortification is too expensive!'
+        });
+        debug('This fortification is too expensive!', fortificationCost);
+        debug('******************** error ********************');
+        return;
+      }
+
+      debug(
+        'checkPlayerAffordFortification: canPlayerAffordFortification:',
+        canPlayerAffordFortification
+      );
       const message = 'ok';
       res.send({
         error: 0,
         message: message
       });
     }
-
-    // Check can player afford fortification
-    function functionName() {}
   };
 };
