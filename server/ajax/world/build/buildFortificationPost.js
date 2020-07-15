@@ -9,34 +9,51 @@ module.exports = (db, fortificationBlueprint) => {
   return (req, res) => {
     (function init() {
       debug('// Endpoint, build one fortification in castle by given name');
-      debug('init: req.body:', req.body);
       const ctx = {};
       ctx.entities = res.locals.entities;
       ctx.gameId = res.locals.entities._id;
       ctx.playerId = res.locals.playerId;
 
-      comparePlayerAndFortificationRace(ctx);
+      validateFortificationName(ctx);
     })();
 
-    // Check is fortificationName valid and such fortification exist
+    function validateFortificationName(ctx) {
+      const fortificationName = req.body.fortificationName;
+      const fortification = fortificationBlueprint()[fortificationName];
+
+      if (!fortification) {
+        res.status(503);
+        res.send({
+          error: 'This fortification not exists!'
+        });
+        debug('This fortification not exists!', fortificationName);
+        debug('******************** error ********************');
+        return;
+      }
+
+      ctx.fortification = fortification;
+      debug(
+        'validateFortificationName: fortification.namePretty:',
+        fortification.namePretty
+      );
+      comparePlayerAndFortificationRace(ctx);
+    }
 
     function comparePlayerAndFortificationRace(ctx) {
       const playerId = ctx.playerId;
       const player = ctx.entities[playerId];
       const playerRace = player.playerData.race;
-      const fortificationName = req.body.fortificationName;
-      const fortification = fortificationBlueprint()[fortificationName];
-      ctx.fortification = fortification;
+      const fortificationRace = ctx.fortification.race;
 
-      if (playerRace !== fortification.race) {
+      if (playerRace !== fortificationRace) {
         res.status(503);
         res.send({
           error: 'This fortification is not from player race!'
         });
-        debug('This fortification is not from player race:');
+        debug('This fortification is not from player race!');
         debug(
-          'comparePlayerAndFortificationRace: fortificationName:',
-          fortificationName
+          'comparePlayerAndFortificationRace: fortificationRace:',
+          fortificationRace
         );
         debug('******************** error ********************');
         return;
