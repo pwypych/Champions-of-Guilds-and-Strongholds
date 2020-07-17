@@ -227,7 +227,6 @@ function setupLibrariesAndRoutes(hook) {
   const findEntitiesByGameId = require('./library/findEntitiesByGameId.js')(db);
 
   const unitBlueprint = require('./ajax/blueprint/unitBlueprint.js');
-  const figureBlueprint = require('./ajax/blueprint/figureBlueprint.js');
   const raceBlueprint = require('./ajax/blueprint/raceBlueprint.js');
   const fortificationBlueprint = require('./ajax/blueprint/fortificationBlueprint.js');
 
@@ -328,7 +327,6 @@ function setupLibrariesAndRoutes(hook) {
     require('./library/middlewareTokenAuth.js')(),
     require('./ajax/blueprint/blueprintGet.js')(
       unitBlueprint,
-      figureBlueprint,
       raceBlueprint,
       fortificationBlueprint
     )
