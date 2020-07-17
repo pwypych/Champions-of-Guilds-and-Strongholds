@@ -7,6 +7,7 @@ const debug = require('debug')('cogs:app');
 const glob = require('glob');
 const fs = require('fs');
 const express = require('express');
+const compression = require('compression')
 const mongodb = require('mongodb').MongoClient;
 const bodyParser = require('body-parser');
 const compose = require('compose-middleware').compose;
@@ -98,8 +99,15 @@ function buildSprites() {
     });
 
     debug('buildSprites:', pathFiles.length);
-    setupLocals();
+    setupCompression();
   });
+}
+
+function setupCompression() {
+  app.use(compression());
+
+  debug('setupCompression()');
+  setupLocals();
 }
 
 function setupLocals() {
