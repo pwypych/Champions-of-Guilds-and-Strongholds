@@ -40,7 +40,7 @@ module.exports = (environment, db, hook) => {
     }
 
     function generateBlueprints(mapObject, entities) {
-      const injected = { entities: entities, db: db };
+      const injected = { entities: entities };
       hook.run('generateBlueprints_', injected, (error) => {
         // hook mutates injected
         debug('generateBlueprints');

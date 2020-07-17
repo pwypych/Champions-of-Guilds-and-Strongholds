@@ -5,7 +5,7 @@
 const debug = require('debug')('cogs:addMonsterToFigureMap');
 const _ = require('lodash');
 
-module.exports = (environment, unitBlueprint) => {
+module.exports = (environment, hook) => {
   return (req, res, next) => {
     (function init() {
       debug('// Fill figureMap with monster fiugres');
@@ -13,13 +13,35 @@ module.exports = (environment, unitBlueprint) => {
       ctx.land = res.locals.land;
       ctx.figureMap = res.locals.mapObject;
 
-      generateMonsterArray(ctx);
+      generateMonsterBlueprints(ctx);
     })();
 
+    function generateMonsterBlueprints(ctx) {
+      const injected = { entities: {} };
+      hook.run('generateBlueprints_', injected, (error) => {
+        // filter out only monster blueprints
+        ctx.monsterBlueprints = _.filter(injected.entities, (entity) => {
+          if (entity.blueprint.unitName) {
+            return true;
+          }
+          return false;
+        });
+
+        ctx.monsterBlueprints = _.map(ctx.monsterBlueprints, (entity) => {
+          return entity.blueprint;
+        });
+
+        debug('generateMonsterBlueprints: ', ctx.monsterBlueprints);
+        generateMonsterArray(ctx);
+      });
+    }
+
     function generateMonsterArray(ctx) {
+      const monsterBlueprints = ctx.monsterBlueprints;
+
       const monsterArray = [];
-      _.forEach(unitBlueprint(), (unit, name) => {
-        monsterArray.push({ name: name, tier: unit.tier });
+      _.forEach(monsterBlueprints, (unit) => {
+        monsterArray.push({ name: unit.unitName, tier: unit.tier });
       });
 
       sortMonsterArrayByTier(ctx, monsterArray);

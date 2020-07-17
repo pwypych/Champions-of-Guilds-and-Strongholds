@@ -246,13 +246,10 @@ function setupLibrariesAndRoutes(hook) {
     require('./panel/random/generateMap/generateParcelCategoryExitList.js')(db),
     require('./panel/random/generateMap/generateParcelMap.js')(),
     require('./panel/random/generateMap/generateAbstractFigureMap.js')(),
-    require('./panel/random/generateMap/generateFigureMap.js')(
-      environment,
-      unitBlueprint
-    ),
+    require('./panel/random/generateMap/generateFigureMap.js')(),
     require('./panel/random/generateMap/addMonsterToFigureMap.js')(
       environment,
-      unitBlueprint
+      hook
     ),
     require('./panel/random/generateMap/addBarrierToFigureMap.js')(),
     require('./panel/random/generateMap/addTreasureToFigureMap.js')(),
