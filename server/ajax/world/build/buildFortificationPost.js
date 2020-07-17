@@ -4,6 +4,7 @@
 
 const debug = require('debug')('cogs:buildFortificationPost.js');
 const _ = require('lodash');
+const shortId = require('shortid');
 
 module.exports = (db, fortificationBlueprint) => {
   return (req, res) => {
@@ -51,10 +52,7 @@ module.exports = (db, fortificationBlueprint) => {
           error: 'This fortification is not from player race!'
         });
         debug('This fortification is not from player race!');
-        debug(
-          'comparePlayerAndFortificationRace: fortificationRace:',
-          fortificationRace
-        );
+        debug('comparePlayerAndFortificationRace: playerRace:', playerRace);
         debug('******************** error ********************');
         return;
       }
@@ -63,15 +61,17 @@ module.exports = (db, fortificationBlueprint) => {
       checkIsFortificationAlreadyBuild(ctx);
     }
 
-    // Check is fortification already build
     function checkIsFortificationAlreadyBuild(ctx) {
-      const fortificationName = ctx.fortification;
+      const fortificationName = req.body.fortificationName;
       const entities = ctx.entities;
       const playerId = ctx.playerId;
       let isBuild = false;
 
       _.forEach(entities, (entity) => {
-        if (entity.goldIncome && entity.owner === playerId) {
+        if (
+          entity.fortificationName === fortificationName &&
+          entity.owner === playerId
+        ) {
           isBuild = true;
         }
       });
@@ -86,11 +86,10 @@ module.exports = (db, fortificationBlueprint) => {
         return;
       }
 
-      checkPlayerAffordFortification(ctx);
+      checkCanPlayerAffordFortification(ctx);
     }
 
-    // Check can player afford fortification
-    function checkPlayerAffordFortification(ctx) {
+    function checkCanPlayerAffordFortification(ctx) {
       const fortification = ctx.fortification;
       const fortificationCost = fortification.buildingCost;
       const playerId = ctx.playerId;
@@ -101,7 +100,7 @@ module.exports = (db, fortificationBlueprint) => {
       _.forEach(fortificationCost, (cost, resource) => {
         if (playerResources[resource] < cost) {
           canPlayerAffordFortification = false;
-          debug('checkPlayerAffordFortification: Not enaugh:', resource);
+          debug('checkCanPlayerAffordFortification: Not enaugh:', resource);
         }
       });
 
@@ -116,14 +115,116 @@ module.exports = (db, fortificationBlueprint) => {
       }
 
       debug(
-        'checkPlayerAffordFortification: canPlayerAffordFortification:',
+        'checkCanPlayerAffordFortification: canPlayerAffordFortification:',
         canPlayerAffordFortification
       );
-      const message = 'ok';
-      res.send({
-        error: 0,
-        message: message
+
+      ctx.playerResources = playerResources;
+      substractFortificationCostFromPlayerResources(ctx);
+    }
+
+    function substractFortificationCostFromPlayerResources(ctx) {
+      const fortificationCost = ctx.fortification.buildingCost;
+      const playerResources = ctx.playerResources;
+
+      debug(
+        'substractFortificationCostFromPlayerResources: playerResources:',
+        playerResources
+      );
+
+      _.forEach(fortificationCost, (cost, resource) => {
+        playerResources[resource] -= cost;
       });
+
+      debug(
+        'substractFortificationCostFromPlayerResources: playerResources:',
+        playerResources
+      );
+
+      ctx.playerResourcesAfterBuild = playerResources;
+      updateSetPlayerResources(ctx);
+    }
+
+    function updateSetPlayerResources(ctx) {
+      const gameId = ctx.gameId;
+      const playerId = ctx.playerId;
+      const playerResourcesAfterBuild = ctx.playerResourcesAfterBuild;
+      const $set = {};
+
+      _.forEach(playerResourcesAfterBuild, (amount, resource) => {
+        const field = playerId + '.playerResources.' + resource;
+        $set[field] = amount;
+      });
+
+      const query = { _id: gameId };
+
+      const update = { $set: $set };
+      const options = {};
+
+      debug('updateSetPlayerResources: $set:', $set);
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('ERROR: insert mongo error:', error);
+          }
+
+          debug('updateSetPlayerResources: Success!');
+          generateFortificationEntity(ctx);
+        }
+      );
+    }
+
+    function generateFortificationEntity(ctx) {
+      const playerId = ctx.playerId;
+
+      const fortificationEntity = {};
+      fortificationEntity.fortificationName = req.body.fortificationName;
+      fortificationEntity.owner = playerId;
+
+      debug(
+        'generateFortificationEntity: fortificationEntity:',
+        fortificationEntity
+      );
+
+      ctx.fortificationEntity = fortificationEntity;
+      updateSetFortificationEntity(ctx);
+    }
+
+    function updateSetFortificationEntity(ctx) {
+      const entities = ctx.entities;
+      const gameId = entities._id;
+      const fortificationName = req.body.fortificationName;
+      const fortificationEntity = ctx.fortificationEntity;
+      const id =
+        'fortification_' + fortificationName + '__' + shortId.generate();
+
+      const $set = {};
+      $set[id] = fortificationEntity;
+
+      const query = { _id: gameId };
+      const update = { $set: $set };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('updateSetFortificationEntity: error:', error);
+          }
+
+          debug('updateSetFortificationEntity');
+          const message = 'ok';
+          res.send({
+            error: 0,
+            message: message
+          });
+        }
+      );
     }
   };
 };

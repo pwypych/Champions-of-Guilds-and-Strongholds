@@ -7,13 +7,13 @@
 
 module.exports = () => {
   return {
-    humanCapitol: {
+    humanTownHall: {
       namePretty: 'Town hall',
       race: 'human',
       buildingCost: {
-        gold: 2500,
-        crystal: 2,
-        wood: 10
+        gold: 500
+        // crystal: 2,
+        // wood: 10
       },
       generatesDaily: {
         gold: 1000
@@ -30,7 +30,7 @@ module.exports = () => {
       }
     },
 
-    beastCapitol: {
+    beastTownHall: {
       namePretty: 'Town hall',
       race: 'beast',
       buildingCost: {
@@ -52,7 +52,7 @@ module.exports = () => {
       }
     },
 
-    undeadCapitol: {
+    undeadTownHall: {
       namePretty: 'Town hall',
       race: 'undead',
       buildingCost: {
