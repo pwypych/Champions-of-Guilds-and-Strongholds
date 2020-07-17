@@ -52,10 +52,7 @@ module.exports = (db, fortificationBlueprint) => {
           error: 'This fortification is not from player race!'
         });
         debug('This fortification is not from player race!');
-        debug(
-          'comparePlayerAndFortificationRace: fortificationRace:',
-          fortificationRace
-        );
+        debug('comparePlayerAndFortificationRace: playerRace:', playerRace);
         debug('******************** error ********************');
         return;
       }
@@ -64,15 +61,17 @@ module.exports = (db, fortificationBlueprint) => {
       checkIsFortificationAlreadyBuild(ctx);
     }
 
-    // Check is fortification already build
     function checkIsFortificationAlreadyBuild(ctx) {
-      const fortificationName = ctx.fortification;
+      const fortificationName = req.body.fortificationName;
       const entities = ctx.entities;
       const playerId = ctx.playerId;
       let isBuild = false;
 
       _.forEach(entities, (entity) => {
-        if (entity.goldIncome && entity.owner === playerId) {
+        if (
+          entity.fortificationName === fortificationName &&
+          entity.owner === playerId
+        ) {
           isBuild = true;
         }
       });
@@ -90,7 +89,6 @@ module.exports = (db, fortificationBlueprint) => {
       checkCanPlayerAffordFortification(ctx);
     }
 
-    // Check can player afford fortification
     function checkCanPlayerAffordFortification(ctx) {
       const fortification = ctx.fortification;
       const fortificationCost = fortification.buildingCost;
@@ -126,8 +124,7 @@ module.exports = (db, fortificationBlueprint) => {
     }
 
     function substractFortificationCostFromPlayerResources(ctx) {
-      const fortification = ctx.fortification;
-      const fortificationCost = fortification.buildingCost;
+      const fortificationCost = ctx.fortification.buildingCost;
       const playerResources = ctx.playerResources;
 
       debug(
