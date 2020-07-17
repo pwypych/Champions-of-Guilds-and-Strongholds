@@ -83,9 +83,9 @@ module.exports = (environment, db, hook) => {
     }
 
     function generateBlueprints(mapObject, entities) {
-      const ctx = { entities: entities, db: db };
-      hook.run('generateBlueprints_', ctx, (error) => {
-        // hook mutates ctx
+      const inject = { entities: entities, db: db };
+      hook.run('generateBlueprints_', inject, (error) => {
+        // hook mutates inject
         debug('generateBlueprints');
         addRandomPartToBlueprintId(mapObject, entities);
       });

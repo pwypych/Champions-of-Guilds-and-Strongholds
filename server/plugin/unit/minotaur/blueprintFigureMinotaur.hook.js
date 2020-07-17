@@ -5,8 +5,8 @@
 // What does this module do?
 // It attaches blueprint for this figure
 module.exports = (hook) => {
-  hook.attach('generateBlueprints_', (ctx, done) => {
-    ctx.entities.blueprint_figure_minotaur = {
+  hook.attach('generateBlueprints_', (inject, done) => {
+    inject.entities.blueprint_figure_minotaur = {
       blueprint: {
         figureName: 'minotaur',
         unitAmounts: { minotaur: 4 }
