@@ -1,0 +1,28 @@
+// @format
+
+'use strict';
+
+// What does this module do?
+// It attaches blueprint for this unit
+module.exports = (hook) => {
+  hook.attach('generateBlueprints_', (injected, done) => {
+    injected.entities.blueprint_unit_blackKnight = {
+      blueprint: {
+        unitName: 'blackKnight',
+        tier: 5,
+        life: 77,
+        movement: 4,
+        maneuverPoints: 2,
+        recruitCost: 550,
+        maneuvers: {
+          walk: true,
+          melee: {
+            damage: 13
+          }
+        }
+      }
+    };
+
+    done();
+  });
+};
