@@ -17,37 +17,16 @@ module.exports = (environment, hook) => {
     })();
 
     function generateMonsterBlueprints(ctx) {
-      const injected = { entities: {} };
-      hook.run('generateBlueprints_', injected, (error) => {
-        // filter out only monster blueprints
-        ctx.monsterBlueprints = _.filter(injected.entities, (entity) => {
-          if (entity.blueprint.unitName) {
-            return true;
-          }
-          return false;
-        });
-
-        ctx.monsterBlueprints = _.map(ctx.monsterBlueprints, (entity) => {
-          return entity.blueprint;
-        });
-
-        debug('generateMonsterBlueprints: ', ctx.monsterBlueprints);
-        generateMonsterArray(ctx);
+      const injected = { monsterArray: [] };
+      hook.run('registerMonster_', injected, (error) => {
+        ctx.monsterArray = injected.monsterArray;
+        debug('generateMonsterBlueprints: ', ctx.monsterArray.length);
+        sortMonsterArrayByTier(ctx);
       });
     }
 
-    function generateMonsterArray(ctx) {
-      const monsterBlueprints = ctx.monsterBlueprints;
-
-      const monsterArray = [];
-      _.forEach(monsterBlueprints, (unit) => {
-        monsterArray.push({ name: unit.unitName, tier: unit.tier });
-      });
-
-      sortMonsterArrayByTier(ctx, monsterArray);
-    }
-
-    function sortMonsterArrayByTier(ctx, monsterArray) {
+    function sortMonsterArrayByTier(ctx) {
+      const monsterArray = ctx.monsterArray;
       const monsterTierArray = {
         tier1: [],
         tier2: [],
