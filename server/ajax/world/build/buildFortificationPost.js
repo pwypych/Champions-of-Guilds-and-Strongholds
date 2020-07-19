@@ -179,9 +179,12 @@ module.exports = (db, fortificationBlueprint) => {
 
     function generateFortificationEntity(ctx) {
       const playerId = ctx.playerId;
+      const fortificationName = req.body.fortificationName;
 
+      const fortificationId =
+        'fortification_' + fortificationName + '__' + shortId.generate();
       const fortificationEntity = {};
-      fortificationEntity.fortificationName = req.body.fortificationName;
+      fortificationEntity.fortificationName = fortificationName;
       fortificationEntity.owner = playerId;
 
       debug(
@@ -190,19 +193,18 @@ module.exports = (db, fortificationBlueprint) => {
       );
 
       ctx.fortificationEntity = fortificationEntity;
+      ctx.fortificationId = fortificationId;
       updateSetFortificationEntity(ctx);
     }
 
     function updateSetFortificationEntity(ctx) {
       const entities = ctx.entities;
       const gameId = entities._id;
-      const fortificationName = req.body.fortificationName;
       const fortificationEntity = ctx.fortificationEntity;
-      const id =
-        'fortification_' + fortificationName + '__' + shortId.generate();
+      const fortificationId = ctx.fortificationId;
 
       const $set = {};
-      $set[id] = fortificationEntity;
+      $set[fortificationId] = fortificationEntity;
 
       const query = { _id: gameId };
       const update = { $set: $set };
@@ -217,7 +219,57 @@ module.exports = (db, fortificationBlueprint) => {
             debug('updateSetFortificationEntity: error:', error);
           }
 
-          debug('updateSetFortificationEntity');
+          debug('updateSetFortificationEntity: Success!');
+          generateEnchantmentEntity(ctx);
+        }
+      );
+    }
+
+    function generateEnchantmentEntity(ctx) {
+      const playerId = ctx.playerId;
+      const fortificationId = ctx.fortificationId;
+      const fortification = ctx.fortification;
+
+      const enchantmentId = 'enchantment_income__' + shortId.generate();
+      const enchantmentEntity = {};
+      enchantmentEntity.owner = playerId;
+      enchantmentEntity.enchanter = fortificationId;
+      if (fortification.income) {
+        enchantmentEntity.income = {};
+        enchantmentEntity.income.name = fortification.income.name;
+        enchantmentEntity.income.amount = fortification.income.amount;
+      }
+
+      debug('generateEnchantmentEntity: enchantmentEntity:', enchantmentEntity);
+
+      ctx.enchantmentEntity = enchantmentEntity;
+      ctx.enchantmentId = enchantmentId;
+      updateSetEnchantmentEntity(ctx);
+    }
+
+    function updateSetEnchantmentEntity(ctx) {
+      const entities = ctx.entities;
+      const gameId = entities._id;
+      const enchantmentEntity = ctx.enchantmentEntity;
+      const enchantmentId = ctx.enchantmentId;
+
+      const $set = {};
+      $set[enchantmentId] = enchantmentEntity;
+
+      const query = { _id: gameId };
+      const update = { $set: $set };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('updateSetEnchantmentEntity: error:', error);
+          }
+
+          debug('updateSetEnchantmentEntity: Success!');
           const message = 'ok';
           res.send({
             error: 0,
