@@ -16,7 +16,8 @@ module.exports = () => {
         // wood: 10
       },
       generatesDaily: {
-        gold: 1000
+        name: 'gold',
+        amount: 1000
       }
     },
 
@@ -39,7 +40,8 @@ module.exports = () => {
         stone: 8
       },
       generatesDaily: {
-        gold: 1000
+        name: 'gold',
+        amount: 1000
       }
     },
 
@@ -61,7 +63,8 @@ module.exports = () => {
         stone: 12
       },
       generatesDaily: {
-        gold: 1000
+        name: 'gold',
+        amount: 1000
       }
     },
 
