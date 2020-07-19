@@ -6,11 +6,9 @@
 // It attaches blueprint for this figure
 module.exports = (hook) => {
   hook.attach('generateBlueprints_', (injected, done) => {
-    injected.entities.blueprint_figure_mineStone = {
-      blueprint: {
-        figureName: 'mineStone',
-        collision: true,
-      }
+    injected.blueprint.figure.mineStone = {
+      figureName: 'mineStone',
+      collision: true,
     };
 
     done();

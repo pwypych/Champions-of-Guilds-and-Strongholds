@@ -6,11 +6,9 @@
 // It attaches blueprint for this figure
 module.exports = (hook) => {
   hook.attach('generateBlueprints_', (injected, done) => {
-    injected.entities.blueprint_figure_ranger = {
-      blueprint: {
-        figureName: 'ranger',
-        unitAmounts: { ranger: 10 }
-      }
+    injected.blueprint.figure.ranger = {
+      figureName: 'ranger',
+      unitAmounts: { ranger: 10 }
     };
 
     done();

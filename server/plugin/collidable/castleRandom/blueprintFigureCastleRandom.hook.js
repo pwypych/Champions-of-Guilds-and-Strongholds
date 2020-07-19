@@ -6,11 +6,9 @@
 // It attaches blueprint for this figure
 module.exports = (hook) => {
   hook.attach('generateBlueprints_', (injected, done) => {
-    injected.entities.blueprint_figure_castleRandom = {
-      blueprint: {
-        figureName: 'castleRandom',
-        collision: true
-      }
+    injected.blueprint.figure.castleRandom = {
+      figureName: 'castleRandom',
+      collision: true
     };
 
     done();

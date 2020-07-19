@@ -6,11 +6,9 @@
 // It attaches blueprint for this figure
 module.exports = (hook) => {
   hook.attach('generateBlueprints_', (injected, done) => {
-    injected.entities.blueprint_figure_crystal = {
-      blueprint: {
-        figureName: 'crystal',
-        resource: { name: 'crystal', amount: 3 }
-      }
+    injected.blueprint.figure.crystal = {
+      figureName: 'crystal',
+      resource: { name: 'crystal', amount: 3 }
     };
 
     done();
