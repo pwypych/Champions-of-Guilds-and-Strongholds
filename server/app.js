@@ -7,7 +7,7 @@ const debug = require('debug')('cogs:app');
 const glob = require('glob');
 const fs = require('fs');
 const express = require('express');
-const compression = require('compression')
+const compression = require('compression');
 const mongodb = require('mongodb').MongoClient;
 const bodyParser = require('body-parser');
 const compose = require('compose-middleware').compose;
@@ -203,7 +203,10 @@ function setupLandCollection() {
 function setupHooks() {
   const hook = require('./core/hook.js')();
 
-  const pathRead = path.join(environment.basepath, '/server/plugin/**/*.hook.js');
+  const pathRead = path.join(
+    environment.basepath,
+    '/server/plugin/**/*.hook.js'
+  );
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
       debug('setupHooks: error:', error);
@@ -254,11 +257,7 @@ function setupLibrariesAndRoutes(hook) {
     require('./panel/random/generateMap/addBarrierToFigureMap.js')(),
     require('./panel/random/generateMap/addTreasureToFigureMap.js')(),
     require('./panel/random/generateMap/addNonAbstractToFgureMap.js')(),
-    require('./panel/random/createGameRandomPost.js')(
-      environment,
-      db,
-      hook
-    )
+    require('./panel/random/createGameRandomPost.js')(environment, db, hook)
   );
 
   app.post(
@@ -421,6 +420,8 @@ function setupLibrariesAndRoutes(hook) {
     require('./ajax/world/endTurn/battleNpcCreate.js')(db, unitBlueprint),
     require('./ajax/world/endTurn/battleClashCreate.js')(db, unitBlueprint),
     require('./ajax/world/endTurn/newDay.js')(db),
+    // require('./library/readEntities.js')(db),
+    require('./ajax/world/endTurn/enchantmentIncomeExecutor.js')(db),
     require('./ajax/world/endTurn/refillHeroMovement.js')(db),
     require('./ajax/world/endTurn/unsetEndTurnFlags.js')(db)
   );
