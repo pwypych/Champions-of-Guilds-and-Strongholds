@@ -6,19 +6,17 @@
 // It attaches blueprint for this unit
 module.exports = (hook) => {
   hook.attach('generateBlueprints_', (injected, done) => {
-    injected.entities.blueprint_unit_minotaur = {
-      blueprint: {
-        unitName: 'minotaur',
-        tier: 5,
-        life: 91,
-        movement: 3,
-        maneuverPoints: 2,
-        recruitCost: 600,
-        maneuvers: {
-          walk: true,
-          melee: {
-            damage: 15
-          }
+    injected.blueprint.unit.minotaur = {
+      unitName: 'minotaur',
+      tier: 5,
+      life: 91,
+      movement: 3,
+      maneuverPoints: 2,
+      recruitCost: 600,
+      maneuvers: {
+        walk: true,
+        melee: {
+          damage: 15
         }
       }
     };

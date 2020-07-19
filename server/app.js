@@ -217,11 +217,19 @@ function setupHooks() {
       debug('setupHooks: fileName:', fileName);
     });
 
-    setupLibrariesAndRoutes(hook);
+    setupBlueprint(hook);
   });
 }
 
-function setupLibrariesAndRoutes(hook) {
+function setupBlueprint(hook) {
+  require('./core/setupBlueprint.js')(hook, (error, blueprint) => {
+    debug('setupBlueprint: blueprint:', blueprint);
+    setupLibrariesAndRoutes(hook, blueprint);
+  });
+}
+
+function setupLibrariesAndRoutes(hook, blueprint) {
+
   // libraries
   const templateToHtml = require('./library/templateToHtml.js')();
   const findEntitiesByGameId = require('./library/findEntitiesByGameId.js')(db);
@@ -257,7 +265,7 @@ function setupLibrariesAndRoutes(hook) {
     require('./panel/random/createGameRandomPost.js')(
       environment,
       db,
-      hook
+      blueprint
     )
   );
 
@@ -286,7 +294,7 @@ function setupLibrariesAndRoutes(hook) {
     require('./panel/predefined/createGamePredefinedPost.js')(
       environment,
       db,
-      hook
+      blueprint
     )
   );
 

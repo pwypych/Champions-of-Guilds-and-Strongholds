@@ -7,7 +7,7 @@ const shortid = require('shortid');
 const validator = require('validator');
 const _ = require('lodash');
 
-module.exports = (environment, db, hook) => {
+module.exports = (environment, db, blueprint) => {
   return (req, res) => {
     (function init() {
       debug(
@@ -79,28 +79,6 @@ module.exports = (environment, db, hook) => {
       entities[id].day = 1;
 
       debug('generateGameEntity', entities[id]);
-      generateBlueprints(mapObject, entities);
-    }
-
-    function generateBlueprints(mapObject, entities) {
-      const injected = { entities: entities };
-      hook.run('generateBlueprints_', injected, (error) => {
-        // hook mutates injected
-        debug('generateBlueprints');
-        addRandomPartToBlueprintId(mapObject, entities);
-      });
-    }
-
-    function addRandomPartToBlueprintId(mapObject, entities) {
-      _.forEach(entities, (entity, id) => {
-        if (entity.blueprint) {
-          const idRandom = id + '__' + shortid.generate();
-          entities[idRandom] = entities[id];
-          delete entities[id];
-        }
-      });
-
-      debug('addRandomPartToBlueprintId');
       calculatePlayerCount(mapObject, entities);
     }
 
@@ -154,29 +132,10 @@ module.exports = (environment, db, hook) => {
             return;
           }
 
-          // Find figure blueprint
-          let blueprint;
-          _.forEach(entities, (entity) => {
-            if (
-              entity.blueprint &&
-              entity.blueprint.figureName === figureName
-            ) {
-              blueprint = entity.blueprint;
-            }
-          });
-
-          if (!blueprint) {
-            const error =
-              'Cannot load figure that is required by the map: ' + figureName;
-            errorArray.push(error);
-            return;
-          }
-
-          const entity = JSON.parse(JSON.stringify(blueprint));
+          const entity = JSON.parse(JSON.stringify(blueprint.figure[figureName]));
 
           // Add unique id to each figure instance
           const id = 'figure_' + figureName + '__' + shortid.generate();
-          entity.figureName = figureName;
           entity.position = { x: x, y: y };
 
           entities[id] = entity;

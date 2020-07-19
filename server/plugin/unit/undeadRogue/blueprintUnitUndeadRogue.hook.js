@@ -6,19 +6,17 @@
 // It attaches blueprint for this unit
 module.exports = (hook) => {
   hook.attach('generateBlueprints_', (injected, done) => {
-    injected.entities.blueprint_unit_undeadRogue = {
-      blueprint: {
-        unitName: 'undeadRogue',
-        tier: 2,
-        life: 16,
-        movement: 4,
-        maneuverPoints: 2,
-        recruitCost: 110,
-        maneuvers: {
-          walk: true,
-          melee: {
-            damage: 5
-          }
+    injected.blueprint.unit.undeadRogue = {
+      unitName: 'undeadRogue',
+      tier: 2,
+      life: 16,
+      movement: 4,
+      maneuverPoints: 2,
+      recruitCost: 110,
+      maneuvers: {
+        walk: true,
+        melee: {
+          damage: 5
         }
       }
     };

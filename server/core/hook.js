@@ -8,6 +8,7 @@ const _ = require('lodash');
 
 const hooks = {};
 
+// What does this module do?
 // It allows other modules to register hook-functions that can be runned in other middleware modules as part of waterfall with ctx
 // Important! A hook mutates passed ctx!
 module.exports = () => {

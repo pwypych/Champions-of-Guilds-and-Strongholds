@@ -6,19 +6,17 @@
 // It attaches blueprint for this unit
 module.exports = (hook) => {
   hook.attach('generateBlueprints_', (injected, done) => {
-    injected.entities.blueprint_unit_cleric = {
-      blueprint: {
-        unitName: 'cleric',
-        tier: 5,
-        life: 63,
-        movement: 6,
-        maneuverPoints: 2,
-        recruitCost: 500,
-        maneuvers: {
-          walk: true,
-          melee: {
-            damage: 10
-          }
+    injected.blueprint.unit.cleric = {
+      unitName: 'cleric',
+      tier: 5,
+      life: 63,
+      movement: 6,
+      maneuverPoints: 2,
+      recruitCost: 500,
+      maneuvers: {
+        walk: true,
+        melee: {
+          damage: 10
         }
       }
     };
