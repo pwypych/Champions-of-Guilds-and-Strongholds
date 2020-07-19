@@ -7,7 +7,7 @@ g.world.recruitUnitPrepare = (
   walkie,
   freshEntities,
   auth,
-  blueprints
+  blueprint
 ) => {
   const $recruitUnit = $body.find(
     '.js-world-interface-information-modal .js-recruit-unit'
@@ -70,7 +70,7 @@ g.world.recruitUnitPrepare = (
         '<button class="js-button-buy" data-unit-name="' +
           unitName +
           '">' +
-          blueprints.unitBlueprint[unitName].recruitCost +
+          blueprint.unit[unitName].recruitCost +
           '<img class="vertical-align" src="/sprite/gold.png" width="24" height="24"></button>'
       );
       const $seperator10 = $('<div class="seperator-10"></div>');

@@ -312,7 +312,7 @@ function setupLibrariesAndRoutes(hook, blueprint) {
     '/game',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
-    require('./game/game.js')(environment, db, templateToHtml)
+    require('./game/game.js')(environment, db, blueprint, templateToHtml)
   );
 
   app.get(

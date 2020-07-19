@@ -4,11 +4,12 @@
 
 const debug = require('debug')('cogs:game');
 
-module.exports = (environment, db, templateToHtml) => {
+module.exports = (environment, db, blueprint, templateToHtml) => {
   return (req, res) => {
     const viewModel = {};
     viewModel.baseurl = environment.baseurl;
     viewModel.timestamp = Date.now();
+    viewModel.blueprint = JSON.stringify(blueprint);
 
     (function init() {
       debug('// Generates html from .ejs files for game');

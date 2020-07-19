@@ -34,6 +34,7 @@ g.main = function main() {
 
   function setupLibraries($body, app, viewport, auth, blueprints) {
     const walkie = g.setup.setupWalkie();
+    const blueprint = g.blueprint;
 
     g.common.stateChange(walkie, auth);
     g.common.entitiesInterval(walkie, auth);
@@ -59,7 +60,7 @@ g.main = function main() {
     g.world.worldInterfaceToggle($body, walkie);
     g.world.worldToggle(walkie, viewport, freshEntities);
     g.world.worldCleanup(walkie, viewport, freshEntities);
-    g.world.recruitUnitPrepare($body, walkie, freshEntities, auth, blueprints);
+    g.world.recruitUnitPrepare($body, walkie, freshEntities, auth, blueprint);
     g.world.heroFocusWorldReady(walkie, viewport, freshEntities);
     g.world.heroFocusTween(walkie, viewport, freshEntities);
     g.world.backgroundDraw(walkie, viewport, auth);
