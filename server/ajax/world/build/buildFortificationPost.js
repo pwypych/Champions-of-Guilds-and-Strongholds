@@ -234,10 +234,10 @@ module.exports = (db, fortificationBlueprint) => {
       const enchantmentEntity = {};
       enchantmentEntity.owner = playerId;
       enchantmentEntity.enchanter = fortificationId;
-      if (fortification.generatesDaily) {
+      if (fortification.income) {
         enchantmentEntity.income = {};
-        enchantmentEntity.income.name = fortification.generatesDaily.name;
-        enchantmentEntity.income.amount = fortification.generatesDaily.amount;
+        enchantmentEntity.income.name = fortification.income.name;
+        enchantmentEntity.income.amount = fortification.income.amount;
       }
 
       debug('generateEnchantmentEntity: enchantmentEntity:', enchantmentEntity);
