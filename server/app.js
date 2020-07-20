@@ -217,8 +217,8 @@ function setupHooks() {
     pathFiles.forEach((pathFile) => {
       require(pathFile)(hook);
 
-      const fileName = path.basename(pathFile);
-      debug('setupHooks: fileName:', fileName);
+      // const fileName = path.basename(pathFile);
+      // debug('setupHooks: fileName:', fileName);
     });
 
     setupBlueprint(hook);
@@ -233,14 +233,19 @@ function setupBlueprint(hook) {
 }
 
 function setupSpriteFilenameArray(hook, blueprint) {
-  require('./core/setupSpriteFilenameArray.js')(environment, (error, spriteFilenameArray) => {
-    debug('setupSpriteFilenameArray', spriteFilenameArray);
-    setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray);
-  });
+  require('./core/setupSpriteFilenameArray.js')(
+    environment,
+    (error, spriteFilenameArray) => {
+      debug(
+        'setupSpriteFilenameArray: Loaded sprites!',
+        spriteFilenameArray.length
+      );
+      setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray);
+    }
+  );
 }
 
 function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
-
   // libraries
   const templateToHtml = require('./library/templateToHtml.js')();
   const findEntitiesByGameId = require('./library/findEntitiesByGameId.js')(db);
@@ -319,7 +324,13 @@ function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
     '/game',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
-    require('./game/game.js')(environment, db, blueprint, spriteFilenameArray, templateToHtml)
+    require('./game/game.js')(
+      environment,
+      db,
+      blueprint,
+      spriteFilenameArray,
+      templateToHtml
+    )
   );
 
   app.get(
@@ -436,10 +447,7 @@ function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/world/build/buildFortificationPost.js')(
-      db,
-      blueprint
-    )
+    require('./ajax/world/build/buildFortificationPost.js')(db, blueprint)
   );
 
   // battle

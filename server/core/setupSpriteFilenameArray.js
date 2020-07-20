@@ -11,8 +11,6 @@ module.exports = (environment, callback) => {
   const spriteFolder = environment.basepath + '/public/sprite';
 
   (function init() {
-    debug('// Send array with every sprite filename');
-
     scanSpriteFolder();
   })();
 
@@ -23,7 +21,7 @@ module.exports = (environment, callback) => {
         return;
       }
 
-      debug('scanSpriteFolder', files);
+      // debug('scanSpriteFolder: files.length', files.length);
       checkIsEverySpriteFilePng(files);
     });
   }
@@ -39,7 +37,7 @@ module.exports = (environment, callback) => {
         return false;
       }
 
-      debug('spriteFileName - true', spriteFileName);
+      // debug('spriteFileName - true', spriteFileName);
       return true;
     });
 
