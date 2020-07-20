@@ -5,8 +5,6 @@
 const debug = require('debug')('cogs:blueprintGet');
 
 module.exports = (
-  unitBlueprint,
-  raceBlueprint,
   fortificationBlueprint
 ) => {
   return (req, res) => {
@@ -19,8 +17,6 @@ module.exports = (
     function generateBlueprintObject() {
       const blueprint = {};
 
-      blueprint.unitBlueprint = unitBlueprint();
-      blueprint.raceBlueprint = raceBlueprint();
       blueprint.fortificationBlueprint = fortificationBlueprint();
 
       sendBlueprintObject(blueprint);

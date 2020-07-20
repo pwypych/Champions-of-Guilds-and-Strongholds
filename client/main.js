@@ -46,7 +46,7 @@ g.main = function main() {
     g.launch.launchSelectRace($body, auth);
     g.launch.launchButtonReady($body, auth);
     g.launch.launchTable($body, walkie, freshEntities);
-    g.launch.launchSelectRaceOptions($body, walkie, freshEntities, blueprints);
+    g.launch.launchSelectRaceOptions($body, walkie, freshEntities, blueprint);
     g.launch.launchCountdown($body, walkie);
     g.launch.launchDisableUi($body, walkie);
 

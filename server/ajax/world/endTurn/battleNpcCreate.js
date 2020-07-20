@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:battleNpcCreate');
 const _ = require('lodash');
 const shortId = require('shortid');
 
-module.exports = (db, unitBlueprint) => {
+module.exports = (db, blueprint) => {
   return (req, res, next) => {
     (function init() {
       debug(
@@ -77,8 +77,8 @@ module.exports = (db, unitBlueprint) => {
         unit.collision = true;
         unit.position = attackerPositions[counter];
         unit.unitStats = {
-          current: unitBlueprint()[unitName],
-          base: unitBlueprint()[unitName]
+          current: blueprint.unit[unitName],
+          base: blueprint.unit[unitName]
         };
 
         units[id] = unit;
@@ -203,8 +203,8 @@ module.exports = (db, unitBlueprint) => {
         unit.mirrorSprite = true;
         unit.position = defenderPositions[index];
         unit.unitStats = {
-          current: unitBlueprint()[unitName],
-          base: unitBlueprint()[unitName]
+          current: blueprint.unit[unitName],
+          base: blueprint.unit[unitName]
         };
 
         units[id] = unit;

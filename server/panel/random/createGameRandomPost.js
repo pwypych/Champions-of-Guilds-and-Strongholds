@@ -71,7 +71,7 @@ module.exports = (environment, db, blueprint) => {
         entities[id].playerToken = 'playerToken_' + shortid.generate();
         entities[id].playerData = {};
         entities[id].playerData.name = 'Player ' + (index + 1);
-        entities[id].playerData.race = 'human';
+        entities[id].playerData.race = 'beast';
         entities[id].playerData.color = colorArray[index];
         debug('generatePlayerEntities: playerEntity:', entities[id]);
       });

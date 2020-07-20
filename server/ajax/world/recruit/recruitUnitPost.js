@@ -5,7 +5,7 @@
 const debug = require('debug')('cogs:recruitUnitPost.js');
 const _ = require('lodash');
 
-module.exports = (db, unitBlueprint) => {
+module.exports = (db, blueprint) => {
   return (req, res) => {
     (function init() {
       debug('// Endpoint, recruit one unit by given unitName');
@@ -59,7 +59,7 @@ module.exports = (db, unitBlueprint) => {
 
     function findRecruitUnitCost(ctx) {
       const unitName = req.body.unitName;
-      const recruitUnit = unitBlueprint()[unitName];
+      const recruitUnit = blueprint.unit[unitName];
       debug('findRecruitUnitCost: recruitUnit:', recruitUnit);
 
       if (!recruitUnit) {

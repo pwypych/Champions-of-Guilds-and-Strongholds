@@ -237,8 +237,6 @@ function setupLibrariesAndRoutes(hook, blueprint) {
   const templateToHtml = require('./library/templateToHtml.js')();
   const findEntitiesByGameId = require('./library/findEntitiesByGameId.js')(db);
 
-  const unitBlueprint = require('./ajax/blueprint/unitBlueprint.js');
-  const raceBlueprint = require('./ajax/blueprint/raceBlueprint.js');
   const fortificationBlueprint = require('./ajax/blueprint/fortificationBlueprint.js');
 
   // general
@@ -334,8 +332,6 @@ function setupLibrariesAndRoutes(hook, blueprint) {
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./ajax/blueprint/blueprintGet.js')(
-      unitBlueprint,
-      raceBlueprint,
       fortificationBlueprint
     )
   );
@@ -429,8 +425,8 @@ function setupLibrariesAndRoutes(hook, blueprint) {
     ),
     require('./library/readEntities.js')(db),
     require('./ajax/world/endTurn/battleChecker.js')(db),
-    require('./ajax/world/endTurn/battleNpcCreate.js')(db, unitBlueprint),
-    require('./ajax/world/endTurn/battleClashCreate.js')(db, unitBlueprint),
+    require('./ajax/world/endTurn/battleNpcCreate.js')(db, blueprint),
+    require('./ajax/world/endTurn/battleClashCreate.js')(db, blueprint),
     require('./ajax/world/endTurn/newDay.js')(db),
     // require('./library/readEntities.js')(db),
     require('./ajax/world/endTurn/enchantmentIncomeExecutor.js')(db),
@@ -443,7 +439,7 @@ function setupLibrariesAndRoutes(hook, blueprint) {
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/world/recruit/recruitUnitPost.js')(db, unitBlueprint)
+    require('./ajax/world/recruit/recruitUnitPost.js')(db, blueprint)
   );
 
   app.post(
@@ -558,8 +554,8 @@ function setupLibrariesAndRoutes(hook, blueprint) {
     require('./library/readEntities.js')(db),
     require('./ajax/summary/confirm/worldChecker.js')(db),
     require('./ajax/world/endTurn/battleChecker.js')(db),
-    require('./ajax/world/endTurn/battleNpcCreate.js')(db, unitBlueprint),
-    require('./ajax/world/endTurn/battleClashCreate.js')(db, unitBlueprint),
+    require('./ajax/world/endTurn/battleNpcCreate.js')(db, blueprint),
+    require('./ajax/world/endTurn/battleClashCreate.js')(db, blueprint),
     require('./ajax/world/endTurn/newDay.js')(db),
     require('./ajax/world/endTurn/refillHeroMovement.js')(db),
     require('./ajax/world/endTurn/unsetEndTurnFlags.js')(db)

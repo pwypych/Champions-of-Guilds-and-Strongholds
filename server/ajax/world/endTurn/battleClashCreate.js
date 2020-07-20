@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:battleClashCreate');
 const _ = require('lodash');
 const shortId = require('shortid');
 
-module.exports = (db, unitBlueprint) => {
+module.exports = (db, blueprint) => {
   return (req, res, next) => {
     (function init() {
       debug(
@@ -83,8 +83,8 @@ module.exports = (db, unitBlueprint) => {
         unit.collision = true;
         unit.position = attackerPositions[counterA];
         unit.unitStats = {
-          current: unitBlueprint()[unitName],
-          base: unitBlueprint()[unitName]
+          current: blueprint.unit[unitName],
+          base: blueprint.unit[unitName]
         };
 
         units[id] = unit;
@@ -122,8 +122,8 @@ module.exports = (db, unitBlueprint) => {
         unit.mirrorSprite = true;
         unit.position = defenderPositions[counterD];
         unit.unitStats = {
-          current: unitBlueprint()[unitName],
-          base: unitBlueprint()[unitName]
+          current: blueprint.unit[unitName],
+          base: blueprint.unit[unitName]
         };
 
         units[id] = unit;

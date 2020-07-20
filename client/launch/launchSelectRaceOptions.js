@@ -6,7 +6,7 @@ g.launch.launchSelectRaceOptions = (
   $body,
   walkie,
   freshEntities,
-  blueprints
+  blueprint
 ) => {
   const $select = $body.find('.js-launch .js-select-race');
 
@@ -32,10 +32,9 @@ g.launch.launchSelectRaceOptions = (
   }
 
   function updateSelect() {
-    const raceBlueprint = blueprints.raceBlueprint;
     $select.empty();
 
-    _.forEach(raceBlueprint, (race, id) => {
+    _.forEach(blueprint.race, (race, id) => {
       const $option = $('<option value="' + id + '">' + id + '</option>');
       $select.append($option);
     });
