@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:prepareHeroFigure');
 const _ = require('lodash');
 const shortId = require('shortid');
 
-module.exports = (db, raceBlueprint) => {
+module.exports = (db, blueprint) => {
   return (req, res, next) => {
     (function init() {
       debug('// Place every hero figure in front of a castle');
@@ -40,13 +40,13 @@ module.exports = (db, raceBlueprint) => {
         const hero = {};
 
         hero.owner = player.id;
-        hero.figureName = raceBlueprint()[player.playerData.race].heroFigure;
+        hero.figureName = blueprint.race[player.playerData.race].heroFigure;
 
         hero.position = {};
         hero.position.x = castleRandomArray[index].position.x;
         hero.position.y = castleRandomArray[index].position.y + 1;
 
-        const spriteOffset = raceBlueprint()[player.playerData.race]
+        const spriteOffset = blueprint.race[player.playerData.race]
           .spriteOffset;
         hero.spriteOffset = spriteOffset;
 
@@ -55,7 +55,7 @@ module.exports = (db, raceBlueprint) => {
           base: { movement: 15 }
         };
 
-        hero.unitAmounts = raceBlueprint()[player.playerData.race].unitAmounts;
+        hero.unitAmounts = blueprint.race[player.playerData.race].unitAmounts;
 
         heroArray.push(hero);
       });

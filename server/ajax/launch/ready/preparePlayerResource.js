@@ -5,7 +5,7 @@
 const debug = require('debug')('cogs:preparePlayerResource');
 const _ = require('lodash');
 
-module.exports = (db, raceBlueprint) => {
+module.exports = (db, blueprint) => {
   return (req, res, next) => {
     (function init() {
       debug('// Set every player resources depending on chosen race');
@@ -39,7 +39,7 @@ module.exports = (db, raceBlueprint) => {
 
       const field = playerId + '.playerResources';
       const $set = {};
-      $set[field] = raceBlueprint()[playerRace].playerResources;
+      $set[field] = blueprint.race[playerRace].playerResources;
       const update = { $set: $set };
       const options = {};
 

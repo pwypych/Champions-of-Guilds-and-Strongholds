@@ -5,7 +5,7 @@
 const debug = require('debug')('cogs:summaryConfirm');
 const _ = require('lodash');
 
-module.exports = (db, raceBlueprint) => {
+module.exports = (db, blueprint) => {
   return (req, res, next) => {
     (function init() {
       debug(
@@ -77,7 +77,7 @@ module.exports = (db, raceBlueprint) => {
       const playerId = ctx.playerId;
       const player = entities[playerId];
       const race = player.playerData.race;
-      const unitAmountsBase = raceBlueprint()[race].unitAmounts;
+      const unitAmountsBase = blueprint.race[race].unitAmounts;
       const unitsRemaining = {};
 
       _.forEach(unitAmountsBase, (amount, unitName) => {

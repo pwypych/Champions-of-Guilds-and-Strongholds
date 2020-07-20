@@ -7,7 +7,7 @@ const debug = require('debug')('cogs:hook');
 // What does this module do?
 
 module.exports = (hook, callback) => {
-  const injected = { blueprint: { figure: {}, unit: {} } };
+  const injected = { blueprint: { figure: {}, unit: {}, race: {}, fortification: {} } };
   hook.run('generateBlueprints_', injected, (error) => {
     // hook mutates injected
 
