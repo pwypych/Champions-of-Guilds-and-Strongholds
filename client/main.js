@@ -21,18 +21,11 @@ g.main = function main() {
     const auth = g.setup.setupAuth();
 
     g.setup.setupImages(auth, () => {
-      setupBlueprints($body, app, viewport, auth);
+      setupLibraries($body, app, viewport, auth);
     });
   }
 
-  function setupBlueprints($body, app, viewport, auth) {
-    $.get('/ajax/blueprint/blueprintGet' + auth.uri, (blueprints) => {
-      console.log('setupBlueprints: Got blueprints!');
-      setupLibraries($body, app, viewport, auth, blueprints);
-    });
-  }
-
-  function setupLibraries($body, app, viewport, auth, blueprints) {
+  function setupLibraries($body, app, viewport, auth) {
     const walkie = g.setup.setupWalkie();
     const blueprint = g.blueprint;
 

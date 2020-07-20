@@ -237,8 +237,6 @@ function setupLibrariesAndRoutes(hook, blueprint) {
   const templateToHtml = require('./library/templateToHtml.js')();
   const findEntitiesByGameId = require('./library/findEntitiesByGameId.js')(db);
 
-  const fortificationBlueprint = require('./ajax/blueprint/fortificationBlueprint.js');
-
   // general
   app.get('/', (req, res) => {
     res.redirect('/panelRandom');
@@ -325,15 +323,6 @@ function setupLibrariesAndRoutes(hook, blueprint) {
     require('./ajax/battle/entities/battleEntitiesFilter.js')(),
     require('./ajax/summary/entities/summaryEntitiesFilter.js')(),
     require('./ajax/common/entitiesFilterSendResponse.js')()
-  );
-
-  app.get(
-    '/ajax/blueprint/blueprintGet',
-    require('./library/readEntities.js')(db),
-    require('./library/middlewareTokenAuth.js')(),
-    require('./ajax/blueprint/blueprintGet.js')(
-      fortificationBlueprint
-    )
   );
 
   app.get(
@@ -449,7 +438,7 @@ function setupLibrariesAndRoutes(hook, blueprint) {
     require('./library/middlewareAjaxStateAuth.js')('worldState'),
     require('./ajax/world/build/buildFortificationPost.js')(
       db,
-      fortificationBlueprint
+      blueprint
     )
   );
 

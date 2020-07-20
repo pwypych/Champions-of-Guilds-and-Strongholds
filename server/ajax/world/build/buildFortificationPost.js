@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:buildFortificationPost.js');
 const _ = require('lodash');
 const shortId = require('shortid');
 
-module.exports = (db, fortificationBlueprint) => {
+module.exports = (db, blueprint) => {
   return (req, res) => {
     (function init() {
       debug('// Endpoint, build one fortification in castle by given name');
@@ -20,7 +20,7 @@ module.exports = (db, fortificationBlueprint) => {
 
     function validateFortificationName(ctx) {
       const fortificationName = req.body.fortificationName;
-      const fortification = fortificationBlueprint()[fortificationName];
+      const fortification = blueprint.fortification[fortificationName];
 
       if (!fortification) {
         res.status(503);
