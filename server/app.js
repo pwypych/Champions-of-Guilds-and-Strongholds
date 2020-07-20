@@ -4,6 +4,7 @@
 
 // External libraries
 const debug = require('debug')('cogs:app');
+const _ = require('lodash');
 const glob = require('glob');
 const fs = require('fs');
 const express = require('express');
@@ -226,7 +227,7 @@ function setupHooks() {
 
 function setupBlueprint(hook) {
   require('./core/setupBlueprint.js')(hook, (error, blueprint) => {
-    debug('setupBlueprint: blueprint:', blueprint);
+    debug('setupBlueprint: blueprint:', _.size(blueprint));
     setupLibrariesAndRoutes(hook, blueprint);
   });
 }
