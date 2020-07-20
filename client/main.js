@@ -18,14 +18,13 @@ g.main = function main() {
     const viewport = g.setup.setupViewport(app);
     // g.setup.setupTween(app);
 
-    const auth = g.setup.setupAuth();
-
-    g.setup.setupImages(auth, () => {
-      setupLibraries($body, app, viewport, auth);
+    g.setup.setupImages(g.spriteFilenameArray, () => {
+      setupLibraries($body, viewport);
     });
   }
 
-  function setupLibraries($body, app, viewport, auth) {
+  function setupLibraries($body, viewport) {
+    const auth = g.setup.setupAuth();
     const walkie = g.setup.setupWalkie();
     const blueprint = g.blueprint;
 

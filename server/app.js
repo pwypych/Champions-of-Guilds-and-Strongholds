@@ -228,11 +228,18 @@ function setupHooks() {
 function setupBlueprint(hook) {
   require('./core/setupBlueprint.js')(hook, (error, blueprint) => {
     debug('setupBlueprint: blueprint:', _.size(blueprint));
-    setupLibrariesAndRoutes(hook, blueprint);
+    setupSpriteFilenameArray(hook, blueprint);
   });
 }
 
-function setupLibrariesAndRoutes(hook, blueprint) {
+function setupSpriteFilenameArray(hook, blueprint) {
+  require('./core/setupSpriteFilenameArray.js')(environment, (error, spriteFilenameArray) => {
+    debug('setupSpriteFilenameArray', spriteFilenameArray);
+    setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray);
+  });
+}
+
+function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
 
   // libraries
   const templateToHtml = require('./library/templateToHtml.js')();
@@ -312,7 +319,7 @@ function setupLibrariesAndRoutes(hook, blueprint) {
     '/game',
     require('./library/readEntities.js')(db),
     require('./library/middlewareTokenAuth.js')(),
-    require('./game/game.js')(environment, db, blueprint, templateToHtml)
+    require('./game/game.js')(environment, db, blueprint, spriteFilenameArray, templateToHtml)
   );
 
   app.get(
@@ -368,14 +375,6 @@ function setupLibrariesAndRoutes(hook, blueprint) {
     require('./library/middlewareTokenAuth.js')(),
     require('./library/middlewareAjaxStateAuth.js')('launchState'),
     require('./ajax/launch/race/playerRacePost.js')(db)
-  );
-
-  // world
-  app.get(
-    '/ajax/world/load/spriteFilenameArray',
-    require('./library/readEntities.js')(db),
-    require('./library/middlewareTokenAuth.js')(),
-    require('./ajax/world/load/spriteFilenameArrayGet.js')(environment)
   );
 
   app.post(

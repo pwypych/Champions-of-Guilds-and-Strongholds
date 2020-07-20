@@ -2,9 +2,9 @@
 
 'use strict';
 
-g.setup.setupImages = (auth, callback) => {
+g.setup.setupImages = (spriteFilenameArray, callback) => {
   (function init() {
-    getSpriteFilenameArray();
+    forEachSpriteFilename();
   })();
 
   // spriteFilenameArray = [
@@ -14,16 +14,7 @@ g.setup.setupImages = (auth, callback) => {
   //   ...
   // ];
 
-  function getSpriteFilenameArray() {
-    $.get(
-      '/ajax/world/load/spriteFilenameArray' + auth.uri,
-      (spriteFilenameArray) => {
-        forEachSpriteFilename(spriteFilenameArray);
-      }
-    );
-  }
-
-  function forEachSpriteFilename(spriteFilenameArray) {
+  function forEachSpriteFilename() {
     let message = '';
     spriteFilenameArray.forEach((spriteFilename) => {
       const uri = '/sprite/' + spriteFilename + '?t=' + Date.now();

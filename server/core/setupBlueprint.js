@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:hook');
+const debug = require('debug')('cogs:setupBlueprint');
 
 // What does this module do?
 // It generates empty blueprint object and adds blueprints from from all generateBlueprints_ hooks
