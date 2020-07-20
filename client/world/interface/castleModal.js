@@ -2,14 +2,12 @@
 
 'use strict';
 
-g.world.castleModal = ($body, walkie, freshEntities, blueprints, auth) => {
+g.world.castleModal = ($body, walkie, freshEntities, blueprint, auth) => {
   const $modal = $body.find('.js-world-interface-castle-modal');
   const raceFortification = $modal.find('.js-race-building');
-  const fortificationBlueprint = blueprints.fortificationBlueprint;
 
   (function init() {
     onEntitiesGetFirst();
-    console.log('drawRaceFortificationToBuy: blueprints:', blueprints);
   })();
 
   function onEntitiesGetFirst() {
@@ -42,8 +40,8 @@ g.world.castleModal = ($body, walkie, freshEntities, blueprints, auth) => {
     raceFortification.empty();
     const $seperator10 = $('<div class="seperator-10"></div>');
 
-    _.forEach(fortificationBlueprint, (fortification, name) => {
-      console.log('drawRaceFortificationToBuy: fortification:', fortification);
+    _.forEach(blueprint.fortification, (fortification, name) => {
+      // console.log('drawRaceFortificationToBuy: fortification:', fortification);
       if (fortification.race === playerRace) {
         const $fortificationName = $(
           '<div>' + fortification.namePretty + '</div>'
