@@ -19,7 +19,7 @@ module.exports = (environment, db, blueprint, spriteFilenameArray, templateToHtm
     })();
 
     function generateWorld() {
-      const path = environment.basepath + '/server/game/canvasWrapper.ejs';
+      const path = environment.basepath + '/server/game/ejs/canvasWrapper.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         viewModel.htmlCanvasWrapper = html;
         debug('generateWorld: html.length:', html.length);
@@ -28,7 +28,7 @@ module.exports = (environment, db, blueprint, spriteFilenameArray, templateToHtm
     }
 
     function generateCheat() {
-      const path = environment.basepath + '/server/game/cheat.ejs';
+      const path = environment.basepath + '/server/game/ejs/cheat.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         viewModel.htmlCheat = html;
         debug('generateCheat: html.length:', html.length);
@@ -37,7 +37,7 @@ module.exports = (environment, db, blueprint, spriteFilenameArray, templateToHtm
     }
 
     function generateInterfaceWorld() {
-      const path = environment.basepath + '/server/game/worldInterface.ejs';
+      const path = environment.basepath + '/server/game/ejs/worldInterface.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         viewModel.htmlInterfaceWorld = html;
         debug('generateInterfaceWorld: html.length:', html.length);
@@ -46,7 +46,7 @@ module.exports = (environment, db, blueprint, spriteFilenameArray, templateToHtm
     }
 
     function generateHeroDead() {
-      const path = environment.basepath + '/server/game/heroDead.ejs';
+      const path = environment.basepath + '/server/game/ejs/heroDead.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         viewModel.htmlHeroDead = html;
         debug('generateHeroDead: html.length:', html.length);
@@ -55,7 +55,7 @@ module.exports = (environment, db, blueprint, spriteFilenameArray, templateToHtm
     }
 
     function generateInterfaceBattle() {
-      const path = environment.basepath + '/server/game/battleInterface.ejs';
+      const path = environment.basepath + '/server/game/ejs/battleInterface.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         viewModel.htmlInterfaceBattle = html;
         debug('generateInterfaceBattle: html.length:', html.length);
@@ -64,7 +64,7 @@ module.exports = (environment, db, blueprint, spriteFilenameArray, templateToHtm
     }
 
     function generateSummary() {
-      const path = environment.basepath + '/server/game/summary.ejs';
+      const path = environment.basepath + '/server/game/ejs/summary.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         viewModel.htmlSummary = html;
         debug('generateSummary: html.length:', html.length);
@@ -73,7 +73,7 @@ module.exports = (environment, db, blueprint, spriteFilenameArray, templateToHtm
     }
 
     function generateChat() {
-      const path = environment.basepath + '/server/game/chat.ejs';
+      const path = environment.basepath + '/server/game/ejs/chat.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         viewModel.htmlChat = html;
         debug('generateChat: html.length:', html.length);
@@ -82,7 +82,7 @@ module.exports = (environment, db, blueprint, spriteFilenameArray, templateToHtm
     }
 
     function generateLaunch() {
-      const path = environment.basepath + '/server/game/launch.ejs';
+      const path = environment.basepath + '/server/game/ejs/launch.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         viewModel.htmlLaunch = html;
         debug('generateLaunch: html.length:', html.length);
@@ -91,7 +91,7 @@ module.exports = (environment, db, blueprint, spriteFilenameArray, templateToHtm
     }
 
     function generatePreload() {
-      const path = environment.basepath + '/server/game/preload.ejs';
+      const path = environment.basepath + '/server/game/ejs/preload.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         viewModel.htmlPreload = html;
         debug('generatePreload: html.length:', html.length);
@@ -100,7 +100,7 @@ module.exports = (environment, db, blueprint, spriteFilenameArray, templateToHtm
     }
 
     function generateTemplate() {
-      const path = environment.basepath + '/server/game/game.ejs';
+      const path = environment.basepath + '/server/game/ejs/game.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         debug('generateTemplate html.length:', html.length);
         sendResponse(html);
