@@ -4,7 +4,7 @@
 
 g.world.castleButton = ($body) => {
   const $button = $body.find('.js-world-interface-castle-button');
-  const $modal = $body.find('.js-world-interface-castle-modal');
+  const $modal = $body.find('.js-world-interface-fortification-modal');
 
   (function init() {
     onClick();
