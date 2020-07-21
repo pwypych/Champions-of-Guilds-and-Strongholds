@@ -9,7 +9,7 @@ g.world.fortificationeModal = (
   blueprint,
   auth
 ) => {
-  const $modal = $body.find('.js-world-interface-castle-modal');
+  const $modal = $body.find('.js-world-interface-fortification-modal');
   const raceFortification = $modal.find('.js-race-building');
 
   (function init() {
