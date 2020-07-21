@@ -2,7 +2,13 @@
 
 'use strict';
 
-g.world.castleModal = ($body, walkie, freshEntities, blueprint, auth) => {
+g.world.fortificationeModal = (
+  $body,
+  walkie,
+  freshEntities,
+  blueprint,
+  auth
+) => {
   const $modal = $body.find('.js-world-interface-castle-modal');
   const raceFortification = $modal.find('.js-race-building');
 
