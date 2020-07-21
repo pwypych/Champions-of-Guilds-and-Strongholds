@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.world.fortificationeModal = (
+g.world.fortificationModal = (
   $body,
   walkie,
   freshEntities,
@@ -14,6 +14,7 @@ g.world.fortificationeModal = (
 
   (function init() {
     onEntitiesGetFirst();
+    onEntitiesGet();
   })();
 
   function onEntitiesGetFirst() {
