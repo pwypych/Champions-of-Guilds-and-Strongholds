@@ -151,7 +151,7 @@ function setupMongo() {
 }
 
 function setupPredefinedMapCollection() {
-  const generateMapCollection = require('./library/generatePredefinedMapCollection.js')(
+  const generateMapCollection = require('./instrument/tiled/generatePredefinedMapCollection.js')(
     environment,
     db
   );
@@ -168,7 +168,7 @@ function setupPredefinedMapCollection() {
 }
 
 function setupParcelCollection() {
-  const generateParcelCollection = require('./library/generateParcelCollection.js')(
+  const generateParcelCollection = require('./instrument/tiled/generateParcelCollection.js')(
     environment,
     db
   );
@@ -185,7 +185,7 @@ function setupParcelCollection() {
 }
 
 function setupLandCollection() {
-  const generateLandCollection = require('./library/generateLandCollection.js')(
+  const generateLandCollection = require('./instrument/tiled/generateLandCollection.js')(
     environment,
     db
   );
@@ -200,6 +200,7 @@ function setupLandCollection() {
     setupHooks();
   });
 }
+
 
 function setupHooks() {
   const hook = require('./core/hook.js')();
@@ -228,8 +229,92 @@ function setupHooks() {
 function setupBlueprint(hook) {
   require('./core/setupBlueprint.js')(hook, (error, blueprint) => {
     debug('setupBlueprint: blueprint:', _.size(blueprint));
-    setupSpriteFilenameArray(hook, blueprint);
+    setupInstrumentRoutesAndLibraries(hook, blueprint);
   });
+}
+
+function setupInstrumentRoutesAndLibraries(hook, blueprint) {
+  // libraries
+  const templateToHtml = require('./library/templateToHtml.js')();
+
+  // general
+  app.get('/', (req, res) => {
+    res.redirect('/panelRandom');
+  });
+
+  app.get(
+    '/panelRandom',
+    require('./instrument/panel/random/panelRandom.js')(environment, db, templateToHtml)
+  );
+
+  app.post(
+    '/panelRandom/createGameRandomPost',
+    require('./instrument/panel/random/generateMap/findLandByName.js')(db),
+    require('./instrument/panel/random/generateMap/generateParcelCategoryExitList.js')(db),
+    require('./instrument/panel/random/generateMap/generateParcelMap.js')(),
+    require('./instrument/panel/random/generateMap/generateAbstractFigureMap.js')(),
+    require('./instrument/panel/random/generateMap/generateFigureMap.js')(),
+    require('./instrument/panel/random/generateMap/addMonsterToFigureMap.js')(
+      environment,
+      hook
+    ),
+    require('./instrument/panel/random/generateMap/addBarrierToFigureMap.js')(),
+    require('./instrument/panel/random/generateMap/addTreasureToFigureMap.js')(),
+    require('./instrument/panel/random/generateMap/addNonAbstractToFgureMap.js')(),
+    require('./instrument/panel/random/createGameRandomPost.js')(
+      environment,
+      db,
+      blueprint
+    )
+  );
+
+  app.post(
+    '/panelRandom/deleteGameRandomPost',
+    require('./instrument/panel/random/deleteGameRandomPost.js')(environment, db)
+  );
+
+  app.post(
+    '/panelRandom/loadGamePost',
+    require('./instrument/panel/random/loadGamePost.js')(environment, db)
+  );
+
+  // Old Panel
+  app.get(
+    '/panelPredefined',
+    require('./instrument/panel/predefined/panelPredefined.js')(
+      environment,
+      db,
+      templateToHtml
+    )
+  );
+
+  app.post(
+    '/panelPredefined/createGamePredefinedPost',
+    require('./instrument/panel/predefined/createGamePredefinedPost.js')(
+      environment,
+      db,
+      blueprint
+    )
+  );
+
+  app.post(
+    '/panelPredefined/deleteGamePredefinedPost',
+    require('./instrument/panel/predefined/deleteGamePredefinedPost.js')(environment, db)
+  );
+
+  app.post(
+    '/panelPredefined/loadGamePost',
+    require('./instrument/panel/predefined/loadGamePredefinedPost.js')(environment, db)
+  );
+
+
+  debug('setupInstrumentRoutesAndLibraries');
+  setupGame(hook, blueprint);
+}
+
+function setupGame(hook, blueprint) {
+  debug('setupGame');
+  setupSpriteFilenameArray(hook, blueprint);
 }
 
 function setupSpriteFilenameArray(hook, blueprint) {
@@ -248,76 +333,6 @@ function setupSpriteFilenameArray(hook, blueprint) {
 function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
   // libraries
   const templateToHtml = require('./library/templateToHtml.js')();
-
-  // general
-  app.get('/', (req, res) => {
-    res.redirect('/panelRandom');
-  });
-
-  app.get(
-    '/panelRandom',
-    require('./panel/random/panelRandom.js')(environment, db, templateToHtml)
-  );
-
-  app.post(
-    '/panelRandom/createGameRandomPost',
-    require('./panel/random/generateMap/findLandByName.js')(db),
-    require('./panel/random/generateMap/generateParcelCategoryExitList.js')(db),
-    require('./panel/random/generateMap/generateParcelMap.js')(),
-    require('./panel/random/generateMap/generateAbstractFigureMap.js')(),
-    require('./panel/random/generateMap/generateFigureMap.js')(),
-    require('./panel/random/generateMap/addMonsterToFigureMap.js')(
-      environment,
-      hook
-    ),
-    require('./panel/random/generateMap/addBarrierToFigureMap.js')(),
-    require('./panel/random/generateMap/addTreasureToFigureMap.js')(),
-    require('./panel/random/generateMap/addNonAbstractToFgureMap.js')(),
-    require('./panel/random/createGameRandomPost.js')(
-      environment,
-      db,
-      blueprint
-    )
-  );
-
-  app.post(
-    '/panelRandom/deleteGameRandomPost',
-    require('./panel/random/deleteGameRandomPost.js')(environment, db)
-  );
-
-  app.post(
-    '/panelRandom/loadGamePost',
-    require('./panel/random/loadGamePost.js')(environment, db)
-  );
-
-  // Old Panel
-  app.get(
-    '/panelPredefined',
-    require('./panel/predefined/panelPredefined.js')(
-      environment,
-      db,
-      templateToHtml
-    )
-  );
-
-  app.post(
-    '/panelPredefined/createGamePredefinedPost',
-    require('./panel/predefined/createGamePredefinedPost.js')(
-      environment,
-      db,
-      blueprint
-    )
-  );
-
-  app.post(
-    '/panelPredefined/deleteGamePredefinedPost',
-    require('./panel/predefined/deleteGamePredefinedPost.js')(environment, db)
-  );
-
-  app.post(
-    '/panelPredefined/loadGamePost',
-    require('./panel/predefined/loadGamePredefinedPost.js')(environment, db)
-  );
 
   app.get(
     '/game',

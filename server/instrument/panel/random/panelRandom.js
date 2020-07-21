@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:panelPredefined');
+const debug = require('debug')('cogs:panel');
 const _ = require('lodash');
 
 module.exports = (environment, db, templateToHtml) => {
@@ -17,34 +17,35 @@ module.exports = (environment, db, templateToHtml) => {
       viewModel.timestamp = Date.now();
       viewModel._ = _;
 
-      findMapNames(viewModel);
+      findLandNames(viewModel);
     })();
 
-    function findMapNames(viewModel) {
+    function findLandNames(viewModel) {
       const query = {};
       const options = {};
-      options.projection = { _id: 1 };
+      options.projection = { _id: 1, name: 1 };
 
-      db.collection('predefinedMapCollection')
+      db.collection('landCollection')
         .find(query, options)
-        .toArray((error, mapArray) => {
+        .toArray((error, landArray) => {
           if (error) {
-            debug('findMapNames: error:', error);
+            debug('findLandNames: error:', error);
             res
               .status(503)
               .send(
-                '503 Service Unavailable: Mongo error, cannot run find on predefinedMapCollection'
+                '503 Service Unavailable: Mongo error, cannot run find on landCollection'
               );
             return;
           }
 
-          const mapNameArray = mapArray.map((mapObject) => {
-            return mapObject._id;
+          const landNameArray = landArray.map((landObject) => {
+            debug('landObject:', landObject);
+            return landObject.name;
           });
 
-          viewModel.mapNameArray = mapNameArray;
+          viewModel.landNameArray = landNameArray;
 
-          debug('findMapNames', mapNameArray);
+          debug('findLandNames', landNameArray);
           findGames(viewModel);
         });
     }
@@ -99,7 +100,7 @@ module.exports = (environment, db, templateToHtml) => {
 
     function sendResponse(viewModel) {
       const path =
-        environment.basepath + '/server/panel/predefined/panelPredefined.ejs';
+        environment.basepath + '/server/instrument/panel/random/panelRandom.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         debug('sendResponse():html', html.length);
         debug('******************** send ********************');
