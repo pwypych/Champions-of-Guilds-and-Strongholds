@@ -82,7 +82,7 @@ function buildClient() {
 }
 
 function buildSprites() {
-  const pathRead = path.join(environment.basepath, '/server/plugin/**/*.png');
+  const pathRead = path.join(environment.basepath, '/server/game/plugin/**/*.png');
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
       debug('buildSprites: error:', error);
@@ -207,7 +207,7 @@ function setupHooks() {
 
   const pathRead = path.join(
     environment.basepath,
-    '/server/plugin/**/*.hook.js'
+    '/server/game/plugin/**/*.hook.js'
   );
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
@@ -351,23 +351,23 @@ function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
     '/ajax/entitiesGet',
     require('./game/toSort/readEntities.js')(db),
     require('./game/toSort/middlewareTokenAuth.js')(),
-    require('./ajax/launch/entities/launchEntitiesFilter.js')(),
-    require('./ajax/world/entities/worldEntitiesFilter.js')(),
-    require('./ajax/battle/entities/battleEntitiesFilter.js')(),
-    require('./ajax/summary/entities/summaryEntitiesFilter.js')(),
-    require('./ajax/common/entitiesFilterSendResponse.js')()
+    require('./game/ajax/launch/entities/launchEntitiesFilter.js')(),
+    require('./game/ajax/world/entities/worldEntitiesFilter.js')(),
+    require('./game/ajax/battle/entities/battleEntitiesFilter.js')(),
+    require('./game/ajax/summary/entities/summaryEntitiesFilter.js')(),
+    require('./game/ajax/common/entitiesFilterSendResponse.js')()
   );
 
   app.get(
     '/ajax/cheat/entities/cheatEntitiesGet',
     require('./game/toSort/readEntities.js')(db),
     require('./game/toSort/middlewareTokenAuth.js')(),
-    require('./ajax/cheat/entities/cheatEntitiesGet.js')()
+    require('./game/ajax/cheat/entities/cheatEntitiesGet.js')()
   );
 
   const saveGame = compose([
     require('./game/toSort/readEntities.js')(db),
-    require('./ajax/saveLoad/saveGame.js')(db)
+    require('./game/ajax/saveLoad/saveGame.js')(db)
   ]);
 
   // launch
@@ -376,13 +376,13 @@ function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
     require('./game/toSort/readEntities.js')(db),
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('launchState'),
-    require('./ajax/launch/ready/playerReadyPost.js')(db),
+    require('./game/ajax/launch/ready/playerReadyPost.js')(db),
     require('./game/toSort/readEntities.js')(db),
-    require('./ajax/launch/ready/everyPlayerReadyChecker.js')(),
-    require('./ajax/launch/ready/preparePlayerResource.js')(db, blueprint),
-    require('./ajax/launch/ready/prepareHeroFigure.js')(db, blueprint),
-    require('./ajax/launch/ready/launchCountdown.js')(db),
-    require('./ajax/launch/ready/unsetReadyForLaunch.js')(db),
+    require('./game/ajax/launch/ready/everyPlayerReadyChecker.js')(),
+    require('./game/ajax/launch/ready/preparePlayerResource.js')(db, blueprint),
+    require('./game/ajax/launch/ready/prepareHeroFigure.js')(db, blueprint),
+    require('./game/ajax/launch/ready/launchCountdown.js')(db),
+    require('./game/ajax/launch/ready/unsetReadyForLaunch.js')(db),
     saveGame
   );
 
@@ -391,7 +391,7 @@ function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
     require('./game/toSort/readEntities.js')(db),
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('launchState'),
-    require('./ajax/launch/name/playerNamePost.js')(db)
+    require('./game/ajax/launch/name/playerNamePost.js')(db)
   );
 
   app.post(
@@ -399,7 +399,7 @@ function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
     require('./game/toSort/readEntities.js')(db),
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('launchState'),
-    require('./ajax/launch/race/playerRacePost.js')(db)
+    require('./game/ajax/launch/race/playerRacePost.js')(db)
   );
 
   app.post(
@@ -407,22 +407,22 @@ function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
     require('./game/toSort/readEntities.js')(db),
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/commonMovement/entityIdVerify.js')(),
-    require('./ajax/commonMovement/flagIsProcessingInspect.js')(),
-    require('./ajax/commonMovement/pathVerify.js')(),
-    require('./ajax/world/movement/pathHeroMovementPointsSlice.js')(),
-    require('./ajax/world/movement/pathIfBattleSlice.js')(),
-    require('./ajax/world/movement/pathIfResourceSlice.js')(),
-    require('./ajax/world/movement/pathCollisionInWorldVerify.js')(),
-    require('./ajax/world/movement/heroMovementPointsDecrement.js')(db),
-    require('./ajax/commonMovement/flagIsProcessingCreate.js')(db),
-    require('./ajax/commonMovement/recentActivityOnMovement.js')(db),
-    require('./ajax/commonMovement/pathSendResponse.js')(),
-    require('./ajax/commonMovement/movementTimeout.js')(),
-    require('./ajax/commonMovement/positionUpdate.js')(db),
-    require('./ajax/world/movement/collectResource.js')(db),
-    require('./ajax/world/movement/battleNpcInitiate.js')(db),
-    require('./ajax/world/movement/battleClashInitiate.js')(db),
+    require('./game/ajax/commonMovement/entityIdVerify.js')(),
+    require('./game/ajax/commonMovement/flagIsProcessingInspect.js')(),
+    require('./game/ajax/commonMovement/pathVerify.js')(),
+    require('./game/ajax/world/movement/pathHeroMovementPointsSlice.js')(),
+    require('./game/ajax/world/movement/pathIfBattleSlice.js')(),
+    require('./game/ajax/world/movement/pathIfResourceSlice.js')(),
+    require('./game/ajax/world/movement/pathCollisionInWorldVerify.js')(),
+    require('./game/ajax/world/movement/heroMovementPointsDecrement.js')(db),
+    require('./game/ajax/commonMovement/flagIsProcessingCreate.js')(db),
+    require('./game/ajax/commonMovement/recentActivityOnMovement.js')(db),
+    require('./game/ajax/commonMovement/pathSendResponse.js')(),
+    require('./game/ajax/commonMovement/movementTimeout.js')(),
+    require('./game/ajax/commonMovement/positionUpdate.js')(db),
+    require('./game/ajax/world/movement/collectResource.js')(db),
+    require('./game/ajax/world/movement/battleNpcInitiate.js')(db),
+    require('./game/ajax/world/movement/battleClashInitiate.js')(db),
     saveGame
   );
 
@@ -431,20 +431,20 @@ function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
     require('./game/toSort/readEntities.js')(db),
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/world/endTurn/endTurnPost.js')(db),
-    require('./ajax/world/endTurn/zeroHeroMovementPoints.js')(db),
-    require('./ajax/world/endTurn/endTurnCountdown.js')(
+    require('./game/ajax/world/endTurn/endTurnPost.js')(db),
+    require('./game/ajax/world/endTurn/zeroHeroMovementPoints.js')(db),
+    require('./game/ajax/world/endTurn/endTurnCountdown.js')(
       db
     ),
     require('./game/toSort/readEntities.js')(db),
-    require('./ajax/world/endTurn/battleChecker.js')(db),
-    require('./ajax/world/endTurn/battleNpcCreate.js')(db, blueprint),
-    require('./ajax/world/endTurn/battleClashCreate.js')(db, blueprint),
-    require('./ajax/world/endTurn/newDay.js')(db),
+    require('./game/ajax/world/endTurn/battleChecker.js')(db),
+    require('./game/ajax/world/endTurn/battleNpcCreate.js')(db, blueprint),
+    require('./game/ajax/world/endTurn/battleClashCreate.js')(db, blueprint),
+    require('./game/ajax/world/endTurn/newDay.js')(db),
     // require('./game/toSort/readEntities.js')(db),
-    require('./ajax/world/endTurn/enchantmentIncomeExecutor.js')(db),
-    require('./ajax/world/endTurn/refillHeroMovement.js')(db),
-    require('./ajax/world/endTurn/unsetEndTurnFlags.js')(db)
+    require('./game/ajax/world/endTurn/enchantmentIncomeExecutor.js')(db),
+    require('./game/ajax/world/endTurn/refillHeroMovement.js')(db),
+    require('./game/ajax/world/endTurn/unsetEndTurnFlags.js')(db)
   );
 
   app.post(
@@ -452,7 +452,7 @@ function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
     require('./game/toSort/readEntities.js')(db),
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/world/recruit/recruitUnitPost.js')(db, blueprint)
+    require('./game/ajax/world/recruit/recruitUnitPost.js')(db, blueprint)
   );
 
   app.post(
@@ -460,29 +460,29 @@ function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
     require('./game/toSort/readEntities.js')(db),
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('worldState'),
-    require('./ajax/world/build/buildFortificationPost.js')(db, blueprint)
+    require('./game/ajax/world/build/buildFortificationPost.js')(db, blueprint)
   );
 
   // battle
   const maneuverVerify = compose([
     require('./game/toSort/readEntities.js')(db),
-    require('./ajax/commonMovement/entityIdVerify.js')(),
-    require('./ajax/battle/maneuver/verify/checkUnitOwner.js')(),
-    require('./ajax/battle/maneuver/verify/checkUnitActive.js')(),
-    require('./ajax/battle/maneuver/verify/checkUnitManeuverGreatherThenZero.js')()
+    require('./game/ajax/commonMovement/entityIdVerify.js')(),
+    require('./game/ajax/battle/maneuver/verify/checkUnitOwner.js')(),
+    require('./game/ajax/battle/maneuver/verify/checkUnitActive.js')(),
+    require('./game/ajax/battle/maneuver/verify/checkUnitManeuverGreatherThenZero.js')()
   ]);
 
   const maneuverDigest = compose([
     require('./game/toSort/readEntities.js')(db),
-    require('./ajax/battle/maneuver/digest/decrementUnitManeuver.js')(db),
-    require('./ajax/battle/maneuver/digest/ifBattleFinishedChangeState.js')(db),
+    require('./game/ajax/battle/maneuver/digest/decrementUnitManeuver.js')(db),
+    require('./game/ajax/battle/maneuver/digest/ifBattleFinishedChangeState.js')(db),
     require('./game/toSort/readEntities.js')(db),
-    require('./ajax/battle/maneuver/verify/checkIsUnitManeuverZero.js')(),
-    require('./ajax/battle/maneuver/verify/ifEveryUnitManeuverZeroRefill.js')(
+    require('./game/ajax/battle/maneuver/verify/checkIsUnitManeuverZero.js')(),
+    require('./game/ajax/battle/maneuver/verify/ifEveryUnitManeuverZeroRefill.js')(
       db
     ),
     require('./game/toSort/readEntities.js')(db),
-    require('./ajax/battle/maneuver/digest/nominateNewActiveUnit.js')(db)
+    require('./game/ajax/battle/maneuver/digest/nominateNewActiveUnit.js')(db)
   ]);
 
   app.post(
@@ -491,17 +491,17 @@ function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('battleState'),
     maneuverVerify,
-    require('./ajax/commonMovement/flagIsProcessingInspect.js')(),
-    require('./ajax/commonMovement/pathVerify.js')(),
-    require('./ajax/battle/movement/pathUnitMovementPointsVerify.js')(),
-    require('./ajax/battle/movement/walkPathInBattleVerify.js')(),
-    require('./ajax/battle/movement/flyPathInBattleVerify.js')(),
-    require('./ajax/battle/movement/isUnitRetreatFromEnemy.js')(),
-    require('./ajax/commonMovement/flagIsProcessingCreate.js')(db),
-    require('./ajax/commonMovement/recentActivityOnMovement.js')(db),
-    require('./ajax/commonMovement/pathSendResponse.js')(),
-    require('./ajax/commonMovement/movementTimeout.js')(),
-    require('./ajax/commonMovement/positionUpdate.js')(db),
+    require('./game/ajax/commonMovement/flagIsProcessingInspect.js')(),
+    require('./game/ajax/commonMovement/pathVerify.js')(),
+    require('./game/ajax/battle/movement/pathUnitMovementPointsVerify.js')(),
+    require('./game/ajax/battle/movement/walkPathInBattleVerify.js')(),
+    require('./game/ajax/battle/movement/flyPathInBattleVerify.js')(),
+    require('./game/ajax/battle/movement/isUnitRetreatFromEnemy.js')(),
+    require('./game/ajax/commonMovement/flagIsProcessingCreate.js')(db),
+    require('./game/ajax/commonMovement/recentActivityOnMovement.js')(db),
+    require('./game/ajax/commonMovement/pathSendResponse.js')(),
+    require('./game/ajax/commonMovement/movementTimeout.js')(),
+    require('./game/ajax/commonMovement/positionUpdate.js')(db),
     maneuverDigest,
     saveGame
   );
@@ -511,9 +511,9 @@ function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
     require('./game/toSort/readEntities.js')(db),
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('battleState'),
-    require('./ajax/battle/response/sendResponseEarly.js')(),
+    require('./game/ajax/battle/response/sendResponseEarly.js')(),
     maneuverVerify,
-    require('./ajax/battle/melee/maneuverMelee.js')(db),
+    require('./game/ajax/battle/melee/maneuverMelee.js')(db),
     maneuverDigest,
     saveGame
   );
@@ -523,9 +523,9 @@ function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
     require('./game/toSort/readEntities.js')(db),
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('battleState'),
-    require('./ajax/battle/response/sendResponseEarly.js')(),
+    require('./game/ajax/battle/response/sendResponseEarly.js')(),
     maneuverVerify,
-    require('./ajax/battle/shoot/maneuverShoot.js')(db),
+    require('./game/ajax/battle/shoot/maneuverShoot.js')(db),
     maneuverDigest,
     saveGame
   );
@@ -535,9 +535,9 @@ function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
     require('./game/toSort/readEntities.js')(db),
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('battleState'),
-    require('./ajax/battle/response/sendResponseEarly.js')(),
+    require('./game/ajax/battle/response/sendResponseEarly.js')(),
     maneuverVerify,
-    require('./ajax/battle/wait/maneuverWait.js')(),
+    require('./game/ajax/battle/wait/maneuverWait.js')(),
     maneuverDigest,
     saveGame
   );
@@ -548,10 +548,10 @@ function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('battleState'),
     require('./game/toSort/readEntities.js')(db),
-    require('./ajax/commonMovement/entityIdVerify.js')(),
-    require('./ajax/battle/maneuver/verify/checkUnitOwner.js')(),
-    require('./ajax/battle/response/sendResponseEarly.js')(),
-    require('./ajax/battle/activate/activateUnit.js')(db)
+    require('./game/ajax/commonMovement/entityIdVerify.js')(),
+    require('./game/ajax/battle/maneuver/verify/checkUnitOwner.js')(),
+    require('./game/ajax/battle/response/sendResponseEarly.js')(),
+    require('./game/ajax/battle/activate/activateUnit.js')(db)
   );
 
   // summary
@@ -560,15 +560,15 @@ function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
     require('./game/toSort/readEntities.js')(db),
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('summaryState'),
-    require('./ajax/summary/confirm/summaryConfirm.js')(db, blueprint),
+    require('./game/ajax/summary/confirm/summaryConfirm.js')(db, blueprint),
     require('./game/toSort/readEntities.js')(db),
-    require('./ajax/summary/confirm/worldChecker.js')(db),
-    require('./ajax/world/endTurn/battleChecker.js')(db),
-    require('./ajax/world/endTurn/battleNpcCreate.js')(db, blueprint),
-    require('./ajax/world/endTurn/battleClashCreate.js')(db, blueprint),
-    require('./ajax/world/endTurn/newDay.js')(db),
-    require('./ajax/world/endTurn/refillHeroMovement.js')(db),
-    require('./ajax/world/endTurn/unsetEndTurnFlags.js')(db)
+    require('./game/ajax/summary/confirm/worldChecker.js')(db),
+    require('./game/ajax/world/endTurn/battleChecker.js')(db),
+    require('./game/ajax/world/endTurn/battleNpcCreate.js')(db, blueprint),
+    require('./game/ajax/world/endTurn/battleClashCreate.js')(db, blueprint),
+    require('./game/ajax/world/endTurn/newDay.js')(db),
+    require('./game/ajax/world/endTurn/refillHeroMovement.js')(db),
+    require('./game/ajax/world/endTurn/unsetEndTurnFlags.js')(db)
   );
 
   debug('setupLibrariesAndRoutes()');
