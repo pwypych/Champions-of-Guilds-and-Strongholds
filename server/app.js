@@ -248,7 +248,6 @@ function setupSpriteFilenameArray(hook, blueprint) {
 function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
   // libraries
   const templateToHtml = require('./library/templateToHtml.js')();
-  const findEntitiesByGameId = require('./library/findEntitiesByGameId.js')(db);
 
   // general
   app.get('/', (req, res) => {
@@ -420,8 +419,7 @@ function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
     require('./ajax/world/endTurn/endTurnPost.js')(db),
     require('./ajax/world/endTurn/zeroHeroMovementPoints.js')(db),
     require('./ajax/world/endTurn/endTurnCountdown.js')(
-      db,
-      findEntitiesByGameId
+      db
     ),
     require('./library/readEntities.js')(db),
     require('./ajax/world/endTurn/battleChecker.js')(db),

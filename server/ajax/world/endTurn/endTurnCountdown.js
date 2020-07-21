@@ -5,7 +5,7 @@
 const debug = require('debug')('cogs:endTurnCountdown.js');
 const _ = require('lodash');
 
-module.exports = (db, findEntitiesByGameId) => {
+module.exports = (db) => {
   return (req, res, next) => {
     const timeBeforeTurnEnds = 30 * 1000; // ms
 
@@ -70,15 +70,32 @@ module.exports = (db, findEntitiesByGameId) => {
       }, timeBeforeTurnEnds);
 
       interval = setInterval(() => {
-        runFindEntitiesByGameId(timeout, interval, gameId);
+        readEntitiesFresh(timeout, interval, gameId);
       }, 1000);
     }
 
-    function runFindEntitiesByGameId(timeout, interval, gameId) {
-      findEntitiesByGameId(gameId, (error, entities) => {
-        debug('runFindEntitiesByGameId: entities._id:', entities._id);
-        checkEveryPlayerEndTurn(timeout, interval, entities);
-      });
+    function readEntitiesFresh(timeout, interval, gameId) {
+      const query = { _id: gameId };
+      const options = {};
+
+      db.collection('gameCollection').findOne(
+        query,
+        options,
+        (error, entities) => {
+          if (error) {
+            debug('readEntitiesFresh: error: ', error);
+          }
+
+          if (!entities) {
+            debug('entities object is empty');
+            res.status(404).send('404 Not found - Game not exist');
+            return;
+          }
+
+          debug('readEntitiesFresh: gameId', gameId);
+          checkEveryPlayerEndTurn(timeout, interval, entities);
+        }
+      );
     }
 
     function checkEveryPlayerEndTurn(timeout, interval, entities) {
