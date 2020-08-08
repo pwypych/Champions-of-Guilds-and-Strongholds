@@ -15,17 +15,8 @@ module.exports = (environment, db, blueprint, spriteFilenameArray, templateToHtm
     (function init() {
       debug('// Generates html from .ejs files for game');
 
-      generateWorld();
+      generateCheat();
     })();
-
-    function generateWorld() {
-      const path = environment.basepath + '/server/game/ejs/canvasWrapper.ejs';
-      templateToHtml(path, viewModel, (error, html) => {
-        viewModel.htmlCanvasWrapper = html;
-        debug('generateWorld: html.length:', html.length);
-        generateCheat();
-      });
-    }
 
     function generateCheat() {
       const path = environment.basepath + '/server/game/ejs/cheat.ejs';

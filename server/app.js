@@ -330,6 +330,10 @@ function setupSpriteFilenameArray(hook, blueprint) {
   );
 }
 
+// setup ejs files
+
+// setup main game route
+
 function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
   // libraries
   const templateToHtml = require('./library/templateToHtml.js')();

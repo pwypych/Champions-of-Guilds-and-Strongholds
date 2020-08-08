@@ -34,6 +34,10 @@
 
     <%- viewModel.htmlPreload %>
 
+    <!-- Main Pixi Canvas -->
+    <div class="js-canvas-wrapper" style="display: none;">
+    </div>
+
     <script type="text/javascript" src="<%= viewModel.baseurl %>/js/g.js?v=<%= viewModel.timestamp %>"></script>
     <script>g.blueprint = <%- viewModel.blueprint %>;</script>
     <script>g.spriteFilenameArray = <%- viewModel.spriteFilenameArray %>;</script>
