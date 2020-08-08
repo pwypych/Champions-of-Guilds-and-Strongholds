@@ -14,7 +14,6 @@ g.world.fortificationModal = (
 
   (function init() {
     onEntitiesGetFirst();
-    onEntitiesGet();
   })();
 
   function onEntitiesGetFirst() {
