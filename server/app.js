@@ -228,7 +228,7 @@ function setupHooks() {
 
 function setupBlueprint(hook) {
   require('./library/setupBlueprint.js')(hook, (error, blueprint) => {
-    debug('setupBlueprint: blueprint:', _.size(blueprint));
+    debug('setupBlueprint: Main blueprint types:', _.size(blueprint));
     setupInstrumentRoutesAndLibraries(hook, blueprint);
   });
 }
@@ -309,11 +309,6 @@ function setupInstrumentRoutesAndLibraries(hook, blueprint) {
 
 
   debug('setupInstrumentRoutesAndLibraries');
-  setupGame(hook, blueprint);
-}
-
-function setupGame(hook, blueprint) {
-  debug('setupGame');
   setupSpriteFilenameArray(hook, blueprint);
 }
 
@@ -325,17 +320,45 @@ function setupSpriteFilenameArray(hook, blueprint) {
         'setupSpriteFilenameArray: Loaded sprites!',
         spriteFilenameArray.length
       );
-      setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray);
+      setupEjsToHtml(hook, blueprint, spriteFilenameArray);
     }
   );
 }
 
-// setup ejs files
+function setupEjsToHtml(hook, blueprint, spriteFilenameArray) {
+  const templateToHtml = require('./library/templateToHtml.js')();
 
-// setup main game route
+  const htmlArray = [];
 
-function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
-  // libraries
+  const pathRead = path.join(
+    environment.basepath,
+    '/server/game/plugin/**/*.ejs'
+  );
+  glob(pathRead, {}, (errorReadFile, pathFiles) => {
+    if (errorReadFile) {
+      debug('setupHooks: error:', errorReadFile);
+      return;
+    }
+
+    const done = _.after(_.size(pathFiles), () => {
+      debug('setupEjsToHtml', 'Loaded ejs modules!', _.size(pathFiles));
+      setupGameRoute(hook, blueprint, spriteFilenameArray, htmlArray);
+    });
+
+    pathFiles.forEach((pathFile) => {
+      const viewModel = {};
+      viewModel.baseurl = environment.baseurl;
+      viewModel.timestamp = Date.now();
+
+      templateToHtml(pathFile, viewModel, (error, html) => {
+        htmlArray.push(html);
+        done();
+      });
+    });
+  });
+}
+
+function setupGameRoute(hook, blueprint, spriteFilenameArray, htmlArray) {
   const templateToHtml = require('./library/templateToHtml.js')();
 
   app.get(
@@ -347,9 +370,16 @@ function setupLibrariesAndRoutes(hook, blueprint, spriteFilenameArray) {
       db,
       blueprint,
       spriteFilenameArray,
+      htmlArray,
       templateToHtml
     )
   );
+
+  debug('setupGame');
+  setupLibrariesAndRoutes(hook, blueprint);
+}
+
+function setupLibrariesAndRoutes(hook, blueprint) {
 
   app.get(
     '/ajax/entitiesGet',
