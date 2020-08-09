@@ -379,6 +379,22 @@ function setupGameRoute(hook, blueprint, spriteFilenameArray, htmlArray) {
   setupLibrariesAndRoutes(hook, blueprint);
 }
 
+// plan:
+// - move a file from ajax or toSort directory into plugin/libraries (temporary) directory
+// - rename file to f.ex. readEntities.lib.js
+// - load files dynamically in setupLibraries() add lib by filename into l object "l.readEntities"
+// - maybe inject (db, blueprint) into every libarary
+// - if a flag is needed like in middlewareAjaxStateAuth, then rewrite to use one more closure level
+// - rewrite route in setupLibrariesAndRoutes() to use l.readEntities(db) instead of require line
+// - repeat for all server libraries
+// - sort library files into plugin directories
+
+// setup libraries
+
+// setup composed libraries
+
+// setup routes
+
 function setupLibrariesAndRoutes(hook, blueprint) {
 
   app.get(
