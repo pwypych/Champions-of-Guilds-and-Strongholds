@@ -17,9 +17,15 @@ const compose = require('compose-middleware').compose;
 const app = express();
 const path = require('path');
 
+// Main libraries
+const hook = require('./library/hook.js')();
+const templateToHtml = require('./library/templateToHtml.js')();
+
 // Variables (for this file)
 const environment = {};
+const middleware = {};;
 let db;
+let blueprint;
 
 /* eslint-disable global-require */
 /* eslint-disable import/no-dynamic-require */
@@ -203,7 +209,6 @@ function setupLandCollection() {
 
 
 function setupHooks() {
-  const hook = require('./library/hook.js')();
 
   const pathRead = path.join(
     environment.basepath,
@@ -222,20 +227,20 @@ function setupHooks() {
       // debug('setupHooks: fileName:', fileName);
     });
 
-    setupBlueprint(hook);
+    setupBlueprint();
   });
 }
 
-function setupBlueprint(hook) {
-  require('./library/setupBlueprint.js')(hook, (error, blueprint) => {
+function setupBlueprint() {
+  require('./library/setupBlueprint.js')(hook, (error, result) => {
+    blueprint = result;
     debug('setupBlueprint: Main blueprint types:', _.size(blueprint));
-    setupInstrumentRoutesAndLibraries(hook, blueprint);
+    setupInstrumentRoutesAndLibraries();
   });
 }
 
-function setupInstrumentRoutesAndLibraries(hook, blueprint) {
+function setupInstrumentRoutesAndLibraries() {
   // libraries
-  const templateToHtml = require('./library/templateToHtml.js')();
 
   // general
   app.get('/', (req, res) => {
@@ -309,10 +314,51 @@ function setupInstrumentRoutesAndLibraries(hook, blueprint) {
 
 
   debug('setupInstrumentRoutesAndLibraries');
-  setupSpriteFilenameArray(hook, blueprint);
+  setupMiddleware();
 }
 
-function setupSpriteFilenameArray(hook, blueprint) {
+// plan:
+// - move a file from ajax or toSort directory into plugin/libraries (temporary) directory
+// - rename file to f.ex. readEntities.mid.js
+// - load files dynamically in setupMiddleware() add lib by filename into lib object "lib.readEntities"
+// - inject (db, blueprint) into every libarary
+// - if a flag is needed like in middlewareAjaxStateAuth, then rewrite to use one more closure level
+// - rewrite route in setupLibrariesAndRoutes() to use m.readEntities instead of require line
+// - repeat for all server libraries
+// - sort library files into plugin directories
+
+// setup libraries
+function setupMiddleware() {
+  const pathRead = path.join(
+    environment.basepath,
+    '/server/game/plugin/**/*.mid.js'
+  );
+  glob(pathRead, {}, (error, pathFiles) => {
+    if (error) {
+      debug('setupHooks: error:', error);
+      return;
+    }
+
+    pathFiles.forEach((pathFile) => {
+      const fileName = path.basename(pathFile);
+      const name = fileName.substr(0, fileName.length - 7);
+
+      // Those libraries are injected into every middleware
+      middleware[name] = require(pathFile)(db, blueprint, hook);
+
+      debug('setupMiddleware: fileName:', fileName);
+    });
+
+    debug('setupMiddleware', middleware);
+    setupSpriteFilenameArray();
+  });
+}
+
+// setup composed libraries
+
+// setup routes
+
+function setupSpriteFilenameArray() {
   require('./library/setupSpriteFilenameArray.js')(
     environment,
     (error, spriteFilenameArray) => {
@@ -320,14 +366,12 @@ function setupSpriteFilenameArray(hook, blueprint) {
         'setupSpriteFilenameArray: Loaded sprites!',
         spriteFilenameArray.length
       );
-      setupEjsToHtml(hook, blueprint, spriteFilenameArray);
+      setupEjsToHtml(spriteFilenameArray);
     }
   );
 }
 
-function setupEjsToHtml(hook, blueprint, spriteFilenameArray) {
-  const templateToHtml = require('./library/templateToHtml.js')();
-
+function setupEjsToHtml(spriteFilenameArray) {
   const htmlArray = [];
 
   const pathRead = path.join(
@@ -342,7 +386,7 @@ function setupEjsToHtml(hook, blueprint, spriteFilenameArray) {
 
     const done = _.after(_.size(pathFiles), () => {
       debug('setupEjsToHtml', 'Loaded ejs modules!', _.size(pathFiles));
-      setupGameRoute(hook, blueprint, spriteFilenameArray, htmlArray);
+      setupGameRoute(spriteFilenameArray, htmlArray);
     });
 
     pathFiles.forEach((pathFile) => {
@@ -358,12 +402,12 @@ function setupEjsToHtml(hook, blueprint, spriteFilenameArray) {
   });
 }
 
-function setupGameRoute(hook, blueprint, spriteFilenameArray, htmlArray) {
-  const templateToHtml = require('./library/templateToHtml.js')();
+function setupGameRoute(spriteFilenameArray, htmlArray) {
+  const m = middleware;
 
   app.get(
     '/game',
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/game.js')(
       environment,
@@ -376,30 +420,14 @@ function setupGameRoute(hook, blueprint, spriteFilenameArray, htmlArray) {
   );
 
   debug('setupGame');
-  setupLibrariesAndRoutes(hook, blueprint);
+  setupLibrariesAndRoutes();
 }
-
-// plan:
-// - move a file from ajax or toSort directory into plugin/libraries (temporary) directory
-// - rename file to f.ex. readEntities.lib.js
-// - load files dynamically in setupLibraries() add lib by filename into l object "l.readEntities"
-// - maybe inject (db, blueprint) into every libarary
-// - if a flag is needed like in middlewareAjaxStateAuth, then rewrite to use one more closure level
-// - rewrite route in setupLibrariesAndRoutes() to use l.readEntities(db) instead of require line
-// - repeat for all server libraries
-// - sort library files into plugin directories
-
-// setup libraries
-
-// setup composed libraries
-
-// setup routes
-
-function setupLibrariesAndRoutes(hook, blueprint) {
+function setupLibrariesAndRoutes() {
+  const m = middleware;
 
   app.get(
     '/ajax/entitiesGet',
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/ajax/launch/entities/launchEntitiesFilter.js')(),
     require('./game/ajax/world/entities/worldEntitiesFilter.js')(),
@@ -410,24 +438,24 @@ function setupLibrariesAndRoutes(hook, blueprint) {
 
   app.get(
     '/ajax/cheat/entities/cheatEntitiesGet',
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/ajax/cheat/entities/cheatEntitiesGet.js')()
   );
 
   const saveGame = compose([
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/ajax/saveLoad/saveGame.js')(db)
   ]);
 
   // launch
   app.post(
     '/ajax/launch/ready/playerReadyPost',
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('launchState'),
     require('./game/ajax/launch/ready/playerReadyPost.js')(db),
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/ajax/launch/ready/everyPlayerReadyChecker.js')(),
     require('./game/ajax/launch/ready/preparePlayerResource.js')(db, blueprint),
     require('./game/ajax/launch/ready/prepareHeroFigure.js')(db, blueprint),
@@ -438,7 +466,7 @@ function setupLibrariesAndRoutes(hook, blueprint) {
 
   app.post(
     '/ajax/launch/name/playerNamePost',
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('launchState'),
     require('./game/ajax/launch/name/playerNamePost.js')(db)
@@ -446,7 +474,7 @@ function setupLibrariesAndRoutes(hook, blueprint) {
 
   app.post(
     '/ajax/launch/race/playerRacePost',
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('launchState'),
     require('./game/ajax/launch/race/playerRacePost.js')(db)
@@ -454,7 +482,7 @@ function setupLibrariesAndRoutes(hook, blueprint) {
 
   app.post(
     '/ajax/world/movement/pathPost',
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('worldState'),
     require('./game/ajax/commonMovement/entityIdVerify.js')(),
@@ -478,7 +506,7 @@ function setupLibrariesAndRoutes(hook, blueprint) {
 
   app.post(
     '/ajax/world/endTurn/endTurnPost',
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('worldState'),
     require('./game/ajax/world/endTurn/endTurnPost.js')(db),
@@ -486,12 +514,12 @@ function setupLibrariesAndRoutes(hook, blueprint) {
     require('./game/ajax/world/endTurn/endTurnCountdown.js')(
       db
     ),
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/ajax/world/endTurn/battleChecker.js')(db),
     require('./game/ajax/world/endTurn/battleNpcCreate.js')(db, blueprint),
     require('./game/ajax/world/endTurn/battleClashCreate.js')(db, blueprint),
     require('./game/ajax/world/endTurn/newDay.js')(db),
-    // require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/ajax/world/endTurn/enchantmentIncomeExecutor.js')(db),
     require('./game/ajax/world/endTurn/refillHeroMovement.js')(db),
     require('./game/ajax/world/endTurn/unsetEndTurnFlags.js')(db)
@@ -499,7 +527,7 @@ function setupLibrariesAndRoutes(hook, blueprint) {
 
   app.post(
     '/ajax/world/recruit/recruitUnitPost',
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('worldState'),
     require('./game/ajax/world/recruit/recruitUnitPost.js')(db, blueprint)
@@ -507,7 +535,7 @@ function setupLibrariesAndRoutes(hook, blueprint) {
 
   app.post(
     '/ajax/world/build/buildFortificationPost',
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('worldState'),
     require('./game/ajax/world/build/buildFortificationPost.js')(db, blueprint)
@@ -515,7 +543,7 @@ function setupLibrariesAndRoutes(hook, blueprint) {
 
   // battle
   const maneuverVerify = compose([
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/ajax/commonMovement/entityIdVerify.js')(),
     require('./game/ajax/battle/maneuver/verify/checkUnitOwner.js')(),
     require('./game/ajax/battle/maneuver/verify/checkUnitActive.js')(),
@@ -523,21 +551,21 @@ function setupLibrariesAndRoutes(hook, blueprint) {
   ]);
 
   const maneuverDigest = compose([
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/ajax/battle/maneuver/digest/decrementUnitManeuver.js')(db),
     require('./game/ajax/battle/maneuver/digest/ifBattleFinishedChangeState.js')(db),
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/ajax/battle/maneuver/verify/checkIsUnitManeuverZero.js')(),
     require('./game/ajax/battle/maneuver/verify/ifEveryUnitManeuverZeroRefill.js')(
       db
     ),
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/ajax/battle/maneuver/digest/nominateNewActiveUnit.js')(db)
   ]);
 
   app.post(
     '/ajax/battle/movement/pathPost',
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('battleState'),
     maneuverVerify,
@@ -558,7 +586,7 @@ function setupLibrariesAndRoutes(hook, blueprint) {
 
   app.post(
     '/ajax/battle/melee/maneuverMeleePost',
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('battleState'),
     require('./game/ajax/battle/response/sendResponseEarly.js')(),
@@ -570,7 +598,7 @@ function setupLibrariesAndRoutes(hook, blueprint) {
 
   app.post(
     '/ajax/battle/shoot/maneuverShootPost',
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('battleState'),
     require('./game/ajax/battle/response/sendResponseEarly.js')(),
@@ -582,7 +610,7 @@ function setupLibrariesAndRoutes(hook, blueprint) {
 
   app.post(
     '/ajax/battle/wait/maneuverWait',
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('battleState'),
     require('./game/ajax/battle/response/sendResponseEarly.js')(),
@@ -594,10 +622,10 @@ function setupLibrariesAndRoutes(hook, blueprint) {
 
   app.post(
     '/ajax/battle/activate/activateUnitPost',
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('battleState'),
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/ajax/commonMovement/entityIdVerify.js')(),
     require('./game/ajax/battle/maneuver/verify/checkUnitOwner.js')(),
     require('./game/ajax/battle/response/sendResponseEarly.js')(),
@@ -607,11 +635,11 @@ function setupLibrariesAndRoutes(hook, blueprint) {
   // summary
   app.post(
     '/ajax/summary/summaryConfirmPost',
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/toSort/middlewareTokenAuth.js')(),
     require('./game/toSort/middlewareAjaxStateAuth.js')('summaryState'),
     require('./game/ajax/summary/confirm/summaryConfirm.js')(db, blueprint),
-    require('./game/toSort/readEntities.js')(db),
+    m.readEntities,
     require('./game/ajax/summary/confirm/worldChecker.js')(db),
     require('./game/ajax/world/endTurn/battleChecker.js')(db),
     require('./game/ajax/world/endTurn/battleNpcCreate.js')(db, blueprint),
