@@ -327,7 +327,7 @@ function setupInstrumentRoutesAndLibraries() {
 // - repeat for all server libraries
 // - sort library files into plugin directories
 
-// setup libraries
+// setup middleware
 function setupMiddleware() {
   const pathRead = path.join(
     environment.basepath,
@@ -408,7 +408,7 @@ function setupGameRoute(spriteFilenameArray, htmlArray) {
   app.get(
     '/game',
     m.readEntities,
-    require('./game/toSort/middlewareTokenAuth.js')(),
+    m.middlewareTokenAuth,
     require('./game/game.js')(
       environment,
       db,
@@ -428,7 +428,7 @@ function setupLibrariesAndRoutes() {
   app.get(
     '/ajax/entitiesGet',
     m.readEntities,
-    require('./game/toSort/middlewareTokenAuth.js')(),
+    m.middlewareTokenAuth,
     require('./game/ajax/launch/entities/launchEntitiesFilter.js')(),
     require('./game/ajax/world/entities/worldEntitiesFilter.js')(),
     require('./game/ajax/battle/entities/battleEntitiesFilter.js')(),
@@ -439,7 +439,7 @@ function setupLibrariesAndRoutes() {
   app.get(
     '/ajax/cheat/entities/cheatEntitiesGet',
     m.readEntities,
-    require('./game/toSort/middlewareTokenAuth.js')(),
+    m.middlewareTokenAuth,
     require('./game/ajax/cheat/entities/cheatEntitiesGet.js')()
   );
 
@@ -452,8 +452,8 @@ function setupLibrariesAndRoutes() {
   app.post(
     '/ajax/launch/ready/playerReadyPost',
     m.readEntities,
-    require('./game/toSort/middlewareTokenAuth.js')(),
-    require('./game/toSort/middlewareAjaxStateAuth.js')('launchState'),
+    m.middlewareTokenAuth,
+    m.middlewareAjaxStateAuth('launchState'),
     require('./game/ajax/launch/ready/playerReadyPost.js')(db),
     m.readEntities,
     require('./game/ajax/launch/ready/everyPlayerReadyChecker.js')(),
@@ -467,24 +467,24 @@ function setupLibrariesAndRoutes() {
   app.post(
     '/ajax/launch/name/playerNamePost',
     m.readEntities,
-    require('./game/toSort/middlewareTokenAuth.js')(),
-    require('./game/toSort/middlewareAjaxStateAuth.js')('launchState'),
+    m.middlewareTokenAuth,
+    m.middlewareAjaxStateAuth('launchState'),
     require('./game/ajax/launch/name/playerNamePost.js')(db)
   );
 
   app.post(
     '/ajax/launch/race/playerRacePost',
     m.readEntities,
-    require('./game/toSort/middlewareTokenAuth.js')(),
-    require('./game/toSort/middlewareAjaxStateAuth.js')('launchState'),
+    m.middlewareTokenAuth,
+    m.middlewareAjaxStateAuth('launchState'),
     require('./game/ajax/launch/race/playerRacePost.js')(db)
   );
 
   app.post(
     '/ajax/world/movement/pathPost',
     m.readEntities,
-    require('./game/toSort/middlewareTokenAuth.js')(),
-    require('./game/toSort/middlewareAjaxStateAuth.js')('worldState'),
+    m.middlewareTokenAuth,
+    m.middlewareAjaxStateAuth('worldState'),
     require('./game/ajax/commonMovement/entityIdVerify.js')(),
     require('./game/ajax/commonMovement/flagIsProcessingInspect.js')(),
     require('./game/ajax/commonMovement/pathVerify.js')(),
@@ -507,8 +507,8 @@ function setupLibrariesAndRoutes() {
   app.post(
     '/ajax/world/endTurn/endTurnPost',
     m.readEntities,
-    require('./game/toSort/middlewareTokenAuth.js')(),
-    require('./game/toSort/middlewareAjaxStateAuth.js')('worldState'),
+    m.middlewareTokenAuth,
+    m.middlewareAjaxStateAuth('worldState'),
     require('./game/ajax/world/endTurn/endTurnPost.js')(db),
     require('./game/ajax/world/endTurn/zeroHeroMovementPoints.js')(db),
     require('./game/ajax/world/endTurn/endTurnCountdown.js')(
@@ -528,16 +528,16 @@ function setupLibrariesAndRoutes() {
   app.post(
     '/ajax/world/recruit/recruitUnitPost',
     m.readEntities,
-    require('./game/toSort/middlewareTokenAuth.js')(),
-    require('./game/toSort/middlewareAjaxStateAuth.js')('worldState'),
+    m.middlewareTokenAuth,
+    m.middlewareAjaxStateAuth('worldState'),
     require('./game/ajax/world/recruit/recruitUnitPost.js')(db, blueprint)
   );
 
   app.post(
     '/ajax/world/build/buildFortificationPost',
     m.readEntities,
-    require('./game/toSort/middlewareTokenAuth.js')(),
-    require('./game/toSort/middlewareAjaxStateAuth.js')('worldState'),
+    m.middlewareTokenAuth,
+    m.middlewareAjaxStateAuth('worldState'),
     require('./game/ajax/world/build/buildFortificationPost.js')(db, blueprint)
   );
 
@@ -566,8 +566,8 @@ function setupLibrariesAndRoutes() {
   app.post(
     '/ajax/battle/movement/pathPost',
     m.readEntities,
-    require('./game/toSort/middlewareTokenAuth.js')(),
-    require('./game/toSort/middlewareAjaxStateAuth.js')('battleState'),
+    m.middlewareTokenAuth,
+    m.middlewareAjaxStateAuth('battleState'),
     maneuverVerify,
     require('./game/ajax/commonMovement/flagIsProcessingInspect.js')(),
     require('./game/ajax/commonMovement/pathVerify.js')(),
@@ -587,8 +587,8 @@ function setupLibrariesAndRoutes() {
   app.post(
     '/ajax/battle/melee/maneuverMeleePost',
     m.readEntities,
-    require('./game/toSort/middlewareTokenAuth.js')(),
-    require('./game/toSort/middlewareAjaxStateAuth.js')('battleState'),
+    m.middlewareTokenAuth,
+    m.middlewareAjaxStateAuth('battleState'),
     require('./game/ajax/battle/response/sendResponseEarly.js')(),
     maneuverVerify,
     require('./game/ajax/battle/melee/maneuverMelee.js')(db),
@@ -599,8 +599,8 @@ function setupLibrariesAndRoutes() {
   app.post(
     '/ajax/battle/shoot/maneuverShootPost',
     m.readEntities,
-    require('./game/toSort/middlewareTokenAuth.js')(),
-    require('./game/toSort/middlewareAjaxStateAuth.js')('battleState'),
+    m.middlewareTokenAuth,
+    m.middlewareAjaxStateAuth('battleState'),
     require('./game/ajax/battle/response/sendResponseEarly.js')(),
     maneuverVerify,
     require('./game/ajax/battle/shoot/maneuverShoot.js')(db),
@@ -611,8 +611,8 @@ function setupLibrariesAndRoutes() {
   app.post(
     '/ajax/battle/wait/maneuverWait',
     m.readEntities,
-    require('./game/toSort/middlewareTokenAuth.js')(),
-    require('./game/toSort/middlewareAjaxStateAuth.js')('battleState'),
+    m.middlewareTokenAuth,
+    m.middlewareAjaxStateAuth('battleState'),
     require('./game/ajax/battle/response/sendResponseEarly.js')(),
     maneuverVerify,
     require('./game/ajax/battle/wait/maneuverWait.js')(),
@@ -623,8 +623,8 @@ function setupLibrariesAndRoutes() {
   app.post(
     '/ajax/battle/activate/activateUnitPost',
     m.readEntities,
-    require('./game/toSort/middlewareTokenAuth.js')(),
-    require('./game/toSort/middlewareAjaxStateAuth.js')('battleState'),
+    m.middlewareTokenAuth,
+    m.middlewareAjaxStateAuth('battleState'),
     m.readEntities,
     require('./game/ajax/commonMovement/entityIdVerify.js')(),
     require('./game/ajax/battle/maneuver/verify/checkUnitOwner.js')(),
@@ -636,8 +636,8 @@ function setupLibrariesAndRoutes() {
   app.post(
     '/ajax/summary/summaryConfirmPost',
     m.readEntities,
-    require('./game/toSort/middlewareTokenAuth.js')(),
-    require('./game/toSort/middlewareAjaxStateAuth.js')('summaryState'),
+    m.middlewareTokenAuth,
+    m.middlewareAjaxStateAuth('summaryState'),
     require('./game/ajax/summary/confirm/summaryConfirm.js')(db, blueprint),
     m.readEntities,
     require('./game/ajax/summary/confirm/worldChecker.js')(db),
