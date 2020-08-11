@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('nope:cogs:middlewareTokenAuth');
+const debug = require('debug')('nope:cogs:authenticateToken');
 const shortid = require('shortid');
 const _ = require('lodash');
 
