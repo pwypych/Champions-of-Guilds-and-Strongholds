@@ -425,12 +425,12 @@ function setupLibrariesAndRoutes() {
     '/ajax/cheat/entities/cheatEntitiesGet',
     middleware.readEntities,
     middleware.authenticateToken,
-    require('./game/ajax/cheat/entities/cheatEntitiesGet.js')()
+    middleware.cheatEntitiesGet
   );
 
   const saveGame = compose([
     middleware.readEntities,
-    require('./game/ajax/saveLoad/saveGame.js')(db)
+    middleware.saveGame
   ]);
 
   // launch
@@ -439,13 +439,13 @@ function setupLibrariesAndRoutes() {
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('launchState'),
-    require('./game/ajax/launch/ready/playerReadyPost.js')(db),
+    middleware.playerReadyPost,
     middleware.readEntities,
-    require('./game/ajax/launch/ready/everyPlayerReadyChecker.js')(),
-    require('./game/ajax/launch/ready/preparePlayerResource.js')(db, blueprint),
-    require('./game/ajax/launch/ready/prepareHeroFigure.js')(db, blueprint),
-    require('./game/ajax/launch/ready/launchCountdown.js')(db),
-    require('./game/ajax/launch/ready/unsetReadyForLaunch.js')(db),
+    middleware.everyPlayerReadyChecker,
+    middleware.preparePlayerResource,
+    middleware.prepareHeroFigure,
+    middleware.launchCountdown,
+    middleware.unsetReadyForLaunch,
     saveGame
   );
 
