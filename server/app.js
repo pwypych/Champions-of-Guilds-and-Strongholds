@@ -429,11 +429,11 @@ function setupLibrariesAndRoutes() {
     '/ajax/entitiesGet',
     m.readEntities,
     m.authenticateToken,
-    require('./game/ajax/launch/entities/launchEntitiesFilter.js')(),
-    require('./game/ajax/world/entities/worldEntitiesFilter.js')(),
-    require('./game/ajax/battle/entities/battleEntitiesFilter.js')(),
-    require('./game/ajax/summary/entities/summaryEntitiesFilter.js')(),
-    require('./game/ajax/common/entitiesFilterSendResponse.js')()
+    m.launchEntitiesFilter,
+    m.worldEntitiesFilter,
+    m.battleEntitiesFilter,
+    m.summaryEntitiesFilter,
+    m.entitiesFilterSendResponse
   );
 
   app.get(
