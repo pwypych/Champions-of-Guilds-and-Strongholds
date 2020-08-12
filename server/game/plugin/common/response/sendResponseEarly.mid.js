@@ -7,7 +7,7 @@ const debug = require('debug')('cogs:sendResponseEarly');
 module.exports = () => {
   return (req, res, next) => {
     (function init() {
-      debug('// Endpoint, sends response for maneuver');
+      debug('// Endpoint, sends response early, f.ex. for maneuver');
 
       sendResponse();
     })();

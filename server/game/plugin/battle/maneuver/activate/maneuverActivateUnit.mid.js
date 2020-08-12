@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:activateUnit');
+const debug = require('debug')('cogs:maneuverActivateUnit');
 const _ = require('lodash');
 
 module.exports = (db) => {

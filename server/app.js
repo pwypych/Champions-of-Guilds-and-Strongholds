@@ -531,22 +531,20 @@ function setupLibrariesAndRoutes() {
   const maneuverVerify = compose([
     middleware.readEntities,
     middleware.entityIdVerify,
-    require('./game/ajax/battle/maneuver/verify/checkUnitOwner.js')(),
-    require('./game/ajax/battle/maneuver/verify/checkUnitActive.js')(),
-    require('./game/ajax/battle/maneuver/verify/checkUnitManeuverGreatherThenZero.js')()
+    middleware.checkUnitOwner,
+    middleware.checkUnitActive,
+    middleware.checkUnitManeuverGreatherThenZero,
   ]);
 
   const maneuverDigest = compose([
     middleware.readEntities,
-    require('./game/ajax/battle/maneuver/digest/decrementUnitManeuver.js')(db),
-    require('./game/ajax/battle/maneuver/digest/ifBattleFinishedChangeState.js')(db),
+    middleware.decrementUnitManeuver,
+    middleware.ifBattleFinishedChangeState,
     middleware.readEntities,
-    require('./game/ajax/battle/maneuver/verify/checkIsUnitManeuverZero.js')(),
-    require('./game/ajax/battle/maneuver/verify/ifEveryUnitManeuverZeroRefill.js')(
-      db
-    ),
+    middleware.checkIsUnitManeuverZero,
+    middleware.ifEveryUnitManeuverZeroRefill,
     middleware.readEntities,
-    require('./game/ajax/battle/maneuver/digest/nominateNewActiveUnit.js')(db)
+    middleware.nominateNewActiveUnit,
   ]);
 
   app.post(
@@ -557,10 +555,10 @@ function setupLibrariesAndRoutes() {
     maneuverVerify,
     middleware.flagIsProcessingInspect,
     middleware.pathVerify,
-    middleware.pathUnitMovementPointsVerify,
-    middleware.walkPathInBattleVerify,
-    middleware.flyPathInBattleVerify,
-    middleware.isUnitRetreatFromEnemy,
+    middleware.pathUnitMovementPointsVerify, // battle/movement
+    middleware.walkPathInBattleVerify, // battle/movement
+    middleware.flyPathInBattleVerify, // battle/movement
+    middleware.isUnitRetreatFromEnemy, // battle/movement
     middleware.flagIsProcessingCreate,
     middleware.recentActivityOnMovement,
     middleware.pathSendResponse,
@@ -575,9 +573,9 @@ function setupLibrariesAndRoutes() {
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('battleState'),
-    require('./game/ajax/battle/response/sendResponseEarly.js')(),
+    middleware.sendResponseEarly,
     maneuverVerify,
-    require('./game/ajax/battle/melee/maneuverMelee.js')(db),
+    middleware.maneuverMelee,
     maneuverDigest,
     saveGame
   );
@@ -587,9 +585,9 @@ function setupLibrariesAndRoutes() {
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('battleState'),
-    require('./game/ajax/battle/response/sendResponseEarly.js')(),
+    middleware.sendResponseEarly,
     maneuverVerify,
-    require('./game/ajax/battle/shoot/maneuverShoot.js')(db),
+    middleware.maneuverShoot,
     maneuverDigest,
     saveGame
   );
@@ -599,9 +597,9 @@ function setupLibrariesAndRoutes() {
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('battleState'),
-    require('./game/ajax/battle/response/sendResponseEarly.js')(),
+    middleware.sendResponseEarly,
     maneuverVerify,
-    require('./game/ajax/battle/wait/maneuverWait.js')(),
+    middleware.maneuverWait,
     maneuverDigest,
     saveGame
   );
@@ -613,9 +611,9 @@ function setupLibrariesAndRoutes() {
     middleware.authenticateState('battleState'),
     middleware.readEntities,
     middleware.entityIdVerify,
-    require('./game/ajax/battle/maneuver/verify/checkUnitOwner.js')(),
-    require('./game/ajax/battle/response/sendResponseEarly.js')(),
-    require('./game/ajax/battle/activate/activateUnit.js')(db)
+    middleware.checkUnitOwner,
+    middleware.sendResponseEarly,
+    middleware.maneuverActivateUnit
   );
 
   // summary
