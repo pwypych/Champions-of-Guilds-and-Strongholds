@@ -454,7 +454,7 @@ function setupLibrariesAndRoutes() {
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('launchState'),
-    require('./game/ajax/launch/name/playerNamePost.js')(db)
+    middleware.playerNamePost
   );
 
   app.post(
@@ -462,9 +462,10 @@ function setupLibrariesAndRoutes() {
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('launchState'),
-    require('./game/ajax/launch/race/playerRacePost.js')(db)
+    middleware.playerRacePost
   );
 
+  // world
   app.post(
     '/ajax/world/movement/pathPost',
     middleware.readEntities,
