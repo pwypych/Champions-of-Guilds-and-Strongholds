@@ -471,22 +471,31 @@ function setupLibrariesAndRoutes() {
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('worldState'),
+
+    // common / movement
     middleware.entityIdVerify,
     middleware.flagIsProcessingInspect,
     middleware.pathVerify,
-    require('./game/ajax/world/movement/pathHeroMovementPointsSlice.js')(),
-    require('./game/ajax/world/movement/pathIfBattleSlice.js')(),
-    require('./game/ajax/world/movement/pathIfResourceSlice.js')(),
-    require('./game/ajax/world/movement/pathCollisionInWorldVerify.js')(),
-    require('./game/ajax/world/movement/heroMovementPointsDecrement.js')(db),
+
+    // world / movement
+    middleware.pathHeroMovementPointsSlice,
+    middleware.pathIfBattleSlice,
+    middleware.pathIfResourceSlice,
+    middleware.pathCollisionInWorldVerify,
+    middleware.heroMovementPointsDecrement,
+
+    // common / movement
     middleware.flagIsProcessingCreate,
     middleware.recentActivityOnMovement,
     middleware.pathSendResponse,
     middleware.movementTimeout,
     middleware.positionUpdate,
-    require('./game/ajax/world/movement/collectResource.js')(db),
-    require('./game/ajax/world/movement/battleNpcInitiate.js')(db),
-    require('./game/ajax/world/movement/battleClashInitiate.js')(db),
+
+    // world / movement
+    middleware.collectResource,
+    middleware.battleNpcInitiate,
+    middleware.battleClashInitiate,
+
     saveGame
   );
 
