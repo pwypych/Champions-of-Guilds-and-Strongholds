@@ -504,20 +504,20 @@ function setupLibrariesAndRoutes() {
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('worldState'),
-    require('./game/ajax/world/endTurn/endTurnPost.js')(db),
-    require('./game/ajax/world/endTurn/zeroHeroMovementPoints.js')(db),
-    require('./game/ajax/world/endTurn/endTurnCountdown.js')(
-      db
-    ),
+
+    // world / endTurn
+    middleware.endTurnPost,
+    middleware.zeroHeroMovementPoints,
+    middleware.endTurnCountdown,
     middleware.readEntities,
-    require('./game/ajax/world/endTurn/battleChecker.js')(db),
-    require('./game/ajax/world/endTurn/battleNpcCreate.js')(db, blueprint),
-    require('./game/ajax/world/endTurn/battleClashCreate.js')(db, blueprint),
-    require('./game/ajax/world/endTurn/newDay.js')(db),
+    middleware.battleChecker,
+    middleware.battleNpcCreate,
+    middleware.battleClashCreate,
+    middleware.newDay,
     middleware.readEntities,
-    require('./game/ajax/world/endTurn/enchantmentIncomeExecutor.js')(db),
-    require('./game/ajax/world/endTurn/refillHeroMovement.js')(db),
-    require('./game/ajax/world/endTurn/unsetEndTurnFlags.js')(db)
+    middleware.enchantmentIncomeExecutor,
+    middleware.refillHeroMovement,
+    middleware.unsetEndTurnFlags
   );
 
   app.post(
@@ -634,12 +634,14 @@ function setupLibrariesAndRoutes() {
     require('./game/ajax/summary/confirm/summaryConfirm.js')(db, blueprint),
     middleware.readEntities,
     require('./game/ajax/summary/confirm/worldChecker.js')(db),
-    require('./game/ajax/world/endTurn/battleChecker.js')(db),
-    require('./game/ajax/world/endTurn/battleNpcCreate.js')(db, blueprint),
-    require('./game/ajax/world/endTurn/battleClashCreate.js')(db, blueprint),
-    require('./game/ajax/world/endTurn/newDay.js')(db),
-    require('./game/ajax/world/endTurn/refillHeroMovement.js')(db),
-    require('./game/ajax/world/endTurn/unsetEndTurnFlags.js')(db)
+
+    // world / endTurn
+    middleware.battleChecker,
+    middleware.battleNpcCreate,
+    middleware.battleClashCreate,
+    middleware.newDay,
+    middleware.refillHeroMovement,
+    middleware.unsetEndTurnFlags
   );
 
   debug('setupLibrariesAndRoutes()');
