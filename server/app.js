@@ -409,6 +409,7 @@ function setupGameRoute(spriteFilenameArray, htmlArray) {
   debug('setupGame');
   setupLibrariesAndRoutes();
 }
+
 function setupLibrariesAndRoutes() {
   app.get(
     '/ajax/entitiesGet',
@@ -525,7 +526,7 @@ function setupLibrariesAndRoutes() {
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('worldState'),
-    require('./game/ajax/world/recruit/recruitUnitPost.js')(db, blueprint)
+    middleware.recruitUnitPost
   );
 
   app.post(
@@ -533,7 +534,7 @@ function setupLibrariesAndRoutes() {
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('worldState'),
-    require('./game/ajax/world/build/buildFortificationPost.js')(db, blueprint)
+    middleware.buildFortificationPost
   );
 
   // battle
@@ -631,9 +632,9 @@ function setupLibrariesAndRoutes() {
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('summaryState'),
-    require('./game/ajax/summary/confirm/summaryConfirm.js')(db, blueprint),
+    middleware.summaryConfirm,
     middleware.readEntities,
-    require('./game/ajax/summary/confirm/worldChecker.js')(db),
+    middleware.worldChecker,
 
     // world / endTurn
     middleware.battleChecker,
