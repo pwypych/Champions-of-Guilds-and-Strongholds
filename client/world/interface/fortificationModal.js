@@ -14,6 +14,7 @@ g.world.fortificationModal = (
 
   (function init() {
     onEntitiesGetFirst();
+    onEntitiesGet();
   })();
 
   function onEntitiesGetFirst() {
@@ -102,6 +103,62 @@ g.world.fortificationModal = (
         'sendBuildFortificationPost: POST -> /ajax/world/build/buildFortificationPost',
         data
       );
+    }).done(() => {
+      const $button = $body.find(
+        '.js-world-interface-fortification-modal [data-fortification-name=' +
+          fortificationName +
+          ']'
+      );
+      $button.attr('disabled', 'disabled');
+    });
+  }
+
+  function onEntitiesGet() {
+    walkie.onEvent(
+      'entitiesGetFirst_',
+      'fortificationModal.js',
+      () => {
+        const gameEntity = freshEntities()[freshEntities()._id];
+        if (gameEntity.state !== 'worldState') {
+          return;
+        }
+
+        findPlayerId();
+      },
+      false
+    );
+  }
+
+  function findPlayerId() {
+    let playerId;
+    _.forEach(freshEntities(), (entity, id) => {
+      if (entity.playerCurrent) {
+        playerId = id;
+      }
+    });
+
+    generateBuildFortificationArray(playerId);
+  }
+
+  function generateBuildFortificationArray(playerId) {
+    const fortificationBuildArray = [];
+    _.forEach(freshEntities(), (entity) => {
+      if (entity.fortificationName && entity.owner === playerId) {
+        fortificationBuildArray.push(entity.fortificationName);
+      }
+    });
+
+    disableBuildedFortificationButtons(fortificationBuildArray);
+  }
+
+  function disableBuildedFortificationButtons(fortificationBuildArray) {
+    fortificationBuildArray.forEach((fortificationName) => {
+      const $button = $body.find(
+        '.js-world-interface-fortification-modal [data-fortification-name=' +
+          fortificationName +
+          ']'
+      );
+      $button.attr('disabled', 'disabled');
     });
   }
 };
