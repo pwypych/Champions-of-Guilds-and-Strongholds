@@ -330,7 +330,7 @@ function setupMiddleware() {
   );
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
-      debug('setupHooks: error:', error);
+      debug('setupMiddleware: error:', error);
       return;
     }
 
@@ -341,17 +341,38 @@ function setupMiddleware() {
       // Those libraries are injected into every middleware
       middleware[name] = require(pathFile)(db, blueprint, hook);
 
-      debug('setupMiddleware: fileName:', fileName);
+      // debug('setupMiddleware: fileName:', fileName);
     });
 
-    debug('setupMiddleware', middleware);
-    setupSpriteFilenameArray();
+    debug('setupMiddleware: Loaded middleware!', _.size(middleware));
+    setupRoutes();
   });
 }
 
-// setup composed libraries
+function setupRoutes() {
+  const pathRead = path.join(
+    environment.basepath,
+    '/server/game/plugin/**/*.rt.js'
+  );
+  glob(pathRead, {}, (error, pathFiles) => {
+    if (error) {
+      debug('setupRoutes: error:', error);
+      return;
+    }
 
-// setup routes
+    pathFiles.forEach((pathFile) => {
+      const fileName = path.basename(pathFile);
+
+      // Those objects are injected into every route module
+      require(pathFile)(app, middleware);
+
+      debug('setupRoutes: fileName:', fileName);
+    });
+
+    debug('setupRoutes: Loaded routes!', _.size(pathFiles));
+    setupSpriteFilenameArray();
+  });
+}
 
 function setupSpriteFilenameArray() {
   require('./library/setupSpriteFilenameArray.js')(
@@ -375,7 +396,7 @@ function setupEjsToHtml(spriteFilenameArray) {
   );
   glob(pathRead, {}, (errorReadFile, pathFiles) => {
     if (errorReadFile) {
-      debug('setupHooks: error:', errorReadFile);
+      debug('setupEjsToHtml: error:', errorReadFile);
       return;
     }
 
@@ -417,16 +438,16 @@ function setupGameRoute(spriteFilenameArray, htmlArray) {
 }
 
 function setupLibrariesAndRoutes() {
-  app.post(
-    '/ajax/entitiesGet',
-    middleware.readEntities,
-    middleware.authenticateToken,
-    middleware.launchEntitiesFilter,
-    middleware.worldEntitiesFilter,
-    middleware.battleEntitiesFilter,
-    middleware.summaryEntitiesFilter,
-    middleware.entitiesFilterSendResponse
-  );
+  // app.post(
+  //   '/ajax/entitiesGet',
+  //   middleware.readEntities,
+  //   middleware.authenticateToken,
+  //   middleware.launchEntitiesFilter,
+  //   middleware.worldEntitiesFilter,
+  //   middleware.battleEntitiesFilter,
+  //   middleware.summaryEntitiesFilter,
+  //   middleware.entitiesFilterSendResponse
+  // );
 
   app.post(
     '/ajax/cheatEntitiesGet',
