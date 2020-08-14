@@ -439,8 +439,6 @@ function setupGameRoute(spriteFilenameArray, htmlArray) {
 
 function setupLibrariesAndRoutes() {
 
-  const saveGame = compose([middleware.readEntities, middleware.saveGame]);
-
   // launch
   app.post(
     '/ajax/launch/ready/playerReadyPost',
@@ -454,7 +452,10 @@ function setupLibrariesAndRoutes() {
     middleware.prepareHeroFigure,
     middleware.launchCountdown,
     middleware.unsetReadyForLaunch,
-    saveGame
+
+    // save
+    middleware.readEntities,
+    middleware.saveGame
   );
 
   app.post(
@@ -504,7 +505,9 @@ function setupLibrariesAndRoutes() {
     middleware.battleNpcInitiate,
     middleware.battleClashInitiate,
 
-    saveGame
+    // save
+    middleware.readEntities,
+    middleware.saveGame
   );
 
   app.post(
@@ -582,7 +585,10 @@ function setupLibrariesAndRoutes() {
     middleware.movementTimeout,
     middleware.positionUpdate,
     maneuverDigest,
-    saveGame
+
+    // save
+    middleware.readEntities,
+    middleware.saveGame
   );
 
   app.post(
@@ -594,7 +600,10 @@ function setupLibrariesAndRoutes() {
     maneuverVerify,
     middleware.maneuverMelee,
     maneuverDigest,
-    saveGame
+
+    // save
+    middleware.readEntities,
+    middleware.saveGame
   );
 
   app.post(
@@ -606,7 +615,10 @@ function setupLibrariesAndRoutes() {
     maneuverVerify,
     middleware.maneuverShoot,
     maneuverDigest,
-    saveGame
+
+    // save
+    middleware.readEntities,
+    middleware.saveGame
   );
 
   app.post(
@@ -618,7 +630,10 @@ function setupLibrariesAndRoutes() {
     maneuverVerify,
     middleware.maneuverWait,
     maneuverDigest,
-    saveGame
+
+    // save
+    middleware.readEntities,
+    middleware.saveGame
   );
 
   app.post(
