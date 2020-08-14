@@ -1,7 +1,6 @@
 'use strict';
 
 module.exports = (app, middleware) => {
-
   app.post(
     '/ajax/entitiesGet',
     middleware.readEntities,
@@ -11,6 +10,5 @@ module.exports = (app, middleware) => {
     middleware.battleEntitiesFilter,
     middleware.summaryEntitiesFilter,
     middleware.entitiesFilterSendResponse
-
   );
-}
+};

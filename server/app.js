@@ -438,23 +438,6 @@ function setupGameRoute(spriteFilenameArray, htmlArray) {
 }
 
 function setupLibrariesAndRoutes() {
-  // app.post(
-  //   '/ajax/entitiesGet',
-  //   middleware.readEntities,
-  //   middleware.authenticateToken,
-  //   middleware.launchEntitiesFilter,
-  //   middleware.worldEntitiesFilter,
-  //   middleware.battleEntitiesFilter,
-  //   middleware.summaryEntitiesFilter,
-  //   middleware.entitiesFilterSendResponse
-  // );
-
-  app.post(
-    '/ajax/cheatEntitiesGet',
-    middleware.readEntities,
-    middleware.authenticateToken,
-    middleware.cheatEntitiesGet
-  );
 
   const saveGame = compose([middleware.readEntities, middleware.saveGame]);
 
