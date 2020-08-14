@@ -59,6 +59,11 @@ module.exports = () => {
         if (entity.figureName) {
           entitiesFiltered[id] = entity;
         }
+
+        // Fortification entities
+        if (entity.fortificationName) {
+          entitiesFiltered[id] = entity;
+        }
       });
 
       debug('generateData: entitiesFiltered', entitiesFiltered);
