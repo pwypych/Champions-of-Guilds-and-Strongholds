@@ -12,10 +12,10 @@ const compression = require('compression');
 const mongodb = require('mongodb').MongoClient;
 const bodyParser = require('body-parser');
 const compose = require('compose-middleware').compose;
+const path = require('path');
 
 // Instances of libraries
 const app = express();
-const path = require('path');
 
 // Main libraries
 const hook = require('./library/hook.js')();
@@ -23,7 +23,7 @@ const templateToHtml = require('./library/templateToHtml.js')();
 
 // Variables (for this file)
 const environment = {};
-const middleware = {};;
+const middleware = {};
 let db;
 let blueprint;
 
@@ -88,7 +88,10 @@ function buildClient() {
 }
 
 function buildSprites() {
-  const pathRead = path.join(environment.basepath, '/server/game/plugin/**/*.png');
+  const pathRead = path.join(
+    environment.basepath,
+    '/server/game/plugin/**/*.png'
+  );
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
       debug('buildSprites: error:', error);
@@ -114,15 +117,6 @@ function setupCompression() {
   app.use(compression());
 
   debug('setupCompression()');
-  setupLocals();
-}
-
-function setupLocals() {
-  app.use((req, res, next) => {
-    next();
-  });
-
-  debug('setupLocals()');
   setupStaticFolder();
 }
 
@@ -207,9 +201,7 @@ function setupLandCollection() {
   });
 }
 
-
 function setupHooks() {
-
   const pathRead = path.join(
     environment.basepath,
     '/server/game/plugin/**/*.hook.js'
@@ -249,13 +241,19 @@ function setupInstrumentRoutesAndLibraries() {
 
   app.get(
     '/panelRandom',
-    require('./instrument/panel/random/panelRandom.js')(environment, db, templateToHtml)
+    require('./instrument/panel/random/panelRandom.js')(
+      environment,
+      db,
+      templateToHtml
+    )
   );
 
   app.post(
     '/panelRandom/createGameRandomPost',
     require('./instrument/panel/random/generateMap/findLandByName.js')(db),
-    require('./instrument/panel/random/generateMap/generateParcelCategoryExitList.js')(db),
+    require('./instrument/panel/random/generateMap/generateParcelCategoryExitList.js')(
+      db
+    ),
     require('./instrument/panel/random/generateMap/generateParcelMap.js')(),
     require('./instrument/panel/random/generateMap/generateAbstractFigureMap.js')(),
     require('./instrument/panel/random/generateMap/generateFigureMap.js')(),
@@ -275,7 +273,10 @@ function setupInstrumentRoutesAndLibraries() {
 
   app.post(
     '/panelRandom/deleteGameRandomPost',
-    require('./instrument/panel/random/deleteGameRandomPost.js')(environment, db)
+    require('./instrument/panel/random/deleteGameRandomPost.js')(
+      environment,
+      db
+    )
   );
 
   app.post(
@@ -304,14 +305,19 @@ function setupInstrumentRoutesAndLibraries() {
 
   app.post(
     '/panelPredefined/deleteGamePredefinedPost',
-    require('./instrument/panel/predefined/deleteGamePredefinedPost.js')(environment, db)
+    require('./instrument/panel/predefined/deleteGamePredefinedPost.js')(
+      environment,
+      db
+    )
   );
 
   app.post(
     '/panelPredefined/loadGamePost',
-    require('./instrument/panel/predefined/loadGamePredefinedPost.js')(environment, db)
+    require('./instrument/panel/predefined/loadGamePredefinedPost.js')(
+      environment,
+      db
+    )
   );
-
 
   debug('setupInstrumentRoutesAndLibraries');
   setupMiddleware();
@@ -429,10 +435,7 @@ function setupLibrariesAndRoutes() {
     middleware.cheatEntitiesGet
   );
 
-  const saveGame = compose([
-    middleware.readEntities,
-    middleware.saveGame
-  ]);
+  const saveGame = compose([middleware.readEntities, middleware.saveGame]);
 
   // launch
   app.post(
@@ -543,7 +546,7 @@ function setupLibrariesAndRoutes() {
     middleware.entityIdVerify,
     middleware.checkUnitOwner,
     middleware.checkUnitActive,
-    middleware.checkUnitManeuverGreatherThenZero,
+    middleware.checkUnitManeuverGreatherThenZero
   ]);
 
   const maneuverDigest = compose([
@@ -554,7 +557,7 @@ function setupLibrariesAndRoutes() {
     middleware.checkIsUnitManeuverZero,
     middleware.ifEveryUnitManeuverZeroRefill,
     middleware.readEntities,
-    middleware.nominateNewActiveUnit,
+    middleware.nominateNewActiveUnit
   ]);
 
   app.post(
