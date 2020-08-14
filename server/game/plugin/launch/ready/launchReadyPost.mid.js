@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:playerReadyPost');
+const debug = require('debug')('cogs:launchReadyPost');
 
 module.exports = (db) => {
   return (req, res, next) => {

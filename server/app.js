@@ -441,11 +441,11 @@ function setupLibrariesAndRoutes() {
 
   // launch
   app.post(
-    '/ajax/launch/ready/playerReadyPost',
+    '/ajax/launchReadyPost',
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('launchState'),
-    middleware.playerReadyPost,
+    middleware.launchReadyPost,
     middleware.readEntities,
     middleware.everyPlayerReadyChecker,
     middleware.preparePlayerResource,
