@@ -417,7 +417,7 @@ function setupGameRoute(spriteFilenameArray, htmlArray) {
 }
 
 function setupLibrariesAndRoutes() {
-  app.get(
+  app.post(
     '/ajax/entitiesGet',
     middleware.readEntities,
     middleware.authenticateToken,
@@ -428,8 +428,8 @@ function setupLibrariesAndRoutes() {
     middleware.entitiesFilterSendResponse
   );
 
-  app.get(
-    '/ajax/cheat/entities/cheatEntitiesGet',
+  app.post(
+    '/ajax/cheatEntitiesGet',
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.cheatEntitiesGet

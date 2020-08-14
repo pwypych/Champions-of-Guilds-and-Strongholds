@@ -18,7 +18,7 @@ g.common.entitiesInterval = (walkie, auth) => {
   }
 
   function entitiesGet() {
-    $.get('/ajax/entitiesGet' + auth.uri, (entities) => {
+    $.post('/ajax/entitiesGet' + auth.uri, (entities) => {
       walkie.triggerEvent(
         'entitiesGet_',
         'entitiesInterval.js',

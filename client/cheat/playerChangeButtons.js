@@ -11,7 +11,7 @@ g.cheat.playerChangeButtons = ($body, auth) => {
   })();
 
   function getCheatEntities() {
-    $.get('/ajax/cheat/entities/cheatEntitiesGet' + auth.uri, (entities) => {
+    $.post('/ajax/cheatEntitiesGet' + auth.uri, (entities) => {
       generateLinks(entities);
     });
   }
