@@ -493,27 +493,6 @@ function setupLibrariesAndRoutes() {
     middleware.maneuverActivateUnit
   );
 
-  // summary
-  app.post(
-    '/ajax/summary/summaryConfirmPost',
-    middleware.readEntities,
-    middleware.authenticateToken,
-    middleware.authenticateState('summaryState'),
-
-    // summary / confirm
-    middleware.summaryConfirm,
-    middleware.readEntities,
-    middleware.worldChecker,
-
-    // world / endTurn
-    middleware.battleChecker,
-    middleware.battleNpcCreate,
-    middleware.battleClashCreate,
-    middleware.newDay,
-    middleware.refillHeroMovement,
-    middleware.unsetEndTurnFlags
-  );
-
   debug('setupLibrariesAndRoutes()');
   setupExpress();
 }

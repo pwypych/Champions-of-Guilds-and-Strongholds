@@ -19,11 +19,8 @@ g.summary.summaryConfirm = ($body, auth) => {
   function sendPost() {
     const data = {};
 
-    $.post('/ajax/summary/summaryConfirmPost' + auth.uri, data, () => {
-      console.log(
-        'summaryConfirm: POST -> /ajax/summary/summaryConfirmPost',
-        data
-      );
+    $.post('/ajax/summaryConfirm' + auth.uri, data, () => {
+      console.log('summaryConfirm: POST -> /ajax/summaryConfirm', data);
     });
   }
 };
