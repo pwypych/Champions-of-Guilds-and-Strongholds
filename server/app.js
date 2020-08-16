@@ -62,7 +62,7 @@ function setupEnvironment() {
 }
 
 function buildClient() {
-  const pathRead = path.join(environment.basepath, '/server/game/plugin/**/*.cl.js');
+  const pathRead = path.join(environment.basepath, '/server/game/plugin/**/c.*.js');
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
       debug('buildClient: error:', error);
@@ -203,7 +203,7 @@ function setupLandCollection() {
 function setupHooks() {
   const pathRead = path.join(
     environment.basepath,
-    '/server/game/plugin/**/*.hook.js'
+    '/server/game/plugin/**/h.*.js'
   );
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
@@ -325,7 +325,7 @@ function setupInstrumentRoutesAndLibraries() {
 function setupMiddleware() {
   const pathRead = path.join(
     environment.basepath,
-    '/server/game/plugin/**/*.mid.js'
+    '/server/game/plugin/**/m.*.js'
   );
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
@@ -351,7 +351,7 @@ function setupMiddleware() {
 function setupRoutes() {
   const pathRead = path.join(
     environment.basepath,
-    '/server/game/plugin/**/*.rt.js'
+    '/server/game/plugin/**/r.*.js'
   );
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
@@ -391,7 +391,7 @@ function setupEjsToHtml(spriteFilenameArray) {
 
   const pathRead = path.join(
     environment.basepath,
-    '/server/game/plugin/**/*.ejs'
+    '/server/game/plugin/**/e.*.ejs'
   );
   glob(pathRead, {}, (errorReadFile, pathFiles) => {
     if (errorReadFile) {
