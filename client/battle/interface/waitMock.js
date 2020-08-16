@@ -36,8 +36,8 @@ g.battle.waitMock = ($body, auth, freshEntities) => {
     const data = {};
     data.entityId = unitId;
 
-    $.post('/ajax/battle/wait/maneuverWait' + auth.uri, data, () => {
-      console.log('waitMock: POST -> /ajax/battle/wait/maneuverWait', data);
+    $.post('/ajax/maneuverWait' + auth.uri, data, () => {
+      console.log('waitMock: POST -> /ajax/maneuverWait', data);
     });
   }
 };
