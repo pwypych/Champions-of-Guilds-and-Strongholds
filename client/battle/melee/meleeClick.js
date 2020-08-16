@@ -86,6 +86,6 @@ g.battle.meleeClick = (walkie, auth, viewport, freshEntities) => {
   function maneuverMeleePost(clickPosition, unitId) {
     const data = { meleeOnPosition: clickPosition, entityId: unitId };
     console.log('maneuverMeleePost: data:', data);
-    $.post('/ajax/battle/melee/maneuverMeleePost' + auth.uri, data, () => {});
+    $.post('/ajax/maneuverMelee' + auth.uri, data, () => {});
   }
 };
