@@ -62,7 +62,7 @@ function setupEnvironment() {
 }
 
 function buildClient() {
-  const pathRead = path.join(environment.basepath, '/client/**/*.js');
+  const pathRead = path.join(environment.basepath, '/server/game/plugin/**/*.cl.js');
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
       debug('buildClient: error:', error);
