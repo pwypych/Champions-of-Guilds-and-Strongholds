@@ -438,7 +438,7 @@ function setupGameRoute(spriteFilenameArray, htmlArray) {
 
 function setupLibrariesAndRoutes() {
   app.post(
-    '/ajax/world/endTurn/endTurnPost',
+    '/ajax/worldEndTurn',
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('worldState'),
@@ -459,7 +459,7 @@ function setupLibrariesAndRoutes() {
   );
 
   app.post(
-    '/ajax/world/recruit/recruitUnitPost',
+    '/ajax/worldRecruitUnit',
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('worldState'),
@@ -468,7 +468,7 @@ function setupLibrariesAndRoutes() {
   );
 
   app.post(
-    '/ajax/world/build/buildFortificationPost',
+    '/ajax/worldBuildFortification',
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('worldState'),
@@ -477,7 +477,7 @@ function setupLibrariesAndRoutes() {
   );
 
   app.post(
-    '/ajax/battle/activate/activateUnitPost',
+    '/ajax/battleActivateUnit',
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('battleState'),

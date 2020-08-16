@@ -66,7 +66,7 @@ g.battle.unitInactiveClick = (walkie, auth, freshEntities) => {
   function sendRequest(entityId) {
     const data = { entityId: entityId };
     $.post(
-      '/ajax/battle/activate/activateUnitPost' + auth.uri,
+      '/ajax/battleActivateUnit' + auth.uri,
       data,
       (response) => {
         console.log('unitInactiveClick.js: POST pathPost', response);

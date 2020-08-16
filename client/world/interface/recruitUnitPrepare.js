@@ -94,9 +94,9 @@ g.world.recruitUnitPrepare = (
 
   function sendRecruitUnitPost(unitName) {
     const data = { unitName: unitName };
-    $.post('/ajax/world/recruit/recruitUnitPost' + auth.uri, data, () => {
+    $.post('/ajax/worldRecruitUnit' + auth.uri, data, () => {
       console.log(
-        'sendRecruitUnitPost: POST -> /ajax/world/recruit/recruitUnitPost',
+        'sendRecruitUnitPost: POST -> /ajax/worldRecruitUnit',
         data
       );
     });

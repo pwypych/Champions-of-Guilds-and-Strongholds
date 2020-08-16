@@ -98,9 +98,9 @@ g.world.fortificationModal = (
 
   function sendBuildFortificationPost(fortificationName) {
     const data = { fortificationName: fortificationName };
-    $.post('/ajax/world/build/buildFortificationPost' + auth.uri, data, () => {
+    $.post('/ajax/worldBuildFortification' + auth.uri, data, () => {
       console.log(
-        'sendBuildFortificationPost: POST -> /ajax/world/build/buildFortificationPost',
+        'sendBuildFortificationPost: POST -> /ajax/worldBuildFortification',
         data
       );
     }).done(() => {

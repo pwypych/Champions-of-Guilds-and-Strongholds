@@ -21,9 +21,9 @@ g.world.endTurnButton = ($body, auth, walkie, freshEntities) => {
   function sendPost() {
     const data = {};
 
-    $.post('/ajax/world/endTurn/endTurnPost' + auth.uri, data, () => {
+    $.post('/ajax/worldEndTurn' + auth.uri, data, () => {
       console.log(
-        'endTurnButton: POST -> /ajax/world/endTurn/endTurnPost',
+        'endTurnButton: POST -> /ajax/worldEndTurn',
         data
       );
     });
