@@ -21,11 +21,8 @@ g.cheat.testFeatureLink = ($body, auth) => {
   function sendPost() {
     const data = {};
     console.log('testFeatureLink: sendPost: Trying to post!');
-    $.post('/ajax/battle/shoot/maneuverShootPost' + auth.uri, data, () => {
-      console.log(
-        'waitMock: POST -> /ajax/battle/shoot/maneuverShootPost',
-        data
-      );
+    $.post('/ajax/maneuverShoot' + auth.uri, data, () => {
+      console.log('waitMock: POST -> /ajax/maneuverShoot', data);
     });
   }
 };

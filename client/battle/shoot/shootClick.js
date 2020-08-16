@@ -86,6 +86,6 @@ g.battle.shootClick = (walkie, auth, viewport, freshEntities) => {
   function maneuverShootPost(clickPosition, unitId) {
     const data = { shootOnPosition: clickPosition, entityId: unitId };
     console.log('maneuverShootPost: data:', data);
-    $.post('/ajax/battle/shoot/maneuverShootPost' + auth.uri, data, () => {});
+    $.post('/ajax/maneuverShoot' + auth.uri, data, () => {});
   }
 };
