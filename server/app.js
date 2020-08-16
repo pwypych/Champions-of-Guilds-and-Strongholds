@@ -437,42 +437,6 @@ function setupGameRoute(spriteFilenameArray, htmlArray) {
 }
 
 function setupLibrariesAndRoutes() {
-  // world
-  app.post(
-    '/ajax/worldMovementPath',
-    middleware.readEntities,
-    middleware.authenticateToken,
-    middleware.authenticateState('worldState'),
-
-    // common / movement
-    middleware.entityIdVerify,
-    middleware.flagIsProcessingInspect,
-    middleware.pathVerify,
-
-    // world / movement
-    middleware.pathHeroMovementPointsSlice,
-    middleware.pathIfBattleSlice,
-    middleware.pathIfResourceSlice,
-    middleware.pathCollisionInWorldVerify,
-    middleware.heroMovementPointsDecrement,
-
-    // common / movement
-    middleware.flagIsProcessingCreate,
-    middleware.recentActivityOnMovement,
-    middleware.pathSendResponse,
-    middleware.movementTimeout,
-    middleware.positionUpdate,
-
-    // world / movement
-    middleware.collectResource,
-    middleware.battleNpcInitiate,
-    middleware.battleClashInitiate,
-
-    // save
-    middleware.readEntities,
-    middleware.saveGame
-  );
-
   app.post(
     '/ajax/world/endTurn/endTurnPost',
     middleware.readEntities,
@@ -510,51 +474,6 @@ function setupLibrariesAndRoutes() {
     middleware.authenticateState('worldState'),
 
     middleware.buildFortificationPost
-  );
-
-  app.post(
-    '/ajax/battleMovementPath',
-    middleware.readEntities,
-    middleware.authenticateToken,
-    middleware.authenticateState('battleState'),
-
-    // maneuver / verify
-    middleware.readEntities,
-    middleware.entityIdVerify,
-    middleware.checkUnitOwner,
-    middleware.checkUnitActive,
-    middleware.checkUnitManeuverGreatherThenZero,
-
-    // common / movement
-    middleware.flagIsProcessingInspect,
-    middleware.pathVerify,
-
-    // battle / movement
-    middleware.pathUnitMovementPointsVerify,
-    middleware.walkPathInBattleVerify,
-    middleware.flyPathInBattleVerify,
-    middleware.isUnitRetreatFromEnemy,
-
-    // commont / movement
-    middleware.flagIsProcessingCreate,
-    middleware.recentActivityOnMovement,
-    middleware.pathSendResponse,
-    middleware.movementTimeout,
-    middleware.positionUpdate,
-
-    // maneuver / digest
-    middleware.readEntities,
-    middleware.decrementUnitManeuver,
-    middleware.ifBattleFinishedChangeState,
-    middleware.readEntities,
-    middleware.checkIsUnitManeuverZero,
-    middleware.ifEveryUnitManeuverZeroRefill,
-    middleware.readEntities,
-    middleware.nominateNewActiveUnit,
-
-    // save
-    middleware.readEntities,
-    middleware.saveGame
   );
 
   app.post(
