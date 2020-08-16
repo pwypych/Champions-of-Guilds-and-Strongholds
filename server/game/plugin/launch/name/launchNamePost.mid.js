@@ -2,22 +2,22 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:playerRacePost');
+const debug = require('debug')('cogs:launchNamePost');
 const validator = require('validator');
 
 module.exports = (db) => {
   return (req, res) => {
     (function init() {
-      debug('// Endpoint that updates player race for game in db');
+      debug('// Endpoint that updates player name for game in db');
 
       checkRequestBody();
     })();
 
     function checkRequestBody() {
-      if (typeof req.body.playerRace !== 'string') {
+      if (typeof req.body.playerName !== 'string') {
         res
           .status(400)
-          .send('400 Bad Request - POST parameter playerRace not defined');
+          .send('400 Bad Request - POST parameter playerName not defined');
         return;
       }
 
@@ -26,30 +26,31 @@ module.exports = (db) => {
     }
 
     function sanitizeRequestBody() {
-      let playerRace = validator.whitelist(
-        req.body.playerRace,
+      let playerName = validator.whitelist(
+        req.body.playerName,
         'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 '
       );
 
-      playerRace = playerRace.trim();
+      playerName = playerName.trim();
+      playerName = playerName.substr(0, 20);
 
-      if (playerRace === '') {
-        res.status(400).send('400 Bad Request - Player race cannot be empty');
+      if (playerName === '') {
+        res.status(400).send('400 Bad Request - Player name cannot be empty');
         return;
       }
 
-      debug('sanitizeRequestBody:', playerRace);
-      updateGameByPlayerRace(playerRace);
+      debug('checkRequestBody', playerName);
+      updateGameByPlayerName(playerName);
     }
 
-    function updateGameByPlayerRace(playerRace) {
+    function updateGameByPlayerName(playerName) {
       const entities = res.locals.entities;
       const playerId = res.locals.playerId;
 
       const query = { _id: entities._id };
-      const field = playerId + '.playerData.race';
+      const field = playerId + '.playerData.name';
       const $set = {};
-      $set[field] = playerRace;
+      $set[field] = playerName;
       const update = { $set: $set };
       const options = {};
 
@@ -59,7 +60,7 @@ module.exports = (db) => {
         options,
         (error) => {
           if (error) {
-            debug('updateGameByPlayerRace: error:', error);
+            debug('updateGameByPlayerName: error:', error);
             res
               .status(503)
               .send('503 Service Unavailable - Cannot update game');
