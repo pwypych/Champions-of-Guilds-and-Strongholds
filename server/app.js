@@ -335,7 +335,7 @@ function setupMiddleware() {
 
     pathFiles.forEach((pathFile) => {
       const fileName = path.basename(pathFile);
-      const name = fileName.substr(0, fileName.length - 7);
+      const name = fileName.substr(2, fileName.length - 5);
 
       // Those libraries are injected into every middleware
       middleware[name] = require(pathFile)(db, blueprint, hook);
@@ -344,6 +344,7 @@ function setupMiddleware() {
     });
 
     debug('setupMiddleware: Loaded middleware!', _.size(middleware));
+    debug('!!!', middleware);
     setupRoutes();
   });
 }
