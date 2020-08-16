@@ -7,7 +7,6 @@
     "async": "^2.6.1",
     "body-parser": "^1.18.3",
     "bresenham": "0.0.4",
-    "compose-middleware": "^5.0.1",
     "compression": "^1.7.4",
     "debug": "^4.0.1",
     "dot": "^1.1.2",

@@ -11,7 +11,6 @@ const express = require('express');
 const compression = require('compression');
 const mongodb = require('mongodb').MongoClient;
 const bodyParser = require('body-parser');
-const compose = require('compose-middleware').compose;
 const path = require('path');
 
 // Instances of libraries
@@ -528,32 +527,19 @@ function setupLibrariesAndRoutes() {
     middleware.buildFortificationPost
   );
 
-  // battle
-  const maneuverVerify = compose([
-    middleware.readEntities,
-    middleware.entityIdVerify,
-    middleware.checkUnitOwner,
-    middleware.checkUnitActive,
-    middleware.checkUnitManeuverGreatherThenZero
-  ]);
-
-  const maneuverDigest = compose([
-    middleware.readEntities,
-    middleware.decrementUnitManeuver,
-    middleware.ifBattleFinishedChangeState,
-    middleware.readEntities,
-    middleware.checkIsUnitManeuverZero,
-    middleware.ifEveryUnitManeuverZeroRefill,
-    middleware.readEntities,
-    middleware.nominateNewActiveUnit
-  ]);
-
   app.post(
     '/ajax/battle/movement/pathPost',
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('battleState'),
-    maneuverVerify,
+
+    // maneuverVerify
+    middleware.readEntities,
+    middleware.entityIdVerify,
+    middleware.checkUnitOwner,
+    middleware.checkUnitActive,
+    middleware.checkUnitManeuverGreatherThenZero,
+
     middleware.flagIsProcessingInspect,
     middleware.pathVerify,
     middleware.pathUnitMovementPointsVerify, // battle/movement
@@ -565,7 +551,16 @@ function setupLibrariesAndRoutes() {
     middleware.pathSendResponse,
     middleware.movementTimeout,
     middleware.positionUpdate,
-    maneuverDigest,
+
+    // maneuverDigest
+    middleware.readEntities,
+    middleware.decrementUnitManeuver,
+    middleware.ifBattleFinishedChangeState,
+    middleware.readEntities,
+    middleware.checkIsUnitManeuverZero,
+    middleware.ifEveryUnitManeuverZeroRefill,
+    middleware.readEntities,
+    middleware.nominateNewActiveUnit,
 
     // save
     middleware.readEntities,
@@ -578,9 +573,25 @@ function setupLibrariesAndRoutes() {
     middleware.authenticateToken,
     middleware.authenticateState('battleState'),
     middleware.sendResponseEarly,
-    maneuverVerify,
+
+    // maneuverVerify
+    middleware.readEntities,
+    middleware.entityIdVerify,
+    middleware.checkUnitOwner,
+    middleware.checkUnitActive,
+    middleware.checkUnitManeuverGreatherThenZero,
+
     middleware.maneuverMelee,
-    maneuverDigest,
+
+    // maneuverDigest
+    middleware.readEntities,
+    middleware.decrementUnitManeuver,
+    middleware.ifBattleFinishedChangeState,
+    middleware.readEntities,
+    middleware.checkIsUnitManeuverZero,
+    middleware.ifEveryUnitManeuverZeroRefill,
+    middleware.readEntities,
+    middleware.nominateNewActiveUnit,
 
     // save
     middleware.readEntities,
@@ -593,9 +604,25 @@ function setupLibrariesAndRoutes() {
     middleware.authenticateToken,
     middleware.authenticateState('battleState'),
     middleware.sendResponseEarly,
-    maneuverVerify,
+
+    // maneuverVerify
+    middleware.readEntities,
+    middleware.entityIdVerify,
+    middleware.checkUnitOwner,
+    middleware.checkUnitActive,
+    middleware.checkUnitManeuverGreatherThenZero,
+
     middleware.maneuverShoot,
-    maneuverDigest,
+
+    // maneuverDigest
+    middleware.readEntities,
+    middleware.decrementUnitManeuver,
+    middleware.ifBattleFinishedChangeState,
+    middleware.readEntities,
+    middleware.checkIsUnitManeuverZero,
+    middleware.ifEveryUnitManeuverZeroRefill,
+    middleware.readEntities,
+    middleware.nominateNewActiveUnit,
 
     // save
     middleware.readEntities,
@@ -608,9 +635,25 @@ function setupLibrariesAndRoutes() {
     middleware.authenticateToken,
     middleware.authenticateState('battleState'),
     middleware.sendResponseEarly,
-    maneuverVerify,
+
+    // maneuverVerify
+    middleware.readEntities,
+    middleware.entityIdVerify,
+    middleware.checkUnitOwner,
+    middleware.checkUnitActive,
+    middleware.checkUnitManeuverGreatherThenZero,
+
     middleware.maneuverWait,
-    maneuverDigest,
+
+    // maneuverDigest
+    middleware.readEntities,
+    middleware.decrementUnitManeuver,
+    middleware.ifBattleFinishedChangeState,
+    middleware.readEntities,
+    middleware.checkIsUnitManeuverZero,
+    middleware.ifEveryUnitManeuverZeroRefill,
+    middleware.readEntities,
+    middleware.nominateNewActiveUnit,
 
     // save
     middleware.readEntities,
