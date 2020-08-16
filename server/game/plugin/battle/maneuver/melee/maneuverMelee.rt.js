@@ -2,8 +2,8 @@
 
 module.exports = (app, middleware) => {
   app.post(
-    // authenticate
     '/ajax/maneuverMelee',
+    // authenticate
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('battleState'),
