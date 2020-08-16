@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:playerRacePost');
+const debug = require('debug')('cogs:launchRacePost');
 const validator = require('validator');
 
 module.exports = (db) => {

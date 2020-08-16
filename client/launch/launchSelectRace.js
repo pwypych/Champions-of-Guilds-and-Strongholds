@@ -21,11 +21,8 @@ g.launch.launchSelectRace = ($body, auth) => {
     };
     console.log('sendPost: data.playerRace:', data.playerRace);
 
-    $.post('/ajax/launch/race/playerRacePost' + auth.uri, data, () => {
-      console.log(
-        'launchSelectRace: POST -> /ajax/launch/race/playerRacePost',
-        data
-      );
+    $.post('/ajax/launchRacePost' + auth.uri, data, () => {
+      console.log('launchSelectRace: POST -> /ajax/launchRacePost', data);
     });
   }
 };
