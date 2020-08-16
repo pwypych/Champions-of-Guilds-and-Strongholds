@@ -433,67 +433,6 @@ function setupGameRoute(spriteFilenameArray, htmlArray) {
   );
 
   debug('setupGame');
-  setupLibrariesAndRoutes();
-}
-
-function setupLibrariesAndRoutes() {
-  app.post(
-    '/ajax/worldEndTurn',
-    middleware.readEntities,
-    middleware.authenticateToken,
-    middleware.authenticateState('worldState'),
-
-    // world / endTurn
-    middleware.endTurnPost,
-    middleware.zeroHeroMovementPoints,
-    middleware.endTurnCountdown,
-    middleware.readEntities,
-    middleware.battleChecker,
-    middleware.battleNpcCreate,
-    middleware.battleClashCreate,
-    middleware.newDay,
-    middleware.readEntities,
-    middleware.enchantmentIncomeExecutor,
-    middleware.refillHeroMovement,
-    middleware.unsetEndTurnFlags
-  );
-
-  app.post(
-    '/ajax/worldRecruitUnit',
-    middleware.readEntities,
-    middleware.authenticateToken,
-    middleware.authenticateState('worldState'),
-
-    middleware.recruitUnitPost
-  );
-
-  app.post(
-    '/ajax/worldBuildFortification',
-    middleware.readEntities,
-    middleware.authenticateToken,
-    middleware.authenticateState('worldState'),
-
-    middleware.buildFortificationPost
-  );
-
-  app.post(
-    '/ajax/battleActivateUnit',
-    middleware.readEntities,
-    middleware.authenticateToken,
-    middleware.authenticateState('battleState'),
-
-    // common / movement
-    middleware.readEntities,
-    middleware.entityIdVerify,
-
-    // maneuver / verify
-    middleware.checkUnitOwner,
-    middleware.sendResponseEarly,
-
-    middleware.maneuverActivateUnit
-  );
-
-  debug('setupLibrariesAndRoutes()');
   setupExpress();
 }
 
