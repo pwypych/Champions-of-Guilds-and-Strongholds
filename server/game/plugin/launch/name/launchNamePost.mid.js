@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:playerNamePost');
+const debug = require('debug')('cogs:launchNamePost');
 const validator = require('validator');
 
 module.exports = (db) => {

@@ -439,14 +439,6 @@ function setupGameRoute(spriteFilenameArray, htmlArray) {
 function setupLibrariesAndRoutes() {
   // launch
   app.post(
-    '/ajax/launch/name/playerNamePost',
-    middleware.readEntities,
-    middleware.authenticateToken,
-    middleware.authenticateState('launchState'),
-    middleware.playerNamePost
-  );
-
-  app.post(
     '/ajax/launch/race/playerRacePost',
     middleware.readEntities,
     middleware.authenticateToken,
