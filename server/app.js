@@ -439,7 +439,7 @@ function setupGameRoute(spriteFilenameArray, htmlArray) {
 function setupLibrariesAndRoutes() {
   // world
   app.post(
-    '/ajax/world/movement/pathPost',
+    '/ajax/worldMovementPath',
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('worldState'),
@@ -513,7 +513,7 @@ function setupLibrariesAndRoutes() {
   );
 
   app.post(
-    '/ajax/battle/movement/pathPost',
+    '/ajax/battleMovementPath',
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('battleState'),

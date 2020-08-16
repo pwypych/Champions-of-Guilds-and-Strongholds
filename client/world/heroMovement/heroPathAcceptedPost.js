@@ -20,7 +20,7 @@ g.world.heroPathAcceptedPost = (walkie, auth) => {
 
   function sendRequest(path, entityId) {
     const data = { path: path, entityId: entityId };
-    $.post('/ajax/world/movement/pathPost' + auth.uri, data, (response) => {
+    $.post('/ajax/worldMovementPath' + auth.uri, data, (response) => {
       console.log('heroPathAcceptedPost.js: POST pathPost', response);
 
       if (response && response.path) {

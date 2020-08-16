@@ -125,7 +125,7 @@ g.battle.walkEmptyBlockClick = (walkie, auth, viewport, freshEntities) => {
 
   function sendRequest(path, entityId) {
     const data = { path: path, entityId: entityId };
-    $.post('/ajax/battle/movement/pathPost' + auth.uri, data, (response) => {
+    $.post('/ajax/battleMovementPath' + auth.uri, data, (response) => {
       console.log('walkEmptyBlockClick.js: POST pathPost', response);
 
       if (response && response.path) {
