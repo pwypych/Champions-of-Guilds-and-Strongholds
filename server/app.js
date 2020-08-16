@@ -516,6 +516,7 @@ function setupLibrariesAndRoutes() {
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('worldState'),
+
     middleware.recruitUnitPost
   );
 
@@ -524,6 +525,7 @@ function setupLibrariesAndRoutes() {
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('worldState'),
+
     middleware.buildFortificationPost
   );
 
@@ -533,26 +535,31 @@ function setupLibrariesAndRoutes() {
     middleware.authenticateToken,
     middleware.authenticateState('battleState'),
 
-    // maneuverVerify
+    // maneuver / verify
     middleware.readEntities,
     middleware.entityIdVerify,
     middleware.checkUnitOwner,
     middleware.checkUnitActive,
     middleware.checkUnitManeuverGreatherThenZero,
 
+    // common / movement
     middleware.flagIsProcessingInspect,
     middleware.pathVerify,
-    middleware.pathUnitMovementPointsVerify, // battle/movement
-    middleware.walkPathInBattleVerify, // battle/movement
-    middleware.flyPathInBattleVerify, // battle/movement
-    middleware.isUnitRetreatFromEnemy, // battle/movement
+
+    // battle / movement
+    middleware.pathUnitMovementPointsVerify,
+    middleware.walkPathInBattleVerify,
+    middleware.flyPathInBattleVerify,
+    middleware.isUnitRetreatFromEnemy,
+
+    // commont / movement
     middleware.flagIsProcessingCreate,
     middleware.recentActivityOnMovement,
     middleware.pathSendResponse,
     middleware.movementTimeout,
     middleware.positionUpdate,
 
-    // maneuverDigest
+    // maneuver / digest
     middleware.readEntities,
     middleware.decrementUnitManeuver,
     middleware.ifBattleFinishedChangeState,
@@ -574,7 +581,7 @@ function setupLibrariesAndRoutes() {
     middleware.authenticateState('battleState'),
     middleware.sendResponseEarly,
 
-    // maneuverVerify
+    // maneuver / verify
     middleware.readEntities,
     middleware.entityIdVerify,
     middleware.checkUnitOwner,
@@ -583,7 +590,7 @@ function setupLibrariesAndRoutes() {
 
     middleware.maneuverMelee,
 
-    // maneuverDigest
+    // maneuver / digest
     middleware.readEntities,
     middleware.decrementUnitManeuver,
     middleware.ifBattleFinishedChangeState,
@@ -605,7 +612,7 @@ function setupLibrariesAndRoutes() {
     middleware.authenticateState('battleState'),
     middleware.sendResponseEarly,
 
-    // maneuverVerify
+    // maneuver / verify
     middleware.readEntities,
     middleware.entityIdVerify,
     middleware.checkUnitOwner,
@@ -614,7 +621,7 @@ function setupLibrariesAndRoutes() {
 
     middleware.maneuverShoot,
 
-    // maneuverDigest
+    // maneuver / digest
     middleware.readEntities,
     middleware.decrementUnitManeuver,
     middleware.ifBattleFinishedChangeState,
@@ -627,6 +634,7 @@ function setupLibrariesAndRoutes() {
     // save
     middleware.readEntities,
     middleware.saveGame
+    // commont / movement
   );
 
   app.post(
@@ -636,7 +644,7 @@ function setupLibrariesAndRoutes() {
     middleware.authenticateState('battleState'),
     middleware.sendResponseEarly,
 
-    // maneuverVerify
+    // maneuver / verify
     middleware.readEntities,
     middleware.entityIdVerify,
     middleware.checkUnitOwner,
@@ -645,7 +653,7 @@ function setupLibrariesAndRoutes() {
 
     middleware.maneuverWait,
 
-    // maneuverDigest
+    // maneuver / digest
     middleware.readEntities,
     middleware.decrementUnitManeuver,
     middleware.ifBattleFinishedChangeState,
@@ -665,10 +673,15 @@ function setupLibrariesAndRoutes() {
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('battleState'),
+
+    // common / movement
     middleware.readEntities,
     middleware.entityIdVerify,
+
+    // maneuver / verify
     middleware.checkUnitOwner,
     middleware.sendResponseEarly,
+
     middleware.maneuverActivateUnit
   );
 
@@ -678,6 +691,8 @@ function setupLibrariesAndRoutes() {
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('summaryState'),
+
+    // summary / confirm
     middleware.summaryConfirm,
     middleware.readEntities,
     middleware.worldChecker,
