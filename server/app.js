@@ -433,11 +433,6 @@ function setupGameRoute(spriteFilenameArray, htmlArray) {
   );
 
   debug('setupGame');
-  setupLibrariesAndRoutes();
-}
-
-function setupLibrariesAndRoutes() {
-  debug('setupLibrariesAndRoutes()');
   setupExpress();
 }
 
