@@ -14,7 +14,6 @@ g.world.fortificationModal = (
 
   (function init() {
     onEntitiesGetFirst();
-    onEntitiesGet();
   })();
 
   function onEntitiesGetFirst() {
@@ -28,27 +27,42 @@ g.world.fortificationModal = (
           return;
         }
 
-        findPlayerRace();
+        findPlayerId();
       },
       false
     );
   }
 
-  function findPlayerRace() {
-    _.forEach(freshEntities(), (entity) => {
+  function findPlayerId() {
+    let playerId;
+    _.forEach(freshEntities(), (entity, id) => {
       if (entity.playerCurrent) {
-        const playerRace = entity.playerData.race;
-        drawRaceFortificationToBuy(playerRace);
+        playerId = id;
       }
     });
+
+    generateBuildFortificationArray(playerId);
   }
 
-  function drawRaceFortificationToBuy(playerRace) {
+  function generateBuildFortificationArray(playerId) {
+    const fortificationBuildArray = [];
+    _.forEach(freshEntities(), (entity) => {
+      if (entity.fortificationName && entity.owner === playerId) {
+        fortificationBuildArray.push(entity.fortificationName);
+      }
+    });
+
+    drawRaceFortificationToBuy(playerId, fortificationBuildArray);
+  }
+
+  function drawRaceFortificationToBuy(playerId, fortificationBuildArray) {
+    console.log('fortificationBuildArray:', fortificationBuildArray);
+    const playerEntity = freshEntities()[playerId];
+    const playerRace = playerEntity.playerData.race;
     raceFortification.empty();
     const $seperator10 = $('<div class="seperator-10"></div>');
 
     _.forEach(blueprint.fortification, (fortification, name) => {
-      // console.log('drawRaceFortificationToBuy: fortification:', fortification);
       if (fortification.race === playerRace) {
         const $fortificationName = $(
           '<div>' + fortification.namePretty + '</div>'
@@ -79,6 +93,11 @@ g.world.fortificationModal = (
             '">Build</button>'
         );
 
+        const isFortificationBuild = _.includes(fortificationBuildArray, name);
+        if (isFortificationBuild) {
+          $buyButton.attr('disabled', 'disabled');
+        }
+
         raceFortification.append($buyButton);
         onBuildFortificationButtonClick($buyButton);
       }
@@ -104,55 +123,6 @@ g.world.fortificationModal = (
         data
       );
     }).done(() => {
-      const $button = $body.find(
-        '.js-world-interface-fortification-modal [data-fortification-name=' +
-          fortificationName +
-          ']'
-      );
-      $button.attr('disabled', 'disabled');
-    });
-  }
-
-  function onEntitiesGet() {
-    walkie.onEvent(
-      'entitiesGetFirst_',
-      'fortificationModal.js',
-      () => {
-        const gameEntity = freshEntities()[freshEntities()._id];
-        if (gameEntity.state !== 'worldState') {
-          return;
-        }
-
-        findPlayerId();
-      },
-      false
-    );
-  }
-
-  function findPlayerId() {
-    let playerId;
-    _.forEach(freshEntities(), (entity, id) => {
-      if (entity.playerCurrent) {
-        playerId = id;
-      }
-    });
-
-    generateBuildFortificationArray(playerId);
-  }
-
-  function generateBuildFortificationArray(playerId) {
-    const fortificationBuildArray = [];
-    _.forEach(freshEntities(), (entity) => {
-      if (entity.fortificationName && entity.owner === playerId) {
-        fortificationBuildArray.push(entity.fortificationName);
-      }
-    });
-
-    disableBuildedFortificationButtons(fortificationBuildArray);
-  }
-
-  function disableBuildedFortificationButtons(fortificationBuildArray) {
-    fortificationBuildArray.forEach((fortificationName) => {
       const $button = $body.find(
         '.js-world-interface-fortification-modal [data-fortification-name=' +
           fortificationName +
