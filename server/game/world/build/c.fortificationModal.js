@@ -82,34 +82,28 @@ g.world.fortificationModal = (
           $fortificationWrapper.append($resource);
         });
 
-        const $buyButton = $(
-          '<button class="js-button-buy" data-fortification-name="' +
+        const $buildButton = $(
+          '<button class="js-button-build" data-fortification-name="' +
             name +
             '">Build</button>'
         );
 
-        const isFortificationBuild = _.includes(
+        const isFortificationBuilded = _.includes(
           buildedFortificationArray,
           name
         );
-        if (isFortificationBuild) {
-          $buyButton.attr('disabled', 'disabled');
+        if (isFortificationBuilded) {
+          $buildButton.attr('disabled', 'disabled');
         }
 
-        $fortificationWrapper.append($buyButton);
-        onBuildFortificationButtonClick($buyButton);
+        $fortificationWrapper.append($buildButton);
+        onBuildFortificationButtonClick($buildButton, name);
       }
     });
   }
 
-  function onBuildFortificationButtonClick($buyButton) {
-    // Pass fortificationName as function parameter, rename to on buyButtonClick
-    $buyButton.on('click', () => {
-      const fortificationName = $buyButton.attr('data-fortification-name');
-      console.log(
-        'onBuildFortificationButtonClick:fortificationName:',
-        fortificationName
-      );
+  function onBuildFortificationButtonClick($buildButton, fortificationName) {
+    $buildButton.on('click', () => {
       sendBuildFortificationPost(fortificationName);
     });
   }
