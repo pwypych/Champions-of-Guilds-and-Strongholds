@@ -89,6 +89,8 @@ g.common.tweenMovementPath = (walkie, viewport) => {
     triggerEntityTweenStart(entityId, position, time);
 
     timeline.addCallback(() => {
+      triggerEntityTweenEnd(entityId, position);
+
       setTimeout(() => {
         tweeningEntityIdByPathVerifiedByServer = undefined;
       }, 500); // wait with removing flag until new tick
@@ -105,6 +107,18 @@ g.common.tweenMovementPath = (walkie, viewport) => {
         entityId: entityId,
         position: position,
         time: time
+      },
+      true
+    );
+  }
+
+  function triggerEntityTweenEnd(entityId, position) {
+    walkie.triggerEvent(
+      'entityTweenEnd_',
+      'tweenMovementPath.js',
+      {
+        entityId: entityId,
+        position: position,
       },
       true
     );

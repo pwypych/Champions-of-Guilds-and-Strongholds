@@ -71,6 +71,7 @@ g.main = function main() {
     g.world.endTurnCountdown(walkie, freshEntities);
     g.world.heroNearBattleAnimation(walkie, viewport, freshEntities);
     g.world.heroDeadToggle($body, walkie, freshEntities);
+    g.world.heroVisit(walkie, freshEntities);
 
     g.battle.battleInterfaceToggle($body, walkie);
     g.battle.waitMock($body, auth, freshEntities);
