@@ -102,8 +102,6 @@ g.world.fortificationModal = (
     });
   }
 
-  // buildFortification to fortificationBuild
-
   function onFortificationBuildButtonClick($buildButton, fortificationName) {
     $buildButton.on('click', () => {
       sendFortificationBuildPost(fortificationName);
