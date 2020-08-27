@@ -20,7 +20,7 @@ module.exports = (environment, db, blueprint, spriteFilenameArray, htmlArray, te
     })();
 
     function generateTemplate() {
-      const path = environment.basepath + '/server/game/game.ejs';
+      const path = environment.basepath + '/server/game.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         debug('generateTemplate html.length:', html.length);
         sendResponse(html);

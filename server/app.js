@@ -62,7 +62,7 @@ function setupEnvironment() {
 }
 
 function buildClient() {
-  const pathRead = path.join(environment.basepath, '/server/game/plugin/**/c.*.js');
+  const pathRead = path.join(environment.basepath, '/server/game/**/c.*.js');
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
       debug('buildClient: error:', error);
@@ -89,7 +89,7 @@ function buildClient() {
 function buildSprites() {
   const pathRead = path.join(
     environment.basepath,
-    '/server/game/plugin/**/*.png'
+    '/server/game/**/*.png'
   );
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
@@ -203,7 +203,7 @@ function setupLandCollection() {
 function setupHooks() {
   const pathRead = path.join(
     environment.basepath,
-    '/server/game/plugin/**/h.*.js'
+    '/server/game/**/h.*.js'
   );
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
@@ -325,7 +325,7 @@ function setupInstrumentRoutesAndLibraries() {
 function setupMiddleware() {
   const pathRead = path.join(
     environment.basepath,
-    '/server/game/plugin/**/m.*.js'
+    '/server/game/**/m.*.js'
   );
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
@@ -352,7 +352,7 @@ function setupMiddleware() {
 function setupRoutes() {
   const pathRead = path.join(
     environment.basepath,
-    '/server/game/plugin/**/r.*.js'
+    '/server/game/**/r.*.js'
   );
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
@@ -392,7 +392,7 @@ function setupEjsToHtml(spriteFilenameArray) {
 
   const pathRead = path.join(
     environment.basepath,
-    '/server/game/plugin/**/e.*.ejs'
+    '/server/game/**/e.*.ejs'
   );
   glob(pathRead, {}, (errorReadFile, pathFiles) => {
     if (errorReadFile) {
@@ -423,7 +423,7 @@ function setupGameRoute(spriteFilenameArray, htmlArray) {
     '/game',
     middleware.readEntities,
     middleware.authenticateToken,
-    require('./game/game.js')(
+    require('./game.js')(
       environment,
       db,
       blueprint,
