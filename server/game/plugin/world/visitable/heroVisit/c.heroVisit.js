@@ -48,7 +48,7 @@ g.world.heroVisit = (walkie, freshEntities) => {
         entity.position &&
         entity.position.x === position.x &&
         entity.position.y === position.y &&
-        entity.visitableType
+        entity.visitableName
       ) {
         triggerHeroCurrentVisited(id);
       }

@@ -8,7 +8,7 @@ module.exports = (hook) => {
   hook.attach('generateBlueprints_', (injected, done) => {
     injected.blueprint.figure.mineStone = {
       figureName: 'mineStone',
-      visitableType: 'mineStone'
+      visitableName: 'mineStone'
     };
 
     done();
