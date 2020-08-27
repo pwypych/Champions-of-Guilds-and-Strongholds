@@ -40,21 +40,21 @@ g.world.fortificationModal = (
       }
     });
 
-    generateBuildedFortificationArray(playerId);
+    generateFortificationBuildedArray(playerId);
   }
 
-  function generateBuildedFortificationArray(playerId) {
-    const buildedFortificationArray = [];
+  function generateFortificationBuildedArray(playerId) {
+    const fortificationBuildedArray = [];
     _.forEach(freshEntities(), (entity) => {
       if (entity.fortificationName && entity.owner === playerId) {
-        buildedFortificationArray.push(entity.fortificationName);
+        fortificationBuildedArray.push(entity.fortificationName);
       }
     });
 
-    drawFortificationToBuild(playerId, buildedFortificationArray);
+    fabricateFortificationDiv(playerId, fortificationBuildedArray);
   }
 
-  function drawFortificationToBuild(playerId, buildedFortificationArray) {
+  function fabricateFortificationDiv(playerId, fortificationBuildedArray) {
     const playerEntity = freshEntities()[playerId];
     const playerRace = playerEntity.playerData.race;
     $fortificationWrapper.empty();
@@ -89,7 +89,7 @@ g.world.fortificationModal = (
         );
 
         const isFortificationBuilded = _.includes(
-          buildedFortificationArray,
+          fortificationBuildedArray,
           name
         );
         if (isFortificationBuilded) {
