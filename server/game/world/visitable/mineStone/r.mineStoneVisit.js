@@ -6,7 +6,6 @@ module.exports = (app, middleware) => {
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('worldState'),
-    middleware.sendResponseEarly,
 
     middleware.entityIdVerify,
 
