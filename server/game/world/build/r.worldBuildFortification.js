@@ -2,7 +2,7 @@
 
 module.exports = (app, middleware) => {
   app.post(
-    '/ajax/worldBuildFortification',
+    '/ajax/worldFortificationBuild',
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('worldState'),

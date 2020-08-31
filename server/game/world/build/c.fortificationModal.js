@@ -97,22 +97,22 @@ g.world.fortificationModal = (
         }
 
         $fortificationWrapper.append($buildButton);
-        onBuildFortificationButtonClick($buildButton, name);
+        onFortificationBuildButtonClick($buildButton, name);
       }
     });
   }
 
-  function onBuildFortificationButtonClick($buildButton, fortificationName) {
+  function onFortificationBuildButtonClick($buildButton, fortificationName) {
     $buildButton.on('click', () => {
-      sendBuildFortificationPost(fortificationName);
+      sendFortificationBuildPost(fortificationName);
     });
   }
 
-  function sendBuildFortificationPost(fortificationName) {
+  function sendFortificationBuildPost(fortificationName) {
     const data = { fortificationName: fortificationName };
-    $.post('/ajax/worldBuildFortification' + auth.uri, data, () => {
+    $.post('/ajax/worldFortificationBuild' + auth.uri, data, () => {
       console.log(
-        'sendBuildFortificationPost: POST -> /ajax/worldBuildFortification',
+        'sendFortificationBuildPost: POST -> /ajax/worldFortificationBuild',
         data
       );
     }).done(() => {
