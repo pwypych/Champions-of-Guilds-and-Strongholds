@@ -278,5 +278,7 @@ module.exports = (db, blueprint) => {
         }
       );
     }
+
+    // @todo sendResponse function
   };
 };
