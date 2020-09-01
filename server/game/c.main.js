@@ -72,7 +72,7 @@ g.main = function main() {
     g.world.heroNearBattleAnimation(walkie, viewport, freshEntities);
     g.world.heroDeadToggle($body, walkie, freshEntities);
     g.world.heroVisit(walkie, freshEntities);
-    g.world.mineStoneVisit(walkie, freshEntities, auth);
+    g.world.mineVisit(walkie, freshEntities, auth);
 
     g.battle.battleInterfaceToggle($body, walkie);
     g.battle.waitMock($body, auth, freshEntities);

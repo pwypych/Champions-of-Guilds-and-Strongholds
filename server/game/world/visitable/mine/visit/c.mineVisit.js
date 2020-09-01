@@ -2,9 +2,9 @@
 
 'use strict';
 
-// Listens to when hero visits this type of visitable
-// and sends request to backend for owner and enchantment registration
-g.world.mineStoneVisit = (walkie, freshEntities, auth) => {
+// Listens to when hero visits a visitable of type mine
+// sends request to backend for owner and enchantment registration
+g.world.mineVisit = (walkie, freshEntities, auth) => {
   (function init() {
     onHeroCurrentVisited();
   })();
@@ -12,12 +12,12 @@ g.world.mineStoneVisit = (walkie, freshEntities, auth) => {
   function onHeroCurrentVisited() {
     walkie.onEvent(
       'heroCurrentVisited_',
-      'mineStoneVisit.js',
+      'mineVisit.js',
       (data) => {
         const entityId = data.entityId;
-        const visitableName = data.visitableName;
+        const visitableType = data.visitableType;
 
-        if (visitableName === 'mineStone') {
+        if (visitableType === 'mine') {
           mineStoneVisitPost(entityId);
         }
       },
@@ -25,13 +25,13 @@ g.world.mineStoneVisit = (walkie, freshEntities, auth) => {
     );
   }
 
-  // Optional: Show modal
+  // Optional: Show modal with OK
 
   function mineStoneVisitPost(entityId) {
     const data = { entityId: entityId };
-    $.post('/ajax/mineStoneVisit' + auth.uri, data, () => {
+    $.post('/ajax/mineVisit' + auth.uri, data, () => {
       console.log(
-        'mineStoneVisit: POST -> /ajax/mineStoneVisit',
+        'mineVisit: POST -> /ajax/mineVisit',
         data
       );
     });

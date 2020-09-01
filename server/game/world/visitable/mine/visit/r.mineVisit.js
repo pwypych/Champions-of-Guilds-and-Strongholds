@@ -2,13 +2,13 @@
 
 module.exports = (app, middleware) => {
   app.post(
-    '/ajax/mineStoneVisit',
+    '/ajax/mineVisit',
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('worldState'),
 
     middleware.entityIdVerify,
 
-    middleware.mineStoneVisit
+    middleware.mineVisit
   );
 };

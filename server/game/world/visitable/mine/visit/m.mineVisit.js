@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:mineStoneVisit');
+const debug = require('debug')('cogs:mineVisit');
 const _ = require('lodash');
 const shortId = require('shortid');
 
@@ -20,7 +20,7 @@ module.exports = (db) => {
       ctx.visitableId = res.locals.entityId;
       ctx.visitable = ctx.entities[ctx.visitableId];
 
-      debug('init: ctx:', ctx);
+      debug('init:');
       findHeroId(ctx);
     })();
 

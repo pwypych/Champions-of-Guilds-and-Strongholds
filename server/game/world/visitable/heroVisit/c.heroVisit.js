@@ -48,20 +48,20 @@ g.world.heroVisit = (walkie, freshEntities) => {
         entity.position &&
         entity.position.x === position.x &&
         entity.position.y === position.y &&
-        entity.visitableName
+        entity.visitableType
       ) {
-        triggerHeroCurrentVisited(id, entity.visitableName);
+        triggerHeroCurrentVisited(id, entity.visitableType);
       }
     });
   }
 
-  function triggerHeroCurrentVisited(entityId, visitableName) {
+  function triggerHeroCurrentVisited(entityId, visitableType) {
     walkie.triggerEvent(
       'heroCurrentVisited_',
       'heroVisit.js',
       {
         entityId: entityId,
-        visitableName: visitableName
+        visitableType: visitableType
       },
       true
     );
