@@ -54,56 +54,106 @@ module.exports = (db) => {
         hero.position.y !== visitable.position.y
       ) {
         debug('checkHeroPosition: Hero not on visitable! Aborting!');
-        next();
+        sendResponse();
         return;
       }
 
       debug('checkHeroPosition: Ok!');
-      generateEnchantmentEntity(ctx);
+      checkVisitableIsMine(ctx);
     }
 
-    // check if visitable is a mine
+    function checkVisitableIsMine(ctx) {
+      const visitable = ctx.visitable;
 
-    // check if enchantment allready exists
+      if (visitable.visitableType !== 'mine') {
+        debug('checkVisitableIsMine: Not a mine! Aborting!');
+        sendResponse();
+        return;
+      }
 
-    // add new enchantment
+      debug('checkVisitableIsMine: Ok!');
+      checkEnchantmentExists(ctx);
+    }
 
-    // check if enchantment owner has changed
+    function checkEnchantmentExists(ctx) {
+      const entities = ctx.entities;
+      const visitableId = ctx.visitableId;
 
-    // change owner of the effect
+      let enchantment;
+      let enchantmentId;
 
-    // change figure color
+      _.forEach(entities, (entity, id) => {
+        if (entity.enchanter === visitableId) {
+          enchantment = entity;
+          enchantmentId = id;
+        }
+      });
 
-    function generateEnchantmentEntity(ctx) {
+      if (!enchantment && !enchantmentId) {
+        debug('checkEnchantmentExists: No!');
+        generateNewEnchantment(ctx);
+        return;
+      }
+
+      ctx.enchantment = enchantment;
+      ctx.enchantmentId = enchantmentId;
+
+      debug('checkEnchantmentExists: Yes!');
+      checkEnchantmentOwnerChanged(ctx);
+    }
+
+    function checkEnchantmentOwnerChanged(ctx) {
+      const enchantment = ctx.enchantment;
+      const playerId = ctx.playerId;
+
+      if (enchantment.owner === playerId) {
+        debug('checkEnchantmentOwnerChanged: Same owner as before, ignoring!');
+        sendResponse();
+        return;
+      }
+
+      debug('checkEnchantmentOwnerChanged: New owner!');
+      changeOwnerOfEnchantment(ctx);
+    }
+
+    function changeOwnerOfEnchantment(ctx) {
+      const enchantment = ctx.enchantment;
+      enchantment.owner = ctx.playerId;
+      updateSetEnchantment(ctx);
+    }
+
+    // change figure color by playerEntity.playerData.color
+
+    function generateNewEnchantment(ctx) {
       const playerId = ctx.playerId;
       const visitableId = ctx.visitableId;
       const visitable = ctx.visitable;
 
       const enchantmentId = 'enchantment_income__' + shortId.generate();
-      const enchantmentEntity = {};
-      enchantmentEntity.owner = playerId;
-      enchantmentEntity.enchanter = visitableId;
+      const enchantment = {};
+      enchantment.owner = playerId;
+      enchantment.enchanter = visitableId;
       if (visitable.income) {
-        enchantmentEntity.income = {};
-        enchantmentEntity.income.name = visitable.income.name;
-        enchantmentEntity.income.amount = visitable.income.amount;
+        enchantment.income = {};
+        enchantment.income.name = visitable.income.name;
+        enchantment.income.amount = visitable.income.amount;
       }
 
-      debug('generateEnchantmentEntity: enchantmentEntity:', enchantmentEntity);
+      debug('generateNewEnchantment: enchantment:', enchantment);
 
-      ctx.enchantmentEntity = enchantmentEntity;
+      ctx.enchantment = enchantment;
       ctx.enchantmentId = enchantmentId;
-      updateSetEnchantmentEntity(ctx);
+      updateSetEnchantment(ctx);
     }
 
-    function updateSetEnchantmentEntity(ctx) {
+    function updateSetEnchantment(ctx) {
       const entities = ctx.entities;
       const gameId = entities._id;
-      const enchantmentEntity = ctx.enchantmentEntity;
+      const enchantment = ctx.enchantment;
       const enchantmentId = ctx.enchantmentId;
 
       const $set = {};
-      $set[enchantmentId] = enchantmentEntity;
+      $set[enchantmentId] = enchantment;
 
       const query = { _id: gameId };
       const update = { $set: $set };
@@ -115,10 +165,10 @@ module.exports = (db) => {
         options,
         (error) => {
           if (error) {
-            debug('updateSetEnchantmentEntity: error:', error);
+            debug('updateSetEnchantment: error:', error);
           }
 
-          debug('updateSetEnchantmentEntity: Success!');
+          debug('updateSetEnchantment: Success!');
           sendResponse();
         }
       );
