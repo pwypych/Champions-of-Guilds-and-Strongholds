@@ -62,8 +62,6 @@ module.exports = (db) => {
       generateEnchantmentEntity(ctx);
     }
 
-    // rename / rewrite this module to support all mine visitables
-
     // check if visitable is a mine
 
     // check if enchantment allready exists

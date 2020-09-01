@@ -344,7 +344,7 @@ function setupMiddleware() {
     });
 
     debug('setupMiddleware: Loaded middleware!', _.size(middleware));
-    debug('!!!', middleware);
+    // debug('!!!', middleware);
     setupRoutes();
   });
 }

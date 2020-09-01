@@ -21,6 +21,7 @@ module.exports = (db) => {
       const query = { _id: gameId };
       const $inc = {};
 
+      // @todo bug when player have two stone mines, it adds resources only for one
       _.forEach(entities, (entity) => {
         if (entity.enchanter && entity.income) {
           const field = entity.owner + '.playerResources.' + entity.income.name;

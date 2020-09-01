@@ -30,10 +30,7 @@ g.world.mineVisit = (walkie, freshEntities, auth) => {
   function mineStoneVisitPost(entityId) {
     const data = { entityId: entityId };
     $.post('/ajax/mineVisit' + auth.uri, data, () => {
-      console.log(
-        'mineVisit: POST -> /ajax/mineVisit',
-        data
-      );
+      console.log('mineVisit: POST -> /ajax/mineVisit', data);
     });
   }
 };
