@@ -4,7 +4,7 @@
 
 const _ = require('lodash');
 
-const debug = require('debug')('cogs:enchantmentIncomeExecutor.js');
+const debug = require('debug')('cogs:enchantmentIncomeDigest.js');
 
 module.exports = (db) => {
   return (req, res, next) => {

@@ -18,7 +18,7 @@ module.exports = (app, middleware) => {
     middleware.battleClashCreate,
     middleware.newDay,
     middleware.readEntities,
-    middleware.enchantmentIncomeExecutor,
+    middleware.enchantmentIncomeDigest,
     middleware.refillHeroMovement,
     middleware.unsetEndTurnFlags
   );
