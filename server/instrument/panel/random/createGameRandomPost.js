@@ -62,7 +62,11 @@ module.exports = (environment, db, blueprint) => {
         'orange',
         'brown',
         'aqua',
-        'pink'
+        'pink',
+        'yellow',
+        'black',
+        'grey',
+        'white'
       ];
 
       _.times(playerCount, (index) => {
