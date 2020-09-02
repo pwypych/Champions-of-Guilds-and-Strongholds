@@ -91,7 +91,7 @@ module.exports = (db) => {
 
       if (!enchantment && !enchantmentId) {
         debug('checkEnchantmentExists: No!');
-        generateNewEnchantment(ctx);
+        generateEnchantment(ctx);
         return;
       }
 
@@ -124,7 +124,7 @@ module.exports = (db) => {
 
     // change figure color by playerEntity.playerData.color
 
-    function generateNewEnchantment(ctx) {
+    function generateEnchantment(ctx) {
       const playerId = ctx.playerId;
       const visitableId = ctx.visitableId;
       const visitable = ctx.visitable;
@@ -139,7 +139,7 @@ module.exports = (db) => {
         enchantment.income.amount = visitable.income.amount;
       }
 
-      debug('generateNewEnchantment: enchantment:', enchantment);
+      debug('generateEnchantment: enchantment:', enchantment);
 
       ctx.enchantment = enchantment;
       ctx.enchantmentId = enchantmentId;
