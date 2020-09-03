@@ -37,7 +37,7 @@ g.world.figuresDraw = (walkie, auth, viewport, freshEntities) => {
     if (!figureContainer) {
       // Should happen only once
       // console.log('figuresDraw: figure container', figureId);
-      figureContainer = new PIXI.Container();
+      figureContainer = new PIXI.ContainerZ();
       figureContainer.name = figureId;
       const zOrder = 100 + entity.position.y;
       worldContainer.addChildZ(figureContainer, zOrder);

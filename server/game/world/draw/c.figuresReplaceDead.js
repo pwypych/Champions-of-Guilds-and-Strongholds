@@ -13,7 +13,7 @@ g.world.figuresReplaceDead = (walkie, viewport, freshEntities) => {
   function onViewPortWorldReady() {
     walkie.onEvent(
       'viewportWorldReady_',
-      'figuresDraw.js',
+      'figuresReplaceDead.js',
       () => {
         forEachFigure();
       },

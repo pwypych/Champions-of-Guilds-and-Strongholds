@@ -122,8 +122,6 @@ module.exports = (db) => {
       updateSetEnchantment(ctx);
     }
 
-    // change figure color by playerEntity.playerData.color
-
     function generateEnchantment(ctx) {
       const playerId = ctx.playerId;
       const visitableId = ctx.visitableId;
@@ -169,6 +167,43 @@ module.exports = (db) => {
           }
 
           debug('updateSetEnchantment: Success!');
+          updateSetFigureColor(ctx);
+        }
+      );
+    }
+
+    function updateSetFigureColor(ctx) {
+      const entities = ctx.entities;
+      const gameId = entities._id;
+      const visitableId = ctx.visitableId;
+      const player = ctx.entities[ctx.playerId];
+      const color = player.playerData.color;
+
+      const recentActivity = {};
+      recentActivity.name = 'changedColor';
+      recentActivity.timestamp = Date.now();
+      recentActivity.color = color;
+
+      const $set = {};
+      const fieldColor = visitableId + '.color';
+      $set[fieldColor] = color;
+      const fieldRecentActivity = visitableId + '.recentActivity';
+      $set[fieldRecentActivity] = recentActivity;
+
+      const query = { _id: gameId };
+      const update = { $set: $set };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('updateSetFigureColor: error: ', error);
+          }
+
+          debug('updateSetFigureColor: Success!');
           sendResponse();
         }
       );
