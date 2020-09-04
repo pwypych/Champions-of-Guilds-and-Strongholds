@@ -125,7 +125,7 @@ module.exports = (db, blueprint) => {
         life: 1,
         movement: 3,
         maneuverPoints: 2,
-        recruitCost: 0,
+        cost: 0,
         maneuvers: {
           fly: true,
           melee: {

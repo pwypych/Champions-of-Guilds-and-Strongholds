@@ -74,12 +74,9 @@ module.exports = (db, blueprint) => {
         return;
       }
 
-      ctx.recruitCost = recruitUnit.recruitCost;
+      ctx.unitCost = recruitUnit.cost;
       ctx.unitName = unitName;
-      debug(
-        'findRecruitUnitCost: recruitUnit.recruitCost',
-        recruitUnit.recruitCost
-      );
+      debug('findRecruitUnitCost: recruitUnit.cost', recruitUnit.cost);
       findPlayerCurrentGold(ctx);
     }
 
@@ -96,15 +93,15 @@ module.exports = (db, blueprint) => {
 
     function checkCanPlayerAffordUnit(ctx) {
       const playerGold = ctx.playerGold;
-      const recruitCost = ctx.recruitCost;
+      const unitCost = ctx.unitCost;
       const unitName = ctx.unitName;
       let message = '';
 
-      const playerGoldRemaining = playerGold - recruitCost;
+      const playerGoldRemaining = playerGold - unitCost;
 
       if (playerGoldRemaining < 0) {
         message =
-          'Cannot afford ' + unitName + ' it cost: ' + recruitCost + ' gold.';
+          'Cannot afford ' + unitName + ' it cost: ' + unitCost + ' gold.';
         res.send({
           error: 1,
           message: message
@@ -114,7 +111,7 @@ module.exports = (db, blueprint) => {
         return;
       }
 
-      message = '1 ' + unitName + ' bought for ' + recruitCost + ' gold.';
+      message = '1 ' + unitName + ' bought for ' + unitCost + ' gold.';
       res.send({
         error: 0,
         message: message
