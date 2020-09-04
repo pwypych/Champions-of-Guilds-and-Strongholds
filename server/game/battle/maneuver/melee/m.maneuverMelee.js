@@ -31,10 +31,10 @@ module.exports = (db) => {
       }
 
       debug('checkUnitSkill: Unit has "melee" skill!');
-      checkRequestBodyMeleeOnPosition(ctx);
+      validateRequestBodyMeleeOnPosition(ctx);
     }
 
-    function checkRequestBodyMeleeOnPosition(ctx) {
+    function validateRequestBodyMeleeOnPosition(ctx) {
       const meleeOnPosition = req.body.meleeOnPosition;
 
       if (
@@ -44,7 +44,7 @@ module.exports = (db) => {
         !validator.isNumeric(meleeOnPosition.y)
       ) {
         debug(
-          'checkRequestBodyMeleeOnPosition: POST parameter meleeOnPosition not valid!'
+          'validateRequestBodyMeleeOnPosition: POST parameter meleeOnPosition not valid!'
         );
         return;
       }
@@ -54,7 +54,7 @@ module.exports = (db) => {
 
       ctx.meleeOnPosition = meleeOnPosition;
       debug(
-        'checkRequestBodyMeleeOnPosition: meleeOnPosition',
+        'validateRequestBodyMeleeOnPosition: meleeOnPosition',
         meleeOnPosition
       );
       checkIsMeleePositionInRange(ctx);

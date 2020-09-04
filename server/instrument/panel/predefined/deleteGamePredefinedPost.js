@@ -10,21 +10,17 @@ module.exports = (environment, db) => {
     (function init() {
       debug('// Delete game instance on player button click');
 
-      checkRequestBody();
+      validateRequestBody();
     })();
 
-    function checkRequestBody() {
-      if (!req.body.gameId) {
+    function validateRequestBody() {
+      const gameId = req.body.gameId;
+
+      if (!gameId) {
         debug('validateShortId: error: ', req.body);
         res.status(503).send('503 Error - Wrong POST parameter');
         return;
       }
-      debug('checkRequestBody');
-      validateRequestBody();
-    }
-
-    function validateRequestBody() {
-      const gameId = req.body.gameId;
 
       if (!shortid.isValid(gameId)) {
         debug('validateShortId: error: ', gameId);

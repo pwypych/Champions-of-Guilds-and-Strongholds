@@ -32,10 +32,10 @@ module.exports = (db) => {
       }
 
       debug('checkUnitSkill: Unit has "shoot" skill!');
-      checkRequestBodyMeleeOnPosition(ctx);
+      validateRequestBodyMeleeOnPosition(ctx);
     }
 
-    function checkRequestBodyMeleeOnPosition(ctx) {
+    function validateRequestBodyMeleeOnPosition(ctx) {
       const shootOnPosition = req.body.shootOnPosition;
 
       if (
@@ -45,7 +45,7 @@ module.exports = (db) => {
         !validator.isNumeric(shootOnPosition.y)
       ) {
         debug(
-          'checkRequestBodyMeleeOnPosition: POST parameter shootOnPosition not valid!'
+          'validateRequestBodyMeleeOnPosition: POST parameter shootOnPosition not valid!'
         );
         return;
       }
@@ -55,7 +55,7 @@ module.exports = (db) => {
 
       ctx.shootOnPosition = shootOnPosition;
       debug(
-        'checkRequestBodyMeleeOnPosition: shootOnPosition',
+        'validateRequestBodyMeleeOnPosition: shootOnPosition',
         shootOnPosition
       );
       generateShootPath(ctx);
