@@ -17,34 +17,36 @@ module.exports = (db, blueprint) => {
 
     function generateHeroArray(entities) {
       const playerArray = [];
-      const castleRandomArray = [];
 
       _.forEach(entities, (entity, id) => {
         if (entity.playerData) {
           entity.id = id;
           playerArray.push(entity);
         }
-
-        if (entity.figureName === 'castleRandom') {
-          entity.id = id;
-          castleRandomArray.push(entity);
-        }
       });
 
-      if (playerArray.length !== castleRandomArray.length) {
-        throw new Error('Castle and Player number are not equal');
-      }
-
       const heroArray = [];
-      _.forEach(playerArray, (player, index) => {
+      _.forEach(playerArray, (player) => {
+
+        // find castle for that player
+        let castle;
+        _.forEach(entities, (entity) => {
+          if (
+            entity.figureName === 'castleRandom' &&
+            entity.owner === player.id
+          ) {
+            castle = entity;
+          }
+        });
+
         const hero = {};
 
         hero.owner = player.id;
         hero.figureName = blueprint.race[player.playerData.race].heroFigure;
 
         hero.position = {};
-        hero.position.x = castleRandomArray[index].position.x;
-        hero.position.y = castleRandomArray[index].position.y + 1;
+        hero.position.x = castle.position.x;
+        hero.position.y = castle.position.y + 1;
 
         const spriteOffset = blueprint.race[player.playerData.race]
           .spriteOffset;
