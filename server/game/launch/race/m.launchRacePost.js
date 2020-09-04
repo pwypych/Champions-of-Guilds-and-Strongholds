@@ -10,10 +10,10 @@ module.exports = (db) => {
     (function init() {
       debug('// Endpoint that updates player race for game in db');
 
-      checkRequestBody();
+      validateRequestBody();
     })();
 
-    function checkRequestBody() {
+    function validateRequestBody() {
       if (typeof req.body.playerRace !== 'string') {
         res
           .status(400)
@@ -21,7 +21,7 @@ module.exports = (db) => {
         return;
       }
 
-      debug('checkRequestBody');
+      debug('validateRequestBody');
       sanitizeRequestBody();
     }
 

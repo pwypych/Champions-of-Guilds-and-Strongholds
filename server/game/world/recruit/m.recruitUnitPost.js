@@ -48,8 +48,10 @@ module.exports = (db, blueprint) => {
         res.send({
           error: 'This unit is not from player race!'
         });
-        debug('This unit is not from player race:');
-        debug('checkCanPlayerRecruitUnit: unitName:', unitName);
+        debug(
+          'checkCanPlayerRecruitUnit: This unit is not from player race!',
+          unitName
+        );
         debug('******************** error ********************');
         return;
       }
@@ -67,6 +69,7 @@ module.exports = (db, blueprint) => {
         res.send({
           error: 'Wrong recruit name!'
         });
+        debug('findRecruitUnitCost: This unit not exist!', unitName);
         debug('******************** error ********************');
         return;
       }
@@ -102,11 +105,11 @@ module.exports = (db, blueprint) => {
       if (playerGoldRemaining < 0) {
         message =
           'Cannot afford ' + unitName + ' it cost: ' + recruitCost + ' gold.';
-        debug('checkCanPlayerAffordUnit:', message);
         res.send({
           error: 1,
           message: message
         });
+        debug('checkCanPlayerAffordUnit:', message);
         debug('******************** error ********************');
         return;
       }

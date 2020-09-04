@@ -14,12 +14,12 @@ module.exports = (environment, db, blueprint) => {
         '// Creates game in db based on map choosen by a player, sets starting properties'
       );
 
-      checkRequestBody();
+      validateRequestBody();
     })();
 
-    function checkRequestBody() {
+    function validateRequestBody() {
       if (typeof req.body.mapName !== 'string') {
-        debug('checkRequestBody: mapName not a string: ', req.body);
+        debug('validateRequestBody: mapName not a string: ', req.body);
         res.status(503);
         res.send(
           '503 Service Unavailable - Wrong POST parameter or empty mapName parameter'
@@ -27,7 +27,7 @@ module.exports = (environment, db, blueprint) => {
         return;
       }
 
-      debug('checkRequestBody');
+      debug('validateRequestBody');
       sanitizeRequestBody();
     }
 
@@ -36,7 +36,7 @@ module.exports = (environment, db, blueprint) => {
         req.body.mapName,
         'abcdefghijklmnopqrstuvwxyz01234567890|_'
       );
-      debug('checkRequestBody', mapName);
+      debug('validateRequestBody', mapName);
       findMap(mapName);
     }
 
@@ -136,7 +136,9 @@ module.exports = (environment, db, blueprint) => {
             return;
           }
 
-          const entity = JSON.parse(JSON.stringify(blueprint.figure[figureName]));
+          const entity = JSON.parse(
+            JSON.stringify(blueprint.figure[figureName])
+          );
 
           // Add unique id to each figure instance
           const id = 'figure_' + figureName + '__' + shortid.generate();

@@ -9,13 +9,13 @@ module.exports = (db) => {
     (function init() {
       debug('// Look for a land in landCollection by name choosen by player');
 
-      checkRequestBody();
+      validateRequestBody();
     })();
 
-    function checkRequestBody() {
+    function validateRequestBody() {
       const landName = req.body.landName;
       if (typeof landName !== 'string') {
-        debug('checkRequestBody: landName not a string: ', req.body);
+        debug('validateRequestBody: landName not a string: ', req.body);
         res.status(503);
         res.send(
           '503 Service Unavailable - Wrong POST parameter or empty landName parameter'
@@ -23,7 +23,7 @@ module.exports = (db) => {
         return;
       }
 
-      debug('checkRequestBody');
+      debug('validateRequestBody');
       findLand(landName);
     }
 

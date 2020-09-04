@@ -7,40 +7,43 @@ const _ = require('lodash');
 const shortId = require('shortid');
 
 module.exports = (db, blueprint) => {
-  return (req, res) => {
+  return (req, res, next) => {
     (function init() {
       debug('// Endpoint, build one fortification in castle by given name');
+
       const ctx = {};
       ctx.entities = res.locals.entities;
       ctx.gameId = res.locals.entities._id;
       ctx.playerId = res.locals.playerId;
-
-      validateFortificationName(ctx);
+      const player = ctx.entities[ctx.playerId];
+      ctx.playerResources = player.playerResources;
+      validateRequestBody(ctx);
     })();
 
-    function validateFortificationName(ctx) {
+    function validateRequestBody(ctx) {
       const fortificationName = req.body.fortificationName;
-      const fortification = blueprint.fortification[fortificationName];
+      const fortificationBlueprint = blueprint.fortification[fortificationName];
 
-      if (!fortification) {
+      if (!fortificationBlueprint) {
         res.status(503);
         res.send({
           error: 'This fortification not exists!'
         });
-        debug('This fortification not exists!', fortificationName);
+        debug(
+          'validateRequestBody: This fortification not exists!',
+          fortificationName
+        );
         debug('******************** error ********************');
         return;
       }
 
-      ctx.fortification = fortification;
-      debug(
-        'validateFortificationName: fortification.namePretty:',
-        fortification.namePretty
-      );
-      comparePlayerAndFortificationRace(ctx);
+      ctx.fortificationBlueprint = fortificationBlueprint;
+      ctx.fortificationName = fortificationName;
+      debug('validateFortificationName: fortificationName:', fortificationName);
+      checkFortificationAndPlayerRace(ctx);
     }
 
-    function comparePlayerAndFortificationRace(ctx) {
+    function checkFortificationAndPlayerRace(ctx) {
       const playerId = ctx.playerId;
       const player = ctx.entities[playerId];
       const playerRace = player.playerData.race;
@@ -51,20 +54,22 @@ module.exports = (db, blueprint) => {
         res.send({
           error: 'This fortification is not from player race!'
         });
-        debug('This fortification is not from player race!');
-        debug('comparePlayerAndFortificationRace: playerRace:', playerRace);
+        debug(
+          'checkFortificationAndPlayerRace: This fortification is not from player race!'
+        );
         debug('******************** error ********************');
         return;
       }
 
-      debug('comparePlayerAndFortificationRace: playerRace:', playerRace);
+      debug('checkFortificationAndPlayerRace: playerRace:', playerRace);
       checkIsFortificationAlreadyBuild(ctx);
     }
 
     function checkIsFortificationAlreadyBuild(ctx) {
-      const fortificationName = req.body.fortificationName;
+      const fortificationName = ctx.fortificationName;
       const entities = ctx.entities;
       const playerId = ctx.playerId;
+
       let isBuild = false;
 
       _.forEach(entities, (entity) => {
@@ -81,26 +86,28 @@ module.exports = (db, blueprint) => {
         res.send({
           error: 'This fortification is already build!'
         });
-        debug('This fortification is already build!', fortificationName);
+        debug(
+          'checkIsFortificationAlreadyBuild: This fortification is already build!',
+          fortificationName
+        );
         debug('******************** error ********************');
         return;
       }
 
+      debug('checkIsFortificationAlreadyBuild: Not build, proceed!');
       checkCanPlayerAffordFortification(ctx);
     }
 
     function checkCanPlayerAffordFortification(ctx) {
-      const fortification = ctx.fortification;
-      const fortificationCost = fortification.buildingCost;
-      const playerId = ctx.playerId;
-      const player = ctx.entities[playerId];
-      const playerResources = player.playerResources;
+      const fortificationBlueprint = ctx.fortificationBlueprint;
+      const fortificationCost = fortificationBlueprint.buildingCost;
+      const playerResources = ctx.playerResources;
       let canPlayerAffordFortification = true;
 
       _.forEach(fortificationCost, (cost, resource) => {
         if (playerResources[resource] < cost) {
           canPlayerAffordFortification = false;
-          debug('checkCanPlayerAffordFortification: Not enaugh:', resource);
+          debug('checkCanPlayerAffordFortification: Not enough:', resource);
         }
       });
 
@@ -109,17 +116,16 @@ module.exports = (db, blueprint) => {
         res.send({
           error: 'This fortification is too expensive!'
         });
-        debug('This fortification is too expensive!', fortificationCost);
+        debug(
+          'checkCanPlayerAffordFortification: This fortification is too expensive!',
+          fortificationCost
+        );
         debug('******************** error ********************');
         return;
       }
 
-      debug(
-        'checkCanPlayerAffordFortification: canPlayerAffordFortification:',
-        canPlayerAffordFortification
-      );
+      debug('checkCanPlayerAffordFortification: Yes!');
 
-      ctx.playerResources = playerResources;
       substractFortificationCostFromPlayerResources(ctx);
     }
 
@@ -127,19 +133,11 @@ module.exports = (db, blueprint) => {
       const fortificationCost = ctx.fortification.buildingCost;
       const playerResources = ctx.playerResources;
 
-      debug(
-        'substractFortificationCostFromPlayerResources: playerResources:',
-        playerResources
-      );
-
       _.forEach(fortificationCost, (cost, resource) => {
         playerResources[resource] -= cost;
       });
 
-      debug(
-        'substractFortificationCostFromPlayerResources: playerResources:',
-        playerResources
-      );
+      debug('substractFortificationCostFromPlayerResources: Substracted!');
 
       ctx.playerResourcesAfterBuild = playerResources;
       updateSetPlayerResources(ctx);
@@ -161,7 +159,6 @@ module.exports = (db, blueprint) => {
       const update = { $set: $set };
       const options = {};
 
-      debug('updateSetPlayerResources: $set:', $set);
       db.collection('gameCollection').updateOne(
         query,
         update,
@@ -179,20 +176,18 @@ module.exports = (db, blueprint) => {
 
     function generateFortificationEntity(ctx) {
       const playerId = ctx.playerId;
-      const fortificationName = req.body.fortificationName;
+      const fortificationName = ctx.fortificationName;
 
       const fortificationId =
         'fortification_' + fortificationName + '__' + shortId.generate();
-      const fortificationEntity = {};
-      fortificationEntity.fortificationName = fortificationName;
-      fortificationEntity.owner = playerId;
 
-      debug(
-        'generateFortificationEntity: fortificationEntity:',
-        fortificationEntity
-      );
+      const fortification = {};
+      fortification.fortificationName = fortificationName;
+      fortification.owner = playerId;
 
-      ctx.fortificationEntity = fortificationEntity;
+      debug('generateFortificationEntity: fortification:', fortification);
+
+      ctx.fortification = fortification;
       ctx.fortificationId = fortificationId;
       updateSetFortificationEntity(ctx);
     }
@@ -200,11 +195,11 @@ module.exports = (db, blueprint) => {
     function updateSetFortificationEntity(ctx) {
       const entities = ctx.entities;
       const gameId = entities._id;
-      const fortificationEntity = ctx.fortificationEntity;
+      const fortification = ctx.fortification;
       const fortificationId = ctx.fortificationId;
 
       const $set = {};
-      $set[fortificationId] = fortificationEntity;
+      $set[fortificationId] = fortification;
 
       const query = { _id: gameId };
       const update = { $set: $set };
@@ -220,29 +215,29 @@ module.exports = (db, blueprint) => {
           }
 
           debug('updateSetFortificationEntity: Success!');
-          generateEnchantmentEntity(ctx);
+          generateEnchantment(ctx);
         }
       );
     }
 
-    function generateEnchantmentEntity(ctx) {
+    function generateEnchantment(ctx) {
       const playerId = ctx.playerId;
       const fortificationId = ctx.fortificationId;
-      const fortification = ctx.fortification;
+      const fortificationBlueprint = ctx.fortificationBlueprint;
 
       const enchantmentId = 'enchantment_income__' + shortId.generate();
-      const enchantmentEntity = {};
-      enchantmentEntity.owner = playerId;
-      enchantmentEntity.enchanter = fortificationId;
-      if (fortification.income) {
-        enchantmentEntity.income = {};
-        enchantmentEntity.income.name = fortification.income.name;
-        enchantmentEntity.income.amount = fortification.income.amount;
+      const enchantment = {};
+      enchantment.owner = playerId;
+      enchantment.enchanter = fortificationId;
+      if (fortificationBlueprint.income) {
+        enchantment.income = {};
+        enchantment.income.name = fortificationBlueprint.income.name;
+        enchantment.income.amount = fortificationBlueprint.income.amount;
       }
 
-      debug('generateEnchantmentEntity: enchantmentEntity:', enchantmentEntity);
+      debug('generateEnchantment: enchantment:', enchantment);
 
-      ctx.enchantmentEntity = enchantmentEntity;
+      ctx.enchantment = enchantment;
       ctx.enchantmentId = enchantmentId;
       updateSetEnchantmentEntity(ctx);
     }
@@ -250,11 +245,11 @@ module.exports = (db, blueprint) => {
     function updateSetEnchantmentEntity(ctx) {
       const entities = ctx.entities;
       const gameId = entities._id;
-      const enchantmentEntity = ctx.enchantmentEntity;
+      const enchantment = ctx.enchantment;
       const enchantmentId = ctx.enchantmentId;
 
       const $set = {};
-      $set[enchantmentId] = enchantmentEntity;
+      $set[enchantmentId] = enchantment;
 
       const query = { _id: gameId };
       const update = { $set: $set };
@@ -270,15 +265,15 @@ module.exports = (db, blueprint) => {
           }
 
           debug('updateSetEnchantmentEntity: Success!');
-          const message = 'ok';
-          res.send({
-            error: 0,
-            message: message
-          });
+          sendResponse();
         }
       );
     }
 
-    // @todo sendResponse function
+    function sendResponse() {
+      debug('sendResponse: No Errors!');
+      res.send({ error: 0 });
+      next();
+    }
   };
 };
