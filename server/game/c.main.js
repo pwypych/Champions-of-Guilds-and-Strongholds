@@ -16,7 +16,6 @@ g.main = function main() {
   function setupPixi($body) {
     const app = g.setup.setupPixi($body);
     const viewport = g.setup.setupViewport(app);
-    // g.setup.setupTween(app);
 
     g.setup.setupImages(g.spriteFilenameArray, () => {
       setupLibraries($body, viewport);
@@ -27,11 +26,10 @@ g.main = function main() {
     const auth = g.setup.setupAuth();
     const walkie = g.setup.setupWalkie();
     const blueprint = g.blueprint;
+    const freshEntities = g.common.freshEntities(walkie);
 
     g.common.stateChange(walkie, auth);
     g.common.entitiesInterval(walkie, auth);
-
-    const freshEntities = g.common.freshEntities(walkie);
 
     g.launch.launchToggle($body, walkie);
     g.launch.launchInputName($body, auth);
