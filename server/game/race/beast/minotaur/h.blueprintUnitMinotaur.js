@@ -12,7 +12,7 @@ module.exports = (hook) => {
       life: 91,
       movement: 3,
       maneuverPoints: 2,
-      recruitCost: 600,
+      cost: 600,
       maneuvers: {
         walk: true,
         melee: {

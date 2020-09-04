@@ -70,7 +70,7 @@ g.world.recruitUnitPrepare = (
         '<button class="js-button-buy" data-unit-name="' +
           unitName +
           '">' +
-          blueprint.unit[unitName].recruitCost +
+          blueprint.unit[unitName].cost +
           '<img class="vertical-align" src="/sprite/gold.png" width="24" height="24"></button>'
       );
       const $seperator10 = $('<div class="seperator-10"></div>');
@@ -95,10 +95,7 @@ g.world.recruitUnitPrepare = (
   function sendRecruitUnitPost(unitName) {
     const data = { unitName: unitName };
     $.post('/ajax/worldRecruitUnit' + auth.uri, data, () => {
-      console.log(
-        'sendRecruitUnitPost: POST -> /ajax/worldRecruitUnit',
-        data
-      );
+      console.log('sendRecruitUnitPost: POST -> /ajax/worldRecruitUnit', data);
     });
   }
 };

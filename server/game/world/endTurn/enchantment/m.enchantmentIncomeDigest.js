@@ -25,6 +25,11 @@ module.exports = (db) => {
       _.forEach(entities, (entity) => {
         if (entity.enchanter && entity.income) {
           const field = entity.owner + '.playerResources.' + entity.income.name;
+          if ($inc[field]) {
+            $inc[field] += entity.income.amount;
+            return;
+          }
+
           $inc[field] = entity.income.amount;
         }
       });

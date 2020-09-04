@@ -10,10 +10,10 @@ module.exports = (hook) => {
       fortificationName: 'humanTownHall',
       namePretty: 'Town hall',
       race: 'human',
-      buildingCost: {
-        gold: 500
-        // crystal: 2,
-        // wood: 10
+      cost: {
+        gold: 1500,
+        crystal: 2,
+        wood: 10
       },
       income: {
         name: 'gold',
