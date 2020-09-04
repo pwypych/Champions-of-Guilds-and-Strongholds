@@ -66,6 +66,11 @@ g.battle.amountDraw = (walkie, viewport, freshEntities) => {
 
   function drawAmount(entity, unitId, isEnemy) {
     const unitContainer = battleContainer.getChildByName(unitId);
+
+    if (!unitContainer) {
+      return;
+    }
+
     let amount = unitContainer.getChildByName('amount');
 
     // Should happen only once
