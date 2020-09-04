@@ -71,7 +71,7 @@ g.world.fortificationModal = (
         );
         $fortificationWrapper.append($fortificationSprite);
 
-        _.forEach(fortification.buildingCost, (cost, resource) => {
+        _.forEach(fortification.cost, (cost, resource) => {
           const $resource = $(
             '<img class="vertical-align" src="/sprite/' +
               resource +

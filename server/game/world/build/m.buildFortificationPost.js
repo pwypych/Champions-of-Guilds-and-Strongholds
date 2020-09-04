@@ -100,7 +100,7 @@ module.exports = (db, blueprint) => {
 
     function checkCanPlayerAffordFortification(ctx) {
       const fortificationBlueprint = ctx.fortificationBlueprint;
-      const fortificationCost = fortificationBlueprint.buildingCost;
+      const fortificationCost = fortificationBlueprint.cost;
       const playerResources = ctx.playerResources;
       let canPlayerAffordFortification = true;
 
@@ -130,7 +130,7 @@ module.exports = (db, blueprint) => {
     }
 
     function substractFortificationCostFromPlayerResources(ctx) {
-      const fortificationCost = ctx.fortification.buildingCost;
+      const fortificationCost = ctx.fortification.cost;
       const playerResources = ctx.playerResources;
 
       _.forEach(fortificationCost, (cost, resource) => {
