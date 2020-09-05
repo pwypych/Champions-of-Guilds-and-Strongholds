@@ -8,3 +8,4 @@ g.world = {};
 g.battle = {};
 g.cheat = {};
 g.summary = {};
+g.autoload = {};

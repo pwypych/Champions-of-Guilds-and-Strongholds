@@ -28,12 +28,21 @@ g.main = function main() {
     const blueprint = g.blueprint;
     const freshEntities = g.common.freshEntities(walkie);
 
-    g.common.stateChange(walkie, auth);
-    g.common.entitiesInterval(walkie, auth);
+    const inject = {
+      $body: $body,
+      viewport: viewport,
+      auth: auth,
+      walkie: walkie,
+      blueprint: blueprint,
+      freshEntities: freshEntities
+    };
 
-    g.launch.launchToggle($body, walkie);
-    g.launch.launchInputName($body, auth);
-    g.launch.launchSelectRace($body, auth);
+    g.autoload.stateChange(inject);
+    g.autoload.entitiesInterval(inject);
+
+    g.autoload.launchToggle(inject);
+    g.autoload.launchInputName(inject);
+    g.autoload.launchSelectRace(inject);
     g.launch.launchButtonReady($body, auth);
     g.launch.launchTable($body, walkie, freshEntities);
     g.launch.launchSelectRaceOptions($body, walkie, freshEntities, blueprint);

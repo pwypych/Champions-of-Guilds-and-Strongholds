@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.common.entitiesInterval = (walkie, auth) => {
+g.autoload.entitiesInterval = (inject) => {
+  const walkie = inject.walkie;
+  const auth = inject.auth;
+
   const every = 500;
 
   (function init() {

@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.launch.launchToggle = ($body, walkie) => {
+g.autoload.launchToggle = (inject) => {
+  const walkie = inject.walkie;
+  const $body = inject.$body;
+
   const $launch = $body.find('.js-launch');
 
   (function init() {

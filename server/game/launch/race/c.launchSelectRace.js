@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.launch.launchSelectRace = ($body, auth) => {
+g.autoload.launchSelectRace = (inject) => {
+  const $body = inject.$body;
+  const auth = inject.auth;
+
   const $selectRace = $body.find('.js-launch .js-select-race');
 
   (function init() {

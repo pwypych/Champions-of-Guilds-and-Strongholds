@@ -2,7 +2,9 @@
 
 'use strict';
 
-g.common.stateChange = (walkie) => {
+g.autoload.stateChange = (inject) => {
+  const walkie = inject.walkie;
+
   let currentState;
 
   (function init() {
