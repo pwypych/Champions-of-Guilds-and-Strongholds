@@ -27,10 +27,9 @@ module.exports = (db) => {
           const field = entity.owner + '.playerResources.' + entity.income.name;
           if ($inc[field]) {
             $inc[field] += entity.income.amount;
-            return;
+          } else {
+            $inc[field] = entity.income.amount;
           }
-
-          $inc[field] = entity.income.amount;
         }
       });
 
