@@ -45,12 +45,18 @@ g.autoload.unitJustDiedHide = (inject) => {
 
   function hideFigureSprite(unitId, unit, unitContainer) {
     const sprite = unitContainer.getChildByName('sprite');
-    sprite.visible = false;
+    if (sprite) {
+      sprite.visible = false;
+    }
 
     const amount = unitContainer.getChildByName('amount');
-    amount.visible = false;
+    if (amount) {
+      amount.visible = false;
+    }
 
     const marker = unitContainer.getChildByName('marker');
-    marker.visible = false;
+    if (marker) {
+      marker.visible = false;
+    }
   }
 };

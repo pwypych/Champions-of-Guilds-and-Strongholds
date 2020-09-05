@@ -63,6 +63,11 @@ g.autoload.markerActiveDraw = (inject) => {
 
   function drawMarkerActive(unitId) {
     const unitContainer = battleContainer.getChildByName(unitId);
+
+    if (!unitContainer) {
+      return;
+    }
+
     let marker = unitContainer.getChildByName('markerActive');
 
     // Should happen only once - memory leak danger!

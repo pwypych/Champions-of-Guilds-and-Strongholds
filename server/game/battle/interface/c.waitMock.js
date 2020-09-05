@@ -7,6 +7,7 @@
 g.autoload.waitMock = (inject) => {
   const $body = inject.$body;
   const freshEntities = inject.freshEntities;
+  const auth = inject.auth;
 
   const $maneuverButtons = $body.find('.js-battle-interface-maneuver-buttons');
   const $button = $maneuverButtons.find('.js-wait-button');
