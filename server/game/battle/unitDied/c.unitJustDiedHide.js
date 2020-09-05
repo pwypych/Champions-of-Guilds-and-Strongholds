@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.battle.unitJustDiedHide = (walkie, viewport) => {
+g.autoload.unitJustDiedHide = (inject) => {
+  const viewport = inject.viewport;
+  const walkie = inject.walkie;
+
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {

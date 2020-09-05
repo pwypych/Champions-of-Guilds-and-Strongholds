@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.battle.unitDamageGradeBonus = (walkie, viewport) => {
+g.autoload.unitDamageGradeBonus = (inject) => {
+  const viewport = inject.viewport;
+  const walkie = inject.walkie;
+
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 

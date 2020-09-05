@@ -2,9 +2,9 @@
 
 'use strict';
 
-g.battle.unitJustDiedAnimation = (walkie, viewport) => {
-  // const blockWidthPx = 32;
-  // const blockHeightPx = 32;
+g.autoload.unitJustDiedAnimation = (inject) => {
+  const viewport = inject.viewport;
+  const walkie = inject.walkie;
 
   const battleContainer = viewport.getChildByName('battleContainer');
 

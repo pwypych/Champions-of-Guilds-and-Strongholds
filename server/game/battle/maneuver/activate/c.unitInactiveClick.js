@@ -4,7 +4,11 @@
 
 // What does this module do?
 // It listens to click_ events, for unit owned by player, that is inactive with maneuvers remaining, and activates it
-g.battle.unitInactiveClick = (walkie, auth, freshEntities) => {
+g.autoload.unitInactiveClick = (inject) => {
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+  const auth = inject.auth;
+
   (function init() {
     onClick();
   })();
@@ -65,12 +69,8 @@ g.battle.unitInactiveClick = (walkie, auth, freshEntities) => {
 
   function sendRequest(entityId) {
     const data = { entityId: entityId };
-    $.post(
-      '/ajax/battleActivateUnit' + auth.uri,
-      data,
-      (response) => {
-        console.log('unitInactiveClick.js: POST pathPost', response);
-      }
-    );
+    $.post('/ajax/battleActivateUnit' + auth.uri, data, (response) => {
+      console.log('unitInactiveClick.js: POST pathPost', response);
+    });
   }
 };

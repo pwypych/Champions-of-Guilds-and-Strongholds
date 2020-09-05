@@ -4,7 +4,11 @@
 
 // What does this module do?
 // It listens to viewport clicked events, validates it and sends click_ event through walkie
-g.battle.battleClick = (walkie, viewport, freshEntities) => {
+g.autoload.battleClick = (inject) => {
+  const viewport = inject.viewport;
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 

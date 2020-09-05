@@ -2,7 +2,11 @@
 
 'use strict';
 
-g.battle.unitFocusTween = (walkie, viewport, freshEntities) => {
+g.autoload.unitFocusTween = (inject) => {
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+  const viewport = inject.viewport;
+
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 

@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.cheat.testFeatureLink = ($body, auth) => {
+g.autoload.testFeatureLink = (inject) => {
+  const $body = inject.$body;
+  const auth = inject.auth;
+
   const $cheat = $body.find('.js-cheat');
   const $testLink = $cheat.find('.js-cheat-test');
 

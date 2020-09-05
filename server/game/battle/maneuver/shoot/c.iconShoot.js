@@ -2,7 +2,11 @@
 
 'use strict';
 
-g.battle.iconShoot = (walkie, viewport, freshEntities) => {
+g.autoload.iconShoot = (inject) => {
+  const walkie = inject.walkie;
+  const viewport = inject.viewport;
+  const freshEntities = inject.freshEntities;
+
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 

@@ -4,7 +4,11 @@
 
 // What does this module do?
 // It listens to click_ events, checks if click happened on enemy that is not one block away and sends shoot POST
-g.battle.shootClick = (walkie, auth, viewport, freshEntities) => {
+g.autoload.shootClick = (inject) => {
+  const walkie = inject.walkie;
+  const auth = inject.auth;
+  const freshEntities = inject.freshEntities;
+
   (function init() {
     onClick();
   })();
