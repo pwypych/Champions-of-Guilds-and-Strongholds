@@ -137,10 +137,10 @@ module.exports = (db, blueprint) => {
     function updateSetPlayerResources(ctx) {
       const gameId = ctx.gameId;
       const playerId = ctx.playerId;
-      const playerResourcesAfterBuild = ctx.playerResourcesAfterBuild;
+      const playerResourcesAfterRecruit = ctx.playerResourcesAfterRecruit;
       const $set = {};
 
-      _.forEach(playerResourcesAfterBuild, (amount, resource) => {
+      _.forEach(playerResourcesAfterRecruit, (amount, resource) => {
         const field = playerId + '.playerResources.' + resource;
         $set[field] = amount;
       });
@@ -149,6 +149,7 @@ module.exports = (db, blueprint) => {
 
       const update = { $set: $set };
       const options = {};
+      debug('updateSetPlayerResources: $set:', $set);
 
       db.collection('gameCollection').updateOne(
         query,
