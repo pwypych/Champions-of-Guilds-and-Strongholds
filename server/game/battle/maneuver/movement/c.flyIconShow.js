@@ -2,7 +2,11 @@
 
 'use strict';
 
-g.battle.flyIconShow = (walkie, viewport, freshEntities) => {
+g.autoload.flyIconShow = (inject) => {
+  const viewport = inject.viewport;
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {

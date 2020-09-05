@@ -2,7 +2,11 @@
 
 'use strict';
 
-g.battle.unitRetreatIndicator = (walkie, viewport, freshEntities) => {
+g.autoload.unitRetreatIndicator = (inject) => {
+  const walkie = inject.walkie;
+  const viewport = inject.viewport;
+  const freshEntities = inject.freshEntities;
+
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 

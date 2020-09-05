@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.battle.unitGotShotAnimation = (walkie, viewport) => {
+g.autoload.unitGotShotAnimation = (inject) => {
+  const viewport = inject.viewport;
+  const walkie = inject.walkie;
+
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 

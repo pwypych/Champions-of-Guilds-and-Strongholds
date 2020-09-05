@@ -2,7 +2,11 @@
 
 'use strict';
 
-g.summary.summaryToggle = ($body, walkie, freshEntities) => {
+g.autoload.summaryToggle = (inject) => {
+  const $body = inject.$body;
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+
   const $summary = $body.find('.js-summary');
   const $button = $summary.find('.js-summary-button');
   const $text = $summary.find('.js-summary-text');

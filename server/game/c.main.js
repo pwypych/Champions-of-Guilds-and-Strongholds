@@ -43,7 +43,6 @@ g.main = function main() {
     g.autoload.launchToggle(inject);
     g.autoload.launchInputName(inject);
     g.autoload.launchSelectRace(inject);
-
     g.autoload.launchButtonReady(inject);
     g.autoload.launchTable(inject);
     g.autoload.launchSelectRaceOptions(inject);
@@ -89,38 +88,38 @@ g.main = function main() {
     g.autoload.battleCleanup(inject);
     g.autoload.battleBackgroundDraw(inject);
     g.autoload.unitsDraw(inject);
-    g.battle.amountDraw(walkie, viewport, freshEntities);
-    g.battle.battleClick(walkie, viewport, freshEntities);
+    g.autoload.amountDraw(inject);
+    g.autoload.battleClick(inject);
 
-    g.battle.iconMovementDraw(walkie, viewport, freshEntities);
-    g.battle.walkIconShow(walkie, viewport, freshEntities);
-    g.battle.walkEmptyBlockClick(walkie, auth, viewport, freshEntities);
-    g.battle.iconFlyDraw(walkie, viewport, freshEntities);
-    g.battle.flyIconShow(walkie, viewport, freshEntities);
-    g.battle.flyEmptyBlockClick(walkie, auth, viewport, freshEntities);
-    g.battle.unitInactiveClick(walkie, auth, freshEntities);
+    g.autoload.iconMovementDraw(inject);
+    g.autoload.walkIconShow(inject);
+    g.autoload.walkEmptyBlockClick(inject);
+    g.autoload.iconFlyDraw(inject);
+    g.autoload.flyIconShow(inject);
+    g.autoload.flyEmptyBlockClick(inject);
+    g.autoload.unitInactiveClick(inject);
 
-    g.battle.iconMelee(walkie, viewport, freshEntities);
-    g.battle.meleeClick(walkie, auth, viewport, freshEntities);
-    g.battle.unitJustDiedHide(walkie, viewport);
-    g.battle.unitJustDiedAnimation(walkie, viewport);
-    g.battle.unitGotHitAnimation(walkie, viewport);
-    g.battle.unitGotHitObsticleBonus(walkie, viewport);
-    g.battle.unitGotShotAnimation(walkie, viewport);
-    g.battle.unitGotShotObsticleBonus(walkie, viewport);
-    g.battle.unitDamageGradeBonus(walkie, viewport);
-    g.battle.markerActiveDraw(walkie, viewport, freshEntities);
-    g.battle.markerActiveEnemyDraw(walkie, viewport, freshEntities);
-    g.battle.unitFocusActive(walkie, viewport, freshEntities);
-    g.battle.unitFocusTween(walkie, viewport, freshEntities);
-    g.battle.iconShoot(walkie, viewport, freshEntities);
-    g.battle.shootClick(walkie, auth, viewport, freshEntities);
-    g.battle.unitRetreatIndicator(walkie, viewport, freshEntities);
+    g.autoload.iconMelee(inject);
+    g.autoload.meleeClick(inject);
+    g.autoload.unitJustDiedHide(inject);
+    g.autoload.unitJustDiedAnimation(inject);
+    g.autoload.unitGotHitAnimation(inject);
+    g.autoload.unitGotHitObsticleBonus(inject);
+    g.autoload.unitGotShotAnimation(inject);
+    g.autoload.unitGotShotObsticleBonus(inject);
+    g.autoload.unitDamageGradeBonus(inject);
+    g.autoload.markerActiveDraw(inject);
+    g.autoload.markerActiveEnemyDraw(inject);
+    g.autoload.unitFocusActive(inject);
+    g.autoload.unitFocusTween(inject);
+    g.autoload.iconShoot(inject);
+    g.autoload.shootClick(inject);
+    g.autoload.unitRetreatIndicator(inject);
 
-    g.summary.summaryToggle($body, walkie, freshEntities);
-    g.summary.summaryConfirm($body, auth);
+    g.autoload.summaryToggle(inject);
+    g.autoload.summaryConfirm(inject);
 
-    g.cheat.playerChangeButtons($body, auth);
-    g.cheat.testFeatureLink($body, auth);
+    g.autoload.playerChangeButtons(inject);
+    g.autoload.testFeatureLink(inject);
   }
 };

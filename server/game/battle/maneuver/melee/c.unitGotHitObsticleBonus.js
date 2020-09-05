@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.battle.unitGotHitObsticleBonus = (walkie, viewport) => {
+g.autoload.unitGotHitObsticleBonus = (inject) => {
+  const viewport = inject.viewport;
+  const walkie = inject.walkie;
+
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 

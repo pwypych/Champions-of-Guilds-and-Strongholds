@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.cheat.playerChangeButtons = ($body, auth) => {
+g.autoload.playerChangeButtons = (inject) => {
+  const $body = inject.$body;
+  const auth = inject.auth;
+
   const $cheat = $body.find('.js-cheat');
 
   (function init() {

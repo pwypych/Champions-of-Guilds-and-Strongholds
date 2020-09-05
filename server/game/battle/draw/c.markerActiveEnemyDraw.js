@@ -2,7 +2,11 @@
 
 'use strict';
 
-g.battle.markerActiveEnemyDraw = (walkie, viewport, freshEntities) => {
+g.autoload.markerActiveEnemyDraw = (inject) => {
+  const viewport = inject.viewport;
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {

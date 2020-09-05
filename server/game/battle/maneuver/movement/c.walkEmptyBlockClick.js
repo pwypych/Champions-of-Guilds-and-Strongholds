@@ -4,7 +4,11 @@
 
 // What does this module do?
 // It listens to click_ events, for walking units, generates path through library and sends path events
-g.battle.walkEmptyBlockClick = (walkie, auth, viewport, freshEntities) => {
+g.autoload.walkEmptyBlockClick = (inject) => {
+  const auth = inject.auth;
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+
   (function init() {
     onClick();
   })();

@@ -4,7 +4,11 @@
 
 // What does this module do?
 // It listens to click_ events, checks if click happened on enemy one block away and sends melee POST
-g.battle.meleeClick = (walkie, auth, viewport, freshEntities) => {
+g.autoload.meleeClick = (inject) => {
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+  const auth = inject.auth;
+
   (function init() {
     onClick();
   })();

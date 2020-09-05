@@ -2,7 +2,11 @@
 
 'use strict';
 
-g.battle.iconMelee = (walkie, viewport, freshEntities) => {
+g.autoload.iconMelee = (inject) => {
+  const viewport = inject.viewport;
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
