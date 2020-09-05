@@ -4,7 +4,10 @@
 
 // What does this module do
 // It listens to heroPathAccepted_ events, sends path to server
-g.world.heroPathAcceptedPost = (walkie, auth) => {
+g.autoload.heroPathAcceptedPost = (inject) => {
+  const walkie = inject.walkie;
+  const auth = inject.auth;
+
   (function init() {
     onPathAccepted();
   })();

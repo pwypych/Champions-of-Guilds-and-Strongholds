@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.launch.launchCountdown = ($body, walkie) => {
+g.autoload.launchCountdown = (inject) => {
+  const $body = inject.$body;
+  const walkie = inject.walkie;
+
   const $countdown = $body.find('.js-launch .js-countdown');
 
   let isCountDownRunning = false;

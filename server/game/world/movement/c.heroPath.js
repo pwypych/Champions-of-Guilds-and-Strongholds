@@ -4,7 +4,11 @@
 
 // What does this module do?
 // It listens to path events, and renders path accordingly
-g.world.heroPath = (walkie, auth, viewport, freshEntities) => {
+g.autoload.heroPath = (inject) => {
+  const viewport = inject.viewport;
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+
   let path;
   let spriteArray = [];
   let heroId;

@@ -2,7 +2,11 @@
 
 'use strict';
 
-g.battle.backgroundDraw = (walkie, viewport, freshEntities) => {
+g.autoload.battleBackgroundDraw = (inject) => {
+  const viewport = inject.viewport;
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
@@ -15,7 +19,7 @@ g.battle.backgroundDraw = (walkie, viewport, freshEntities) => {
   function onEntitiesGet() {
     walkie.onEvent(
       'viewportBattleReady_',
-      'backgroundDraw.js',
+      'battleBackgroundDraw.js',
       () => {
         findBattleEntity();
       },

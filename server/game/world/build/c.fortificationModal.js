@@ -2,13 +2,13 @@
 
 'use strict';
 
-g.world.fortificationModal = (
-  $body,
-  walkie,
-  freshEntities,
-  blueprint,
-  auth
-) => {
+g.autoload.fortificationModal = (inject) => {
+  const $body = inject.$body;
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+  const blueprint = inject.blueprint;
+  const auth = inject.auth;
+
   const $fortificationWrapper = $body.find('.js-fortification-build-wrapper');
 
   (function init() {

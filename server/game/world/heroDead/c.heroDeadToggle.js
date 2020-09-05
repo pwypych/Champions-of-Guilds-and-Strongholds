@@ -2,7 +2,11 @@
 
 'use strict';
 
-g.world.heroDeadToggle = ($body, walkie, freshEntities) => {
+g.autoload.heroDeadToggle = (inject) => {
+  const $body = inject.$body;
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+
   const $heroDead = $body.find('.js-hero-dead');
 
   (function init() {

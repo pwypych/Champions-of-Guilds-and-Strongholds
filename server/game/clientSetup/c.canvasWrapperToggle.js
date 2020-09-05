@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.common.canvasWrapperToggle = ($body, walkie) => {
+g.autoload.canvasWrapperToggle = (inject) => {
+  const $body = inject.$body;
+  const walkie = inject.walkie;
+
   const $canvasWrapper = $body.find('.js-canvas-wrapper');
 
   (function init() {

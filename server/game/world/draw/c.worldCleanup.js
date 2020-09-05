@@ -2,7 +2,11 @@
 
 'use strict';
 
-g.world.worldCleanup = (walkie, viewport, freshEntities) => {
+g.autoload.worldCleanup = (inject) => {
+  const viewport = inject.viewport;
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+
   const worldContainer = viewport.getChildByName('worldContainer');
 
   (function init() {

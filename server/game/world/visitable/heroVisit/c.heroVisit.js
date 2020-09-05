@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.world.heroVisit = (walkie, freshEntities) => {
+g.autoload.heroVisit = (inject) => {
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+
   (function init() {
     onEntityTweenEnd();
   })();

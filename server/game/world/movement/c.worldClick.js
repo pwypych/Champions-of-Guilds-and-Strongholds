@@ -4,7 +4,11 @@
 
 // What does this module do?
 // It listens to mouse click events, generates path through library and sends path events
-g.world.worldClick = (walkie, auth, viewport, freshEntities) => {
+g.autoload.worldClick = (inject) => {
+  const viewport = inject.viewport;
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+
   let lastPathPositionX;
   let lastPathPositionY;
 

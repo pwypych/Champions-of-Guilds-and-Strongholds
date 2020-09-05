@@ -2,7 +2,11 @@
 
 'use strict';
 
-g.world.colorFlagDraw = (walkie, viewport, freshEntities) => {
+g.autoload.colorFlagDraw = (inject) => {
+  const viewport = inject.viewport;
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 

@@ -2,12 +2,12 @@
 
 'use strict';
 
-g.launch.launchSelectRaceOptions = (
-  $body,
-  walkie,
-  freshEntities,
-  blueprint
-) => {
+g.autoload.launchSelectRaceOptions = (inject) => {
+  const $body = inject.$body;
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+  const blueprint = inject.blueprint;
+
   const $select = $body.find('.js-launch .js-select-race');
 
   (function init() {

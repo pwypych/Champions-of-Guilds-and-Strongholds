@@ -2,7 +2,11 @@
 
 'use strict';
 
-g.world.backgroundDraw = (walkie, viewport, auth) => {
+g.autoload.worldBackgroundDraw = (inject) => {
+  const viewport = inject.viewport;
+  const walkie = inject.walkie;
+  const auth = inject.auth;
+
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 
@@ -15,7 +19,7 @@ g.world.backgroundDraw = (walkie, viewport, auth) => {
   function onEntitiesGetFirst() {
     walkie.onEvent(
       'viewportWorldReady_',
-      'backgroundDraw.js',
+      'worldBackgroundDraw.js',
       () => {
         drawBackground();
       },

@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.common.recentActivityDifferance = (walkie, freshEntities) => {
+g.autoload.recentActivityDifferance = (inject) => {
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+
   let oldEntities;
 
   (function init() {

@@ -2,7 +2,11 @@
 
 'use strict';
 
-g.world.heroFocusWorldReady = (walkie, viewport, freshEntities) => {
+g.autoload.heroFocusWorldReady = (inject) => {
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+  const viewport = inject.viewport;
+
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 

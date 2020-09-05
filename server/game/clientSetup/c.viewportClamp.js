@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.common.viewportClamp = (walkie, viewport) => {
+g.autoload.viewportClamp = (inject) => {
+  const walkie = inject.walkie;
+  const viewport = inject.viewport;
+
   (function init() {
     onViewportWorldReady();
     onViewportBattleReady();

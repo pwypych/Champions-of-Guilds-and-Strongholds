@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.common.tweenMovementPath = (walkie, viewport) => {
+g.autoload.tweenMovementPath = (inject) => {
+  const walkie = inject.walkie;
+  const viewport = inject.viewport;
+
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 

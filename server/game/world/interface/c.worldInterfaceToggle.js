@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.world.worldInterfaceToggle = ($body, walkie) => {
+g.autoload.worldInterfaceToggle = (inject) => {
+  const $body = inject.$body;
+  const walkie = inject.walkie;
+
   const $buttons = $body.find('.js-world-interface-buttons');
 
   (function init() {

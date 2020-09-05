@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.world.hasBeenCollectedIndicate = (walkie, viewport) => {
+g.autoload.hasBeenCollectedIndicate = (inject) => {
+  const walkie = inject.walkie;
+  const viewport = inject.viewport;
+
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 

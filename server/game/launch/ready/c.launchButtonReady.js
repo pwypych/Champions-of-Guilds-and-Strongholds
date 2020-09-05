@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.launch.launchButtonReady = ($body, auth) => {
+g.autoload.launchButtonReady = (inject) => {
+  const $body = inject.$body;
+  const auth = inject.auth;
+
   const $button = $body.find('.js-launch .js-button-ready');
 
   (function init() {

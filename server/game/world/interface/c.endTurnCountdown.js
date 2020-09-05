@@ -4,7 +4,10 @@
 
 // What does this module do?
 // It listens to event, checks changes in player endTurn, runs countdown, uses chat for messages
-g.world.endTurnCountdown = (walkie, freshEntities) => {
+g.autoload.endTurnCountdown = (inject) => {
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+
   let interval;
   let newDayMessageWasSend = true;
 

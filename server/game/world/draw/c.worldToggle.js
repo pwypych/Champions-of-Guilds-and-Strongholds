@@ -2,7 +2,11 @@
 
 'use strict';
 
-g.world.worldToggle = (walkie, viewport, freshEntities) => {
+g.autoload.worldToggle = (inject) => {
+  const viewport = inject.viewport;
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+
   const blockWidthPx = 32;
   const blockHeightPx = 32;
 

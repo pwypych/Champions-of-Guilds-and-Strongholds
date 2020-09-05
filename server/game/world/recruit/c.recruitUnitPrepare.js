@@ -2,13 +2,13 @@
 
 'use strict';
 
-g.world.recruitUnitPrepare = (
-  $body,
-  walkie,
-  freshEntities,
-  auth,
-  blueprint
-) => {
+g.autoload.recruitUnitPrepare = (inject) => {
+  const $body = inject.$body;
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+  const auth = inject.auth;
+  const blueprint = inject.blueprint;
+
   const $recruitUnit = $body.find(
     '.js-world-interface-information-modal .js-recruit-unit'
   );

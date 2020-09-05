@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.battle.battleInterfaceToggle = ($body, walkie) => {
+g.autoload.battleInterfaceToggle = (inject) => {
+  const $body = inject.$body;
+  const walkie = inject.walkie;
+
   const $buttons = $body.find('.js-battle-interface-maneuver-buttons');
 
   (function init() {

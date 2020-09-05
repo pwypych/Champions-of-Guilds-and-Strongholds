@@ -2,7 +2,9 @@
 
 'use strict';
 
-g.world.castleButton = ($body) => {
+g.autoload.castleButton = (inject) => {
+  const $body = inject.$body;
+
   const $button = $body.find('.js-world-interface-castle-button');
   const $modal = $body.find('.js-world-interface-fortification-modal');
 

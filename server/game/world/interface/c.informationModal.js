@@ -2,7 +2,11 @@
 
 'use strict';
 
-g.world.informationModal = ($body, walkie, freshEntities) => {
+g.autoload.informationModal = (inject) => {
+  const $body = inject.$body;
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+
   const $modal = $body.find('.js-world-interface-information-modal');
   const $gold = $modal.find('.js-gold');
   const $wood = $modal.find('.js-wood');

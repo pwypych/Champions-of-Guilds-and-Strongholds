@@ -4,7 +4,12 @@
 
 // What does this module do?
 // It listens to clicks on endTurn button and sends POST
-g.world.endTurnButton = ($body, auth, walkie, freshEntities) => {
+g.autoload.endTurnButton = (inject) => {
+  const $body = inject.$body;
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+  const auth = inject.auth;
+
   const $button = $body.find('.js-world-interface-end-turn-button');
 
   (function init() {

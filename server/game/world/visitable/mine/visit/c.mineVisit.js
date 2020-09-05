@@ -4,7 +4,10 @@
 
 // Listens to when hero visits a visitable of type mine
 // sends request to backend for owner and enchantment registration
-g.world.mineVisit = (walkie, freshEntities, auth) => {
+g.autoload.mineVisit = (inject) => {
+  const walkie = inject.walkie;
+  const auth = inject.auth;
+
   (function init() {
     onHeroCurrentVisited();
   })();

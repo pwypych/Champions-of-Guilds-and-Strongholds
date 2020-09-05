@@ -2,7 +2,11 @@
 
 'use strict';
 
-g.launch.launchTable = ($body, walkie, freshEntities) => {
+g.autoload.launchTable = (inject) => {
+  const $body = inject.$body;
+  const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
+
   const $table = $body.find('.js-launch .js-table-name');
 
   (function init() {

@@ -2,7 +2,10 @@
 
 'use strict';
 
-g.common.keyboardLoadSavedGame = (walkie, auth) => {
+g.autoload.keyboardLoadSavedGame = (inject) => {
+  const walkie = inject.walkie;
+  const auth = inject.auth;
+
   (function init() {
     addListener();
   })();

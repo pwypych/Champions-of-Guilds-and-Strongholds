@@ -2,7 +2,9 @@
 
 'use strict';
 
-g.world.informationButton = ($body) => {
+g.autoload.informationButton = (inject) => {
+  const $body = inject.$body;
+
   const $button = $body.find('.js-world-interface-information-button');
   const $modal = $body.find('.js-world-interface-information-modal');
 

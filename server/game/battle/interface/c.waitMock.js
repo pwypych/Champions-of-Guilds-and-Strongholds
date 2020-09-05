@@ -4,7 +4,10 @@
 
 // What does this module do?
 // Allow unit to skip one maneuver
-g.battle.waitMock = ($body, auth, freshEntities) => {
+g.autoload.waitMock = (inject) => {
+  const $body = inject.$body;
+  const freshEntities = inject.freshEntities;
+
   const $maneuverButtons = $body.find('.js-battle-interface-maneuver-buttons');
   const $button = $maneuverButtons.find('.js-wait-button');
 
