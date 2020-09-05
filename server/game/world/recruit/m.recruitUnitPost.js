@@ -77,60 +77,75 @@ module.exports = (db, blueprint) => {
       ctx.unitCost = recruitUnit.cost;
       ctx.unitName = unitName;
       debug('findRecruitUnitCost: recruitUnit.cost', recruitUnit.cost);
-      findPlayerCurrentGold(ctx);
+      findPlayerCurrentResources(ctx);
     }
 
-    function findPlayerCurrentGold(ctx) {
+    function findPlayerCurrentResources(ctx) {
       const entities = ctx.entities;
       const playerId = ctx.playerId;
       const player = entities[playerId];
-      const playerGold = player.playerResources.gold;
+      const playerResources = player.playerResources;
 
-      ctx.playerGold = playerGold;
-      debug('findPlayerCurrentGold: playerGold:', playerGold);
+      ctx.playerResources = playerResources;
+      debug('findPlayerCurrentResources: playerResources:', playerResources);
       checkCanPlayerAffordUnit(ctx);
     }
 
     function checkCanPlayerAffordUnit(ctx) {
-      const playerGold = ctx.playerGold;
+      const playerResources = ctx.playerResources;
       const unitCost = ctx.unitCost;
-      const unitName = ctx.unitName;
-      let message = '';
+      let canPlayerAffordUnit = true;
 
-      const playerGoldRemaining = playerGold - unitCost;
+      _.forEach(unitCost, (cost, resource) => {
+        if (playerResources[resource] < cost) {
+          canPlayerAffordUnit = false;
+          debug('checkCanPlayerAffordUnit: Not enough:', resource);
+        }
+      });
 
-      if (playerGoldRemaining < 0) {
-        message =
-          'Cannot afford ' + unitName + ' it cost: ' + unitCost + ' gold.';
+      if (!canPlayerAffordUnit) {
+        res.status(503);
         res.send({
-          error: 1,
-          message: message
+          error: 'This unit is too expensive!'
         });
-        debug('checkCanPlayerAffordUnit:', message);
+        debug(
+          'checkCanPlayerAffordUnit: This unit is too expensive!',
+          unitCost
+        );
         debug('******************** error ********************');
         return;
       }
 
-      message = '1 ' + unitName + ' bought for ' + unitCost + ' gold.';
-      res.send({
-        error: 0,
-        message: message
+      debug('checkCanPlayerAffordUnit: Yes!');
+      substractUnitCostFromPlayerResources(ctx);
+    }
+
+    function substractUnitCostFromPlayerResources(ctx) {
+      const unitCost = ctx.unitCost;
+      const playerResources = ctx.playerResources;
+
+      _.forEach(unitCost, (cost, resource) => {
+        playerResources[resource] -= cost;
       });
 
-      ctx.playerGoldRemaining = playerGoldRemaining;
-      debug('checkCanPlayerAffordUnit: Yes!');
+      debug('substractUnitCostFromPlayerResources: Substracted!');
+
+      ctx.playerResourcesAfterRecruit = playerResources;
       updateSetPlayerResources(ctx);
     }
 
     function updateSetPlayerResources(ctx) {
       const gameId = ctx.gameId;
       const playerId = ctx.playerId;
-      const playerGoldRemaining = ctx.playerGoldRemaining;
+      const playerResourcesAfterBuild = ctx.playerResourcesAfterBuild;
+      const $set = {};
+
+      _.forEach(playerResourcesAfterBuild, (amount, resource) => {
+        const field = playerId + '.playerResources.' + resource;
+        $set[field] = amount;
+      });
 
       const query = { _id: gameId };
-      const field = playerId + '.playerResources.gold';
-      const $set = {};
-      $set[field] = playerGoldRemaining;
 
       const update = { $set: $set };
       const options = {};
