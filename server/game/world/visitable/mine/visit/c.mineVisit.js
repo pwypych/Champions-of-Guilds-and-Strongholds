@@ -21,7 +21,7 @@ g.autoload.mineVisit = (inject) => {
         const visitableType = data.visitableType;
 
         if (visitableType === 'mine') {
-          mineStoneVisitPost(entityId);
+          mineVisitPost(entityId);
         }
       },
       false
@@ -30,7 +30,7 @@ g.autoload.mineVisit = (inject) => {
 
   // Optional: Show modal with OK
 
-  function mineStoneVisitPost(entityId) {
+  function mineVisitPost(entityId) {
     const data = { entityId: entityId };
     $.post('/ajax/mineVisit' + auth.uri, data, () => {
       console.log('mineVisit: POST -> /ajax/mineVisit', data);

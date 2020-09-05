@@ -16,7 +16,7 @@
  "margin":0,
  "name":"1x1",
  "spacing":0,
- "tilecount":25,
+ "tilecount":26,
  "tiledversion":"2020.08.05",
  "tileheight":32,
  "tiles":[
@@ -167,6 +167,12 @@
         {
          "id":46,
          "image":"..\/..\/public\/sprite\/mineStone.png",
+         "imageheight":32,
+         "imagewidth":32
+        }, 
+        {
+         "id":47,
+         "image":"..\/..\/public\/sprite\/mineCrystal.png",
          "imageheight":32,
          "imagewidth":32
         }],
