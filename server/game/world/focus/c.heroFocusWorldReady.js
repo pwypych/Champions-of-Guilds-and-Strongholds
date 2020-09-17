@@ -11,10 +11,10 @@ g.autoload.heroFocusWorldReady = (inject) => {
   const blockHeightPx = 32;
 
   (function init() {
-    onEntitiesGetFirst();
+    onViewPortWorldReady();
   })();
 
-  function onEntitiesGetFirst() {
+  function onViewPortWorldReady() {
     walkie.onEvent(
       'viewportWorldReady_',
       'heroFocusWorldReady.js',

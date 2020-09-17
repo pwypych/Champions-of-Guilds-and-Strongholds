@@ -11,10 +11,10 @@ g.autoload.heroFocusTween = (inject) => {
   const blockHeightPx = 32;
 
   (function init() {
-    onEntitiesGet();
+    onEntityTweenStart();
   })();
 
-  function onEntitiesGet() {
+  function onEntityTweenStart() {
     walkie.onEvent(
       'entityTweenStart_',
       'heroFocusTween.js',
