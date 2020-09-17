@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.common.freshEntities = (walkie) => {
+g.setup.freshEntities = (walkie) => {
   let entities = {};
 
   (function init() {

@@ -29,14 +29,32 @@
     <% }); %>
 
     <!-- Main Pixi Canvas -->
-    <div class="js-canvas-wrapper" style="display: none;">
-    </div>
+    <div class="js-canvas-wrapper" style="display: none;"></div>
 
-    <script type="text/javascript" src="<%= viewModel.baseurl %>/js/g.js?v=<%= viewModel.timestamp %>"></script>
-    <script>g.blueprint = <%- viewModel.blueprint %>;</script>
-    <script>g.spriteFilenameArray = <%- viewModel.spriteFilenameArray %>;</script>
+    <script>
+      'use strict';
+
+      // Define a global variable g, for game libraries
+      const g = {};
+
+      g.autoload = {};
+      g.setup = {};
+      g.setup.blueprint = <%- viewModel.blueprint %>;
+      g.setup.spriteFilenameArray = <%- viewModel.spriteFilenameArray %>;
+
+      // Starting module is will be loaded in g.main object
+      // Every other client module is in g.autoload object 
+      // All modules are in bundle.js file
+    </script>
 
     <script type="text/javascript" src="<%= viewModel.baseurl %>/build/bundle.js?v=<%= viewModel.timestamp %>"></script>
-    <script type="text/javascript" src="<%= viewModel.baseurl %>/js/start.js?v=<%= viewModel.timestamp %>"></script>
+
+    <script>
+      // Game code starts with g.main() function
+      window.onload = () => {
+        g.main();
+      }
+    </script>
+
   </body>
 </html>
