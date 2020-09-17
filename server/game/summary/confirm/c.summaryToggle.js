@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Shows battle summary when state is changed to summaryState
 g.autoload.summaryToggle = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;
@@ -12,12 +14,12 @@ g.autoload.summaryToggle = (inject) => {
   const $text = $summary.find('.js-summary-text');
 
   (function init() {
-    onEntitiesGet();
+    onStateChange();
   })();
 
-  function onEntitiesGet() {
+  function onStateChange() {
     walkie.onEvent(
-      'entitiesGet_',
+      'stateChange_',
       'summaryToggle.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];

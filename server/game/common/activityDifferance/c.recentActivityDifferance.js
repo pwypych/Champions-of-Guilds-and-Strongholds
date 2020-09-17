@@ -50,10 +50,14 @@ g.autoload.recentActivityDifferance = (inject) => {
   }
 
   function checkRecentActivityDifferance(entity, id) {
-    if (!oldEntities[id]) {
-      oldEntities = freshEntities();
-      triggerEntitiesGetFirst();
-    }
+    // @todo
+    // Commented because it was used wrongly to trigger events when state has changed
+    // Test if game works fine without it then delete
+    //
+    // if (!oldEntities[id]) {
+    //   oldEntities = freshEntities();
+    //   triggerEntitiesGetFirst();
+    // }
 
     if (entity.recentActivity) {
       if (!_.isEqual(entity.recentActivity, oldEntities[id].recentActivity)) {

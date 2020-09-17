@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Prepares viewport when state is changed to battleState
 g.autoload.battleToggle = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;
@@ -14,12 +16,12 @@ g.autoload.battleToggle = (inject) => {
   const worldContainer = viewport.getChildByName('worldContainer');
 
   (function init() {
-    onEntitiesGetFirst();
+    onStateChange();
   })();
 
-  function onEntitiesGetFirst() {
+  function onStateChange() {
     walkie.onEvent(
-      'entitiesGetFirst_',
+      'stateChange_',
       'battleToggle.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
