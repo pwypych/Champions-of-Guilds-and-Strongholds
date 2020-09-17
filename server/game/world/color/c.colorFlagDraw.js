@@ -13,13 +13,13 @@ g.autoload.colorFlagDraw = (inject) => {
   const worldContainer = viewport.getChildByName('worldContainer');
 
   (function init() {
-    onViewPortWorldReady();
+    onFiguresDrawn();
     onRecentActivityDifferanceDone();
   })();
 
-  function onViewPortWorldReady() {
+  function onFiguresDrawn() {
     walkie.onEvent(
-      'viewportWorldReady_',
+      'figuresDrawn_',
       'colorFlagDraw.js',
       () => {
         forEachFigure();
@@ -51,19 +51,21 @@ g.autoload.colorFlagDraw = (inject) => {
     const figureContainer = worldContainer.getChildByName(figureId);
 
     if (!figureContainer) {
+      console.log('No figure container');
       return;
     }
 
     const sprite = figureContainer.getChildByName('sprite');
 
     if (!sprite) {
+      console.log('No sprite container');
       return;
     }
 
-    drawAmount(entity, figureId);
+    drawFlag(entity, figureId);
   }
 
-  function drawAmount(entity, figureId) {
+  function drawFlag(entity, figureId) {
     const figureContainer = worldContainer.getChildByName(figureId);
     let flagContainer = figureContainer.getChildByName('flagContainer');
 

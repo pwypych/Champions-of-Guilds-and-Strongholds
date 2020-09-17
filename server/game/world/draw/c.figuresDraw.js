@@ -33,6 +33,8 @@ g.autoload.figuresDraw = (inject) => {
         instantiateFigureContainer(entity, id);
       }
     });
+
+    triggerFiguresDrawn();
   }
 
   function instantiateFigureContainer(entity, figureId) {
@@ -70,5 +72,14 @@ g.autoload.figuresDraw = (inject) => {
 
       figureContainer.addChild(sprite);
     }
+  }
+
+  function triggerFiguresDrawn() {
+    walkie.triggerEvent(
+      'figuresDrawn_',
+      'figuresDraw.js',
+      {},
+      true
+    );
   }
 };
