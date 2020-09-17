@@ -10,6 +10,15 @@ g.autoload.fortificationModal = (inject) => {
   const auth = inject.auth;
 
   const $fortificationWrapper = $body.find('.js-fortification-build-wrapper');
+  const $fortificationExample = $body.find(
+    '.js-fortification-build-wrapper [data-example]'
+  );
+  const $resourceExample = $body.find(
+    '.js-fortification-build-wrapper [data-resource-example]'
+  );
+
+  // console.log('$fortificationExample:', $fortificationExample);
+  // console.log('$resourceExample:', $resourceExample);
 
   (function init() {
     onEntitiesGetFirst();
@@ -57,19 +66,48 @@ g.autoload.fortificationModal = (inject) => {
   function fabricateFortificationDiv(playerId, fortificationBuildedArray) {
     const playerEntity = freshEntities()[playerId];
     const playerRace = playerEntity.playerData.race;
-    $fortificationWrapper.empty();
+    // $fortificationWrapper.empty();
 
     _.forEach(blueprint.fortification, (fortification, name) => {
       if (fortification.race === playerRace) {
+        const $newFortification = $fortificationExample.clone();
+
+        // Fortification name
+        const fortificationName = $newFortification.find('div')[0];
+        $(fortificationName).text(fortification.namePretty);
+
+        // Fortification cost
+        _.forEach(fortification.cost, (cost, resource) => {
+          const $newResource = $resourceExample.clone();
+          const resourceSprite = $newResource.find('img')[0];
+          const resourceAmount = $newResource.find('span')[0];
+          $(resourceAmount).text(cost);
+          const spriteSrc = '/sprite/' + resource + '.png';
+          $(resourceSprite).attr('src', spriteSrc);
+
+          const $fortificationSprite = $newFortification.find('button')[0];
+          $($newResource).removeAttr('data-resource-example');
+          $fortificationSprite.before($newResource[0]);
+        });
+
+        // Fortification button
+        const $fortificationButton = $newFortification.find('button')[0];
+        $($fortificationButton).attr('data-fortification-name', name);
+
         const $fortificationName = $(
           '<div>' + fortification.namePretty + '</div>'
         );
-        $fortificationWrapper.append($fortificationName);
+
+        // Remove data-example
+        $($newFortification).removeAttr('data-example');
+        console.log('$newFortification:', $newFortification);
+
+        // $fortificationWrapper.append($fortificationName);
 
         const $fortificationSprite = $(
           '<img class="vertical-align" src="/sprite/castleRandom.png" width="36" height="36">'
         );
-        $fortificationWrapper.append($fortificationSprite);
+        // $fortificationWrapper.append($fortificationSprite);
 
         _.forEach(fortification.cost, (cost, resource) => {
           const $resource = $(
@@ -79,7 +117,7 @@ g.autoload.fortificationModal = (inject) => {
               cost +
               '</span>'
           );
-          $fortificationWrapper.append($resource);
+          // $fortificationWrapper.append($resource);
         });
 
         const $buildButton = $(
@@ -96,10 +134,16 @@ g.autoload.fortificationModal = (inject) => {
           $buildButton.attr('disabled', 'disabled');
         }
 
-        $fortificationWrapper.append($buildButton);
+        // $fortificationWrapper.append($buildButton);
+        $fortificationWrapper.append($newFortification);
         onFortificationBuildButtonClick($buildButton, name);
       }
     });
+
+    $body.find('.js-fortification-build-wrapper [data-example]').hide();
+    $body
+      .find('.js-fortification-build-wrapper [data-resource-example]')
+      .hide();
   }
 
   function onFortificationBuildButtonClick($buildButton, fortificationName) {
