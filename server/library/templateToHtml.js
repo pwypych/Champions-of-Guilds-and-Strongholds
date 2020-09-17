@@ -16,7 +16,7 @@ dot.templateSettings = {
   conditional: /\<\%\?(\?)?\s*([\s\S]*?)\s*\%\>/g,
   iterate: /\<\%~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\%\>)/g,
   varname: 'viewModel',
-  strip: true,
+  strip: false,
   append: true,
   selfcontained: false
 };
