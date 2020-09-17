@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// When not in worldState it cleans every world PIXI container
 g.autoload.worldCleanup = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;

@@ -3,7 +3,8 @@
 'use strict';
 
 // What does this module do?
-//
+// Sets up the pixi and libraries, then autoloads and runs
+// every client module with injected libraries to start the game
 g.main = function main() {
   (function init() {
     setupBody();

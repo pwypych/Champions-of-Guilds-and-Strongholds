@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Draws random background and grid in battle state
 g.autoload.battleBackgroundDraw = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;

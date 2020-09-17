@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// When not in battleState it cleans every battle PIXI container
 g.autoload.battleCleanup = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;

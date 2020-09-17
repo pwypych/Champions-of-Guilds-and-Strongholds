@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Draws and updates amount on units in battle state
 g.autoload.amountDraw = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;
