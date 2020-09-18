@@ -11,7 +11,7 @@ g.autoload.fortificationModal = (inject) => {
 
   // only main div should be found here js-world-interface-fortification-modal
 
-  const $fortificationWrapper = $body.find('.js-fortification-build-wrapper');
+  const $wrapper = $body.find('.js-fortification-build-wrapper');
   const $fortificationExample = $body.find(
     '.js-fortification-build-wrapper [data-example]'
   );
@@ -53,80 +53,57 @@ g.autoload.fortificationModal = (inject) => {
 
   // why Builded array, not FortificationArray?
   function generateFortificationBuildedArray(playerId) {
-    const fortificationBuildedArray = [];
+    const buildedArray = [];
     _.forEach(freshEntities(), (entity) => {
       if (entity.fortificationName && entity.owner === playerId) {
-        fortificationBuildedArray.push(entity.fortificationName);
+        buildedArray.push(entity.fortificationName);
       }
     });
 
-    fabricateFortificationDiv(playerId, fortificationBuildedArray);
+    fillFortificationDiv(playerId, buildedArray);
   }
 
   // div is not fabricated here now, must find new name for function
-  function fabricateFortificationDiv(playerId, fortificationBuildedArray) {
+  function fillFortificationDiv(playerId, buildedArray) {
     const playerEntity = freshEntities()[playerId];
     const playerRace = playerEntity.playerData.race;
 
-    // $fortificationWrapper should be defined here not on top
+    // $wrapper should be defined here not on top
     // $fortificationExaple should be defined here not on top
     // $resourceExaple should be defined here top
 
-    $fortificationWrapper.empty();
+    $wrapper.empty();
 
     _.forEach(blueprint.fortification, (fortification, name) => {
       if (fortification.race === playerRace) {
         const $fortification = $fortificationExample.clone();
 
-        $fortification
-          .find('div')
-          .first()
-          .text(fortification.namePretty);
+        $fortification.find('div').text(fortification.namePretty);
 
         _.forEach(fortification.cost, (cost, resource) => {
           const $resource = $resourceExample.clone();
           const spriteSrc = '/sprite/' + resource + '.png';
 
-          $resource
-            .find('span')
-            .first()
-            .text(cost);
-
-          $resource
-            .find('img')
-            .first()
-            .attr('src', spriteSrc);
-
+          $resource.find('span').text(cost);
+          $resource.find('img').attr('src', spriteSrc);
           $($resource).removeAttr('data-example-resource');
 
-          $fortification
-            .find('button')
-            .first()
-            .before($resource.first());
+          $resource.insertBefore($fortification.find('button'));
         });
 
-        $fortification
-          .find('button')
-          .first()
-          .attr('data-fortification-name', name);
+        $fortification.find('button').attr('data-fortification-name', name);
 
         $($fortification).removeAttr('data-example');
 
-        const $buildButton = $($fortification)
-          .find('button')
-          .first();
-
-        const isFortificationBuilded = _.includes(
-          fortificationBuildedArray,
-          name
-        );
+        const $buildButton = $($fortification).find('button');
+        const isFortificationBuilded = _.includes(buildedArray, name);
 
         if (isFortificationBuilded) {
           $buildButton.attr('disabled', 'disabled');
         }
 
-        $fortificationWrapper.append($fortification);
-        onFortificationBuildButtonClick($buildButton, name);
+        $wrapper.append($fortification);
+        onButtonClick($buildButton, name);
       }
     });
 
@@ -136,7 +113,7 @@ g.autoload.fortificationModal = (inject) => {
       .hide();
   }
 
-  function onFortificationBuildButtonClick($buildButton, fortificationName) {
+  function onButtonClick($buildButton, fortificationName) {
     $buildButton.on('click', () => {
       sendFortificationBuildPost(fortificationName);
     });
