@@ -15,20 +15,8 @@ g.autoload.amountDraw = (inject) => {
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
-    onUnitsDrawn();
     onEntitiesGet();
   })();
-
-  function onUnitsDrawn() {
-    walkie.onEvent(
-      'unitsDrawn_',
-      'amountDraw.js',
-      () => {
-        checkBattleState();
-      },
-      false
-    );
-  }
 
   function onEntitiesGet() {
     walkie.onEvent(
