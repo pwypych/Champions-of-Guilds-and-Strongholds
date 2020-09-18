@@ -14,11 +14,8 @@ g.autoload.fortificationModal = (inject) => {
     '.js-fortification-build-wrapper [data-example]'
   );
   const $resourceExample = $body.find(
-    '.js-fortification-build-wrapper [data-resource-example]'
+    '.js-fortification-build-wrapper [data-example-resource]'
   );
-
-  // console.log('$fortificationExample:', $fortificationExample);
-  // console.log('$resourceExample:', $resourceExample);
 
   (function init() {
     onEntitiesGetFirst();
@@ -66,83 +63,67 @@ g.autoload.fortificationModal = (inject) => {
   function fabricateFortificationDiv(playerId, fortificationBuildedArray) {
     const playerEntity = freshEntities()[playerId];
     const playerRace = playerEntity.playerData.race;
-    // $fortificationWrapper.empty();
+    $fortificationWrapper.empty();
 
     _.forEach(blueprint.fortification, (fortification, name) => {
       if (fortification.race === playerRace) {
-        const $newFortification = $fortificationExample.clone();
+        const $fortification = $fortificationExample.clone();
 
-        // Fortification name
-        const fortificationName = $newFortification.find('div')[0];
-        $(fortificationName).text(fortification.namePretty);
+        $fortification
+          .find('div')
+          .first()
+          .text(fortification.namePretty);
 
-        // Fortification cost
         _.forEach(fortification.cost, (cost, resource) => {
-          const $newResource = $resourceExample.clone();
-          const resourceSprite = $newResource.find('img')[0];
-          const resourceAmount = $newResource.find('span')[0];
-          $(resourceAmount).text(cost);
+          const $resource = $resourceExample.clone();
           const spriteSrc = '/sprite/' + resource + '.png';
-          $(resourceSprite).attr('src', spriteSrc);
 
-          const $fortificationSprite = $newFortification.find('button')[0];
-          $($newResource).removeAttr('data-resource-example');
-          $fortificationSprite.before($newResource[0]);
+          $resource
+            .find('span')
+            .first()
+            .text(cost);
+
+          $resource
+            .find('img')
+            .first()
+            .attr('src', spriteSrc);
+
+          $($resource).removeAttr('data-example-resource');
+
+          $fortification
+            .find('button')
+            .first()
+            .before($resource.first());
         });
 
-        // Fortification button
-        const $fortificationButton = $newFortification.find('button')[0];
-        $($fortificationButton).attr('data-fortification-name', name);
+        $fortification
+          .find('button')
+          .first()
+          .attr('data-fortification-name', name);
 
-        const $fortificationName = $(
-          '<div>' + fortification.namePretty + '</div>'
-        );
+        $($fortification).removeAttr('data-example');
 
-        // Remove data-example
-        $($newFortification).removeAttr('data-example');
-        console.log('$newFortification:', $newFortification);
-
-        // $fortificationWrapper.append($fortificationName);
-
-        const $fortificationSprite = $(
-          '<img class="vertical-align" src="/sprite/castleRandom.png" width="36" height="36">'
-        );
-        // $fortificationWrapper.append($fortificationSprite);
-
-        _.forEach(fortification.cost, (cost, resource) => {
-          const $resource = $(
-            '<img class="vertical-align" src="/sprite/' +
-              resource +
-              '.png" width="36" height="36"><span>' +
-              cost +
-              '</span>'
-          );
-          // $fortificationWrapper.append($resource);
-        });
-
-        const $buildButton = $(
-          '<button class="js-button-build" data-fortification-name="' +
-            name +
-            '">Build</button>'
-        );
+        const $buildButton = $($fortification)
+          .find('button')
+          .first();
 
         const isFortificationBuilded = _.includes(
           fortificationBuildedArray,
           name
         );
+
         if (isFortificationBuilded) {
           $buildButton.attr('disabled', 'disabled');
         }
 
-        // $fortificationWrapper.append($buildButton);
-        $fortificationWrapper.append($newFortification);
+        $fortificationWrapper.append($fortification);
         onFortificationBuildButtonClick($buildButton, name);
       }
     });
 
     $body.find('.js-fortification-build-wrapper [data-example]').hide();
     $body
-      .find('.js-fortification-build-wrapper [data-resource-example]')
+      .find('.js-fortification-build-wrapper [data-example-resource]')
       .hide();
   }
 
