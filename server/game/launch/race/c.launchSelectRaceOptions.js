@@ -11,12 +11,12 @@ g.autoload.launchSelectRaceOptions = (inject) => {
   const $select = $body.find('.js-launch .js-select-race');
 
   (function init() {
-    onEntitiesGet();
+    onViewportLaunchReady();
   })();
 
-  function onEntitiesGet() {
+  function onViewportLaunchReady() {
     walkie.onEvent(
-      'entitiesGetFirst_',
+      'viewportLaunchReady_',
       'launchSelectRaceOptions.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];

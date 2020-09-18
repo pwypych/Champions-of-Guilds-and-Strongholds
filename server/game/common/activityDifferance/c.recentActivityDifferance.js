@@ -26,7 +26,6 @@ g.autoload.recentActivityDifferance = (inject) => {
   function ensureOldEntitiesDefined() {
     if (!oldEntities) {
       oldEntities = freshEntities();
-      triggerEntitiesGetFirst();
     }
 
     forEachEntity();
@@ -50,15 +49,6 @@ g.autoload.recentActivityDifferance = (inject) => {
   }
 
   function checkRecentActivityDifferance(entity, id) {
-    // @todo
-    // Commented because it was used wrongly to trigger events when state has changed
-    // Test if game works fine without it then delete
-    //
-    // if (!oldEntities[id]) {
-    //   oldEntities = freshEntities();
-    //   triggerEntitiesGetFirst();
-    // }
-
     if (entity.recentActivity) {
       if (!_.isEqual(entity.recentActivity, oldEntities[id].recentActivity)) {
         const data = {
@@ -75,14 +65,5 @@ g.autoload.recentActivityDifferance = (inject) => {
         );
       }
     }
-  }
-
-  function triggerEntitiesGetFirst() {
-    walkie.triggerEvent(
-      'entitiesGetFirst_',
-      'recentActivityDifferance.js',
-      {},
-      true
-    );
   }
 };

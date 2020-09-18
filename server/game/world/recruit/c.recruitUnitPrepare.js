@@ -14,12 +14,12 @@ g.autoload.recruitUnitPrepare = (inject) => {
   );
 
   (function init() {
-    onEntitiesGetFirst();
+    onViewportWorldReady();
   })();
 
-  function onEntitiesGetFirst() {
+  function onViewportWorldReady() {
     walkie.onEvent(
-      'entitiesGetFirst_',
+      'viewportWorldReady_',
       'recruitUnitPrepare.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];

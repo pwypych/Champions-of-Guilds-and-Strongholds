@@ -13,7 +13,8 @@ g.autoload.entitiesInterval = (inject) => {
   })();
 
   function createInterval() {
-    entitiesGet(); // first run
+    // first run
+    entitiesGet();
 
     setInterval(() => {
       entitiesGet();
@@ -22,12 +23,16 @@ g.autoload.entitiesInterval = (inject) => {
 
   function entitiesGet() {
     $.post('/ajax/entitiesGet' + auth.uri, (entities) => {
-      walkie.triggerEvent(
-        'entitiesGet_',
-        'entitiesInterval.js',
-        entities,
-        false
-      );
+      triggerEntitiesGet(entities);
     });
+  }
+
+  function triggerEntitiesGet(entities) {
+    walkie.triggerEvent(
+      'entitiesGet_',
+      'entitiesInterval.js',
+      entities,
+      false
+    );
   }
 };

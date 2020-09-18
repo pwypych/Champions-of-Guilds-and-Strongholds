@@ -21,12 +21,12 @@ g.autoload.fortificationModal = (inject) => {
   // console.log('$resourceExample:', $resourceExample);
 
   (function init() {
-    onEntitiesGetFirst();
+    onViewportWorldReady();
   })();
 
-  function onEntitiesGetFirst() {
+  function onViewportWorldReady() {
     walkie.onEvent(
-      'entitiesGetFirst_',
+      'viewportWorldReady_',
       'fortificationModal.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];

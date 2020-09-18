@@ -17,13 +17,19 @@ g.autoload.launchToggle = (inject) => {
       'stateChange_',
       'launchToggle.js',
       (state) => {
-        if (state === 'launchState') {
-          $launch.show();
-        } else {
+        if (state !== 'launchState') {
           $launch.hide();
+          return;
         }
+
+        $launch.show();
+        triggerViewportLaunchReady();
       },
       false
     );
+  }
+
+  function triggerViewportLaunchReady() {
+    walkie.triggerEvent('viewportLaunchReady_', 'launchToggle.js', {}, true);
   }
 };
