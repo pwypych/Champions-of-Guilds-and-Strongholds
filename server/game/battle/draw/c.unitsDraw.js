@@ -33,6 +33,8 @@ g.autoload.unitsDraw = (inject) => {
         instantiateUnitContainer(entity, id);
       }
     });
+
+    triggerUnitsDrawn();
   }
 
   function instantiateUnitContainer(entity, unitId) {
@@ -81,5 +83,14 @@ g.autoload.unitsDraw = (inject) => {
       unitContainer.addChildZ(sprite, zOrder);
       unitContainer.sortChildren();
     }
+  }
+
+  function triggerUnitsDrawn() {
+    walkie.triggerEvent(
+      'unitsDrawn_',
+      'unitsDraw.js',
+      {},
+      true
+    );
   }
 };

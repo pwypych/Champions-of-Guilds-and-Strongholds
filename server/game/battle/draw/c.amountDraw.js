@@ -15,24 +15,40 @@ g.autoload.amountDraw = (inject) => {
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
+    onUnitsDrawn();
     onEntitiesGet();
   })();
+
+  function onUnitsDrawn() {
+    walkie.onEvent(
+      'unitsDrawn_',
+      'amountDraw.js',
+      () => {
+        checkBattleState();
+      },
+      false
+    );
+  }
 
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
       'amountDraw.js',
       () => {
-        const gameEntity = freshEntities()[freshEntities()._id];
-
-        if (gameEntity.state !== 'battleState') {
-          return;
-        }
-
-        findPlayerId();
+        checkBattleState();
       },
       false
     );
+  }
+
+  function checkBattleState() {
+    const gameEntity = freshEntities()[freshEntities()._id];
+
+    if (gameEntity.state !== 'battleState') {
+      return;
+    }
+
+    findPlayerId();
   }
 
   function findPlayerId() {
