@@ -44,10 +44,14 @@ module.exports = (db, blueprint) => {
     }
 
     function checkFortificationAndPlayerRace(ctx) {
+      debug(
+        'validateFortificationName: ctx.fortificationBlueprint:',
+        ctx.fortificationBlueprint
+      );
       const playerId = ctx.playerId;
       const player = ctx.entities[playerId];
       const playerRace = player.playerData.race;
-      const fortificationRace = ctx.fortification.race;
+      const fortificationRace = ctx.fortificationBlueprint.race;
 
       if (playerRace !== fortificationRace) {
         res.status(503);
@@ -130,7 +134,7 @@ module.exports = (db, blueprint) => {
     }
 
     function substractFortificationCostFromPlayerResources(ctx) {
-      const fortificationCost = ctx.fortification.cost;
+      const fortificationCost = ctx.fortificationBlueprint.cost;
       const playerResources = ctx.playerResources;
 
       _.forEach(fortificationCost, (cost, resource) => {
