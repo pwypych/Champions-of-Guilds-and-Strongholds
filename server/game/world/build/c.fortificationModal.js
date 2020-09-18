@@ -9,6 +9,8 @@ g.autoload.fortificationModal = (inject) => {
   const blueprint = inject.blueprint;
   const auth = inject.auth;
 
+  // only main div should be found here js-world-interface-fortification-modal
+
   const $fortificationWrapper = $body.find('.js-fortification-build-wrapper');
   const $fortificationExample = $body.find(
     '.js-fortification-build-wrapper [data-example]'
@@ -49,6 +51,7 @@ g.autoload.fortificationModal = (inject) => {
     generateFortificationBuildedArray(playerId);
   }
 
+  // why Builded array, not FortificationArray?
   function generateFortificationBuildedArray(playerId) {
     const fortificationBuildedArray = [];
     _.forEach(freshEntities(), (entity) => {
@@ -60,9 +63,15 @@ g.autoload.fortificationModal = (inject) => {
     fabricateFortificationDiv(playerId, fortificationBuildedArray);
   }
 
+  // div is not fabricated here now, must find new name for function
   function fabricateFortificationDiv(playerId, fortificationBuildedArray) {
     const playerEntity = freshEntities()[playerId];
     const playerRace = playerEntity.playerData.race;
+
+    // $fortificationWrapper should be defined here not on top
+    // $fortificationExaple should be defined here not on top
+    // $resourceExaple should be defined here top
+
     $fortificationWrapper.empty();
 
     _.forEach(blueprint.fortification, (fortification, name) => {
