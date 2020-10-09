@@ -9,15 +9,7 @@ g.autoload.fortificationModal = (inject) => {
   const blueprint = inject.blueprint;
   const auth = inject.auth;
 
-  // only main div should be found here js-world-interface-fortification-modal
-
-  const $wrapper = $body.find('.js-fortification-build-wrapper');
-  const $fortificationExample = $body.find(
-    '.js-fortification-build-wrapper [data-example]'
-  );
-  const $resourceExample = $body.find(
-    '.js-fortification-build-wrapper [data-example-resource]'
-  );
+  const $modal = $body.find('[data-world-interface-fortification-modal]');
 
   (function init() {
     onViewportWorldReady();
@@ -51,26 +43,24 @@ g.autoload.fortificationModal = (inject) => {
     generateFortificationBuildedArray(playerId);
   }
 
-  // why Builded array, not FortificationArray?
   function generateFortificationBuildedArray(playerId) {
-    const buildedArray = [];
+    const fortificationBuildedArray = [];
     _.forEach(freshEntities(), (entity) => {
       if (entity.fortificationName && entity.owner === playerId) {
-        buildedArray.push(entity.fortificationName);
+        fortificationBuildedArray.push(entity.fortificationName);
       }
     });
 
-    fillFortificationDiv(playerId, buildedArray);
+    fillFortificationDiv(playerId, fortificationBuildedArray);
   }
 
-  // div is not fabricated here now, must find new name for function
-  function fillFortificationDiv(playerId, buildedArray) {
+  function fillFortificationDiv(playerId, fortificationBuildedArray) {
     const playerEntity = freshEntities()[playerId];
     const playerRace = playerEntity.playerData.race;
 
-    // $wrapper should be defined here not on top
-    // $fortificationExaple should be defined here not on top
-    // $resourceExaple should be defined here top
+    const $wrapper = $modal.find('[data-wrapper]');
+    const $fortificationExample = $wrapper.find('[data-example-fortification]');
+    const $resourceExample = $wrapper.find('[data-example-resource]');
 
     $wrapper.empty();
 
@@ -93,10 +83,13 @@ g.autoload.fortificationModal = (inject) => {
 
         $fortification.find('button').attr('data-fortification-name', name);
 
-        $($fortification).removeAttr('data-example');
+        $($fortification).removeAttr('data-example-fortification');
 
         const $buildButton = $($fortification).find('button');
-        const isFortificationBuilded = _.includes(buildedArray, name);
+        const isFortificationBuilded = _.includes(
+          fortificationBuildedArray,
+          name
+        );
 
         if (isFortificationBuilded) {
           $buildButton.attr('disabled', 'disabled');
@@ -107,10 +100,8 @@ g.autoload.fortificationModal = (inject) => {
       }
     });
 
-    $body.find('.js-fortification-build-wrapper [data-example]').hide();
-    $body
-      .find('.js-fortification-build-wrapper [data-example-resource]')
-      .hide();
+    $wrapper.find('[data-example-fortification]').hide();
+    $wrapper.find('[data-example-resource]').hide();
   }
 
   function onButtonClick($buildButton, fortificationName) {
@@ -127,10 +118,8 @@ g.autoload.fortificationModal = (inject) => {
         data
       );
     }).done(() => {
-      const $button = $body.find(
-        '.js-world-interface-fortification-modal [data-fortification-name=' +
-          fortificationName +
-          ']'
+      const $button = $modal.find(
+        '[data-fortification-name=' + fortificationName + ']'
       );
       $button.attr('disabled', 'disabled');
     });

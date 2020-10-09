@@ -5,8 +5,8 @@
 g.autoload.castleButton = (inject) => {
   const $body = inject.$body;
 
+  const $modal = $body.find('[data-world-interface-fortification-modal]');
   const $button = $body.find('.js-world-interface-castle-button');
-  const $modal = $body.find('.js-world-interface-fortification-modal');
 
   (function init() {
     onClick();
