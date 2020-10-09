@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Toggles battle interface (buttons etc.)
 g.autoload.battleInterfaceToggle = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;

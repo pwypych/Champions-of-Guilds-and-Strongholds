@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Draws units to battlefield when viewport is ready
 g.autoload.unitsDraw = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;

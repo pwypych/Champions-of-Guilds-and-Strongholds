@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Adds indicators (Miss, Low etc.) after unit recieves damage in battle
 g.autoload.unitDamageGradeBonus = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;
@@ -12,7 +14,6 @@ g.autoload.unitDamageGradeBonus = (inject) => {
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
-    // adds miss! low! mid! high! crit! indicators to battle
     onRecentActivityDifferance();
   })();
 
