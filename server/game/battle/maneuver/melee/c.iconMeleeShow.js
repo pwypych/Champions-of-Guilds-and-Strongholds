@@ -2,31 +2,18 @@
 
 'use strict';
 
-g.autoload.iconMelee = (inject) => {
+// What does this module do?
+// Checks if players active unit is next to enemy(ies) and shows melee icon(s)
+g.autoload.iconMeleeShow = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;
 
-  const blockWidthPx = 32;
-  const blockHeightPx = 32;
-
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
-    onViewportBattleReady();
     onEntitiesGet();
   })();
-
-  function onViewportBattleReady() {
-    walkie.onEvent(
-      'viewportBattleReady_',
-      'iconMelee.js',
-      () => {
-        drawIconsOnce();
-      },
-      false
-    );
-  }
 
   function onEntitiesGet() {
     walkie.onEvent(
@@ -37,47 +24,6 @@ g.autoload.iconMelee = (inject) => {
       },
       false
     );
-  }
-
-  function drawIconsOnce() {
-    let iconMeleeContainer = battleContainer.getChildByName(
-      'iconMeleeContainer'
-    );
-
-    if (!iconMeleeContainer) {
-      iconMeleeContainer = new PIXI.Container();
-      iconMeleeContainer.name = 'iconMeleeContainer';
-      battleContainer.addChildZ(iconMeleeContainer, 10000);
-    }
-
-    let battleWidth;
-    let battleHeight;
-
-    if (iconMeleeContainer.children.length < 1) {
-      _.forEach(freshEntities(), (entity) => {
-        if (entity.battleStatus === 'active') {
-          battleWidth = entity.battleWidth;
-          battleHeight = entity.battleHeight;
-        }
-      });
-
-      _.times(battleWidth, (x) => {
-        _.times(battleHeight, (y) => {
-          const iconName = 'iconMelee_' + x + '_' + y;
-
-          const textureName = 'iconMelee';
-          const texture = PIXI.loader.resources[textureName].texture;
-          const icon = new PIXI.Sprite(texture);
-          icon.name = iconName;
-          iconMeleeContainer.addChild(icon);
-
-          icon.x = x * blockWidthPx;
-          icon.y = y * blockHeightPx;
-          icon.alpha = 0.55;
-          icon.visible = false;
-        });
-      });
-    }
   }
 
   function hideIcons() {
