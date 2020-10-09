@@ -3,7 +3,7 @@
 'use strict';
 
 // What does this module do?
-// Draws marker for active unit
+// Draws marker with blink for active player unit hide it for all other units
 g.autoload.markerActiveDraw = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;

@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Draws all hidden movement icons once on whole battle area
 g.autoload.iconMovementDraw = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;

@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Draws all hidden fly icons once on whole battle area
 g.autoload.iconFlyDraw = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;
