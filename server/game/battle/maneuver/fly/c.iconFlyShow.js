@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Shows fly icons for active player unit that can fly
 g.autoload.iconFlyShow = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;

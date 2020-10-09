@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Shows walk icons for active player unit that can walk
 g.autoload.iconWalkShow = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;
