@@ -2,7 +2,7 @@
 
 'use strict';
 
-g.autoload.walkIconShow = (inject) => {
+g.autoload.iconWalkShow = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;
@@ -16,7 +16,7 @@ g.autoload.walkIconShow = (inject) => {
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGet_',
-      'walkIconShow.js',
+      'iconWalkShow.js',
       () => {
         findPlayerId();
       },
@@ -62,7 +62,7 @@ g.autoload.walkIconShow = (inject) => {
 
   function checkUnitMovement(unit) {
     if (!unit.unitStats.current.maneuvers.walk) {
-      // console.log('walkIconShow: This unit does not walk!');
+      // console.log('iconWalkShow: This unit does not walk!');
       return;
     }
 
