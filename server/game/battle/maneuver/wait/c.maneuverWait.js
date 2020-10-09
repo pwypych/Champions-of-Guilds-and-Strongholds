@@ -3,7 +3,7 @@
 'use strict';
 
 // What does this module do?
-// Allow unit to skip one maneuver
+// Listens for clicks on wait button, and posts that maneuver
 g.autoload.maneuverWait = (inject) => {
   const $body = inject.$body;
   const freshEntities = inject.freshEntities;
