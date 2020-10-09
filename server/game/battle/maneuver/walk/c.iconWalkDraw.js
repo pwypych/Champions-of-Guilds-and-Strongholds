@@ -3,8 +3,8 @@
 'use strict';
 
 // What does this module do?
-// Draws all hidden movement icons once on whole battle area
-g.autoload.iconMovementDraw = (inject) => {
+// Draws all hidden walk icons once on whole battle area
+g.autoload.iconWalkDraw = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;
@@ -21,7 +21,7 @@ g.autoload.iconMovementDraw = (inject) => {
   function onViewportBattleReady() {
     walkie.onEvent(
       'viewportBattleReady_',
-      'iconMovementDraw.js',
+      'iconWalkDraw.js',
       () => {
         drawIconsOnce();
       },
@@ -30,20 +30,20 @@ g.autoload.iconMovementDraw = (inject) => {
   }
 
   function drawIconsOnce() {
-    let iconMovementContainer = battleContainer.getChildByName(
-      'iconMovementContainer'
+    let iconWalkContainer = battleContainer.getChildByName(
+      'iconWalkContainer'
     );
 
-    if (!iconMovementContainer) {
-      iconMovementContainer = new PIXI.Container();
-      iconMovementContainer.name = 'iconMovementContainer';
-      battleContainer.addChildZ(iconMovementContainer, 3);
+    if (!iconWalkContainer) {
+      iconWalkContainer = new PIXI.Container();
+      iconWalkContainer.name = 'iconWalkContainer';
+      battleContainer.addChildZ(iconWalkContainer, 3);
     }
 
     let battleWidth;
     let battleHeight;
 
-    if (iconMovementContainer.children.length < 1) {
+    if (iconWalkContainer.children.length < 1) {
       _.forEach(freshEntities(), (entity) => {
         if (entity.battleStatus === 'active') {
           battleWidth = entity.battleWidth;
@@ -53,13 +53,13 @@ g.autoload.iconMovementDraw = (inject) => {
 
       _.times(battleWidth, (x) => {
         _.times(battleHeight, (y) => {
-          const iconName = 'iconMovement_' + x + '_' + y;
+          const iconName = 'iconWalk_' + x + '_' + y;
 
           const textureName = 'iconMovement';
           const texture = PIXI.loader.resources[textureName].texture;
           const icon = new PIXI.Sprite(texture);
           icon.name = iconName;
-          iconMovementContainer.addChild(icon);
+          iconWalkContainer.addChild(icon);
 
           icon.x = x * blockWidthPx;
           icon.y = y * blockHeightPx;

@@ -47,15 +47,15 @@ g.autoload.walkIconShow = (inject) => {
   }
 
   function hideIcons() {
-    const iconMovementContainer = battleContainer.getChildByName(
-      'iconMovementContainer'
+    const iconWalkContainer = battleContainer.getChildByName(
+      'iconWalkContainer'
     );
 
-    if (!iconMovementContainer) {
+    if (!iconWalkContainer) {
       return;
     }
 
-    _.forEach(iconMovementContainer.children, (icon) => {
+    _.forEach(iconWalkContainer.children, (icon) => {
       icon.visible = false;
     });
   }
@@ -142,17 +142,17 @@ g.autoload.walkIconShow = (inject) => {
   }
 
   function showIcon(position) {
-    const iconMovementContainer = battleContainer.getChildByName(
-      'iconMovementContainer'
+    const iconWalkContainer = battleContainer.getChildByName(
+      'iconWalkContainer'
     );
 
     // happens when there are no units on battlefield
-    if (!iconMovementContainer) {
+    if (!iconWalkContainer) {
       return;
     }
 
-    const iconName = 'iconMovement_' + position.x + '_' + position.y;
-    const icon = iconMovementContainer.getChildByName(iconName);
+    const iconName = 'iconWalk_' + position.x + '_' + position.y;
+    const icon = iconWalkContainer.getChildByName(iconName);
     icon.visible = true;
   }
 };
