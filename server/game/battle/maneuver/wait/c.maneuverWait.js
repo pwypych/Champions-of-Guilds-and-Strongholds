@@ -4,7 +4,7 @@
 
 // What does this module do?
 // Allow unit to skip one maneuver
-g.autoload.waitMock = (inject) => {
+g.autoload.maneuverWait = (inject) => {
   const $body = inject.$body;
   const freshEntities = inject.freshEntities;
   const auth = inject.auth;
@@ -41,7 +41,7 @@ g.autoload.waitMock = (inject) => {
     data.entityId = unitId;
 
     $.post('/ajax/maneuverWait' + auth.uri, data, () => {
-      console.log('waitMock: POST -> /ajax/maneuverWait', data);
+      console.log('maneuverWait: POST -> /ajax/maneuverWait', data);
     });
   }
 };

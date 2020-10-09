@@ -25,7 +25,7 @@ g.autoload.testFeatureLink = (inject) => {
     const data = {};
     console.log('testFeatureLink: sendPost: Trying to post!');
     $.post('/ajax/maneuverShoot' + auth.uri, data, () => {
-      console.log('waitMock: POST -> /ajax/maneuverShoot', data);
+      console.log('testFeatureLink: POST -> /ajax/maneuverShoot', data);
     });
   }
 };
