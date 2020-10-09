@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Draws marker with blink for active enemy unit hide it for all other units
 g.autoload.markerActiveEnemyDraw = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;
@@ -41,12 +43,14 @@ g.autoload.markerActiveEnemyDraw = (inject) => {
 
   function findActiveUnit(playerId) {
     _.forEach(freshEntities(), (entity, id) => {
-      const unitId = id;
+      if (entity.unitStats) {
+        const unitId = id;
 
-      if (entity.unitStats && entity.active && entity.owner !== playerId) {
-        drawMarkerActiveEnemy(unitId);
-      } else {
-        hideMarker(unitId);
+        if (entity.active && entity.owner !== playerId) {
+          drawMarkerActiveEnemy(unitId);
+        } else {
+          hideMarker(unitId);
+        }
       }
     });
   }
