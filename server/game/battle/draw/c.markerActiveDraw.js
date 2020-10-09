@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Draws marker for active unit
 g.autoload.markerActiveDraw = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;
@@ -41,12 +43,14 @@ g.autoload.markerActiveDraw = (inject) => {
 
   function findActiveUnit(playerId) {
     _.forEach(freshEntities(), (entity, id) => {
-      const unitId = id;
+      if (entity.unitStats) {
+        const unitId = id;
 
-      if (entity.unitStats && entity.active && entity.owner === playerId) {
-        drawMarkerActive(unitId);
-      } else {
-        hideMarker(unitId);
+        if (entity.active && entity.owner === playerId) {
+          drawMarkerActive(unitId);
+        } else {
+          hideMarker(unitId);
+        }
       }
     });
   }
