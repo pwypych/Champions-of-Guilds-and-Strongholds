@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Renders flying arrow animation after unit gotShot or justDiedShot with shoot attack
 g.autoload.unitGotShotAnimation = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;
@@ -12,7 +14,6 @@ g.autoload.unitGotShotAnimation = (inject) => {
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
-    // Renders arrow after unit gotShot or justDiedShot
     onRecentActivityDifferance();
   })();
 

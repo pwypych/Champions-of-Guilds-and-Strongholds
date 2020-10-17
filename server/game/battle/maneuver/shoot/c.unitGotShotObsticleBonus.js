@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Renders negative obsticle bonus when unit gotGotShot or justDiedShot with shoot attack
 g.autoload.unitGotShotObsticleBonus = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;

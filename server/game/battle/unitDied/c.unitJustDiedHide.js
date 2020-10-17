@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Hides unit and its amount and marker, after unit justDiedHit or justDiedShot
 g.autoload.unitJustDiedHide = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;

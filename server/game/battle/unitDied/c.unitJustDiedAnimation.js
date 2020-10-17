@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Renders grave animation after unit justDiedHit or justDiedShot
 g.autoload.unitJustDiedAnimation = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;

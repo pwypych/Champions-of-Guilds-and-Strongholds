@@ -3,7 +3,7 @@
 'use strict';
 
 // What does this module do?
-// Renders obsticle bonus after unit gotHit with melee attack or justDiedHit
+// Renders obsticle bonus when unit gotHit or justDiedHit with melee attack
 g.autoload.unitGotHitObsticleBonus = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;
