@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Renders slash animation after unit gotHit with melee attack or justDiedHit
 g.autoload.unitGotHitAnimation = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;
@@ -12,7 +14,6 @@ g.autoload.unitGotHitAnimation = (inject) => {
   const battleContainer = viewport.getChildByName('battleContainer');
 
   (function init() {
-    // Renders slash animation after unit gotHit with melee attack or justDiedHit
     onRecentActivityDifferance();
   })();
 

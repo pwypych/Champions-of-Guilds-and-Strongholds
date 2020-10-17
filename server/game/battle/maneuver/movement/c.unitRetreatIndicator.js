@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Renders retreat indicator after unit moves/runs from an enemy that is standing near
 g.autoload.unitRetreatIndicator = (inject) => {
   const walkie = inject.walkie;
   const viewport = inject.viewport;
