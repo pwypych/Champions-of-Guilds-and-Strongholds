@@ -140,9 +140,13 @@ g.autoload.walkEmptyBlockClick = (inject) => {
   }
 
   function triggerUnitPathVerifiedByServer(entityId, responseUnitPath) {
-    walkie.triggerEvent('movementPathVerifiedByServer_', 'battleClick.js', {
-      entityId: entityId,
-      path: responseUnitPath
-    });
+    walkie.triggerEvent(
+      'movementPathVerifiedByServer_',
+      'walkEmptyBlockClick.js',
+      {
+        entityId: entityId,
+        path: responseUnitPath
+      }
+    );
   }
 };
