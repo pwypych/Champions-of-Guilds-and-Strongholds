@@ -2,6 +2,10 @@
 
 'use strict';
 
+// What does this module do?
+// Tweens an entitiy through a path in both battle and world state when server confirms movement,
+// or when recent activity onMovement has been recieved. That way it moves player unit right
+// after clicking, and moves enemy unit on server changes
 g.autoload.tweenMovementPath = (inject) => {
   const walkie = inject.walkie;
   const viewport = inject.viewport;

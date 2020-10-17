@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Checks changes in every entitie.recentActivity and trigger event if change in activity was found
 g.autoload.recentActivityDifferance = (inject) => {
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;

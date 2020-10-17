@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Holds entities object, and refreshes it with every new entities every time they are downloaded
 g.setup.freshEntities = (walkie) => {
   let entities = {};
 
