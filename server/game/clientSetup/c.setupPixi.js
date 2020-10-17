@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Sets up PIXI app with canvas and some options
 g.setup.setupPixi = ($body) => {
   const $canvas = $('<canvas id="pixi-canvas"></canvas>');
   const eCanvas = $canvas.get(0);

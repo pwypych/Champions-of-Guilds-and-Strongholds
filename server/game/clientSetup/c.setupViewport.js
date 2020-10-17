@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Sets up PIXI viewport with options and basic containers
 g.setup.setupViewport = (app) => {
   const options = {};
   options.screenWidth = window.innerWidth;

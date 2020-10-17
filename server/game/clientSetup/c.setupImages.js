@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Loads all game sprites into PIXI
 g.setup.setupImages = (spriteFilenameArray, callback) => {
   (function init() {
     forEachSpriteFilename();

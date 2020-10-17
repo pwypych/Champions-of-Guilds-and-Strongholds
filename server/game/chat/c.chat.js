@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Listens to chat message events and displays them in chat
 g.autoload.chat = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;

@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Uses cheated entities endpoint to get player tokens and adds change player links to cheat menu
 g.autoload.playerChangeButtons = (inject) => {
   const $body = inject.$body;
   const auth = inject.auth;

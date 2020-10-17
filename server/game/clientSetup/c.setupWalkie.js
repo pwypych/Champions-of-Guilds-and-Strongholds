@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Sets up walkie library, an event emitter with better console.log
 g.setup.setupWalkie = () => {
   const walkie = $('body');
 

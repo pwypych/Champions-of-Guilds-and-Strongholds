@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Defines cheat menu test link, that can be used to test different POST requests to endpoints from here
 g.autoload.testFeatureLink = (inject) => {
   const $body = inject.$body;
   const auth = inject.auth;

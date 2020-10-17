@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Shows canvas on world and battle states, hides it on other states
 g.autoload.canvasWrapperToggle = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;

@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Sets up viewport clamp, so viewport never leaves too much outside world boundaries
 g.autoload.viewportClamp = (inject) => {
   const walkie = inject.walkie;
   const viewport = inject.viewport;

@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Checks state changes in entities and triggers event if state was changed
 g.autoload.stateChange = (inject) => {
   const walkie = inject.walkie;
 
