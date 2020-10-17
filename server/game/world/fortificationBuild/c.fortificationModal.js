@@ -87,6 +87,8 @@ g.autoload.fortificationModal = (inject) => {
 
     $wrapper.find('[data-example-fortification]').hide();
     $wrapper.find('[data-example-resource]').hide();
+
+    triggerFortificationModalDrawnEvent();
   }
 
   function onButtonClick($button, fortificationName) {
@@ -108,5 +110,12 @@ g.autoload.fortificationModal = (inject) => {
       );
       $button.attr('disabled', 'disabled');
     });
+  }
+
+  function triggerFortificationModalDrawnEvent() {
+    walkie.triggerEvent(
+      'fortificationModalDrawnEvent_',
+      'fortificationModal.js'
+    );
   }
 };

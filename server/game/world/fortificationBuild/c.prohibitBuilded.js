@@ -18,8 +18,7 @@ g.autoload.prohibitBuilded = (inject) => {
 
   function onFortificationModalDrawn() {
     walkie.onEvent(
-      // 'fortificationModalDrawn',
-      'viewportWorldReady_',
+      'fortificationModalDrawnEvent_',
       'prohibitBuilded.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
