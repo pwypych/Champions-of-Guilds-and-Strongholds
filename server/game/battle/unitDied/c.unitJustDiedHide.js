@@ -41,11 +41,11 @@ g.autoload.unitJustDiedHide = (inject) => {
 
   function waitForAnimation(unitId, unit, unitContainer) {
     setTimeout(() => {
-      hideFigureSprite(unitId, unit, unitContainer);
+      hideUnitSprite(unitId, unit, unitContainer);
     }, 500);
   }
 
-  function hideFigureSprite(unitId, unit, unitContainer) {
+  function hideUnitSprite(unitId, unit, unitContainer) {
     const sprite = unitContainer.getChildByName('sprite');
     if (sprite) {
       sprite.visible = false;
