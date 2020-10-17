@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// When a unit moves in battle it centers viewport to that unit while tweening
 g.autoload.unitFocusTween = (inject) => {
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;

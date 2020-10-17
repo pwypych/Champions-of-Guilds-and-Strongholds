@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// When a new unit becomes active it centers viewport to that position
 g.autoload.unitFocusActive = (inject) => {
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;
