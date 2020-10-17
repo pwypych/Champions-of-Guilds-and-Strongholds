@@ -34,9 +34,13 @@ g.autoload.heroPathAcceptedPost = (inject) => {
   }
 
   function triggerUnitPathVerifiedByServer(entityId, responseUnitPath) {
-    walkie.triggerEvent('movementPathVerifiedByServer_', 'battleClick.js', {
-      entityId: entityId,
-      path: responseUnitPath
-    });
+    walkie.triggerEvent(
+      'movementPathVerifiedByServer_',
+      'heroPathAcceptedPost.js',
+      {
+        entityId: entityId,
+        path: responseUnitPath
+      }
+    );
   }
 };
