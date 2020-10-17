@@ -82,32 +82,11 @@ g.autoload.fortificationModal = (inject) => {
       $($button).removeAttr('data-button');
 
       $wrapper.append($fortification);
-      generateFortificationBuildedArray(playerId, $button, name);
+      onButtonClick($button, name);
     });
 
     $wrapper.find('[data-example-fortification]').hide();
     $wrapper.find('[data-example-resource]').hide();
-  }
-
-  function generateFortificationBuildedArray(playerId, $button, name) {
-    const fortificationBuildedArray = [];
-    _.forEach(freshEntities(), (entity) => {
-      if (entity.fortificationName && entity.owner === playerId) {
-        fortificationBuildedArray.push(entity.fortificationName);
-      }
-    });
-
-    disableButton($button, name, fortificationBuildedArray);
-  }
-
-  function disableButton($button, name, fortificationBuildedArray) {
-    const isFortificationBuilded = _.includes(fortificationBuildedArray, name);
-
-    if (isFortificationBuilded) {
-      $button.attr('disabled', 'disabled');
-    }
-
-    onButtonClick($button, name);
   }
 
   function onButtonClick($button, fortificationName) {
