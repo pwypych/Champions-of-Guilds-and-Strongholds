@@ -2,7 +2,9 @@
 
 'use strict';
 
-g.autoload.figuresReplaceDead = (inject) => {
+// What does this module do?
+// Hides figure and shows blood, dust or grave after figure has been killed/removed
+g.autoload.figureDeadReplace = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;
@@ -17,7 +19,7 @@ g.autoload.figuresReplaceDead = (inject) => {
   function onViewPortWorldReady() {
     walkie.onEvent(
       'viewportWorldReady_',
-      'figuresReplaceDead.js',
+      'figureDeadReplace.js',
       () => {
         forEachFigure();
       },
@@ -28,7 +30,7 @@ g.autoload.figuresReplaceDead = (inject) => {
   function onRecentActivityDifferanceDone() {
     walkie.onEvent(
       'recentActivityDifferanceFound_',
-      'figuresReplaceDead.js',
+      'figureDeadReplace.js',
       () => {
         forEachFigure();
       },
