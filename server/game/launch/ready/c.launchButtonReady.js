@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// It listens to user ready button click, and sends information that player is ready to server after click
 g.autoload.launchButtonReady = (inject) => {
   const $body = inject.$body;
   const auth = inject.auth;

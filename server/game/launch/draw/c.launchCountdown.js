@@ -3,10 +3,11 @@
 'use strict';
 
 // What does this module do?
-// Checks if every player is ready in launchState and starts countdown interval
+// Checks if every player is ready in launchState and starts (and clears) countdown interval
 g.autoload.launchCountdown = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
 
   const $countdown = $body.find('.js-launch .js-countdown');
 
@@ -20,19 +21,22 @@ g.autoload.launchCountdown = (inject) => {
     walkie.onEvent(
       'entitiesGet_',
       'launchTable.js',
-      (entities) => {
-        if (entities[entities._id].state === 'launchState') {
-          checkEveryPlayerReady(entities);
+      () => {
+        const gameEntity = freshEntities()[freshEntities()._id];
+        if (gameEntity.state !== 'launchState') {
+          return;
         }
+
+        checkEveryPlayerReady();
       },
       false
     );
   }
 
-  function checkEveryPlayerReady(entities) {
+  function checkEveryPlayerReady() {
     let isEveryPlayerReady = true;
 
-    _.forEach(entities, (entity) => {
+    _.forEach(freshEntities(), (entity) => {
       if (entity.playerData) {
         if (!entity.readyForLaunch) {
           isEveryPlayerReady = false;

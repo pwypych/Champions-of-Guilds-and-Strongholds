@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// After state is changed to launchState it fills select input with options of different races to choose from
 g.autoload.launchSelectRaceOptions = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;
@@ -20,7 +22,6 @@ g.autoload.launchSelectRaceOptions = (inject) => {
       'launchSelectRaceOptions.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
-
         if (gameEntity.state !== 'launchState') {
           return;
         }

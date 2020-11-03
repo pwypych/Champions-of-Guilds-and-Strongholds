@@ -2,9 +2,12 @@
 
 'use strict';
 
+// What does this module do?
+// Checks if player is readyForLaunch and disables UI and buttons
 g.autoload.launchDisableUi = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;
+  const freshEntities = inject.freshEntities;
 
   const $button = $body.find('.js-launch .js-button-ready');
   const $inputName = $body.find('.js-launch .js-input-name');
@@ -18,17 +21,20 @@ g.autoload.launchDisableUi = (inject) => {
     walkie.onEvent(
       'entitiesGet_',
       'launchTable.js',
-      (entities) => {
-        if (entities[entities._id].state === 'launchState') {
-          disableUi(entities);
+      () => {
+        const gameEntity = freshEntities()[freshEntities()._id];
+        if (gameEntity.state !== 'launchState') {
+          return;
         }
+
+        disableUi();
       },
       false
     );
   }
 
-  function disableUi(entities) {
-    const player = _.find(entities, 'playerCurrent');
+  function disableUi() {
+    const player = _.find(freshEntities(), 'playerCurrent');
 
     if (player.readyForLaunch) {
       $button.attr('disabled', 'disabled');

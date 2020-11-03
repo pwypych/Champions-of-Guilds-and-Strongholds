@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Updates launch table with user data, so players can live see options other players have chosen
 g.autoload.launchTable = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;
@@ -19,7 +21,6 @@ g.autoload.launchTable = (inject) => {
       'launchTable.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
-
         if (gameEntity.state !== 'launchState') {
           return;
         }

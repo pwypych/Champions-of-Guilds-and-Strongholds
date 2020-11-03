@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// It listens to user name input, and sends updates to server while player is writing the name
 g.autoload.launchInputName = (inject) => {
   const $body = inject.$body;
   const auth = inject.auth;

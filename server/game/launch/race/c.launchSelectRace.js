@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// It listens to user race select, and sends updates to server after player has selected
 g.autoload.launchSelectRace = (inject) => {
   const $body = inject.$body;
   const auth = inject.auth;

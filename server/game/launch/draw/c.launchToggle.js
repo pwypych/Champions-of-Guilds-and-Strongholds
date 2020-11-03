@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Shows launch table and UI when in launchState, hides it in other states
 g.autoload.launchToggle = (inject) => {
   const walkie = inject.walkie;
   const $body = inject.$body;
