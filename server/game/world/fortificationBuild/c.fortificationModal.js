@@ -68,6 +68,7 @@ g.autoload.fortificationModal = (inject) => {
 
       _.forEach(fortification.cost, (cost, resource) => {
         const $resource = $resourceExample.clone();
+        $($resource).attr('data-resource', resource);
         const spriteSrc = '/sprite/' + resource + '.png';
 
         $resource.find('span').text(cost);
