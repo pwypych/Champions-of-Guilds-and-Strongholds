@@ -4,7 +4,6 @@
 
 // What does this module do
 // Disable buy buttons of fortification that cannot be build
-
 g.autoload.prohibitBuilded = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;

@@ -4,7 +4,6 @@
 
 // What does this module do
 // If not enough any resorce to build fortification color it and disable buy button
-
 g.autoload.prohibitResourceless = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;
