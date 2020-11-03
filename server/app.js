@@ -117,6 +117,12 @@ function buildSprites() {
       return;
     }
 
+    // Create directory if not exits, git likes to delete this dir
+    const pathDir = path.join(environment.basepath, '/public/sprite/');
+    if (!fs.existsSync(pathDir)){
+      fs.mkdirSync(pathDir);
+    }
+
     pathFiles.forEach((pathFile) => {
       const fileName = path.basename(pathFile);
       const pathCopy = path.join(
