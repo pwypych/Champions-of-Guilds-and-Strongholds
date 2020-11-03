@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Shows world interface buttons when in worldState, hides them in other states
 g.autoload.worldInterfaceToggle = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;

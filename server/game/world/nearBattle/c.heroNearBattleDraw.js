@@ -2,7 +2,9 @@
 
 'use strict';
 
-g.autoload.heroNearBattleAnimation = (inject) => {
+// What does this module do?
+// Draws battle marker if hero stands next by NPC unit and battle will be initiated
+g.autoload.heroNearBattleDraw = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;
@@ -19,12 +21,12 @@ g.autoload.heroNearBattleAnimation = (inject) => {
   function onRecentActivityDifferance() {
     walkie.onEvent(
       'recentActivityDifferanceFound_',
-      'heroNearBattleAnimation.js',
+      'heroNearBattleDraw.js',
       (data) => {
         if (data.entity.recentActivity.name === 'onMovement') {
           const pathLength = data.entity.recentActivity.path.length;
           const position = data.entity.recentActivity.path[pathLength - 1];
-          // console.log('heroNearBattleAnimation: position:', position);
+          // console.log('heroNearBattleDraw: position:', position);
           checkIsPositionBattle(position, pathLength);
         }
       },

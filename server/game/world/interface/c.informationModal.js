@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Updates data in information modal
 g.autoload.informationModal = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;

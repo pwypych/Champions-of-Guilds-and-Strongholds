@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// It checks if hero has just landed on visitable figure, and triggers a visit action, so that visitable can react
 g.autoload.heroVisit = (inject) => {
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;

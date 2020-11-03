@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Draws color flag on a figure and updates, shows/hides in ongoing game
 g.autoload.colorFlagDraw = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;

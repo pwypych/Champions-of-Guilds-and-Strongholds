@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// It prepares unit recruit table on info modal and fills it with player units possible to buy and buy buttons
 g.autoload.recruitUnitPrepare = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;

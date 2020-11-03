@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// It listens to info button clicks and toggles info modal
 g.autoload.informationButton = (inject) => {
   const $body = inject.$body;
 

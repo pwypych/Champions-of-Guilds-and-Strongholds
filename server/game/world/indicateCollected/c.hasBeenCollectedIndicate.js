@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Adds indicator after hero collects a resource
 g.autoload.hasBeenCollectedIndicate = (inject) => {
   const walkie = inject.walkie;
   const viewport = inject.viewport;

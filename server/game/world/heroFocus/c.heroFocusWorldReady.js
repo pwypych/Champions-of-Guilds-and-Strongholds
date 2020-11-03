@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// When a world is loaded it centers viewport on players hero position
 g.autoload.heroFocusWorldReady = (inject) => {
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;

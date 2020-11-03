@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Draws random background in world state
 g.autoload.worldBackgroundDraw = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;

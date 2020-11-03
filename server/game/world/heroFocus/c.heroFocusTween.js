@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// When player hero moves in worldState it centers viewport to that unit while tweening
 g.autoload.heroFocusTween = (inject) => {
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;
