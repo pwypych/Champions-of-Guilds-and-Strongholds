@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// It listens to confirm button click and sends confirmation info to server, so new battle or world can be loaded after summary
 g.autoload.summaryConfirm = (inject) => {
   const $body = inject.$body;
   const auth = inject.auth;

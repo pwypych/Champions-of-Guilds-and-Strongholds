@@ -3,7 +3,7 @@
 'use strict';
 
 // What does this module do?
-// Shows battle summary when state is changed to summaryState
+// Shows battle summary when state is changed to summaryState and shows summary info
 g.autoload.summaryToggle = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;

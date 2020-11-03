@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// It listens to keypress of "1" or "0" keyboard button and loads previous or next save (game is saved after every move)
 g.autoload.keyboardLoadSavedGame = (inject) => {
   const walkie = inject.walkie;
   const auth = inject.auth;
