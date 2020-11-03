@@ -2,6 +2,8 @@
 
 'use strict';
 
+// What does this module do?
+// Checks if every player is ready in launchState and starts countdown interval
 g.autoload.launchCountdown = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;
@@ -48,9 +50,12 @@ g.autoload.launchCountdown = (inject) => {
     isCountDownRunning = true;
 
     let count = 5;
-    setInterval(() => {
+    const timer = setInterval(() => {
       $countdown.text(count);
       count -= 1;
+      if (count === 0) {
+        clearInterval(timer);
+      }
     }, 1000);
   }
 };
