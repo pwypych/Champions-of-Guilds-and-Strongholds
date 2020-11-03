@@ -82,6 +82,26 @@ function buildClient() {
     fs.writeFileSync(pathWrite, build);
 
     debug('buildClient: bundle.js', build.length);
+    removeSprites();
+  });
+}
+
+function removeSprites() {
+  const pathRead = path.join(
+    environment.basepath,
+    '/public/sprite/*'
+  );
+  glob(pathRead, {}, (error, pathFiles) => {
+    if (error) {
+      debug('removeSprites: error:', error);
+      return;
+    }
+
+    pathFiles.forEach((pathFile) => {
+      fs.unlinkSync(pathFile);
+    });
+
+    debug('removeSprites:', pathFiles.length);
     buildSprites();
   });
 }

@@ -1,6 +1,7 @@
 !.gitkeep
 .tern-port
 /public/build/bundle.js
+/public/sprite/
 /_assets/
 /_/
 Session.vim
