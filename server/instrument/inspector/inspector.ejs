@@ -8,7 +8,22 @@
     <title>Champions of Guilds &amp; Strongholds</title>
 
     <link rel="stylesheet" href="<%= viewModel.baseurl %>/css/style.css?v=<%= viewModel.timestamp %>">
-    <link rel="stylesheet" href="<%= viewModel.baseurl %>/css/ui.css?v=<%= viewModel.timestamp %>">
+
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/library/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/library/pretty-print-json-0.3.0.js"></script>
+
+    /*! pretty-print-json v0.3.0 ~ github.com/center-key/pretty-print-json ~ MIT License */
+    <style>
+      .json-key           { color: brown; }
+      .json-string        { color: olive; }
+      .json-number        { color: navy; }
+      .json-boolean       { color: teal; }
+      .json-null          { color: dimgray; }
+      a.json-link         { color: purple; transition: all 400ms; }
+      a.json-link:visited { color: slategray; }
+      a.json-link:hover   { color: blueviolet; }
+      a.json-link:active  { color: slategray; }
+    </style>
 
     <style>
       body {
@@ -18,6 +33,13 @@
   </head>
 
   <body>
-    <%= JSON.stringify(viewModel.entities) %>
+    <pre></pre> 
   </body>
+
+  <script>
+    const entities = <%- JSON.stringify(viewModel.entities) %>
+    console.log(entities);
+    const $body = $('body pre');
+    $body.html(prettyPrintJson.toHtml(entities));
+  </script>
 </html>
