@@ -3,7 +3,7 @@
 'use strict';
 
 // What does this module do
-// If not enough any resorce to build fortification color it and disable buy button
+// Disable buy button in not enough resources to build fortification
 g.autoload.prohibitResourceless = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;
@@ -13,7 +13,7 @@ g.autoload.prohibitResourceless = (inject) => {
 
   (function init() {
     onFortificationModalDrawn();
-    onRecentActivityDifferance();
+    onEntitiesGet();
   })();
 
   function onFortificationModalDrawn() {
@@ -33,9 +33,9 @@ g.autoload.prohibitResourceless = (inject) => {
     );
   }
 
-  function onRecentActivityDifferance() {
+  function onEntitiesGet() {
     walkie.onEvent(
-      'recentActivityDifferanceFound_',
+      'entitiesGet_',
       'prohibitResourceless.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
@@ -76,18 +76,18 @@ g.autoload.prohibitResourceless = (inject) => {
     const player = freshEntities()[playerId];
     const playerResources = player.playerResources;
 
-    findFortificationsToBuild(fortificationBuildedArray, playerResources);
+    findNotbuildedFortifications(fortificationBuildedArray, playerResources);
   }
 
-  function findFortificationsToBuild(
+  function findNotbuildedFortifications(
     fortificationBuildedArray,
     playerResources
   ) {
-    const singleFortifications = $modal
+    const fortificationArray = $modal
       .find('[data-single-fortification]')
       .toArray();
 
-    singleFortifications.forEach(($fortification) => {
+    fortificationArray.forEach(($fortification) => {
       const $button = $($fortification).find('button');
       const fortificationName = $($button).data('fortification-name');
       const isFortificationBuilded = _.includes(
@@ -102,7 +102,6 @@ g.autoload.prohibitResourceless = (inject) => {
   }
 
   function checkFortificationCost($fortification, playerResources) {
-    let notEnoughResource = false;
     const $button = $($fortification).find('button');
     $button.attr('disabled', false);
     const fortificationCost = $($fortification)
@@ -120,12 +119,8 @@ g.autoload.prohibitResourceless = (inject) => {
 
       if (resourceAmount > playerResources[resource]) {
         $spanAmount.css({ color: '#f00' });
-        notEnoughResource = true;
+        $button.attr('disabled', true);
       }
     });
-
-    if (notEnoughResource) {
-      $button.attr('disabled', true);
-    }
   }
 };
