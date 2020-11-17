@@ -110,7 +110,12 @@ g.autoload.fortificationModal = (inject) => {
         '[data-fortification-name=' + fortificationName + ']'
       );
       $button.attr('disabled', 'disabled');
+      triggerFortificationBuildedEvent();
     });
+  }
+
+  function triggerFortificationBuildedEvent() {
+    walkie.triggerEvent('fortificationBuildedEvent_', 'fortificationModal.js');
   }
 
   function triggerFortificationModalDrawnEvent() {

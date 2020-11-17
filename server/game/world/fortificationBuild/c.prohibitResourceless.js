@@ -13,12 +13,30 @@ g.autoload.prohibitResourceless = (inject) => {
 
   (function init() {
     onFortificationModalDrawn();
-    onEntitiesGet();
+    onFortificationBuilded();
+    // onEntitiesGet();
   })();
 
   function onFortificationModalDrawn() {
     walkie.onEvent(
       'fortificationModalDrawnEvent_',
+      'prohibitResourceless.js',
+      () => {
+        const gameEntity = freshEntities()[freshEntities()._id];
+
+        if (gameEntity.state !== 'worldState') {
+          return;
+        }
+
+        findPlayerId();
+      },
+      false
+    );
+  }
+
+  function onFortificationBuilded() {
+    walkie.onEvent(
+      'fortificationBuildedEvent_',
       'prohibitResourceless.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
