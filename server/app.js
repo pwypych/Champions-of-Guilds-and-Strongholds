@@ -344,6 +344,15 @@ function setupInstrumentRoutesAndLibraries() {
     )
   );
 
+  app.get(
+    '/inspector',
+    require('./instrument/inspector/inspector.js')(
+      environment,
+      db,
+      templateToHtml
+    )
+  );
+
   debug('setupInstrumentRoutesAndLibraries');
   setupMiddleware();
 }
