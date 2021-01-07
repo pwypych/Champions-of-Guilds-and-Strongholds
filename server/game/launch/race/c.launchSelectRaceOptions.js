@@ -10,7 +10,7 @@ g.autoload.launchSelectRaceOptions = (inject) => {
   const freshEntities = inject.freshEntities;
   const blueprint = inject.blueprint;
 
-  const $select = $body.find('.js-launch .js-select-race');
+  const $select = $body.find('.js-launch [data-select-race]');
 
   (function init() {
     onViewportLaunchReady();
