@@ -9,7 +9,7 @@ g.autoload.launchTable = (inject) => {
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;
 
-  const $table = $body.find('.js-launch .js-table-name');
+  const $table = $body.find('.js-launch [data-table-name]');
 
   (function init() {
     onEntitiesGet();
