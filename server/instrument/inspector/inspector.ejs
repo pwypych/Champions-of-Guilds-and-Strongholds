@@ -5,20 +5,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
 
-    <title>Champions of Guilds &amp; Strongholds</title>
+    <title>Inspector Entities</title>
 
     <link rel="stylesheet" href="<%= viewModel.baseurl %>/css/style.css?v=<%= viewModel.timestamp %>">
 
     <script type="text/javascript" src="<%= viewModel.baseurl %>/library/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="<%= viewModel.baseurl %>/library/pretty-print-json-0.3.0.js"></script>
 
-    /*! pretty-print-json v0.3.0 ~ github.com/center-key/pretty-print-json ~ MIT License */
     <style>
-      .json-key           { color: brown; }
-      .json-string        { color: olive; }
-      .json-number        { color: navy; }
-      .json-boolean       { color: teal; }
-      .json-null          { color: dimgray; }
+      .json-key           { color: #eeeeec; }
+      .json-string        { color: #4e9a06; }
+      .json-number        { color: #cc0000; }
+      .json-boolean       { color: #3465a4; }
+      .json-null          { color: #ad7fa8; }
       a.json-link         { color: purple; transition: all 400ms; }
       a.json-link:visited { color: slategray; }
       a.json-link:hover   { color: blueviolet; }
@@ -28,18 +27,101 @@
     <style>
       body {
         padding: 10px;
+        background-color: #300a24;
+        color: #999;
+        font-family: "Ubuntu Mono", monospace;
+        overflow: auto;
+      }
+
+      pre {
+        margin-top: 0px;
+        font-family: "Ubuntu Mono", monospace;
+      }
+
+      h1 {
+        margin-top: 0px;
+      }
+
+      .board {
+        margin-top: 50px;
+      }
+
+      .entity {
+        color: #fce94f;
+      }
+
+      .row {
+        margin-bottom: 20px;
+      }
+
+      .menu {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        padding: 10px;
+        background-color: #300a24;
       }
     </style>
   </head>
 
   <body>
-    <pre></pre> 
+    <div class="menu">
+    Entity: <input data-search-entity type="text" placeholder="Search entity...">
+    &nbsp;&nbsp;&nbsp;
+    Component: <input data-search-component type="text" placeholder="Search component...">
+    </div>
+
+    <div data-board class="board">
+    </div>
   </body>
 
   <script>
-    const entities = <%- JSON.stringify(viewModel.entities) %>
-    console.log(entities);
-    const $body = $('body pre');
-    $body.html(prettyPrintJson.toHtml(entities));
+    const $board = $('[data-board]');
+
+    const entities = <%- JSON.stringify(viewModel.entities) %>;
+
+    $.each(entities, (key, entity) => {
+      let html = ''
+      html += '<div data-row class="row">';
+      html += '<span data-entity class="entity">' + key + ':</span>';
+      html += '<pre data-component>' + prettyPrintJson.toHtml(entity) + '</pre>';
+      html += '</div>';
+      $board.append(html);
+    });
+
+  </script>
+
+  <script>
+    $('[data-search-entity]').on('input', function() {
+      filterRows();
+    });
+
+    $('[data-search-component]').on('input', function() {
+      filterRows();
+    });
+
+    function filterRows() {
+      const valueEntity = $('[data-search-entity').val();
+      const valueComponent = $('[data-search-component').val();
+
+      $('[data-row]').each(function(index) {
+        const $row = $(this);
+        const $entity = $row.find('[data-entity]');
+        const textEntity = $entity.text();
+
+        const $component = $row.find('[data-component]');
+        const textComponent = $component.text();
+
+        if (textEntity.indexOf(valueEntity) >= 0 && textComponent.indexOf(valueComponent) >= 0) {
+          $row.show();
+        }
+        else {
+          $row.hide();
+        }
+      });
+    }
+
+    // autostart on reload
+    filterRows();
   </script>
 </html>
