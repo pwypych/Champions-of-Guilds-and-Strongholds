@@ -10,7 +10,7 @@ g.autoload.maneuverWait = (inject) => {
   const auth = inject.auth;
 
   const $maneuverButtons = $body.find('.js-battle-interface-maneuver-buttons');
-  const $button = $maneuverButtons.find('.js-wait-button');
+  const $button = $maneuverButtons.find('[data-wait-button]');
 
   (function init() {
     onClick();

@@ -8,8 +8,8 @@ g.autoload.testFeatureLink = (inject) => {
   const $body = inject.$body;
   const auth = inject.auth;
 
-  const $cheat = $body.find('.js-cheat');
-  const $testLink = $cheat.find('.js-cheat-test');
+  const $cheat = $body.find('[data-cheat]');
+  const $testLink = $cheat.find('[cheat-test]');
 
   (function init() {
     onClick();

@@ -9,9 +9,9 @@ g.autoload.launchDisableUi = (inject) => {
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;
 
-  const $button = $body.find('.js-launch .js-button-ready');
-  const $inputName = $body.find('.js-launch .js-input-name');
-  const $selectRace = $body.find('.js-launch .js-select-race');
+  const $button = $body.find('[data-launch] [data-button-ready]');
+  const $inputName = $body.find('[data-launch] [data-input-name]');
+  const $selectRace = $body.find('[data-launch] [data-select-race]');
 
   (function init() {
     onEntitiesGet();

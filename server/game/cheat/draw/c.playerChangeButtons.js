@@ -8,7 +8,7 @@ g.autoload.playerChangeButtons = (inject) => {
   const $body = inject.$body;
   const auth = inject.auth;
 
-  const $cheat = $body.find('.js-cheat');
+  const $cheat = $body.find('[data-cheat]');
 
   (function init() {
     console.log('init');

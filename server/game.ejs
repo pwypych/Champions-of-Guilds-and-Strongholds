@@ -29,7 +29,7 @@
     <% }); %>
 
     <!-- Main Pixi Canvas -->
-    <div class="js-canvas-wrapper" style="display: none;"></div>
+    <div data-canvas-wrapper style="display: none;"></div>
 
     <script>
       'use strict';
@@ -43,7 +43,7 @@
       g.setup.spriteFilenameArray = <%- viewModel.spriteFilenameArray %>;
 
       // Starting module is will be loaded in g.main object
-      // Every other client module is in g.autoload object 
+      // Every other client module is in g.autoload object
       // All modules are in bundle.js file
     </script>
 

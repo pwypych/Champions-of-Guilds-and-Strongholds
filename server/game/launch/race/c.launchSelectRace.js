@@ -8,7 +8,7 @@ g.autoload.launchSelectRace = (inject) => {
   const $body = inject.$body;
   const auth = inject.auth;
 
-  const $selectRace = $body.find('.js-launch .js-select-race');
+  const $selectRace = $body.find('[data-launch] [data-select-race]');
 
   (function init() {
     selectRaceOn();

@@ -8,7 +8,7 @@ g.autoload.canvasWrapperToggle = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;
 
-  const $canvasWrapper = $body.find('.js-canvas-wrapper');
+  const $canvasWrapper = $body.find('[data-canvas-wrapper]');
 
   (function init() {
     onStateChange();
