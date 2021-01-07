@@ -8,7 +8,7 @@ g.autoload.launchButtonReady = (inject) => {
   const $body = inject.$body;
   const auth = inject.auth;
 
-  const $button = $body.find('.js-launch .js-button-ready');
+  const $button = $body.find('.js-launch [data-button-ready]');
 
   (function init() {
     buttonOnClick();
@@ -24,10 +24,7 @@ g.autoload.launchButtonReady = (inject) => {
     const data = {};
 
     $.post('/ajax/launchReadyPost' + auth.uri, data, () => {
-      console.log(
-        'launchButtonReady: POST -> /ajax/launchReadyPost',
-        data
-      );
+      console.log('launchButtonReady: POST -> /ajax/launchReadyPost', data);
     });
   }
 };
