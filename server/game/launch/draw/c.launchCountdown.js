@@ -9,7 +9,7 @@ g.autoload.launchCountdown = (inject) => {
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;
 
-  const $countdown = $body.find('.js-launch [data-countdown]');
+  const $countdown = $body.find('[data-launch] [data-countdown]');
 
   let isCountDownRunning = false;
 

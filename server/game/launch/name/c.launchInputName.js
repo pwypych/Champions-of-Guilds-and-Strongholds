@@ -8,7 +8,7 @@ g.autoload.launchInputName = (inject) => {
   const $body = inject.$body;
   const auth = inject.auth;
 
-  const $inputName = $body.find('.js-launch [data-input-name]');
+  const $inputName = $body.find('[data-launch] [data-input-name]');
 
   let writingTimeout;
 

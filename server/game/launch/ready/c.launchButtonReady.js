@@ -8,7 +8,7 @@ g.autoload.launchButtonReady = (inject) => {
   const $body = inject.$body;
   const auth = inject.auth;
 
-  const $button = $body.find('.js-launch [data-button-ready]');
+  const $button = $body.find('[data-launch] [data-button-ready]');
 
   (function init() {
     buttonOnClick();
