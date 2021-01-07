@@ -112,10 +112,10 @@ g.autoload.prohibitResourceless = (inject) => {
     const player = freshEntities()[playerId];
     const playerResources = player.playerResources;
 
-    findNotbuildedFortifications(fortificationBuildedArray, playerResources);
+    findNotBuildedFortifications(fortificationBuildedArray, playerResources);
   }
 
-  function findNotbuildedFortifications(
+  function findNotBuildedFortifications(
     fortificationBuildedArray,
     playerResources
   ) {
