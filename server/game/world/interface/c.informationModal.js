@@ -9,7 +9,7 @@ g.autoload.informationModal = (inject) => {
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;
 
-  const $modal = $body.find('.js-world-interface-information-modal');
+  const $modal = $body.find('[data-world-interface-information-modal]');
   const $gold = $modal.find('.js-gold');
   const $wood = $modal.find('.js-wood');
   const $stone = $modal.find('.js-stone');

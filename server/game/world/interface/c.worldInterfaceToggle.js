@@ -8,7 +8,7 @@ g.autoload.worldInterfaceToggle = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;
 
-  const $buttons = $body.find('.js-world-interface-buttons');
+  const $buttons = $body.find('[data-world-interface-buttons]');
 
   (function init() {
     onStateChange();
