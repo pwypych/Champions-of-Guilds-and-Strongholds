@@ -8,7 +8,7 @@ g.autoload.informationButton = (inject) => {
   const $body = inject.$body;
 
   const $button = $body.find('.js-world-interface-information-button');
-  const $modal = $body.find('.js-world-interface-information-modal');
+  const $modal = $body.find('[data-world-interface-information-modal]');
 
   (function init() {
     onClick();
