@@ -10,7 +10,7 @@ g.autoload.endTurnButton = (inject) => {
   const freshEntities = inject.freshEntities;
   const auth = inject.auth;
 
-  const $button = $body.find('.js-world-interface-end-turn-button');
+  const $button = $body.find('[data-world-interface-end-turn-button]');
 
   (function init() {
     onClick();
@@ -27,10 +27,7 @@ g.autoload.endTurnButton = (inject) => {
     const data = {};
 
     $.post('/ajax/worldEndTurn' + auth.uri, data, () => {
-      console.log(
-        'endTurnButton: POST -> /ajax/worldEndTurn',
-        data
-      );
+      console.log('endTurnButton: POST -> /ajax/worldEndTurn', data);
     });
   }
 
