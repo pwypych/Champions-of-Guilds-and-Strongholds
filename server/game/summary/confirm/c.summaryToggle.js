@@ -10,7 +10,7 @@ g.autoload.summaryToggle = (inject) => {
   const freshEntities = inject.freshEntities;
 
   const $summary = $body.find('[data-summary]');
-  const $button = $summary.find('.js-summary-button');
+  const $button = $summary.find('[data-summary-button]');
   const $text = $summary.find('.js-summary-text');
 
   (function init() {

@@ -8,7 +8,7 @@ g.autoload.summaryConfirm = (inject) => {
   const $body = inject.$body;
   const auth = inject.auth;
 
-  const $button = $body.find('[data-summary] .js-summary-button');
+  const $button = $body.find('[data-summary] [data-summary-button]');
 
   (function init() {
     buttonOnClick();
