@@ -9,7 +9,7 @@ g.autoload.summaryToggle = (inject) => {
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;
 
-  const $summary = $body.find('.js-summary');
+  const $summary = $body.find('[data-summary]');
   const $button = $summary.find('.js-summary-button');
   const $text = $summary.find('.js-summary-text');
 
