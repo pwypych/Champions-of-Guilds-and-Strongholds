@@ -7,7 +7,7 @@ g.autoload.heroDeadToggle = (inject) => {
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;
 
-  const $heroDead = $body.find('.js-hero-dead');
+  const $heroDead = $body.find('[data-hero-dead]');
 
   (function init() {
     onEntitiesGet();
