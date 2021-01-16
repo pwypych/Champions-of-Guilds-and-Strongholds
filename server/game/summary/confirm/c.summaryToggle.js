@@ -11,7 +11,7 @@ g.autoload.summaryToggle = (inject) => {
 
   const $summary = $body.find('[data-summary]');
   const $button = $summary.find('[data-summary-button]');
-  const $text = $summary.find('.js-summary-text');
+  const $text = $summary.find('[data-summary-text]');
 
   (function init() {
     onStateChange();
