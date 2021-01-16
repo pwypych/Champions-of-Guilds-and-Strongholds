@@ -61,6 +61,12 @@
         padding: 10px;
         background-color: #300a24;
       }
+
+      .collapsed {
+        display: inline-block;
+        width: 200px;
+        padding-left: 5px;
+      }
     </style>
   </head>
 
@@ -76,6 +82,9 @@
   </body>
 
   <script>
+    // generate HTML of entities
+    'use strict';
+
     const $board = $('[data-board]');
 
     const entities = <%- JSON.stringify(viewModel.entities) %>;
@@ -84,7 +93,15 @@
       let html = ''
       html += '<div data-row class="row">';
       html += '<span data-entity class="entity">' + key + ':</span>';
-      html += '<pre data-component>' + prettyPrintJson.toHtml(entity) + '</pre>';
+
+      if (localStorage.getItem('collapsed__' + key)) {
+        html += '<span data-collapsed class="collapsed">show &#9660; { ... }</span>';
+        html += '<pre data-component style="display: none;">' + prettyPrintJson.toHtml(entity) + '</pre>';
+      } else {
+        html += '<span data-collapsed class="collapsed">hide &#9650;</span>';
+        html += '<pre data-component>' + prettyPrintJson.toHtml(entity) + '</pre>';
+      }
+
       html += '</div>';
       $board.append(html);
     });
@@ -92,11 +109,14 @@
   </script>
 
   <script>
-    $('[data-search-entity]').on('input', function() {
+    // allow filtering of entities
+    'use strict';
+
+    $('[data-search-entity]').on('input', () => {
       filterRows();
     });
 
-    $('[data-search-component]').on('input', function() {
+    $('[data-search-component]').on('input', () => {
       filterRows();
     });
 
@@ -124,4 +144,26 @@
     // autostart on reload
     filterRows();
   </script>
+
+  <script>
+    // collapse / uncollapse
+    'use strict';
+
+    $('[data-collapsed]').on('click', (event) => {
+      const $collapsed = $(event.currentTarget);
+      const $component = $collapsed.next('[data-component]');
+      const key = $collapsed.prev('[data-entity]').text().slice(0, -1);
+
+      if ($component.is(':visible')) {
+        $component.slideUp();
+        $collapsed.html('show &#9660; { ... }'); // arrow down
+        localStorage.setItem('collapsed__' + key, true);
+      } else {
+        $component.slideDown();
+        $collapsed.html('hide &#9650;'); // arrow up
+        localStorage.removeItem('collapsed__' + key);
+      }
+    });
+  </script>
+
 </html>
