@@ -8,7 +8,7 @@ g.autoload.chat = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;
 
-  const $chat = $body.find('.js-chat');
+  const $chat = $body.find('[data-chat]');
 
   (function init() {
     onChatMessage();
