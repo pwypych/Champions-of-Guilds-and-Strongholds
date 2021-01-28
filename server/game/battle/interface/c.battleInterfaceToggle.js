@@ -8,7 +8,7 @@ g.autoload.battleInterfaceToggle = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;
 
-  const $buttons = $body.find('[data-lol]');
+  const $buttons = $body.find('[data-battle-interface]');
 
   (function init() {
     onStateChange();
