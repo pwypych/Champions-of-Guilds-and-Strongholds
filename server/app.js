@@ -25,6 +25,7 @@ const environment = {};
 const middleware = {};
 let db;
 let blueprint;
+let spriteFilenameArray;
 
 /* eslint-disable global-require */
 /* eslint-disable import/no-dynamic-require */
@@ -252,8 +253,19 @@ function setupBlueprint() {
   require('./library/setupBlueprint.js')(hook, (error, result) => {
     blueprint = result;
     debug('setupBlueprint: Main blueprint types:', _.size(blueprint));
-    setupInstrumentRoutesAndLibraries();
+    setupSpriteFilenameArray();
   });
+}
+
+function setupSpriteFilenameArray() {
+  require('./library/setupSpriteFilenameArray.js')(
+    environment,
+    (error, result) => {
+      spriteFilenameArray = result;
+      debug('setupSpriteFilenameArray: Loaded sprites!', spriteFilenameArray.length);
+      setupInstrumentRoutesAndLibraries();
+    }
+  );
 }
 
 function setupInstrumentRoutesAndLibraries() {
@@ -358,6 +370,7 @@ function setupInstrumentRoutesAndLibraries() {
     require('./instrument/editorMap/editorMap.js')(
       environment,
       db,
+      blueprint,
       templateToHtml
     )
   );
@@ -414,24 +427,11 @@ function setupRoutes() {
     });
 
     debug('setupRoutes: Loaded routes!', _.size(pathFiles));
-    setupSpriteFilenameArray();
+    setupEjsToHtml();
   });
 }
 
-function setupSpriteFilenameArray() {
-  require('./library/setupSpriteFilenameArray.js')(
-    environment,
-    (error, spriteFilenameArray) => {
-      debug(
-        'setupSpriteFilenameArray: Loaded sprites!',
-        spriteFilenameArray.length
-      );
-      setupEjsToHtml(spriteFilenameArray);
-    }
-  );
-}
-
-function setupEjsToHtml(spriteFilenameArray) {
+function setupEjsToHtml() {
   const htmlArray = [];
 
   const pathRead = path.join(
