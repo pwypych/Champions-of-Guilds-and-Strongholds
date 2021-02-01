@@ -9,37 +9,39 @@ module.exports = (environment, db, templateToHtml) => {
 
     (function init() {
       debug(
-        '// Loads map editor that allows to edit maps from predefinedMapCollection in database'
+        '// Loads map editor that allows to edit a map by mapId'
       );
+
+      const mapId = req.query.mapId;
 
       const viewModel = {};
       viewModel.baseurl = environment.baseurl;
 
-      findMaps(viewModel);
+      findMapById(mapId, viewModel);
     })();
 
-    function findMaps(viewModel) {
-      const query = {};
+    function findMapById(mapId, viewModel) {
+      const query = { _id: mapId };
       const options = {};
 
       db.collection('predefinedMapCollection').findOne(
         query,
         options,
-        (error, maps) => {
+        (error, map) => {
           if (error) {
-            debug('findGameById: error:', error);
-            res.status(404).send('404 Not found - Read maps error');
+            debug('findMapById: error:', error);
+            res.status(404).send('404 Not found - Read map error');
             return;
           }
 
-          if (!maps) {
-            debug('maps object is empty');
-            res.status(404).send('404 Not found - Game not exist');
+          if (!map) {
+            debug('map object is empty');
+            res.status(404).send('404 Not found - Map not exist');
             return;
           }
 
-          viewModel.maps = maps;
-          debug('findMaps', maps._id);
+          viewModel.map = map;
+          debug('findMaps', map._id);
           sendResponse(viewModel);
         }
       );
