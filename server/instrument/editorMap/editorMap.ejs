@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+
+    <title>Inspector Entities</title>
+
+    <link rel="stylesheet" href="<%= viewModel.baseurl %>/css/style.css?v=<%= viewModel.timestamp %>">
+
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/library/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/library/pretty-print-json-0.3.0.js"></script>
+
+    <style>
+      .json-key           { color: #eeeeec; }
+      .json-string        { color: #4e9a06; }
+      .json-number        { color: #cc0000; }
+      .json-boolean       { color: #3465a4; }
+      .json-null          { color: #ad7fa8; }
+      a.json-link         { color: purple; transition: all 400ms; }
+      a.json-link:visited { color: slategray; }
+      a.json-link:hover   { color: blueviolet; }
+      a.json-link:active  { color: slategray; }
+    </style>
+
+    <style>
+      body {
+        padding: 10px;
+        background-color: #300a24;
+        color: #999;
+        font-family: "Ubuntu Mono", monospace;
+        overflow: auto;
+      }
+
+      pre {
+        margin-top: 0px;
+        font-family: "Ubuntu Mono", monospace;
+      }
+
+      h1 {
+        margin-top: 0px;
+      }
+
+      .board {
+        margin-top: 50px;
+      }
+
+      .entity {
+        color: #fce94f;
+      }
+
+      .row {
+        margin-bottom: 20px;
+      }
+
+      .menu {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        padding: 10px;
+        background-color: #300a24;
+      }
+
+      .collapsed {
+        display: inline-block;
+        width: 200px;
+        padding-left: 5px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="menu">
+    Entity: <input data-search-entity type="text" placeholder="Search entity...">
+    &nbsp;&nbsp;&nbsp;
+    Component: <input data-search-component type="text" placeholder="Search component...">
+    </div>
+
+    <div data-board class="board">
+    </div>
+  </body>
+
+  <script>
+    // generate HTML of entities
+    'use strict';
+
+    const $board = $('[data-board]');
+
+    const entities = <%- JSON.stringify(viewModel.entities) %>;
+
+    $.each(entities, (key, entity) => {
+      let html = ''
+      html += '<div data-row class="row">';
+      html += '<span data-entity class="entity">' + key + ':</span>';
+
+      if (localStorage.getItem('collapsed__' + key)) {
+        html += '<span data-collapsed class="collapsed">show &#9660; { ... }</span>';
+        html += '<pre data-component style="display: none;">' + prettyPrintJson.toHtml(entity) + '</pre>';
+      } else {
+        html += '<span data-collapsed class="collapsed">hide &#9650;</span>';
+        html += '<pre data-component>' + prettyPrintJson.toHtml(entity) + '</pre>';
+      }
+
+      html += '</div>';
+      $board.append(html);
+    });
+
+  </script>
+
+  <script>
+    // allow filtering of entities
+    'use strict';
+
+    $('[data-search-entity]').on('input', () => {
+      filterRows();
+    });
+
+    $('[data-search-component]').on('input', () => {
+      filterRows();
+    });
+
+    function filterRows() {
+      const valueEntity = $('[data-search-entity').val();
+      const valueComponent = $('[data-search-component').val();
+
+      $('[data-row]').each(function(index) {
+        const $row = $(this);
+        const $entity = $row.find('[data-entity]');
+        const textEntity = $entity.text();
+
+        const $component = $row.find('[data-component]');
+        const textComponent = $component.text();
+
+        if (textEntity.indexOf(valueEntity) >= 0 && textComponent.indexOf(valueComponent) >= 0) {
+          $row.show();
+        }
+        else {
+          $row.hide();
+        }
+      });
+    }
+
+    // autostart on reload
+    filterRows();
+  </script>
+
+  <script>
+    // collapse / uncollapse
+    'use strict';
+
+    $('[data-collapsed]').on('click', (event) => {
+      const $collapsed = $(event.currentTarget);
+      const $component = $collapsed.next('[data-component]');
+      const key = $collapsed.prev('[data-entity]').text().slice(0, -1);
+
+      if ($component.is(':visible')) {
+        $component.slideUp();
+        $collapsed.html('show &#9660; { ... }'); // arrow down
+        localStorage.setItem('collapsed__' + key, true);
+      } else {
+        $component.slideDown();
+        $collapsed.html('hide &#9650;'); // arrow up
+        localStorage.removeItem('collapsed__' + key);
+      }
+    });
+  </script>
+
+</html>

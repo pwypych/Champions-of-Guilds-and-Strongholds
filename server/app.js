@@ -353,6 +353,15 @@ function setupInstrumentRoutesAndLibraries() {
     )
   );
 
+  app.get(
+    '/editorMap',
+    require('./instrument/editorMap/editorMap.js')(
+      environment,
+      db,
+      templateToHtml
+    )
+  );
+
   debug('setupInstrumentRoutesAndLibraries');
   setupMiddleware();
 }
