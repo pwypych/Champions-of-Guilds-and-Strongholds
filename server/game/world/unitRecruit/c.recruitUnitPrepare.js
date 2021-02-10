@@ -64,9 +64,9 @@ g.autoload.recruitUnitPrepare = (inject) => {
           '.png" width="36" height="36">'
       );
       const $amountSpan = $(
-        '<span class="js-unit-amount margin-right" data-unit-name="' +
+        '<span class="margin-right" data-unit-name="' +
           unitName +
-          '" class="big">0</span>'
+          '" data-unit-amount class="big">0</span>'
       );
       const $buyButton = $(
         '<button class="js-button-buy" data-unit-name="' +

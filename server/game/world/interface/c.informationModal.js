@@ -80,7 +80,7 @@ g.autoload.informationModal = (inject) => {
   function updateUnitAmounts(hero) {
     _.forEach(hero.unitAmounts, (count, unitName) => {
       const $amount = $recruitUnit.find(
-        ".js-unit-amount[data-unit-name='" + unitName + "']"
+        "[data-unit-amount][data-unit-name='" + unitName + "']"
       );
       $amount.text(count);
     });
