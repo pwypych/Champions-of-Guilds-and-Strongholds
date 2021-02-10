@@ -44,6 +44,10 @@
         margin-top: -2px;
       }
 
+      .seperator-10 {
+        margin-top: 10px;
+      }
+
       .clearfix {
         clear: both;
       }
@@ -52,8 +56,10 @@
   </head>
 
   <body>
-    <div class="menu">
+    <div data-menu class="menu">
       <button>Save</button>
+      <div class="seperator-10"></div>
+      <img data-figure="empty" style="background-color: white;" src="<%= viewModel.baseurl %>/sprite/empty.png">
     </div>
 
     <div data-board class="board">
@@ -72,15 +78,40 @@
     // tools in javascript here
 
     const data = <%- JSON.stringify(viewModel.map) %>;
+    const figures = <%- JSON.stringify(viewModel.figures) %>;
     const baseurl = '<%- viewModel.baseurl %>';
     const map = data.mapLayerWithStrings;
     const height = map.length;
     const width = map[0].length;
     console.log(height, width);
 
+    const state = {};
+    state.selected = 'empty';
+
     (function init() {
+      generateFigureMenu();
+      onClickFigureMenu();
       generateBoard();
+      onClickBoard();
     })();
+
+    function generateFigureMenu() {
+      const $menu = $('[data-menu]');
+      figures.forEach((figure) => {
+        const $img = $('<img data-figure="' + figure + '" src="' + baseurl + '/sprite/' + figure + '.png">');
+        $menu.append($img);
+      });
+    }
+
+    function onClickFigureMenu() {
+      const $imgs = $('[data-figure]');
+      $('[data-figure]').on('click', (event) => {
+        const $img = $(event.currentTarget);
+        $imgs.css('background-color', 'transparent');
+        $img.css('background-color', 'white');
+        state.selected = $img.attr('data-figure');
+      });
+    }
 
     function generateBoard() {
       const $board = $('[data-board]');
@@ -91,7 +122,7 @@
         row.forEach((figure, x) => {
           i++;
           let html = '';
-          html += '<img src="' + baseurl + '/sprite/' + figure + '.png">';
+          html += '<img data-square src="' + baseurl + '/sprite/' + figure + '.png">';
 
           if (i % width === 0) {
             html += '<div class="clearfix"></div>';
@@ -99,6 +130,14 @@
 
           $board.append(html);
         });
+      });
+    }
+
+    function onClickBoard() {
+      const $imgs = $('[data-square]');
+      $('[data-square]').on('click', (event) => {
+        const $img = $(event.currentTarget);
+        console.log(state);
       });
     }
 

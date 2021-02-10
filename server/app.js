@@ -370,6 +370,7 @@ function setupInstrumentRoutesAndLibraries() {
     require('./instrument/editorMap/editorMap.js')(
       environment,
       db,
+      blueprint,
       templateToHtml
     )
   );

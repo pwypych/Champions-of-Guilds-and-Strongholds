@@ -3,8 +3,9 @@
 'use strict';
 
 const debug = require('debug')('cogs:editorMap');
+const _ = require('lodash');
 
-module.exports = (environment, db, templateToHtml) => {
+module.exports = (environment, db, blueprint, templateToHtml) => {
   return (req, res) => {
 
     (function init() {
@@ -42,9 +43,42 @@ module.exports = (environment, db, templateToHtml) => {
 
           viewModel.map = map;
           debug('findMaps', map._id);
-          sendResponse(viewModel);
+          findFigures(viewModel);
         }
       );
+    }
+
+    function findFigures(viewModel) {
+      const figures = [];
+
+      _.forEach(blueprint.figure, (figure) => {
+        if (figure.collision) {
+          figures.push(figure.figureName);
+        }
+      });
+
+      _.forEach(blueprint.figure, (figure) => {
+        if (figure.resource) {
+          figures.push(figure.figureName);
+        }
+      });
+
+      _.forEach(blueprint.figure, (figure) => {
+        if (figure.visitableType) {
+          figures.push(figure.figureName);
+        }
+      });
+
+      _.forEach(blueprint.figure, (figure) => {
+        if (figure.unitAmounts) {
+          figures.push(figure.figureName);
+        }
+      });
+
+      viewModel.figures = figures;
+
+      debug('findFigures', figures.length);
+      sendResponse(viewModel);
     }
 
     function sendResponse(viewModel) {
