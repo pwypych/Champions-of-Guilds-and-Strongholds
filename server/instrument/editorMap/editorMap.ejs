@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+
+    <title>Map Editor</title>
+
+    <link rel="stylesheet" href="<%= viewModel.baseurl %>/css/style.css?v=<%= viewModel.timestamp %>">
+
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/library/jquery-3.3.1.js"></script>
+
+    <style>
+      body {
+        padding: 10px;
+        background-color: #300a24;
+        color: #999;
+        font-family: "Ubuntu Mono", monospace;
+        overflow: auto;
+
+        image-rendering: optimizeSpeed;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: -o-crisp-edges;
+        image-rendering: pixelated;
+        -ms-interpolation-mode: nearest-neighbor;
+      }
+
+      .board {
+        display: inline-block;
+        margin: 50px;
+        white-space: nowrap;
+        background-image: url('/sprite/backgroundGrass1.png');
+        width: auto;
+      }
+
+      .board img {
+        width: 48px;
+        height: 48px;
+        box-sizing: border-box;
+        border-top: 1px solid #300a24;
+        border-right: 1px solid #300a24;
+        margin-top: -2px;
+      }
+
+      .clearfix {
+        clear: both;
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <div class="menu">
+      <button>Save</button>
+    </div>
+
+    <div data-board class="board">
+      <img src="<%= viewModel.baseurl %>/sprite/backgroundGrass1.png">
+      <img src="<%= viewModel.baseurl %>/sprite/backgroundGrass1.png">
+      <img src="<%= viewModel.baseurl %>/sprite/backgroundGrass1.png">
+      <div class="clearfix"></div>
+      <img src="<%= viewModel.baseurl %>/sprite/backgroundGrass1.png"></div>
+  </body>
+
+  <script>
+    'use strict';
+
+    // save will be done by Ajax
+    // steps for undo function in localStorage
+    // tools in javascript here
+
+    const data = <%- JSON.stringify(viewModel.map) %>;
+    const baseurl = '<%- viewModel.baseurl %>';
+    const map = data.mapLayerWithStrings;
+    const height = map.length;
+    const width = map[0].length;
+    console.log(height, width);
+
+    (function init() {
+      generateBoard();
+    })();
+
+    function generateBoard() {
+      const $board = $('[data-board]');
+      $board.html('');
+
+      let i = 0;
+      map.forEach((row, y) => {
+        row.forEach((figure, x) => {
+          i++;
+          let html = '';
+          html += '<img src="' + baseurl + '/sprite/' + figure + '.png">';
+
+          if (i % width === 0) {
+            html += '<div class="clearfix"></div>';
+          }
+
+          $board.append(html);
+        });
+      });
+    }
+
+  </script>
+
+</html>
