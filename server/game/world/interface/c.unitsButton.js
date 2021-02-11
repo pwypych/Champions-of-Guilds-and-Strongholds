@@ -1,0 +1,22 @@
+// @format
+
+'use strict';
+
+// What does this module do?
+// It listens to info button clicks and toggles info modal
+g.autoload.informationButton = (inject) => {
+  const $body = inject.$body;
+
+  const $button = $body.find('[data-world-interface-units-button]');
+  const $modal = $body.find('[data-world-interface-units-modal]');
+
+  (function init() {
+    onClick();
+  })();
+
+  function onClick() {
+    $button.on('click', () => {
+      $modal.toggle();
+    });
+  }
+};
