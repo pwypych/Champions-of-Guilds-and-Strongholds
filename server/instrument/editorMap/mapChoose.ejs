@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+
+    <title>Champions of Guilds &amp; Strongholds</title>
+
+    <link rel="stylesheet" href="<%= viewModel.baseurl %>/css/style.css?v=<%= viewModel.timestamp %>">
+    <link rel="stylesheet" href="<%= viewModel.baseurl %>/css/ui.css?v=<%= viewModel.timestamp %>">
+  </head>
+
+  <body>
+    <div class="card-brown">
+      <div class="seperator-20"></div>
+      <a href="<%= viewModel.baseurl %>/panelPredefined">Back to panel</a>
+      <div class="seperator-20"></div>
+
+      <h1>Edit Map:</h1>
+
+      <% viewModel.mapNameArray.forEach((mapId) => { %>
+        <a href="<%= viewModel.baseurl %>/editorMap/mapEdit?mapId=<%= mapId %>"><%= mapId %></a> 
+        <div class="seperator-10"></div>
+      <% }); %>
+
+      <div class="seperator-20"></div>
+
+  </body>
+</html>

@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:editorMap');
+const debug = require('debug')('cogs:mapEdit');
 const _ = require('lodash');
 
 module.exports = (environment, db, blueprint, templateToHtml) => {
@@ -84,7 +84,7 @@ module.exports = (environment, db, blueprint, templateToHtml) => {
 
     function sendResponse(viewModel) {
       const path =
-        environment.basepath + '/server/instrument/editorMap/editorMap.ejs';
+        environment.basepath + '/server/instrument/editorMap/mapEdit.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         debug('sendResponse():html', html.length);
         debug('******************** send ********************');

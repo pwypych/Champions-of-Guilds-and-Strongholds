@@ -366,8 +366,17 @@ function setupInstrumentRoutesAndLibraries() {
   );
 
   app.get(
-    '/editorMap',
-    require('./instrument/editorMap/editorMap.js')(
+    '/editorMap/mapChoose',
+    require('./instrument/editorMap/mapChoose.js')(
+      environment,
+      db,
+      templateToHtml
+    )
+  );
+
+  app.get(
+    '/editorMap/mapEdit',
+    require('./instrument/editorMap/mapEdit.js')(
       environment,
       db,
       blueprint,
@@ -376,8 +385,8 @@ function setupInstrumentRoutesAndLibraries() {
   );
 
   app.post(
-    '/editorMapSavePost',
-    require('./instrument/editorMap/editorMapSavePost.js')(
+    '/editorMap/mapSavePost',
+    require('./instrument/editorMap/mapSavePost.js')(
       environment,
       db
     )

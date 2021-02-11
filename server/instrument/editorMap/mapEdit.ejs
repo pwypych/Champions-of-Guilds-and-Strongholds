@@ -8,16 +8,17 @@
     <title>Map Editor</title>
 
     <link rel="stylesheet" href="<%= viewModel.baseurl %>/css/style.css?v=<%= viewModel.timestamp %>">
+    <link rel="stylesheet" href="<%= viewModel.baseurl %>/css/ui.css?v=<%= viewModel.timestamp %>">
 
     <script type="text/javascript" src="<%= viewModel.baseurl %>/library/jquery-3.3.1.js"></script>
 
     <style>
       body {
-        padding: 10px;
+        padding: 10px 10px 10px 30px;
         background-color: #300a24;
         color: #999;
-        font-family: "Ubuntu Mono", monospace;
         overflow: auto;
+
 
         image-rendering: optimizeSpeed;
         image-rendering: -moz-crisp-edges;
@@ -29,7 +30,6 @@
 
       .board {
         display: inline-block;
-        margin: 50px;
         white-space: nowrap;
         background-image: url('/sprite/backgroundGrass1.png');
         width: auto;
@@ -51,23 +51,31 @@
       .clearfix {
         clear: both;
       }
+
     </style>
 
   </head>
 
   <body>
     <div data-menu class="menu">
-      <button>Save</button>
-      <div class="seperator-10"></div>
+      <div class="seperator-20"></div>
+      <a href="<%= viewModel.baseurl %>/editorMap/mapChoose">Back to map selection</a>
+      <div class="seperator-20"></div>
       <img data-figure="empty" style="background-color: white;" src="<%= viewModel.baseurl %>/sprite/empty.png">
     </div>
+
+    <div class="seperator-20"></div>
 
     <div data-board class="board">
       <img src="<%= viewModel.baseurl %>/sprite/backgroundGrass1.png">
       <img src="<%= viewModel.baseurl %>/sprite/backgroundGrass1.png">
       <img src="<%= viewModel.baseurl %>/sprite/backgroundGrass1.png">
       <div class="clearfix"></div>
-      <img src="<%= viewModel.baseurl %>/sprite/backgroundGrass1.png"></div>
+      <img src="<%= viewModel.baseurl %>/sprite/backgroundGrass1.png">
+    </div>
+
+    <div class="seperator-40"></div>
+    <div class="seperator-40"></div>
   </body>
 
   <script>
@@ -151,7 +159,7 @@
 
     function save() {
       const data = { mapId: mapId, mapLayerWithStrings: state.map };
-      $.post('/editorMapSavePost', data, () => {});
+      $.post('/editorMap/mapSavePost', data, () => {});
     }
 
   </script>
