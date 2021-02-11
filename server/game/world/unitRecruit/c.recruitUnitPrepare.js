@@ -12,7 +12,7 @@ g.autoload.recruitUnitPrepare = (inject) => {
   const blueprint = inject.blueprint;
 
   const $recruitUnit = $body.find(
-    '[data-world-interface-information-modal] .js-recruit-unit'
+    '[data-world-interface-information-modal] [data-recruit-unit]'
   );
 
   (function init() {

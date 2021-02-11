@@ -10,12 +10,12 @@ g.autoload.informationModal = (inject) => {
   const freshEntities = inject.freshEntities;
 
   const $modal = $body.find('[data-world-interface-information-modal]');
-  const $gold = $modal.find('.js-gold');
-  const $wood = $modal.find('.js-wood');
-  const $stone = $modal.find('.js-stone');
-  const $crystal = $modal.find('.js-crystal');
-  const $movement = $modal.find('.js-movement');
-  const $recruitUnit = $modal.find('.js-recruit-unit');
+  const $gold = $modal.find('[data-gold]');
+  const $wood = $modal.find('[data-wood]');
+  const $stone = $modal.find('[data-stone]');
+  const $crystal = $modal.find('[data-crystal]');
+  const $movement = $modal.find('[data-movement]');
+  const $recruitUnit = $modal.find('[data-recruit-unit]');
 
   (function init() {
     onEntitiesGet();
