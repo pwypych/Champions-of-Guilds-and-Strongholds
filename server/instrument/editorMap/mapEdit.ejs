@@ -14,7 +14,7 @@
 
     <style>
       body {
-        padding: 10px 10px 10px 30px;
+        padding: 10px 30px 10px 30px;
         background-color: #300a24;
         color: #999;
         overflow: auto;
@@ -48,7 +48,10 @@
       .menu {
         position: fixed;
         top: 0px;
-        left: 30px;
+        left: 0px;
+        right: 0px;
+        background-color: #300a24;
+        padding: 0px 30px 10px 30px;
       }
 
       .seperator-10 {
@@ -113,7 +116,7 @@
     function menuBoardMargin() {
       $(window).on('load', () => {
         const height = $('[data-menu]').outerHeight();
-        $('[data-board]').css('margin-top', height + 5 + 'px');
+        $('[data-board]').css('margin-top', height + 'px');
       });
     }
 
