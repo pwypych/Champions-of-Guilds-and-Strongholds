@@ -29,6 +29,7 @@
       }
 
       .board {
+        margin-top: 150px;
         display: inline-block;
         white-space: nowrap;
         background-image: url('/sprite/backgroundGrass1.png');
@@ -42,6 +43,12 @@
         border-top: 1px solid #300a24;
         border-right: 1px solid #300a24;
         margin-top: -2px;
+      }
+
+      .menu {
+        position: fixed;
+        top: 0px;
+        left: 30px;
       }
 
       .seperator-10 {
@@ -63,8 +70,6 @@
       <div class="seperator-20"></div>
       <img data-figure="empty" style="background-color: white;" src="<%= viewModel.baseurl %>/sprite/empty.png">
     </div>
-
-    <div class="seperator-20"></div>
 
     <div data-board class="board">
       <img src="<%= viewModel.baseurl %>/sprite/backgroundGrass1.png">
@@ -96,15 +101,21 @@
 
     const height = state.map.length;
     const width = state.map[0].length;
-    console.log(height, width);
-
 
     (function init() {
+      menuBoardMargin();
       figureMenuGenerate();
       figureMenuOnClick();
       boardGenerate();
       boardOnClick();
     })();
+
+    function menuBoardMargin() {
+      $(window).on('load', () => {
+        const height = $('[data-menu]').outerHeight();
+        $('[data-board]').css('margin-top', height + 5 + 'px');
+      });
+    }
 
     function figureMenuGenerate() {
       const $menu = $('[data-menu]');
