@@ -375,6 +375,14 @@ function setupInstrumentRoutesAndLibraries() {
     )
   );
 
+  app.post(
+    '/editorMapSavePost',
+    require('./instrument/editorMap/editorMapSavePost.js')(
+      environment,
+      db
+    )
+  );
+
   debug('setupInstrumentRoutesAndLibraries');
   setupMiddleware();
 }

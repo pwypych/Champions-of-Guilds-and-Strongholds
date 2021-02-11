@@ -80,6 +80,7 @@
     const data = <%- JSON.stringify(viewModel.map) %>;
     const figures = <%- JSON.stringify(viewModel.figures) %>;
     const baseurl = '<%- viewModel.baseurl %>';
+    const mapId = '<%- viewModel.mapId %>';
 
     const state = {};
     state.selected = 'empty';
@@ -94,7 +95,6 @@
       figureMenuGenerate();
       figureMenuOnClick();
       boardGenerate();
-      boardRefresh();
       boardOnClick();
     })();
 
@@ -125,7 +125,7 @@
         row.forEach((figure, x) => {
           i++;
           let html = '';
-          html += '<img data-square="' + figure + '" data-x="' + x + '" data-y="' + y + '">';
+          html += '<img data-square data-x="' + x + '" data-y="' + y + '" src="' + baseurl + '/sprite/' + figure + '.png">';
 
           if (i % width === 0) {
             html += '<div class="clearfix"></div>';
@@ -136,21 +136,22 @@
       });
     }
 
-    function boardRefresh() {
-      const $imgs = $('[data-square]'); 
-      $imgs.each((index, img) => {
-        const $img = $(img);
-        const figure = $img.attr('data-square');
-        $img.attr('src', baseurl + '/sprite/' + figure + '.png')
-      });
-    }
-
     function boardOnClick() {
       const $imgs = $('[data-square]');
       $('[data-square]').on('click', (event) => {
         const $img = $(event.currentTarget);
-        console.log(state);
+        const x = $img.attr('data-x');
+        const y = $img.attr('data-y');
+        state.map[y][x] = state.selected;
+        boardGenerate();
+        boardOnClick();
+        save();
       });
+    }
+
+    function save() {
+      const data = { mapId: mapId, mapLayerWithStrings: state.map };
+      $.post('/editorMapSavePost', data, () => {});
     }
 
   </script>

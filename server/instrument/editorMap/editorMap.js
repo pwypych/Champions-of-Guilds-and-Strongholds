@@ -17,12 +17,13 @@ module.exports = (environment, db, blueprint, templateToHtml) => {
 
       const viewModel = {};
       viewModel.baseurl = environment.baseurl;
+      viewModel.mapId = mapId;
 
-      findMapById(mapId, viewModel);
+      findMapById(viewModel);
     })();
 
-    function findMapById(mapId, viewModel) {
-      const query = { _id: mapId };
+    function findMapById(viewModel) {
+      const query = { _id: viewModel.mapId };
       const options = {};
 
       db.collection('predefinedMapCollection').findOne(
