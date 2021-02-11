@@ -12,7 +12,7 @@ g.autoload.recruitUnitPrepare = (inject) => {
   const blueprint = inject.blueprint;
 
   const $recruitUnit = $body.find(
-    '[data-world-interface-information-modal] .js-recruit-unit'
+    '[data-world-interface-information-modal] [data-recruit-unit]'
   );
 
   (function init() {
@@ -69,7 +69,7 @@ g.autoload.recruitUnitPrepare = (inject) => {
           '" data-unit-amount class="big">0</span>'
       );
       const $buyButton = $(
-        '<button class="js-button-buy" data-unit-name="' +
+        '<button data-unit-name="' +
           unitName +
           '">' +
           blueprint.unit[unitName].cost.gold +
