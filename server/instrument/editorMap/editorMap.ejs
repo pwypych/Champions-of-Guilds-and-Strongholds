@@ -80,22 +80,25 @@
     const data = <%- JSON.stringify(viewModel.map) %>;
     const figures = <%- JSON.stringify(viewModel.figures) %>;
     const baseurl = '<%- viewModel.baseurl %>';
-    const map = data.mapLayerWithStrings;
-    const height = map.length;
-    const width = map[0].length;
-    console.log(height, width);
 
     const state = {};
     state.selected = 'empty';
+    state.map = data.mapLayerWithStrings;
+
+    const height = state.map.length;
+    const width = state.map[0].length;
+    console.log(height, width);
+
 
     (function init() {
-      generateFigureMenu();
-      onClickFigureMenu();
-      generateBoard();
-      onClickBoard();
+      figureMenuGenerate();
+      figureMenuOnClick();
+      boardGenerate();
+      boardRefresh();
+      boardOnClick();
     })();
 
-    function generateFigureMenu() {
+    function figureMenuGenerate() {
       const $menu = $('[data-menu]');
       figures.forEach((figure) => {
         const $img = $('<img data-figure="' + figure + '" src="' + baseurl + '/sprite/' + figure + '.png">');
@@ -103,7 +106,7 @@
       });
     }
 
-    function onClickFigureMenu() {
+    function figureMenuOnClick() {
       const $imgs = $('[data-figure]');
       $('[data-figure]').on('click', (event) => {
         const $img = $(event.currentTarget);
@@ -113,16 +116,16 @@
       });
     }
 
-    function generateBoard() {
+    function boardGenerate() {
       const $board = $('[data-board]');
       $board.html('');
 
       let i = 0;
-      map.forEach((row, y) => {
+      state.map.forEach((row, y) => {
         row.forEach((figure, x) => {
           i++;
           let html = '';
-          html += '<img data-square src="' + baseurl + '/sprite/' + figure + '.png">';
+          html += '<img data-square="' + figure + '" data-x="' + x + '" data-y="' + y + '">';
 
           if (i % width === 0) {
             html += '<div class="clearfix"></div>';
@@ -133,7 +136,16 @@
       });
     }
 
-    function onClickBoard() {
+    function boardRefresh() {
+      const $imgs = $('[data-square]'); 
+      $imgs.each((index, img) => {
+        const $img = $(img);
+        const figure = $img.attr('data-square');
+        $img.attr('src', baseurl + '/sprite/' + figure + '.png')
+      });
+    }
+
+    function boardOnClick() {
       const $imgs = $('[data-square]');
       $('[data-square]').on('click', (event) => {
         const $img = $(event.currentTarget);
