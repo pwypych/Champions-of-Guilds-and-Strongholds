@@ -1,10 +1,4 @@
 <style>
-  .world-interface-buttons {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-  }
-
   .world-interface-modal {
     position: absolute;
     top: 0px;
@@ -12,12 +6,6 @@
     margin: 60px 10px 10px 10px;
   }
 </style>
-
-<div class="world-interface-buttons" data-world-interface-buttons style="display: none;">
-  <button data-world-interface-end-turn-button>End Turn</button>
-  <button data-world-interface-information-button>Infos</button>
-  <button data-world-interface-castle-button>Castle</button>
-</div>
 
 <div class="card-brown world-interface-modal" data-world-interface-information-modal style="display: none;">
 
@@ -43,7 +31,7 @@
 
   <div class="seperator-20"></div>
 
-  <div class="inline-block ">
+  <div class="inline-block">
     <img class="vertical-align" style="margin-top: -40px;" src="<%= viewModel.baseurl %>/sprite/iconMovementTransparent.png">
   </div>
 
