@@ -357,6 +357,14 @@ function setupInstrumentRoutesAndLibraries() {
   );
 
   app.get(
+    '/panelPredefiend/launchImmediately',
+    require('./instrument/panel/predefined/launchImmediately.js')(
+      environment,
+      templateToHtml
+    )
+  );
+
+  app.get(
     '/inspector',
     require('./instrument/inspector/inspector.js')(
       environment,

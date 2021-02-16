@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+
+    <title>Launch Immediately</title>
+
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/library/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/library/lodash-4.17.10.js"></script>
+
+  </head>
+
+  <body>
+    Launching...
+  </body>
+
+  <script>
+    // Add async launch immediately
+    'use strict';
+
+    (function init() {
+      createNewGame();
+    })();
+
+    function createNewGame() {
+      const mapId = '<%- viewModel.mapId %>';
+      const data = {
+        mapName: mapId,
+        ajax: 'ajax'
+      };
+      $.post('/panelPredefined/createGamePredefinedPost', data, (result) => {
+        console.log('mapEdit: POST -> /panelPredefiend/createGamePredefinedPost', data);
+        const entities = result.entities;
+        readyPlayers(entities);
+      });
+    }
+
+    function readyPlayers(entities) {
+      const gameId = entities._id;
+      let playerTokens = [];
+
+      _.forEach(entities, (entity) => {
+        if (entity.playerToken) {
+          playerTokens.push(entity.playerToken);
+        }
+      });
+
+      const done = _.after(playerTokens.length, () => {
+        const authUri = '?gameId=' + gameId + '&playerToken=' + playerTokens[0];
+        goToUrl(authUri);
+      });
+
+      let delay = 50;
+      _.forEach(playerTokens, (playerToken) => {
+        const authUri = '?gameId=' + gameId + '&playerToken=' + playerToken;
+        delay += 200;
+        setTimeout(() => { // must be timed to prevent racing conditions bugs
+          readyPlayer(authUri, done);
+        }, delay);
+      });
+    }
+
+    function readyPlayer(authUri, done) {
+      const data = {};
+
+      $.post('/ajax/launchReadyPost' + authUri, data, () => {
+        console.log('mapEdit: POST -> /ajax/launchReadyPost', data);
+        done();
+      });
+    }
+
+    function goToUrl(authUri) {
+      window.location.replace('<%- viewModel.baseurl %>/game' + authUri);
+    }
+  </script>
+
+</html>

@@ -72,7 +72,7 @@
       <div class="seperator-20"></div>
       <a href="<%= viewModel.baseurl %>/editorMap/mapChoose">Back to map selection</a>
       <span> | </span>
-      <a data-launch href="#">Launch Immediately</a>
+      <a href="<%= viewModel.baseurl %>/panelPredefiend/launchImmediately?mapId=<%- viewModel.mapId %>" target="_blank">Launch Immediately</a>
       <div class="seperator-20"></div>
       <img data-figure="empty" style="background-color: white;" src="<%= viewModel.baseurl %>/sprite/empty.png">
     </div>
@@ -176,81 +176,6 @@
       $.post('/editorMap/mapSavePost', data, () => {});
     }
 
-  </script>
-
-  <script>
-    // Add async launch immediately button
-    'use strict';
-
-    (function init() {
-      launchOnClick();
-    })();
-
-    function launchOnClick() {
-      const $launch = $('[data-launch]')
-      $launch.on('click', (event) => {
-        event.preventDefault();
-        createNewGame();
-      });
-    }
-
-    function createNewGame() {
-      const mapId = '<%- viewModel.map._id %>';
-      const data = {
-        mapName: mapId,
-        ajax: 'ajax'
-      };
-      $.post('/panelPredefined/createGamePredefinedPost', data, (result) => {
-        console.log('mapEdit: POST -> /panelPredefiend/createGamePredefinedPost', data);
-        const entities = result.entities;
-        readyPlayers(entities);
-      });
-    }
-
-    function readyPlayers(entities) {
-      const gameId = entities._id;
-      let playerTokens = [];
-
-      _.forEach(entities, (entity) => {
-        if (entity.playerToken) {
-          playerTokens.push(entity.playerToken);
-        }
-      });
-
-      const done = _.after(playerTokens.length, () => {
-        const authUri = '?gameId=' + gameId + '&playerToken=' + playerTokens[0];
-        openNewBrowserTab(authUri);
-      });
-
-      let delay = 50;
-      _.forEach(playerTokens, (playerToken) => {
-        const authUri = '?gameId=' + gameId + '&playerToken=' + playerToken;
-        delay += 200;
-        setTimeout(() => { // must be timed to prevent racing conditions bugs
-          readyPlayer(authUri, done);
-        }, delay);
-      });
-    }
-
-    function readyPlayer(authUri, done) {
-      const data = {};
-
-      $.post('/ajax/launchReadyPost' + authUri, data, () => {
-        console.log('mapEdit: POST -> /ajax/launchReadyPost', data);
-        done();
-      });
-    }
-
-    function openNewBrowserTab(authUri) {
-      const win = window.open('<%- viewModel.baseurl %>/game' + authUri, '_blank');
-      if (win) {
-        //Browser has allowed it to be opened
-        win.focus();
-      } else {
-        //Browser has blocked it
-        alert('Please allow popups for this website');
-      } 
-    }
   </script>
 
 </html>
