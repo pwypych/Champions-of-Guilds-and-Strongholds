@@ -9,6 +9,8 @@ const _ = require('lodash');
 
 module.exports = (environment, db, blueprint) => {
   return (req, res) => {
+    let isAjax = false;
+
     (function init() {
       debug(
         '// Creates game in db based on map choosen by a player, sets starting properties'
@@ -25,6 +27,10 @@ module.exports = (environment, db, blueprint) => {
           '503 Service Unavailable - Wrong POST parameter or empty mapName parameter'
         );
         return;
+      }
+
+      if (req.body.ajax) {
+        isAjax = true;
       }
 
       debug('validateRequestBody');
@@ -170,14 +176,21 @@ module.exports = (environment, db, blueprint) => {
         }
 
         debug('insertGame: _.size(entities):', _.size(entities));
-        sendResponse();
+        sendResponse(entities);
       });
     }
 
-    function sendResponse() {
-      debug('sendResponse()');
-      debug('******************** should redirect ********************');
-      res.redirect(environment.baseurl + '/panelPredefined');
+    function sendResponse(entities) {
+      if (isAjax) {
+        res.send({
+          error: 0,
+          entities: entities
+        });
+      } else {
+        debug('sendResponse()');
+        debug('******************** should redirect ********************');
+        res.redirect(environment.baseurl + '/panelPredefined');
+      }
     }
   };
 };
