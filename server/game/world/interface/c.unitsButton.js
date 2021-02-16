@@ -3,8 +3,8 @@
 'use strict';
 
 // What does this module do?
-// It listens to info button clicks and toggles info modal
-g.autoload.informationButton = (inject) => {
+// It listens to units button clicks and toggles units modal
+g.autoload.unitsButton = (inject) => {
   const $body = inject.$body;
 
   const $button = $body.find('[data-world-interface-units-button]');
