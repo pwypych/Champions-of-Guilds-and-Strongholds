@@ -208,29 +208,49 @@
     }
 
     function readyPlayers(entities) {
-      let authUri = '';
+      const gameId = entities._id;
+      let playerTokens = [];
+
       _.forEach(entities, (entity) => {
         if (entity.playerToken) {
-          const authUri = '?gameId=' + entities._id + '&playerToken=' + entity.playerToken;
-          readyPlayer(authUri);
+          playerTokens.push(entity.playerToken);
         }
       });
 
-      openNewBrowserTab(authUri);
+      const done = _.after(playerTokens.length, () => {
+        const authUri = '?gameId=' + gameId + '&playerToken=' + playerTokens[0];
+        openNewBrowserTab(authUri);
+      });
+
+      let delay = 50;
+      _.forEach(playerTokens, (playerToken) => {
+        const authUri = '?gameId=' + gameId + '&playerToken=' + playerToken;
+        delay += 200;
+        setTimeout(() => { // must be timed to prevent racing conditions bugs
+          readyPlayer(authUri, done);
+        }, delay);
+      });
     }
 
-    function readyPlayer(authUri) {
+    function readyPlayer(authUri, done) {
       const data = {};
 
       $.post('/ajax/launchReadyPost' + authUri, data, () => {
         console.log('mapEdit: POST -> /ajax/launchReadyPost', data);
+        done();
       });
     }
 
     function openNewBrowserTab(authUri) {
-      
+      const win = window.open('<%- viewModel.baseurl %>/game' + authUri, '_blank');
+      if (win) {
+        //Browser has allowed it to be opened
+        win.focus();
+      } else {
+        //Browser has blocked it
+        alert('Please allow popups for this website');
+      } 
     }
-
   </script>
 
 </html>
