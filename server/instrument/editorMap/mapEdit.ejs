@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="<%= viewModel.baseurl %>/css/ui.css?v=<%= viewModel.timestamp %>">
 
     <script type="text/javascript" src="<%= viewModel.baseurl %>/library/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/library/lodash-4.17.10.js"></script>
 
     <style>
       body {
@@ -70,6 +71,8 @@
     <div data-menu class="menu">
       <div class="seperator-20"></div>
       <a href="<%= viewModel.baseurl %>/editorMap/mapChoose">Back to map selection</a>
+      <span> | </span>
+      <a data-launch href="#">Launch Immediately</a>
       <div class="seperator-20"></div>
       <img data-figure="empty" style="background-color: white;" src="<%= viewModel.baseurl %>/sprite/empty.png">
     </div>
@@ -87,6 +90,7 @@
   </body>
 
   <script>
+    // Generate and provide map editor
     'use strict';
 
     const data = <%- JSON.stringify(viewModel.map) %>;
@@ -170,6 +174,61 @@
     function save() {
       const data = { mapId: mapId, mapLayerWithStrings: state.map };
       $.post('/editorMap/mapSavePost', data, () => {});
+    }
+
+  </script>
+
+  <script>
+    // Add async launch immediately button
+    'use strict';
+
+    (function init() {
+      launchOnClick();
+    })();
+
+    function launchOnClick() {
+      const $launch = $('[data-launch]')
+      $launch.on('click', (event) => {
+        event.preventDefault();
+        createNewGame();
+      });
+    }
+
+    function createNewGame() {
+      const mapId = '<%- viewModel.map._id %>';
+      const data = {
+        mapName: mapId,
+        ajax: 'ajax'
+      };
+      $.post('/panelPredefined/createGamePredefinedPost', data, (result) => {
+        console.log('mapEdit: POST -> /panelPredefiend/createGamePredefinedPost', data);
+        const entities = result.entities;
+        readyPlayers(entities);
+      });
+    }
+
+    function readyPlayers(entities) {
+      let authUri = '';
+      _.forEach(entities, (entity) => {
+        if (entity.playerToken) {
+          const authUri = '?gameId=' + entities._id + '&playerToken=' + entity.playerToken;
+          readyPlayer(authUri);
+        }
+      });
+
+      openNewBrowserTab(authUri);
+    }
+
+    function readyPlayer(authUri) {
+      const data = {};
+
+      $.post('/ajax/launchReadyPost' + authUri, data, () => {
+        console.log('mapEdit: POST -> /ajax/launchReadyPost', data);
+      });
+    }
+
+    function openNewBrowserTab(authUri) {
+      
     }
 
   </script>
