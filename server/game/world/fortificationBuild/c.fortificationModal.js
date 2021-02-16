@@ -19,7 +19,7 @@ g.autoload.fortificationModal = (inject) => {
 
   function onViewportWorldReady() {
     walkie.onEvent(
-      'viewportWorldReady_',
+      'viewportWorldReadyEvent_',
       'fortificationModal.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];

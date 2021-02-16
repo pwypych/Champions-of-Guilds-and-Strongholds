@@ -20,7 +20,7 @@ g.autoload.worldBackgroundDraw = (inject) => {
 
   function onEntitiesGetFirst() {
     walkie.onEvent(
-      'viewportWorldReady_',
+      'viewportWorldReadyEvent_',
       'worldBackgroundDraw.js',
       () => {
         drawBackground();

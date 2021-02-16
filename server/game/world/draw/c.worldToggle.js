@@ -51,6 +51,6 @@ g.autoload.worldToggle = (inject) => {
   }
 
   function triggerViewportWorldReady() {
-    walkie.triggerEvent('viewportWorldReady_', 'worldToggle.js', {}, true);
+    walkie.triggerEvent('viewportWorldReadyEvent_', 'worldToggle.js', {}, true);
   }
 };

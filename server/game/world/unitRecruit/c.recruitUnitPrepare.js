@@ -21,7 +21,7 @@ g.autoload.recruitUnitPrepare = (inject) => {
 
   function onViewportWorldReady() {
     walkie.onEvent(
-      'viewportWorldReady_',
+      'viewportWorldReadyEvent_',
       'recruitUnitPrepare.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];

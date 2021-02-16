@@ -18,7 +18,7 @@ g.autoload.heroFocusWorldReady = (inject) => {
 
   function onViewPortWorldReady() {
     walkie.onEvent(
-      'viewportWorldReady_',
+      'viewportWorldReadyEvent_',
       'heroFocusWorldReady.js',
       () => {
         findPlayerId();
