@@ -16,7 +16,7 @@ g.autoload.chat = (inject) => {
 
   function onChatMessage() {
     walkie.onEvent(
-      'chatMessage_',
+      'chatMessageEvent_',
       'chat.js',
       (data) => {
         if (!data.message) {
