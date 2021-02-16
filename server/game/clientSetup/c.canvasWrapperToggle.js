@@ -16,7 +16,7 @@ g.autoload.canvasWrapperToggle = (inject) => {
 
   function onStateChange() {
     walkie.onEvent(
-      'stateChange_',
+      'stateChangeEvent_',
       'canvasWrapperToggle.js',
       (state) => {
         if (state === 'worldState' || state === 'battleState') {

@@ -16,7 +16,7 @@ g.autoload.worldInterfaceToggle = (inject) => {
 
   function onStateChange() {
     walkie.onEvent(
-      'stateChange_',
+      'stateChangeEvent_',
       'worldInterfaceToggle.js',
       (state) => {
         if (state === 'worldState') {

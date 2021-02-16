@@ -16,7 +16,7 @@ g.autoload.battleInterfaceToggle = (inject) => {
 
   function onStateChange() {
     walkie.onEvent(
-      'stateChange_',
+      'stateChangeEvent_',
       'battleInterfaceToggle.js',
       (state) => {
         if (state === 'battleState') {

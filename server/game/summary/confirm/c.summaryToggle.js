@@ -19,7 +19,7 @@ g.autoload.summaryToggle = (inject) => {
 
   function onStateChange() {
     walkie.onEvent(
-      'stateChange_',
+      'stateChangeEvent_',
       'summaryToggle.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];

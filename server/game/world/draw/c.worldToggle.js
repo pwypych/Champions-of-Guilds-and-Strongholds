@@ -21,7 +21,7 @@ g.autoload.worldToggle = (inject) => {
 
   function onStateChange() {
     walkie.onEvent(
-      'stateChange_',
+      'stateChangeEvent_',
       'worldToggle.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
