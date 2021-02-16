@@ -20,7 +20,7 @@ g.autoload.figuresDraw = (inject) => {
 
   function onViewPortWorldReady() {
     walkie.onEvent(
-      'viewportWorldReady_',
+      'viewportWorldReadyEvent_',
       'figuresDraw.js',
       () => {
         forEachFigure();

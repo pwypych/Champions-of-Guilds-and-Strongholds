@@ -17,7 +17,7 @@ g.autoload.markerActiveDraw = (inject) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
+      'entitiesGetEvent_',
       'markerActiveDraw.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];

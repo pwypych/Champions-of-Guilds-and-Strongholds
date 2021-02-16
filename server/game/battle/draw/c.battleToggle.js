@@ -21,7 +21,7 @@ g.autoload.battleToggle = (inject) => {
 
   function onStateChange() {
     walkie.onEvent(
-      'stateChange_',
+      'stateChangeEvent_',
       'battleToggle.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];

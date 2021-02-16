@@ -15,7 +15,7 @@ g.autoload.viewportClamp = (inject) => {
 
   function onViewportWorldReady() {
     walkie.onEvent(
-      'viewportWorldReady_',
+      'viewportWorldReadyEvent_',
       'worldClamp.js',
       () => {
         clampViewport();

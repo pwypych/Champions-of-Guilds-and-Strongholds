@@ -17,7 +17,7 @@ g.autoload.battleCleanup = (inject) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
+      'entitiesGetEvent_',
       'battleCleanup.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];

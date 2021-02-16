@@ -3,7 +3,7 @@
 'use strict';
 
 // What does this module do?
-// Downloads entities from endpoint and triggers entitiesGet_ event
+// Downloads entities from endpoint and triggers entitiesGetEvent_
 g.autoload.entitiesInterval = (inject) => {
   const walkie = inject.walkie;
   const auth = inject.auth;
@@ -31,7 +31,7 @@ g.autoload.entitiesInterval = (inject) => {
 
   function triggerEntitiesGet(entities) {
     walkie.triggerEvent(
-      'entitiesGet_',
+      'entitiesGetEvent_',
       'entitiesInterval.js',
       entities,
       false

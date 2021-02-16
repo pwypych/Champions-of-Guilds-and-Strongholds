@@ -17,7 +17,7 @@ g.autoload.endTurnCountdown = (inject) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
+      'entitiesGetEvent_',
       'endTurnCountdown.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
@@ -74,7 +74,7 @@ g.autoload.endTurnCountdown = (inject) => {
     interval = setInterval(() => {
       if (time === 30) {
         walkie.triggerEvent(
-          'chatMessage_',
+          'chatMessageEvent_',
           'endTurnCountdown',
           { message: 'Turn will end in 30s...' },
           false
@@ -83,7 +83,7 @@ g.autoload.endTurnCountdown = (inject) => {
 
       if (time === 25) {
         walkie.triggerEvent(
-          'chatMessage_',
+          'chatMessageEvent_',
           'endTurnCountdown',
           { message: 'Turn will end in 25s...' },
           false
@@ -92,7 +92,7 @@ g.autoload.endTurnCountdown = (inject) => {
 
       if (time === 20) {
         walkie.triggerEvent(
-          'chatMessage_',
+          'chatMessageEvent_',
           'endTurnCountdown',
           { message: 'Turn will end in 20s...' },
           false
@@ -101,7 +101,7 @@ g.autoload.endTurnCountdown = (inject) => {
 
       if (time === 15) {
         walkie.triggerEvent(
-          'chatMessage_',
+          'chatMessageEvent_',
           'endTurnCountdown',
           { message: 'Turn will end in 15s...' },
           false
@@ -110,7 +110,7 @@ g.autoload.endTurnCountdown = (inject) => {
 
       if (time === 10) {
         walkie.triggerEvent(
-          'chatMessage_',
+          'chatMessageEvent_',
           'endTurnCountdown',
           { message: 'Turn will end in 10s...' },
           false
@@ -119,7 +119,7 @@ g.autoload.endTurnCountdown = (inject) => {
 
       if (time === 5) {
         walkie.triggerEvent(
-          'chatMessage_',
+          'chatMessageEvent_',
           'endTurnCountdown',
           { message: 'Turn will end in 5s...' },
           false
@@ -128,7 +128,7 @@ g.autoload.endTurnCountdown = (inject) => {
 
       if (time === 3) {
         walkie.triggerEvent(
-          'chatMessage_',
+          'chatMessageEvent_',
           'endTurnCountdown',
           { message: 'Turn will end in 3s...' },
           false
@@ -137,7 +137,7 @@ g.autoload.endTurnCountdown = (inject) => {
 
       if (time === 2) {
         walkie.triggerEvent(
-          'chatMessage_',
+          'chatMessageEvent_',
           'endTurnCountdown',
           { message: 'Turn will end in 2s...' },
           false
@@ -146,7 +146,7 @@ g.autoload.endTurnCountdown = (inject) => {
 
       if (time === 1) {
         walkie.triggerEvent(
-          'chatMessage_',
+          'chatMessageEvent_',
           'endTurnCountdown',
           { message: 'Turn will end in 1s...' },
           false
@@ -168,7 +168,7 @@ g.autoload.endTurnCountdown = (inject) => {
       newDayMessageWasSend = true;
 
       walkie.triggerEvent(
-        'chatMessage_',
+        'chatMessageEvent_',
         'endTurnCountdown.js',
         { message: 'New day has arrived. You can move now!' },
         false

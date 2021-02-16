@@ -39,7 +39,7 @@ g.autoload.keyboardLoadSavedGame = (inject) => {
     $.post('/panelRandom/loadGamePost' + auth.uri, data, (response) => {
       console.log('loadPreviousSavedGamePost():response.length:', response);
       walkie.triggerEvent(
-        'chatMessage_',
+        'chatMessageEvent_',
         'keyboardLoadSavedGame',
         { message: 'Game loaded.' },
         false
@@ -54,7 +54,7 @@ g.autoload.keyboardLoadSavedGame = (inject) => {
     $.post('/panelRandom/loadGamePost' + auth.uri, data, (response) => {
       console.log('loadNextSavedGamePost():response.length:', response);
       walkie.triggerEvent(
-        'chatMessage_',
+        'chatMessageEvent_',
         'keyboardLoadSavedGame',
         { message: 'Game saved.' },
         false

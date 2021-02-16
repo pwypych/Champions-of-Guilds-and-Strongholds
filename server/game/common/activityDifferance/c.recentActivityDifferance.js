@@ -16,7 +16,7 @@ g.autoload.recentActivityDifferance = (inject) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
+      'entitiesGetEvent_',
       'recentActivityDifferance.js',
       () => {
         ensureOldEntitiesDefined();

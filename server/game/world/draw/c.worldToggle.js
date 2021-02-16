@@ -21,7 +21,7 @@ g.autoload.worldToggle = (inject) => {
 
   function onStateChange() {
     walkie.onEvent(
-      'stateChange_',
+      'stateChangeEvent_',
       'worldToggle.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
@@ -51,6 +51,6 @@ g.autoload.worldToggle = (inject) => {
   }
 
   function triggerViewportWorldReady() {
-    walkie.triggerEvent('viewportWorldReady_', 'worldToggle.js', {}, true);
+    walkie.triggerEvent('viewportWorldReadyEvent_', 'worldToggle.js', {}, true);
   }
 };

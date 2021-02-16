@@ -12,7 +12,7 @@ g.autoload.recruitUnitPrepare = (inject) => {
   const blueprint = inject.blueprint;
 
   const $recruitUnit = $body.find(
-    '[data-world-interface-information-modal] [data-recruit-unit]'
+    '[data-world-interface-units-modal] [data-recruit-unit]'
   );
 
   (function init() {
@@ -21,7 +21,7 @@ g.autoload.recruitUnitPrepare = (inject) => {
 
   function onViewportWorldReady() {
     walkie.onEvent(
-      'viewportWorldReady_',
+      'viewportWorldReadyEvent_',
       'recruitUnitPrepare.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];

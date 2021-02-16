@@ -19,7 +19,7 @@ g.autoload.launchDisableUi = (inject) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
+      'entitiesGetEvent_',
       'launchTable.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];

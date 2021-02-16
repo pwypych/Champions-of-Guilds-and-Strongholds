@@ -2,12 +2,15 @@
 
 'use strict';
 
-g.autoload.heroDeadToggle = (inject) => {
+// What does this module do?
+// Updates data in units modal
+g.autoload.unitsModal = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;
 
-  const $heroDead = $body.find('[data-hero-dead]');
+  const $modal = $body.find('[data-world-interface-units-modal]');
+  const $recruitUnit = $modal.find('[data-recruit-unit]');
 
   (function init() {
     onEntitiesGet();
@@ -16,7 +19,7 @@ g.autoload.heroDeadToggle = (inject) => {
   function onEntitiesGet() {
     walkie.onEvent(
       'entitiesGetEvent_',
-      'heroDeadToggle.js',
+      'unitsModal.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
 
@@ -38,20 +41,22 @@ g.autoload.heroDeadToggle = (inject) => {
       }
     });
 
-    findHeroPosition(playerId);
+    updateUnitAmounts(playerId);
   }
 
-  function findHeroPosition(playerId) {
+  function updateUnitAmounts(playerId) {
     let hero;
     _.forEach(freshEntities(), (entity) => {
-      if (entity.heroStats && entity.owner === playerId && entity.position) {
+      if (entity.heroStats && entity.owner === playerId) {
         hero = entity;
       }
     });
 
-    // when hero is dead
-    if (hero.dead) {
-      $heroDead.show();
-    }
+    _.forEach(hero.unitAmounts, (count, unitName) => {
+      const $amount = $recruitUnit.find(
+        "[data-unit-amount][data-unit-name='" + unitName + "']"
+      );
+      $amount.text(count);
+    });
   }
 };

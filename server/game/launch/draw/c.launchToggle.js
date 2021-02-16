@@ -16,7 +16,7 @@ g.autoload.launchToggle = (inject) => {
 
   function onStateChange() {
     walkie.onEvent(
-      'stateChange_',
+      'stateChangeEvent_',
       'launchToggle.js',
       (state) => {
         if (state !== 'launchState') {

@@ -9,10 +9,11 @@ g.autoload.maneuverWait = (inject) => {
   const freshEntities = inject.freshEntities;
   const auth = inject.auth;
 
-  const $maneuverButtons = $body.find('[data-lol]');
+  const $maneuverButtons = $body.find('[data-battle-interface]');
   const $button = $maneuverButtons.find('[data-wait-button]');
 
   (function init() {
+    console.log('button clicked');
     onClick();
   })();
 

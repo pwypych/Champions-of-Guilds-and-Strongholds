@@ -3,7 +3,7 @@
 'use strict';
 
 // What does this module do?
-// Updates data in information modal
+// Updates data in infos modal
 g.autoload.informationModal = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;
@@ -15,7 +15,6 @@ g.autoload.informationModal = (inject) => {
   const $stone = $modal.find('[data-stone]');
   const $crystal = $modal.find('[data-crystal]');
   const $movement = $modal.find('[data-movement]');
-  const $recruitUnit = $modal.find('[data-recruit-unit]');
 
   (function init() {
     onEntitiesGet();
@@ -23,7 +22,7 @@ g.autoload.informationModal = (inject) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
+      'entitiesGetEvent_',
       'informationModal.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
@@ -73,16 +72,5 @@ g.autoload.informationModal = (inject) => {
     const percent = Math.ceil((movementCurrent * 100) / movementBase);
 
     $movement.css('width', percent);
-
-    updateUnitAmounts(hero);
-  }
-
-  function updateUnitAmounts(hero) {
-    _.forEach(hero.unitAmounts, (count, unitName) => {
-      const $amount = $recruitUnit.find(
-        "[data-unit-amount][data-unit-name='" + unitName + "']"
-      );
-      $amount.text(count);
-    });
   }
 };
