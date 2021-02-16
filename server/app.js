@@ -360,6 +360,7 @@ function setupInstrumentRoutesAndLibraries() {
     '/panelPredefined/launchImmediately',
     require('./instrument/panel/predefined/launchImmediately.js')(
       environment,
+      blueprint,
       templateToHtml
     )
   );

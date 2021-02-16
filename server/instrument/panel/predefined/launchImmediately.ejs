@@ -20,6 +20,8 @@
     // Add async launch immediately
     'use strict';
 
+    const races = <%- JSON.stringify(viewModel.races) %>;
+
     (function init() {
       createNewGame();
     })();
@@ -55,10 +57,21 @@
       let delay = 50;
       _.forEach(playerTokens, (playerToken) => {
         const authUri = '?gameId=' + gameId + '&playerToken=' + playerToken;
-        delay += 200;
         setTimeout(() => { // must be timed to prevent racing conditions bugs
-          readyPlayer(authUri, done);
+          changeRace(authUri, done);
         }, delay);
+        delay += 200;
+      });
+    }
+
+    function changeRace(authUri, done) {
+      const data = {
+        playerRace: _.sample(races)
+      };
+
+      $.post('/ajax/launchRacePost' + authUri, data, () => {
+        console.log('mapEdit: POST -> /ajax/launchRacePost', data);
+        readyPlayer(authUri, done);
       });
     }
 

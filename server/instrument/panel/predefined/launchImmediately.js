@@ -2,9 +2,10 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:mapEdit');
+const debug = require('debug')('cogs:launchImmediately');
+const _ = require('lodash');
 
-module.exports = (environment, templateToHtml) => {
+module.exports = (environment, blueprint, templateToHtml) => {
   return (req, res) => {
 
     (function init() {
@@ -18,8 +19,21 @@ module.exports = (environment, templateToHtml) => {
       viewModel.baseurl = environment.baseurl;
       viewModel.mapId = mapId;
 
-      sendResponse(viewModel);
+      findRaces(viewModel);
     })();
+
+    function findRaces(viewModel) {
+      const races = [];
+
+      _.forEach(blueprint.race, (object, race) => {
+        races.push(race);
+      });
+
+      viewModel.races = races;
+
+      debug('findRaces', races);
+      sendResponse(viewModel);
+    }
 
     function sendResponse(viewModel) {
       const path =
