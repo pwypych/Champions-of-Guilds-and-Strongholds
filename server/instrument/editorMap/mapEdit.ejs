@@ -8,16 +8,17 @@
     <title>Map Editor</title>
 
     <link rel="stylesheet" href="<%= viewModel.baseurl %>/css/style.css?v=<%= viewModel.timestamp %>">
+    <link rel="stylesheet" href="<%= viewModel.baseurl %>/css/ui.css?v=<%= viewModel.timestamp %>">
 
     <script type="text/javascript" src="<%= viewModel.baseurl %>/library/jquery-3.3.1.js"></script>
 
     <style>
       body {
-        padding: 10px;
+        padding: 10px 30px 10px 30px;
         background-color: #300a24;
         color: #999;
-        font-family: "Ubuntu Mono", monospace;
         overflow: auto;
+
 
         image-rendering: optimizeSpeed;
         image-rendering: -moz-crisp-edges;
@@ -28,8 +29,8 @@
       }
 
       .board {
+        margin-top: 150px;
         display: inline-block;
-        margin: 50px;
         white-space: nowrap;
         background-image: url('/sprite/backgroundGrass1.png');
         width: auto;
@@ -44,6 +45,15 @@
         margin-top: -2px;
       }
 
+      .menu {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        background-color: #300a24;
+        padding: 0px 30px 10px 30px;
+      }
+
       .seperator-10 {
         margin-top: 10px;
       }
@@ -51,14 +61,16 @@
       .clearfix {
         clear: both;
       }
+
     </style>
 
   </head>
 
   <body>
     <div data-menu class="menu">
-      <button>Save</button>
-      <div class="seperator-10"></div>
+      <div class="seperator-20"></div>
+      <a href="<%= viewModel.baseurl %>/editorMap/mapChoose">Back to map selection</a>
+      <div class="seperator-20"></div>
       <img data-figure="empty" style="background-color: white;" src="<%= viewModel.baseurl %>/sprite/empty.png">
     </div>
 
@@ -67,35 +79,44 @@
       <img src="<%= viewModel.baseurl %>/sprite/backgroundGrass1.png">
       <img src="<%= viewModel.baseurl %>/sprite/backgroundGrass1.png">
       <div class="clearfix"></div>
-      <img src="<%= viewModel.baseurl %>/sprite/backgroundGrass1.png"></div>
+      <img src="<%= viewModel.baseurl %>/sprite/backgroundGrass1.png">
+    </div>
+
+    <div class="seperator-40"></div>
+    <div class="seperator-40"></div>
   </body>
 
   <script>
     'use strict';
 
-    // save will be done by Ajax
-    // steps for undo function in localStorage
-    // tools in javascript here
-
     const data = <%- JSON.stringify(viewModel.map) %>;
     const figures = <%- JSON.stringify(viewModel.figures) %>;
     const baseurl = '<%- viewModel.baseurl %>';
-    const map = data.mapLayerWithStrings;
-    const height = map.length;
-    const width = map[0].length;
-    console.log(height, width);
+    const mapId = '<%- viewModel.mapId %>';
 
     const state = {};
     state.selected = 'empty';
+    state.map = data.mapLayerWithStrings;
+
+    const height = state.map.length;
+    const width = state.map[0].length;
 
     (function init() {
-      generateFigureMenu();
-      onClickFigureMenu();
-      generateBoard();
-      onClickBoard();
+      menuBoardMargin();
+      figureMenuGenerate();
+      figureMenuOnClick();
+      boardGenerate();
+      boardOnClick();
     })();
 
-    function generateFigureMenu() {
+    function menuBoardMargin() {
+      $(window).on('load', () => {
+        const height = $('[data-menu]').outerHeight();
+        $('[data-board]').css('margin-top', height + 'px');
+      });
+    }
+
+    function figureMenuGenerate() {
       const $menu = $('[data-menu]');
       figures.forEach((figure) => {
         const $img = $('<img data-figure="' + figure + '" src="' + baseurl + '/sprite/' + figure + '.png">');
@@ -103,7 +124,7 @@
       });
     }
 
-    function onClickFigureMenu() {
+    function figureMenuOnClick() {
       const $imgs = $('[data-figure]');
       $('[data-figure]').on('click', (event) => {
         const $img = $(event.currentTarget);
@@ -113,16 +134,16 @@
       });
     }
 
-    function generateBoard() {
+    function boardGenerate() {
       const $board = $('[data-board]');
       $board.html('');
 
       let i = 0;
-      map.forEach((row, y) => {
+      state.map.forEach((row, y) => {
         row.forEach((figure, x) => {
           i++;
           let html = '';
-          html += '<img data-square src="' + baseurl + '/sprite/' + figure + '.png">';
+          html += '<img data-square data-x="' + x + '" data-y="' + y + '" src="' + baseurl + '/sprite/' + figure + '.png">';
 
           if (i % width === 0) {
             html += '<div class="clearfix"></div>';
@@ -133,12 +154,22 @@
       });
     }
 
-    function onClickBoard() {
+    function boardOnClick() {
       const $imgs = $('[data-square]');
       $('[data-square]').on('click', (event) => {
         const $img = $(event.currentTarget);
-        console.log(state);
+        const x = $img.attr('data-x');
+        const y = $img.attr('data-y');
+        state.map[y][x] = state.selected;
+        boardGenerate();
+        boardOnClick();
+        save();
       });
+    }
+
+    function save() {
+      const data = { mapId: mapId, mapLayerWithStrings: state.map };
+      $.post('/editorMap/mapSavePost', data, () => {});
     }
 
   </script>
