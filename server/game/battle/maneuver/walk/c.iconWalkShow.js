@@ -17,7 +17,7 @@ g.autoload.iconWalkShow = (inject) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
+      'entitiesGetEvent_',
       'iconWalkShow.js',
       () => {
         findPlayerId();

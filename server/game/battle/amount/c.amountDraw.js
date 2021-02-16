@@ -20,7 +20,7 @@ g.autoload.amountDraw = (inject) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
+      'entitiesGetEvent_',
       'amountDraw.js',
       () => {
         checkBattleState();

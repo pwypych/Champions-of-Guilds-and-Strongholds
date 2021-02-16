@@ -71,7 +71,7 @@ g.autoload.prohibitResourceless = (inject) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
+      'entitiesGetEvent_',
       'prohibitResourceless.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];

@@ -13,7 +13,7 @@ g.setup.freshEntities = (walkie) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
+      'entitiesGetEvent_',
       'freshEntities.js',
       (data) => {
         entities = data;

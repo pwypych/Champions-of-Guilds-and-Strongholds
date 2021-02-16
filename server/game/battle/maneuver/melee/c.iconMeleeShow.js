@@ -17,7 +17,7 @@ g.autoload.iconMeleeShow = (inject) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
+      'entitiesGetEvent_',
       'iconMelee.js',
       () => {
         hideIcons();

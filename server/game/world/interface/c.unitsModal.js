@@ -18,7 +18,7 @@ g.autoload.unitsModal = (inject) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
+      'entitiesGetEvent_',
       'unitsModal.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];

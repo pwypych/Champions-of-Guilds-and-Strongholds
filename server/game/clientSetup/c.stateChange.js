@@ -15,7 +15,7 @@ g.autoload.stateChange = (inject) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
+      'entitiesGetEvent_',
       'stateChange.js',
       (entities) => {
         compareWithOldState(entities);

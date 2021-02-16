@@ -17,7 +17,7 @@ g.autoload.iconShootShow = (inject) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
+      'entitiesGetEvent_',
       'iconShootShow.js',
       () => {
         hideIcons();

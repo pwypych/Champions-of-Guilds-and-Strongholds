@@ -17,7 +17,7 @@ g.autoload.endTurnCountdown = (inject) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entitiesGet_',
+      'entitiesGetEvent_',
       'endTurnCountdown.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
