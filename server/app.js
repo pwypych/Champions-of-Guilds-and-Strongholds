@@ -273,7 +273,7 @@ function setupInstrumentRoutesAndLibraries() {
 
   // general
   app.get('/', (req, res) => {
-    res.redirect('/panelRandom');
+    res.redirect('/panelPredefined');
   });
 
   app.get(
@@ -357,7 +357,7 @@ function setupInstrumentRoutesAndLibraries() {
   );
 
   app.get(
-    '/panelPredefiend/launchImmediately',
+    '/panelPredefined/launchImmediately',
     require('./instrument/panel/predefined/launchImmediately.js')(
       environment,
       templateToHtml

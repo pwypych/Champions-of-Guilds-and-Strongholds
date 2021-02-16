@@ -27,11 +27,11 @@
     function createNewGame() {
       const mapId = '<%- viewModel.mapId %>';
       const data = {
-        mapName: mapId,
+        mapId: mapId,
         ajax: 'ajax'
       };
       $.post('/panelPredefined/createGamePredefinedPost', data, (result) => {
-        console.log('mapEdit: POST -> /panelPredefiend/createGamePredefinedPost', data);
+        console.log('mapEdit: POST -> /panelPredefined/createGamePredefinedPost', data);
         const entities = result.entities;
         readyPlayers(entities);
       });

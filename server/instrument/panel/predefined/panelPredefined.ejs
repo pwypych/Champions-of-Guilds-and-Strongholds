@@ -27,13 +27,15 @@
 
       <form action="<%= viewModel.baseurl %>/panelPredefined/createGamePredefinedPost" method="POST">
         <button type="submit">Create Game</button>
+        <span> </span>
+        <button type="submit" formaction="<%= viewModel.baseurl %>/panelPredefined/launchImmediately" formmethod="get">Launch Immediately</button>
 
         <div class="seperator-20"></div>
 
         <span>Predefined map:</span><br />
-        <select name="mapName">
-          <% viewModel.mapNameArray.forEach((mapName) => { %>
-            <option value="<%= mapName %>"><%= mapName %></option>
+        <select name="mapId">
+          <% viewModel.mapNameArray.forEach((mapId) => { %>
+            <option value="<%= mapId %>"><%= mapId %></option>
           <% }); %>
         </select>
       </form>

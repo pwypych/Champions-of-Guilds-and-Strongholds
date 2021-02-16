@@ -20,11 +20,11 @@ module.exports = (environment, db, blueprint) => {
     })();
 
     function validateRequestBody() {
-      if (typeof req.body.mapName !== 'string') {
-        debug('validateRequestBody: mapName not a string: ', req.body);
+      if (typeof req.body.mapId !== 'string') {
+        debug('validateRequestBody: mapId not a string: ', req.body);
         res.status(503);
         res.send(
-          '503 Service Unavailable - Wrong POST parameter or empty mapName parameter'
+          '503 Service Unavailable - Wrong POST parameter or empty mapId parameter'
         );
         return;
       }
@@ -38,16 +38,16 @@ module.exports = (environment, db, blueprint) => {
     }
 
     function sanitizeRequestBody() {
-      const mapName = validator.whitelist(
-        req.body.mapName,
+      const mapId = validator.whitelist(
+        req.body.mapId,
         'abcdefghijklmnopqrstuvwxyz01234567890|_'
       );
-      debug('validateRequestBody', mapName);
-      findMap(mapName);
+      debug('validateRequestBody', mapId);
+      findMap(mapId);
     }
 
-    function findMap(mapName) {
-      const query = { _id: mapName };
+    function findMap(mapId) {
+      const query = { _id: mapId };
       const options = {};
 
       db.collection('predefinedMapCollection').findOne(
