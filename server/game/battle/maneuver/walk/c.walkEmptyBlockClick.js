@@ -3,7 +3,7 @@
 'use strict';
 
 // What does this module do?
-// It listens to click_ events, for walking units, generates path through library and sends path events
+// It listens to clickEvent_, for walking units, generates path through library and sends path events
 g.autoload.walkEmptyBlockClick = (inject) => {
   const auth = inject.auth;
   const walkie = inject.walkie;
@@ -15,7 +15,7 @@ g.autoload.walkEmptyBlockClick = (inject) => {
 
   function onClick() {
     walkie.onEvent(
-      'click_',
+      'clickEvent_',
       'walkEmptyBlockClick.js',
       (data) => {
         const clickPosition = data.position;

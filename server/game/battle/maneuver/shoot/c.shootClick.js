@@ -3,7 +3,7 @@
 'use strict';
 
 // What does this module do?
-// It listens to click_ events, checks if click happened on enemy that is not one block away and sends shoot POST
+// It listens to clickEvent_, checks if click happened on enemy that is not one block away and sends shoot POST
 g.autoload.shootClick = (inject) => {
   const walkie = inject.walkie;
   const auth = inject.auth;
@@ -15,7 +15,7 @@ g.autoload.shootClick = (inject) => {
 
   function onClick() {
     walkie.onEvent(
-      'click_',
+      'clickEvent_',
       'shootClick.js',
       (data) => {
         const clickPosition = data.position;

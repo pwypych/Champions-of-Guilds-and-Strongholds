@@ -3,7 +3,7 @@
 'use strict';
 
 // What does this module do?
-// It listens to viewport clicked events, validates it and sends click_ event through walkie
+// It listens to viewport clicked events, validates it and sends clickEvent_ through walkie
 g.autoload.battleClick = (inject) => {
   const viewport = inject.viewport;
   const walkie = inject.walkie;
@@ -57,7 +57,7 @@ g.autoload.battleClick = (inject) => {
 
   function triggerClick(position) {
     walkie.triggerEvent(
-      'click_',
+      'clickEvent_',
       'battleClick.js',
       {
         position: position
