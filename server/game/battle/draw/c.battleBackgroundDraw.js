@@ -20,7 +20,7 @@ g.autoload.battleBackgroundDraw = (inject) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'viewportBattleReady_',
+      'viewportBattleReadyEvent_',
       'battleBackgroundDraw.js',
       () => {
         findBattleEntity();

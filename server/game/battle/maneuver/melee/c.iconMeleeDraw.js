@@ -20,7 +20,7 @@ g.autoload.iconMeleeDraw = (inject) => {
 
   function onViewportBattleReady() {
     walkie.onEvent(
-      'viewportBattleReady_',
+      'viewportBattleReadyEvent_',
       'iconMelee.js',
       () => {
         drawIconsOnce();

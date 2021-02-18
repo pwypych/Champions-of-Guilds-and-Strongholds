@@ -20,7 +20,7 @@ g.autoload.iconShootDraw = (inject) => {
 
   function onViewportBattleReady() {
     walkie.onEvent(
-      'viewportBattleReady_',
+      'viewportBattleReadyEvent_',
       'iconShootDraw.js',
       () => {
         drawIconsOnce();
