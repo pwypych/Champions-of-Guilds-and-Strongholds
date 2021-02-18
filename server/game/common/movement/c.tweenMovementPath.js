@@ -25,7 +25,7 @@ g.autoload.tweenMovementPath = (inject) => {
 
   function onEntityPathVerifiedByServer() {
     walkie.onEvent(
-      'movementPathVerifiedByServer_',
+      'movementPathVerifiedByServerEvent_',
       'tweenMovementPath.js',
       (data) => {
         const entityId = data.entityId;

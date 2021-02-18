@@ -145,7 +145,7 @@ g.autoload.flyEmptyBlockClick = (inject) => {
 
   function triggerUnitPathVerifiedByServer(entityId, responseUnitPath) {
     walkie.triggerEvent(
-      'movementPathVerifiedByServer_',
+      'movementPathVerifiedByServerEvent_',
       'flyEmptyBlockClick.js',
       {
         entityId: entityId,
