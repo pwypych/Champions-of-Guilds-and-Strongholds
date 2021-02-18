@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:editorMapSavePost');
+const debug = require('debug')('cogs:mapSavePost');
 
 module.exports = (environment, db) => {
   return (req, res) => {

@@ -17,7 +17,21 @@
       <a href="<%= viewModel.baseurl %>/panelPredefined">Back to panel</a>
       <div class="seperator-20"></div>
 
-      <h1>Edit Map:</h1>
+      <h1>Create Empty Map:</h1>
+
+      <form class="inline-block" action="/editorMap/mapCreateNewPost" method="post">
+      <p>Name: <input name="mapId" type="text" /></p>
+      <p>Width: <input name="width" type="number" value="9" /></p>
+      <p>Height: <input name="height" type="number" value="9" /></p>
+
+      <div class="seperator-10"></div>
+
+      <p><button data-button-ready>Create</button></p>
+      </form>
+
+      <div class="seperator-20"></div>
+
+      <h1>Edit Existing Map:</h1>
 
       <% viewModel.mapNameArray.forEach((mapId) => { %>
         <a href="<%= viewModel.baseurl %>/editorMap/mapEdit?mapId=<%= mapId %>"><%= mapId %></a> 

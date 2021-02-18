@@ -3,7 +3,7 @@
 'use strict';
 
 const debug = require('debug')('cogs:createGamePredefinedPost');
-const shortid = require('shortid');
+const shortId = require('shortid');
 const validator = require('validator');
 const _ = require('lodash');
 
@@ -71,7 +71,7 @@ module.exports = (environment, db, blueprint) => {
     function generateGameEntity(mapObject) {
       const entities = {};
 
-      const id = 'game__' + shortid.generate();
+      const id = 'game__' + shortId.generate();
 
       entities._id = id; // mongo id for that game is the same as entitie id for gameEntity
 
@@ -119,9 +119,9 @@ module.exports = (environment, db, blueprint) => {
       ];
 
       _.times(playerCount, (index) => {
-        const id = 'player__' + shortid.generate();
+        const id = 'player__' + shortId.generate();
         entities[id] = {};
-        entities[id].playerToken = 'playerToken_' + shortid.generate();
+        entities[id].playerToken = 'playerToken_' + shortId.generate();
         entities[id].playerData = {};
         entities[id].playerData.name = 'Player ' + (index + 1);
         entities[id].playerData.race = 'beast';
@@ -147,7 +147,7 @@ module.exports = (environment, db, blueprint) => {
           );
 
           // Add unique id to each figure instance
-          const id = 'figure_' + figureName + '__' + shortid.generate();
+          const id = 'figure_' + figureName + '__' + shortId.generate();
           entity.position = { x: x, y: y };
 
           entities[id] = entity;

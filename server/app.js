@@ -401,6 +401,14 @@ function setupInstrumentRoutesAndLibraries() {
     )
   );
 
+  app.post(
+    '/editorMap/mapCreateNewPost',
+    require('./instrument/editorMap/mapCreateNewPost.js')(
+      environment,
+      db
+    )
+  );
+
   debug('setupInstrumentRoutesAndLibraries');
   setupMiddleware();
 }
