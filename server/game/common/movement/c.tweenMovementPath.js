@@ -41,7 +41,7 @@ g.autoload.tweenMovementPath = (inject) => {
 
   function onRecentActivityDifferance() {
     walkie.onEvent(
-      'recentActivityDifferanceFound_',
+      'recentActivityDifferanceFoundEvent_',
       'tweenMovementPath.js',
       (data) => {
         if (data.entityId === tweeningEntityIdByPathVerifiedByServer) {

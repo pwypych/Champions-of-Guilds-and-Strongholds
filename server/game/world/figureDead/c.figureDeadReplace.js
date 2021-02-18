@@ -29,7 +29,7 @@ g.autoload.figureDeadReplace = (inject) => {
 
   function onRecentActivityDifferanceDone() {
     walkie.onEvent(
-      'recentActivityDifferanceFound_',
+      'recentActivityDifferanceFoundEvent_',
       'figureDeadReplace.js',
       () => {
         forEachFigure();

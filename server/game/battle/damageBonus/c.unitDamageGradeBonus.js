@@ -19,7 +19,7 @@ g.autoload.unitDamageGradeBonus = (inject) => {
 
   function onRecentActivityDifferance() {
     walkie.onEvent(
-      'recentActivityDifferanceFound_',
+      'recentActivityDifferanceFoundEvent_',
       'unitDamageGradeBonus.js',
       (data) => {
         if (data.entity.recentActivity.damageGrade) {

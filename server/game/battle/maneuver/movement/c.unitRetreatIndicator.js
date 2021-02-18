@@ -20,7 +20,7 @@ g.autoload.unitRetreatIndicator = (inject) => {
 
   function onRecentActivityDifferance() {
     walkie.onEvent(
-      'recentActivityDifferanceFound_',
+      'recentActivityDifferanceFoundEvent_',
       'unitRetreatIndicator.js',
       (data) => {
         if (data.entity.recentActivity.name === 'onMovement') {

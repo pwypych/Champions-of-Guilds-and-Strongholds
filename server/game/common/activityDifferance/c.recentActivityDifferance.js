@@ -60,7 +60,7 @@ g.autoload.recentActivityDifferance = (inject) => {
         };
 
         walkie.triggerEvent(
-          'recentActivityDifferanceFound_',
+          'recentActivityDifferanceFoundEvent_',
           'recentActivityDifferance.js',
           data,
           true
