@@ -25,7 +25,7 @@ g.autoload.tweenMovementPath = (inject) => {
 
   function onEntityPathVerifiedByServer() {
     walkie.onEvent(
-      'movementPathVerifiedByServer_',
+      'movementPathVerifiedByServerEvent_',
       'tweenMovementPath.js',
       (data) => {
         const entityId = data.entityId;
@@ -41,7 +41,7 @@ g.autoload.tweenMovementPath = (inject) => {
 
   function onRecentActivityDifferance() {
     walkie.onEvent(
-      'recentActivityDifferanceFound_',
+      'recentActivityDifferanceFoundEvent_',
       'tweenMovementPath.js',
       (data) => {
         if (data.entityId === tweeningEntityIdByPathVerifiedByServer) {
@@ -108,7 +108,7 @@ g.autoload.tweenMovementPath = (inject) => {
 
   function triggerEntityTweenStart(entityId, position, time) {
     walkie.triggerEvent(
-      'entityTweenStart_',
+      'entityTweenStartEvent_',
       'tweenMovementPath.js',
       {
         entityId: entityId,
@@ -121,7 +121,7 @@ g.autoload.tweenMovementPath = (inject) => {
 
   function triggerEntityTweenEnd(entityId, position) {
     walkie.triggerEvent(
-      'entityTweenEnd_',
+      'entityTweenEndEvent_',
       'tweenMovementPath.js',
       {
         entityId: entityId,

@@ -16,7 +16,7 @@ g.autoload.unitJustDiedHide = (inject) => {
 
   function onRecentActivityDifferance() {
     walkie.onEvent(
-      'recentActivityDifferanceFound_',
+      'recentActivityDifferanceFoundEvent_',
       'unitJustDiedHide.js',
       (data) => {
         if (

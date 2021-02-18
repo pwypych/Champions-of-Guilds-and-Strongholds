@@ -66,6 +66,6 @@ g.autoload.battleToggle = (inject) => {
   }
 
   function triggerViewportReady() {
-    walkie.triggerEvent('viewportBattleReady_', 'battleToggle.js', {}, true);
+    walkie.triggerEvent('viewportBattleReadyEvent_', 'battleToggle.js', {}, true);
   }
 };

@@ -19,7 +19,7 @@ g.autoload.hasBeenCollectedIndicate = (inject) => {
 
   function onRecentActivityDifferance() {
     walkie.onEvent(
-      'recentActivityDifferanceFound_',
+      'recentActivityDifferanceFoundEvent_',
       'hasBeenCollectedIndicate.js',
       (data) => {
         if (data.entity.recentActivity.name === 'hasBeenCollected') {

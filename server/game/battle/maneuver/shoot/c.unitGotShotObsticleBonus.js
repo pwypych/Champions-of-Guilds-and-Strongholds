@@ -19,7 +19,7 @@ g.autoload.unitGotShotObsticleBonus = (inject) => {
 
   function onRecentActivityDifferance() {
     walkie.onEvent(
-      'recentActivityDifferanceFound_',
+      'recentActivityDifferanceFoundEvent_',
       'unitGotShotObsticleBonus.js',
       (data) => {
         if (

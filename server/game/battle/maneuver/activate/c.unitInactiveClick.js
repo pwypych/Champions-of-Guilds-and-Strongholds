@@ -3,7 +3,7 @@
 'use strict';
 
 // What does this module do?
-// Listens to click_ events on a unit. If unit is inactive, owned by player, with maneuvers remaining it activates it.
+// Listens to clickEvent_ on a unit. If unit is inactive, owned by player, with maneuvers remaining it activates it.
 g.autoload.unitInactiveClick = (inject) => {
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;
@@ -15,7 +15,7 @@ g.autoload.unitInactiveClick = (inject) => {
 
   function onClick() {
     walkie.onEvent(
-      'click_',
+      'clickEvent_',
       'unitInactiveClick.js',
       (data) => {
         const clickPosition = data.position;

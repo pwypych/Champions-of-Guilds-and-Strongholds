@@ -19,7 +19,7 @@ g.autoload.unitGotHitAnimation = (inject) => {
 
   function onRecentActivityDifferance() {
     walkie.onEvent(
-      'recentActivityDifferanceFound_',
+      'recentActivityDifferanceFoundEvent_',
       'unitGotHitAnimation.js',
       (data) => {
         if (data.entity.recentActivity.name === 'gotHit') {

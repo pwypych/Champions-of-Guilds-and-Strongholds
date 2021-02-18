@@ -3,7 +3,7 @@
 'use strict';
 
 // What does this module do?
-// It listens to click_ events, for flying units, generates path through library and sends path events
+// It listens to clickEvent_ for flying units, generates path through library and sends path events
 g.autoload.flyEmptyBlockClick = (inject) => {
   const auth = inject.auth;
   const walkie = inject.walkie;
@@ -15,7 +15,7 @@ g.autoload.flyEmptyBlockClick = (inject) => {
 
   function onClick() {
     walkie.onEvent(
-      'click_',
+      'clickEvent_',
       'flyEmptyBlockClick.js',
       (data) => {
         const clickPosition = data.position;
@@ -145,7 +145,7 @@ g.autoload.flyEmptyBlockClick = (inject) => {
 
   function triggerUnitPathVerifiedByServer(entityId, responseUnitPath) {
     walkie.triggerEvent(
-      'movementPathVerifiedByServer_',
+      'movementPathVerifiedByServerEvent_',
       'flyEmptyBlockClick.js',
       {
         entityId: entityId,

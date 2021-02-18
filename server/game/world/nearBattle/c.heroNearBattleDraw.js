@@ -20,7 +20,7 @@ g.autoload.heroNearBattleDraw = (inject) => {
 
   function onRecentActivityDifferance() {
     walkie.onEvent(
-      'recentActivityDifferanceFound_',
+      'recentActivityDifferanceFoundEvent_',
       'heroNearBattleDraw.js',
       (data) => {
         if (data.entity.recentActivity.name === 'onMovement') {

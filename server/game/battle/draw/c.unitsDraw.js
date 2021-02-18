@@ -20,7 +20,7 @@ g.autoload.unitsDraw = (inject) => {
 
   function onRecentActivityDifferanceDone() {
     walkie.onEvent(
-      'viewportBattleReady_',
+      'viewportBattleReadyEvent_',
       'unitsDraw.js',
       () => {
         forEachUnit();

@@ -18,7 +18,7 @@ g.autoload.unitFocusTween = (inject) => {
 
   function onEntitiesGet() {
     walkie.onEvent(
-      'entityTweenStart_',
+      'entityTweenStartEvent_',
       'unitFocusTween.js',
       (data) => {
         const gameEntity = freshEntities()[freshEntities()._id];

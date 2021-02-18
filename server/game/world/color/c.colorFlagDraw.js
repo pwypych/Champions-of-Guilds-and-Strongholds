@@ -32,7 +32,7 @@ g.autoload.colorFlagDraw = (inject) => {
 
   function onRecentActivityDifferanceDone() {
     walkie.onEvent(
-      'recentActivityDifferanceFound_',
+      'recentActivityDifferanceFoundEvent_',
       'colorFlagDraw.js',
       () => {
         forEachFigure();

@@ -3,7 +3,7 @@
 'use strict';
 
 // What does this module do?
-// It listens to click_ events, checks if click happened on enemy one block away and sends melee POST
+// It listens to clickEvent_, checks if click happened on enemy one block away and sends melee POST
 g.autoload.meleeClick = (inject) => {
   const walkie = inject.walkie;
   const freshEntities = inject.freshEntities;
@@ -15,7 +15,7 @@ g.autoload.meleeClick = (inject) => {
 
   function onClick() {
     walkie.onEvent(
-      'click_',
+      'clickEvent_',
       'meleeClick.js',
       (data) => {
         const clickPosition = data.position;

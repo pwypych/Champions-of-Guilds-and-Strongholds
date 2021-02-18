@@ -16,7 +16,7 @@ g.autoload.unitJustDiedAnimation = (inject) => {
 
   function onRecentActivityDifferance() {
     walkie.onEvent(
-      'recentActivityDifferanceFound_',
+      'recentActivityDifferanceFoundEvent_',
       'unitJustDiedAnimation.js',
       (data) => {
         if (

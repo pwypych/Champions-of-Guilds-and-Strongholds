@@ -14,7 +14,7 @@ g.autoload.heroVisit = (inject) => {
 
   function onEntityTweenEnd() {
     walkie.onEvent(
-      'entityTweenEnd_',
+      'entityTweenEndEvent_',
       'heroVisit.js',
       (data) => {
         const entityId = data.entityId;
