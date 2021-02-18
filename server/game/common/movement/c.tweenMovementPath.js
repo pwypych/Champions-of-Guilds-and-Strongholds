@@ -108,7 +108,7 @@ g.autoload.tweenMovementPath = (inject) => {
 
   function triggerEntityTweenStart(entityId, position, time) {
     walkie.triggerEvent(
-      'entityTweenStart_',
+      'entityTweenStartEvent_',
       'tweenMovementPath.js',
       {
         entityId: entityId,
