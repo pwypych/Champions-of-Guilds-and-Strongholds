@@ -50,8 +50,6 @@ function setupEnvironment() {
     environment.baseurl = 'https://axe.cogs.ovh';
   }
   environment.basepath = path.join(__dirname, '..');
-  environment.basepathTiledMap =
-    environment.basepath + '/tiled/tiledPredefinedMap';
   environment.basepathTiledLand = environment.basepath + '/tiled/tiledLand';
   environment.basepathTiledParcel = environment.basepath + '/tiled/tiledParcel';
   environment.basepathTiledTileset =
@@ -172,23 +170,6 @@ function setupMongo() {
     db = client.db(dbName);
 
     debug('setupMongo()');
-    setupPredefinedMapCollection();
-  });
-}
-
-function setupPredefinedMapCollection() {
-  const generateMapCollection = require('./instrument/tiled/generatePredefinedMapCollection.js')(
-    environment,
-    db
-  );
-  generateMapCollection((error, mapCount) => {
-    if (error) {
-      debug('setupPredefinedMapCollection: Errors:', error);
-      process.exit(1);
-      return;
-    }
-
-    debug('setupPredefinedMapCollection: mapCount:', mapCount);
     setupParcelCollection();
   });
 }
