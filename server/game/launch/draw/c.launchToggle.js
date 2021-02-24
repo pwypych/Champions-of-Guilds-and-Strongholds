@@ -32,6 +32,6 @@ g.autoload.launchToggle = (inject) => {
   }
 
   function triggerViewportLaunchReady() {
-    walkie.triggerEvent('viewportLaunchReady_', 'launchToggle.js', {}, true);
+    walkie.triggerEvent('viewportLaunchReadyEvent_', 'launchToggle.js', {}, true);
   }
 };
