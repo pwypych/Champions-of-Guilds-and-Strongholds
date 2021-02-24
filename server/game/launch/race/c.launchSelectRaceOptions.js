@@ -18,7 +18,7 @@ g.autoload.launchSelectRaceOptions = (inject) => {
 
   function onViewportLaunchReady() {
     walkie.onEvent(
-      'viewportLaunchReady_',
+      'viewportLaunchReadyEvent_',
       'launchSelectRaceOptions.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];

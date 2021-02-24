@@ -3,7 +3,7 @@
 'use strict';
 
 // What does this module do
-// It listens to heroPathAccepted_ events, sends path to server
+// It listens to heroPathAcceptedEvent_ sends path to server
 g.autoload.heroPathAcceptedPost = (inject) => {
   const walkie = inject.walkie;
   const auth = inject.auth;
@@ -13,7 +13,7 @@ g.autoload.heroPathAcceptedPost = (inject) => {
   })();
 
   function onPathAccepted() {
-    walkie.onEvent('heroPathAccepted_', 'heroPathAcceptedPost.js', (data) => {
+    walkie.onEvent('heroPathAcceptedEvent_', 'heroPathAcceptedPost.js', (data) => {
       const path = data.path;
       const entityId = data.heroId;
 

@@ -25,7 +25,7 @@ g.autoload.heroPath = (inject) => {
   })();
 
   function onPathCalculated() {
-    walkie.onEvent('heroPathCalculated_', 'heroPath.js', (data) => {
+    walkie.onEvent('heroPathCalculatedEvent_', 'heroPath.js', (data) => {
       toolRemoveOldPath();
       path = data.path;
       heroId = data.heroId;
@@ -34,13 +34,13 @@ g.autoload.heroPath = (inject) => {
   }
 
   function onPathImpossible() {
-    walkie.onEvent('heroPathImpossible_', 'heroPath.js', () => {
+    walkie.onEvent('heroPathImpossibleEvent_', 'heroPath.js', () => {
       toolRemoveOldPath();
     });
   }
 
   function onPathAccepted() {
-    walkie.onEvent('heroPathAccepted_', 'heroPath.js', () => {
+    walkie.onEvent('heroPathAcceptedEvent_', 'heroPath.js', () => {
       toolRemoveOldPath();
     });
   }

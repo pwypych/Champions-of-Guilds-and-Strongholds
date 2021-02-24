@@ -62,7 +62,7 @@ g.autoload.heroVisit = (inject) => {
 
   function triggerHeroCurrentVisited(entityId, visitableType) {
     walkie.triggerEvent(
-      'heroCurrentVisited_',
+      'heroCurrentVisitedEvent_',
       'heroVisit.js',
       {
         entityId: entityId,

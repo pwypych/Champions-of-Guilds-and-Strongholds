@@ -21,7 +21,7 @@ g.autoload.colorFlagDraw = (inject) => {
 
   function onFiguresDrawn() {
     walkie.onEvent(
-      'figuresDrawn_',
+      'figuresDrawnEvent_',
       'colorFlagDraw.js',
       () => {
         forEachFigure();
