@@ -25,7 +25,7 @@ module.exports = (environment, db, templateToHtml) => {
       const options = {};
       options.projection = { _id: 1, name: 1 };
 
-      db.collection('landCollection')
+      db.collection('landCollectionOld')
         .find(query, options)
         .toArray((error, landArray) => {
           if (error) {
@@ -33,7 +33,7 @@ module.exports = (environment, db, templateToHtml) => {
             res
               .status(503)
               .send(
-                '503 Service Unavailable: Mongo error, cannot run find on landCollection'
+                '503 Service Unavailable: Mongo error, cannot run find on landCollectionOld'
               );
             return;
           }

@@ -22,7 +22,7 @@ module.exports = (environment, db) => {
     })();
 
     function dropLandCollection() {
-      db.collection('landCollection').drop((error) => {
+      db.collection('landCollectionOld').drop((error) => {
         if (error) {
           // When no land collection this error is thrown, ignore it
           if (error.message !== 'ns not found') {
@@ -261,7 +261,7 @@ module.exports = (environment, db) => {
 
     function insertLandObject(landObject, done) {
       debug('insertLandObject: landObject:', landObject);
-      db.collection('landCollection').insertOne(landObject, (error) => {
+      db.collection('landCollectionOld').insertOne(landObject, (error) => {
         if (error) {
           errorArray.push(
             landObject.folderName +
