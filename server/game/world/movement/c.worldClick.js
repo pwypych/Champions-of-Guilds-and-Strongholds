@@ -122,7 +122,7 @@ g.autoload.worldClick = (inject) => {
     }
 
     if (!_.isEmpty(path) && path.length > 1) {
-      walkie.triggerEvent('heroPathCalculated_', 'worldClick.js', {
+      walkie.triggerEvent('heroPathCalculatedEvent_', 'worldClick.js', {
         heroId: heroId,
         path: path
       });

@@ -25,7 +25,7 @@ g.autoload.heroPath = (inject) => {
   })();
 
   function onPathCalculated() {
-    walkie.onEvent('heroPathCalculated_', 'heroPath.js', (data) => {
+    walkie.onEvent('heroPathCalculatedEvent_', 'heroPath.js', (data) => {
       toolRemoveOldPath();
       path = data.path;
       heroId = data.heroId;
