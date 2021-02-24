@@ -78,7 +78,7 @@ g.autoload.figuresDraw = (inject) => {
 
   function triggerFiguresDrawn() {
     walkie.triggerEvent(
-      'figuresDrawn_',
+      'figuresDrawnEvent_',
       'figuresDraw.js',
       {},
       true
