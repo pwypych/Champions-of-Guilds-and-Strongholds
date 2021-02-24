@@ -127,7 +127,7 @@ g.autoload.worldClick = (inject) => {
         path: path
       });
     } else {
-      walkie.triggerEvent('heroPathImpossible_', 'worldClick.js');
+      walkie.triggerEvent('heroPathImpossibleEvent_', 'worldClick.js');
     }
   }
 };
