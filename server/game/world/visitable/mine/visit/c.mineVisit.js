@@ -14,7 +14,7 @@ g.autoload.mineVisit = (inject) => {
 
   function onHeroCurrentVisited() {
     walkie.onEvent(
-      'heroCurrentVisited_',
+      'heroCurrentVisitedEvent_',
       'mineVisit.js',
       (data) => {
         const entityId = data.entityId;
