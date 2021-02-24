@@ -105,7 +105,7 @@ g.autoload.worldClick = (inject) => {
       if (lastPathPositionX === click.x && lastPathPositionY === click.y) {
         lastPathPositionX = undefined;
         lastPathPositionY = undefined;
-        walkie.triggerEvent('heroPathAccepted_', 'worldClick.js', {
+        walkie.triggerEvent('heroPathAcceptedEvent_', 'worldClick.js', {
           heroId: heroId,
           path: path
         });

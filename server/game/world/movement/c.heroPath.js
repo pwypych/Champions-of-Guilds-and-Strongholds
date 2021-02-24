@@ -40,7 +40,7 @@ g.autoload.heroPath = (inject) => {
   }
 
   function onPathAccepted() {
-    walkie.onEvent('heroPathAccepted_', 'heroPath.js', () => {
+    walkie.onEvent('heroPathAcceptedEvent_', 'heroPath.js', () => {
       toolRemoveOldPath();
     });
   }
