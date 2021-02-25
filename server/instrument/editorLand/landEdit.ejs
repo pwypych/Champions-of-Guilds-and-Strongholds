@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+
+    <title>Land Edit - Champions of Guilds &amp; Strongholds</title>
+
+    <link rel="stylesheet" href="<%= viewModel.baseurl %>/css/style.css?v=<%= viewModel.timestamp %>">
+    <link rel="stylesheet" href="<%= viewModel.baseurl %>/css/ui.css?v=<%= viewModel.timestamp %>">
+
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/library/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="<%= viewModel.baseurl %>/library/lodash-4.17.10.js"></script>
+
+    <style>
+      body {
+        padding: 10px 30px 10px 30px;
+        background-color: #300a24;
+        color: #999;
+        overflow: auto;
+
+
+        image-rendering: optimizeSpeed;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: -o-crisp-edges;
+        image-rendering: pixelated;
+        -ms-interpolation-mode: nearest-neighbor;
+      }
+
+      .board {
+        margin-top: 50px;
+        display: inline-block;
+        white-space: nowrap;
+        width: auto;
+      }
+
+      .board .square {
+        display: inline-block;
+        min-width: 350px;
+        min-height: 350px;
+        padding: 10px 0px 0px 70px;
+        box-sizing: border-box;
+        border-top: 1px solid #300a24;
+        border-right: 1px solid #300a24;
+        margin-top: -2px;
+        border: 1px solid white;
+        color: white;
+      }
+
+      .board .square input,
+      .board .square select,
+      .board .square span {
+        vertical-align: middle;
+      }
+
+      .board .square select {
+        width: 120px;
+      }
+
+      .board .square .icon {
+        display: inline-block;
+        height: 26px;
+        width: 18px;
+        margin: 3px 3px 3px 2px;
+        font-size: 22px;
+        
+      }
+
+      .menu {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        background-color: #300a24;
+        padding: 0px 30px 10px 30px;
+      }
+
+      .seperator-10 {
+        margin-top: 10px;
+      }
+
+      .clearfix {
+        clear: both;
+      }
+
+      .hidden {
+        visibility: hidden;
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+    <div data-menu class="menu">
+      <div class="seperator-20"></div>
+      <a href="<%= viewModel.baseurl %>/editorLand/landChoose">Back to land selection</a>
+      <span> | </span>
+      <a href="<%= viewModel.baseurl %>/panelPredefined/launchImmediately?landId=<%- viewModel.landId %>" target="_blank">Launch Immediately</a>
+    </div>
+
+    <table data-board class="board">
+    </table>
+
+    <div class="seperator-40"></div>
+    <div class="seperator-40"></div>
+  </body>
+
+  <script>
+    // Generate and provide land editor
+    'use strict';
+
+    const data = <%- JSON.stringify(viewModel.land) %>;
+    const figures = <%- JSON.stringify(viewModel.figures) %>;
+    const baseurl = '<%- viewModel.baseurl %>';
+    const landId = '<%- viewModel.landId %>';
+
+    const state = {};
+    state.selected = 'empty';
+    state.land = data.landLayer;
+
+    const height = state.land.length;
+    const width = state.land[0].length;
+
+    (function init() {
+      boardGenerate();
+      // boardOnClick();
+    })();
+
+    function boardGenerate() {
+      const $board = $('[data-board]');
+      $board.html('');
+
+      state.land.forEach((row, y) => {
+        let html = '<tr>';
+        row.forEach((figure, x) => {
+          html += '<td data-square data-x="' + x + '" data-y="' + y + '" class="square">';
+
+            html += '<div class="icon">✔</div>';
+            html += '<div class="icon">♞</div>';
+            html += '<div class="icon">?</div>';
+            html += '&nbsp';
+            html += '<select>';
+              html += '<option name="level">Level 1</option>';
+              html += '<option name="level">Level 2</option>';
+              html += '<option name="level">Level 3</option>';
+              html += '<option name="level">Level 4</option>';
+              html += '<option name="level">Level 5</option>';
+            html += '</select>';
+            html += '<br>';
+
+            html += '<input type="checkbox" title="On / Off">';
+            html += '<input type="checkbox" title="Protected by monster">';
+            html += '<input class="hidden" type="checkbox">';
+            html += '<span>&nbsp;Exit Top</span>';
+            html += '<br>';
+
+            html += '<input type="checkbox" title="On / Off">';
+            html += '<input type="checkbox" title="Protected by monster">';
+            html += '<input class="hidden" type="checkbox">';
+            html += '<span>&nbsp;Exit Right</span>';
+            html += '<br>';
+
+            html += '<input type="checkbox" title="On / Off">';
+            html += '<input type="checkbox" title="Protected by monster">';
+            html += '<input class="hidden" type="checkbox">';
+            html += '<span>&nbsp;Exit Bottom</span>';
+            html += '<br>';
+
+            html += '<input type="checkbox" title="On / Off">';
+            html += '<input type="checkbox" title="Protected by monster">';
+            html += '<input class="hidden" type="checkbox">';
+            html += '<span>&nbsp;Exit Left</span>';
+            html += '<br>';
+
+            html += '<input type="checkbox" title="On / Off">';
+            html += '<input type="checkbox" title="Protected by monster">';
+            html += '<input type="checkbox" title="Maybe appears">';
+            html += '&nbsp';
+            html += '<select>';
+              html += '<option name="Nothing">mineStone</option>';
+            html += '</select>';
+            html += '<br>';
+
+            html += '<input type="checkbox" title="On / Off">';
+            html += '<input type="checkbox" title="Protected by monster">';
+            html += '<input type="checkbox" title="Maybe appears">';
+            html += '&nbsp';
+            html += '<select>';
+              html += '<option name="Nothing">mineCrystal</option>';
+            html += '</select>';
+            html += '<br>';
+
+            html += '<input type="checkbox" title="On / Off">';
+            html += '<input type="checkbox" title="Protected by monster">';
+            html += '<input type="checkbox" title="Maybe appears">';
+            html += '&nbsp';
+            html += '<select>';
+              html += '<option name="Nothing">-</option>';
+            html += '</select>';
+            html += '<br>';
+
+            html += '<input type="checkbox" title="On / Off">';
+            html += '<input type="checkbox" title="Protected by monster">';
+            html += '<input type="checkbox" title="Maybe appears">';
+            html += '&nbsp';
+            html += '<select>';
+              html += '<option name="Nothing">-</option>';
+            html += '</select>';
+            html += '<br>';
+
+            html += '<input type="checkbox" title="On / Off">';
+            html += '<input type="checkbox" title="Protected by monster">';
+            html += '<input type="checkbox" title="Maybe appears">';
+            html += '&nbsp';
+            html += '<select>';
+              html += '<option name="Nothing">-</option>';
+            html += '</select>';
+
+          html += '</td>';
+        });
+        html += '</tr>'
+        $board.append(html);
+      });
+    }
+
+    function boardOnClick() {
+      const $imgs = $('[data-square]');
+      $('[data-square]').on('click', (event) => {
+        const $img = $(event.currentTarget);
+        const x = $img.attr('data-x');
+        const y = $img.attr('data-y');
+        state.land[y][x] = state.selected;
+        boardGenerate();
+        boardOnClick();
+        save();
+      });
+    }
+
+    function save() {
+      const data = { mapId: mapId, mapLayerWithStrings: state.map };
+      $.post('/editorLand/mapSavePost', data, () => {});
+    }
+
+  </script>
+
+</html>

@@ -390,6 +390,34 @@ function setupInstrumentRoutesAndLibraries() {
     )
   );
 
+  app.get(
+    '/editorLand/landChoose',
+    require('./instrument/editorLand/landChoose.js')(
+      environment,
+      db,
+      templateToHtml
+    )
+  );
+
+  app.post(
+    '/editorLand/landCreateNewPost',
+    require('./instrument/editorLand/landCreateNewPost.js')(
+      environment,
+      db
+    )
+  );
+
+  app.get(
+    '/editorLand/landEdit',
+    require('./instrument/editorLand/landEdit.js')(
+      environment,
+      db,
+      blueprint,
+      templateToHtml
+    )
+  );
+
+
   debug('setupInstrumentRoutesAndLibraries');
   setupMiddleware();
 }
