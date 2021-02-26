@@ -417,6 +417,13 @@ function setupInstrumentRoutesAndLibraries() {
     )
   );
 
+  app.post(
+    '/editorLand/landSavePost',
+    require('./instrument/editorLand/landSavePost.js')(
+      environment,
+      db
+    )
+  );
 
   debug('setupInstrumentRoutesAndLibraries');
   setupMiddleware();

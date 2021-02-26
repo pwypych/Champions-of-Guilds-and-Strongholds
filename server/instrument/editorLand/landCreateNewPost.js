@@ -63,7 +63,10 @@ module.exports = (environment, db) => {
       _.times(height, () => {
         const row = [];
         _.times(width, () => {
-          row.push({});
+          row.push({
+            level: 1,
+            conditions: [],
+          });
         });
         landLayer.push(row);
       });

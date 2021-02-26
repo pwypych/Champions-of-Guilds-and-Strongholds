@@ -89,6 +89,10 @@
         visibility: hidden;
       }
 
+      select {
+        background-color: #ddd;
+      }
+
     </style>
 
   </head>
@@ -113,111 +117,86 @@
     'use strict';
 
     const data = <%- JSON.stringify(viewModel.land) %>;
-    const figures = <%- JSON.stringify(viewModel.figures) %>;
+    const availableConditions = <%- JSON.stringify(viewModel.conditions) %>;
     const baseurl = '<%- viewModel.baseurl %>';
     const landId = '<%- viewModel.landId %>';
 
     const state = {};
     state.selected = 'empty';
-    state.land = data.landLayer;
+    state.landLayer = data.landLayer;
 
-    const height = state.land.length;
-    const width = state.land[0].length;
+    const height = state.landLayer.length;
+    const width = state.landLayer[0].length;
 
     (function init() {
       boardGenerate();
-      // boardOnClick();
+      boardOnChange();
+      console.log(availableConditions);
     })();
 
     function boardGenerate() {
       const $board = $('[data-board]');
       $board.html('');
 
-      state.land.forEach((row, y) => {
+      state.landLayer.forEach((row, y) => {
         let html = '<tr>';
-        row.forEach((figure, x) => {
+        row.forEach((parcel, x) => {
+          const level = parcel.level;
+          const conditions = parcel.conditions; 
           html += '<td data-square data-x="' + x + '" data-y="' + y + '" class="square">';
 
-            html += '<div class="icon">✔</div>';
             html += '<div class="icon">♞</div>';
             html += '<div class="icon">?</div>';
             html += '&nbsp';
-            html += '<select>';
-              html += '<option name="level">Level 1</option>';
-              html += '<option name="level">Level 2</option>';
-              html += '<option name="level">Level 3</option>';
-              html += '<option name="level">Level 4</option>';
-              html += '<option name="level">Level 5</option>';
+            html += '<select data-level>';
+              _.range(1, 5).forEach((index) => {
+                if (index == level) {
+                  html += '<option name="level" value="' + index + '" selected="selected">Level ' + index + '</option>';
+                } else {
+                  html += '<option name="level" value="' + index + '">Level ' + index + '</option>';
+                }
+              });
             html += '</select>';
-            html += '<br>';
 
-            html += '<input type="checkbox" title="On / Off">';
-            html += '<input type="checkbox" title="Protected by monster">';
-            html += '<input class="hidden" type="checkbox">';
-            html += '<span>&nbsp;Exit Top</span>';
-            html += '<br>';
+            _.range(9).forEach((index) => {
+              let name = 'Nothing';
+              let monster = false;
+              let random = false;
 
-            html += '<input type="checkbox" title="On / Off">';
-            html += '<input type="checkbox" title="Protected by monster">';
-            html += '<input class="hidden" type="checkbox">';
-            html += '<span>&nbsp;Exit Right</span>';
-            html += '<br>';
+              if (conditions[index]) {
+                name = conditions[index].name;
+                monster = (conditions[index].monster === 'true');
+                random = (conditions[index].random === 'true');
+              }
 
-            html += '<input type="checkbox" title="On / Off">';
-            html += '<input type="checkbox" title="Protected by monster">';
-            html += '<input class="hidden" type="checkbox">';
-            html += '<span>&nbsp;Exit Bottom</span>';
-            html += '<br>';
+              html += '<p>';
 
-            html += '<input type="checkbox" title="On / Off">';
-            html += '<input type="checkbox" title="Protected by monster">';
-            html += '<input class="hidden" type="checkbox">';
-            html += '<span>&nbsp;Exit Left</span>';
-            html += '<br>';
+              if (monster) {
+                html += '<input name="monster" type="checkbox" title="Protected by monster" checked="checked">';
+              } else {
+                html += '<input name="monster" type="checkbox" title="Protected by monster">';
+              }
 
-            html += '<input class="hidden" type="checkbox" title="On / Off">';
-            html += '<input type="checkbox" title="Protected by monster">';
-            html += '<input type="checkbox" title="Maybe appears">';
-            html += '&nbsp';
-            html += '<select>';
-              html += '<option name="Nothing">mineStone</option>';
-            html += '</select>';
-            html += '<br>';
+              if (random) {
+                html += '<input name="random" type="checkbox" title="Random appear" checked="checked">';
+              } else {
+                html += '<input name="random" type="checkbox" title="Random appear">';
+              }
 
-            html += '<input class="hidden" type="checkbox" title="On / Off">';
-            html += '<input type="checkbox" title="Protected by monster">';
-            html += '<input type="checkbox" title="Maybe appears">';
-            html += '&nbsp';
-            html += '<select>';
-              html += '<option name="Nothing">mineCrystal</option>';
-            html += '</select>';
-            html += '<br>';
+              html += '&nbsp';
+              html += '<select name="name">';
+                html += '<option value="Nothing">-</option>';
+                availableConditions.forEach((availableConditionName) => {
+                  if (name === availableConditionName) {
+                    html += '<option value="' + availableConditionName + '" selected="selected">' + availableConditionName + '</option>';
+                  } else {
+                    html += '<option value="' + availableConditionName + '">' + availableConditionName + '</option>';
+                  }
+                });
+              html += '</select>';
 
-            html += '<input class="hidden" type="checkbox" title="On / Off">';
-            html += '<input type="checkbox" title="Protected by monster">';
-            html += '<input type="checkbox" title="Maybe appears">';
-            html += '&nbsp';
-            html += '<select>';
-              html += '<option name="Nothing">-</option>';
-            html += '</select>';
-            html += '<br>';
-
-            html += '<input class="hidden" type="checkbox" title="On / Off">';
-            html += '<input type="checkbox" title="Protected by monster">';
-            html += '<input type="checkbox" title="Maybe appears">';
-            html += '&nbsp';
-            html += '<select>';
-              html += '<option name="Nothing">-</option>';
-            html += '</select>';
-            html += '<br>';
-
-            html += '<input class="hidden" type="checkbox" title="On / Off">';
-            html += '<input type="checkbox" title="Protected by monster">';
-            html += '<input type="checkbox" title="Maybe appears">';
-            html += '&nbsp';
-            html += '<select>';
-              html += '<option name="Nothing">-</option>';
-            html += '</select>';
+              html += '</p>';
+            });
 
           html += '</td>';
         });
@@ -226,22 +205,59 @@
       });
     }
 
-    function boardOnClick() {
-      const $imgs = $('[data-square]');
-      $('[data-square]').on('click', (event) => {
-        const $img = $(event.currentTarget);
-        const x = $img.attr('data-x');
-        const y = $img.attr('data-y');
-        state.land[y][x] = state.selected;
-        boardGenerate();
-        boardOnClick();
-        save();
+    function boardOnChange() {
+      $('select, input[type=checkbox]').on('change', (event) => {
+        const $select = $(event.currentTarget);
+        readSaveBoard();
       });
     }
 
-    function save() {
-      const data = { mapId: mapId, mapLayerWithStrings: state.map };
-      $.post('/editorLand/mapSavePost', data, () => {});
+    function readSaveBoard() {
+      const landLayer = [];
+      _.times(height, () => {
+        const row = [];
+        _.times(width, () => {
+          row.push({
+            level: 0,
+            conditions: [],
+          });
+        });
+        landLayer.push(row);
+      });
+
+      $('[data-square]').each((index, element) => {
+        const $square = $(element);
+        const x = $square.attr('data-x');
+        const y = $square.attr('data-y');
+        let level = $square.find('[data-level]').val();
+        const conditions = [];
+
+        $square.find('p').each((index, element) => {
+          const $p = $(element);
+          const name = $p.find('[name=name]').val();
+          let monster = $p.find('[name=monster]').prop('checked');
+          let random = $p.find('[name=random]').prop('checked');
+
+          if (name !== 'Nothing') {
+            conditions.push({
+              name: name,
+              monster: monster,
+              random: random
+            });
+          }
+        });
+
+        landLayer[y][x].level = level;
+        landLayer[y][x].conditions = conditions;
+      });
+
+      console.log('after', landLayer);
+      save(landLayer);
+    }
+
+    function save(landLayer) {
+      const data = { landId: landId, landLayer: landLayer };
+      $.post('/editorLand/landSavePost', data, () => {});
     }
 
   </script>

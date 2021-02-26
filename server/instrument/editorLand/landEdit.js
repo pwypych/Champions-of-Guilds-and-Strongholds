@@ -44,33 +44,36 @@ module.exports = (environment, db, blueprint, templateToHtml) => {
 
           viewModel.land = land;
           debug('findLands', land._id);
-          findAbstracts(viewModel);
+          findConditions(viewModel);
         }
       );
     }
 
-    function findAbstracts(viewModel) {
-      // abstracts are like abstract figures, e.g. monster1
-      const abstracts = [];
-
-      _.forEach(blueprint.figure, (figure) => {
-        if (figure.resource) {
-          abstracts.push(figure.figureName);
-        }
-      });
+    function findConditions(viewModel) {
+      // conditions are like abstract figures, e.g. monster1
+      const conditions = [
+        'exitTop',
+        'exitRight',
+        'exitBottom',
+        'exitLeft',
+        'castleRandom'
+      ];
 
       _.forEach(blueprint.figure, (figure) => {
         if (figure.visitableType) {
-          abstracts.push(figure.figureName);
+          conditions.push(figure.figureName);
         }
       });
 
-      // @todo special abstract list: monster1 etc.
-      // @todo special abstract list: castleRandom
+      _.forEach(blueprint.figure, (figure) => {
+        if (figure.resource) {
+          conditions.push(figure.figureName);
+        }
+      });
 
-      viewModel.abstracts = abstracts;
+      viewModel.conditions = conditions;
 
-      debug('findAbstracts', abstracts.length);
+      debug('findConditions', conditions.length);
       sendResponse(viewModel);
     }
 
