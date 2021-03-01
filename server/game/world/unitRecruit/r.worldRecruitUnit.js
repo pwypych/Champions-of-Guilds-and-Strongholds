@@ -7,6 +7,7 @@ module.exports = (app, middleware) => {
     middleware.authenticateToken,
     middleware.authenticateState('worldState'),
 
+    middleware.ensureHeroOnCastle,
     middleware.recruitUnitPost
   );
 };
