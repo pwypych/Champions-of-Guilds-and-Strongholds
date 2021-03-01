@@ -8,7 +8,7 @@ module.exports = (hook) => {
   hook.attach('generateBlueprints_', (injected, done) => {
     injected.blueprint.figure.castleRandom = {
       figureName: 'castleRandom',
-      collision: true
+      collision: false
     };
 
     done();
