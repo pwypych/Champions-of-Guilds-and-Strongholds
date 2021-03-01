@@ -3,6 +3,7 @@
 'use strict';
 
 const debug = require('debug')('cogs:landSavePost');
+const _ = require('lodash');
 
 module.exports = (environment, db) => {
   return (req, res) => {
@@ -31,6 +32,28 @@ module.exports = (environment, db) => {
 
       debug('validateRequestBody: landId:', landId);
       debug('validateRequestBody: landLayer:', landLayer);
+      ensureEmptyArrayAndBooleans(landId, landLayer);
+    }
+
+    function ensureEmptyArrayAndBooleans(landId, landLayer) {
+      landLayer.forEach((row, y) => {
+        row.forEach((parcel, x) => {
+          debug('ensureEmptyArrayAndBooleans', parcel);
+          if (parcel.conditions) {
+            const conditions = parcel.conditions;
+            _.each(conditions, (condition, index) => {
+              const monster = (condition.monster === 'true');
+              const random = (condition.random === 'true');
+              landLayer[y][x].conditions[index].monster = monster;
+              landLayer[y][x].conditions[index].random = random;
+            });
+          } else {
+            landLayer[y][x].conditions = [];
+          }
+        });
+      });
+
+      debug('ensureEmptyArrayAndBooleans');
       updateSetLandLayer(landId, landLayer);
     }
 
