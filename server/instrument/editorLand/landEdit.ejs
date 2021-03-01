@@ -30,7 +30,7 @@
       }
 
       .board {
-        margin-top: 50px;
+        margin-top: 72px;
         display: inline-block;
         white-space: nowrap;
         width: auto;
@@ -102,7 +102,10 @@
       <div class="seperator-20"></div>
       <a href="<%= viewModel.baseurl %>/editorLand/landChoose">Back to land selection</a>
       <span> | </span>
-      <a href="<%= viewModel.baseurl %>/panelPredefined/launchImmediately?landId=<%- viewModel.landId %>" target="_blank">Launch Immediately</a>
+      <form class="inline-block" action="<%= viewModel.baseurl %>/editorLand/landGenerateMapPost" method="post">
+        <input type="hidden" name="landId" value="<%- viewModel.landId %>">
+        <button type="submit">Generate Map</button>
+      </form>
     </div>
 
     <table data-board class="board">

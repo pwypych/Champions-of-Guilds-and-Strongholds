@@ -425,6 +425,15 @@ function setupInstrumentRoutesAndLibraries() {
     )
   );
 
+  app.post(
+    '/editorLand/landGenerateMapPost',
+    require('./instrument/editorLand/landGenerateMapPost.js')(
+      environment,
+      blueprint,
+      db
+    )
+  );
+
   debug('setupInstrumentRoutesAndLibraries');
   setupMiddleware();
 }
