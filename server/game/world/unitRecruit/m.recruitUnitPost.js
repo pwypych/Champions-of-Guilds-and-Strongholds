@@ -6,7 +6,7 @@ const debug = require('debug')('cogs:recruitUnitPost.js');
 const _ = require('lodash');
 
 module.exports = (db, blueprint) => {
-  return (req, res) => {
+  return (req, res, next) => {
     (function init() {
       debug('// Endpoint, recruit one unit by given unitName');
       const ctx = {};
@@ -205,6 +205,7 @@ module.exports = (db, blueprint) => {
           }
 
           debug('updateIncrementHeroUnits: unitName: +1', unitName);
+          next();
         }
       );
     }
