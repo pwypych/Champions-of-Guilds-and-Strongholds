@@ -109,7 +109,12 @@ g.autoload.fortificationModal = (inject) => {
       const $button = $modal.find(
         '[data-fortification-name=' + fortificationName + ']'
       );
+      const $fortificationDiv = $($button).parent();
+      const $resourcesArray = $fortificationDiv
+        .find('[data-resource]')
+        .toArray();
       $($button).hide();
+      $($resourcesArray).hide();
       triggerFortificationBuildedEvent();
     });
   }

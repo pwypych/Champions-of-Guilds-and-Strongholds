@@ -101,9 +101,18 @@ g.autoload.prohibitBuilded = (inject) => {
       );
 
       if (isFortificationBuilded) {
-        // $($button).hide('disabled', 'disabled');
         $($button).hide();
+        hideResources(fortificationName);
       }
     });
+  }
+
+  function hideResources(fortificationName) {
+    const $buildButtons = $modal.find(
+      "[data-fortification-name='" + fortificationName + "']"
+    );
+    const $fortificationDiv = $($buildButtons).parent();
+    const $resourcesArray = $fortificationDiv.find('[data-resource]').toArray();
+    $($resourcesArray).hide();
   }
 };
