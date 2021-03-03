@@ -115,26 +115,27 @@ module.exports = (environment, blueprint, db) => {
     }
 
     function generateParcel(abstractParcel) {
-      // while conditions not true
+      let runInLoop = true;
+      let parcelDone;
 
-      const parcel = newParcel();
+      while (runInLoop) {
+        let parcel = newParcel();
 
-      // add required figures randomly
-      abstractParcel.conditions.forEach((condition) => {
-        if (checkIsFigure(condition)) {
-          const [x, y] = pickRandomEmptyCoords(parcel);
-          parcel[y][x] = condition.name;
-          debug('checkIsFigure: yes: condition:', condition);
-        }
-      });
+        parcel = addRequiredFiguresRandomly(abstractParcel, parcel);
+        parcel = addCollidablesRandomly(abstractParcel, parcel);
 
-      // add random blocks
-      // check each condition
+        // add random blocks
+        // check each figure able to reach other figure
+        // check exits
 
-      // check exists
+        // check exists
 
-      debug('generateParcel', parcel);
-      return parcel;
+        runInLoop = false;
+        parcelDone = parcel;
+      }
+
+      debug('generateParcel', parcelDone);
+      return parcelDone;
     }
 
     function newParcel() {
@@ -150,6 +151,19 @@ module.exports = (environment, blueprint, db) => {
       return parcel;
     }
 
+    function addRequiredFiguresRandomly(abstractParcel, parcel) {
+      // add required figures randomly
+      abstractParcel.conditions.forEach((condition) => {
+        if (checkIsFigure(condition)) {
+          const [x, y] = pickRandomEmptyCoords(parcel);
+          parcel[y][x] = condition.name;
+          debug('addRequiredFiguresRandomly: figure:' + condition.name + ' x: ' + x + ' y: ' + y);
+        }
+      });
+
+      return parcel;
+    }
+
     function checkIsFigure(condition) {
       let isFigure = false;
       _.forEach(blueprint.figure, (figure) => {
@@ -159,6 +173,17 @@ module.exports = (environment, blueprint, db) => {
       });
 
       return isFigure;
+    }
+
+    function addCollidablesRandomly(abstractParcel, parcel) {
+      const count = _.random(15, 25);
+      _.times(count, () => {
+        const [x, y] = pickRandomEmptyCoords(parcel);
+        parcel[y][x] = 'tree';
+        debug('addCollidablesRandomly: collidable: tree x: ' + x + ' y: ' + y);
+      });
+
+      return parcel;
     }
 
     function pickRandomEmptyCoords(parcel) {

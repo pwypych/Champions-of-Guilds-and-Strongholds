@@ -55,8 +55,7 @@ module.exports = (environment, db, blueprint, templateToHtml) => {
         'exitTop',
         'exitRight',
         'exitBottom',
-        'exitLeft',
-        'castleRandom'
+        'exitLeft'
       ];
 
       _.forEach(blueprint.figure, (figure) => {
