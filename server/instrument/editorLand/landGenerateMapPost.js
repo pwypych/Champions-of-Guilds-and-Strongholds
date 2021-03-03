@@ -3,6 +3,7 @@
 'use strict';
 
 const debug = require('debug')('cogs:landGenerateMapPost');
+const PF = require('pathfinding');
 const _ = require('lodash');
 
 module.exports = (environment, blueprint, db) => {
@@ -122,19 +123,22 @@ module.exports = (environment, blueprint, db) => {
         let parcel = newParcel();
 
         parcel = addRequiredFiguresRandomly(abstractParcel, parcel);
+        const figureCoordsArray = calculateFigureCoordsArray(parcel);
         parcel = addCollidablesRandomly(abstractParcel, parcel);
 
-        // add random blocks
-        // check each figure able to reach other figure
-        // check exits
+        const isReachable = areFiguresAbleToReachEachOther(parcel, figureCoordsArray);
 
+        // check exits
         // check exists
 
-        runInLoop = false;
-        parcelDone = parcel;
+        if (isReachable) {
+          runInLoop = false;
+          parcelDone = parcel;
+        }
+        debug('generateParcel: figureCoordsArray: ', figureCoordsArray);
       }
 
-      debug('generateParcel', parcelDone);
+      debug('generateParcel: parcel: ', parcelDone);
       return parcelDone;
     }
 
@@ -173,6 +177,47 @@ module.exports = (environment, blueprint, db) => {
       });
 
       return isFigure;
+    }
+
+    function calculateFigureCoordsArray(parcel) {
+      const figureCoordsArray = [];
+      parcel.forEach((row, y) => {
+        row.forEach((figure, x) => {
+          if (figure !== 'empty') {
+            figureCoordsArray.push({x: x, y: y});
+          }
+        });
+      });
+      return figureCoordsArray;
+    }
+
+    function areFiguresAbleToReachEachOther(parcel, figureCoordsArray) {
+      const height = parcel.length;
+      const width = parcel[0].length;
+      const firstCoord = figureCoordsArray.shift(); // mutating
+
+      let isPossible = true;
+      figureCoordsArray.forEach((coord) => {
+        const grid = new PF.Grid(width, height);
+
+        // define collidables
+        parcel.forEach((row, y) => {
+          row.forEach((figure, x) => {
+            if (figure === 'tree') {
+              grid.setWalkableAt(x, y, false);
+            }
+          });
+        });
+
+        const finder = new PF.AStarFinder({ allowDiagonal: false });
+        const path = finder.findPath(firstCoord.x, firstCoord.y, coord.x, coord.y, grid);
+
+        if (_.isEmpty(path)) {
+          isPossible = false;
+        }
+      });
+
+      return isPossible;
     }
 
     function addCollidablesRandomly(abstractParcel, parcel) {
