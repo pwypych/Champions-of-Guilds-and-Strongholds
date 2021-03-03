@@ -109,7 +109,7 @@ g.autoload.fortificationModal = (inject) => {
       const $button = $modal.find(
         '[data-fortification-name=' + fortificationName + ']'
       );
-      $button.attr('disabled', 'disabled');
+      $($button).hide();
       triggerFortificationBuildedEvent();
     });
   }
