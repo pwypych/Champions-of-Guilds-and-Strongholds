@@ -13,11 +13,47 @@ g.autoload.prohibitBuilded = (inject) => {
 
   (function init() {
     onFortificationModalDrawn();
+    onFortificationBuilded();
+    onFortificationModalToggled();
   })();
 
   function onFortificationModalDrawn() {
     walkie.onEvent(
       'fortificationModalDrawnEvent_',
+      'prohibitBuilded.js',
+      () => {
+        const gameEntity = freshEntities()[freshEntities()._id];
+
+        if (gameEntity.state !== 'worldState') {
+          return;
+        }
+
+        findPlayerId();
+      },
+      false
+    );
+  }
+
+  function onFortificationBuilded() {
+    walkie.onEvent(
+      'fortificationBuildedEvent_',
+      'prohibitBuilded.js',
+      () => {
+        const gameEntity = freshEntities()[freshEntities()._id];
+
+        if (gameEntity.state !== 'worldState') {
+          return;
+        }
+
+        findPlayerId();
+      },
+      false
+    );
+  }
+
+  function onFortificationModalToggled() {
+    walkie.onEvent(
+      'fortificationModalToggledEvent_',
       'prohibitBuilded.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
@@ -51,10 +87,10 @@ g.autoload.prohibitBuilded = (inject) => {
       }
     });
 
-    disableButton(fortificationBuildedArray);
+    hideButton(fortificationBuildedArray);
   }
 
-  function disableButton(fortificationBuildedArray) {
+  function hideButton(fortificationBuildedArray) {
     const buildButtonsArray = $modal.find('button').toArray();
 
     buildButtonsArray.forEach(($button) => {
@@ -65,8 +101,18 @@ g.autoload.prohibitBuilded = (inject) => {
       );
 
       if (isFortificationBuilded) {
-        $($button).attr('disabled', 'disabled');
+        $($button).hide();
+        hideResources(fortificationName);
       }
     });
+  }
+
+  function hideResources(fortificationName) {
+    const $buildButtons = $modal.find(
+      "[data-fortification-name='" + fortificationName + "']"
+    );
+    const $fortificationDiv = $($buildButtons).parent();
+    const $resourcesArray = $fortificationDiv.find('[data-resource]').toArray();
+    $($resourcesArray).hide();
   }
 };
