@@ -6,6 +6,7 @@
 // It listens to units button clicks and toggles units modal
 g.autoload.unitsButton = (inject) => {
   const $body = inject.$body;
+  const walkie = inject.walkie;
 
   const $button = $body.find('[data-world-interface-units-button]');
   const $modal = $body.find('[data-world-interface-units-modal]');
@@ -17,6 +18,11 @@ g.autoload.unitsButton = (inject) => {
   function onClick() {
     $button.on('click', () => {
       $modal.toggle();
+      triggerUnitModalToggledEvent();
     });
+  }
+
+  function triggerUnitModalToggledEvent() {
+    walkie.triggerEvent('unitModalToggledEvent_', 'unitsButton.js');
   }
 };
