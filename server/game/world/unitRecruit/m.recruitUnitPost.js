@@ -205,9 +205,15 @@ module.exports = (db, blueprint) => {
           }
 
           debug('updateIncrementHeroUnits: unitName: +1', unitName);
-          next();
+          sendResponse();
         }
       );
+    }
+
+    function sendResponse() {
+      debug('sendResponse: No Errors!');
+      res.send({ error: 0 });
+      next();
     }
   };
 };
