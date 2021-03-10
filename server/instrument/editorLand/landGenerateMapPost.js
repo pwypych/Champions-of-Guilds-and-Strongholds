@@ -134,7 +134,7 @@ module.exports = (environment, blueprint, db) => {
         let areConditionsFullfilled = true;
         conditions.forEach((condition) => {
           const isConditionFullfilled = condition(parcel, abstractParcel, parcelTop, parcelLeft);
-          debug('generateParcel: isConditionFullfilled:', isConditionFullfilled);
+          // debug('generateParcel: isConditionFullfilled:', isConditionFullfilled);
           if (!isConditionFullfilled) {
             areConditionsFullfilled = false;
           }
