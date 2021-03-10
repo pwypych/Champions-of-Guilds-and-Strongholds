@@ -3,11 +3,12 @@
 'use strict';
 
 const debug = require('debug')('cogs:landGenerateMapPost');
-const PF = require('pathfinding');
 const _ = require('lodash');
 
 module.exports = (environment, blueprint, db) => {
   return (req, res) => {
+    const conditions = res.locals.conditions;
+
     (function init() {
       debug('// Takes POST request with land to create a new random map');
 
@@ -52,14 +53,14 @@ module.exports = (environment, blueprint, db) => {
       _.times(height, () => {
         const row = [];
         _.times(width, () => {
-          row.push({});
+          row.push([]);
         });
         parcelArray.push(row);
       });
 
       land.landLayer.forEach((row, y) => {
         row.forEach((abstractParcel, x) => {
-          parcelArray[y][x] = generateParcel(abstractParcel);
+          parcelArray[y][x] = generateParcel(parcelArray, x, y, abstractParcel);
         });
       });
 
@@ -115,31 +116,61 @@ module.exports = (environment, blueprint, db) => {
       return mapLayer;
     }
 
-    function generateParcel(abstractParcel) {
+    function generateParcel(parcelArray, x, y, abstractParcel) {
       let runInLoop = true;
       let parcelDone;
+
+      const parcelTop = getParcelTop(parcelArray, x, y);
+      const parcelLeft = getParcelLeft(parcelArray, x, y);
 
       while (runInLoop) {
         let parcel = newParcel();
 
         parcel = addRequiredFiguresRandomly(abstractParcel, parcel);
-        const figureCoordsArray = calculateFigureCoordsArray(parcel);
-        parcel = addCollidablesRandomly(abstractParcel, parcel);
+        parcel = addRequiredCollidablesRandomly(abstractParcel, parcel);
 
-        const isReachable = areFiguresAbleToReachEachOther(parcel, figureCoordsArray);
+        // more condition checks loop through, injected as middlewares
+        // inject parcel, parcelTop, parcelLeft, abstractParcel
+        let areConditionsFullfilled = true;
+        conditions.forEach((condition) => {
+          const isConditionFullfilled = condition(parcel, abstractParcel, parcelTop, parcelLeft);
+          debug('generateParcel: isConditionFullfilled:', isConditionFullfilled);
+          if (!isConditionFullfilled) {
+            areConditionsFullfilled = false;
+          }
+        });
 
-        // check exits
-        // check exists
-
-        if (isReachable) {
+        if (areConditionsFullfilled) {
           runInLoop = false;
           parcelDone = parcel;
         }
-        debug('generateParcel: figureCoordsArray: ', figureCoordsArray);
+        debug('generateParcel');
       }
 
       debug('generateParcel: parcel: ', parcelDone);
       return parcelDone;
+    }
+
+    function getParcelTop(parcelArray, x, y) {
+      if (y === 0) {
+        debug('getParcelTop: ', false);
+        return false;
+      }
+
+      const parcelTop = parcelArray[y - 1][x];
+      debug('getParcelTop: y: ' + (y - 1) + ' x: ' + x);
+      return parcelTop;
+    }
+
+    function getParcelLeft(parcelArray, x, y) {
+      if (x === 0) {
+        debug('getParcelLeft: ', false);
+        return false;
+      }
+
+      const parcelTop = parcelArray[y][x - 1];
+      debug('getParcelLeft: y: ' + y + ' x: ' + (x - 1));
+      return parcelTop;
     }
 
     function newParcel() {
@@ -179,53 +210,12 @@ module.exports = (environment, blueprint, db) => {
       return isFigure;
     }
 
-    function calculateFigureCoordsArray(parcel) {
-      const figureCoordsArray = [];
-      parcel.forEach((row, y) => {
-        row.forEach((figure, x) => {
-          if (figure !== 'empty') {
-            figureCoordsArray.push({x: x, y: y});
-          }
-        });
-      });
-      return figureCoordsArray;
-    }
-
-    function areFiguresAbleToReachEachOther(parcel, figureCoordsArray) {
-      const height = parcel.length;
-      const width = parcel[0].length;
-      const firstCoord = figureCoordsArray.shift(); // mutating
-
-      let isPossible = true;
-      figureCoordsArray.forEach((coord) => {
-        const grid = new PF.Grid(width, height);
-
-        // define collidables
-        parcel.forEach((row, y) => {
-          row.forEach((figure, x) => {
-            if (figure === 'tree') {
-              grid.setWalkableAt(x, y, false);
-            }
-          });
-        });
-
-        const finder = new PF.AStarFinder({ allowDiagonal: false });
-        const path = finder.findPath(firstCoord.x, firstCoord.y, coord.x, coord.y, grid);
-
-        if (_.isEmpty(path)) {
-          isPossible = false;
-        }
-      });
-
-      return isPossible;
-    }
-
-    function addCollidablesRandomly(abstractParcel, parcel) {
+    function addRequiredCollidablesRandomly(abstractParcel, parcel) {
       const count = _.random(15, 25);
       _.times(count, () => {
         const [x, y] = pickRandomEmptyCoords(parcel);
         parcel[y][x] = 'tree';
-        debug('addCollidablesRandomly: collidable: tree x: ' + x + ' y: ' + y);
+        debug('addRequiredCollidablesRandomly: collidable: tree x: ' + x + ' y: ' + y);
       });
 
       return parcel;

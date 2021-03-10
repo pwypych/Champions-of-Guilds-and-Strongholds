@@ -427,6 +427,7 @@ function setupInstrumentRoutesAndLibraries() {
 
   app.post(
     '/editorLand/landGenerateMapPost',
+    require('./instrument/editorLand/conditions/areFiguresAbleToReachEachOther.js')(),
     require('./instrument/editorLand/landGenerateMapPost.js')(
       environment,
       blueprint,
