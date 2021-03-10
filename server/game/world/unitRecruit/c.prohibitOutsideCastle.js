@@ -14,12 +14,30 @@ g.autoload.prohibitOutsideCastle = (inject) => {
 
   (function init() {
     onUnitModalToggled();
+    onEntitiesGet();
   })();
 
   function onUnitModalToggled() {
     walkie.onEvent(
       'unitModalToggledEvent_',
       'prohibitOutsideCastle.js',
+      () => {
+        const gameEntity = freshEntities()[freshEntities()._id];
+
+        if (gameEntity.state !== 'worldState') {
+          return;
+        }
+
+        findPlayerId();
+      },
+      false
+    );
+  }
+
+  function onEntitiesGet() {
+    walkie.onEvent(
+      'entitiesGetEvent_',
+      'prohibitResourceless.js',
       () => {
         const gameEntity = freshEntities()[freshEntities()._id];
 
@@ -68,15 +86,25 @@ g.autoload.prohibitOutsideCastle = (inject) => {
       castle.position.y !== hero.position.y
     ) {
       disableRecruitUnitButton();
+      return;
     }
+
+    enableRecruitUnitButton();
   }
 
   function disableRecruitUnitButton() {
     const recruitButtonsArray = $wrapper.find('button').toArray();
 
     recruitButtonsArray.forEach(($button) => {
-      console.log('$button:', $button);
-      $($button).attr('disabled', 'disabled');
+      $($button).attr('disabled', true);
+    });
+  }
+
+  function enableRecruitUnitButton() {
+    const recruitButtonsArray = $wrapper.find('button').toArray();
+
+    recruitButtonsArray.forEach(($button) => {
+      $($button).attr('disabled', false);
     });
   }
 };
