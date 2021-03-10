@@ -3,7 +3,7 @@
 'use strict';
 
 // What does this module do
-// Toggle castle modal
+// Toggle castle modal and emmit event
 
 g.autoload.castleButton = (inject) => {
   const $body = inject.$body;
