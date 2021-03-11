@@ -120,8 +120,11 @@ module.exports = (environment, blueprint, db) => {
       let runInLoop = true;
       let parcelDone;
 
-      const parcelTop = getParcelTop(parcelArray, x, y);
-      const parcelLeft = getParcelLeft(parcelArray, x, y);
+      const surrounding = {};
+      surrounding.parcelTop = getParcelTop(parcelArray, x, y);
+      surrounding.parcelLeft = getParcelLeft(parcelArray, x, y);
+      surrounding.parcelBottom = getParcelBottom(parcelArray, x, y);
+      surrounding.parcelRight = getParcelRight(parcelArray, x, y);
 
       while (runInLoop) {
         let parcel = newParcel();
@@ -130,10 +133,10 @@ module.exports = (environment, blueprint, db) => {
         parcel = addRequiredCollidablesRandomly(abstractParcel, parcel);
 
         // more condition checks loop through, injected as middlewares
-        // inject parcel, parcelTop, parcelLeft, abstractParcel
+        // inject abstractParcel, surrounding parcels, parcelTop, parcelLeft, parcelBottom, parcelRight
         let areConditionsFullfilled = true;
         _.each(conditions, (condition) => {
-          const isConditionFullfilled = condition(parcel, abstractParcel, parcelTop, parcelLeft);
+          const isConditionFullfilled = condition(parcel, abstractParcel, surrounding);
           // debug('generateParcel: isConditionFullfilled:', isConditionFullfilled);
           if (!isConditionFullfilled) {
             areConditionsFullfilled = false;
@@ -172,9 +175,35 @@ module.exports = (environment, blueprint, db) => {
         return [];
       }
 
-      const parcelTop = parcelArray[y][x - 1];
+      const parcelLeft = parcelArray[y][x - 1];
       debug('getParcelLeft: y: ' + y + ' x: ' + (x - 1));
-      return parcelTop;
+      return parcelLeft;
+    }
+
+    function getParcelBottom(parcelArray, x, y) {
+      const height = parcelArray.length;
+
+      if (y === height - 1) {
+        debug('getParcelBottom: []');
+        return [];
+      }
+
+      const parcelBottom = parcelArray[y + 1][x];
+      debug('getParcelBottom: y: ' + (y + 1) + ' x: ' + x);
+      return parcelBottom;
+    }
+
+    function getParcelRight(parcelArray, x, y) {
+      const width = parcelArray[0].length;
+
+      if (x === width - 1) {
+        debug('getParcelRight: []');
+        return [];
+      }
+
+      const parcelRight = parcelArray[y][x - 1];
+      debug('getParcelRight: y: ' + y + ' x: ' + (x - 1));
+      return parcelRight;
     }
 
     function newParcel() {

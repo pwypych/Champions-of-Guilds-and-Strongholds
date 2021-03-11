@@ -15,15 +15,17 @@ module.exports = () => {
         res.locals.conditions = [];
       }
 
-      res.locals.conditions.push((parcel, abstractParcel, parcelTop) => {
+      res.locals.conditions.push((parcel, abstractParcel, surrounding) => {
         // return true if condition is met
-        return validateCondition(parcel, abstractParcel, parcelTop);
+        return validateCondition(parcel, abstractParcel, surrounding);
       });
 
       next();
     })();
 
-    function validateCondition(parcel, abstractParcel, parcelTop) {
+    function validateCondition(parcel, abstractParcel, surrounding) {
+      const parcelTop = surrounding.parcelTop;
+
       if (_.isEmpty(parcelTop)) {
         // when no parcelTop is present, no need to ensure exit
         debug('validateExitRight: Parcel on top is outside of bound. Does not need to be opened or closed, skipping');
