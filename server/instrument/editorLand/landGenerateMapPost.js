@@ -215,7 +215,7 @@ module.exports = (environment, blueprint, db) => {
     }
 
     function addRequiredCollidablesRandomly(abstractParcel, parcel) {
-      const count = _.random(15, 25);
+      const count = _.random(10, 30);
       _.times(count, () => {
         const [x, y] = pickRandomEmptyCoords(parcel);
         parcel[y][x] = 'tree';

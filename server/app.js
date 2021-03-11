@@ -431,6 +431,7 @@ function setupInstrumentRoutesAndLibraries() {
     require('./instrument/editorLand/conditions/exitRightOpen.js')(),
     require('./instrument/editorLand/conditions/exitBottomOpen.js')(),
     require('./instrument/editorLand/conditions/exitLeftOpenClosed.js')(),
+    require('./instrument/editorLand/conditions/exitTopOpenClosed.js')(),
     require('./instrument/editorLand/landGenerateMapPost.js')(
       environment,
       blueprint,
@@ -509,7 +510,7 @@ function setupEjsToHtml() {
 
     const done = _.after(_.size(pathFiles), () => {
       debug('setupEjsToHtml', 'Loaded ejs modules!', _.size(pathFiles));
-      setupGameRoute(spriteFilenameArray, htmlArray);
+      setupGameRoute(htmlArray);
     });
 
     pathFiles.forEach((pathFile) => {
@@ -525,7 +526,7 @@ function setupEjsToHtml() {
   });
 }
 
-function setupGameRoute(spriteFilenameArray, htmlArray) {
+function setupGameRoute(htmlArray) {
   app.get(
     '/game',
     middleware.readEntities,
