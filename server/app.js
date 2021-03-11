@@ -428,8 +428,8 @@ function setupInstrumentRoutesAndLibraries() {
   app.post(
     '/editorLand/landGenerateMapPost',
     require('./instrument/editorLand/conditions/areFiguresAbleToReachEachOther.js')(),
-    require('./instrument/editorLand/conditions/exitRightOpen.js')(),
-    require('./instrument/editorLand/conditions/exitBottomOpen.js')(),
+    require('./instrument/editorLand/conditions/exitRightOpenClosed.js')(),
+    require('./instrument/editorLand/conditions/exitBottomOpenClosed.js')(),
     require('./instrument/editorLand/conditions/exitLeftOpenClosed.js')(),
     require('./instrument/editorLand/conditions/exitTopOpenClosed.js')(),
     require('./instrument/editorLand/landGenerateMapPost.js')(

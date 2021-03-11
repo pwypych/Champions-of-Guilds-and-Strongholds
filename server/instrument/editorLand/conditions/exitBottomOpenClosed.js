@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:exitBottomOpen');
+const debug = require('debug')('cogs:exitBottomOpenClosed');
 const PF = require('pathfinding');
 const _ = require('lodash');
 
