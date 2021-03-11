@@ -132,19 +132,23 @@ module.exports = (environment, blueprint, db) => {
         // more condition checks loop through, injected as middlewares
         // inject parcel, parcelTop, parcelLeft, abstractParcel
         let areConditionsFullfilled = true;
-        conditions.forEach((condition) => {
+        _.each(conditions, (condition) => {
           const isConditionFullfilled = condition(parcel, abstractParcel, parcelTop, parcelLeft);
           // debug('generateParcel: isConditionFullfilled:', isConditionFullfilled);
           if (!isConditionFullfilled) {
             areConditionsFullfilled = false;
+            return false; // Break (lodash), no need to check more conditions if one fails
           }
+          return true; // Continue (lodash)
         });
 
         if (areConditionsFullfilled) {
           runInLoop = false;
           parcelDone = parcel;
+          debug('generateParcel: Conditions fullfilled for this parcel, done generating this parcel x: ' + x + ' y: ' + y);
+        } else {
+          debug('generateParcel: Conditions not fullfilled for this parcel, trying again x: ' + x + ' y: ' + y);
         }
-        debug('generateParcel');
       }
 
       debug('generateParcel: parcel: ', parcelDone);
@@ -153,8 +157,8 @@ module.exports = (environment, blueprint, db) => {
 
     function getParcelTop(parcelArray, x, y) {
       if (y === 0) {
-        debug('getParcelTop: ', false);
-        return false;
+        debug('getParcelTop: []');
+        return [];
       }
 
       const parcelTop = parcelArray[y - 1][x];
@@ -164,8 +168,8 @@ module.exports = (environment, blueprint, db) => {
 
     function getParcelLeft(parcelArray, x, y) {
       if (x === 0) {
-        debug('getParcelLeft: ', false);
-        return false;
+        debug('getParcelLeft: []');
+        return [];
       }
 
       const parcelTop = parcelArray[y][x - 1];
@@ -192,7 +196,7 @@ module.exports = (environment, blueprint, db) => {
         if (checkIsFigure(condition)) {
           const [x, y] = pickRandomEmptyCoords(parcel);
           parcel[y][x] = condition.name;
-          debug('addRequiredFiguresRandomly: figure:' + condition.name + ' x: ' + x + ' y: ' + y);
+          // debug('addRequiredFiguresRandomly: figure:' + condition.name + ' x: ' + x + ' y: ' + y);
         }
       });
 
@@ -215,7 +219,7 @@ module.exports = (environment, blueprint, db) => {
       _.times(count, () => {
         const [x, y] = pickRandomEmptyCoords(parcel);
         parcel[y][x] = 'tree';
-        debug('addRequiredCollidablesRandomly: collidable: tree x: ' + x + ' y: ' + y);
+        // debug('addRequiredCollidablesRandomly: collidable: tree x: ' + x + ' y: ' + y);
       });
 
       return parcel;

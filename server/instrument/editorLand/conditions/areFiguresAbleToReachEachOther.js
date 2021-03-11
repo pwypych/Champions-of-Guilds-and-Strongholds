@@ -18,13 +18,13 @@ module.exports = () => {
       }
 
       res.locals.conditions.push((parcel) => {
-        return checkAreFiguresAbleToReachEachOther(parcel);
+        return validateCondition(parcel);
       });
 
       next();
     })();
 
-    function checkAreFiguresAbleToReachEachOther(parcel) {
+    function validateCondition(parcel) {
       const figureCoordsArray = calculateFigureCoordsArray(parcel);
       const height = parcel.length;
       const width = parcel[0].length;
@@ -57,7 +57,12 @@ module.exports = () => {
         }
       });
 
-      debug('checkAreFiguresAbleToReachEachOther', isPossible);
+      if (isPossible) {
+        debug('validateCondition: Correct! All figures on parcel can reach each other');
+      } else {
+        debug('validateCondition: Wrong! Some figures on parcel cannot reach each other');
+      }
+
       return isPossible;
     }
 

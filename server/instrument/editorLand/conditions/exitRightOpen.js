@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:exitRightOpen');
+const debug = require('debug')('cogs:exitRightOpenClosed');
 const PF = require('pathfinding');
 const _ = require('lodash');
 
@@ -18,15 +18,15 @@ module.exports = () => {
 
       res.locals.conditions.push((parcel, abstractParcel) => {
         // return true if condition is met
-        return validateExitRight(parcel, abstractParcel);
+        return validateCondition(parcel, abstractParcel);
       });
 
       next();
     })();
 
-    function validateExitRight(parcel, abstractParcel) {
+    function validateCondition(parcel, abstractParcel) {
       if (!checkShouldBeOpen(abstractParcel)) {
-        debug('validateExitRight: Does not need to be opened, skipping');
+        debug('validateCondition: Skip! Does not need to be opened');
         return true;
       }
 
@@ -37,7 +37,12 @@ module.exports = () => {
 
       const isValid = validatePath(parcelExtended, figureCoords);
 
-      debug('validateExitRight: isValid: ', isValid);
+      if (isValid) {
+        debug('validateCondition: Correct! exitRight should be opened and is open');
+      } else {
+        debug('validateCondition: Wrong! exitRight should be opened but is closed');
+      }
+
       return isValid;
     }
 

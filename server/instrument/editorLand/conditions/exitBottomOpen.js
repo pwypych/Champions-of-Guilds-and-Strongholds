@@ -18,15 +18,15 @@ module.exports = () => {
 
       res.locals.conditions.push((parcel, abstractParcel) => {
         // return true if condition is met
-        return validateExitBottom(parcel, abstractParcel);
+        return validateCondition(parcel, abstractParcel);
       });
 
       next();
     })();
 
-    function validateExitBottom(parcel, abstractParcel) {
+    function validateCondition(parcel, abstractParcel) {
       if (!checkShouldBeOpen(abstractParcel)) {
-        debug('validateExitBottom: Does not need to be opened, skipping');
+        debug('validateCondition: Skip! Does not need to be opened');
         return true;
       }
 
@@ -37,7 +37,12 @@ module.exports = () => {
 
       const isValid = validatePath(parcelExtended, figureCoords);
 
-      debug('validateExitBottom: isValid: ', isValid);
+      if (isValid) {
+        debug('validateCondition: Correct! exitBottom should be opened and is open');
+      } else {
+        debug('validateCondition: Wrong! exitBottom should be opened but is closed');
+      }
+
       return isValid;
     }
 
