@@ -26,9 +26,9 @@ module.exports = () => {
     function validateCondition(parcel, abstractParcel, surrounding) {
       const parcelTop = surrounding.parcelTop;
 
-      if (_.isEmpty(parcelTop)) {
+      if (parcelTop === false) {
         // when no parcelTop is present, no need to ensure exit
-        debug('validateExitRight: Parcel on top is outside of bound. Does not need to be opened or closed, skipping');
+        debug('validateCondition: Skip! Parcel on top is outside of bound. Does not need to be opened or closed, skipping');
         return true;
       }
 

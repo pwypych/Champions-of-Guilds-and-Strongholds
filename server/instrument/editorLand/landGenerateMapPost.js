@@ -161,7 +161,7 @@ module.exports = (environment, blueprint, db) => {
     function getParcelTop(parcelArray, x, y) {
       if (y === 0) {
         debug('getParcelTop: []');
-        return [];
+        return false;
       }
 
       const parcelTop = parcelArray[y - 1][x];
@@ -172,7 +172,7 @@ module.exports = (environment, blueprint, db) => {
     function getParcelLeft(parcelArray, x, y) {
       if (x === 0) {
         debug('getParcelLeft: []');
-        return [];
+        return false;
       }
 
       const parcelLeft = parcelArray[y][x - 1];
@@ -185,7 +185,7 @@ module.exports = (environment, blueprint, db) => {
 
       if (y === height - 1) {
         debug('getParcelBottom: []');
-        return [];
+        return false;
       }
 
       const parcelBottom = parcelArray[y + 1][x];
@@ -198,7 +198,7 @@ module.exports = (environment, blueprint, db) => {
 
       if (x === width - 1) {
         debug('getParcelRight: []');
-        return [];
+        return false;
       }
 
       const parcelRight = parcelArray[y][x - 1];

@@ -16,34 +16,49 @@ module.exports = () => {
         res.locals.conditions = [];
       }
 
-      res.locals.conditions.push((parcel, abstractParcel) => {
+      res.locals.conditions.push((parcel, abstractParcel, surrounding) => {
         // return true if condition is met
-        return validateCondition(parcel, abstractParcel);
+        return validateCondition(parcel, abstractParcel, surrounding);
       });
 
       next();
     })();
 
-    function validateCondition(parcel, abstractParcel) {
-      if (!checkShouldBeOpen(abstractParcel)) {
-        debug('validateCondition: Skip! Does not need to be opened');
+    function validateCondition(parcel, abstractParcel, surrounding) {
+      const parcelBottom = surrounding.parcelBottom;
+
+      if (parcelBottom === false) {
+        // when no parcelBottom is present, no need to ensure open / closed
+        debug('validateCondition: Skip! Parcel on bottom is outside of bound. Does not need to be opened or closed, skipping');
         return true;
       }
+
+      const shouldBeOpen = checkShouldBeOpen(abstractParcel);
 
       const figureCoords = calculateFigureCoords(parcel);
 
       const parcelCopy = JSON.parse(JSON.stringify(parcel));
       const parcelExtended = addRowToParcel(parcelCopy);
 
-      const isValid = validatePath(parcelExtended, figureCoords);
+      const isPathBetween = validatePath(parcelExtended, figureCoords);
 
-      if (isValid) {
-        debug('validateCondition: Correct! exitBottom should be opened and is open');
-      } else {
-        debug('validateCondition: Wrong! exitBottom should be opened but is closed');
+      if (shouldBeOpen && isPathBetween) {
+        debug('validateCondition: Correct! exitBottom should be open, and is open');
+        return true;
       }
 
-      return isValid;
+      if (!shouldBeOpen && !isPathBetween) {
+        debug('validateCondition: Correct! exitBottom should be closed, and is closed');
+        return true;
+      }
+
+      if (!shouldBeOpen && isPathBetween) {
+        debug('validateCondition: Wrong! exitBottom should be closed, but is open');
+        return false;
+      }
+
+      debug('validateCondition: Wrong! exitBottom should be open, but is closed');
+      return false;
     }
 
     function checkShouldBeOpen(abstractParcel) {
