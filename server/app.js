@@ -429,6 +429,7 @@ function setupInstrumentRoutesAndLibraries() {
     '/editorLand/landGenerateMapPost',
     require('./instrument/editorLand/conditions/areFiguresAbleToReachEachOther.js')(),
     require('./instrument/editorLand/conditions/exitRightOpenClosed.js')(),
+    require('./instrument/editorLand/conditions/exitBottomOpenClosed.js')(),
     require('./instrument/editorLand/landGenerateMapPost.js')(
       environment,
       blueprint,
