@@ -43,9 +43,7 @@ module.exports = (environment, db) => {
             const conditions = parcel.conditions;
             _.each(conditions, (condition, index) => {
               const monster = (condition.monster === 'true');
-              const random = (condition.random === 'true');
               landLayer[y][x].conditions[index].monster = monster;
-              landLayer[y][x].conditions[index].random = random;
             });
           } else {
             landLayer[y][x].conditions = [];

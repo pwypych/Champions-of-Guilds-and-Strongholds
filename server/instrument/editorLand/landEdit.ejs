@@ -40,7 +40,7 @@
         display: inline-block;
         min-width: 350px;
         min-height: 350px;
-        padding: 10px 0px 0px 70px;
+        padding: 10px 0px 0px 90px;
         box-sizing: border-box;
         border-top: 1px solid #300a24;
         border-right: 1px solid #300a24;
@@ -149,7 +149,6 @@
           html += '<td data-square data-x="' + x + '" data-y="' + y + '" class="square">';
 
             html += '<div class="icon">♞</div>';
-            html += '<div class="icon">?</div>';
             html += '&nbsp';
             html += '<select data-level>';
               _.range(1, 5).forEach((index) => {
@@ -164,12 +163,10 @@
             _.range(9).forEach((index) => {
               let name = 'Nothing';
               let monster = false;
-              let random = false;
 
               if (conditions[index]) {
                 name = conditions[index].name;
-                monster = (conditions[index].monster === 'true');
-                random = (conditions[index].random === 'true');
+                monster = (conditions[index].monster === true);
               }
 
               html += '<p>';
@@ -178,12 +175,6 @@
                 html += '<input name="monster" type="checkbox" title="Protected by monster" checked="checked">';
               } else {
                 html += '<input name="monster" type="checkbox" title="Protected by monster">';
-              }
-
-              if (random) {
-                html += '<input name="random" type="checkbox" title="Random appear" checked="checked">';
-              } else {
-                html += '<input name="random" type="checkbox" title="Random appear">';
               }
 
               html += '&nbsp';
@@ -239,13 +230,11 @@
           const $p = $(element);
           const name = $p.find('[name=name]').val();
           let monster = $p.find('[name=monster]').prop('checked');
-          let random = $p.find('[name=random]').prop('checked');
 
           if (name !== 'Nothing') {
             conditions.push({
               name: name,
-              monster: monster,
-              random: random
+              monster: monster
             });
           }
         });
