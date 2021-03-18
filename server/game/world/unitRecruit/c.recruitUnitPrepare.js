@@ -61,7 +61,6 @@ g.autoload.recruitUnitPrepare = (inject) => {
 
     const $unitExample = $wrapper.find('[data-example-unit]');
     const $resourceExample = $wrapper.find('[data-example-resource]');
-    const $seperator10 = $('<div class="seperator-10"></div>');
 
     $wrapper.empty();
 
@@ -96,7 +95,6 @@ g.autoload.recruitUnitPrepare = (inject) => {
       $($button).removeAttr('data-button');
 
       $wrapper.append($unit);
-      $wrapper.append($seperator10);
       onRecruitUnitButtonClick($button, unitName);
     });
 
