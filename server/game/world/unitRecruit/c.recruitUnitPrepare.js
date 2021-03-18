@@ -11,15 +11,17 @@ g.autoload.recruitUnitPrepare = (inject) => {
   const auth = inject.auth;
   const blueprint = inject.blueprint;
 
-  const $recruitUnit = $body.find(
+  const $wrapper = $body.find(
     '[data-world-interface-units-modal] [data-recruit-unit]'
   );
 
   (function init() {
+    console.log('recruitUnitPrepare');
     onViewportWorldReady();
   })();
 
   function onViewportWorldReady() {
+    console.log('blueprint:', blueprint);
     walkie.onEvent(
       'viewportWorldReadyEvent_',
       'recruitUnitPrepare.js',
@@ -48,48 +50,60 @@ g.autoload.recruitUnitPrepare = (inject) => {
     _.forEach(freshEntities(), (entity) => {
       if (entity.owner === playerId && entity.heroStats) {
         const hero = entity;
-        updateTable(hero);
+        fillUnitsModal(hero);
       }
     });
   }
 
-  function updateTable(hero) {
+  function fillUnitsModal(hero) {
     const unitAmounts = hero.unitAmounts;
-    $recruitUnit.empty();
+    const unitBlueprint = blueprint.unit;
+
+    const $unitExample = $wrapper.find('[data-example-unit]');
+    const $resourceExample = $wrapper.find('[data-example-resource]');
+
+    $wrapper.empty();
 
     _.forEach(unitAmounts, (amount, unitName) => {
-      const $unit = $(
-        '<img class="vertical-align" src="/sprite/' +
-          unitName +
-          '.png" width="36" height="36">'
-      );
-      const $amountSpan = $(
-        '<span class="margin-right" data-unit-name="' +
-          unitName +
-          '" data-unit-amount class="big">0</span>'
-      );
-      const $buyButton = $(
-        '<button data-unit-name="' +
-          unitName +
-          '">' +
-          blueprint.unit[unitName].cost.gold +
-          '<img class="vertical-align" src="/sprite/gold.png" width="24" height="24"></button>'
-      );
-      const $seperator10 = $('<div class="seperator-10"></div>');
+      const unitCost = unitBlueprint[unitName].cost;
+      const $unit = $unitExample.clone();
+      $($unit).removeAttr('data-example-unit');
 
-      $recruitUnit.append($unit);
-      $recruitUnit.append($amountSpan);
-      $recruitUnit.append($buyButton);
-      $recruitUnit.append($seperator10);
+      $unit.find('[data-name]').text(unitName);
+      $($unit).removeAttr('data-name');
 
-      onRecruitUnitButtonClick($buyButton);
+      $unit.find('[data-unit-amount]').text(amount);
+      $unit.find('span').attr('data-unit-name', unitName);
+
+      const unitSpriteSrc = '/sprite/' + unitName + '.png';
+      $unit.find('[data-unit-sprite]').attr('src', unitSpriteSrc);
+
+      _.forEach(unitCost, (cost, resource) => {
+        const $resource = $resourceExample.clone();
+        $($resource).attr('data-resource', resource);
+        const resourceSpriteSrc = '/sprite/' + resource + '.png';
+
+        $resource.find('span').text(cost);
+        $resource.find('img').attr('src', resourceSpriteSrc);
+
+        $resource.insertBefore($unit.find('button'));
+        $($resource).removeAttr('data-example-resource');
+      });
+
+      const $button = $($unit).find('[data-button]');
+      $button.attr('data-unit-name', unitName);
+      $($button).removeAttr('data-button');
+
+      $wrapper.append($unit);
+      onRecruitUnitButtonClick($button, unitName);
     });
+
+    $wrapper.find('[data-example-fortification]').hide();
+    $wrapper.find('[data-example-resource]').hide();
   }
 
-  function onRecruitUnitButtonClick($buyButton) {
-    $buyButton.on('click', () => {
-      const unitName = $buyButton.attr('data-unit-name');
-      console.log('recruitUnitClick:unitName:', unitName);
+  function onRecruitUnitButtonClick($button, unitName) {
+    $button.on('click', () => {
       sendRecruitUnitPost(unitName);
     });
   }
