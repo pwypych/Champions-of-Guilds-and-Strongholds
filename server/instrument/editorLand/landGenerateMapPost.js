@@ -225,6 +225,14 @@ module.exports = (environment, blueprint, db) => {
         if (checkIsFigure(condition)) {
           const [x, y] = pickRandomEmptyCoords(parcel);
           parcel[y][x] = condition.name;
+
+          if (condition.monster) {
+            const [monsterX, monsterY] = pickNearEmptyCoords(parcel, x, y);
+
+            debug('pickNearEmptyCoords: figure:' + condition.name + ' x: ' + monsterX + ' y: ' + monsterY);
+            const monsterName = pickMonsterNameByLevel(abstractParcel.level);
+            parcel[monsterY][monsterX] = monsterName;
+          }
           // debug('addRequiredFiguresRandomly: figure:' + condition.name + ' x: ' + x + ' y: ' + y);
         }
       });
@@ -241,6 +249,45 @@ module.exports = (environment, blueprint, db) => {
       });
 
       return isFigure;
+    }
+
+    function pickNearEmptyCoords(parcel, x, y) {
+      const coordsArray = [];
+
+      // assumes parcel is 7x7
+      if (y - 1 > 0 && parcel[y - 1][x] === 'empty') {
+        coordsArray.push([x, y - 1]);
+      }
+
+      if (y + 1 <= 6 && parcel[y + 1][x] === 'empty') {
+        coordsArray.push([x, y + 1]);
+      }
+
+      if (x - 1 > 0 && parcel[y][x - 1] === 'empty') {
+        coordsArray.push([x - 1, y]);
+      }
+
+      if (x + 1 <= 6  && parcel[y][x + 1] === 'empty') {
+        coordsArray.push([x + 1, y]);
+      }
+
+      if (_.isEmpty(coordsArray)) {
+        // if not possible to find coords nearby just place it randomly
+        return pickRandomEmptyCoords(parcel);
+      }
+
+      return _.sample(coordsArray);
+    }
+
+    function pickMonsterNameByLevel(level) {
+      const monsterNames = [];
+      _.forEach(blueprint.unit, (unit) => {
+        if (parseInt(level, 10) === unit.tier) {
+          monsterNames.push(unit.unitName);
+        }
+      });
+
+      return _.sample(monsterNames);
     }
 
     function addRequiredCollidablesRandomly(abstractParcel, parcel) {
