@@ -102,6 +102,11 @@
       <div class="seperator-20"></div>
       <a href="<%= viewModel.baseurl %>/editorLand/landChoose">Back to land selection</a>
       <span> | </span>
+      <form class="inline-block" action="<%= viewModel.baseurl %>/editorLand/landRandomizePost" method="post">
+        <input type="hidden" name="landId" value="<%- viewModel.landId %>">
+        <button type="submit">Random Land</button>
+      </form>
+      <span> | </span>
       <form class="inline-block" action="<%= viewModel.baseurl %>/editorLand/landGenerateMapPost" method="post">
         <input type="hidden" name="landId" value="<%- viewModel.landId %>">
         <button type="submit">Generate Map</button>

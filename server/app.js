@@ -426,6 +426,15 @@ function setupInstrumentRoutesAndLibraries() {
   );
 
   app.post(
+    '/editorLand/landRandomizePost',
+    require('./instrument/editorLand/landRandomizePost.js')(
+      environment,
+      blueprint,
+      db
+    )
+  );
+
+  app.post(
     '/editorLand/landGenerateMapPost',
     require('./instrument/editorLand/conditions/areFiguresAbleToReachEachOther.js')(),
     require('./instrument/editorLand/conditions/exitRightOpenClosed.js')(),
