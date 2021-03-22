@@ -84,6 +84,7 @@ g.autoload.prohibitResourcelessRecruit = (inject) => {
           .find('span')
           .text();
         const $spanAmount = $(cost).find('span');
+        $spanAmount.css({ color: '#fff' });
 
         if (resourceAmount > playerResources[resource]) {
           $spanAmount.css({ color: '#f00' });
