@@ -13,8 +13,26 @@ g.autoload.prohibitResourcelessRecruit = (inject) => {
   const $wrapper = $modal.find('[data-recruit-unit]');
 
   (function init() {
+    onUnitModalToggled();
     onEntitiesGet();
   })();
+
+  function onUnitModalToggled() {
+    walkie.onEvent(
+      'unitModalToggledEvent_',
+      'prohibitOutsideCastle.js',
+      () => {
+        const gameEntity = freshEntities()[freshEntities()._id];
+
+        if (gameEntity.state !== 'worldState') {
+          return;
+        }
+
+        findPlayerId();
+      },
+      false
+    );
+  }
 
   function onEntitiesGet() {
     walkie.onEvent(
@@ -48,34 +66,30 @@ g.autoload.prohibitResourcelessRecruit = (inject) => {
     const player = freshEntities()[playerId];
     const playerResources = player.playerResources;
 
-    findUnitInWrapper(playerResources);
+    checkUnitCost(playerResources);
   }
 
-  function findUnitInWrapper(playerResources) {
+  function checkUnitCost(playerResources) {
     const unitArray = $wrapper.find('[data-single-unit]').toArray();
 
     unitArray.forEach(($unit) => {
-      checkUnitCost($unit, playerResources);
-    });
-  }
+      const $button = $($unit).find('button');
+      const unitCost = $($unit)
+        .find('[data-resource]')
+        .toArray();
 
-  function checkUnitCost($unit, playerResources) {
-    const $button = $($unit).find('button');
-    const unitCost = $($unit)
-      .find('[data-resource]')
-      .toArray();
+      unitCost.forEach((cost) => {
+        const resource = $(cost).data('resource');
+        const resourceAmount = $(cost)
+          .find('span')
+          .text();
+        const $spanAmount = $(cost).find('span');
 
-    unitCost.forEach((cost) => {
-      const resource = $(cost).data('resource');
-      const resourceAmount = $(cost)
-        .find('span')
-        .text();
-      const $spanAmount = $(cost).find('span');
-
-      if (resourceAmount > playerResources[resource]) {
-        $spanAmount.css({ color: '#f00' });
-        $button.attr('disabled', true);
-      }
+        if (resourceAmount > playerResources[resource]) {
+          $spanAmount.css({ color: '#f00' });
+          $button.attr('disabled', true);
+        }
+      });
     });
   }
 };
