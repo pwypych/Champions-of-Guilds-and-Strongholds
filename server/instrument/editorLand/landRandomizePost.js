@@ -99,7 +99,58 @@ module.exports = (environment, blueprint, db) => {
 
       debug('generateMaze', mazeMatrix);
       debug(mazeString);
+      generateRandomFigureOnEveryParcel(landId, landLayer);
+    }
+
+    function generateRandomFigureOnEveryParcel(landId, landLayer) {
+      _.forEach(landLayer, (row) => {
+        _.forEach(row, (parcel) => {
+          _.times(2, () => {
+            if (_.random(1, 2) === 1 ) {
+              const figureName = pickRandomVisitable();
+              let monster = false;
+              if (_.random(1, 2) === 1 ) {
+                monster = true;
+              }
+              const condition = { name: figureName, monster: monster };
+              parcel.conditions.push(condition);
+            }
+          });
+
+          _.times(4, () => {
+            const figureName = pickRandomResource();
+            let monster = false;
+            if (_.random(1, 6) === 1 ) {
+              monster = true;
+            }
+            const condition = { name: figureName, monster: monster };
+            parcel.conditions.push(condition);
+          });
+        });
+      });
+
+      debug('generateRandomFigureOnEveryParcel');
       insertLand(landId, landLayer);
+    }
+
+    function pickRandomResource() {
+      const resourceNames = [];
+      _.forEach(blueprint.figure, (figure) => {
+        if (figure.resource) {
+          resourceNames.push(figure.figureName);
+        }
+      });
+      return _.sample(resourceNames);
+    }
+
+    function pickRandomVisitable() {
+      const visitableNames = [];
+      _.forEach(blueprint.figure, (figure) => {
+        if (figure.visitableType) {
+          visitableNames.push(figure.figureName);
+        }
+      });
+      return _.sample(visitableNames);
     }
 
     function insertLand(landId, landLayer) {
