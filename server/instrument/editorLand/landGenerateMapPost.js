@@ -41,8 +41,36 @@ module.exports = (environment, blueprint, db) => {
 
         debug('findLand: land:', land);
 
-        forEachAbstractParcel(land);
+        validateEveryParcelMustHaveFigure(land);
       });
+    }
+
+    function validateEveryParcelMustHaveFigure(land) {
+      let everyParcelHaveFigure = true;
+      land.landLayer.forEach((row) => {
+        row.forEach((abstractParcel) => {
+          let thisParcelHaveFigure = false;
+          abstractParcel.conditions.forEach((condition) => {
+            if (checkIsFigure(condition)) {
+              thisParcelHaveFigure = true;
+            }
+          });
+
+          if (!thisParcelHaveFigure) {
+            everyParcelHaveFigure = false;
+          }
+        });
+      });
+
+      if (!everyParcelHaveFigure) {
+        debug('validateEveryParcelMustHaveFigure: Not every parcel have a figure defined');
+        res.status(503).send('503 Service Unavailable - All parcels must have at least one figure');
+        return;
+      }
+
+      debug('validateEveryParcelMustHaveFigure');
+
+      forEachAbstractParcel(land);
     }
 
     function forEachAbstractParcel(land) {
@@ -291,7 +319,7 @@ module.exports = (environment, blueprint, db) => {
     }
 
     function addRequiredCollidablesRandomly(abstractParcel, parcel) {
-      const count = _.random(10, 30);
+      const count = _.random(15, 30);
       _.times(count, () => {
         const [x, y] = pickRandomEmptyCoords(parcel);
         parcel[y][x] = 'tree';
