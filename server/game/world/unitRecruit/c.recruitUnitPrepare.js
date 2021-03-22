@@ -21,7 +21,6 @@ g.autoload.recruitUnitPrepare = (inject) => {
   })();
 
   function onViewportWorldReady() {
-    console.log('blueprint:', blueprint);
     walkie.onEvent(
       'viewportWorldReadyEvent_',
       'recruitUnitPrepare.js',
