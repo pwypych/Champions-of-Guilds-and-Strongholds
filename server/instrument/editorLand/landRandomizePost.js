@@ -3,6 +3,7 @@
 'use strict';
 
 const debug = require('debug')('cogs:landRandomizePost');
+const mazeGeneration = require('maze-generation');
 const _ = require('lodash');
 
 module.exports = (environment, blueprint, db) => {
@@ -67,6 +68,37 @@ module.exports = (environment, blueprint, db) => {
         landLayer.push(row);
       });
 
+      generateMaze(landId, landLayer, width, height);
+    }
+
+    function generateMaze(landId, landLayer, width, height) {
+      const maze = mazeGeneration(width, height);
+      const mazeMatrix = maze.toJSON().rows;
+      const mazeString = maze.toString();
+
+      _.forEach(mazeMatrix, (row, y) => {
+        _.forEach(row, (walls, x) => {
+          if (walls.up === false) {
+            const condition = { name: 'exitTop' };
+            landLayer[y][x].conditions.push(condition);
+          }
+          if (walls.right === false) {
+            const condition = { name: 'exitRight' };
+            landLayer[y][x].conditions.push(condition);
+          }
+          if (walls.down === false) {
+            const condition = { name: 'exitBottom' };
+            landLayer[y][x].conditions.push(condition);
+          }
+          if (walls.left === false) {
+            const condition = { name: 'exitLeft' };
+            landLayer[y][x].conditions.push(condition);
+          }
+        });
+      });
+
+      debug('generateMaze', mazeMatrix);
+      debug(mazeString);
       insertLand(landId, landLayer);
     }
 
