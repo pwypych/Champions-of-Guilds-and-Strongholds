@@ -219,64 +219,16 @@ module.exports = (db, blueprint) => {
           }
 
           debug('updateSetFortificationEntity: Success!');
-          generateEnchantment(ctx);
+          addEntitiesFilteredToLocals(ctx);
         }
       );
     }
 
-    function generateEnchantment(ctx) {
-      const playerId = ctx.playerId;
-      const fortificationId = ctx.fortificationId;
-      const fortificationBlueprint = ctx.fortificationBlueprint;
+    function addEntitiesFilteredToLocals(ctx) {
+      res.locals.fortificationId = ctx.fortificationId;
+      res.locals.fortificationBlueprint = ctx.fortificationBlueprint;
+      res.locals.fortificationBlueprint = ctx.fortificationBlueprint;
 
-      const enchantmentId = 'enchantment_income__' + shortId.generate();
-      const enchantment = {};
-      enchantment.owner = playerId;
-      enchantment.enchanter = fortificationId;
-      if (fortificationBlueprint.income) {
-        enchantment.income = {};
-        enchantment.income.name = fortificationBlueprint.income.name;
-        enchantment.income.amount = fortificationBlueprint.income.amount;
-      }
-
-      debug('generateEnchantment: enchantment:', enchantment);
-
-      ctx.enchantment = enchantment;
-      ctx.enchantmentId = enchantmentId;
-      updateSetEnchantmentEntity(ctx);
-    }
-
-    function updateSetEnchantmentEntity(ctx) {
-      const entities = ctx.entities;
-      const gameId = entities._id;
-      const enchantment = ctx.enchantment;
-      const enchantmentId = ctx.enchantmentId;
-
-      const $set = {};
-      $set[enchantmentId] = enchantment;
-
-      const query = { _id: gameId };
-      const update = { $set: $set };
-      const options = {};
-
-      db.collection('gameCollection').updateOne(
-        query,
-        update,
-        options,
-        (error) => {
-          if (error) {
-            debug('updateSetEnchantmentEntity: error:', error);
-          }
-
-          debug('updateSetEnchantmentEntity: Success!');
-          sendResponse();
-        }
-      );
-    }
-
-    function sendResponse() {
-      debug('sendResponse: No Errors!');
-      res.send({ error: 0 });
       next();
     }
   };

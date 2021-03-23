@@ -8,7 +8,7 @@ module.exports = (hook) => {
   hook.attach('generateBlueprints_', (injected, done) => {
     injected.blueprint.fortification.humanBarracks = {
       fortificationName: 'humanBarracks',
-      namePretty: 'Barracks',
+      namePretty: 'Foresters hut',
       race: 'human',
       cost: {
         gold: 1000,
