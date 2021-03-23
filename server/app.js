@@ -146,8 +146,8 @@ function setupStaticFolder() {
 }
 
 function setupBodyParser() {
-  app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ limit: '10mb', parameterLimit: 1000000, extended: true }));
+  app.use(bodyParser.json({ limit: '10mb', parameterLimit: 1000000}));
 
   debug('setupBodyParser()');
   setupMongo();
