@@ -4,7 +4,7 @@
 
 // Listens to event when player build Beast Townhall
 // sends request to backend for creating a new enchantment and entity for it
-g.autoload.buildBeastTownhall = (inject) => {
+g.autoload.buildBeastBarracks = (inject) => {
   const walkie = inject.walkie;
   const auth = inject.auth;
 
@@ -19,7 +19,7 @@ g.autoload.buildBeastTownhall = (inject) => {
       (data) => {
         const fortificationName = data.fortificationName;
 
-        if (fortificationName === 'beastTownhall') {
+        if (fortificationName === 'beastBarracks') {
           console.log('fortification beeing build:', fortificationName);
           buildBeastTownhallFortification(data);
         }
@@ -29,9 +29,9 @@ g.autoload.buildBeastTownhall = (inject) => {
   }
 
   function buildBeastTownhallFortification(data) {
-    $.post('/ajax/beastTownhallBuild' + auth.uri, data, () => {
+    $.post('/ajax/beastBarracksBuild' + auth.uri, data, () => {
       console.log(
-        'sendFortificationBuildPost: POST -> /ajax/beastTownhallBuild',
+        'sendFortificationBuildPost: POST -> /ajax/beastBarracksBuild',
         data
       );
     });
