@@ -86,10 +86,7 @@ function buildClient() {
 }
 
 function removeSprites() {
-  const pathRead = path.join(
-    environment.basepath,
-    '/public/sprite/*'
-  );
+  const pathRead = path.join(environment.basepath, '/public/sprite/*');
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
       debug('removeSprites: error:', error);
@@ -106,10 +103,7 @@ function removeSprites() {
 }
 
 function buildSprites() {
-  const pathRead = path.join(
-    environment.basepath,
-    '/server/game/**/*.png'
-  );
+  const pathRead = path.join(environment.basepath, '/server/game/**/*.png');
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
       debug('buildSprites: error:', error);
@@ -118,7 +112,7 @@ function buildSprites() {
 
     // Create directory if not exits, git likes to delete this dir
     const pathDir = path.join(environment.basepath, '/public/sprite/');
-    if (!fs.existsSync(pathDir)){
+    if (!fs.existsSync(pathDir)) {
       fs.mkdirSync(pathDir);
     }
 
@@ -209,10 +203,7 @@ function setupLandCollection() {
 }
 
 function setupHooks() {
-  const pathRead = path.join(
-    environment.basepath,
-    '/server/game/**/h.*.js'
-  );
+  const pathRead = path.join(environment.basepath, '/server/game/**/h.*.js');
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
       debug('setupHooks: error:', error);
@@ -243,7 +234,10 @@ function setupSpriteFilenameArray() {
     environment,
     (error, result) => {
       spriteFilenameArray = result;
-      debug('setupSpriteFilenameArray: Loaded sprites!', spriteFilenameArray.length);
+      debug(
+        'setupSpriteFilenameArray: Loaded sprites!',
+        spriteFilenameArray.length
+      );
       setupInstrumentRoutesAndLibraries();
     }
   );
@@ -376,18 +370,12 @@ function setupInstrumentRoutesAndLibraries() {
 
   app.post(
     '/editorMap/mapSavePost',
-    require('./instrument/editorMap/mapSavePost.js')(
-      environment,
-      db
-    )
+    require('./instrument/editorMap/mapSavePost.js')(environment, db)
   );
 
   app.post(
     '/editorMap/mapCreateNewPost',
-    require('./instrument/editorMap/mapCreateNewPost.js')(
-      environment,
-      db
-    )
+    require('./instrument/editorMap/mapCreateNewPost.js')(environment, db)
   );
 
   app.get(
@@ -401,10 +389,7 @@ function setupInstrumentRoutesAndLibraries() {
 
   app.post(
     '/editorLand/landCreateNewPost',
-    require('./instrument/editorLand/landCreateNewPost.js')(
-      environment,
-      db
-    )
+    require('./instrument/editorLand/landCreateNewPost.js')(environment, db)
   );
 
   app.get(
@@ -419,10 +404,7 @@ function setupInstrumentRoutesAndLibraries() {
 
   app.post(
     '/editorLand/landSavePost',
-    require('./instrument/editorLand/landSavePost.js')(
-      environment,
-      db
-    )
+    require('./instrument/editorLand/landSavePost.js')(environment, db)
   );
 
   app.post(
@@ -453,10 +435,7 @@ function setupInstrumentRoutesAndLibraries() {
 }
 
 function setupMiddleware() {
-  const pathRead = path.join(
-    environment.basepath,
-    '/server/game/**/m.*.js'
-  );
+  const pathRead = path.join(environment.basepath, '/server/game/**/m.*.js');
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
       debug('setupMiddleware: error:', error);
@@ -480,10 +459,7 @@ function setupMiddleware() {
 }
 
 function setupRoutes() {
-  const pathRead = path.join(
-    environment.basepath,
-    '/server/game/**/r.*.js'
-  );
+  const pathRead = path.join(environment.basepath, '/server/game/**/r.*.js');
   glob(pathRead, {}, (error, pathFiles) => {
     if (error) {
       debug('setupRoutes: error:', error);
@@ -507,10 +483,7 @@ function setupRoutes() {
 function setupEjsToHtml() {
   const htmlArray = [];
 
-  const pathRead = path.join(
-    environment.basepath,
-    '/server/game/**/e.*.ejs'
-  );
+  const pathRead = path.join(environment.basepath, '/server/game/**/e.*.ejs');
   glob(pathRead, {}, (errorReadFile, pathFiles) => {
     if (errorReadFile) {
       debug('setupEjsToHtml: error:', errorReadFile);
