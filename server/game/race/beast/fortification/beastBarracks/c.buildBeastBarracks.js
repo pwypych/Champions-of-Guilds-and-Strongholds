@@ -2,8 +2,8 @@
 
 'use strict';
 
-// Listens to event when player build Beast Townhall
-// sends request to backend for creating a new enchantment and entity for it
+// Listens to event when player build Beast Barracks
+// sends request to backend to build that fortification
 g.autoload.buildBeastBarracks = (inject) => {
   const walkie = inject.walkie;
   const auth = inject.auth;
@@ -20,15 +20,15 @@ g.autoload.buildBeastBarracks = (inject) => {
         const fortificationName = data.fortificationName;
 
         if (fortificationName === 'beastBarracks') {
-          console.log('fortification beeing build:', fortificationName);
-          buildBeastTownhallFortification(data);
+          console.log('fortification send to build:', fortificationName);
+          buildBeastBarracksFortification(data);
         }
       },
       false
     );
   }
 
-  function buildBeastTownhallFortification(data) {
+  function buildBeastBarracksFortification(data) {
     $.post('/ajax/beastBarracksBuild' + auth.uri, data, () => {
       console.log(
         'sendFortificationBuildPost: POST -> /ajax/beastBarracksBuild',
