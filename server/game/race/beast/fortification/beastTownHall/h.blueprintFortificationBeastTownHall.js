@@ -6,8 +6,8 @@
 // It attaches blueprint for this fortification
 module.exports = (hook) => {
   hook.attach('generateBlueprints_', (injected, done) => {
-    injected.blueprint.fortification.beastTownHall = {
-      fortificationName: 'beastTownHall',
+    injected.blueprint.fortification.beastTownhall = {
+      fortificationName: 'beastTownhall',
       namePretty: 'Town hall',
       race: 'beast',
       cost: {

@@ -94,8 +94,18 @@ g.autoload.fortificationModal = (inject) => {
 
   function onButtonClick($button, fortificationName) {
     $button.on('click', () => {
-      sendFortificationBuildPost(fortificationName);
+      triggerFortificationBuildButtonClick(fortificationName);
     });
+  }
+
+  function triggerFortificationBuildButtonClick(fortificationName) {
+    walkie.triggerEvent(
+      'fortificationBuildButtonClickEvent_',
+      'fortificationModal.js',
+      {
+        fortificationName: fortificationName
+      }
+    );
   }
 
   function sendFortificationBuildPost(fortificationName) {
