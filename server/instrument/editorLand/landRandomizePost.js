@@ -5,6 +5,7 @@
 const debug = require('debug')('cogs:landRandomizePost');
 const mazeGeneration = require('maze-generation');
 const _ = require('lodash');
+const PF = require('pathfinding');
 
 module.exports = (environment, blueprint, db) => {
   return (req, res) => {
@@ -99,15 +100,161 @@ module.exports = (environment, blueprint, db) => {
 
       debug('generateMaze', mazeMatrix);
       debug(mazeString);
+      generateCastles(landId, landLayer);
+    }
+
+    function generateCastles(landId, landLayer) {
+      const accuracy = 100;
+      const playersCount = 2;
+      let positions = [];
+      let distanceLargest = 0;
+
+      // loop 100 times
+      _.times(accuracy, () => {
+        const positionsTemporary = toolPickXRandomPositions(playersCount, landLayer);
+        const path = toolFindPath(positionsTemporary[0], positionsTemporary[1], landLayer);
+
+        // check how far they are from each other
+        const distance = path.length;
+        if (distance > distanceLargest) {
+          distanceLargest = distance;
+          positions = positionsTemporary;
+        }
+      });
+
+      debug('generateCastles', positions);
       generateRandomFigureOnEveryParcel(landId, landLayer);
+    }
+
+    function toolPickXRandomPositions(count, landLayer) {
+      const height = landLayer.length;
+      const width = landLayer[0].length;
+
+      const positions = [];
+      _.times(count, () => {
+        let run = true;
+        while (run) {
+          const x = _.random(0, width - 1);
+          const y = _.random(0, height - 1);
+          if (!_.some(positions, {x: x, y: y})) { // _.includes does not work on objects
+            run = false;
+            positions.push({x: x, y: y});
+          }
+        }
+      });
+
+      return positions;
+    }
+
+    function toolFindPath(positionFirst, positionSecond, landLayer) {
+      const height = landLayer.length;
+      const width = landLayer[0].length;
+
+      const matrix = [];
+      _.times(height * 3, () => {
+        const row = [];
+        _.times(width * 3, () => {
+          row.push(1);
+        });
+        matrix.push(row);
+      });
+
+      landLayer.forEach((row, parcelY) => {
+        row.forEach((parcel, parcelX) => {
+          const matrixParcel = [
+            [1, 1 , 1],
+            [1, 0 , 1],
+            [1, 1 , 1]
+          ];
+
+          parcel.conditions.forEach((condition) => {
+            if (condition.name === 'exitTop') {
+              matrixParcel[0][1] = 0;
+            }
+
+            if (condition.name === 'exitRight') {
+              matrixParcel[1][2] = 0;
+            }
+
+            if (condition.name === 'exitBottom') {
+              matrixParcel[2][1] = 0;
+            }
+
+            if (condition.name === 'exitLeft') {
+              matrixParcel[1][0] = 0;
+            }
+          });
+
+          // debug('toolFindPath: parcel x: ' + parcelX + ' y: ' + parcelY);
+          // debug('toolFindPath:', matrixParcel[0]);
+          // debug('toolFindPath:', matrixParcel[1]);
+          // debug('toolFindPath:', matrixParcel[2]);
+
+          const y = parcelY * 3;
+          const x = parcelX * 3;
+
+          matrix[y][x] = matrixParcel[0][0];
+          matrix[y][x + 1] = matrixParcel[0][1];
+          matrix[y][x + 2] = matrixParcel[0][2];
+          matrix[y + 1][x] = matrixParcel[1][0];
+          matrix[y + 1][x + 1] = matrixParcel[1][1];
+          matrix[y + 1][x + 2] = matrixParcel[1][2];
+          matrix[y + 2][x] = matrixParcel[2][0];
+          matrix[y + 2][x + 1] = matrixParcel[2][1];
+          matrix[y + 2][x + 2] = matrixParcel[2][2];
+        });
+      });
+
+      // debug('toolFindPath: matrix:', JSON.stringify(matrix[0]));
+      // debug('toolFindPath: matrix:', JSON.stringify(matrix[1]));
+      // debug('toolFindPath: matrix:', JSON.stringify(matrix[2]));
+      // debug('toolFindPath: matrix:', JSON.stringify(matrix[3]));
+      // debug('toolFindPath: matrix:', JSON.stringify(matrix[4]));
+      // debug('toolFindPath: matrix:', JSON.stringify(matrix[5]));
+
+      // debug('toolFindPath: positionFirst', positionFirst);
+      // debug('toolFindPath: positionSecond', positionSecond);
+
+      const grid = new PF.Grid(matrix);
+
+      const finder = new PF.AStarFinder({ allowDiagonal: false });
+      const path = finder.findPath(
+        positionFirst.x * 3 + 1,
+        positionFirst.y * 3 + 1,
+        positionSecond.x * 3 + 1,
+        positionSecond.y * 3 + 1,
+        grid
+      );
+
+      const pathTransformed = [];
+      path.forEach((step) => {
+        const x = step[0];
+        const y = step[1];
+
+        const xT = x - 1;
+        const yT = y - 1;
+
+        if ((xT % 3 === 0) && (yT % 3 === 0)) {
+          const xR = xT / 3;
+          const yR = yT / 3;
+
+          const obj = {x: xR, y: yR};
+          // debug('Transforming x: ' + x + ' y: ' + y + ' to ', obj);
+          pathTransformed.push(obj);
+        }
+      });
+
+      // debug('toolFindPath: path:', path);
+      // debug('toolFindPath: pathTransformed', pathTransformed);
+      return pathTransformed;
     }
 
     function generateRandomFigureOnEveryParcel(landId, landLayer) {
       _.forEach(landLayer, (row) => {
         _.forEach(row, (parcel) => {
-          _.times(2, () => {
+          _.times(0, () => {
             if (_.random(1, 2) === 1 ) {
-              const figureName = pickRandomVisitable();
+              const figureName = toolPickRandomVisitable();
               let monster = false;
               if (_.random(1, 2) === 1 ) {
                 monster = true;
@@ -117,8 +264,8 @@ module.exports = (environment, blueprint, db) => {
             }
           });
 
-          _.times(4, () => {
-            const figureName = pickRandomResource();
+          _.times(1, () => {
+            const figureName = toolPickRandomResource();
             let monster = false;
             if (_.random(1, 6) === 1 ) {
               monster = true;
@@ -133,7 +280,7 @@ module.exports = (environment, blueprint, db) => {
       insertLand(landId, landLayer);
     }
 
-    function pickRandomResource() {
+    function toolPickRandomResource() {
       const resourceNames = [];
       _.forEach(blueprint.figure, (figure) => {
         if (figure.resource) {
@@ -143,10 +290,10 @@ module.exports = (environment, blueprint, db) => {
       return _.sample(resourceNames);
     }
 
-    function pickRandomVisitable() {
+    function toolPickRandomVisitable() {
       const visitableNames = [];
       _.forEach(blueprint.figure, (figure) => {
-        if (figure.visitableType) {
+        if (figure.visitableType && figure.figureName !== 'castleRandom') {
           visitableNames.push(figure.figureName);
         }
       });
