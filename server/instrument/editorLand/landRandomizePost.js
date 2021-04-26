@@ -104,20 +104,35 @@ module.exports = (environment, blueprint, db) => {
     }
 
     function generateCastles(landId, landLayer) {
-      const accuracy = 100;
-      const playersCount = 2;
+      const accuracy = 1000;
+      const playersCount = 8;
       let positions = [];
       let distanceLargest = 0;
 
       // loop 100 times
       _.times(accuracy, () => {
         const positionsTemporary = toolPickXRandomPositions(playersCount, landLayer);
-        const path = toolFindPath(positionsTemporary[0], positionsTemporary[1], landLayer);
+
+        const distances = [];
+
+        positionsTemporary.forEach((positionTemporary) => {
+          const positionsRemaining = positionsTemporary.filter((position) => {
+            return position !== positionTemporary;
+          });
+
+          positionsRemaining.forEach((positionRemaining) => {
+            const path = toolFindPath(positionTemporary, positionRemaining, landLayer);
+            const distance = path.length;
+            distances.push(distance);
+          });
+        });
+
+        // debug('distances', distances);
+        const distanceMin = _.min(distances);
 
         // check how far they are from each other
-        const distance = path.length;
-        if (distance > distanceLargest) {
-          distanceLargest = distance;
+        if (distanceMin > distanceLargest) {
+          distanceLargest = distanceMin;
           positions = positionsTemporary;
         }
       });
