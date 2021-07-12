@@ -146,6 +146,26 @@ module.exports = (environment, blueprint, db) => {
       generateRandomFigureOnEveryParcel(landId, landLayer);
     }
 
+    function generateLevels(positionsCastle, landId, landLayer) {
+      /*
+      4x4 land
+      16 parcels
+      16 - 3 castles = 13 free parcels
+      13/5 ~= 2 tiles per level, rest is 3
+
+      2 parcels = level 5
+      2 parcels + 1 = level 4
+      2 parcels + 1 = level 3
+      2 parcels + 1 = level 2
+      2 parcels = level 1
+      3 castle parcels = level 1
+
+      Make distanceToNearestCastleMatrix
+
+      Start from highest distance and assign levels
+      */
+    }
+
     function toolPickXRandomPositions(count, landLayer) {
       const height = landLayer.length;
       const width = landLayer[0].length;
@@ -206,9 +226,6 @@ module.exports = (environment, blueprint, db) => {
           });
 
           // debug('toolFindPath: parcel x: ' + parcelX + ' y: ' + parcelY);
-          // debug('toolFindPath:', matrixParcel[0]);
-          // debug('toolFindPath:', matrixParcel[1]);
-          // debug('toolFindPath:', matrixParcel[2]);
 
           const y = parcelY * 3;
           const x = parcelX * 3;
@@ -224,13 +241,6 @@ module.exports = (environment, blueprint, db) => {
           matrix[y + 2][x + 2] = matrixParcel[2][2];
         });
       });
-
-      // debug('toolFindPath: matrix:', JSON.stringify(matrix[0]));
-      // debug('toolFindPath: matrix:', JSON.stringify(matrix[1]));
-      // debug('toolFindPath: matrix:', JSON.stringify(matrix[2]));
-      // debug('toolFindPath: matrix:', JSON.stringify(matrix[3]));
-      // debug('toolFindPath: matrix:', JSON.stringify(matrix[4]));
-      // debug('toolFindPath: matrix:', JSON.stringify(matrix[5]));
 
       // debug('toolFindPath: positionFirst', positionFirst);
       // debug('toolFindPath: positionSecond', positionSecond);
@@ -259,7 +269,6 @@ module.exports = (environment, blueprint, db) => {
           const yR = yT / 3;
 
           const obj = {x: xR, y: yR};
-          // debug('Transforming x: ' + x + ' y: ' + y + ' to ', obj);
           pathTransformed.push(obj);
         }
       });
