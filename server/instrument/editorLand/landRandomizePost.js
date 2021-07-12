@@ -105,7 +105,7 @@ module.exports = (environment, blueprint, db) => {
 
     function generateCastles(landId, landLayer) {
       const accuracy = 1000;
-      const playersCount = 8;
+      const playersCount = 3;
       let positions = [];
       let distanceLargest = 0;
 
@@ -135,6 +135,11 @@ module.exports = (environment, blueprint, db) => {
           distanceLargest = distanceMin;
           positions = positionsTemporary;
         }
+      });
+
+      _.forEach(positions, (position) => {
+        const condition = { name: 'castleRandom' };
+        landLayer[position.y][position.x].conditions.push(condition);
       });
 
       debug('generateCastles', positions);
