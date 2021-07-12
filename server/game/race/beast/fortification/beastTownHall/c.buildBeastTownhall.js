@@ -20,15 +20,14 @@ g.autoload.buildBeastTownhall = (inject) => {
         const fortificationName = data.fortificationName;
 
         if (fortificationName === 'beastTownhall') {
-          console.log('fortification send to build:', fortificationName);
-          buildBeastTownhallFortification(data);
+          beastTownhallBuildPost(data);
         }
       },
       false
     );
   }
 
-  function buildBeastTownhallFortification(data) {
+  function beastTownhallBuildPost(data) {
     $.post('/ajax/beastTownhallBuild' + auth.uri, data, () => {
       console.log(
         'sendFortificationBuildPost: POST -> /ajax/beastTownhallBuild',

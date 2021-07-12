@@ -2,9 +2,9 @@
 
 'use strict';
 
-// Listens to event when player build Beast Barracks
+// Listens to event when player build meadow
 // sends request to backend to build that fortification
-g.autoload.buildBeastBarracks = (inject) => {
+g.autoload.buildMeadow = (inject) => {
   const walkie = inject.walkie;
   const auth = inject.auth;
 
@@ -15,23 +15,22 @@ g.autoload.buildBeastBarracks = (inject) => {
   function onFortificationBuildButtonClick() {
     walkie.onEvent(
       'fortificationBuildButtonClickEvent_',
-      'buildBeastTownhall.js',
+      'buildMeadow.js',
       (data) => {
         const fortificationName = data.fortificationName;
 
-        if (fortificationName === 'beastBarracks') {
-          console.log('fortification send to build:', fortificationName);
-          buildBeastBarracksFortification(data);
+        if (fortificationName === 'meadow') {
+          meadowBuildPost(data);
         }
       },
       false
     );
   }
 
-  function buildBeastBarracksFortification(data) {
-    $.post('/ajax/beastBarracksBuild' + auth.uri, data, () => {
+  function meadowBuildPost(data) {
+    $.post('/ajax/buildMeadow' + auth.uri, data, () => {
       console.log(
-        'sendFortificationBuildPost: POST -> /ajax/beastBarracksBuild',
+        'sendFortificationBuildPost: POST -> /ajax/buildMeadow',
         data
       );
     });

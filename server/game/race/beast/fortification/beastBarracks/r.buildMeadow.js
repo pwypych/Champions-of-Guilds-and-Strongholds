@@ -2,11 +2,12 @@
 
 module.exports = (app, middleware) => {
   app.post(
-    '/ajax/worldFortificationBuild',
+    '/ajax/buildMeadow',
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('worldState'),
 
-    middleware.buildFortificationPost
+    middleware.buildFortificationPost,
+    middleware.sendResponseEarly
   );
 };

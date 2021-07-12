@@ -227,7 +227,6 @@ module.exports = (db, blueprint) => {
     function addEntitiesFilteredToLocals(ctx) {
       res.locals.fortificationId = ctx.fortificationId;
       res.locals.fortificationBlueprint = ctx.fortificationBlueprint;
-      res.locals.fortificationBlueprint = ctx.fortificationBlueprint;
 
       next();
     }
