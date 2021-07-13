@@ -106,7 +106,7 @@ module.exports = (environment, blueprint, db) => {
     function generateCastles(landId, landLayer) {
       const accuracy = 1000;
       const playersCount = 3;
-      let positions = [];
+      let positionsCastle = [];
       let distanceLargest = 0;
 
       // loop 100 times
@@ -133,37 +133,17 @@ module.exports = (environment, blueprint, db) => {
         // check how far they are from each other
         if (distanceMin > distanceLargest) {
           distanceLargest = distanceMin;
-          positions = positionsTemporary;
+          positionsCastle = positionsTemporary;
         }
       });
 
-      _.forEach(positions, (position) => {
+      _.forEach(positionsCastle, (position) => {
         const condition = { name: 'castleRandom' };
         landLayer[position.y][position.x].conditions.push(condition);
       });
 
-      debug('generateCastles', positions);
-      generateRandomFigureOnEveryParcel(landId, landLayer);
-    }
-
-    function generateLevels(positionsCastle, landId, landLayer) {
-      /*
-      4x4 land
-      16 parcels
-      16 - 3 castles = 13 free parcels
-      13/5 ~= 2 tiles per level, rest is 3
-
-      2 parcels = level 5
-      2 parcels + 1 = level 4
-      2 parcels + 1 = level 3
-      2 parcels + 1 = level 2
-      2 parcels = level 1
-      3 castle parcels = level 1
-
-      Make distanceToNearestCastleMatrix
-
-      Start from highest distance and assign levels
-      */
+      debug('generateCastles', positionsCastle);
+      generateLevels(positionsCastle, landId, landLayer);
     }
 
     function toolPickXRandomPositions(count, landLayer) {
@@ -184,6 +164,54 @@ module.exports = (environment, blueprint, db) => {
       });
 
       return positions;
+    }
+
+    function generateLevels(positionsCastle, landId, landLayer) {
+      /*
+      4x4 land
+      16 parcels
+      16 - 3 castles = 13 free parcels
+      13/5 ~= 2 tiles per level, rest is 3
+
+      Make distanceToNearestCastleMatrix
+
+      sort positions by distance
+
+      Start from lowest distance and assign levels
+
+      Maybe castle can be level 0
+
+      2 parcels = level 5
+      2 parcels + 1 = level 4
+      2 parcels + 1 = level 3
+      2 parcels + 1 = level 2
+      2 parcels = level 1
+      3 castle parcels = level 1
+
+      */
+
+      const nearestCastleArrayUnsorted = [];
+
+      landLayer.forEach((row, y) => {
+        row.forEach((parcel, x) => {
+          const distances = [];
+
+          positionsCastle.forEach((positionCastle) => {
+            const path = toolFindPath(positionCastle, {x: x, y: y}, landLayer);
+            const distance = path.length;
+            distances.push(distance);
+          });
+
+          const distance = _.min(distances);
+
+          nearestCastleArrayUnsorted.push({x: x, y: y, distance: distance});
+        });
+      });
+
+      const nearestCastleArray = _.sortBy(nearestCastleArrayUnsorted, ['distance']);
+
+      debug('generateLevels', nearestCastleArray);
+      generateRandomFigureOnEveryParcel(landId, landLayer);
     }
 
     function toolFindPath(positionFirst, positionSecond, landLayer) {
