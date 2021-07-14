@@ -182,18 +182,20 @@ module.exports = (environment, blueprint, db) => {
       Maybe castle can be level 0
 
       2 parcels = level 5
-      2 parcels + 1 = level 4
+      2 parcels = level 4
       2 parcels + 1 = level 3
       2 parcels + 1 = level 2
-      2 parcels = level 1
-      3 castle parcels = level 1
+      2 parcels + 1 = level 1
+      3 castle parcels = level 0
 
       */
 
       const nearestCastleArrayUnsorted = [];
+      let amountParcel = 0;
 
       landLayer.forEach((row, y) => {
         row.forEach((parcel, x) => {
+          amountParcel += 1;
           const distances = [];
 
           positionsCastle.forEach((positionCastle) => {
@@ -210,7 +212,18 @@ module.exports = (environment, blueprint, db) => {
 
       const nearestCastleArray = _.sortBy(nearestCastleArrayUnsorted, ['distance']);
 
-      debug('generateLevels', nearestCastleArray);
+      const amountCastle = positionsCastle.length;
+
+      const levelArray = [];
+      _.times(amountCastle, () => {
+        levelArray.push(0);
+      });
+
+      const amount = amountParcel - amountCastle;
+      const average = Math.floor(amount / 5);
+      const remaining = amount % 5;
+
+      debug('generateLevels', amount, levelArray, average, remaining);
       generateRandomFigureOnEveryParcel(landId, landLayer);
     }
 
