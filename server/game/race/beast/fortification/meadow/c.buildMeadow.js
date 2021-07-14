@@ -33,6 +33,8 @@ g.autoload.buildMeadow = (inject) => {
         'sendFortificationBuildPost: POST -> /ajax/buildMeadow',
         data
       );
+    }).done(() => {
+      console.log('Build success');
     });
   }
 };
