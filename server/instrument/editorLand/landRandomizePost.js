@@ -190,13 +190,14 @@ module.exports = (environment, blueprint, db) => {
 
       const nearestCastleArray = _.sortBy(nearestCastleArrayUnsorted, ['distance']);
 
+
       const amountCastle = positionsCastle.length;
 
       // Fill level array with levels with algorithm:
       /*
         ex. 16 parcels and 3 castles
         16 - 3 castles = 13 free parcels
-        13/5 ~= 2 tiles per level, rest is 3
+        13/5 ~= 2 parcels per level, rest is 3
 
         2 parcels + 1 = level 5
         2 parcels + 1 = level 4
