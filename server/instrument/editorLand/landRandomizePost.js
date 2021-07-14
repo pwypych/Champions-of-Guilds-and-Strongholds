@@ -167,29 +167,7 @@ module.exports = (environment, blueprint, db) => {
     }
 
     function generateLevels(positionsCastle, landId, landLayer) {
-      /*
-      4x4 land
-      16 parcels
-      16 - 3 castles = 13 free parcels
-      13/5 ~= 2 tiles per level, rest is 3
-
-      Make distanceToNearestCastleMatrix
-
-      sort positions by distance
-
-      Start from lowest distance and assign levels
-
-      Maybe castle can be level 0
-
-      2 parcels = level 5
-      2 parcels = level 4
-      2 parcels + 1 = level 3
-      2 parcels + 1 = level 2
-      2 parcels + 1 = level 1
-      3 castle parcels = level 0
-
-      */
-
+      // Calculate distances to nearest castles
       const nearestCastleArrayUnsorted = [];
       let amountParcel = 0;
 
@@ -214,16 +192,53 @@ module.exports = (environment, blueprint, db) => {
 
       const amountCastle = positionsCastle.length;
 
+      // Fill level array with levels with algorithm:
+      /*
+        ex. 16 parcels and 3 castles
+        16 - 3 castles = 13 free parcels
+        13/5 ~= 2 tiles per level, rest is 3
+
+        2 parcels + 1 = level 5
+        2 parcels + 1 = level 4
+        2 parcels + 1 = level 3
+        2 parcels = level 2
+        2 parcels = level 1
+        3 castle parcels = level 1
+      */
       const levelArray = [];
       _.times(amountCastle, () => {
-        levelArray.push(0);
+        levelArray.push(1);
       });
 
       const amount = amountParcel - amountCastle;
       const average = Math.floor(amount / 5);
       const remaining = amount % 5;
 
-      debug('generateLevels', amount, levelArray, average, remaining);
+      _.times(5, (i) => {
+        _.times(average, () => {
+          levelArray.push(i + 1);
+        });
+      });
+
+      let subtractFromHardest = 0;
+      _.times(remaining, () => {
+        levelArray.push(5 - subtractFromHardest);
+        subtractFromHardest += 1;
+      });
+
+      levelArray.sort(); // muntating
+
+      // Assign levels with parcels sorted by distance to nearest castle
+      levelArray.forEach((level, index) => {
+        nearestCastleArray[index].level = level;
+      });
+
+      // Assign levels to landLayer
+      nearestCastleArray.forEach((positionLevelObject) => {
+        landLayer[positionLevelObject.y][positionLevelObject.x].level = positionLevelObject.level;
+      });
+
+      debug('generateLevels');
       generateRandomFigureOnEveryParcel(landId, landLayer);
     }
 
@@ -322,8 +337,8 @@ module.exports = (environment, blueprint, db) => {
     function generateRandomFigureOnEveryParcel(landId, landLayer) {
       _.forEach(landLayer, (row) => {
         _.forEach(row, (parcel) => {
-          _.times(0, () => {
-            if (_.random(1, 2) === 1 ) {
+          _.times(1, () => {
+            if (_.random(1, 3) !== 1 ) {
               const figureName = toolPickRandomVisitable();
               let monster = false;
               if (_.random(1, 2) === 1 ) {
