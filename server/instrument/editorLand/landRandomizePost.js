@@ -146,26 +146,6 @@ module.exports = (environment, blueprint, db) => {
       generateLevels(positionsCastle, landId, landLayer);
     }
 
-    function toolPickXRandomPositions(count, landLayer) {
-      const height = landLayer.length;
-      const width = landLayer[0].length;
-
-      const positions = [];
-      _.times(count, () => {
-        let run = true;
-        while (run) {
-          const x = _.random(0, width - 1);
-          const y = _.random(0, height - 1);
-          if (!_.some(positions, {x: x, y: y})) { // _.includes does not work on objects
-            run = false;
-            positions.push({x: x, y: y});
-          }
-        }
-      });
-
-      return positions;
-    }
-
     function generateLevels(positionsCastle, landId, landLayer) {
       // Calculate distances to nearest castles
       const nearestCastleArrayUnsorted = [];
@@ -241,6 +221,88 @@ module.exports = (environment, blueprint, db) => {
 
       debug('generateLevels');
       generateRandomFigureOnEveryParcel(landId, landLayer);
+    }
+
+    function generateRandomFigureOnEveryParcel(landId, landLayer) {
+      _.forEach(landLayer, (row) => {
+        _.forEach(row, (parcel) => {
+          _.times(1, () => {
+            if (_.random(1, 3) !== 1 ) {
+              const figureName = toolPickRandomVisitable();
+              let monster = false;
+              if (_.random(1, 2) === 1 ) {
+                monster = true;
+              }
+              const condition = { name: figureName, monster: monster };
+              parcel.conditions.push(condition);
+            }
+          });
+
+          _.times(1, () => {
+            const figureName = toolPickRandomResource();
+            let monster = false;
+            if (_.random(1, 6) === 1 ) {
+              monster = true;
+            }
+            const condition = { name: figureName, monster: monster };
+            parcel.conditions.push(condition);
+          });
+        });
+      });
+
+      debug('generateRandomFigureOnEveryParcel');
+      insertLand(landId, landLayer);
+    }
+
+    function insertLand(landId, landLayer) {
+      const query = { _id: landId };
+      const update = { $set: { landLayer: landLayer } };
+      const options = {};
+
+      db.collection('landCollection').updateOne(
+        query,
+        update,
+        options,
+        (error) => {
+          if (error) {
+            debug('insertGame: error:', error);
+            res
+              .status(503)
+              .send('503 Service Unavailable - Cannot insert land instance');
+          }
+
+          debug('insertLand: landId:', landId);
+          sendResponse(landId);
+        }
+      );
+    }
+
+    function sendResponse(landId) {
+      debug('sendResponse()');
+      debug('******************** ok ********************');
+      res.redirect(
+        environment.baseurl + '/editorLand/landEdit?landId=' + landId
+      );
+    }
+
+    function toolPickXRandomPositions(count, landLayer) {
+      const height = landLayer.length;
+      const width = landLayer[0].length;
+
+      const positions = [];
+      _.times(count, () => {
+        let run = true;
+        while (run) {
+          const x = _.random(0, width - 1);
+          const y = _.random(0, height - 1);
+          if (!_.some(positions, {x: x, y: y})) { // _.includes does not work on objects
+            run = false;
+            positions.push({x: x, y: y});
+          }
+        }
+      });
+
+      return positions;
     }
 
     function toolFindPath(positionFirst, positionSecond, landLayer) {
@@ -335,37 +397,6 @@ module.exports = (environment, blueprint, db) => {
       return pathTransformed;
     }
 
-    function generateRandomFigureOnEveryParcel(landId, landLayer) {
-      _.forEach(landLayer, (row) => {
-        _.forEach(row, (parcel) => {
-          _.times(1, () => {
-            if (_.random(1, 3) !== 1 ) {
-              const figureName = toolPickRandomVisitable();
-              let monster = false;
-              if (_.random(1, 2) === 1 ) {
-                monster = true;
-              }
-              const condition = { name: figureName, monster: monster };
-              parcel.conditions.push(condition);
-            }
-          });
-
-          _.times(1, () => {
-            const figureName = toolPickRandomResource();
-            let monster = false;
-            if (_.random(1, 6) === 1 ) {
-              monster = true;
-            }
-            const condition = { name: figureName, monster: monster };
-            parcel.conditions.push(condition);
-          });
-        });
-      });
-
-      debug('generateRandomFigureOnEveryParcel');
-      insertLand(landId, landLayer);
-    }
-
     function toolPickRandomResource() {
       const resourceNames = [];
       _.forEach(blueprint.figure, (figure) => {
@@ -384,37 +415,6 @@ module.exports = (environment, blueprint, db) => {
         }
       });
       return _.sample(visitableNames);
-    }
-
-    function insertLand(landId, landLayer) {
-      const query = { _id: landId };
-      const update = { $set: { landLayer: landLayer } };
-      const options = {};
-
-      db.collection('landCollection').updateOne(
-        query,
-        update,
-        options,
-        (error) => {
-          if (error) {
-            debug('insertGame: error:', error);
-            res
-              .status(503)
-              .send('503 Service Unavailable - Cannot insert land instance');
-          }
-
-          debug('insertLand: landId:', landId);
-          sendResponse(landId);
-        }
-      );
-    }
-
-    function sendResponse(landId) {
-      debug('sendResponse()');
-      debug('******************** ok ********************');
-      res.redirect(
-        environment.baseurl + '/editorLand/landEdit?landId=' + landId
-      );
     }
   };
 };
