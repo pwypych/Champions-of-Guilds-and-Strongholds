@@ -12,7 +12,15 @@ module.exports = (hook) => {
       income: {
         name: 'crystal',
         amount: 1
-      }
+      },
+      landRandomizeLevelChances: {
+        1: 0,
+        2: 1,
+        3: 10,
+        4: 20,
+        5: 5
+      },
+      landRandomizeConcentrationMax: 0.1
     };
 
     done();

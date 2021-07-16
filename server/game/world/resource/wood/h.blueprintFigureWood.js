@@ -8,7 +8,15 @@ module.exports = (hook) => {
   hook.attach('generateBlueprints_', (injected, done) => {
     injected.blueprint.figure.wood = {
       figureName: 'wood',
-      resource: { name: 'wood', amount: 7 }
+      resource: { name: 'wood', amount: 7 },
+      landRandomizeLevelChances: {
+        1: 50,
+        2: 40,
+        3: 30,
+        4: 10,
+        5: 5
+      },
+      landRandomizeConcentrationMax: 0.7
     };
 
     done();
