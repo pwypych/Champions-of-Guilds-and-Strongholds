@@ -326,8 +326,6 @@ module.exports = (environment, blueprint, db) => {
             }
           }
         });
-
-        debug('generateRandomFigureOnEveryParcel: parcelArray', parcelArray);
       });
 
       debug('generateRandomFigureOnEveryParcel: done');

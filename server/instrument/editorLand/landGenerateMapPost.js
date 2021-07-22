@@ -86,11 +86,19 @@ module.exports = (environment, blueprint, db) => {
         parcelArray.push(row);
       });
 
-      land.landLayer.forEach((row, y) => {
-        row.forEach((abstractParcel, x) => {
-          parcelArray[y][x] = generateParcel(parcelArray, x, y, abstractParcel);
+      // generateParcel can throw errors, becaouse sometimes it is impossible to generate parcel fulfilling all conditions
+      try {
+        land.landLayer.forEach((row, y) => {
+          row.forEach((abstractParcel, x) => {
+            parcelArray[y][x] = generateParcel(parcelArray, x, y, abstractParcel);
+          });
         });
-      });
+      } catch(e) {
+        debug('generateParcel: Tried to generate parcel 10000 times, cannot fulfill all conditions');
+        res.status(503);
+        res.send('503 Service Unavailable - Cannot generate map, please try again...');
+        return;
+      }
 
       const mapLayer = parcelArrayToMapLayer(parcelArray);
       const mapId = 'random_map_1234';
@@ -154,6 +162,9 @@ module.exports = (environment, blueprint, db) => {
       surrounding.parcelBottom = getParcelBottom(parcelArray, x, y);
       surrounding.parcelRight = getParcelRight(parcelArray, x, y);
 
+      let failureOverflow = false;
+      let failureCounter = 0;
+
       while (runInLoop) {
         let parcel = newParcel();
 
@@ -175,11 +186,22 @@ module.exports = (environment, blueprint, db) => {
 
         if (areConditionsFullfilled) {
           runInLoop = false;
+          failureCounter = 0;
           parcelDone = parcel;
           debug('generateParcel: Conditions fullfilled for this parcel, done generating this parcel x: ' + x + ' y: ' + y);
         } else {
+          failureCounter += 1;
           debug('generateParcel: Conditions not fullfilled for this parcel, trying again x: ' + x + ' y: ' + y);
+
+          if (failureCounter === 10000) {
+            failureOverflow = true;
+            runInLoop = false;
+          }
         }
+      }
+
+      if (failureOverflow) {
+        throw new Error('failureOverflow');
       }
 
       debug('generateParcel: parcel: ', parcelDone);
