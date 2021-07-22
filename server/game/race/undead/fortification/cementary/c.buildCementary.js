@@ -2,9 +2,9 @@
 
 'use strict';
 
-// Listens to event when player build suburbs
+// Listens to event when player build cementary
 // sends request to backend to build that fortification
-g.autoload.buildSuburbs = (inject) => {
+g.autoload.buildCementary = (inject) => {
   const walkie = inject.walkie;
   const auth = inject.auth;
 
@@ -15,22 +15,22 @@ g.autoload.buildSuburbs = (inject) => {
   function onFortificationBuildButtonClick() {
     walkie.onEvent(
       'fortificationBuildButtonClickEvent_',
-      'buildSuburbs.js',
+      'buildCementary.js',
       (data) => {
         const fortificationName = data.fortificationName;
 
-        if (fortificationName === 'suburbs') {
-          suburbsBuildPost(data);
+        if (fortificationName === 'cementary') {
+          cementaryBuildPost(data);
         }
       },
       false
     );
   }
 
-  function suburbsBuildPost(data) {
-    $.post('/ajax/buildSuburbs' + auth.uri, data, () => {
+  function cementaryBuildPost(data) {
+    $.post('/ajax/buildCementary' + auth.uri, data, () => {
       console.log(
-        'sendFortificationBuildPost: POST -> /ajax/buildSuburbs',
+        'sendFortificationBuildPost: POST -> /ajax/buildCementary',
         data
       );
     }).done(() => {
