@@ -105,13 +105,16 @@ module.exports = (environment, blueprint, db) => {
 
     function generateCastles(landId, landLayer) {
       const accuracy = 1000;
-      const playersCount = 3;
+      const playersCount = 2;
       let positionsCastle = [];
       let distanceLargest = 0;
 
       // loop 100 times
       _.times(accuracy, () => {
-        const positionsTemporary = toolPickXRandomPositions(playersCount, landLayer);
+        const positionsTemporary = toolPickXRandomPositions(
+          playersCount,
+          landLayer
+        );
 
         const distances = [];
 
@@ -121,7 +124,11 @@ module.exports = (environment, blueprint, db) => {
           });
 
           positionsRemaining.forEach((positionRemaining) => {
-            const path = toolFindPath(positionTemporary, positionRemaining, landLayer);
+            const path = toolFindPath(
+              positionTemporary,
+              positionRemaining,
+              landLayer
+            );
             const distance = path.length;
             distances.push(distance);
           });
@@ -157,19 +164,24 @@ module.exports = (environment, blueprint, db) => {
           const distances = [];
 
           positionsCastle.forEach((positionCastle) => {
-            const path = toolFindPath(positionCastle, {x: x, y: y}, landLayer);
+            const path = toolFindPath(
+              positionCastle,
+              { x: x, y: y },
+              landLayer
+            );
             const distance = path.length;
             distances.push(distance);
           });
 
           const distance = _.min(distances);
 
-          nearestCastleArrayUnsorted.push({x: x, y: y, distance: distance});
+          nearestCastleArrayUnsorted.push({ x: x, y: y, distance: distance });
         });
       });
 
-      const nearestCastleArray = _.sortBy(nearestCastleArrayUnsorted, ['distance']);
-
+      const nearestCastleArray = _.sortBy(nearestCastleArrayUnsorted, [
+        'distance'
+      ]);
 
       const amountCastle = positionsCastle.length;
 
@@ -216,43 +228,142 @@ module.exports = (environment, blueprint, db) => {
 
       // Assign levels to landLayer
       nearestCastleArray.forEach((positionLevelObject) => {
-        landLayer[positionLevelObject.y][positionLevelObject.x].level = positionLevelObject.level;
+        landLayer[positionLevelObject.y][positionLevelObject.x].level =
+          positionLevelObject.level;
       });
 
       debug('generateLevels');
       generateRandomFigureOnEveryParcel(landId, landLayer);
     }
 
-    function generateRandomFigureOnEveryParcel(landId, landLayer) {
-      _.forEach(landLayer, (row) => {
-        _.forEach(row, (parcel) => {
-          _.times(1, () => {
-            if (_.random(1, 3) !== 1 ) {
-              const figureName = toolPickRandomVisitable();
-              let monster = false;
-              if (_.random(1, 2) === 1 ) {
-                monster = true;
-              }
-              const condition = { name: figureName, monster: monster };
-              parcel.conditions.push(condition);
-            }
-          });
+    // 3 figures per parcel times x3:
+    // for every randomly picked parcel
+    // find possible figures that can appear on that level of parcel, randomize order
+    // for every possible figure
+    // check if empty chance
+    // check max concentration
+    // calculate if figure spawned by spawn chance
+    // next figure
+    // next unused parcel
+    // next round for all parcels
 
-          _.times(1, () => {
-            const figureName = toolPickRandomResource();
-            let monster = false;
-            if (_.random(1, 6) === 1 ) {
-              monster = true;
-            }
-            const condition = { name: figureName, monster: monster };
-            parcel.conditions.push(condition);
+    function generateRandomFigureOnEveryParcel(landId, landLayer) {
+      const figureTypes = [
+        'visitable',
+        'visitable',
+        'visitable',
+        'resource',
+        'resource',
+        'resource'
+      ];
+      _.forEach(figureTypes, (figureType) => {
+        // Randomize parcels
+        let parcelArray = [];
+        _.forEach(landLayer, (row, y) => {
+          _.forEach(row, (parcel, x) => {
+            parcelArray.push({
+              x: x,
+              y: y,
+              level: parcel.level,
+              conditions: parcel.conditions
+            });
           });
         });
+        parcelArray = _.shuffle(parcelArray);
+
+        // Dev: Only one random parcel
+        // const first = parcelArray[0];
+        // parcelArray = [];
+        // parcelArray.push(first);
+
+        // For every randomly picked parcel
+        _.forEach(parcelArray, (parcel) => {
+          let isRunning = true;
+          while (isRunning) {
+            // Check if empty chance
+            if (_.random(1, 100) === 1) {
+              // debug('generateRandomFigureOnEveryParcel: Empty!');
+              isRunning = false;
+            }
+
+            let visitable;
+            if (figureType === 'visitable') {
+              visitable = toolPickRandomVisitableByLevel(parcel.level);
+            }
+            if (figureType === 'resource') {
+              visitable = toolPickRandomResourceByLevel(parcel.level);
+            }
+
+            // Check max concentration
+            const isMax = toolIsMaxConcentrationReached(
+              landLayer,
+              visitable.figureName,
+              visitable.landRandomizeConcentrationMax
+            );
+            if (!isMax) {
+              // Calculate if figure spawned by spawn chance
+              if (
+                _.random(1, 100) <=
+                visitable.landRandomizeLevelChances[parcel.level]
+              ) {
+                // Add monsters at random
+                let monster = false;
+                if (_.random(1, 3) === 1) {
+                  // Do not add on castle parcel
+                  if (!toolIsCastleRandomOnParcel(parcel)) {
+                    monster = true;
+                  }
+                }
+
+                const condition = {
+                  name: visitable.figureName,
+                  monster: monster
+                };
+                // debug('generateRandomFigureOnEveryParcel: condition: ', condition);
+                landLayer[parcel.y][parcel.x].conditions.push(condition);
+                isRunning = false;
+              }
+            }
+          }
+        });
+
+        debug('generateRandomFigureOnEveryParcel: parcelArray', parcelArray);
       });
 
-      debug('generateRandomFigureOnEveryParcel');
+      debug('generateRandomFigureOnEveryParcel: done');
       insertLand(landId, landLayer);
     }
+
+    // function generateRandomFigureOnEveryParcel_old(landId, landLayer) {
+    //   _.forEach(landLayer, (row) => {
+    //     _.forEach(row, (parcel) => {
+    //       _.times(1, () => {
+    //         if (_.random(1, 3) !== 1) {
+    //           const figureName = toolPickRandomVisitable();
+    //           let monster = false;
+    //           if (_.random(1, 2) === 1) {
+    //             monster = true;
+    //           }
+    //           const condition = { name: figureName, monster: monster };
+    //           parcel.conditions.push(condition);
+    //         }
+    //       });
+
+    //       _.times(1, () => {
+    //         const figureName = toolPickRandomResource();
+    //         let monster = false;
+    //         if (_.random(1, 6) === 1) {
+    //           monster = true;
+    //         }
+    //         const condition = { name: figureName, monster: monster };
+    //         parcel.conditions.push(condition);
+    //       });
+    //     });
+    //   });
+
+    //   debug('generateRandomFigureOnEveryParcel');
+    //   insertLand(landId, landLayer);
+    // }
 
     function insertLand(landId, landLayer) {
       const query = { _id: landId };
@@ -295,9 +406,10 @@ module.exports = (environment, blueprint, db) => {
         while (run) {
           const x = _.random(0, width - 1);
           const y = _.random(0, height - 1);
-          if (!_.some(positions, {x: x, y: y})) { // _.includes does not work on objects
+          if (!_.some(positions, { x: x, y: y })) {
+            // _.includes does not work on objects
             run = false;
-            positions.push({x: x, y: y});
+            positions.push({ x: x, y: y });
           }
         }
       });
@@ -321,9 +433,9 @@ module.exports = (environment, blueprint, db) => {
       landLayer.forEach((row, parcelY) => {
         row.forEach((parcel, parcelX) => {
           const matrixParcel = [
-            [1, 1 , 1],
-            [1, 0 , 1],
-            [1, 1 , 1]
+            [1, 1, 1],
+            [1, 0, 1],
+            [1, 1, 1]
           ];
 
           parcel.conditions.forEach((condition) => {
@@ -383,11 +495,11 @@ module.exports = (environment, blueprint, db) => {
         const xT = x - 1;
         const yT = y - 1;
 
-        if ((xT % 3 === 0) && (yT % 3 === 0)) {
+        if (xT % 3 === 0 && yT % 3 === 0) {
           const xR = xT / 3;
           const yR = yT / 3;
 
-          const obj = {x: xR, y: yR};
+          const obj = { x: xR, y: yR };
           pathTransformed.push(obj);
         }
       });
@@ -415,6 +527,73 @@ module.exports = (environment, blueprint, db) => {
         }
       });
       return _.sample(visitableNames);
+    }
+
+    function toolPickRandomVisitableByLevel(level) {
+      const visitables = [];
+      _.forEach(blueprint.figure, (figure) => {
+        if (figure.visitableType && figure.landRandomizeLevelChances) {
+          if (figure.landRandomizeLevelChances[level] > 0) {
+            visitables.push(figure);
+          }
+        }
+      });
+
+      return _.sample(visitables);
+    }
+
+    function toolPickRandomResourceByLevel(level) {
+      const resources = [];
+      _.forEach(blueprint.figure, (figure) => {
+        if (figure.resource && figure.landRandomizeLevelChances) {
+          if (figure.landRandomizeLevelChances[level] > 0) {
+            resources.push(figure);
+          }
+        }
+      });
+
+      return _.sample(resources);
+    }
+
+    function toolIsMaxConcentrationReached(
+      landLayer,
+      figureName,
+      landRandomizeConcentrationMax
+    ) {
+      const height = landLayer.length;
+      const width = landLayer[0].length;
+      const parcelCount = height * width;
+      const maxFigureCount = Math.round(
+        parcelCount * landRandomizeConcentrationMax
+      );
+
+      let figureCount = 0;
+      landLayer.forEach((row) => {
+        row.forEach((parcel) => {
+          parcel.conditions.forEach((condition) => {
+            if (condition.name === figureName) {
+              figureCount += 1;
+            }
+          });
+        });
+      });
+
+      if (figureCount > maxFigureCount) {
+        return true;
+      }
+
+      return false;
+    }
+
+    function toolIsCastleRandomOnParcel(parcel) {
+      let isCastle = false;
+      _.forEach(parcel.conditions, (condition) => {
+        if (condition.name === 'castleRandom') {
+          isCastle = true;
+        }
+      });
+
+      return isCastle;
     }
   };
 };
