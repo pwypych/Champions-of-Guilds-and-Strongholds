@@ -225,7 +225,7 @@ function setupInstrumentRoutesAndLibraries() {
   // Panel
   app.get(
     '/panelPredefined',
-    require('./instrument/panel/predefined/panelPredefined.js')(
+    require('./instrument/panel/panelPredefined.js')(
       environment,
       db,
       templateToHtml
@@ -234,7 +234,7 @@ function setupInstrumentRoutesAndLibraries() {
 
   app.post(
     '/panelPredefined/createGamePredefinedPost',
-    require('./instrument/panel/predefined/createGamePredefinedPost.js')(
+    require('./instrument/panel/createGamePredefinedPost.js')(
       environment,
       db,
       blueprint
@@ -243,7 +243,7 @@ function setupInstrumentRoutesAndLibraries() {
 
   app.post(
     '/panelPredefined/deleteGamePredefinedPost',
-    require('./instrument/panel/predefined/deleteGamePredefinedPost.js')(
+    require('./instrument/panel/deleteGamePredefinedPost.js')(
       environment,
       db
     )
@@ -251,7 +251,7 @@ function setupInstrumentRoutesAndLibraries() {
 
   app.post(
     '/panelPredefined/loadGamePost',
-    require('./instrument/panel/predefined/loadGamePredefinedPost.js')(
+    require('./instrument/panel/loadGamePredefinedPost.js')(
       environment,
       db
     )
@@ -259,7 +259,7 @@ function setupInstrumentRoutesAndLibraries() {
 
   app.get(
     '/panelPredefined/launchImmediately',
-    require('./instrument/panel/predefined/launchImmediately.js')(
+    require('./instrument/panel/launchImmediately.js')(
       environment,
       blueprint,
       templateToHtml
