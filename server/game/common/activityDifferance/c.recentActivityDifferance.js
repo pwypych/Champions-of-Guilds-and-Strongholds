@@ -36,6 +36,7 @@ g.autoload.recentActivityDifferance = (inject) => {
   function forEachEntity() {
     const entities = freshEntities();
 
+
     _.forEach(entities, (entity, id) => {
       checkRecentActivityDifferance(entity, id);
     });
@@ -52,19 +53,21 @@ g.autoload.recentActivityDifferance = (inject) => {
 
   function checkRecentActivityDifferance(entity, id) {
     if (entity.recentActivity) {
-      if (!_.isEqual(entity.recentActivity, oldEntities[id].recentActivity)) {
-        const data = {
-          entityId: id,
-          entity: entity,
-          entityOld: oldEntities[id]
-        };
+      if (oldEntities[id]) { // sometimes entities get deleted, or hidden by server, must exist to run recentActivity
+        if (!_.isEqual(entity.recentActivity, oldEntities[id].recentActivity)) {
+          const data = {
+            entityId: id,
+            entity: entity,
+            entityOld: oldEntities[id]
+          };
 
-        walkie.triggerEvent(
-          'recentActivityDifferanceFoundEvent_',
-          'recentActivityDifferance.js',
-          data,
-          true
-        );
+          walkie.triggerEvent(
+            'recentActivityDifferanceFoundEvent_',
+            'recentActivityDifferance.js',
+            data,
+            true
+          );
+        }
       }
     }
   }
