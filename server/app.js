@@ -50,10 +50,6 @@ function setupEnvironment() {
     environment.baseurl = 'https://axe.cogs.ovh';
   }
   environment.basepath = path.join(__dirname, '..');
-  environment.basepathTiledLand = environment.basepath + '/tiled/tiledLand';
-  environment.basepathTiledParcel = environment.basepath + '/tiled/tiledParcel';
-  environment.basepathTiledTileset =
-    environment.basepath + '/tiled/tiledTileset';
   environment.basepathFigure = environment.basepath + '/server/figure';
 
   debug('setupEnvironment()', environment);
