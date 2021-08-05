@@ -169,7 +169,7 @@ module.exports = (environment, db) => {
       debug('sendResponse()');
       if (req.body.redirect) {
         debug('******************** redirect ********************');
-        res.redirect(environment.baseurl + '/panelRandom');
+        res.redirect(environment.baseurl + '/panelPredefined');
       } else {
         debug('******************** ajax ********************');
         res.send({ error: 0 });

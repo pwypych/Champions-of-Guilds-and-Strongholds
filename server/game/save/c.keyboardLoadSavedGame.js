@@ -36,7 +36,7 @@ g.autoload.keyboardLoadSavedGame = (inject) => {
   function loadPreviousSavedGamePost() {
     const data = { gameId: auth.gameId, direction: 'previous' };
     console.log('loadPreviousSavedGamePost');
-    $.post('/panelRandom/loadGamePost' + auth.uri, data, (response) => {
+    $.post('/loadGame/loadGamePost' + auth.uri, data, (response) => {
       console.log('loadPreviousSavedGamePost():response.length:', response);
       walkie.triggerEvent(
         'chatMessageEvent_',
@@ -51,7 +51,7 @@ g.autoload.keyboardLoadSavedGame = (inject) => {
   function loadNextSavedGamePost() {
     const data = { gameId: auth.gameId, direction: 'next' };
     console.log('loadNextSavedGamePost()');
-    $.post('/panelRandom/loadGamePost' + auth.uri, data, (response) => {
+    $.post('/loadGame/loadGamePost' + auth.uri, data, (response) => {
       console.log('loadNextSavedGamePost():response.length:', response);
       walkie.triggerEvent(
         'chatMessageEvent_',

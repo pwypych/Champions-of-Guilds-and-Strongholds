@@ -164,40 +164,6 @@ function setupMongo() {
     db = client.db(dbName);
 
     debug('setupMongo()');
-    setupParcelCollection();
-  });
-}
-
-function setupParcelCollection() {
-  const generateParcelCollection = require('./instrument/tiled/generateParcelCollection.js')(
-    environment,
-    db
-  );
-  generateParcelCollection((error, parcelCount) => {
-    if (error) {
-      debug('setupParcelCollection: Errors:', error);
-      process.exit(1);
-      return;
-    }
-
-    debug('setupParcelCollection: parcelCount:', parcelCount);
-    setupLandCollection();
-  });
-}
-
-function setupLandCollection() {
-  const generateLandCollection = require('./instrument/tiled/generateLandCollection.js')(
-    environment,
-    db
-  );
-  generateLandCollection((error, landCount) => {
-    if (error) {
-      debug('setupLandCollection: Errors:', error);
-      process.exit(1);
-      return;
-    }
-
-    debug('setupLandCollection: landCount:', landCount);
     setupHooks();
   });
 }
@@ -251,52 +217,12 @@ function setupInstrumentRoutesAndLibraries() {
     res.redirect('/panelPredefined');
   });
 
-  app.get(
-    '/panelRandom',
-    require('./instrument/panel/random/panelRandom.js')(
-      environment,
-      db,
-      templateToHtml
-    )
-  );
-
   app.post(
-    '/panelRandom/createGameRandomPost',
-    require('./instrument/panel/random/generateMap/findLandByName.js')(db),
-    require('./instrument/panel/random/generateMap/generateParcelCategoryExitList.js')(
-      db
-    ),
-    require('./instrument/panel/random/generateMap/generateParcelMap.js')(),
-    require('./instrument/panel/random/generateMap/generateAbstractFigureMap.js')(),
-    require('./instrument/panel/random/generateMap/generateFigureMap.js')(),
-    require('./instrument/panel/random/generateMap/addMonsterToFigureMap.js')(
-      environment,
-      hook
-    ),
-    require('./instrument/panel/random/generateMap/addBarrierToFigureMap.js')(),
-    require('./instrument/panel/random/generateMap/addTreasureToFigureMap.js')(),
-    require('./instrument/panel/random/generateMap/addNonAbstractToFgureMap.js')(),
-    require('./instrument/panel/random/createGameRandomPost.js')(
-      environment,
-      db,
-      blueprint
-    )
+    '/loadGame/loadGamePost',
+    require('./instrument/loadGame/loadGamePost.js')(environment, db)
   );
 
-  app.post(
-    '/panelRandom/deleteGameRandomPost',
-    require('./instrument/panel/random/deleteGameRandomPost.js')(
-      environment,
-      db
-    )
-  );
-
-  app.post(
-    '/panelRandom/loadGamePost',
-    require('./instrument/panel/random/loadGamePost.js')(environment, db)
-  );
-
-  // Old Panel
+  // Panel
   app.get(
     '/panelPredefined',
     require('./instrument/panel/predefined/panelPredefined.js')(
