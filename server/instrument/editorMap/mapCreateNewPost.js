@@ -58,23 +58,23 @@ module.exports = (environment, db) => {
     }
 
     function generateMap(mapId, width, height) {
-      const mapLayerWithStrings = [];
+      const mapLayer = [];
 
       _.times(height, () => {
         const row = [];
         _.times(width, () => {
           row.push('empty');
         });
-        mapLayerWithStrings.push(row);
+        mapLayer.push(row);
       });
 
-      insertMap(mapId, mapLayerWithStrings);
+      insertMap(mapId, mapLayer);
     }
 
-    function insertMap(mapId, mapLayerWithStrings) {
+    function insertMap(mapId, mapLayer) {
       const map = {
         _id: mapId,
-        mapLayerWithStrings: mapLayerWithStrings
+        mapLayer: mapLayer
       };
 
       db.collection('mapCollection').insertOne(map, (error) => {

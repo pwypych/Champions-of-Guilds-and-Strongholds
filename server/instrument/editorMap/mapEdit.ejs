@@ -100,7 +100,7 @@
 
     const state = {};
     state.selected = 'empty';
-    state.map = data.mapLayerWithStrings;
+    state.map = data.mapLayer;
 
     const height = state.map.length;
     const width = state.map[0].length;
@@ -172,7 +172,7 @@
     }
 
     function save() {
-      const data = { mapId: mapId, mapLayerWithStrings: state.map };
+      const data = { mapId: mapId, mapLayer: state.map };
       $.post('/editorMap/mapSavePost', data, () => {});
     }
 

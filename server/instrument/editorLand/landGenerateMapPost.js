@@ -109,7 +109,7 @@ module.exports = (environment, blueprint, db) => {
 
     function updateSetMapLayerWithStrings(mapId, mapLayer) {
       const $set = {};
-      $set.mapLayerWithStrings = mapLayer;
+      $set.mapLayer = mapLayer;
 
       const query = { _id: mapId };
       const update = { $set: $set };

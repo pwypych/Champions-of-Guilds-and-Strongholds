@@ -78,8 +78,8 @@ module.exports = (environment, db, blueprint) => {
       entities[id] = {};
       entities[id].mapData = {};
       entities[id].mapData.name = mapObject._id;
-      entities[id].mapData.width = mapObject.mapLayerWithStrings[0].length;
-      entities[id].mapData.height = mapObject.mapLayerWithStrings.length;
+      entities[id].mapData.width = mapObject.mapLayer[0].length;
+      entities[id].mapData.height = mapObject.mapLayer.length;
 
       entities[id].state = 'launchState';
       entities[id].day = 1;
@@ -90,7 +90,7 @@ module.exports = (environment, db, blueprint) => {
 
     function calculatePlayerCount(mapObject, entities) {
       let playerCount = 0;
-      mapObject.mapLayerWithStrings.forEach((row) => {
+      mapObject.mapLayer.forEach((row) => {
         row.forEach((tileName) => {
           if (tileName === 'castleRandom') {
             playerCount += 1;
@@ -135,7 +135,7 @@ module.exports = (environment, db, blueprint) => {
     function generateFigureEntities(mapObject, entities) {
       const errorArray = [];
 
-      mapObject.mapLayerWithStrings.forEach((row, y) => {
+      mapObject.mapLayer.forEach((row, y) => {
         row.forEach((figureName, x) => {
           debug('generateFigureEntities: figureName:', figureName);
           if (figureName === 'empty') {

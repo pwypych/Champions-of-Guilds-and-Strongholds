@@ -22,22 +22,22 @@ module.exports = (environment, db) => {
 
       const mapId = req.body.mapId;
 
-      if (!req.body.mapLayerWithStrings) {
+      if (!req.body.mapLayer) {
         debug('validateRequestBody: Missing req.body.direction!');
         res.status(503).send('503 Error - no load direction!');
         return;
       }
 
-      const mapLayerWithStrings = req.body.mapLayerWithStrings;
+      const mapLayer = req.body.mapLayer;
 
       debug('validateRequestBody: mapId:', mapId);
-      debug('validateRequestBody: mapLayerWithStrings:', mapLayerWithStrings);
-      updateSetMapLayerWithStrings(mapId, mapLayerWithStrings);
+      debug('validateRequestBody: mapLayer:', mapLayer);
+      updateSetMapLayerWithStrings(mapId, mapLayer);
     }
 
-    function updateSetMapLayerWithStrings(mapId, mapLayerWithStrings) {
+    function updateSetMapLayerWithStrings(mapId, mapLayer) {
       const $set = {};
-      $set.mapLayerWithStrings = mapLayerWithStrings;
+      $set.mapLayer = mapLayer;
 
       const query = { _id: mapId };
       const update = { $set: $set };
