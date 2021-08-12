@@ -189,7 +189,7 @@ module.exports = (environment, db, blueprint) => {
       } else {
         debug('sendResponse()');
         debug('******************** should redirect ********************');
-        res.redirect(environment.baseurl + '/panelPredefined');
+        res.redirect(environment.baseurl + '/panelAdmin');
       }
     }
   };

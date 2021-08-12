@@ -60,7 +60,7 @@ module.exports = (environment, db) => {
     function sendResponse() {
       debug('sendResponse()');
       debug('******************** should redirect ********************');
-      res.redirect(environment.baseurl + '/panelPredefined');
+      res.redirect(environment.baseurl + '/panelAdmin');
     }
   };
 };

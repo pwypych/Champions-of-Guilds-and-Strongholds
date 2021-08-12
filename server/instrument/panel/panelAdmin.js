@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:panelPredefined');
+const debug = require('debug')('cogs:panelAdmin');
 const _ = require('lodash');
 
 module.exports = (environment, db, templateToHtml) => {
@@ -99,7 +99,7 @@ module.exports = (environment, db, templateToHtml) => {
 
     function sendResponse(viewModel) {
       const path =
-        environment.basepath + '/server/instrument/panel/panelPredefined.ejs';
+        environment.basepath + '/server/instrument/panel/panelAdmin.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         debug('sendResponse():html', html.length);
         debug('******************** send ********************');

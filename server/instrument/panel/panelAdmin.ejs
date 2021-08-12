@@ -25,10 +25,10 @@
       <div class="seperator-20"></div>
 
 
-      <form action="<%= viewModel.baseurl %>/panelPredefined/createGamePost" method="POST">
+      <form action="<%= viewModel.baseurl %>/panelAdmin/createGamePost" method="POST">
         <button type="submit">Create Game</button>
         <span> </span>
-        <button type="submit" formaction="<%= viewModel.baseurl %>/panelPredefined/launchImmediately" formmethod="get">Launch Immediately</button>
+        <button type="submit" formaction="<%= viewModel.baseurl %>/panelAdmin/launchImmediately" formmethod="get">Launch Immediately</button>
 
         <div class="seperator-20"></div>
 
@@ -66,7 +66,7 @@
             <% }); %>
             <div class="seperator-10"></div>
             <div>
-              <form class="inline-block" action="/panelPredefined/deleteGamePost" method="post">
+              <form class="inline-block" action="/panelAdmin/deleteGamePost" method="post">
                 <input name="gameId" type="hidden" value="<%= game._id %>">
                 <button type="submit">Delete</button>
               </form>

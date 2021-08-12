@@ -210,7 +210,7 @@ function setupInstrumentRoutesAndLibraries() {
 
   // general
   app.get('/', (req, res) => {
-    res.redirect('/panelPredefined');
+    res.redirect('/panelAdmin');
   });
 
   app.post(
@@ -220,8 +220,8 @@ function setupInstrumentRoutesAndLibraries() {
 
   // Panel
   app.get(
-    '/panelPredefined',
-    require('./instrument/panel/panelPredefined.js')(
+    '/panelAdmin',
+    require('./instrument/panel/panelAdmin.js')(
       environment,
       db,
       templateToHtml
@@ -229,7 +229,7 @@ function setupInstrumentRoutesAndLibraries() {
   );
 
   app.post(
-    '/panelPredefined/createGamePost',
+    '/panelAdmin/createGamePost',
     require('./instrument/panel/createGamePost.js')(
       environment,
       db,
@@ -238,7 +238,7 @@ function setupInstrumentRoutesAndLibraries() {
   );
 
   app.post(
-    '/panelPredefined/deleteGamePost',
+    '/panelAdmin/deleteGamePost',
     require('./instrument/panel/deleteGamePost.js')(
       environment,
       db
@@ -246,7 +246,7 @@ function setupInstrumentRoutesAndLibraries() {
   );
 
   app.post(
-    '/panelPredefined/loadGamePost',
+    '/panelAdmin/loadGamePost',
     require('./instrument/panel/loadGamePost.js')(
       environment,
       db
@@ -254,7 +254,7 @@ function setupInstrumentRoutesAndLibraries() {
   );
 
   app.get(
-    '/panelPredefined/launchImmediately',
+    '/panelAdmin/launchImmediately',
     require('./instrument/panel/launchImmediately.js')(
       environment,
       blueprint,
