@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:loadGamePredefinedPost');
+const debug = require('debug')('cogs:loadGamePost');
 const shortid = require('shortid');
 const _ = require('lodash');
 

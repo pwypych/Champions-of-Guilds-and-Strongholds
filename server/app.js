@@ -247,7 +247,7 @@ function setupInstrumentRoutesAndLibraries() {
 
   app.post(
     '/panelPredefined/loadGamePost',
-    require('./instrument/panel/loadGamePredefinedPost.js')(
+    require('./instrument/panel/loadGamePost.js')(
       environment,
       db
     )
