@@ -99,7 +99,7 @@ module.exports = (environment, db, templateToHtml) => {
 
     function sendResponse(viewModel) {
       const path =
-        environment.basepath + '/server/instrument/panel/panelAdmin.ejs';
+        environment.basepath + '/server/instrument/panelAdmin/panelAdmin.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         debug('sendResponse():html', html.length);
         debug('******************** send ********************');

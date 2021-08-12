@@ -221,7 +221,7 @@ function setupInstrumentRoutesAndLibraries() {
   // Panel
   app.get(
     '/panelAdmin',
-    require('./instrument/panel/panelAdmin.js')(
+    require('./instrument/panelAdmin/panelAdmin.js')(
       environment,
       db,
       templateToHtml
@@ -230,7 +230,7 @@ function setupInstrumentRoutesAndLibraries() {
 
   app.post(
     '/panelAdmin/createGamePost',
-    require('./instrument/panel/createGamePost.js')(
+    require('./instrument/panelAdmin/createGamePost.js')(
       environment,
       db,
       blueprint
@@ -239,7 +239,7 @@ function setupInstrumentRoutesAndLibraries() {
 
   app.post(
     '/panelAdmin/deleteGamePost',
-    require('./instrument/panel/deleteGamePost.js')(
+    require('./instrument/panelAdmin/deleteGamePost.js')(
       environment,
       db
     )
@@ -247,7 +247,7 @@ function setupInstrumentRoutesAndLibraries() {
 
   app.post(
     '/panelAdmin/loadGamePost',
-    require('./instrument/panel/loadGamePost.js')(
+    require('./instrument/panelAdmin/loadGamePost.js')(
       environment,
       db
     )
@@ -255,7 +255,7 @@ function setupInstrumentRoutesAndLibraries() {
 
   app.get(
     '/panelAdmin/launchImmediately',
-    require('./instrument/panel/launchImmediately.js')(
+    require('./instrument/panelAdmin/launchImmediately.js')(
       environment,
       blueprint,
       templateToHtml

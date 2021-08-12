@@ -37,7 +37,7 @@ module.exports = (environment, blueprint, templateToHtml) => {
 
     function sendResponse(viewModel) {
       const path =
-        environment.basepath + '/server/instrument/panel/launchImmediately.ejs';
+        environment.basepath + '/server/instrument/panelAdmin/launchImmediately.ejs';
       templateToHtml(path, viewModel, (error, html) => {
         debug('sendResponse():html', html.length);
         debug('******************** send ********************');
