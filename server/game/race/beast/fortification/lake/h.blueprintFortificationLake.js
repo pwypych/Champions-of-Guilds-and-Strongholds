@@ -6,12 +6,13 @@
 // It attaches blueprint for this fortification
 module.exports = (hook) => {
   hook.attach('generateBlueprints_', (injected, done) => {
-    injected.blueprint.fortification.garden = {
-      fortificationName: 'garden',
-      namePretty: 'Garden',
+    injected.blueprint.fortification.meadow = {
+      fortificationName: 'meadow',
+      namePretty: 'Meadow',
       race: 'beast',
       cost: {
-        gold: 4000
+        gold: 2500,
+        crystal: 2
       }
     };
 
