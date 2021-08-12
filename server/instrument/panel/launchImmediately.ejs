@@ -32,8 +32,8 @@
         mapId: mapId,
         ajax: 'ajax'
       };
-      $.post('/panelPredefined/createGamePredefinedPost', data, (result) => {
-        console.log('mapEdit: POST -> /panelPredefined/createGamePredefinedPost', data);
+      $.post('/panelPredefined/createGamePost', data, (result) => {
+        console.log('mapEdit: POST -> /panelPredefined/createGamePost', data);
         const entities = result.entities;
         readyPlayers(entities);
       });

@@ -229,8 +229,8 @@ function setupInstrumentRoutesAndLibraries() {
   );
 
   app.post(
-    '/panelPredefined/createGamePredefinedPost',
-    require('./instrument/panel/createGamePredefinedPost.js')(
+    '/panelPredefined/createGamePost',
+    require('./instrument/panel/createGamePost.js')(
       environment,
       db,
       blueprint
