@@ -77,7 +77,7 @@ module.exports = (environment, db) => {
         mapLayerWithStrings: mapLayerWithStrings
       };
 
-      db.collection('predefinedMapCollection').insertOne(map, (error) => {
+      db.collection('mapCollection').insertOne(map, (error) => {
         if (error) {
           debug('insertGame: error:', error);
           res

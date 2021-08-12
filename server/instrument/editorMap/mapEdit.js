@@ -26,7 +26,7 @@ module.exports = (environment, db, blueprint, templateToHtml) => {
       const query = { _id: viewModel.mapId };
       const options = {};
 
-      db.collection('predefinedMapCollection').findOne(
+      db.collection('mapCollection').findOne(
         query,
         options,
         (error, map) => {

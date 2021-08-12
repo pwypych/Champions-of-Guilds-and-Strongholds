@@ -43,7 +43,7 @@ module.exports = (environment, db) => {
       const update = { $set: $set };
       const options = {};
 
-      db.collection('predefinedMapCollection').updateOne(
+      db.collection('mapCollection').updateOne(
         query,
         update,
         options,

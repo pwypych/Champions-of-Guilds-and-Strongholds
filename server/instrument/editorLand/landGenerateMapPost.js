@@ -115,7 +115,7 @@ module.exports = (environment, blueprint, db) => {
       const update = { $set: $set };
       const options = { upsert: true };
 
-      db.collection('predefinedMapCollection').updateOne(
+      db.collection('mapCollection').updateOne(
         query,
         update,
         options,

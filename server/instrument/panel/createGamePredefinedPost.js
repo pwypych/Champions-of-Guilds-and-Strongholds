@@ -50,7 +50,7 @@ module.exports = (environment, db, blueprint) => {
       const query = { _id: mapId };
       const options = {};
 
-      db.collection('predefinedMapCollection').findOne(
+      db.collection('mapCollection').findOne(
         query,
         options,
         (error, data) => {
