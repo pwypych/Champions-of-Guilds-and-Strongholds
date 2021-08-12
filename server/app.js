@@ -238,8 +238,8 @@ function setupInstrumentRoutesAndLibraries() {
   );
 
   app.post(
-    '/panelPredefined/deleteGamePredefinedPost',
-    require('./instrument/panel/deleteGamePredefinedPost.js')(
+    '/panelPredefined/deleteGamePost',
+    require('./instrument/panel/deleteGamePost.js')(
       environment,
       db
     )
