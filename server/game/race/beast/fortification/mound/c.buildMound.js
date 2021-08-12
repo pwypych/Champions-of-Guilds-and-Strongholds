@@ -2,9 +2,9 @@
 
 'use strict';
 
-// Listens to event when player build lake
+// Listens to event when player build mound
 // sends request to backend to build that fortification
-g.autoload.buildLake = (inject) => {
+g.autoload.buildMound = (inject) => {
   const walkie = inject.walkie;
   const auth = inject.auth;
 
@@ -15,21 +15,21 @@ g.autoload.buildLake = (inject) => {
   function onFortificationBuildButtonClick() {
     walkie.onEvent(
       'fortificationBuildButtonClickEvent_',
-      'buildLake.js',
+      'buildMound.js',
       (data) => {
         const fortificationName = data.fortificationName;
 
-        if (fortificationName === 'lake') {
-          lakeBuildPost(data);
+        if (fortificationName === 'mound') {
+          moundBuildPost(data);
         }
       },
       false
     );
   }
 
-  function lakeBuildPost(data) {
-    $.post('/ajax/buildLake' + auth.uri, data, () => {
-      console.log('sendFortificationBuildPost: POST -> /ajax/buildLake', data);
+  function moundBuildPost(data) {
+    $.post('/ajax/buildMound' + auth.uri, data, () => {
+      console.log('sendFortificationBuildPost: POST -> /ajax/buildMound', data);
     }).done(() => {
       console.log('Build success');
     });

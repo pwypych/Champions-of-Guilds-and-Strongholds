@@ -2,7 +2,7 @@
 
 module.exports = (app, middleware) => {
   app.post(
-    '/ajax/buildLake',
+    '/ajax/buildMound',
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('worldState'),
