@@ -51,36 +51,115 @@ module.exports = (db) => {
       debug('mapData', mapData);
       debug('heroPosition', heroPosition);
 
-      // @todo do this based on generation of movement tiles around a unit
+      const fogArray = [];
 
-      done();
+      _.times(mapData.width, (x) => {
+        fogArray[x] = [];
+        _.times(mapData.height, (y) => {
+          fogArray[x][y] = true;
+        });
+      });
+
+      diminishFog(gameId, playerId, mapData, heroPosition, fogArray, done);
     }
 
-    // @todo add a function to update player object with fogArray
+    function diminishFog(gameId, playerId, mapData, heroPosition, fogArray, done) {
+      const diminishRange = 3;
+      const positionArray = toolAroundPositions(fogArray, heroPosition, diminishRange, mapData.width, mapData.height);
 
-    // function updatePlayerResources(gameId, playerId, playerRace, done) {
-    //   const query = { _id: gameId };
+      positionArray.forEach((position) => {
+        fogArray[position.y][position.x] = false;
+      });
 
-    //   const field = playerId + '.playerResources';
-    //   const $set = {};
-    //   $set[field] = raceBlueprint()[playerRace].playerResources;
-    //   const update = { $set: $set };
-    //   const options = {};
+      debug('diminishFog: fogArray:', toolDebugFogArray(fogArray));
+      updatePlayerFogArray(gameId, playerId, fogArray, done);
+    }
 
-    //   db.collection('gameCollection').updateOne(
-    //     query,
-    //     update,
-    //     options,
-    //     (error, result) => {
-    //       if (error) {
-    //         debug('updatePlayerResources: ERROR: insert mongo error:', error);
-    //         return;
-    //       }
+    function updatePlayerFogArray(gameId, playerId, fogArray, done) {
+      const query = { _id: gameId };
 
-    //       debug('updatePlayerResources', result.result);
-    //       done();
-    //     }
-    //   );
-    // }
+      const field = playerId + '.fogArray';
+      const $set = {};
+      $set[field] = fogArray;
+      const update = { $set: $set };
+      const options = {};
+
+      db.collection('gameCollection').updateOne(
+        query,
+        update,
+        options,
+        (error, result) => {
+          if (error) {
+            debug('updatePlayerFogArray: ERROR: insert mongo error:', error);
+            return;
+          }
+
+          debug('updatePlayerFogArray', result.result);
+          done();
+        }
+      );
+    }
+
+    function toolAroundPositions(fogArray, positionInitial, range, widthMax, heightMax) {
+      let positionArray = [];
+
+      positionArray.push(positionInitial);
+
+      _.times(range, () => {
+        positionArray.forEach((positionToScan) => {
+          positionArray = _.union(positionArray, toolAroundSinglePosition(positionToScan));
+        });
+      });
+
+      positionArray = _.uniqWith(positionArray, _.isEqual);
+
+      positionArray = _.filter(positionArray, (position) => {
+        if (position.x < 0) {
+          return false;
+        }
+        if (position.y < 0) {
+          return false;
+        }
+        if (position.x >= widthMax) {
+          return false;
+        }
+        if (position.y >= heightMax) {
+          return false;
+        }
+        return true;
+      });
+
+      return positionArray;
+    }
+
+    function toolAroundSinglePosition(positionInitial) {
+      const positionArray = [];
+      [{ x: 0, y: -1 }, { x: 1, y: 0 }, { x: 0, y: 1 }, { x: -1, y: 0 }].forEach(
+        (offset) => {
+          const position = {};
+          position.x = positionInitial.x + offset.x;
+          position.y = positionInitial.y + offset.y;
+          positionArray.push(position);
+        }
+      );
+      return positionArray;
+    }
+
+    function toolDebugFogArray(fogArray) {
+      let string = '\n';
+      fogArray.forEach((row) => {
+        row.forEach((isFog) => {
+          if (isFog) {
+            string += 'X';
+          } else {
+            string += ' ';
+          }
+        });
+        string += '\n';
+      });
+
+      return string;
+    }
+
   };
 };

@@ -13,6 +13,8 @@ module.exports = (app, middleware) => {
     middleware.prepareCastleFigure,
     middleware.readEntities,
     middleware.prepareHeroFigure,
+    middleware.readEntities,
+    middleware.preparePlayerFog,
     middleware.launchCountdown,
     middleware.unsetReadyForLaunch,
 
