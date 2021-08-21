@@ -8,6 +8,7 @@ module.exports = (hook) => {
   hook.attach('generateBlueprints_', (injected, done) => {
     injected.blueprint.unit.worm = {
       unitName: 'worm',
+      fortificationRequired: 'mound',
       tier: 4,
       life: 42,
       movement: 5,
