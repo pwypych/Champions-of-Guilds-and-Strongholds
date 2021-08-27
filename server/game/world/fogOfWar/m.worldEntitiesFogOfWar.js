@@ -4,6 +4,7 @@
 
 const debug = require('debug')('nope:cogs:worldEntitiesFogOfWar');
 const _ = require('lodash');
+const shortId = require('shortid');
 
 module.exports = () => {
   return (req, res, next) => {
@@ -47,29 +48,35 @@ module.exports = () => {
 
     function applyFogOfWar(fogArray) {
       const entitiesFiltered = res.locals.entitiesFiltered;
-
-      _.forEach(entitiesFiltered, (entity, id) => {
-        if (entity.position) {
-          let isFilteredByFog = false;
-
-          _.forEach(fogArray, (row, y) => {
-            _.forEach(row, (isFog, x) => {
-              if (entity.position.x === x && entity.position.y === y) {
-                if (isFog) {
-                  isFilteredByFog = true;
+      _.forEach(fogArray, (row, y) => {
+        _.forEach(row, (isFog, x) => {
+          if (isFog) {
+            // Check if figure exists on this fog position
+            let figureIdExisting = false;
+            _.forEach(entitiesFiltered, (entity, id) => {
+              if (entity.position) {
+                if (entity.position.x === x && entity.position.y === y) {
+                  figureIdExisting = id;
                 }
               }
-            });
-          });
 
-          if (isFilteredByFog) {
-            entitiesFiltered[id] = {
+            });
+
+            const fogOfWar = {
               figureName: 'fogOfWar',
-              position: entity.position,
+              position: {x: x, y: y},
               collision: true
             };
+
+            // If figure on this x y position, then overwrite it with fog, else create fog
+            if (figureIdExisting) {
+              entitiesFiltered[figureIdExisting] = fogOfWar;
+            } else {
+              const figureIdNew = 'figure_fogOfWar_' + shortId.generate();
+              entitiesFiltered[figureIdNew] = fogOfWar;
+            }
           }
-        }
+        });
       });
 
       debug('applyFogOfWar');
