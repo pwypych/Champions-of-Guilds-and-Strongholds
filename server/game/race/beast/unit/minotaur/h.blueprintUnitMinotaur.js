@@ -8,6 +8,7 @@ module.exports = (hook) => {
   hook.attach('generateBlueprints_', (injected, done) => {
     injected.blueprint.unit.minotaur = {
       unitName: 'minotaur',
+      fortificationRequired: 'maze',
       tier: 5,
       life: 91,
       movement: 3,

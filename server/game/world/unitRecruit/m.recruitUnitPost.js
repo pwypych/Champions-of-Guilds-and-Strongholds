@@ -56,6 +56,44 @@ module.exports = (db, blueprint) => {
         return;
       }
 
+      checkPlayerHasUnitFortification(ctx);
+    }
+
+    function checkPlayerHasUnitFortification(ctx) {
+      const unitName = req.body.unitName;
+      const recruitUnit = blueprint.unit[unitName];
+      const fortificationRequired = recruitUnit.fortificationRequired;
+      const entities = ctx.entities;
+      const playerId = ctx.playerId;
+
+      let isFortificationBuilded = false;
+
+      _.forEach(entities, (entity) => {
+        if (entity.fortificationName && entity.owner === playerId) {
+          if (entity.fortificationName === fortificationRequired) {
+            isFortificationBuilded = true;
+          }
+        }
+      });
+
+      debug(
+        'checkPlayerHasUnitFortification: isFortificationBuilded:',
+        isFortificationBuilded
+      );
+
+      if (!isFortificationBuilded) {
+        res.status(503);
+        res.send({
+          error: 'You need unit fortification to recruit this unit!'
+        });
+        debug(
+          'checkPlayerHasUnitFortification: Fortification not builded!',
+          unitName
+        );
+        debug('******************** error ********************');
+        return;
+      }
+
       findRecruitUnitCost(ctx);
     }
 

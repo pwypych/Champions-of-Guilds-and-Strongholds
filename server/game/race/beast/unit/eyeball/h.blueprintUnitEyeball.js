@@ -8,6 +8,7 @@ module.exports = (hook) => {
   hook.attach('generateBlueprints_', (injected, done) => {
     injected.blueprint.unit.eyeball = {
       unitName: 'eyeball',
+      fortificationRequired: 'lake',
       tier: 3,
       life: 31,
       movement: 4,

@@ -8,6 +8,7 @@ module.exports = (hook) => {
   hook.attach('generateBlueprints_', (injected, done) => {
     injected.blueprint.unit.wizard = {
       unitName: 'wizard',
+      fortificationRequired: 'ivoryTower',
       tier: 4,
       life: 28,
       movement: 6,
