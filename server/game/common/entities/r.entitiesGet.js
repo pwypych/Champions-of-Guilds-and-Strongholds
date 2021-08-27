@@ -7,6 +7,7 @@ module.exports = (app, middleware) => {
     middleware.authenticateToken,
     middleware.launchEntitiesFilter,
     middleware.worldEntitiesFilter,
+    middleware.worldEntitiesFogOfWar,
     middleware.battleEntitiesFilter,
     middleware.summaryEntitiesFilter,
     middleware.entitiesFilterSendResponse
