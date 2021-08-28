@@ -88,7 +88,7 @@ module.exports = (db, blueprint) => {
         });
         debug(
           'checkPlayerHasUnitFortification: Fortification not builded!',
-          unitName
+          fortificationRequired
         );
         debug('******************** error ********************');
         return;

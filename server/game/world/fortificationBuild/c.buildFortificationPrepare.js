@@ -3,7 +3,8 @@
 'use strict';
 
 // What does this module do
-// Generate modal with race fortifications to build
+// It prepares fortification build table on info modal
+// And fills it with race fortifications possible to build and buy buttons
 g.autoload.fortificationModal = (inject) => {
   const $body = inject.$body;
   const walkie = inject.walkie;
@@ -64,6 +65,11 @@ g.autoload.fortificationModal = (inject) => {
       $($fortification).removeAttr('data-example-fortification');
 
       $fortification.find('[data-name]').text(fortification.namePretty);
+
+      const fortificationSpriteSrc = '/sprite/' + name + '.png';
+      $fortification
+        .find('[data-fortification-sprite]')
+        .attr('src', fortificationSpriteSrc);
       $($fortification).removeAttr('data-name');
 
       _.forEach(fortification.cost, (cost, resource) => {
@@ -95,6 +101,7 @@ g.autoload.fortificationModal = (inject) => {
   function onButtonClick($button, fortificationName) {
     $button.on('click', () => {
       triggerFortificationBuildButtonClick(fortificationName);
+      // sendFortificationBuildPost(fortificationName);
     });
   }
 
