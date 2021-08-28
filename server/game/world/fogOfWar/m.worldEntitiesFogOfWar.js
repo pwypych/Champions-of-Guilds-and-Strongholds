@@ -42,8 +42,24 @@ module.exports = () => {
         }
       });
 
-      debug('findFogArray', fogArray.length);
+      debug('findFogArray', toolDebugFogArray(fogArray));
       applyFogOfWar(fogArray);
+    }
+
+    function toolDebugFogArray(fogArray) {
+      let string = '\n';
+      fogArray.forEach((row) => {
+        row.forEach((isFog) => {
+          if (isFog) {
+            string += 'X';
+          } else {
+            string += ' ';
+          }
+        });
+        string += '\n';
+      });
+
+      return string;
     }
 
     function applyFogOfWar(fogArray) {
@@ -59,7 +75,6 @@ module.exports = () => {
                   figureIdExisting = id;
                 }
               }
-
             });
 
             const fogOfWar = {
