@@ -2,7 +2,7 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:buildUndeadTownhall');
+const debug = require('debug')('cogs:buildUndeadTownHall');
 const shortId = require('shortid');
 
 module.exports = (db) => {

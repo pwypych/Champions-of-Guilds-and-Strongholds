@@ -2,13 +2,13 @@
 
 'use strict';
 
-const debug = require('debug')('cogs:buildBeastTownhall');
+const debug = require('debug')('cogs:buildBeastTownHall');
 const shortId = require('shortid');
 
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
-      debug('// Set beast townhall enchantment for player');
+      debug('// Set beast town hall enchantment for player');
 
       const ctx = {};
       ctx.playerId = res.locals.playerId;

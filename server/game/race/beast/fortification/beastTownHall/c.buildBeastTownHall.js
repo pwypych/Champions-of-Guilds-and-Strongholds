@@ -2,9 +2,9 @@
 
 'use strict';
 
-// Listens to event when player build Beast Townhall
+// Listens to event when player build Beast Town Hall
 // sends request to backend to build that fortification
-g.autoload.buildBeastTownhall = (inject) => {
+g.autoload.buildBeastTownHall = (inject) => {
   const walkie = inject.walkie;
   const auth = inject.auth;
 
@@ -15,22 +15,22 @@ g.autoload.buildBeastTownhall = (inject) => {
   function onFortificationBuildButtonClick() {
     walkie.onEvent(
       'fortificationBuildButtonClickEvent_',
-      'buildBeastTownhall.js',
+      'buildBeastTownHall.js',
       (data) => {
         const fortificationName = data.fortificationName;
 
-        if (fortificationName === 'beastTownhall') {
-          beastTownhallBuildPost(data);
+        if (fortificationName === 'beastTownHall') {
+          beastTownHallBuildPost(data);
         }
       },
       false
     );
   }
 
-  function beastTownhallBuildPost(data) {
-    $.post('/ajax/beastTownhallBuild' + auth.uri, data, () => {
+  function beastTownHallBuildPost(data) {
+    $.post('/ajax/beastTownHallBuild' + auth.uri, data, () => {
       console.log(
-        'sendFortificationBuildPost: POST -> /ajax/beastTownhallBuild',
+        'sendFortificationBuildPost: POST -> /ajax/beastTownHallBuild',
         data
       );
     });

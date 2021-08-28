@@ -2,9 +2,9 @@
 
 'use strict';
 
-// Listens to event when player build Human Townhall
+// Listens to event when player build Human Town Hall
 // sends request to backend to build that fortification
-g.autoload.buildHumanTownhall = (inject) => {
+g.autoload.buildHumanTownHall = (inject) => {
   const walkie = inject.walkie;
   const auth = inject.auth;
 
@@ -15,22 +15,22 @@ g.autoload.buildHumanTownhall = (inject) => {
   function onFortificationBuildButtonClick() {
     walkie.onEvent(
       'fortificationBuildButtonClickEvent_',
-      'buildHumanTownhall.js',
+      'buildHumanTownHall.js',
       (data) => {
         const fortificationName = data.fortificationName;
 
         if (fortificationName === 'humanTownHall') {
-          humanTownhallBuildPost(data);
+          humanTownHallBuildPost(data);
         }
       },
       false
     );
   }
 
-  function humanTownhallBuildPost(data) {
-    $.post('/ajax/humanTownhallBuild' + auth.uri, data, () => {
+  function humanTownHallBuildPost(data) {
+    $.post('/ajax/humanTownHallBuild' + auth.uri, data, () => {
       console.log(
-        'sendFortificationBuildPost: POST -> /ajax/humanTownhallBuild',
+        'sendFortificationBuildPost: POST -> /ajax/humanTownHallBuild',
         data
       );
     });

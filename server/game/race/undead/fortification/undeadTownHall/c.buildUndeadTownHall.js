@@ -2,9 +2,9 @@
 
 'use strict';
 
-// Listens to event when player build Undead Townhall
+// Listens to event when player build Undead Town Hall
 // sends request to backend to build that fortification
-g.autoload.buildUndeadTownhall = (inject) => {
+g.autoload.buildUndeadTownHall = (inject) => {
   const walkie = inject.walkie;
   const auth = inject.auth;
 
@@ -15,22 +15,22 @@ g.autoload.buildUndeadTownhall = (inject) => {
   function onFortificationBuildButtonClick() {
     walkie.onEvent(
       'fortificationBuildButtonClickEvent_',
-      'buildUndeadTownhall.js',
+      'buildUndeadTownHall.js',
       (data) => {
         const fortificationName = data.fortificationName;
 
         if (fortificationName === 'undeadTownHall') {
-          undeadTownhallBuildPost(data);
+          undeadTownHallBuildPost(data);
         }
       },
       false
     );
   }
 
-  function undeadTownhallBuildPost(data) {
-    $.post('/ajax/undeadTownhallBuild' + auth.uri, data, () => {
+  function undeadTownHallBuildPost(data) {
+    $.post('/ajax/undeadTownHallBuild' + auth.uri, data, () => {
       console.log(
-        'sendFortificationBuildPost: POST -> /ajax/undeadTownhallBuild',
+        'sendFortificationBuildPost: POST -> /ajax/undeadTownHallBuild',
         data
       );
     });

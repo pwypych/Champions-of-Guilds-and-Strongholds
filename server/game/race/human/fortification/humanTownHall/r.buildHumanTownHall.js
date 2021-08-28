@@ -2,12 +2,12 @@
 
 module.exports = (app, middleware) => {
   app.post(
-    '/ajax/humanTownhallBuild',
+    '/ajax/humanTownHallBuild',
     middleware.readEntities,
     middleware.authenticateToken,
     middleware.authenticateState('worldState'),
 
     middleware.buildFortificationPost,
-    middleware.buildHumanTownhall
+    middleware.buildHumanTownHall
   );
 };
