@@ -60,10 +60,17 @@ g.autoload.fortificationModal = (inject) => {
         return;
       }
 
+      console.log('Fortification name:', name);
+
       const $fortification = $fortificationExample.clone();
       $($fortification).removeAttr('data-example-fortification');
 
       $fortification.find('[data-name]').text(fortification.namePretty);
+
+      const fortificationSpriteSrc = '/sprite/' + name + '.png';
+      $fortification
+        .find('[data-fortification-sprite]')
+        .attr('src', fortificationSpriteSrc);
       $($fortification).removeAttr('data-name');
 
       _.forEach(fortification.cost, (cost, resource) => {
