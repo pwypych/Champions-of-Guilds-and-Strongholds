@@ -1,19 +1,12 @@
 <style>
-  .world-interface-buttons {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-  }
-
-  .world-interface-modal {
+  .world-information-modal {
     position: absolute;
     top: 0px;
     right: 0px;
-    margin: 60px 10px 10px 10px;
   }
 </style>
 
-<div class="card-brown world-interface-modal" data-world-interface-information-modal style="display: none;">
+<div class="card-brown world-information-modal" data-world-interface-information-modal>
 
   <div class="inline-block">
     <img class="vertical-align" src="<%= viewModel.baseurl %>/sprite/gold.png" width="24" height="24">
@@ -35,7 +28,7 @@
     <span data-crystal>0</span>
   </div>
 
-  <div class="seperator-20"></div>
+  <!-- <div class="seperator-20"></div>
 
   <div class="inline-block">
     <img class="vertical-align" style="margin-top: -40px;" src="<%= viewModel.baseurl %>/sprite/iconMovementTransparent.png">
@@ -45,6 +38,6 @@
     <div style="height: 15px; width: 100px; border: 2px solid black">
       <div class="background-green" style="height: 15px; width: 0px;" data-movement></div>
     </div>
-  </div>
+  </div> -->
 
 </div>
