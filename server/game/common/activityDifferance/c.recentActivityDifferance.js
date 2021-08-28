@@ -36,7 +36,6 @@ g.autoload.recentActivityDifferance = (inject) => {
   function forEachEntity() {
     const entities = freshEntities();
 
-
     _.forEach(entities, (entity, id) => {
       checkRecentActivityDifferance(entity, id);
     });
