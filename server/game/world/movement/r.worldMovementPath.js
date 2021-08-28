@@ -17,6 +17,7 @@ module.exports = (app, middleware) => {
     middleware.pathIfBattleSlice,
     middleware.pathIfResourceSlice,
     middleware.pathCollisionInWorldVerify,
+    middleware.pathFogOnMovement,
     middleware.heroMovementPointsDecrement,
 
     // common / movement
