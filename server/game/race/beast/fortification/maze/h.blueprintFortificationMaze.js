@@ -11,7 +11,7 @@ module.exports = (hook) => {
       namePretty: 'Maze',
       race: 'beast',
       cost: {
-        gold: 5000,
+        gold: 7500,
         crystal: 5,
         stone: 15,
         wood: 5

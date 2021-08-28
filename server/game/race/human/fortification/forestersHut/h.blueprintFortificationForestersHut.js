@@ -11,9 +11,7 @@ module.exports = (hook) => {
       namePretty: 'Foresters hut',
       race: 'human',
       cost: {
-        gold: 1500,
-        wood: 4,
-        stone: 7
+        gold: 1000
       }
     };
 
