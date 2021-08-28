@@ -8,7 +8,7 @@ const _ = require('lodash');
 module.exports = (db) => {
   return (req, res, next) => {
     (function init() {
-      debug('// Set starting fog for player');
+      debug('// Set starting fog for player, meant to be used in r.launchReadyPost.js');
 
       const entities = res.locals.entities;
 

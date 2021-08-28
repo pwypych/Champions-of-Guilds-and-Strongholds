@@ -14,7 +14,7 @@ module.exports = (app, middleware) => {
     middleware.readEntities,
     middleware.prepareHeroFigure,
     middleware.readEntities,
-    middleware.preparePlayerFog,
+    middleware.preparePlayerFog, // from world/fogOfWar
     middleware.launchCountdown,
     middleware.unsetReadyForLaunch,
 
