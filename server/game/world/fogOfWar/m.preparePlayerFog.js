@@ -53,9 +53,9 @@ module.exports = (db) => {
 
       const fogArray = [];
 
-      _.times(mapData.width, (x) => {
+      _.times(mapData.height, (x) => {
         fogArray[x] = [];
-        _.times(mapData.height, (y) => {
+        _.times(mapData.width, (y) => {
           fogArray[x][y] = true;
         });
       });
