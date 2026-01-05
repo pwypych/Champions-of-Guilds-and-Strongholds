@@ -41,7 +41,7 @@ let spriteFilenameArray;
 function setupEnvironment() {
   if (
     __dirname.substr(0, 11) === '/home/galh/' ||
-    __dirname.substr(0, 14) === '/home/piotrek/'
+    __dirname.substr(0, 12) === '/home/piotr/'
   ) {
     environment.env = 'dev';
     environment.baseurl = 'http://localhost:3000';
