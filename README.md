@@ -1,13 +1,14 @@
 # Champions of Guilds and Strongholds
 
-Champions of Guilds and Strongholds is a multiplayer strategy game set in a fantasy world of castles, heroes, and rival factions. Players explore a shared map, expand their power from their castles, and clash in tactical battles where unit skills and positioning decide the outcome.
+## Gameplay
+![Battle GIF](docs/images/cogs-battle.gif)
 
-![Game Lobby Placeholder](docs/images/game-lobby.png)
+Champions of Guilds and Strongholds is a multiplayer strategy game set in a fantasy world of castles, heroes, and rival factions. Players explore a shared map, expand their power from their castles, and clash in tactical battles where unit skills and positioning decide the outcome.
 
 ## Game Context
 You lead a faction of heroes and units across a procedurally built land. Each game starts with a generated map and land layout, then players choose their race, prepare their forces, and enter the world together. The goal is to grow your economy, control key locations, and defeat rival heroes.
 
-![World Map Placeholder](docs/images/world-map.png)
+![World Map](docs/images/world-map.png)
 
 ## Features
 - Multiplayer fantasy strategy with simultaneous turns (all players act at the same time, then the turn resolves together).
@@ -19,8 +20,9 @@ You lead a faction of heroes and units across a procedurally built land. Each ga
 - NPC encounters and PvP hero battles.
 - Save/load snapshots of turns for quick rollback and replay.
 
-![Map Generator Placeholder](docs/images/map-generator.png)
-![Land Generator Placeholder](docs/images/land-generator.png)
+![Map Generator](docs/images/map-generator.png)
+![Land Generator](docs/images/land-generator.png)
+![Game Lobby](docs/images/game-lobby.png)
 
 ## Core Gameplay Loop
 1. Pick your race and name in the lobby.
@@ -42,8 +44,7 @@ Battles take place on a grid-based battlefield with unit stacks. Each stack has 
 
 When a player fights against NPC forces, another human player controls the NPC units, turning the encounter into a PvP-style tactical duel.
 
-![Battle GIF Placeholder](docs/images/cogs-battle.gif)
-
+![Battle GIF](docs/images/cogs-battle.gif)
 
 ## Tech Stack
 - Node.js + Express backend
