@@ -50,7 +50,28 @@ When a player fights against NPC forces, another human player controls the NPC u
 - MongoDB persistence
 - Pixi.js rendering on the client
 
+## Local Setup
+Requirements:
+- Node.js (v14+ recommended)
+- npm (comes with Node.js)
+- MongoDB running locally on `mongodb://localhost:27017`
+
+Install and run:
+```bash
+npm install
+npm start
+```
+
+Open the admin panel at:
+- `http://localhost:3000/panelAdmin`
+
+From there you can create a game, launch it, and open player links.
+
 ## Roadmap Ideas
 - Additional races and unit archetypes
+- New castles and more buildings in castles
+- Improved fog of war
+- Better animations during hero movement and in battles
+- Better UI
 - More map generators and land presets
 - Expanded battle abilities and terrain effects
