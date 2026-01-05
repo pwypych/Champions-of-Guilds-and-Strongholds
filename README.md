@@ -42,13 +42,8 @@ Battles take place on a grid-based battlefield with unit stacks. Each stack has 
 
 When a player fights against NPC forces, another human player controls the NPC units, turning the encounter into a PvP-style tactical duel.
 
-![Battle GIF Placeholder](docs/images/placeholder-battle.gif)
+![Battle GIF Placeholder](docs/images/cogs-battle.gif)
 
-## Screenshots and Media
-- Game lobby: `docs/images/placeholder-game-lobby.png`
-- Map generator: `docs/images/placeholder-map-generator.png`
-- Land generator: `docs/images/placeholder-land-generator.png`
-- Battle gif: `docs/images/placeholder-battle.gif`
 
 ## Tech Stack
 - Node.js + Express backend
