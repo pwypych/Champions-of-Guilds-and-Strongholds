@@ -1,9 +1,9 @@
 # Champions of Guilds and Strongholds
+Champions of Guilds and Strongholds is a multiplayer strategy game set in a fantasy world of castles, heroes, and rival factions. Players explore a shared map, expand their power from their castles, and clash in tactical battles where unit skills and positioning decide the outcome.
 
 ## Gameplay
 ![Battle GIF](docs/images/cogs-battle.gif)
 
-Champions of Guilds and Strongholds is a multiplayer strategy game set in a fantasy world of castles, heroes, and rival factions. Players explore a shared map, expand their power from their castles, and clash in tactical battles where unit skills and positioning decide the outcome.
 
 ## Game Context
 You lead a faction of heroes and units across a procedurally built land. Each game starts with a generated map and land layout, then players choose their race, prepare their forces, and enter the world together. The goal is to grow your economy, control key locations, and defeat rival heroes.
