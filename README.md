@@ -41,6 +41,7 @@ Battles take place on a grid-based battlefield with unit stacks. Each stack has 
 - Line-of-fire obstacles for ranged attacks.
 - Randomized damage grades (miss, low, mid, high, crit).
 - Target life/stack size and remaining unit health.
+- Unit surrounded by obstacles or other units gets more damage
 
 When a player fights against NPC forces, another human player controls the NPC units, turning the encounter into a PvP-style tactical duel.
 
